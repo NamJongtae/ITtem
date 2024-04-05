@@ -1,0 +1,26 @@
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-[1.1rem] !important;
+  @apply font-semibold;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  @apply bg-white p-4 w-[30px] h-[30px] rounded-full text-black !important;
+}
+
+.swiper-button-disabled{
+  @apply pointer-events-auto !important;
+  @apply opacity-50 !important;
+}
+
+.swiper .swiper-pagination-bullet{
+  @apply bg-white !important;
+  @apply opacity-80 !important;
+  @apply w-[10px] h-[10px];
+}
+
+.swiper .swiper-pagination-bullet-active {
+  @apply opacity-100 !important;
+  @apply bg-yellow-500 !important;
+}
