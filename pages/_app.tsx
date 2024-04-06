@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "@/styles/global.css";
 import "swiper/css";
 import "react-toastify/dist/ReactToastify.css";
 import "@/styles/toast.css";
