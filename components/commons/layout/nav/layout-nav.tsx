@@ -3,6 +3,7 @@ import Link from "next/link";
 import NavAvata from "./nav-avata";
 import NavLogoutBtn from "./nav-logout-btn";
 import NavSearchBar from "./nav-searchbar";
+import SubNav from "./sub-nav";
 import Image from "next/image";
 
 export default function Nav() {
@@ -31,6 +32,7 @@ export default function Nav() {
           </div>
         </div>
       </nav>
+      <SubNav />
     </>
   );
 }
