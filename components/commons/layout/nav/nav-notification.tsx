@@ -1,12 +1,10 @@
 import NotificatonIcon from "@/public/icons/notification_icon.svg";
-import { useState } from "react";
+import NotificationModal from "../../notificationModal/notification-modal";
+import useNotification from "@/hooks/useNotification";
 
 export default function NavNotification() {
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
-
-  const toggleNotification = () => {
-    setIsOpenNotification((prev) => !prev);
-  };
+  const { isOpenNotification, toggleNotification, notificationRef } =
+    useNotification();
 
   return (
     <>
@@ -25,6 +23,7 @@ export default function NavNotification() {
         />
         <span className="hidden md:inline">알림</span>
       </button>
+      {isOpenNotification && <NotificationModal ref={notificationRef} />}
     </>
   );
 }
