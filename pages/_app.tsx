@@ -7,6 +7,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import StoreProvider from "@/store/StoreProvider";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
 import Layout from "@/components/commons/layout/layout";
+import { ToastContainer } from "react-toastify";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -23,6 +24,17 @@ export default function App({ Component, pageProps }: AppProps) {
           >
             <Component {...pageProps} />
           </main>
+          <ToastContainer
+            position="top-center"
+            limit={1}
+            closeOnClick={true}
+            closeButton={true}
+            pauseOnHover={false}
+            draggable={true}
+            autoClose={100000}
+            theme="light"
+            hideProgressBar={true}
+          />
         </Layout>
       </ReactQueryProvider>
     </StoreProvider>
