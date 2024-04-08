@@ -6,10 +6,25 @@
   #__next {
     @apply flex flex-col min-h-screen;
   }
+  html {
+    @apply h-full;
+  }
+  body {
+    @apply h-full;
+  }
 }
 
 @layer utilities {
   .center {
     @apply -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2;
+  }
+  .root_input {
+    @apply w-full border rounded-md py-3 px-4 text-sm;
+  }
+  .button_primary {
+    @apply py-3 rounded-md transition-all duration-150 bg-rootColor text-white;
+  }
+  .button_secondary {
+    @apply py-3 rounded-md transition-all duration-150 bg-gray-200;
   }
 }
