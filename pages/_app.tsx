@@ -26,6 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </main>
           <ToastContainer
             position="top-center"
+            className={inter.className}
             limit={1}
             closeOnClick={true}
             closeButton={true}
