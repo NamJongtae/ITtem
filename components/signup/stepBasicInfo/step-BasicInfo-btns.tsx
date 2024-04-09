@@ -7,18 +7,23 @@ interface IProps {
 
 export default function StepBasicInfoBtns({ nextStepHandler }: IProps) {
   const { formState } = useFormContext();
-  const errors = formState.errors["email"] || formState.errors["password"];
-  const isEmailDirty = formState.dirtyFields["email"];
-  const isPasswordDirty = formState.dirtyFields["password"];
+  const errors =
+    formState.errors["email"] ||
+    formState.errors["password"] ||
+    formState.errors["verifyNumber"];
+  const isDirty =
+    formState.dirtyFields["email"] &&
+    formState.dirtyFields["password"] &&
+    formState.dirtyFields["verifyNumber"];
 
-  const isDisabled = !!errors || !isEmailDirty || !isPasswordDirty;
+  const isDisabled = !!errors || !isDirty;
 
   const router = useRouter();
 
   const handleCilckToback = () => {
     router.push("/");
   };
-  
+
   return (
     <div className="w-full flex flex-col gap-3 absolute bottom-10">
       <button
