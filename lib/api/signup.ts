@@ -1,10 +1,11 @@
+import { EmailVerifyData } from "@/types/apiTypes";
 import axios, { AxiosResponse } from "axios";
 
 export async function sendToVerifyEmail(
   email: string
 ): Promise<AxiosResponse<EmailVerifyData>> {
   try {
-    const response = await axios.post("/api/signup/sendVerifyEmail", {
+    const response = await axios.post("/api/auth/sendVerifyEmail", {
       email,
     });
     return response;
@@ -18,7 +19,7 @@ export async function verifyEmail(
   verifyNumber: number
 ): Promise<AxiosResponse<EmailVerifyData>> {
   try {
-    const response = await axios.post("/api/signup/verifyEmail", {
+    const response = await axios.post("/api/auth/verifyEmail", {
       email,
       verifyNumber,
     });

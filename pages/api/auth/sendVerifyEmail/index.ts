@@ -51,11 +51,11 @@ export default async function handler(
       } else {
         await saveEmailVerifyNumber(email, number);
       }
-      res.json({ message: "메일로 인증번호가 전송되었습니다.", ok: true });
+      res.status(200).json({ message: "메일로 인증번호가 전송되었습니다.", ok: true });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        message: "인증번호 전송에 실패하였습니다./n잠시 후 다시 시도해주세요.",
+      res.status(422).json({
+        message: "인증번호 전송에 실패하였습니다.",
         ok: false,
       });
     }

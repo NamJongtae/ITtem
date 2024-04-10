@@ -1,4 +1,5 @@
-type EmailVerifyData = {
-  message: "string";
+export interface EmailVerifyData {
+  message: string;
   ok: boolean;
 };
+
