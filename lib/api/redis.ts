@@ -7,15 +7,17 @@ const client = new Redis({
 
 export const saveVerifiedEmail = async (email: string) => {
   try {
-    await client.set(email, email, { ex: 60 * 30 });
+    await client.hset(email, { isVerify: true });
+    await client.expire(email, 60 * 30);
   } catch (error) {
-    console.error("이메일 인증에 실패하였습니다!");
+    console.error(error);
   }
 };
 
 export const getVerifiedEmail = async (email: string) => {
   try {
-    const isVerify = await client.get(email);
+    const data: { isVerify: boolean } | null = await client.hget(email, "email");
+    const isVerify = data?.isVerify;
     if (isVerify) {
       return true;
     } else {
@@ -34,7 +36,7 @@ export const saveEmailVerifyNumber = async (
   exp = 60 * 3 + 10
 ) => {
   try {
-    await client.hset(email, { verifyCode: number, count });
+    await client.hset(email, { isVerify: false, verifyCode: number, count });
     await client.expire(email, exp);
   } catch (error) {
     console.error(error);
