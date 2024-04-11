@@ -1,13 +1,13 @@
 import {
-  CheckEmailDuplicationData,
-  CheckNicknameDuplicationData,
-  EmailVerifyData,
+  EmailDuplicationResponseData,
+  NicknameDuplicationResponseData,
+  VerifyEmailResponseData,
 } from "@/types/apiTypes";
 import axios, { AxiosResponse } from "axios";
 
 export async function sendToVerifyEmail(
   email: string
-): Promise<AxiosResponse<EmailVerifyData>> {
+): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
     const response = await axios.post("/api/auth/sendVerifyEmail", {
       email,
@@ -21,7 +21,7 @@ export async function sendToVerifyEmail(
 export async function verifyEmail(
   email: string,
   verifyNumber: number
-): Promise<AxiosResponse<EmailVerifyData>> {
+): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
     const response = await axios.post("/api/auth/verifyEmail", {
       email,
@@ -35,7 +35,7 @@ export async function verifyEmail(
 
 export async function checkEmailDuplication(
   email: string
-): Promise<AxiosResponse<CheckEmailDuplicationData>> {
+): Promise<AxiosResponse<EmailDuplicationResponseData>> {
   try {
     const response = await axios.post("/api/auth/duplication/email", {
       email,
@@ -48,7 +48,7 @@ export async function checkEmailDuplication(
 
 export async function checkNicknameDuplication(
   nickname: string
-): Promise<AxiosResponse<CheckNicknameDuplicationData>> {
+): Promise<AxiosResponse<NicknameDuplicationResponseData>> {
   try {
     const response = await axios.post("/api/auth/duplication/nickname", {
       nickname,
@@ -58,3 +58,4 @@ export async function checkNicknameDuplication(
     throw error;
   }
 }
+

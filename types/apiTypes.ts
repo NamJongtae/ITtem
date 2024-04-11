@@ -1,14 +1,14 @@
-export interface EmailVerifyData {
+export interface VerifyEmailResponseData {
   message: string;
   ok: boolean;
 }
 
-export interface CheckEmailDuplicationData {
+export interface EmailDuplicationResponseData {
   message: string;
   ok: boolean;
 }
 
-export interface CheckNicknameDuplicationData {
+export interface NicknameDuplicationResponseData {
   message: string;
   ok: boolean;
 }

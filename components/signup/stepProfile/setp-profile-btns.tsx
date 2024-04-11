@@ -1,5 +1,5 @@
 import useNicknameDuplicationMutate from "@/hooks/querys/useNicknameDuplicationMutate";
-import { CheckNicknameDuplicationData } from "@/types/apiTypes";
+import { NicknameDuplicationResponseData } from "@/types/apiTypes";
 import { isAxiosError } from "axios";
 import { useFormContext } from "react-hook-form";
 
@@ -18,7 +18,7 @@ export default function SetpProfileBtns({ nextStepHandler }: IProps) {
       const nickname = getValues("nickname");
       await nicknameDuplicationMuate(nickname);
     } catch (error) {
-      if (isAxiosError<CheckNicknameDuplicationData>(error)) {
+      if (isAxiosError<NicknameDuplicationResponseData>(error)) {
         if (error.response?.status === 401) {
           setError("nickname", {
             type: "duplication",

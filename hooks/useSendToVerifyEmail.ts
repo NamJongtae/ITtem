@@ -3,11 +3,11 @@ import { toast } from "react-toastify";
 import { useFormContext } from "react-hook-form";
 import useSendToVerifyEmailMutate from "./querys/useSendToVerifyEmailMutate";
 import useEmailDuplicationMutate from "./querys/useEmailDuplicationMutate";
-import { CheckEmailDuplicationData } from '@/types/apiTypes';
-import { isAxiosError } from 'axios';
+import { EmailDuplicationResponseData } from "@/types/apiTypes";
+import { isAxiosError } from "axios";
 
 export default function useSendToVerifyEmail() {
-  const { setError, getValues, clearErrors } = useFormContext();
+  const { setError, getValues } = useFormContext();
   const [isSendToVerifyEmail, setIsSendToVerifyEmail] = useState(false);
   const emailRef = useRef<HTMLInputElement | null>(null);
 
@@ -30,7 +30,7 @@ export default function useSendToVerifyEmail() {
     try {
       await emailDuplicationMuate(email);
     } catch (error) {
-      if (isAxiosError<CheckEmailDuplicationData>(error)) {
+      if (isAxiosError<EmailDuplicationResponseData>(error)) {
         if (error.response?.status === 401) {
           setError("email", {
             type: "duplication",
