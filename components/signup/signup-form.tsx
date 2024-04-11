@@ -1,11 +1,14 @@
 import { MyForm } from "../commons/myForm/MyForm";
-import { FieldValues } from "react-hook-form";
 import FormContent from "./form-content";
+import Loading from "../commons/loading";
+import useSignup from "@/hooks/useSignup";
 
 export default function SignupForm() {
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
-  };
+  const { onSubmit, signupLoading } = useSignup();
+
+  if (signupLoading) {
+    return <Loading />;
+  }
 
   return (
     <MyForm
