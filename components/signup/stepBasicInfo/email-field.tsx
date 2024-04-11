@@ -52,7 +52,6 @@ export default function EmailField() {
           handleClickVerifyEmail={handleClickVerifyEmail}
           counter={counter}
           verifyCodeRef={verifyCodeRef}
-          verifiedEmail={verifiedEmail}
         />
       )}
 
@@ -61,6 +60,7 @@ export default function EmailField() {
           requestSendToVerifyEmail={requestSendToVerifyEmail}
           resetSendToVerifyEmail={resetSendToVerifyEmail}
           SendToVerifyEmailLoading={SendToVerifyEmailLoading}
+          verifyCodeRef={verifyCodeRef}
         />
       )}
 

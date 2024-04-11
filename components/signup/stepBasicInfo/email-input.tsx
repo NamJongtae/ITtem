@@ -25,6 +25,14 @@ const EmailInput = ({
   emailRef,
 }: IProps) => {
   const { register } = useFormContext();
+  const { ref, ...rest } = register("email", {
+    required: "이메일을 입력하세요.",
+    onChange: handleChangeEmail,
+    pattern: {
+      value: emailRegex,
+      message: emailRegexErrorMsg,
+    },
+  });
 
   return (
     <>
@@ -39,17 +47,10 @@ const EmailInput = ({
           placeholder="이메일을 입력하세요."
           autoComplete="off"
           readOnly={isSendToVerifyEmail}
-          {...register("email", {
-            required: "이메일을 입력하세요.",
-            onChange: handleChangeEmail,
-            pattern: {
-              value: emailRegex,
-              message: emailRegexErrorMsg,
-            },
-          })}
+          {...rest}
           ref={(e) => {
-            if (emailRef.current) emailRef.current = e;
-            register("email").ref(e);
+            if (emailRef) emailRef.current = e;
+            ref(e);
           }}
         />
         {!isSendToVerifyEmail && (

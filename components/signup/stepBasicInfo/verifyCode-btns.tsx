@@ -1,22 +1,29 @@
-import Spinner from '@/components/commons/spinner';
+import Spinner from "@/components/commons/spinner";
+import { MutableRefObject } from "react";
 
 interface IProps {
   requestSendToVerifyEmail: () => void;
   resetSendToVerifyEmail: () => void;
   SendToVerifyEmailLoading: boolean;
+  verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function VerifyCodeBtns({
   requestSendToVerifyEmail,
   resetSendToVerifyEmail,
   SendToVerifyEmailLoading,
+  verifyCodeRef,
 }: IProps) {
   return (
     <div className="text-sm text-center mt-2">
       <p>
         인증코드가 오지 않았나요?{" "}
         <button
-          onClick={requestSendToVerifyEmail}
+          onClick={() => {
+            requestSendToVerifyEmail();
+            if (!verifyCodeRef.current) return;
+            verifyCodeRef.current.focus();
+          }}
           className={`${
             !SendToVerifyEmailLoading && "underline"
           } text-gray-400  underline-offset-2`}
