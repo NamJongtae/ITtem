@@ -11,19 +11,19 @@ export default function useVerifyEmailMutate(sucessVeriedEmail: () => void) {
   const { mutate: verifyEmailMuate } = useMutation<
     AxiosResponse<VerifyEmailResponseData>,
     AxiosError,
-    { email: string; verifyNumber: number }
+    { email: string; verifyCode: string }
   >({
     mutationFn: ({
       email,
-      verifyNumber,
+      verifyCode,
     }: {
       email: string;
-      verifyNumber: number;
-    }) => verifyEmail(email, verifyNumber),
+      verifyCode: string;
+    }) => verifyEmail(email, verifyCode),
     onSuccess: (result) => {
       toast.success(result.data?.message);
       sucessVeriedEmail();
-      clearErrors("verfiyNumber");
+      clearErrors("verifyCode");
     },
     onError: (error: unknown) => {
       if (isAxiosError<VerifyEmailResponseData, any>(error)) {

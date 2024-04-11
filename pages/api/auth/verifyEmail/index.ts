@@ -6,9 +6,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { email, verifyNumber } = req.body;
+    const { email, verifyCode } = req.body;
     const data = await getEmailVerifyNumber(email);
-    if (parseInt(verifyNumber, 10) === parseInt(data?.verifyCode || "0", 10)) {
+    if (verifyCode.toUpperCase() === data?.verifyCode) {
       await saveVerifiedEmail(email);
       res.status(200).json({ message: "인증이 완료되었습니다.", ok: true });
     } else {

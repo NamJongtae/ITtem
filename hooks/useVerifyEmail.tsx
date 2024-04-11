@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export default function useVerifyEmail(isSendToVerifyEmail: boolean) {
   const { getValues } = useFormContext();
   const [verifiedEmail, setVerfiedEmail] = useState(false);
-  const verifyNumberRef = useRef<HTMLInputElement | null>(null);
+  const verifyCodeRef = useRef<HTMLInputElement | null>(null);
 
   const successVeriedEmail = () => {
     setVerfiedEmail(true);
@@ -16,20 +16,23 @@ export default function useVerifyEmail(isSendToVerifyEmail: boolean) {
 
   const handleClickVerifyEmail = async () => {
     const email = getValues("email");
-    const verifyNumber = parseInt(getValues("verifyNumber"), 10);
-    if (!verifyNumber) {
+    const verifyCode = getValues("verifyCode");
+    if (!verifyCode) {
       toast.warn("인증번호를 입력해주세요.");
       return;
     }
 
-    verifyEmailMuate({ email, verifyNumber });
+    verifyEmailMuate({ email, verifyCode });
   };
-  
 
   useEffect(() => {
-    if (!verifyNumberRef.current) return;
-    verifyNumberRef.current.focus();
-  }, [isSendToVerifyEmail, verifyNumberRef]);
+    if (!verifyCodeRef.current) return;
+    verifyCodeRef.current.focus();
+  }, [isSendToVerifyEmail, verifyCodeRef]);
 
-  return { verifiedEmail, handleClickVerifyEmail, verifyNumberRef };
+  return {
+    verifiedEmail,
+    handleClickVerifyEmail,
+    verifyCodeRef,
+  };
 }

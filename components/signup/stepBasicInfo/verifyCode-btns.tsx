@@ -6,7 +6,7 @@ interface IProps {
   SendToVerifyEmailLoading: boolean;
 }
 
-export default function VerifyNumberBtns({
+export default function VerifyCodeBtns({
   requestSendToVerifyEmail,
   resetSendToVerifyEmail,
   SendToVerifyEmailLoading,
@@ -14,7 +14,7 @@ export default function VerifyNumberBtns({
   return (
     <div className="text-sm text-center mt-2">
       <p>
-        인증번호가 오지 않았나요?{" "}
+        인증코드가 오지 않았나요?{" "}
         <button
           onClick={requestSendToVerifyEmail}
           className={`${

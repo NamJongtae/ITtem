@@ -1,4 +1,4 @@
-export const emailHTML = (number: number) => {
+export const emailHTML = (verfiyCode: string) => {
   return `
 <body>
   <h1
@@ -14,9 +14,9 @@ export const emailHTML = (number: number) => {
 > ITtem
 </h1>
 
-<p style="white-space:pre-line; margin: 20px 0; font-size:16px; font-weight:700; color:black">ITtem 가입을 환영합니다 :)\n아래 인증번호를 입력해주세요.</p>
+<p style="white-space:pre-line; margin: 20px 0; font-size:16px; font-weight:700; color:black">ITtem 가입을 환영합니다 :)\n아래 인증코드를 입력해주세요.</p>
 <h2 style="font-size: 14px; margin: 0; padding: 0; margin-bottom: 10px; color:black;">
-메일 인증번호
+메일 인증코드
 </h2>
 
 <div
@@ -31,12 +31,12 @@ style="
   margin: 0 auto 20px auto;
 "
 >
-<span style="padding: 2px 8px">${number.toString()[0]}</span>
-<span style="padding: 2px 8px">${number.toString()[1]}</span>
-<span style="padding: 2px 8px">${number.toString()[2]}</span>
-<span style="padding: 2px 8px">${number.toString()[3]}</span>
-<span style="padding: 2px 8px">${number.toString()[4]}</span>
-<span style="padding: 2px 8px">${number.toString()[5]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[0]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[1]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[2]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[3]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[4]}</span>
+<span style="padding: 2px 8px">${verfiyCode.toString()[5]}</span>
 </div>
 
 <ul
@@ -61,7 +61,7 @@ height: 1px;
 margin: -1px;
 overflow: hidden;
 padding: 0;
-position: absolute;">${number}</div>
+position: absolute;">${verfiyCode}</div>
 </body>
   `;
 };

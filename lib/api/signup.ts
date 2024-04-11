@@ -20,12 +20,12 @@ export async function sendToVerifyEmail(
 
 export async function verifyEmail(
   email: string,
-  verifyNumber: number
+  verifyCode: string
 ): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
     const response = await axios.post("/api/auth/verifyEmail", {
       email,
-      verifyNumber,
+      verifyCode,
     });
     return response;
   } catch (error) {

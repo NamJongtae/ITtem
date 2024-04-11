@@ -16,8 +16,7 @@ export const saveVerifiedEmail = async (email: string) => {
 
 export const getVerifiedEmail = async (email: string) => {
   try {
-    const data: { isVerify: boolean } | null = await client.hget(email, "email");
-    const isVerify = data?.isVerify;
+    const isVerify  = await client.hget(email, "isVerify");
     if (isVerify) {
       return true;
     } else {
@@ -31,12 +30,12 @@ export const getVerifiedEmail = async (email: string) => {
 
 export const saveEmailVerifyNumber = async (
   email: string,
-  number: number,
+  verifyCode: string,
   count = 0,
   exp = 60 * 3 + 10
 ) => {
   try {
-    await client.hset(email, { isVerify: false, verifyCode: number, count });
+    await client.hset(email, { isVerify: false, verifyCode, count });
     await client.expire(email, exp);
   } catch (error) {
     console.error(error);

@@ -3,10 +3,9 @@ import useSendToVerifyEmail from "@/hooks/useSendToVerifyEmail";
 import useVerifyEmail from "@/hooks/useVerifyEmail";
 import useEmailInput from "@/hooks/useEmailInput";
 import EmailInput from "./email-input";
-import VerifyNumberInput from "./verifyNumber-input";
+import VerifyCodeInput from "./verifyCode-input";
 import EmailError from "./email-error";
-import VerifyNumberBtns from "./verifyNumber-btns";
-
+import VerifyCodeBtns from "./verifyCode-btns";
 
 export const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 export const emailRegexErrorMsg = "이메일 형식을 확인해주세요.";
@@ -22,8 +21,11 @@ export default function EmailField() {
     requestSendToVerifyEmail,
   } = useSendToVerifyEmail();
 
-  const { verifiedEmail, handleClickVerifyEmail, verifyNumberRef } =
-    useVerifyEmail(isSendToVerifyEmail);
+  const {
+    verifiedEmail,
+    handleClickVerifyEmail,
+    verifyCodeRef,
+  } = useVerifyEmail(isSendToVerifyEmail);
 
   const { counter } = useVerifyEmailCounter(
     isSendToVerifyEmail,
@@ -46,15 +48,16 @@ export default function EmailField() {
       />
 
       {isSendToVerifyEmail && !verifiedEmail && (
-        <VerifyNumberInput
+        <VerifyCodeInput
           handleClickVerifyEmail={handleClickVerifyEmail}
           counter={counter}
-          verifyNumberRef={verifyNumberRef}
+          verifyCodeRef={verifyCodeRef}
+          verifiedEmail={verifiedEmail}
         />
       )}
 
       {isSendToVerifyEmail && !verifiedEmail && (
-        <VerifyNumberBtns
+        <VerifyCodeBtns
           requestSendToVerifyEmail={requestSendToVerifyEmail}
           resetSendToVerifyEmail={resetSendToVerifyEmail}
           SendToVerifyEmailLoading={SendToVerifyEmailLoading}

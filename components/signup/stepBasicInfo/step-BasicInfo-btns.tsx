@@ -10,11 +10,11 @@ export default function StepBasicInfoBtns({ nextStepHandler }: IProps) {
   const errors =
     formState.errors["email"] ||
     formState.errors["password"] ||
-    formState.errors["verifyNumber"];
+    formState.errors["verifyCode"];
   const isDirty =
     formState.dirtyFields["email"] &&
     formState.dirtyFields["password"] &&
-    formState.dirtyFields["verifyNumber"];
+    formState.dirtyFields["verifyCode"];
 
   const isDisabled = !!errors || !isDirty;
 
@@ -38,7 +38,6 @@ export default function StepBasicInfoBtns({ nextStepHandler }: IProps) {
         type="button"
         onClick={handleCilckToback}
         className="button_secondary w-full"
-        disabled={false}
       >
         다음에 가입하기
       </button>
