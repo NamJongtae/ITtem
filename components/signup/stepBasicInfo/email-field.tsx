@@ -1,59 +1,44 @@
-import useVerifyEmailCounter from "@/hooks/useVerifyEmailCounter";
-import useSendToVerifyEmail from "@/hooks/useSendToVerifyEmail";
-import useVerifyEmail from "@/hooks/useVerifyEmail";
 import EmailInput from "./email-input";
-import VerifyCodeInput from "./verifyCode-input";
 import EmailError from "./email-error";
-import VerifyCodeBtns from "./verifyCode-btns";
+import { useFormContext } from "react-hook-form";
+import { MutableRefObject } from 'react';
 
-export default function EmailField() {
-  const {
-    isSendToVerifyEmail,
-    handleClickSendToEmail,
-    SendToVerifyEmailLoading,
-    resetSendToVerifyEmail,
-    emailRef,
-    sendToVerifyEmailError,
-    requestSendToVerifyEmail,
-  } = useSendToVerifyEmail();
+interface IProps {
+  isSendToVerifyEmail: boolean;
+  handleClickSendToEmail: () => void;
+  emailRef:  MutableRefObject<HTMLInputElement | null>;
+}
 
-  const {
-    verifiedEmail,
-    handleClickVerifyEmail,
-    verifyCodeRef,
-  } = useVerifyEmail(isSendToVerifyEmail);
-
-  const { counter } = useVerifyEmailCounter(
-    isSendToVerifyEmail,
-    verifiedEmail,
-    sendToVerifyEmailError,
-    SendToVerifyEmailLoading
-  );
+export default function EmailField({
+  isSendToVerifyEmail,
+  handleClickSendToEmail,
+  emailRef
+}: IProps) {
+  const { formState } = useFormContext();
+  const error = formState.errors["email"];
+  const isDirty = formState.dirtyFields["email"];
 
   return (
     <div>
-      <EmailInput
-        isSendToVerifyEmail={isSendToVerifyEmail}
-        handleClickSendToEmail={handleClickSendToEmail}
-        emailRef={emailRef}
-      />
-
-      {isSendToVerifyEmail && !verifiedEmail && (
-        <VerifyCodeInput
-          handleClickVerifyEmail={handleClickVerifyEmail}
-          counter={counter}
-          verifyCodeRef={verifyCodeRef}
+      <label className="sr-only" htmlFor="email">
+        이메일
+      </label>
+      <div className="flex gap-3 items-center">
+        <EmailInput
+          isSendToVerifyEmail={isSendToVerifyEmail}
+          emailRef={emailRef}
         />
-      )}
-
-      {isSendToVerifyEmail && !verifiedEmail && (
-        <VerifyCodeBtns
-          requestSendToVerifyEmail={requestSendToVerifyEmail}
-          resetSendToVerifyEmail={resetSendToVerifyEmail}
-          SendToVerifyEmailLoading={SendToVerifyEmailLoading}
-          verifyCodeRef={verifyCodeRef}
-        />
-      )}
+        {!isSendToVerifyEmail && (
+          <button
+            className="basis-1/4 button_primary disabled:bg-blue-200 text-sm"
+            onClick={handleClickSendToEmail}
+            type="button"
+            disabled={!!error || !isDirty}
+          >
+            인증받기
+          </button>
+        )}
+      </div>
 
       <EmailError />
     </div>
