@@ -18,21 +18,26 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <StoreProvider>
       <ReactQueryProvider>
+        <style jsx global>{`
+          html {
+            font-family: ${inter.style.fontFamily};
+          }
+        `}</style>
         <Layout>
           <main
-            className={`${inter.className} flex-grow mt-[113px] md:mt-[127px]`}
+            className={"flex-grow mt-[113px] md:mt-[127px]"}
           >
             <Component {...pageProps} />
           </main>
           <ToastContainer
             position="top-center"
-            className={inter.className}
             limit={1}
             closeOnClick={true}
             closeButton={true}
             pauseOnHover={false}
             draggable={true}
-            autoClose={100000}
+            autoClose={2000}
+            pauseOnFocusLoss={false}
             theme="light"
             hideProgressBar={true}
           />
