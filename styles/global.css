@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer components {
   #__next {
-    @apply flex flex-col min-h-screen;
+    @apply flex flex-col min-h-screen pb-16 md:pb-0;
   }
   html {
     @apply h-full;
