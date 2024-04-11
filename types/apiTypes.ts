@@ -3,6 +3,19 @@ export interface VerifyEmailResponseData {
   ok: boolean;
 }
 
+export interface SignupRequsetData {
+  email: string;
+  password: string;
+  profileImg: File | "";
+  nickname: string;
+  introduce: string;
+}
+
+export interface SignupResponseData {
+  message: string;
+  user: { nickname: string, profileImg: string },
+}
+
 export interface EmailDuplicationResponseData {
   message: string;
   ok: boolean;

@@ -1,9 +1,55 @@
 import {
   EmailDuplicationResponseData,
   NicknameDuplicationResponseData,
+  SignupRequsetData,
+  SignupResponseData,
   VerifyEmailResponseData,
 } from "@/types/apiTypes";
 import axios, { AxiosResponse } from "axios";
+import { compare, hash } from "bcryptjs";
+import { uploadImgToFireStore } from "./firebase";
+
+export async function createAccount({
+  email,
+  password,
+  nickname,
+  profileImg,
+  introduce,
+}: SignupRequsetData): Promise<AxiosResponse<SignupResponseData>> {
+  try {
+    const imgData = await uploadImgToFireStore(profileImg);
+
+    const response = await axios.post("/api/auth/signup", {
+      email,
+      password,
+      nickname,
+      profileImg: imgData || "/icons/user_icon.svg",
+      introduce,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getHasdPassword(password: string) {
+  try {
+    const hashedPassword = await hash(password, 12);
+    return hashedPassword;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function verifyPassword(password: string, hashedPassword: string) {
+  try {
+    const isVerify = await compare(password, hashedPassword);
+    return isVerify;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function sendToVerifyEmail(
   email: string
@@ -58,4 +104,3 @@ export async function checkNicknameDuplication(
     throw error;
   }
 }
-
