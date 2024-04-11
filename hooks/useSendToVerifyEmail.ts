@@ -42,10 +42,6 @@ export default function useSendToVerifyEmail() {
     }
 
     setIsSendToVerifyEmail(true);
-    setError("verifyNumber", {
-      type: "validate",
-      message: "",
-    });
     sendToVerifyEmailMutate(email);
   };
 
