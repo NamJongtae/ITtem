@@ -1,15 +1,12 @@
+import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from '@/constants/constant';
 import { useFormContext } from "react-hook-form";
-export const passwordRegex =
-  /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-export const passwordRegexErrorMsg =
-  "8-16자 특수문자, 숫자, 영문을 포함해야합니다.";
 
 export default function PasswordField() {
   const { register, formState, setError, clearErrors } = useFormContext();
   const error = formState.errors["password"];
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!passwordRegex.test(e.target.value)) {
+    if (!PASSWORD_REGEX.test(e.target.value)) {
       setError("password", {
         type: "onChange",
         message: "",
@@ -34,8 +31,8 @@ export default function PasswordField() {
           required: "비밀번호를 입력하세요.",
           onChange: handleChangePassword,
           pattern: {
-            value: passwordRegex,
-            message: passwordRegexErrorMsg,
+            value: PASSWORD_REGEX,
+            message: PASSWORD_REGEX_ERRORMSG,
           },
         })}
       />

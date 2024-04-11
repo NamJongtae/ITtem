@@ -1,5 +1,6 @@
-import { MutableRefObject, RefObject } from "react";
-import { emailRegex, emailRegexErrorMsg } from "./email-field";
+import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from '@/constants/constant';
+import { MutableRefObject } from "react";
+
 import {
   FieldError,
   FieldErrorsImpl,
@@ -29,8 +30,8 @@ const EmailInput = ({
     required: "이메일을 입력하세요.",
     onChange: handleChangeEmail,
     pattern: {
-      value: emailRegex,
-      message: emailRegexErrorMsg,
+      value: EMAIL_REGEX,
+      message: EMAIL_REGEX_ERRORMSG,
     },
   });
 

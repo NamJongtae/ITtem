@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { nicknameErrorMsg, nicknameRegx } from "./nickname-field";
 import useProfileNickname from "@/hooks/useProfileNickname";
+import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from '@/constants/constant';
 
 export default function NicknameInput() {
   const { register} = useFormContext();
@@ -20,8 +20,8 @@ export default function NicknameInput() {
         required: "닉네임을 입력해주세요.",
         onChange: handleChangeNickname,
         pattern: {
-          value: nicknameRegx,
-          message: nicknameErrorMsg,
+          value: NICKNAME_REGEX,
+          message: NICKNAME_REGEX_ERRORMSG,
         },
       })}
     />

@@ -17,3 +17,15 @@ export const CATEGORY = [
 
 export const ERROR_MESSAGE =
   "알 수 없는 에러가 발생하였습니다.\n잠시 후 다시 시도해주세요.";
+
+export const EMAIL_REGEX = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+export const EMAIL_REGEX_ERRORMSG = "이메일 형식을 확인해주세요.";
+
+export const PASSWORD_REGEX =
+  /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+export const PASSWORD_REGEX_ERRORMSG =
+  "8-16자 특수문자, 숫자, 영문을 포함해야합니다.";
+
+export const NICKNAME_REGEX = /^(?![0-9]+$)([a-zA-Z0-9가-힣]{4,8})$/;
+export const NICKNAME_REGEX_ERRORMSG =
+  "4-8자 닉네임(영문, 한글, 숫자조합)을 입력해주세요.";

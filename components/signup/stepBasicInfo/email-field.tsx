@@ -7,9 +7,6 @@ import VerifyCodeInput from "./verifyCode-input";
 import EmailError from "./email-error";
 import VerifyCodeBtns from "./verifyCode-btns";
 
-export const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
-export const emailRegexErrorMsg = "이메일 형식을 확인해주세요.";
-
 export default function EmailField() {
   const {
     isSendToVerifyEmail,
