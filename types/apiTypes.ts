@@ -12,3 +12,8 @@ export interface NicknameDuplicationResponseData {
   message: string;
   ok: boolean;
 }
+
+export interface UploadImgResponseData {
+  imgUrl: string;
+  fileName: string;
+}
