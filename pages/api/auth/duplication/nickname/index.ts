@@ -1,4 +1,4 @@
-import connectToDB from "@/lib/database";
+import { DBClient } from "@/lib/database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,18 +6,26 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { nickname } = req.body;
-    const client = await connectToDB();
-    const db = client.db("auth");
-    const isDuplication = await db.collection("user").findOne({ nickname });
-    client.close();
-    if (isDuplication) {
-      res
-        .status(401)
-        .json({ message: "이미 사용중인 닉네임입니다.", ok: false });
+    try {
+      const { nickname } = req.body;
+      await DBClient.connect();
+      const db = DBClient.db("auth");
+      const isDuplication = await db.collection("user").findOne({ nickname });
+      
+      if (isDuplication) {
+        res
+          .status(401)
+          .json({ message: "이미 사용중인 닉네임입니다.", ok: false });
 
-      return;
+        return;
+      }
+      res.status(200).json({ message: "사용 가능한 닉네임입니다.", ok: true });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "닉네임 확인에 실패하였습니다.", ok: false });
+    } finally {
+      DBClient.close();
     }
-    res.status(200).json({ message: "사용 가능한 닉네임입니다.", ok: true });
   }
 }
