@@ -15,7 +15,7 @@ export default function SignupForm() {
       className="relative max-w-[400px] w-full h-full mx-auto"
       onSubmit={onSubmit}
       formOptions={{
-        mode: "onBlur",
+        mode: "onChange",
         defaultValues: {
           email: "",
           password: "",

@@ -1,7 +1,6 @@
 import useVerifyEmailCounter from "@/hooks/useVerifyEmailCounter";
 import useSendToVerifyEmail from "@/hooks/useSendToVerifyEmail";
 import useVerifyEmail from "@/hooks/useVerifyEmail";
-import useEmailInput from "@/hooks/useEmailInput";
 import EmailInput from "./email-input";
 import VerifyCodeInput from "./verifyCode-input";
 import EmailError from "./email-error";
@@ -31,16 +30,11 @@ export default function EmailField() {
     SendToVerifyEmailLoading
   );
 
-  const { emailError, isEmailDirty, handleChangeEmail } = useEmailInput();
-
   return (
     <div>
       <EmailInput
         isSendToVerifyEmail={isSendToVerifyEmail}
-        handleChangeEmail={handleChangeEmail}
         handleClickSendToEmail={handleClickSendToEmail}
-        emailError={emailError}
-        isEmailDirty={isEmailDirty}
         emailRef={emailRef}
       />
 
@@ -61,7 +55,7 @@ export default function EmailField() {
         />
       )}
 
-      <EmailError emailError={emailError} />
+      <EmailError />
     </div>
   );
 }

@@ -1,34 +1,23 @@
-import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from '@/constants/constant';
+import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import { MutableRefObject } from "react";
-
-import {
-  FieldError,
-  FieldErrorsImpl,
-  Merge,
-  useFormContext,
-} from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface IProps {
   isSendToVerifyEmail: boolean;
-  handleChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleClickSendToEmail: () => void;
-  emailError: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
-  isEmailDirty: boolean;
   emailRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 const EmailInput = ({
   isSendToVerifyEmail,
-  handleChangeEmail,
   handleClickSendToEmail,
-  emailError,
-  isEmailDirty,
   emailRef,
 }: IProps) => {
-  const { register } = useFormContext();
+  const { register, formState } = useFormContext();
+  const error = formState.errors["email"];
+  const isDirty = formState.dirtyFields["email"];
   const { ref, ...rest } = register("email", {
     required: "이메일을 입력하세요.",
-    onChange: handleChangeEmail,
     pattern: {
       value: EMAIL_REGEX,
       message: EMAIL_REGEX_ERRORMSG,
@@ -59,7 +48,7 @@ const EmailInput = ({
             className="basis-1/4 button_primary disabled:bg-blue-200 text-sm"
             onClick={handleClickSendToEmail}
             type="button"
-            disabled={!!emailError || !isEmailDirty}
+            disabled={!!error || !isDirty}
           >
             인증받기
           </button>

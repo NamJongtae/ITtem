@@ -1,15 +1,15 @@
-import React from "react";
-import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+import {
+  useFormContext,
+} from "react-hook-form";
 
-interface IProps {
-  emailError: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
-}
+export default function EmailError() {
+  const { formState } = useFormContext();
+  const error = formState.errors["email"];
 
-export default function EmailError({ emailError }: IProps) {
   return (
-    emailError?.message && (
+    error?.message && (
       <p className="text-xs ml-1 mt-1 text-red-400">
-        {typeof emailError.message === "string" ? emailError.message : ""}
+        {typeof error.message === "string" ? error.message : ""}
       </p>
     )
   );
