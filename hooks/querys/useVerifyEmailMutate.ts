@@ -5,8 +5,12 @@ import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerifyEmailResponseData } from "@/types/apiTypes";
 import { ERROR_MESSAGE } from "@/constants/constant";
+import { signupSlice } from "@/store/signupSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 
-export default function useVerifyEmailMutate(sucessVeriedEmail: () => void) {
+export default function useVerifyEmailMutate() {
+  const dispatch = useDispatch<AppDispatch>();
   const { clearErrors } = useFormContext();
   const { mutate: verifyEmailMuate } = useMutation<
     AxiosResponse<VerifyEmailResponseData>,
@@ -22,7 +26,7 @@ export default function useVerifyEmailMutate(sucessVeriedEmail: () => void) {
     }) => verifyEmail(email, verifyCode),
     onSuccess: (result) => {
       toast.success(result.data?.message);
-      sucessVeriedEmail();
+      dispatch(signupSlice.actions.verifedEmail());
       clearErrors("verifyCode");
     },
     onError: (error: unknown) => {

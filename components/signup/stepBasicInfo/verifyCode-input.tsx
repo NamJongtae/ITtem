@@ -1,15 +1,17 @@
+import useVerifyEmailCounter from '@/hooks/useVerifyEmailCounter';
+import { RootState } from '@/store/store';
 import { MutableRefObject } from "react";
 import { useFormContext } from "react-hook-form";
+import { useSelector } from 'react-redux';
 
 interface IProps {
-  counter: number;
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function VerifyCodeInput({
-  counter,
   verifyCodeRef,
 }: IProps) {
+  const { counter } = useVerifyEmailCounter();
   const { register } = useFormContext();
   const { ref, ...rest } = register("verifyCode", {
     validate: () => false,

@@ -1,42 +1,45 @@
-import { MutableRefObject } from "react";
 import VerifyCodeInput from "./verifyCode-input";
 import VerifyCodeBtns from "./verifyCode-btns";
-import VerifyBtn from "./verify-Btn";
+import VerifyBtn from "./emailVerify-Btn";
+import useVerifyEmail from "@/hooks/useVerifyEmail";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-interface IProps {
-  counter: number;
-  handleClickVerifyEmail: () => void;
-  verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
-  requestSendToVerifyEmail: () => void;
-  resetSendToVerifyEmail: () => void;
-  SendToVerifyEmailLoading: boolean;
-}
-export default function VerifyCodeField({
-  counter,
-  handleClickVerifyEmail,
-  verifyCodeRef,
-  requestSendToVerifyEmail,
-  resetSendToVerifyEmail,
-  SendToVerifyEmailLoading,
-}: IProps) {
+export default function VerifyCodeField() {
+  const {
+    handleClickVerifyEmail,
+    requestSendToVerifyEmail,
+    resetSendToVerifyEmail,
+    verifyCodeRef,
+  } = useVerifyEmail();
+
+  const isSendToVerifyEmail = useSelector(
+    (state: RootState) => state.signup.isSendToVerifyEmail
+  );
+  const isVerifiedEmail = useSelector(
+    (state: RootState) => state.signup.isVerifedEmail
+  );
+  
   return (
-    <div>
-      <div className="flex gap-2 items-center mt-3">
-        <label className="sr-only" htmlFor="verifyCode">
-          인증코드
-        </label>
+    isSendToVerifyEmail &&
+    !isVerifiedEmail && (
+      <div>
+        <div className="flex gap-2 items-center mt-3">
+          <label className="sr-only" htmlFor="verifyCode">
+            인증코드
+          </label>
 
-        <VerifyCodeInput counter={counter} verifyCodeRef={verifyCodeRef} />
+          <VerifyCodeInput verifyCodeRef={verifyCodeRef} />
 
-        <VerifyBtn handleClickVerifyEmail={handleClickVerifyEmail} />
+          <VerifyBtn handleClickVerifyEmail={handleClickVerifyEmail} />
+        </div>
+
+        <VerifyCodeBtns
+          requestSendToVerifyEmail={requestSendToVerifyEmail}
+          resetSendToVerifyEmail={resetSendToVerifyEmail}
+          verifyCodeRef={verifyCodeRef}
+        />
       </div>
-
-      <VerifyCodeBtns
-        requestSendToVerifyEmail={requestSendToVerifyEmail}
-        resetSendToVerifyEmail={resetSendToVerifyEmail}
-        SendToVerifyEmailLoading={SendToVerifyEmailLoading}
-        verifyCodeRef={verifyCodeRef}
-      />
-    </div>
+    )
   );
 }

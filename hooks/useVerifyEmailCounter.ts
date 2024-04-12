@@ -1,37 +1,37 @@
-import { useEffect, useRef, useState } from "react";
+import { signupSlice } from "@/store/signupSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function useVerifyEmailCounter(
-  isSendToVerifyEmail: boolean,
-  verifiedEmail: boolean,
-  sendToVerifyEmailError: boolean,
-  SendToVerifyEmailLoading: boolean
-) {
-  const [counter, setCounter] = useState(180);
+export default function useVerifyEmailCounter() {
+  const isSendToVerifyEmail = useSelector(
+    (state: RootState) => state.signup.isSendToVerifyEmail
+  );
+  const isVerifiedEmail = useSelector(
+    (state: RootState) => state.signup.isVerifedEmail
+  );
+  const sendToVerifyEmailLoading = useSelector(
+    (state: RootState) => state.signup.sendToVerifyEmailLoading
+  );
+  const sendToVerifyEmailError = useSelector(
+    (state: RootState) => state.signup.sendToVerifyEmailError
+  );
+  const counter = useSelector((state: RootState) => state.signup.counter);
   const counterRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const resetCounter = () => {
-    setCounter(180);
-  };
-
-  const inactiveCounter = () => {
-    setCounter(0);
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   // 카운터 관리
   useEffect(() => {
-    if (isSendToVerifyEmail) {
+    if (isSendToVerifyEmail || sendToVerifyEmailLoading) {
       counterRef.current = null;
       counterRef.current = setInterval(() => {
-        setCounter((prevCounter) => {
-          if (prevCounter <= 0 && counterRef.current) {
-            clearInterval(counterRef.current);
-            return 0;
-          }
-          return prevCounter - 1;
-        });
+        if (counter <= 0 && counterRef.current) {
+          clearInterval(counterRef.current);
+        }
+        dispatch(signupSlice.actions.decrementCounter());
       }, 1000);
 
-      if (verifiedEmail) {
+      if (isVerifiedEmail || sendToVerifyEmailError) {
         clearInterval(counterRef.current);
       }
 
@@ -39,20 +39,19 @@ export default function useVerifyEmailCounter(
         if (counterRef.current) clearInterval(counterRef.current);
       };
     }
-  }, [isSendToVerifyEmail, verifiedEmail, SendToVerifyEmailLoading]);
-
-  useEffect(() => {
-    if (sendToVerifyEmailError) {
-      inactiveCounter();
-    }
-  }, [sendToVerifyEmailError]);
+  }, [
+    isSendToVerifyEmail,
+    isVerifiedEmail,
+    sendToVerifyEmailLoading,
+    sendToVerifyEmailError,
+  ]);
 
   // 이메일 전송시 카운터 초기화
-  useEffect(()=>{
-    if(SendToVerifyEmailLoading){
-      resetCounter();
+  useEffect(() => {
+    if (sendToVerifyEmailLoading) {
+      dispatch(signupSlice.actions.resetCounter());
     }
-  },[SendToVerifyEmailLoading])
+  }, [sendToVerifyEmailLoading]);
 
-  return { counter, resetCounter, inactiveCounter };
+  return { counter };
 }

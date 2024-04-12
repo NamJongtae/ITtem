@@ -1,19 +1,23 @@
 import Spinner from "@/components/commons/spinner";
+import { RootState } from "@/store/store";
 import { MutableRefObject } from "react";
+import { useSelector } from "react-redux";
 
 interface IProps {
   requestSendToVerifyEmail: () => void;
   resetSendToVerifyEmail: () => void;
-  SendToVerifyEmailLoading: boolean;
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function VerifyCodeBtns({
   requestSendToVerifyEmail,
   resetSendToVerifyEmail,
-  SendToVerifyEmailLoading,
   verifyCodeRef,
 }: IProps) {
+  const sendToVerifyEmailLoading = useSelector(
+    (state: RootState) => state.signup.sendToVerifyEmailLoading
+  );
+
   return (
     <div className="text-sm text-center mt-2">
       <p>
@@ -25,11 +29,11 @@ export default function VerifyCodeBtns({
             verifyCodeRef.current.focus();
           }}
           className={`${
-            !SendToVerifyEmailLoading && "underline"
+            !sendToVerifyEmailLoading && "underline"
           } text-gray-400  underline-offset-2`}
           type="button"
         >
-          {SendToVerifyEmailLoading ? (
+          {sendToVerifyEmailLoading ? (
             <div className="flex items-center ml-1">
               <Spinner className="w-[14px] h-[14px] mr-1" />
               전송중...
