@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { HTMLInputTypeAttribute, MutableRefObject, useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import {
   FieldValues,
   Validate,
@@ -8,13 +8,17 @@ import {
 } from "react-hook-form";
 
 interface IProps {
-  className?: string;
+  inputClassName?: string;
   label: string;
   inputId: string;
   inputName: string;
-  inputType: "text" | "password" | "number";
-  inputPlaceholder: string;
+  inputType: "text" | "password" | "email" | "number";
+  inputPlaceholder?: string;
+  inputReadOnly?: boolean;
+  inputMaxLength?: number;
+  inputMinLength?: number;
   inputOnChange?: React.ChangeEventHandler<HTMLInputElement>;
+  inputOnFocus?: React.FocusEventHandler<HTMLInputElement>;
   inputOnBlur?: React.FocusEventHandler<HTMLInputElement>;
   inputRef?: MutableRefObject<HTMLInputElement | null>;
   inputRequired?: string | ValidationRule<boolean> | undefined;
@@ -23,23 +27,29 @@ interface IProps {
     | Validate<any, FieldValues>
     | Record<string, Validate<any, FieldValues>>
     | undefined;
+  hideError?: boolean;
 }
 
 export default function CoreInputField({
-  className,
+  inputClassName,
   label,
   inputId,
   inputName,
   inputType,
   inputPlaceholder,
+  inputReadOnly,
+  inputMinLength,
+  inputMaxLength,
   inputOnChange,
+  inputOnFocus,
   inputOnBlur,
   inputRef,
   inputRequired,
   inputPattern,
   inputValidate,
+  hideError,
 }: IProps) {
-  const { register, formState, watch, setValue, clearErrors } =
+  const { register, formState, watch, setValue, clearErrors, trigger } =
     useFormContext();
   const { ref, ...rest } = register(inputName, {
     required: inputRequired,
@@ -52,9 +62,9 @@ export default function CoreInputField({
   const value = watch(inputName);
   const resetInput = () => {
     setValue(inputName, "", {
-      shouldValidate: false,
       shouldDirty: true,
     });
+    clearErrors(inputName);
   };
 
   return (
@@ -64,17 +74,22 @@ export default function CoreInputField({
       </label>
       <div className="relative w-full">
         <input
-          className={className + " root_input"}
+          className={inputClassName + " root_input"}
           id={inputId}
           type={inputType}
           placeholder={inputPlaceholder}
+          autoComplete="off"
+          readOnly={inputReadOnly}
+          onFocus={inputOnFocus}
+          minLength={inputMinLength}
+          maxLength={inputMaxLength}
           {...rest}
           ref={(e) => {
             ref(e);
             if (inputRef) inputRef.current = e;
           }}
         />
-        {value && (
+        {value && !inputReadOnly && (
           <button
             type="button"
             onClick={resetInput}
@@ -91,7 +106,7 @@ export default function CoreInputField({
         )}
       </div>
 
-      {error && (
+      {error && !hideError && (
         <p className="input_error">
           {typeof error.message === "string" && error.message}
         </p>
