@@ -10,12 +10,14 @@ interface IProps {
 export default function SignupStepBasicInfo({ nextStepHandler }: IProps) {
   return (
     <div className="flex flex-col gap-3">
-      <EmailField />
+      <div className="flex flex-col gap-3">
+        <EmailField />
 
-      <VerifyCodeField />
+        <VerifyCodeField />
 
-      <PasswordField />
-      
+        <PasswordField />
+      </div>
+
       <StepBasicInfoBtns nextStepHandler={nextStepHandler} />
     </div>
   );

@@ -25,7 +25,7 @@ export default function StepBasicInfoBtns({ nextStepHandler }: IProps) {
   };
 
   return (
-    <div className="w-full flex flex-col gap-3 absolute bottom-10">
+    <div className="w-full flex flex-col gap-3 absolute bottom-3">
       <button
         type="button"
         onClick={nextStepHandler}

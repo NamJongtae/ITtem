@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 interface IProps {
   toggleMenu: () => void;
 }
-// eslint-disable-next-line react/display-name
+
 const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
   ({ toggleMenu }: IProps, ref) => {
     return (
@@ -30,5 +30,7 @@ const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
     );
   }
 );
+
+NavMobileMenu.displayName = "NavMobileMenu"
 
 export default NavMobileMenu;

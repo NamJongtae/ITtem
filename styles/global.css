@@ -5,7 +5,7 @@
 
 @layer components {
   #__next {
-    @apply flex flex-col min-h-screen pb-16 md:pb-0;
+    @apply flex flex-col min-h-screen;
   }
   html {
     @apply h-full;
@@ -20,7 +20,7 @@
     @apply -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2;
   }
   .root_input {
-    @apply w-full border rounded-md py-3 px-4 text-sm;
+    @apply w-full border rounded-md py-3 pl-4 pr-8 text-sm read-only:bg-gray-100 read-only:text-gray-300;
   }
   .input_error {
     @apply text-xs ml-1 mt-1 text-red-400
@@ -31,4 +31,8 @@
   .button_secondary {
     @apply py-3 rounded-md transition-all duration-150 bg-gray-200;
   }
+}
+
+:root {
+  --vh: 100%;
 }

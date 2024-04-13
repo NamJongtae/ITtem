@@ -8,6 +8,7 @@ import StoreProvider from "@/store/StoreProvider";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -15,6 +16,8 @@ const inter = Noto_Sans_KR({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const pathanme = usePathname();
+
   return (
     <StoreProvider>
       <ReactQueryProvider>
@@ -22,11 +25,13 @@ export default function App({ Component, pageProps }: AppProps) {
           html {
             font-family: ${inter.style.fontFamily};
           }
+          #__next {
+            @apply ${!pathanme.includes("/signup") || !pathanme.includes
+            ("/signin") && "pb-16 md:pb-0"}
+          }
         `}</style>
         <Layout>
-          <main
-            className={"flex-grow mt-[113px] md:mt-[127px]"}
-          >
+          <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
             <Component {...pageProps} />
           </main>
           <ToastContainer

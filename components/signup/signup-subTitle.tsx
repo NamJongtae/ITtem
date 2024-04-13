@@ -2,7 +2,7 @@ interface IProps {
   currentStep: "기본정보입력" | "프로필설정" | "소개글작성";
 }
 
-const SubTitleStyles = "font-semibold text-2xl mt-5 mb-10";
+const SubTitleStyles = "font-semibold text-2xl py-5";
 
 export default function SignupSubTitle({ currentStep }: IProps) {
   switch (currentStep) {

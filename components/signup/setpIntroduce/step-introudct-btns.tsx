@@ -4,7 +4,7 @@ interface IProps {
 
 export default function StepIntroudctBtns({ prevStepHandler }: IProps) {
   return (
-    <div className="w-full flex flex-col gap-3 absolute bottom-10">
+    <div className="w-full flex flex-col gap-3 absolute bottom-3">
       <button className="button_primary">회원가입</button>
       <button
         type="button"
