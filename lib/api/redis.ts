@@ -1,3 +1,4 @@
+import { VERIFIED_EMAIL_EXP, VERIFY_EMAIL_BLOCK_EXP, VERIFY_EMAIL_EXP } from '@/constants/constant';
 import { Redis } from "@upstash/redis";
 
 const client = new Redis({
@@ -8,7 +9,7 @@ const client = new Redis({
 export const saveVerifiedEmail = async (email: string) => {
   try {
     await client.hset(email, { isVerify: true });
-    await client.expire(email, 60 * 30);
+    await client.expire(email, VERIFIED_EMAIL_EXP);
   } catch (error) {
     console.error(error);
   }
@@ -16,7 +17,7 @@ export const saveVerifiedEmail = async (email: string) => {
 
 export const getVerifiedEmail = async (email: string) => {
   try {
-    const isVerify  = await client.hget(email, "isVerify");
+    const isVerify = await client.hget(email, "isVerify");
     if (isVerify) {
       return true;
     } else {
@@ -28,11 +29,26 @@ export const getVerifiedEmail = async (email: string) => {
   }
 };
 
-export const saveEmailVerifyNumber = async (
+export const incrementVerifyEmailCounter = async (
+  email: string,
+  count: string | undefined
+) => {
+  try {
+    if (!count) return;
+    await client.hset(email, { count: parseInt(count, 10) + 1 });
+    if (parseInt(count, 10) >= 9) {
+      await client.expire(email, VERIFY_EMAIL_BLOCK_EXP);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const saveEmailVerifyCode = async (
   email: string,
   verifyCode: string,
-  count = 0,
-  exp = 60 * 3 + 10
+  count = 1,
+  exp = VERIFY_EMAIL_EXP
 ) => {
   try {
     await client.hset(email, { isVerify: false, verifyCode, count });
@@ -42,7 +58,7 @@ export const saveEmailVerifyNumber = async (
   }
 };
 
-export const getEmailVerifyNumber = async (email: string) => {
+export const getEmailVerifyCode = async (email: string) => {
   try {
     const result: { verifyCode: string; count: string } | null =
       await client.hgetall(email);
