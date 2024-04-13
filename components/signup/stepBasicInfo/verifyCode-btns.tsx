@@ -39,7 +39,7 @@ export default function VerifyCodeBtns({
               전송중...
             </div>
           ) : (
-            "재전송"
+            "재요청"
           )}
         </button>
       </p>

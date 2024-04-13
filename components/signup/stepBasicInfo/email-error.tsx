@@ -8,7 +8,7 @@ export default function EmailError() {
 
   return (
     error?.message && (
-      <p className="text-xs ml-1 mt-1 text-red-400">
+      <p className="input_error">
         {typeof error.message === "string" ? error.message : ""}
       </p>
     )

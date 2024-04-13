@@ -28,4 +28,8 @@ export const PASSWORD_REGEX_ERRORMSG =
 
 export const NICKNAME_REGEX = /^(?![0-9]+$)([a-zA-Z0-9가-힣]{4,8})$/;
 export const NICKNAME_REGEX_ERRORMSG =
-  "4-8자 닉네임(영문, 한글, 숫자조합)을 입력해주세요.";
+  "4-8자 닉네임(영문, 한글, 영문+숫자)을 입력해주세요.";
+
+export const VERIFYCODE_REGEX = /^[A-Za-z0-9]{6}$/;
+export const VERIFYCODE_REGEX_ERRORMSG =
+  "인증코드는 영문, 숫자, 영문+숫자 6자리입니다.";

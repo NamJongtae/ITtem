@@ -1,14 +1,23 @@
-import NicknameInput from "./nickname-input";
-import NicknameError from "./nickname-error";
+import CoreInputField from "@/components/commons/coreInputField/core-input-field";
+import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from "@/constants/constant";
 
 export default function NicknameField() {
   return (
     <div>
-      <label className="sr-only" id="nickname">
-        닉네임
-      </label>
-      <NicknameInput />
-      <NicknameError />
+      <CoreInputField
+        label="닉네임"
+        inputId="nickname"
+        inputName="nickname"
+        inputType="text"
+        inputMinLength={4}
+        inputMaxLength={8}
+        inputPlaceholder="닉네임을 입력해주세요."
+        inputRequired="닉네임을 입력해주세요."
+        inputPattern={{
+          value: NICKNAME_REGEX,
+          message: NICKNAME_REGEX_ERRORMSG,
+        }}
+      />
     </div>
   );
 }

@@ -1,40 +1,46 @@
-import useVerifyEmailCounter from '@/hooks/useVerifyEmailCounter';
-import { RootState } from '@/store/store';
-import { MutableRefObject } from "react";
-import { useFormContext } from "react-hook-form";
-import { useSelector } from 'react-redux';
+import CoreInputField from "@/components/commons/coreInputField/core-input-field";
+import { MutableRefObject, useEffect, useState } from "react";
+import VerfiyCodeCounter from "./verfiyCode-counter";
+import {
+  VERIFYCODE_REGEX,
+  VERIFYCODE_REGEX_ERRORMSG,
+} from "@/constants/constant";
 
 interface IProps {
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
-export default function VerifyCodeInput({
-  verifyCodeRef,
-}: IProps) {
-  const { counter } = useVerifyEmailCounter();
-  const { register } = useFormContext();
-  const { ref, ...rest } = register("verifyCode", {
-    validate: () => false,
-  });
+export default function VerifyCodeInput({ verifyCodeRef }: IProps) {
+  const [isFocus, setIsFocus] = useState(false);
 
   return (
-    <div className="relative flex items-center w-full">
-      <input
-        className="root_input"
-        id="verifyCode"
-        type="text"
-        placeholder="인증번호를 입력해주세요."
-        maxLength={6}
-        {...rest}
-        ref={(e) => {
-          ref(e);
-          if (verifyCodeRef) verifyCodeRef.current = e;
+    <div
+      className={`${
+        isFocus && "outline outline-2"
+      } relative flex  items-center w-full border rounded-md`}
+    >
+      <CoreInputField
+        inputClassName="border-hidden focus:outline-none group"
+        label="인증코드"
+        inputId="verifyCode"
+        inputName="verifyCode"
+        inputType="text"
+        inputMinLength={6}
+        inputMaxLength={6}
+        inputRequired={"인증코드를 입력해주세요."}
+        hideError={true}
+        inputOnFocus={() => {
+          setIsFocus(true);
         }}
+        inputPattern={{
+          value: VERIFYCODE_REGEX,
+          message: VERIFYCODE_REGEX_ERRORMSG,
+        }}
+        inputOnBlur={() => setIsFocus(false)}
+        inputValidate={(value) => value.length === 6}
+        inputRef={verifyCodeRef}
       />
-      <span className="absolute right-[10px] text-sm text-gray-400">
-        {String(Math.floor(counter / 60)).padStart(2, "0")}:
-        {String(counter % 60).padStart(2, "0")}
-      </span>
+      <VerfiyCodeCounter />
     </div>
   );
 }

@@ -21,7 +21,7 @@ export default function useSendToVerifyEmail() {
 
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
 
-  const handleClickSendToEmail = async () => {
+  const handleClickSendToVerifyEmail = async () => {
     const email = getValues("email");
 
     if (!email) {
@@ -36,13 +36,15 @@ export default function useSendToVerifyEmail() {
         if (error.response?.status === 401) {
           setError("email", {
             type: "duplication",
-            message: "이미 사용중인 이메일입니다.",
+            message: "이미 사용중인 이메일이에요.",
           });
         }
       }
       return;
     }
     dispatch(signupSlice.actions.sendToVerifyEmail());
+    dispatch(signupSlice.actions.resetCounter());
+    dispatch(signupSlice.actions.setSendToVerifyEmailLoading(true));
     sendToVerifyEmailMutate(email);
   };
 
@@ -61,7 +63,7 @@ export default function useSendToVerifyEmail() {
 
   return {
     isSendToVerifyEmail,
-    handleClickSendToEmail,
+    handleClickSendToVerifyEmail,
     emailRef,
   };
 }

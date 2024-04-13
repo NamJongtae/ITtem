@@ -11,14 +11,14 @@ import { AppDispatch, RootState } from "@/store/store";
 import { signupSlice } from "@/store/signupSlice";
 
 export default function useVerifyEmail() {
-  const { getValues, setError } = useFormContext();
+  const { getValues, setError, clearErrors } = useFormContext();
   const verifyCodeRef = useRef<HTMLInputElement | null>(null);
   const isSendToVerifyEmail = useSelector(
     (state: RootState) => state.signup.isSendToVerifyEmail
   );
   const dispatch = useDispatch<AppDispatch>();
 
-  const { verifyEmailMuate } = useVerifyEmailMutate();
+  const { verifyEmailMuate, verfiyEmailLoading } = useVerifyEmailMutate();
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
 
@@ -48,15 +48,17 @@ export default function useVerifyEmail() {
         if (error.response?.status === 401) {
           setError("email", {
             type: "duplication",
-            message: "이미 사용중인 이메일입니다.",
+            message: "이미 사용중인 이메일이에요",
           });
         }
       }
       return;
     }
 
+    clearErrors("verifyCode");
     dispatch(signupSlice.actions.resetVerifedEmail());
     dispatch(signupSlice.actions.setSendToVerifyEmailLoading(true));
+    dispatch(signupSlice.actions.resetCounter());
     sendToVerifyEmailMutate(email);
   };
 
@@ -80,5 +82,6 @@ export default function useVerifyEmail() {
     verifyCodeRef,
     requestSendToVerifyEmail,
     resetSendToVerifyEmail,
+    verfiyEmailLoading,
   };
 }
