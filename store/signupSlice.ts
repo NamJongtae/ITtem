@@ -1,3 +1,4 @@
+import { VERIFY_EMAIL_EXP } from '@/constants/constant';
 import { createSlice } from "@reduxjs/toolkit";
 
 export const signupSlice = createSlice({
@@ -5,7 +6,7 @@ export const signupSlice = createSlice({
   initialState: {
     isSendToVerifyEmail: false,
     isVerifedEmail: false,
-    counter: 180,
+    counter: VERIFY_EMAIL_EXP,
     sendToVerifyEmailLoading: false,
     sendToVerifyEmailError: false,
   },
@@ -16,7 +17,7 @@ export const signupSlice = createSlice({
       }
     },
     resetCounter: (state) => {
-      state.counter = 180;
+      state.counter = VERIFY_EMAIL_EXP;
     },
     inactiveCounter: (state) => {
       state.counter = 0;
