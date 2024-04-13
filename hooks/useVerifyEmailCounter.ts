@@ -1,9 +1,12 @@
 import { signupSlice } from "@/store/signupSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function useVerifyEmailCounter() {
+  const { setError } = useFormContext();
   const isSendToVerifyEmail = useSelector(
     (state: RootState) => state.signup.isSendToVerifyEmail
   );
@@ -17,41 +20,47 @@ export default function useVerifyEmailCounter() {
     (state: RootState) => state.signup.sendToVerifyEmailError
   );
   const counter = useSelector((state: RootState) => state.signup.counter);
-  const counterRef = useRef<NodeJS.Timeout | null>(null);
+  const counterRef = useRef(counter);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  // 카운터 관리
   useEffect(() => {
-    if (isSendToVerifyEmail || sendToVerifyEmailLoading) {
-      counterRef.current = null;
-      counterRef.current = setInterval(() => {
-        if (counter <= 0 && counterRef.current) {
-          clearInterval(counterRef.current);
+    counterRef.current = counter;
+  }, [counter]);
+
+  useEffect(() => {
+    if (isSendToVerifyEmail) {
+      intervalRef.current = setInterval(() => {
+        if (counterRef.current <= 0) {
+          if (!sendToVerifyEmailError) {
+            toast.warn("인증 시간이 만료되었어요.");
+            setError("verifyCode", {
+              type: "validate",
+              message: "인증 시간이 만료되었어요. 인증 재요청을 해주세요.",
+            });
+          }
+
+          if (intervalRef.current) clearInterval(intervalRef.current);
+        } else {
+          dispatch(signupSlice.actions.decrementCounter());
+          counterRef.current -= 1;
         }
-        dispatch(signupSlice.actions.decrementCounter());
       }, 1000);
-
-      if (isVerifiedEmail || sendToVerifyEmailError) {
-        clearInterval(counterRef.current);
-      }
-
-      return () => {
-        if (counterRef.current) clearInterval(counterRef.current);
-      };
     }
+
+    if (isVerifiedEmail || sendToVerifyEmailError) {
+      clearInterval(counterRef.current);
+    }
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [
     isSendToVerifyEmail,
     isVerifiedEmail,
-    sendToVerifyEmailLoading,
     sendToVerifyEmailError,
+    sendToVerifyEmailLoading,
   ]);
-
-  // 이메일 전송시 카운터 초기화
-  useEffect(() => {
-    if (sendToVerifyEmailLoading) {
-      dispatch(signupSlice.actions.resetCounter());
-    }
-  }, [sendToVerifyEmailLoading]);
 
   return { counter };
 }
