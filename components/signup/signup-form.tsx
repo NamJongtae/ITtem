@@ -18,6 +18,7 @@ export default function SignupForm() {
         mode: "onChange",
         defaultValues: {
           email: "",
+          verifyCode: "",
           password: "",
           nickname: "",
           profileImg: "",
