@@ -26,7 +26,7 @@ export default function useSignupMutate() {
     },
     onError: (error: unknown) => {
       if (isAxiosError<SignupResponseData, any>(error)) {
-        if (error.response?.status === 500) {
+        if (error.response?.status === 422 || error.response?.status === 500) {
           toast.warn(error.response?.data.message);
         } else {
           toast.warn(ERROR_MESSAGE);
