@@ -1,4 +1,8 @@
+import useSignoutMutate from "@/hooks/querys/useSignoutMutate";
+import { RootState } from "@/store/store";
+import { useRouter } from "next/navigation";
 import { forwardRef } from "react";
+import { useSelector } from "react-redux";
 
 interface IProps {
   toggleMenu: () => void;
@@ -6,6 +10,20 @@ interface IProps {
 
 const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
   ({ toggleMenu }: IProps, ref) => {
+    const router = useRouter();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const { signoutMutate } = useSignoutMutate();
+
+    const handleClicksignin = () => {
+      router.push("/signin");
+      toggleMenu();
+    };
+
+    const handleClickSignout = () => {
+      signoutMutate(undefined);
+      toggleMenu();
+    };
+
     return (
       <>
         <div
@@ -19,10 +37,11 @@ const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
         >
           <li>
             <button
+              onClick={user ? handleClickSignout : handleClicksignin}
               className="mt-1 block px-3 py-2 rounded-md text-gray-800 font-semibold betterhover:hover:bg-gray-300 betterhover:hover:text-white  transition duration-150 ease-in-out w-full text-left"
               type="button"
             >
-              로그아웃
+              {user ? "로그아웃" : "로그인"}
             </button>
           </li>
         </ul>
@@ -31,6 +50,6 @@ const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
   }
 );
 
-NavMobileMenu.displayName = "NavMobileMenu"
+NavMobileMenu.displayName = "NavMobileMenu";
 
 export default NavMobileMenu;
