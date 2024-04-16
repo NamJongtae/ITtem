@@ -73,3 +73,7 @@ export interface SessionCookiesResponseData {
   message: string;
   ok: boolean;
 }
+
+export interface RegenerateAccessTokenResponseData {
+  message: string;
+}

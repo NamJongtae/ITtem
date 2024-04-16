@@ -2,6 +2,7 @@ import {
   AuthData,
   EmailDuplicationResponseData,
   NicknameDuplicationResponseData,
+  RegenerateAccessTokenResponseData,
   SessionCookiesResponseData,
   SigninResponseData,
   SignupRequsetData,
@@ -144,7 +145,7 @@ export async function getSessionCookies(): Promise<
     throw error;
   }
 }
-export async function regenerateAccessToken() {
+export async function regenerateAccessToken(): Promise<AxiosResponse<RegenerateAccessTokenResponseData>> {
   try {
     const respose = await axios("/api/auth/refreshToken");
     return respose;
