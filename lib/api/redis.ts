@@ -1,4 +1,8 @@
-import { VERIFIED_EMAIL_EXP, VERIFY_EMAIL_BLOCK_EXP, VERIFY_EMAIL_EXP } from '@/constants/constant';
+import {
+  VERIFIED_EMAIL_EXP,
+  VERIFY_EMAIL_BLOCK_EXP,
+  VERIFY_EMAIL_EXP,
+} from "@/constants/constant";
 import { Redis } from "@upstash/redis";
 
 const client = new Redis({
@@ -67,3 +71,41 @@ export const getEmailVerifyCode = async (email: string) => {
     console.error(error);
   }
 };
+
+export async function saveToken({
+  uid,
+  token,
+  type,
+  exp,
+}: {
+  uid: string;
+  token: string;
+  type: "accessToken" | "refreshToken";
+  exp: number;
+}) {
+  try {
+    const ex = exp - Math.floor(Date.now() / 1000);
+    await client.set(`${uid}:${type}`, token, { ex });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getToken(uid: string, type: "accessToken" | "refreshToken") {
+  try {
+    const token = await client.get(`${uid}:${type}`);
+    return token;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deleteToken(uid: string, type: "accessToken" | "refreshToken") {
+  try {
+    const response = await client.del(`${uid}:${type}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
