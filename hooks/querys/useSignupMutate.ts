@@ -1,5 +1,5 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
-import { createAccount } from "@/lib/api/signup";
+import { createAccount } from "@/lib/api/auth";
 import { SignupResponseData, SignupRequsetData } from "@/types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
@@ -10,7 +10,7 @@ export default function useSignupMutate() {
   const router = useRouter();
 
   const {
-    mutateAsync: signupMutate,
+    mutate: signupMutate,
     isPending: signupLoading,
     data,
   } = useMutation<

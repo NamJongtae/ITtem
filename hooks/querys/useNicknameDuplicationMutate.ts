@@ -1,5 +1,5 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
-import { checkNicknameDuplication } from "@/lib/api/signup";
+import { checkNicknameDuplication } from "@/lib/api/auth";
 import { NicknameDuplicationResponseData } from "@/types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";

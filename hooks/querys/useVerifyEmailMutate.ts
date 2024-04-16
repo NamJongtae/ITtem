@@ -1,4 +1,4 @@
-import { verifyEmail } from "@/lib/api/signup";
+import { verifyEmail } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import { AppDispatch } from "@/store/store";
 
 export default function useVerifyEmailMutate() {
   const dispatch = useDispatch<AppDispatch>();
-  const { setError, clearErrors,setValue } = useFormContext();
+  const { setError, clearErrors, setValue } = useFormContext();
   const { mutate: verifyEmailMuate, isPending: verfiyEmailLoading } =
     useMutation<
       AxiosResponse<VerifyEmailResponseData>,
@@ -41,7 +41,7 @@ export default function useVerifyEmailMutate() {
           } else if (error.response?.status === 403) {
             dispatch(signupSlice.actions.resetSendToVerifyEmail());
             toast.warn(error.response?.data.message);
-            setValue("verifyCode","");
+            setValue("verifyCode", "");
             clearErrors("verifyCode");
           } else {
             toast.warn(ERROR_MESSAGE);
