@@ -1,6 +1,7 @@
 import {
   EmailDuplicationResponseData,
   NicknameDuplicationResponseData,
+  SigninResponseData,
   SignupRequsetData,
   SignupResponseData,
   VerifyEmailResponseData,
@@ -98,6 +99,23 @@ export async function checkNicknameDuplication(
   try {
     const response = await axios.post("/api/auth/duplication/nickname", {
       nickname,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function sigin(
+  email: string,
+  password: string,
+  isDuplicateLogin?: boolean
+): Promise<AxiosResponse<SigninResponseData>> {
+  try {
+    const response = await axios.post("/api/auth/signin", {
+      email,
+      password,
+      isDuplicateLogin,
     });
     return response;
   } catch (error) {
