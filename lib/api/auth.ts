@@ -1,6 +1,8 @@
 import {
+  AuthData,
   EmailDuplicationResponseData,
   NicknameDuplicationResponseData,
+  SessionCookiesResponseData,
   SigninResponseData,
   SignupRequsetData,
   SignupResponseData,
@@ -122,3 +124,24 @@ export async function sigin(
     throw error;
   }
 }
+
+export async function getUser(): Promise<AuthData> {
+  try {
+    const response = await axios.get("/api/auth/user");
+    return response.data.user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSessionCookies(): Promise<
+  AxiosResponse<SessionCookiesResponseData>
+> {
+  try {
+    const response = await axios.get("/api/auth/session");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+

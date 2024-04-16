@@ -65,6 +65,11 @@ export interface SigninResponseData {
 export interface IronSessionData {
   accessToken: string;
   refreshToken: string;
-};
+}
 
 export type IronSessionType = IronSession<IronSessionData>;
+
+export interface SessionCookiesResponseData {
+  message: string;
+  ok: boolean;
+}
