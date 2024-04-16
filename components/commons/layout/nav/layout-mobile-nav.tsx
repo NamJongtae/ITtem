@@ -1,5 +1,3 @@
-"use client";
-
 import NavChat from "./nav-chat";
 import NavSell from "./nav-sell";
 import NavMyProduct from "./nav-product";
