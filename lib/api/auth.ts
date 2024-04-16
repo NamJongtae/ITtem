@@ -144,4 +144,11 @@ export async function getSessionCookies(): Promise<
     throw error;
   }
 }
-
+export async function regenerateAccessToken() {
+  try {
+    const respose = await axios("/api/auth/refreshToken");
+    return respose;
+  } catch (error) {
+    throw error;
+  }
+}
