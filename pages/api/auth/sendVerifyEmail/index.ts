@@ -1,9 +1,24 @@
 import { emailHTML } from "@/lib/emailHTML";
+import nodemailer from "nodemailer";
 import { getEmailVerifyCode, saveEmailVerifyCode } from "@/lib/api/redis";
-import { smtpTransport } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuid } from "uuid";
 import { VERIFY_EMAIL_BLOCK_EXP, VERIFY_EMAIL_EXP } from '@/constants/constant';
+
+export const smtpTransport = nodemailer.createTransport({
+  service: "gamil",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.NEXT_SECRET_SMTP_USER,
+    pass: process.env.NEXT_SECRET_SMTP_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 export default async function handler(
   req: NextApiRequest,
