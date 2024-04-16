@@ -1,4 +1,4 @@
-import { sendToVerifyEmail } from "@/lib/api/signup";
+import { sendToVerifyEmail } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
