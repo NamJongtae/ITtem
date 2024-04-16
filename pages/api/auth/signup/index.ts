@@ -1,5 +1,5 @@
 import { getVerifiedEmail } from "@/lib/api/redis";
-import { getHasdPassword } from "@/lib/api/signup";
+import { getHasdPassword } from "@/lib/api/auth";
 import { DBClient } from "@/lib/database";
 import { randomUUID } from "crypto";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -48,7 +48,7 @@ export default async function handler(
         password: hashedPassword,
         nickname,
         profileImg: profileImgData?.imgUrl || "/icons/user_icon.svg",
-        filename: profileImgData?.fileName || "",
+        profieImgFilename: profileImgData?.fileName || "",
         introduce,
         productList: [],
         wishList: [],
