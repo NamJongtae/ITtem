@@ -34,6 +34,9 @@ export const authSlice = createSlice({
     },
     resetAuth: (state) => {
       state.user = null;
+      if (isClient) {
+        localStorage.removeItem("uid");
+      }
     },
     setIsLoading: (state, action: { payload: boolean; type: string }) => {
       state.isLoading = action.payload;
