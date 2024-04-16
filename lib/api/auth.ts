@@ -5,6 +5,7 @@ import {
   RegenerateAccessTokenResponseData,
   SessionCookiesResponseData,
   SigninResponseData,
+  SignoutResposeData,
   SignupRequsetData,
   SignupResponseData,
   VerifyEmailResponseData,
@@ -124,6 +125,15 @@ export async function sigin(
     return response;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function signout(): Promise<AxiosResponse<SignoutResposeData>> {
+  try {
+    const response = await customAxios("/api/auth/signout");
+    return response;
+  } catch(error) {
+    throw error
   }
 }
 

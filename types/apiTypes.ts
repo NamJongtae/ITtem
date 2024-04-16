@@ -77,3 +77,7 @@ export interface SessionCookiesResponseData {
 export interface RegenerateAccessTokenResponseData {
   message: string;
 }
+
+export interface SignoutResposeData {
+  message: string;
+}
