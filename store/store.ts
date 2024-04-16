@@ -1,36 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import reducer from "./reducer";
+import logger from "redux-logger";
 
-function getServerState() {
-  if (typeof document !== "undefined") {
-    const element = document.querySelector("#__NEXT_DATA__");
-    if (element) {
-      const textContent = element.textContent;
-      if (textContent) {
-        return JSON.parse(textContent)?.props?.pageProps?.initialState;
-      }
-    }
-  }
-  return undefined;
-}
+import reducer from "./reducers";
 
-const serverState = getServerState();
-
-export const makeStore = () =>
+const makeStore = () =>
   configureStore({
     reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     devTools: process.env.NODE_ENV !== "production",
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }).concat(),
-    preloadedState: serverState,
   });
 
-export default createWrapper(makeStore, {
-  debug: process.env.NODE_ENV !== "production",
+const wrapper = createWrapper(makeStore, {
+  // debug: process.env.NODE_ENV !== "production",
 });
+
+export default wrapper;
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
