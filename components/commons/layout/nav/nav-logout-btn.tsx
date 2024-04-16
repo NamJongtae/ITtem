@@ -1,9 +1,19 @@
+import useSignoutMutate from "@/hooks/querys/useSignoutMutate";
 import Image from "next/image";
 import React from "react";
 
 export default function NavLogoutBtn() {
+  const { signoutMutate } = useSignoutMutate();
+
+  const handleClickLogout = () => {
+    signoutMutate(undefined);
+  };
+
   return (
-    <button className="pb-1 hidden md:block underline-offset-2 betterhover:hover:underline">
+    <button
+      onClick={handleClickLogout}
+      className="pb-1 hidden md:block underline-offset-2 betterhover:hover:underline"
+    >
       <Image
         className="inline mr-1"
         src={"/icons/logout_icon.svg"}
