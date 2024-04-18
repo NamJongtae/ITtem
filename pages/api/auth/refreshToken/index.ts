@@ -33,7 +33,7 @@ export default async function handler(
         !decodeRefreshToken?.isVaild
       ) {
         session.destroy();
-        res.status(401).json({ message: "만료된 토큰이에요." });
+        res.status(401).json({ message: "세션이 만료됬어요." });
         return;
       }
 
