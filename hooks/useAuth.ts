@@ -12,7 +12,7 @@ export default function useAuth() {
 
   const onRefetchAuth = () => {
     refetchAuth();
-  }
+  };
 
   const { getSessionCookiesMuate } = useSessionCookiesMutate(onRefetchAuth);
 
@@ -34,6 +34,7 @@ export default function useAuth() {
     if (authError) {
       toast.warn((authError as any).response.data.message);
       dispatch(authSlice.actions.resetAuth());
+      dispatch(authSlice.actions.setIsLoading(false));
     }
   }, [authError]);
 
