@@ -11,7 +11,6 @@ customAxios.interceptors.response.use(
   },
   async (error: AxiosError) => {
     const originalRequest = error.config;
-    
     if (isAxiosError<RegenerateAccessTokenResponseData>(error)) {
       if (
         error.response?.status === 401 &&
@@ -23,8 +22,10 @@ customAxios.interceptors.response.use(
         } catch (refreshError) {
           if (isAxiosError<RegenerateAccessTokenResponseData>(refreshError)) {
             if (refreshError.response?.status === 401) {
+              toast.warn("로그인이 만료됬어요.", {
+                autoClose: 3000,
+              });
               location.replace("/signin");
-              toast.warn("로그인이 만료됬어요.");
             }
             return Promise.reject(refreshError);
           }
