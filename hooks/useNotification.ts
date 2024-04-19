@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { modalSlice } from "../store/modalSlice";
+import useDebouncing from "./useDebouncing";
+import { toast } from "react-toastify";
 
 export default function useNotification() {
   const isOpenNotification = useSelector(
@@ -10,8 +12,21 @@ export default function useNotification() {
   const dispatch = useDispatch<AppDispatch>();
   const notificationRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const debouncing = useDebouncing();
+
+  const handleClickLink = debouncing(() => {
+    if (!user) {
+      toast.warn("로그인 후 이용해주세요.");
+    }
+  }, 500);
 
   const openNotification = () => {
+    if (!user) {
+      handleClickLink();
+      return;
+    }
     dispatch(modalSlice.actions.openNotification());
   };
 
@@ -45,7 +60,6 @@ export default function useNotification() {
     if (isOpenNotification) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
