@@ -5,10 +5,11 @@ import NavHome from "./nav-home";
 import NavMobileMenu from "./nav-mobile-menu";
 import useMoblieNavMenu from "@/hooks/useMoblieNavMenu";
 import NavMoblieMenuBtn from "./nav-moblie-menuBtn";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 export default function MobileNav() {
   const { isOpenMenu, toggleMenu, menuRef } = useMoblieNavMenu();
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
 
   if (pathname.includes("/signup") || pathname.includes("/signin")) {
     return null;

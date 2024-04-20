@@ -1,7 +1,8 @@
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function Footer() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
 
   if (pathname.includes("/signup") || pathname.includes("/signin")) {
     return null;
