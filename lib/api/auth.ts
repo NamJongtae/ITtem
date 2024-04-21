@@ -1,6 +1,7 @@
 import {
   AuthData,
   EmailDuplicationResponseData,
+  GoogleAuthInfoResponseData,
   NicknameDuplicationResponseData,
   RegenerateAccessTokenResponseData,
   SessionCookiesResponseData,
@@ -13,7 +14,7 @@ import {
 import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
-import customAxios from '../customAixos';
+import customAxios from "../customAixos";
 
 export async function createAccount({
   email,
@@ -132,8 +133,8 @@ export async function signout(): Promise<AxiosResponse<SignoutResposeData>> {
   try {
     const response = await customAxios("/api/auth/signout");
     return response;
-  } catch(error) {
-    throw error
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -156,10 +157,25 @@ export async function getSessionCookies(): Promise<
     throw error;
   }
 }
-export async function regenerateAccessToken(): Promise<AxiosResponse<RegenerateAccessTokenResponseData>> {
+export async function regenerateAccessToken(): Promise<
+  AxiosResponse<RegenerateAccessTokenResponseData>
+> {
   try {
     const respose = await customAxios("/api/auth/refreshToken");
     return respose;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getGoogleAuthInfo(
+  accessToken: string
+): Promise<AxiosResponse<GoogleAuthInfoResponseData>> {
+  try {
+    const response = await customAxios(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
+    );
+    return response;
   } catch (error) {
     throw error;
   }
