@@ -34,6 +34,15 @@ export default async function handler(
       const userData = (await collection.findOne({
         email: email.toLocaleLowerCase(),
       })) as UserData | null;
+
+      // 소셜 로그인으로 가입한 경우
+      if (userData?.socialType !== null) {
+        res
+          .status(401)
+          .json({ message: "이메일 혹은 비밀번호가 일치하지 않아요." });
+        return;
+      }
+
       if (!userData) {
         res
           .status(401)
@@ -56,12 +65,10 @@ export default async function handler(
       const refreshTokenData = await getToken(userData.uid, "refreshToken");
 
       if (refreshTokenData && !isDuplicateLogin) {
-        res
-          .status(409)
-          .json({
-            message:
-              "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다.",
-          });
+        res.status(409).json({
+          message:
+            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다.",
+        });
         return;
       }
 

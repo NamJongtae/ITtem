@@ -44,6 +44,7 @@ export default async function handler(
 
       await db.collection("user").insertOne({
         uid: randomUUID(),
+        socialType: null,
         email,
         password: hashedPassword,
         nickname,
