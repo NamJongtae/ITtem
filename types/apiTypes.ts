@@ -7,6 +7,7 @@ export interface VerifyEmailResponseData {
 }
 
 export interface SignupRequsetData {
+  socialType: string | null;
   email: string;
   password: string;
   profileImg: File | "";
@@ -37,6 +38,7 @@ export interface UploadImgResponseData {
 export interface UserData {
   _id: ObjectId;
   uid: string;
+  socialType: string | null;
   email: string;
   password: string;
   nickname: string;
@@ -80,4 +82,14 @@ export interface RegenerateAccessTokenResponseData {
 
 export interface SignoutResposeData {
   message: string;
+}
+
+export interface GoogleAuthInfoResponseData {
+  email: string;
+  given_name: string;
+  id: string;
+  locale: string;
+  name: string;
+  picture: string;
+  verifired_email: boolean;
 }
