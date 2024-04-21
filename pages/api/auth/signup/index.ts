@@ -10,7 +10,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { email, password, nickname, profileImgData, introduce } = req.body;
+      const { email, password, nickname, profileImg, introduce } = req.body;
       await DBClient.connect();
       const db = DBClient.db("auth");
 
@@ -48,8 +48,8 @@ export default async function handler(
         email,
         password: hashedPassword,
         nickname,
-        profileImg: profileImgData?.imgUrl || "/icons/user_icon.svg",
-        profieImgFilename: profileImgData?.fileName || "",
+        profileImg: profileImg?.imgUrl || "/icons/user_icon.svg",
+        profieImgFilename: profileImg?.fileName || "",
         introduce,
         productList: [],
         wishList: [],
@@ -60,7 +60,7 @@ export default async function handler(
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",
-        user: { nickname, profileImg: profileImgData?.imgurl },
+        user: { nickname, profileImg: profileImg?.imgurl },
       });
     } catch (error) {
       console.error(error);
