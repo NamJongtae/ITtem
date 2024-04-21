@@ -37,7 +37,7 @@ export default function Nav() {
 
           <NavSearchBar />
 
-          <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/5 justify-end">
+          <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
             {mouted ? (
               user ? (
                 <div className="flex items-center gap-3 w-full justify-end">
