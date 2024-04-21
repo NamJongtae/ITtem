@@ -9,6 +9,7 @@ import {
   SignoutResposeData,
   SignupRequsetData,
   SignupResponseData,
+  SocialType,
   VerifyEmailResponseData,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
@@ -180,3 +181,19 @@ export async function getGoogleAuthInfo(
     throw error;
   }
 }
+
+export async function SocialLogin(
+  socialType: SocialType,
+  accessToken: string
+): Promise<AxiosResponse<SigninResponseData>> {
+  try {
+    const response = await customAxios.post("/api/auth/socialLogin", {
+      socialType,
+      accessToken,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
