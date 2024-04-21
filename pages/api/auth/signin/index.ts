@@ -36,7 +36,7 @@ export default async function handler(
       })) as UserData | null;
 
       // 소셜 로그인으로 가입한 경우
-      if (userData?.socialType !== null) {
+      if (userData?.socialType === "EMAIL") {
         res
           .status(401)
           .json({ message: "이메일 혹은 비밀번호가 일치하지 않아요." });

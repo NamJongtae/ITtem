@@ -7,7 +7,7 @@ export interface VerifyEmailResponseData {
 }
 
 export interface SignupRequsetData {
-  socialType: string | null;
+  socialType: SocialType;
   email: string;
   password: string;
   profileImg: File | "";
@@ -38,7 +38,7 @@ export interface UploadImgResponseData {
 export interface UserData {
   _id: ObjectId;
   uid: string;
-  socialType: string | null;
+  socialType: SocialType;
   email: string;
   password: string;
   nickname: string;
@@ -92,4 +92,10 @@ export interface GoogleAuthInfoResponseData {
   name: string;
   picture: string;
   verifired_email: boolean;
+}
+
+export const enum SocialType {
+  EMAIL = "EMAIL",
+  GOOGLE = "GOOGLE",
+  KAKAO = "KAKAO",
 }

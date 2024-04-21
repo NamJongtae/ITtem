@@ -1,6 +1,10 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { createAccount } from "@/lib/api/auth";
-import { SignupResponseData, SignupRequsetData } from "@/types/apiTypes";
+import {
+  SignupResponseData,
+  SignupRequsetData,
+  SocialType,
+} from "@/types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -19,7 +23,14 @@ export default function useSignupMutate() {
     SignupRequsetData
   >({
     mutationFn: ({ email, password, profileImg, nickname, introduce }) =>
-      createAccount({ email, password, profileImg, nickname, introduce }),
+      createAccount({
+        socialType: SocialType.EMAIL,
+        email,
+        password,
+        profileImg,
+        nickname,
+        introduce,
+      }),
     onSuccess: (result) => {
       toast.success(result.data?.message);
       router.push("/");
