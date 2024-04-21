@@ -1,8 +1,16 @@
-import { getVerifiedEmail } from "@/lib/api/redis";
+import { getVerifiedEmail, saveToken } from "@/lib/api/redis";
 import { getHasdPassword } from "@/lib/api/auth";
 import { DBClient } from "@/lib/database";
-import { randomUUID } from "crypto";
+import { v4 as uuid } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/constant';
+import { generateToekn, setTokenExp } from '@/lib/token';
+import { getIronSession } from 'iron-session';
+import { IronSessionType } from '@/types/apiTypes';
+import { sessionOptions } from '@/lib/server';
+
+const ACCESS_TOKEN_EXP = setTokenExp(60);
+const REFRESH_TOKEN_EXP = setTokenExp(300);
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,9 +49,9 @@ export default async function handler(
       }
 
       const hashedPassword = await getHasdPassword(password);
-
+      const uid = uuid();
       await db.collection("user").insertOne({
-        uid: randomUUID(),
+        uid,
         socialType: null,
         email,
         password: hashedPassword,
@@ -57,6 +65,57 @@ export default async function handler(
         followings: [],
         chatRoomList: [],
       });
+
+      const session = await getIronSession<IronSessionType>(
+        req,
+        res,
+        sessionOptions
+      );
+
+      const accessToken = generateToekn({
+        payload: {
+          user: {
+            uid,
+            email,
+            nickname,
+            profileImg: profileImg?.imgUrl || "/icons/user_icon.svg",
+          },
+          exp: ACCESS_TOKEN_EXP,
+        },
+        secret: ACCESS_TOKEN_KEY,
+      });
+
+      const refreshToken = generateToekn({
+        payload: {
+          user: {
+            uid,
+            email,
+            nickname,
+            profileImg: profileImg?.imgUrl || "/icons/user_icon.svg",
+          },
+          exp: REFRESH_TOKEN_EXP,
+        },
+        secret: REFRESH_TOKEN_KEY as string,
+      });
+
+      await saveToken({
+        uid,
+        token: accessToken,
+        type: "accessToken",
+        exp: ACCESS_TOKEN_EXP,
+      });
+
+      await saveToken({
+        uid,
+        token: refreshToken,
+        type: "refreshToken",
+        exp: REFRESH_TOKEN_EXP,
+      });
+
+      session.accessToken = accessToken;
+      session.refreshToken = refreshToken;
+
+      await session.save();
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",
