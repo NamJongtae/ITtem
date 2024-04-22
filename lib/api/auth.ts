@@ -1,6 +1,7 @@
 import {
   AuthData,
   EmailDuplicationResponseData,
+  GoogleAuthAccessTokenResponseData,
   GoogleAuthInfoResponseData,
   NicknameDuplicationResponseData,
   RegenerateAccessTokenResponseData,
@@ -169,12 +170,43 @@ export async function regenerateAccessToken(): Promise<
   }
 }
 
-export async function getGoogleAuthInfo(
-  accessToken: string
-): Promise<AxiosResponse<GoogleAuthInfoResponseData>> {
+export async function SocialLogin(
+  socialType: SocialType,
+  accessToken: string,
+  code?: string
+): Promise<AxiosResponse<SigninResponseData>> {
   try {
-    const response = await customAxios(
-      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
+    const response = await customAxios.post("/api/auth/socialLogin", {
+      socialType,
+      accessToken,
+      code,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getGoogleAuthAccessToken(
+  code: string
+): Promise<AxiosResponse<GoogleAuthAccessTokenResponseData>> {
+  const params = new URLSearchParams({
+    code: code,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
+    client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET as string,
+    redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI as string,
+    grant_type: "authorization_code",
+  });
+
+  try {
+    const response = await customAxios.post(
+      `https://oauth2.googleapis.com/token`,
+      params.toString(),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
     );
     return response;
   } catch (error) {
@@ -182,15 +214,13 @@ export async function getGoogleAuthInfo(
   }
 }
 
-export async function SocialLogin(
-  socialType: SocialType,
+export async function getGoogleAuthInfo(
   accessToken: string
-): Promise<AxiosResponse<SigninResponseData>> {
+): Promise<AxiosResponse<GoogleAuthInfoResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/socialLogin", {
-      socialType,
-      accessToken,
-    });
+    const response = await customAxios(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
+    );
     return response;
   } catch (error) {
     throw error;
