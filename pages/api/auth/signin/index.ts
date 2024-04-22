@@ -1,19 +1,11 @@
-import {
-  ACCESS_TOKEN_KEY,
-  ERROR_MESSAGE,
-  REFRESH_TOKEN_KEY,
-} from "@/constants/constant";
+import { ERROR_MESSAGE } from "@/constants/constant";
 import { verifyPassword } from "@/lib/api/auth";
-import { getToken, saveToken } from "@/lib/api/redis";
+import { getToken } from "@/lib/api/redis";
 import { DBClient } from "@/lib/database";
-import { sessionOptions } from "@/lib/server";
-import { generateToekn, setTokenExp } from "@/lib/token";
+import { createAndSaveToken, sessionOptions } from "@/lib/server";
 import { IronSessionType, UserData } from "@/types/apiTypes";
 import { getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const ACCESS_TOKEN_EXP = setTokenExp(60);
-const REFRESH_TOKEN_EXP = setTokenExp(300);
 
 export default async function handler(
   req: NextApiRequest,
@@ -78,50 +70,7 @@ export default async function handler(
         sessionOptions
       );
 
-      const accessToken = generateToekn({
-        payload: {
-          user: {
-            uid: userData.uid,
-            email: userData.email,
-            nickname: userData.nickname,
-            profileImg: userData.profileImg,
-          },
-          exp: ACCESS_TOKEN_EXP,
-        },
-        secret: ACCESS_TOKEN_KEY,
-      });
-
-      const refreshToken = generateToekn({
-        payload: {
-          user: {
-            uid: userData.uid,
-            email: userData.email,
-            nickname: userData.nickname,
-            profileImg: userData.profileImg,
-          },
-          exp: REFRESH_TOKEN_EXP,
-        },
-        secret: REFRESH_TOKEN_KEY as string,
-      });
-
-      await saveToken({
-        uid: userData.uid,
-        token: accessToken,
-        type: "accessToken",
-        exp: ACCESS_TOKEN_EXP,
-      });
-
-      await saveToken({
-        uid: userData.uid,
-        token: refreshToken,
-        type: "refreshToken",
-        exp: REFRESH_TOKEN_EXP,
-      });
-
-      session.accessToken = accessToken;
-      session.refreshToken = refreshToken;
-
-      await session.save();
+      await createAndSaveToken({ user: userData, session });
 
       res.status(200).json({
         message: "로그인에 성공했습니다.",

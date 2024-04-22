@@ -1,6 +1,6 @@
 import { getIronSession } from "iron-session";
 import { sessionOptions } from "@/lib/server";
-import { generateToekn, setTokenExp, verifyToken } from "@/lib/token";
+import { generateToken, setTokenExp, verifyToken } from "@/lib/token";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken, saveToken } from "@/lib/api/redis";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/constant";
@@ -37,7 +37,7 @@ export default async function handler(
         return;
       }
 
-      const newAccessToken = generateToekn({
+      const newAccessToken = generateToken({
         payload: {
           user: decodeRefreshToken.data?.user,
           exp: ACCESS_TOKEN_EXP,

@@ -3,14 +3,16 @@ import { getHasdPassword } from "@/lib/api/auth";
 import { DBClient } from "@/lib/database";
 import { v4 as uuid } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants/constant';
-import { generateToekn, setTokenExp } from '@/lib/token';
-import { getIronSession } from 'iron-session';
-import { IronSessionType } from '@/types/apiTypes';
-import { sessionOptions } from '@/lib/server';
-
-const ACCESS_TOKEN_EXP = setTokenExp(60);
-const REFRESH_TOKEN_EXP = setTokenExp(300);
+import {
+  ACCESS_TOKEN_EXP,
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_EXP,
+  REFRESH_TOKEN_KEY,
+} from "@/constants/constant";
+import { generateToken, setTokenExp } from "@/lib/token";
+import { getIronSession } from "iron-session";
+import { IronSessionType } from "@/types/apiTypes";
+import { createAndSaveToken, sessionOptions } from "@/lib/server";
 
 export default async function handler(
   req: NextApiRequest,
@@ -72,50 +74,10 @@ export default async function handler(
         sessionOptions
       );
 
-      const accessToken = generateToekn({
-        payload: {
-          user: {
-            uid,
-            email,
-            nickname,
-            profileImg: profileImg?.imgUrl || "/icons/user_icon.svg",
-          },
-          exp: ACCESS_TOKEN_EXP,
-        },
-        secret: ACCESS_TOKEN_KEY,
+      await createAndSaveToken({
+        user: { uid, email, nickname, profileImg },
+        session,
       });
-
-      const refreshToken = generateToekn({
-        payload: {
-          user: {
-            uid,
-            email,
-            nickname,
-            profileImg: profileImg?.imgUrl || "/icons/user_icon.svg",
-          },
-          exp: REFRESH_TOKEN_EXP,
-        },
-        secret: REFRESH_TOKEN_KEY as string,
-      });
-
-      await saveToken({
-        uid,
-        token: accessToken,
-        type: "accessToken",
-        exp: ACCESS_TOKEN_EXP,
-      });
-
-      await saveToken({
-        uid,
-        token: refreshToken,
-        type: "refreshToken",
-        exp: REFRESH_TOKEN_EXP,
-      });
-
-      session.accessToken = accessToken;
-      session.refreshToken = refreshToken;
-
-      await session.save();
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",
