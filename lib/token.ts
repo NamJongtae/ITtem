@@ -2,7 +2,7 @@ import { AuthData } from "@/types/apiTypes";
 import jwt, { JsonWebTokenError, JwtPayload, SignOptions } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
-export const generateToekn = ({
+export const generateToken = ({
   payload,
   options,
   secret,
