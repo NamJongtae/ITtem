@@ -1,3 +1,5 @@
+import { setTokenExp } from '@/lib/token';
+
 export const CATEGORY = [
   "전체",
   "의류",
@@ -39,5 +41,10 @@ export const VERIFY_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
 export const AUTH_QUERY_KEY = ["auth"];
-export const ACCESS_TOKEN_KEY = process.env.NEXT_SECRET_ACCESS_TOKEN_KEY as string;
-export const REFRESH_TOKEN_KEY = process.env.NEXT_SECRET_REFRESH_TOKEN_KEY as string;
+export const ACCESS_TOKEN_KEY = process.env
+  .NEXT_SECRET_ACCESS_TOKEN_KEY as string;
+export const REFRESH_TOKEN_KEY = process.env
+  .NEXT_SECRET_REFRESH_TOKEN_KEY as string;
+
+export const ACCESS_TOKEN_EXP = setTokenExp(60);
+export const REFRESH_TOKEN_EXP = setTokenExp(300);
