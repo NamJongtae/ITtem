@@ -1,8 +1,16 @@
 import { IronSessionType } from "@/types/apiTypes";
 import { SessionOptions, getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
-import { verifyToken } from "./token";
-import { getToken } from "./api/redis";
+import { generateToken, verifyToken } from "./token";
+import { getToken, saveToken } from "./api/redis";
+import {
+  ACCESS_TOKEN_EXP,
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_EXP,
+  REFRESH_TOKEN_KEY,
+} from "@/constants/constant";
+import { Db } from "mongodb";
+import { v4 as uuid } from "uuid";
 
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
@@ -50,4 +58,59 @@ export async function checkAuthorization(
       message: "유효한 토큰이에요.",
     };
   }
+}
+
+export async function createAndSaveToken({
+  user,
+  session,
+}: {
+  user: { uid: string; email: string; nickname: string; profileImg: string };
+  session: IronSessionType;
+}) {
+  const accessToken = generateToken({
+    payload: { user, exp: ACCESS_TOKEN_EXP },
+    secret: ACCESS_TOKEN_KEY,
+  });
+
+  const refreshToken = generateToken({
+    payload: { user, exp: REFRESH_TOKEN_EXP },
+    secret: REFRESH_TOKEN_KEY as string,
+  });
+
+  await saveToken({
+    uid: user.uid,
+    token: accessToken,
+    type: "accessToken",
+    exp: ACCESS_TOKEN_EXP,
+  });
+  await saveToken({
+    uid: user.uid,
+    token: refreshToken,
+    type: "refreshToken",
+    exp: REFRESH_TOKEN_EXP,
+  });
+
+  session.accessToken = accessToken;
+  session.refreshToken = refreshToken;
+
+  await session.save();
+}
+
+export async function createUniqueNickname(db: Db) {
+  const randomString = uuid().substring(0, 8);
+  let userNickname = randomString;
+  let isDuplicationNickname = true;
+  while (isDuplicationNickname) {
+    const nicknameCheckResult = await db
+      .collection("user")
+      .findOne({ nickname: userNickname });
+    if (nicknameCheckResult) {
+      // 닉네임이 중복될 경우, 랜덤 숫자를 추가하여 새로운 닉네임 생성
+      userNickname = randomString;
+    } else {
+      // 닉네임이 중복되지 않으면 루프 종료
+      isDuplicationNickname = false;
+    }
+  }
+  return userNickname;
 }
