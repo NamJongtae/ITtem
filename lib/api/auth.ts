@@ -3,6 +3,8 @@ import {
   EmailDuplicationResponseData,
   GoogleAuthAccessTokenResponseData,
   GoogleAuthInfoResponseData,
+  KaKaoAuthAccessTokenResponseData,
+  KakaoAuthInfoResponseData,
   NicknameDuplicationResponseData,
   RegenerateAccessTokenResponseData,
   SessionCookiesResponseData,
@@ -223,3 +225,44 @@ export async function googleSignin(
   }
 }
 
+export async function getKakaoAuthAccessToken(
+  code: string
+): Promise<AxiosResponse<KaKaoAuthAccessTokenResponseData>> {
+  try {
+    const response = await customAxios(
+      `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&code=${code}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getKaKaoAuthInfo(
+  accessToken: string
+): Promise<AxiosResponse<KakaoAuthInfoResponseData>> {
+  try {
+    const userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+    const response = await customAxios(userInfoUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function kakaoSignin(
+  code: string
+): Promise<AxiosResponse<SigninResponseData>> {
+  try {
+    const response = await customAxios.post("/api/auth/signin/kakao", {
+      code,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
