@@ -1,29 +1,16 @@
-import { useGoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
-import Loading from "../commons/loading";
-import useSocialLoginMutate from '@/hooks/querys/useSocialLoginMutate';
-import { SocialType } from '@/types/apiTypes';
-import { toast } from 'react-toastify';
+import { useRouter } from "next/navigation";
 
 export default function SigninSocialLoginBtns() {
-  const { socialLoginMutate, socialLoginLoading } = useSocialLoginMutate();
-  const handleClickGoogleLogin = useGoogleLogin({
-    onSuccess: async (credentialResponse) => {
-      const accessToken = credentialResponse.access_token;
+  const router = useRouter();
 
-      socialLoginMutate({
-        socialType: SocialType.GOOGLE,
-        accessToken,
-      });
-    },
-    onError: () => {
-      toast.warn("로그인 중 에러가 발생하였습니다.\n잠시 후 다시 시도해주세요.")
-    },
-  });
-
-  if (socialLoginLoading) {
-    return <Loading />;
-  }
+  const handleClickGoogleLogin = () => {
+    router.push(`https://accounts.google.com/o/oauth2/v2/auth?
+		client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+		&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}
+		&response_type=code
+		&scope=email profile`);
+  };
 
   return (
     <div className="relative flex flex-col gap-3">
