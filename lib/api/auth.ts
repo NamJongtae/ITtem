@@ -227,3 +227,16 @@ export async function getGoogleAuthInfo(
   }
 }
 
+export async function googleSignin(
+  code: string
+): Promise<AxiosResponse<SigninResponseData>> {
+  try {
+    const response = await customAxios.post("/api/auth/signin/google", {
+      code,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
