@@ -16,6 +16,7 @@ const nextConfig = {
     domains: [
       "images.unsplash.com",
       "lh3.googleusercontent.com",
+      "k.kakaocdn.net",
       "firebasestorage.googleapis.com",
     ],
   },
