@@ -9,16 +9,24 @@ import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
-import {
-  HydrationBoundary,
-} from "@tanstack/react-query";
+import { HydrationBoundary } from "@tanstack/react-query";
 import wrapper from "@/store/store";
-
+import Script from 'next/script';
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
+function kakaoInit() {
+  window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+}
 
 function App({ Component, pageProps }: AppProps) {
   const pathanme = usePathname();
@@ -52,6 +60,10 @@ function App({ Component, pageProps }: AppProps) {
           <Layout>
             <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
               <Component {...pageProps} />
+              <Script
+                src="https://developers.kakao.com/sdk/js/kakao.js"
+                onLoad={kakaoInit}
+              ></Script>
             </main>
             <ToastContainer
               position="top-center"
