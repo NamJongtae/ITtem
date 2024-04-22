@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function SigninSocialLoginBtns() {
+  const Kakao = typeof window !== "undefined" && window.Kakao;
   const router = useRouter();
 
   const handleClickGoogleLogin = () => {
@@ -12,9 +13,17 @@ export default function SigninSocialLoginBtns() {
 		&scope=email profile`);
   };
 
+  const handleClickKaKaoLogin = () => {
+    if (!Kakao) return;
+    Kakao.Auth.authorize({
+      redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
+    });
+  };
+
   return (
     <div className="relative flex flex-col gap-3">
       <button
+        onClick={handleClickKaKaoLogin}
         type="button"
         className="relative mt-5 text-sm bg-[#FEE500] py-3 rounded-md"
       >
