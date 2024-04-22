@@ -170,23 +170,6 @@ export async function regenerateAccessToken(): Promise<
   }
 }
 
-export async function SocialLogin(
-  socialType: SocialType,
-  accessToken: string,
-  code?: string
-): Promise<AxiosResponse<SigninResponseData>> {
-  try {
-    const response = await customAxios.post("/api/auth/socialLogin", {
-      socialType,
-      accessToken,
-      code,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function getGoogleAuthAccessToken(
   code: string
 ): Promise<AxiosResponse<GoogleAuthAccessTokenResponseData>> {
