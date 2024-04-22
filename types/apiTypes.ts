@@ -84,6 +84,15 @@ export interface SignoutResposeData {
   message: string;
 }
 
+export interface GoogleAuthAccessTokenResponseData {
+  access_token: string;
+  authuser: string;
+  expires_in: number;
+  prompot: string;
+  scope: string;
+  token_type: string;
+}
+
 export interface GoogleAuthInfoResponseData {
   email: string;
   given_name: string;
