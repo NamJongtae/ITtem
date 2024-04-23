@@ -5,10 +5,12 @@ import { AppDispatch } from "@/store/store";
 import { AuthData, SignoutResposeData } from "@/types/apiTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useSignoutMutate() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
@@ -29,7 +31,15 @@ export default function useSignoutMutate() {
       return { previousAuth };
     },
     onSuccess: (response) => {
-      toast.success(response.data.message);
+      if (
+        response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
+      ) {
+        router.push(
+          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=http://localhost:3000/signin`
+        );
+      } else {
+        router.push("/signin");
+      }
     },
     onError: (error: unknown, _, context) => {
       if (isAxiosError<{ message: string }>(error)) {
