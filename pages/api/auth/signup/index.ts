@@ -1,17 +1,10 @@
-import { getVerifiedEmail, saveToken } from "@/lib/api/redis";
+import { getVerifiedEmail } from "@/lib/api/redis";
 import { getHasdPassword } from "@/lib/api/auth";
 import { DBClient } from "@/lib/database";
 import { v4 as uuid } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  ACCESS_TOKEN_EXP,
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_EXP,
-  REFRESH_TOKEN_KEY,
-} from "@/constants/constant";
-import { generateToken, setTokenExp } from "@/lib/token";
 import { getIronSession } from "iron-session";
-import { IronSessionType } from "@/types/apiTypes";
+import { IronSessionType, SocialType } from "@/types/apiTypes";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
 
 export default async function handler(
@@ -54,7 +47,7 @@ export default async function handler(
       const uid = uuid();
       await db.collection("user").insertOne({
         uid,
-        socialType: null,
+        socialType: SocialType.EMAIL,
         email,
         password: hashedPassword,
         nickname,
@@ -75,7 +68,7 @@ export default async function handler(
       );
 
       await createAndSaveToken({
-        user: { uid, email, nickname, profileImg },
+        user: { uid, email, nickname, profileImg: profileImg?.imgUrl },
         session,
       });
 
