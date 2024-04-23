@@ -228,7 +228,9 @@ export async function getGoogleAuthInfo(
 
 export async function getGoogleUserInfo(
   code: string
-): Promise<AxiosResponse<{ user: GoogleAuthInfoResponseData }>> {
+): Promise<
+  AxiosResponse<{ user: GoogleAuthInfoResponseData; message: string }>
+> {
   try {
     const response = await customAxios.post("/api/auth/signin/google/user", {
       code,
@@ -281,12 +283,27 @@ export async function getKaKaoAuthInfo(
   }
 }
 
-export async function kakaoSignin(
+export async function getKakaoUserInfo(
   code: string
+): Promise<
+  AxiosResponse<{ user: KakaoAuthInfoResponseData; message: string }>
+> {
+  try {
+    const response = await customAxios.post("/api/auth/signin/kakao/user", {
+      code,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function kakaoSignin(
+  user: KakaoAuthInfoResponseData
 ): Promise<AxiosResponse<SigninResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/signin/kakao", {
-      code,
+      user,
     });
     return response;
   } catch (error) {
