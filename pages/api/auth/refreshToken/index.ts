@@ -4,7 +4,7 @@ import { generateToken, setTokenExp, verifyToken } from "@/lib/token";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken, saveToken } from "@/lib/api/redis";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/constant";
-import { IronSessionType } from '@/types/apiTypes';
+import { IronSessionType } from "@/types/apiTypes";
 
 const ACCESS_TOKEN_EXP = setTokenExp(60);
 
@@ -14,7 +14,11 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      const session = await getIronSession<IronSessionType>(req, res, sessionOptions);
+      const session = await getIronSession<IronSessionType>(
+        req,
+        res,
+        sessionOptions
+      );
 
       const refreshToken = session.refreshToken;
 
@@ -28,10 +32,7 @@ export default async function handler(
         "refreshToken"
       );
 
-      if (
-        (redisRefreshToken && redisRefreshToken !== refreshToken) ||
-        !decodeRefreshToken?.isVaild
-      ) {
+      if (!redisRefreshToken || redisRefreshToken !== refreshToken || !decodeRefreshToken?.isVaild) {
         session.destroy();
         res.status(401).json({ message: "세션이 만료됬어요." });
         return;
