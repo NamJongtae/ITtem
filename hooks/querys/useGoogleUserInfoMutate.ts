@@ -5,7 +5,7 @@ import { AxiosError, AxiosResponse } from "axios";
 
 export default function useGoogleUserInfo() {
   const { mutate: googleUserInfoMutate, data } = useMutation<
-    AxiosResponse<{ user: GoogleAuthInfoResponseData }>,
+    AxiosResponse<{ user: GoogleAuthInfoResponseData; message: string }>,
     AxiosError,
     string
   >({
