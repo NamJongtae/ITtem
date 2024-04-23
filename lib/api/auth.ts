@@ -161,6 +161,7 @@ export async function getSessionCookies(): Promise<
     throw error;
   }
 }
+
 export async function regenerateAccessToken(): Promise<
   AxiosResponse<RegenerateAccessTokenResponseData>
 > {
@@ -206,6 +207,19 @@ export async function getGoogleAuthInfo(
     const response = await customAxios(
       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`
     );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getGoogleUserInfo(
+  code: string
+): Promise<AxiosResponse<{ user: GoogleAuthInfoResponseData }>> {
+  try {
+    const response = await customAxios.post("/api/auth/signin/google/user", {
+      code,
+    });
     return response;
   } catch (error) {
     throw error;
