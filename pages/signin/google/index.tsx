@@ -1,22 +1,24 @@
 import Loading from "@/components/commons/loading";
 import useGoogleSigninMutate from "@/hooks/querys/useGoogleSigninMutate";
+import useGoogleUserInfo from "@/hooks/querys/useGoogleUserInfoMutate";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function GoogleAuth() {
   const params = useSearchParams();
   const code = params.get("code");
   const { googleSigninMutate } = useGoogleSigninMutate();
-
-  const fetchLogin = useCallback(async () => {
-    if (code) {
-      googleSigninMutate(code);
-    }
-  }, [code, googleSigninMutate]);
+  const { googleUserInfoMutate, user } = useGoogleUserInfo();
 
   useEffect(() => {
-    fetchLogin();
-  }, [code, fetchLogin]);
+    if (code) {
+      googleUserInfoMutate(code);
+    }
+  }, [code, googleUserInfoMutate]);
+
+  useEffect(() => {
+    if (user) googleSigninMutate(user);
+  }, [user, googleSigninMutate]);
 
   return <Loading />;
 }
