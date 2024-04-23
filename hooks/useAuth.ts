@@ -5,16 +5,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { authSlice } from "@/store/authSlice";
 import { toast } from "react-toastify";
-import useSessionCookiesMutate from "./querys/useSessionCookiesMutate";
+import useSessionCookiesMutate from './querys/useSessionCookiesMutate';
+
 
 export default function useAuth() {
-  const { user, authIsLoading, authError, refetchAuth } = useAuthQuery();
-
-  const onRefetchAuth = () => {
-    refetchAuth();
-  };
-
-  const { getSessionCookiesMuate } = useSessionCookiesMutate(onRefetchAuth);
+  const { getSessionCookiesMuate, data } = useSessionCookiesMutate();
+  const { user, authIsLoading, authError, refetchAuth } = useAuthQuery(data);
 
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();

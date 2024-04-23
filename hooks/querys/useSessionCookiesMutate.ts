@@ -6,18 +6,16 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useDispatch } from "react-redux";
 
-export default function useSessionCookiesMutate(onRefetchAuth: () => void) {
+export default function useSessionCookiesMutate() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { mutate: getSessionCookiesMuate } = useMutation<
+  const { mutate: getSessionCookiesMuate, data } = useMutation<
     AxiosResponse<SessionCookiesResponseData>,
     AxiosError
   >({
     mutationFn: getSessionCookies,
     onSuccess: (response) => {
-      if (response.data.ok) {
-        onRefetchAuth();
-      } else {
+      if (!response.data.ok){
         dispatch(authSlice.actions.setIsLoading(false));
       }
     },
@@ -26,5 +24,5 @@ export default function useSessionCookiesMutate(onRefetchAuth: () => void) {
     },
   });
 
-  return { getSessionCookiesMuate };
+  return { getSessionCookiesMuate, data };
 }
