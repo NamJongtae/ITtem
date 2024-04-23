@@ -227,11 +227,11 @@ export async function getGoogleUserInfo(
 }
 
 export async function googleSignin(
-  code: string
+  user: GoogleAuthInfoResponseData
 ): Promise<AxiosResponse<SigninResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/signin/google", {
-      code,
+      user,
     });
     return response;
   } catch (error) {

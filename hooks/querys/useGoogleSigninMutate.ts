@@ -1,7 +1,10 @@
 import { googleSignin } from "@/lib/api/auth";
 import { authSlice } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
-import { SigninResponseData } from "@/types/apiTypes";
+import {
+  GoogleAuthInfoResponseData,
+  SigninResponseData,
+} from "@/types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -14,9 +17,10 @@ export default function useGoogleSigninMutate() {
   const { mutate: googleSigninMutate } = useMutation<
     AxiosResponse<SigninResponseData>,
     AxiosError,
-    string
+    GoogleAuthInfoResponseData
   >({
-    mutationFn: async (code: string) => await googleSignin(code),
+    mutationFn: async (user: GoogleAuthInfoResponseData) =>
+      await googleSignin(user),
     onSuccess: (response) => {
       dispatch(authSlice.actions.saveAuth(response.data.user));
       router.push("/");
