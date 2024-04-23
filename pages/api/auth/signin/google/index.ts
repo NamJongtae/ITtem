@@ -1,4 +1,4 @@
-import { getGoogleAuthAccessToken, getGoogleAuthInfo } from "@/lib/api/auth";
+import { getToken } from "@/lib/api/redis";
 import { DBClient } from "@/lib/database";
 import {
   createAndSaveToken,
@@ -15,32 +15,21 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { code } = req.body;
-    if (!code) {
-      res.status(422).json({ message: "유저 코드가 없어요." });
-      return;
-    }
+    const { user } = req.body;
 
-    let googleAccessToken;
-
-    try {
-      const response = await getGoogleAuthAccessToken(code);
-      googleAccessToken = response.data.access_token;
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ message: "토큰을 가져오지못했어요." });
+    if (!user) {
+      res.status(422).json({ message: "유저정보가 없어요." });
       return;
     }
 
     try {
-      const response = await getGoogleAuthInfo(googleAccessToken);
-      const googleUserData = response.data;
+      const googleUserData = user;
 
       await DBClient.connect();
       const db = DBClient.db("auth");
       const collection = db.collection("user");
       const dbUserData = (await collection.findOne({
-        email: googleUserData.id,
+        email: googleUserData.email,
       })) as UserData | null;
 
       const session = await getIronSession<IronSessionType>(
@@ -82,7 +71,12 @@ export default async function handler(
           session,
         });
 
-        res.status(201).json({ message: "회원가입에 성공했어요.", user: {} });
+        res
+          .status(201)
+          .json({
+            message: "회원가입에 성공했어요.",
+            user: { uid, email, nickname: userNickname, profileImg },
+          });
         return;
       }
 
@@ -93,6 +87,17 @@ export default async function handler(
 
       // 로그인 로직
       const { uid, email, nickname, profileImg } = dbUserData;
+
+      const refreshTokenData = await getToken(uid, "refreshToken");
+
+      if (refreshTokenData) {
+        res.status(409).json({
+          message:
+            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다.",
+          email,
+        });
+        return;
+      }
 
       await createAndSaveToken({
         user: dbUserData,
