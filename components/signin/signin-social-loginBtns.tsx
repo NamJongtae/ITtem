@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function SigninSocialLoginBtns() {
-  const Kakao = typeof window !== "undefined" && window.Kakao;
   const router = useRouter();
 
   const handleClickGoogleLogin = () => {
@@ -14,10 +13,9 @@ export default function SigninSocialLoginBtns() {
   };
 
   const handleClickKaKaoLogin = () => {
-    if (!Kakao) return;
-    Kakao.Auth.authorize({
-      redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
-    });
+    router.push(
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&prompt=login`
+    );
   };
 
   return (
