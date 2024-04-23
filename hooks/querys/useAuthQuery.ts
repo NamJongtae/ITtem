@@ -1,11 +1,10 @@
 import { AUTH_QUERY_KEY } from "@/constants/constant";
 import { getUser } from "@/lib/api/auth";
-import { AuthData, SessionCookiesResponseData } from "@/types/apiTypes";
+import { AuthData } from "@/types/apiTypes";
 import { useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
 
 export default function useAuthQuery(
-  data: AxiosResponse<SessionCookiesResponseData, any> | undefined
+  isExistSession: boolean
 ) {
   const {
     data: user,
@@ -16,7 +15,7 @@ export default function useAuthQuery(
     queryFn: getUser,
     queryKey: AUTH_QUERY_KEY,
     retry: 0,
-    enabled: !!data?.data.ok,
+    enabled: isExistSession,
   });
 
   return { user, authIsLoading, authError, refetchAuth };

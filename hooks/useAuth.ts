@@ -5,26 +5,29 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { authSlice } from "@/store/authSlice";
 import { toast } from "react-toastify";
-import useSessionCookiesMutate from './querys/useSessionCookiesMutate';
-
+import useSessionCookiesMutate from "./querys/useSessionCookiesMutate";
 
 export default function useAuth() {
-  const { getSessionCookiesMuate, data } = useSessionCookiesMutate();
-  const { user, authIsLoading, authError, refetchAuth } = useAuthQuery(data);
+  const { getSessionCookiesMuate, isExistSession, resetIsExistSession } =
+    useSessionCookiesMutate();
+  const { user, authIsLoading, authError, refetchAuth } =
+    useAuthQuery(isExistSession);
 
   const dispatch = useDispatch<AppDispatch>();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const params = [searchParams].toString();
 
   useEffect(() => {
     getSessionCookiesMuate();
-  }, [pathname, [searchParams].toString()]);
+  }, [pathname, params, getSessionCookiesMuate]);
 
   useEffect(() => {
+    resetIsExistSession();
     if (user) {
       dispatch(authSlice.actions.saveAuth(user));
     }
-  }, [user, dispatch]);
+  }, [user, resetIsExistSession, dispatch]);
 
   useEffect(() => {
     if (authError) {
@@ -32,7 +35,7 @@ export default function useAuth() {
       dispatch(authSlice.actions.resetAuth());
       dispatch(authSlice.actions.setIsLoading(false));
     }
-  }, [authError]);
+  }, [authError, dispatch]);
 
   return { user, authIsLoading, authError, refetchAuth };
 }
