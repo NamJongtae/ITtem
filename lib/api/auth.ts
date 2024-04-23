@@ -173,6 +173,19 @@ export async function regenerateAccessToken(): Promise<
   }
 }
 
+export async function deleteAllToken(
+  email: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = customAxios.post("/api/auth/deleteToken", {
+      email,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getGoogleAuthAccessToken(
   code: string
 ): Promise<AxiosResponse<GoogleAuthAccessTokenResponseData>> {
