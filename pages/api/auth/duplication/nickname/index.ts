@@ -25,7 +25,7 @@ export default async function handler(
         .status(500)
         .json({ message: "닉네임 확인에 실패하였습니다.", ok: false });
     } finally {
-      DBClient.close();
+      await DBClient.close();
     }
   }
 }

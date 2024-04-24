@@ -85,7 +85,7 @@ export default async function handler(
       console.error(error);
       res.status(500).json(ERROR_MESSAGE);
     } finally {
-      DBClient.close();
+      await DBClient.close();
     }
   }
 }

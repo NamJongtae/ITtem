@@ -117,7 +117,7 @@ export default async function handler(
       console.log(error);
       res.status(500).json({ message: "로그인에 실패했어요." });
     } finally {
-      DBClient.close();
+      await DBClient.close();
     }
   }
 }

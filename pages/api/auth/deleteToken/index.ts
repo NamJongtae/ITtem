@@ -25,7 +25,7 @@ export default async function handler(
       console.error(error);
       res.status(500).json({ message: "토큰 삭제에 실패했어요." });
     } finally {
-      DBClient.close();
+      await DBClient.close();
     }
   }
 }

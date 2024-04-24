@@ -7,9 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { code } = req.body;
-
-    console.log(code);
-
+    
     if (!code) {
       res.status(422).json({ message: "유저 코드가 없어요." });
       return;
