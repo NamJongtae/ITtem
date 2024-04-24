@@ -10,8 +10,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { email, verifyCode } = req.body;
-    const data = await getEmailVerifyCode(email);
+    const { email, verifyCode, isFindPw } = req.body;
+    const data = await getEmailVerifyCode(email, isFindPw);
+
     if (data && parseInt(data.count, 10) >= 10) {
       res.status(403).json({
         message:
@@ -19,17 +20,15 @@ export default async function handler(
       });
       return;
     }
-    await incrementVerifyEmailCounter(email, data?.count);
+    await incrementVerifyEmailCounter(email, data?.count, isFindPw);
     if (verifyCode.toUpperCase() === data?.verifyCode) {
       await saveVerifiedEmail(email);
       res.status(200).json({ message: "인증이 완료됬어요.", ok: true });
     } else {
-      res
-        .status(401)
-        .json({
-          message: "인증코드가 일치하지 않아요.",
-          ok: false,
-        });
+      res.status(401).json({
+        message: "인증코드가 일치하지 않아요.",
+        ok: false,
+      });
     }
   }
 }
