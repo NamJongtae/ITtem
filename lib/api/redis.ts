@@ -10,18 +10,20 @@ const client = new Redis({
   token: process.env.NEXT_SECRET_REDIS_TOKEN as string,
 });
 
-export const saveVerifiedEmail = async (email: string) => {
+export const saveVerifiedEmail = async (email: string, isFindPw?: boolean) => {
   try {
-    await client.hset(email, { isVerify: true });
-    await client.expire(email, VERIFIED_EMAIL_EXP);
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
+    await client.hset(key, { isVerify: true });
+    await client.expire(key, VERIFIED_EMAIL_EXP);
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getVerifiedEmail = async (email: string) => {
+export const getVerifiedEmail = async (email: string, isFindPw?: boolean) => {
   try {
-    const isVerify = await client.hget(email, "isVerify");
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
+    const isVerify = await client.hget(key, "isVerify");
     if (isVerify) {
       return true;
     } else {
@@ -35,13 +37,15 @@ export const getVerifiedEmail = async (email: string) => {
 
 export const incrementVerifyEmailCounter = async (
   email: string,
-  count: string | undefined
+  count: string | undefined,
+  isFindPw?: boolean
 ) => {
   try {
     if (!count) return;
-    await client.hset(email, { count: parseInt(count, 10) + 1 });
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
+    await client.hset(key, { count: parseInt(count, 10) + 1 });
     if (parseInt(count, 10) >= 9) {
-      await client.expire(email, VERIFY_EMAIL_BLOCK_EXP);
+      await client.expire(key, VERIFY_EMAIL_BLOCK_EXP);
     }
   } catch (error) {
     console.log(error);
@@ -51,21 +55,24 @@ export const incrementVerifyEmailCounter = async (
 export const saveEmailVerifyCode = async (
   email: string,
   verifyCode: string,
+  isFindPw?: boolean,
   count = 1,
   exp = VERIFY_EMAIL_EXP
 ) => {
   try {
-    await client.hset(email, { isVerify: false, verifyCode, count });
-    await client.expire(email, exp);
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
+    await client.hset(key, { isVerify: false, verifyCode, count });
+    await client.expire(key, exp);
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getEmailVerifyCode = async (email: string) => {
+export const getEmailVerifyCode = async (email: string, isFindPw?: boolean) => {
   try {
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
     const result: { verifyCode: string; count: string } | null =
-      await client.hgetall(email);
+      await client.hgetall(key);
     return result;
   } catch (error) {
     console.error(error);
@@ -91,7 +98,10 @@ export async function saveToken({
   }
 }
 
-export async function getToken(uid: string, type: "accessToken" | "refreshToken") {
+export async function getToken(
+  uid: string,
+  type: "accessToken" | "refreshToken"
+) {
   try {
     const token = await client.get(`${uid}:${type}`);
     return token;
@@ -100,7 +110,10 @@ export async function getToken(uid: string, type: "accessToken" | "refreshToken"
   }
 }
 
-export async function deleteToken(uid: string, type: "accessToken" | "refreshToken") {
+export async function deleteToken(
+  uid: string,
+  type: "accessToken" | "refreshToken"
+) {
   try {
     const response = await client.del(`${uid}:${type}`);
     return response;
@@ -108,4 +121,3 @@ export async function deleteToken(uid: string, type: "accessToken" | "refreshTok
     console.error(error);
   }
 }
-
