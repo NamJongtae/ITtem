@@ -10,7 +10,7 @@ export default function SigninLinks() {
         <div className="absolute w-[1px] h-3 bg-gray-400 top-[3px] -right-[7px]" />
       </div>
 
-      <Link className="text-xs" href={"/signup"}>
+      <Link className="text-xs" href={"/findpassword"}>
         비밀번호찾기
       </Link>
     </div>
