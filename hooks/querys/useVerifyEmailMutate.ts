@@ -16,15 +16,10 @@ export default function useVerifyEmailMutate() {
     useMutation<
       AxiosResponse<VerifyEmailResponseData>,
       AxiosError,
-      { email: string; verifyCode: string }
+      { email: string; verifyCode: string; isFindPw?: boolean }
     >({
-      mutationFn: ({
-        email,
-        verifyCode,
-      }: {
-        email: string;
-        verifyCode: string;
-      }) => verifyEmail(email, verifyCode),
+      mutationFn: ({ email, verifyCode, isFindPw }) =>
+        verifyEmail(email, verifyCode, isFindPw),
       onSuccess: (result) => {
         toast.success(result.data?.message);
         dispatch(signupSlice.actions.verifedEmail());

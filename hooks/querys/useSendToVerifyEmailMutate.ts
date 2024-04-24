@@ -15,9 +15,9 @@ export default function useSendToVerifyEmailMutate() {
   const { mutate: sendToVerifyEmailMutate } = useMutation<
     AxiosResponse<VerifyEmailResponseData>,
     AxiosError,
-    string
+    { email: string; isFindPw?: boolean }
   >({
-    mutationFn: (email: string) => sendToVerifyEmail(email),
+    mutationFn: ({ email, isFindPw }) => sendToVerifyEmail(email, isFindPw),
     onSuccess: (result) => {
       toast.success(result.data?.message);
       dispatch(signupSlice.actions.setSendToVerifyEmailLoading(false));

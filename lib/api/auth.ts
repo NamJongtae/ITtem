@@ -63,11 +63,13 @@ export async function verifyPassword(password: string, hashedPassword: string) {
 }
 
 export async function sendToVerifyEmail(
-  email: string
+  email: string,
+  isFindPw?: boolean
 ): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/sendVerifyEmail", {
       email,
+      isFindPw,
     });
     return response;
   } catch (error) {
@@ -77,12 +79,14 @@ export async function sendToVerifyEmail(
 
 export async function verifyEmail(
   email: string,
-  verifyCode: string
+  verifyCode: string,
+  isFindPw?: boolean
 ): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/verifyEmail", {
       email,
       verifyCode,
+      isFindPw
     });
     return response;
   } catch (error) {
