@@ -116,6 +116,19 @@ export async function checkNicknameDuplication(
   }
 }
 
+export async function checkEmail(
+  email: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.post("/api/auth/checkEmail", {
+      email,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function sigin(
   email: string,
   password: string,
