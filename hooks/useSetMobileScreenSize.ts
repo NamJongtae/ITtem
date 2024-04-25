@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { isMobile } from "react-device-detect";
 
 export const useSetMobileScreenSize = () => {
   function setScreenSize() {
@@ -8,6 +7,10 @@ export const useSetMobileScreenSize = () => {
   }
 
   useEffect(() => {
-    if (isMobile) setScreenSize();
+    setScreenSize();
+
+    // resize 이벤트가 발생하면 다시 계산하도록 아래 코드 추가
+    window.addEventListener("resize", setScreenSize);
+    return () => window.removeEventListener("resize", setScreenSize);
   }, []);
 };
