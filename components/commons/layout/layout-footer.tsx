@@ -4,7 +4,11 @@ export default function Footer() {
   const router = useRouter();
   const pathname = router.pathname;
 
-  if (pathname.includes("/signup") || pathname.includes("/signin")) {
+  if (
+    pathname.includes("/signup") ||
+    pathname.includes("/signin") ||
+    pathname.includes("/findpassword")
+  ) {
     return null;
   }
   return (
