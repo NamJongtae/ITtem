@@ -61,10 +61,10 @@ export default function CoreInputField({
   const error = formState.errors[inputName];
   const value = watch(inputName);
   const resetInput = () => {
+    clearErrors(inputName);
     setValue(inputName, "", {
       shouldDirty: true,
     });
-    clearErrors(inputName);
   };
 
   return (
