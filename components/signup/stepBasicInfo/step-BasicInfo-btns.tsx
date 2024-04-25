@@ -1,5 +1,7 @@
+import { RootState } from '@/store/store';
 import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
+import { useSelector } from 'react-redux';
 
 interface IProps {
   nextStepHandler: () => void;
@@ -16,7 +18,10 @@ export default function StepBasicInfoBtns({ nextStepHandler }: IProps) {
     formState.dirtyFields["password"] &&
     formState.dirtyFields["verifyCode"];
 
-  const isDisabled = !!errors || !isDirty;
+    const isVerifyEmail = useSelector(
+      (state: RootState) => state.signup.isVerifedEmail
+    );
+    const isDisabled = !!errors || !isDirty || !isVerifyEmail;
 
   const router = useRouter();
 
