@@ -10,8 +10,10 @@ export default async function handler(
       const { nickname } = req.body;
       await DBClient.connect();
       const db = DBClient.db("auth");
-      const isDuplication = await db.collection("user").findOne({ nickname });
-      
+      const isDuplication = await db
+        .collection("user")
+        .findOne({ nickname: { $regex: new RegExp(nickname, "i") } });
+
       if (isDuplication) {
         res
           .status(401)

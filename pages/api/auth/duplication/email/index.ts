@@ -8,10 +8,13 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { email } = req.body;
+      
       await DBClient.connect();
       const db = DBClient.db("auth");
-      const isDuplication = await db.collection("user").findOne({ email });
-      
+      const isDuplication = await db
+        .collection("user")
+        .findOne({ email: { $regex: new RegExp(email, "i") } });
+
       if (isDuplication) {
         res
           .status(401)
