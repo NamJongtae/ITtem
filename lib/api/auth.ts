@@ -327,3 +327,24 @@ export async function kakaoSignin(
     throw error;
   }
 }
+
+export async function changePassword({
+  email,
+  password,
+  isFindPw,
+}: {
+  email: string;
+  password: string;
+  isFindPw?: boolean;
+}): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.post("/api/auth/changePassword", {
+      email,
+      password,
+      isFindPw,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
