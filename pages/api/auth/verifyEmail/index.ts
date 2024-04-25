@@ -22,7 +22,7 @@ export default async function handler(
     }
     await incrementVerifyEmailCounter(email, data?.count, isFindPw);
     if (verifyCode.toUpperCase() === data?.verifyCode) {
-      await saveVerifiedEmail(email);
+      await saveVerifiedEmail(email, isFindPw);
       res.status(200).json({ message: "인증이 완료됬어요.", ok: true });
     } else {
       res.status(401).json({

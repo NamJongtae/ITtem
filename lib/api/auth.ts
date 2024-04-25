@@ -86,7 +86,7 @@ export async function verifyEmail(
     const response = await customAxios.post("/api/auth/verifyEmail", {
       email,
       verifyCode,
-      isFindPw
+      isFindPw,
     });
     return response;
   } catch (error) {
