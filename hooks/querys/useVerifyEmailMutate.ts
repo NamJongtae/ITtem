@@ -31,7 +31,7 @@ export default function useVerifyEmailMutate() {
             toast.warn(error.response?.data.message);
             setError("verifyCode", {
               type: "validate",
-              message: "인증 번호가 일치하지 않아요.",
+              message: "인증코드가 일치하지 않아요.",
             });
           } else if (error.response?.status === 403) {
             dispatch(signupSlice.actions.resetSendToVerifyEmail());
