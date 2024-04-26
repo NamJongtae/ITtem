@@ -10,7 +10,7 @@ import { signupSlice } from "@/store/signupSlice";
 import useCheckEmailMutate from "./querys/useCheckEmailMutate";
 
 export default function useVerifyEmail(isFindPw?: boolean) {
-  const { getValues, setError, clearErrors } = useFormContext();
+  const { getValues, clearErrors } = useFormContext();
   const verifyCodeRef = useRef<HTMLInputElement | null>(null);
   const isSendToVerifyEmail = useSelector(
     (state: RootState) => state.signup.isSendToVerifyEmail

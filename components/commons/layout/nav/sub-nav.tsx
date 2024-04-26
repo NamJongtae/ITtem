@@ -1,5 +1,3 @@
-"use client";
-
 import NavSubMenu from "./nav-sub-menu";
 import MenuIcon from "@/public/icons/menu_icon.svg";
 import NavCategoryMenu from "./nav-category-menu";
@@ -13,7 +11,6 @@ export default function SubNav() {
     buttonRef,
     currentCategory,
   } = useNavCategory();
-  
 
   return (
     <nav className="relative flex justify-between px-4 sm:px-8 pb-4 max-w-[1024px] mx-auto">
