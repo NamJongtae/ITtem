@@ -1,6 +1,7 @@
 import "@/styles/global.css";
 import "swiper/css";
 import "react-toastify/dist/ReactToastify.css";
+import "@/styles/swiperStyles.css";
 import "@/styles/toast.css";
 import type { AppProps } from "next/app";
 import { Noto_Sans_KR } from "next/font/google";
