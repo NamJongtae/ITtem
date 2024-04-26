@@ -27,7 +27,7 @@ export default function FindPasswordForm() {
         },
       }}
     >
-      <h2 className="my-5 font-semibold text-xl">비밀번호 찾기</h2>
+      <h2 className="py-5 font-semibold text-xl">비밀번호 찾기</h2>
       <FormConent />
     </MyForm>
   );

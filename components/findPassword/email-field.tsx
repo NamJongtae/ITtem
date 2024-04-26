@@ -17,7 +17,7 @@ export default function EmailField() {
 
   return (
     !isVerifyEmail && (
-      <>
+      <div>
         <div className="flex gap-3 items-center">
           <CoreInputField
             label="이메일"
@@ -42,7 +42,7 @@ export default function EmailField() {
           )}
         </div>
         <EmailError />
-      </>
+      </div>
     )
   );
 }
