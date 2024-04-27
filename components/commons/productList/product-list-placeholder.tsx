@@ -8,7 +8,7 @@ export default function ProductListPlaceholder({ listCount = 10 }: IProps) {
   return Array(listCount)
     .fill("")
     .map((_, index) => (
-      <div
+      <li
         key={index}
         className="w-full h-full mx-auto rounded shadow-lg animate-pulse border max-w-xs"
       >
@@ -26,6 +26,6 @@ export default function ProductListPlaceholder({ listCount = 10 }: IProps) {
             <div className="h-4 bg-gray-300 w-2/3"></div>
           </div>
         </div>
-      </div>
+      </li>
     ));
 }
