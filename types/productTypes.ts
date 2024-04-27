@@ -48,7 +48,7 @@ export interface ProductData {
   name: string;
   description: string;
   userName: string;
-  createdAt: Date;
+  createdAt: string;
   status: ProductStatus;
   report: boolean;
   reportCount: number;
