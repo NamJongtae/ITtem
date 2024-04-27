@@ -13,7 +13,7 @@ export default function ProductListEmpty({ message }: IProps) {
         width={60}
         height={60}
       />
-      <p>{message}</p>
+      <p className='whitespace-pre text-center'>{message}</p>
     </div>
   );
 }
