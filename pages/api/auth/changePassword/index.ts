@@ -14,7 +14,7 @@ export default async function handler(
       const { email, password, currentPassword, isFindPw } = req.body;
 
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
 
       if (isFindPw) {
         const isVerifyEmail = await getVerifiedEmail(email, isFindPw);

@@ -15,7 +15,7 @@ export default async function handler(
     try {
       const { email, password, nickname, profileImg, introduce } = req.body;
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
 
       if (!email) {
         res.status(422).json({ message: "이메일을 입력하지 않았어요." });

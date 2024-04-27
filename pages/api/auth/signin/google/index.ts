@@ -26,7 +26,7 @@ export default async function handler(
       const googleUserData = user;
 
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const collection = db.collection("user");
       const dbUserData = (await collection.findOne({
         email: googleUserData.email,

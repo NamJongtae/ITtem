@@ -4,7 +4,6 @@ import { DBClient } from "@/lib/database";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
 import { IronSessionType, UserData } from "@/types/apiTypes";
-import axios from "axios";
 import { getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -30,14 +29,14 @@ export default async function handler(
       session.destroy();
 
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const user = (await db.collection("user").findOne({
         uid: decodeAccessToken?.data?.user.uid || "",
       })) as UserData | null;
 
       if (user?.socialType === "KAKAO") {
         res
-          .status(200)
+          .status(202)
           .json({ message: "카카오 계정은 별도의 로그아웃이 필요해요."});
         return;
       }

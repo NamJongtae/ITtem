@@ -21,14 +21,14 @@ export default async function handler(
         req.body;
 
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const collection = db.collection("user");
       const userData = (await collection.findOne({
         email: email.toLocaleLowerCase(),
       })) as UserData | null;
 
       // 소셜 로그인으로 가입한 경우
-      if (userData?.socialType === "EMAIL") {
+      if (userData?.socialType !== "EMAIL") {
         res
           .status(401)
           .json({ message: "이메일 혹은 비밀번호가 일치하지 않아요." });

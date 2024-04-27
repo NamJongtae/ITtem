@@ -16,7 +16,7 @@ export default async function handler(
       }
 
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const user = await db.collection("user").findOne({ email });
 
       if (!user) {

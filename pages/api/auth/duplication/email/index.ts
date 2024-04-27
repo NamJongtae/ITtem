@@ -10,7 +10,7 @@ export default async function handler(
       const { email } = req.body;
       
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const isDuplication = await db
         .collection("user")
         .findOne({ email: { $regex: new RegExp(email, "i") } });
