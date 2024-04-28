@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongodb';
-
 export enum ProductCategory {
   전체 = "전체",
   의류 = "의류",
@@ -65,3 +63,5 @@ export interface ProductData {
   transaction: ProductTransaction;
   deliveryFee: boolean;
 }
+
+export type ProductListType = "TODAY" | "CATEGORY";
