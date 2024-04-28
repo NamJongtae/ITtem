@@ -1,4 +1,5 @@
-import { setTokenExp } from '@/lib/token';
+import { setTokenExp } from "@/lib/token";
+import { ProductCategory } from "@/types/productTypes";
 
 export const CATEGORY = [
   "전체",
@@ -50,3 +51,7 @@ export const ACCESS_TOKEN_EXP = setTokenExp(60);
 export const REFRESH_TOKEN_EXP = setTokenExp(300);
 
 export const PRODUCT_TODAY_LIST_QUERY_KEY = ["productList", "today"];
+
+export const getCategoryProductListQueryKey = (category: ProductCategory) => {
+  return ["prduct", category];
+};
