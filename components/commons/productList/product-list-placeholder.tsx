@@ -21,9 +21,13 @@ export default function ProductListPlaceholder({ listCount = 10 }: IProps) {
               alt="loading..."
             />
           </div>
-          <div className="p-5">
-            <div className="h-5 bg-gray-300 mb-2"></div>
-            <div className="h-4 bg-gray-300 w-2/3"></div>
+          <div className="px-[10px] py-[15px]">
+            <div className="h-[14px] bg-gray-300 mb-2"></div>
+            <div className="h-[14px] bg-gray-300 w-2/3 mb-2"></div>
+            <div className="flex justify-between">
+              <div className="w-20 h-3 bg-gray-300"></div>
+              <div className="w-12 h-3 bg-gray-300"></div>
+            </div>
           </div>
         </div>
       </li>

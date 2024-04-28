@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductListImg from "./product-list-img";
 import ProductListContent from "./product-list-content";
-import { ProductData } from '@/types/productTypes';
+import { ProductData } from "@/types/productTypes";
 
 interface IProps {
   data: ProductData;
@@ -22,7 +22,14 @@ export default function ProductItem({ data }: IProps) {
           }}
         />
 
-        <ProductListContent data={{ name: data.name, createdAt: data.createdAt }} />
+        <ProductListContent
+          data={{
+            name: data.name,
+            createdAt: data.createdAt,
+            price: data.price,
+            location: data.location,
+          }}
+        />
       </Link>
     </li>
   );
