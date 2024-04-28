@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CATEGORY } from "@/constants/constant";
 import { forwardRef } from "react";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   currentCategory: string | null;
@@ -8,6 +9,8 @@ interface IProps {
 
 const NavCategoryMenu = forwardRef<HTMLDivElement, IProps>(
   ({ currentCategory }, ref) => {
+    const pathname = usePathname();
+
     return (
       <div
         className="absolute top-[40px] md:top-[54px] left-4 md:left-8 w-[200px] bg-white z-40 border"
@@ -20,8 +23,15 @@ const NavCategoryMenu = forwardRef<HTMLDivElement, IProps>(
           {CATEGORY.map((category) => (
             <li key={category} className="w-full h-ful">
               <Link
-                href={`/product?category=${category}`}
+                href={`${
+                  category === "전체"
+                    ? "/product"
+                    : `/product?category=${category}`
+                }`}
                 className={`${
+                  (pathname.includes("product") &&
+                    currentCategory === null &&
+                    category === "전체") ||
                   currentCategory === category
                     ? "bg-red-400 text-white"
                     : "bg-none text-inherit"
