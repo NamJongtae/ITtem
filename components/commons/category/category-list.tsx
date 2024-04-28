@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { CATEGORY } from '@/constants/constant';
+import { CATEGORY } from "@/constants/constant";
 import { usePathname } from "next/navigation";
 
 interface IProps {
@@ -22,8 +22,15 @@ export default function CategoryList({ currentCategory }: IProps) {
           } border `}
           style={{ padding: "5px" }}
         >
-          <Link href={`/${path.replace("/", "")}?category=${category}`}>
-            <button className={"w-full"}>{category}</button>
+          <Link
+            className="w-full block text-center"
+            href={`${
+              category === "전체"
+                ? "/product"
+                : `/${path.replace("/", "")}?category=${category}`
+            }`}
+          >
+            {category}
           </Link>
         </li>
       ))}
