@@ -1,25 +1,30 @@
-import { PRODUCT_TODAY_LIST_QUERY_KEY } from '@/constants/constant';
+import { PRODUCT_TODAY_LIST_QUERY_KEY } from "@/constants/constant";
 import { getTodayProductList } from "@/lib/api/product";
-import { ProductData } from "@/types/productTypes";
+import { ProductData, ProductListType } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-
-
-export default function useProductTodayListInfiniteQuery(limit: number = 10) {
+export default function useProductTodayListInfiniteQuery({
+  limit = 10,
+  productListType,
+}: {
+  limit?: number;
+  productListType: ProductListType;
+}) {
   const {
-    data,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
+    data: todayProductListData,
+    hasNextPage: hasNextPageTodayProductList,
+    fetchNextPage: fetchNextPageTodayProductList,
+    isFetchingNextPage: isFetchingNextPageTodayProductList,
+    isLoading: isLoadingTodayProductList,
+    isError: isErrorTodayProductList,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: PRODUCT_TODAY_LIST_QUERY_KEY,
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await getTodayProductList(pageParam , limit);
+      const response = await getTodayProductList(pageParam, limit);
       return response.data.product;
     },
+    enabled: productListType === "TODAY",
     initialPageParam: 1,
     getNextPageParam: (lastPage, allpages) => {
       return lastPage.length === limit
@@ -29,11 +34,11 @@ export default function useProductTodayListInfiniteQuery(limit: number = 10) {
   });
 
   return {
-    data: data?.pages.flat(),
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
+    todayProductListData: todayProductListData?.pages.flat(),
+    hasNextPageTodayProductList,
+    fetchNextPageTodayProductList,
+    isFetchingNextPageTodayProductList,
+    isLoadingTodayProductList,
+    isErrorTodayProductList,
   };
 }
