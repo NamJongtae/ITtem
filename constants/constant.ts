@@ -52,6 +52,9 @@ export const REFRESH_TOKEN_EXP = setTokenExp(300);
 
 export const PRODUCT_TODAY_LIST_QUERY_KEY = ["productList", "today"];
 
-export const getCategoryProductListQueryKey = (category: ProductCategory) => {
-  return ["prduct", category];
+export const getCategoryProductListQueryKey = (
+  category: ProductCategory,
+  location?: string
+) => {
+  return location ? ["product", category, "myLocation"] : ["product", category];
 };
