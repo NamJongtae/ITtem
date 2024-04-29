@@ -7,6 +7,7 @@ import ProductListEmpty from "./product-list-empty";
 import useCategoryProductListInfiniteQuery from "@/hooks/querys/useCategoryProductListInfiniteQuery";
 import { useSearchParams } from "next/navigation";
 import { ProductCategory, ProductListType } from "@/types/productTypes";
+import useSearchProductListInfiniteQuery from "@/hooks/querys/useSearchProductListInfiniteQuery";
 
 interface IProps {
   productListType: ProductListType;
@@ -14,6 +15,8 @@ interface IProps {
 
 export default function ProductList({ productListType }: IProps) {
   const search = useSearchParams();
+  const keyword = search.get("keyword");
+
   const category = (search.get("category") as ProductCategory) || null;
   const {
     todayProductListData,
@@ -36,46 +39,83 @@ export default function ProductList({ productListType }: IProps) {
     productListType,
   });
 
+  const {
+    searchProductListData,
+    hasNextPageSearchProductList,
+    fetchNextPageSearchProductList,
+    isFetchingNextPageSearchProductList,
+    isLoadingSearchProductList,
+    isErrorSearchProductList,
+  } = useSearchProductListInfiniteQuery({
+    category: category || undefined,
+    productListType,
+  });
+
   const isLoading =
     productListType === "TODAY"
       ? isLoadingTodayProductList
-      : isLoadingCategoryProductList;
+      : productListType === "CATEGORY"
+      ? isLoadingCategoryProductList
+      : isLoadingSearchProductList;
+
   const data =
     productListType === "TODAY"
       ? todayProductListData
-      : categoryProductListData;
+      : productListType === "CATEGORY"
+      ? categoryProductListData
+      : searchProductListData;
+
   const fetchNextPage =
     productListType === "TODAY"
       ? fetchNextPageTodayProductList
-      : fetchNextPageCategoryProductList;
+      : productListType === "CATEGORY"
+      ? fetchNextPageCategoryProductList
+      : fetchNextPageSearchProductList;
+
   const isFetchingNextPage =
     productListType === "TODAY"
       ? isFetchingNextPageTodayProductList
-      : isFetchingNextPageCategoryProductList;
+      : productListType === "CATEGORY"
+      ? isFetchingNextPageCategoryProductList
+      : isFetchingNextPageSearchProductList;
+
   const hasNextPage =
     productListType === "TODAY"
       ? hasNextPageTodayProductList
-      : hasNextPageCategoryProductList;
+      : productListType === "CATEGORY"
+      ? hasNextPageCategoryProductList
+      : hasNextPageSearchProductList;
+
   const isError =
     productListType === "TODAY"
       ? isErrorTodayProductList
-      : isErrorCategoryProductList;
+      : productListType === "CATEGORY"
+      ? isErrorCategoryProductList
+      : isErrorSearchProductList;
 
   return (
     <>
       {data?.length === 0 && !isLoading && (
         <ProductListEmpty
           message={`${
-            productListType === "TODAY" ? "오늘의" : ""
-          } 상품이 존재하지 않아요.`}
+            productListType === "TODAY"
+              ? "오늘의 상품이 존재하지 않아요."
+              : productListType === "CATEGORY"
+              ? "상품이 존재하지 않아요."
+              : `${'"' + keyword + '"'}에 대한 검색결과가 없어요.`
+          } `}
         />
       )}
 
       {isError && (
         <ProductListEmpty
           message={`${
-            productListType === "TODAY" ? "오늘의" : ""
-          } 상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요.`}
+            productListType === "TODAY"
+              ? "오늘의 상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요."
+              : productListType === "CATEGORY"
+              ? "상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요."
+              : "검색 결과를 불러올 수 없어요.\n잠시 후 다시 시도해주세요."
+          }`}
         />
       )}
 
