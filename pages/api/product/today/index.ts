@@ -18,16 +18,17 @@ export default async function handler(
       todayEnd.setHours(23, 59, 59, 999);
 
       const currentPage = parseInt(page as string) || 1;
-      const currentlimit = parseInt(limit as string) || 10;
+      const currentLimit = parseInt(limit as string) || 10;
 
       // skip할 문서의 수를 계산합니다.
-      const skip = (currentPage - 1) * currentlimit;
+      const skip = (currentPage - 1) * currentLimit;
 
       const product = await db
         .collection("product")
         .find({ createdAt: { $gte: todayStart, $lt: todayEnd } })
         .skip(skip)
-        .limit(currentlimit)
+        .limit(currentLimit)
+        .sort({ createdAt: -1 })
         .toArray();
 
       res.status(200).json({ message: "상품 조회에 성공했어요.", product });
