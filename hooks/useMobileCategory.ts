@@ -1,20 +1,26 @@
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useDropdownMenu from "./useDropDownMenu";
 
 export default function useMobileCategory() {
   const router = useRouter();
-  const path = usePathname();
+  const pathname = usePathname();
   const { isOpenMenu, toggleMenu, menuRef, closeMenu } = useDropdownMenu();
+  const search = useSearchParams();
+  const keyword = search.get("keyword");
 
   const handleSelectMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     const category = e.currentTarget.getAttribute("data-category");
     if (!category) return;
     closeMenu();
-    if (category === "전체") {
-      router.push(`/product`);
-    } else {
-      router.push(`/${path.replace("/", "")}?category=${category}`);
-    }
+    router.push(
+      category === "전체"
+        ? keyword
+          ? `${pathname}?keyword=${keyword}`
+          : pathname
+        : keyword
+        ? `${pathname}?keyword=${keyword}&category=${category}`
+        : `${pathname}?category=${category}`
+    );
   };
 
   return { isOpenMenu, toggleMenu, handleSelectMenu, menuRef };

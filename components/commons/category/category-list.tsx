@@ -1,14 +1,15 @@
-"use client";
 import Link from "next/link";
 import { CATEGORY } from "@/constants/constant";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface IProps {
   currentCategory: string;
 }
 
 export default function CategoryList({ currentCategory }: IProps) {
-  const path = usePathname();
+  const pathname = usePathname();
+  const search = useSearchParams();
+  const keyword = search.get("keyword");
 
   return (
     <ul className="hidden sm:grid sm:grid-cols-5 my-6 gap-1">
@@ -24,11 +25,15 @@ export default function CategoryList({ currentCategory }: IProps) {
         >
           <Link
             className="w-full block text-center"
-            href={`${
+            href={
               category === "전체"
-                ? "/product"
-                : `/${path.replace("/", "")}?category=${category}`
-            }`}
+                ? keyword
+                  ? `${pathname}?keyword=${keyword}`
+                  : pathname
+                : keyword
+                ? `${pathname}?keyword=${keyword}&category=${category}`
+                : `${pathname}?category=${category}`
+            }
           >
             {category}
           </Link>
