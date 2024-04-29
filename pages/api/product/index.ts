@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      const { category, page, limit } = req.query;
+      const { category, page, limit, location } = req.query;
       await DBClient.connect();
 
       const currentPage = parseInt(page as string) || 1;
@@ -16,7 +16,11 @@ export default async function handler(
 
       const db = DBClient.db("ITtem");
 
-      const query = category !== "전체" ? { category: category } : {};
+      let query = {};
+      query = category !== "전체" ? { category } : query;
+      query = location
+        ? { ...query, location: new RegExp(location as string, "i") }
+        : query;
 
       const product = await db
         .collection("product")

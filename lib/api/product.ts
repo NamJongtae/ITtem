@@ -16,14 +16,20 @@ export async function getTodayProductList(
   }
 }
 
-export async function getCategoryProductList(
-  category: ProductCategory = ProductCategory.전체,
-  page: unknown = 1,
-  limit: number = 10
-): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
+export async function getCategoryProductList({
+  category = ProductCategory.전체,
+  page = 1,
+  limit = 10,
+  location,
+}: {
+  category: ProductCategory;
+  page: unknown;
+  limit: number;
+  location?: string;
+}): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
   try {
     const response = await customAxios(
-      `/api/product?category=${category}&page=${page}&limit=${limit}`
+      `/api/product?category=${category}&page=${page}&limit=${limit}&location=${location}`
     );
     return response;
   } catch (error) {
