@@ -58,3 +58,10 @@ export const getCategoryProductListQueryKey = (
 ) => {
   return location ? ["product", category, "myLocation"] : ["product", category];
 };
+
+export const getSearchProductListQueryKey = (
+  category: ProductCategory,
+  keyword: string | null
+) => {
+  return ["product", "search", keyword, category];
+};
