@@ -36,3 +36,24 @@ export async function getCategoryProductList({
     throw error;
   }
 }
+
+export async function getSearchProductList({
+  category = ProductCategory.전체,
+  page = 1,
+  limit = 10,
+  keyword,
+}: {
+  category: ProductCategory;
+  page: unknown;
+  limit: number;
+  keyword: string;
+}): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
+  try {
+    const response = await customAxios(
+      `/api/product/search?keyword=${keyword}&category=${category}&page=${page}&limit=${limit}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
