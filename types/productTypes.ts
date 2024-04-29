@@ -64,4 +64,4 @@ export interface ProductData {
   deliveryFee: boolean;
 }
 
-export type ProductListType = "TODAY" | "CATEGORY";
+export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH";
