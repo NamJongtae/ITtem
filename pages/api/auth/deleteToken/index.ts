@@ -12,7 +12,7 @@ export default async function handler(
     try {
       const { email } = req.body;
       await DBClient.connect();
-      const db = DBClient.db("auth");
+      const db = DBClient.db("ITtem");
       const collection = db.collection("user");
       const dbUserData = (await collection.findOne({
         email,
