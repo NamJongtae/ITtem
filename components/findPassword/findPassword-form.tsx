@@ -1,7 +1,7 @@
 import React from "react";
 import { MyForm } from "../commons/myForm/MyForm";
 import FormConent from "./form-content";
-import useChangePassword from "@/hooks/useChangePassword";
+import useChangePassword from "@/hooks/commons/useChangePassword";
 import Loading from "../commons/loading";
 
 export default function FindPasswordForm() {

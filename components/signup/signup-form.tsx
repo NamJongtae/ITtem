@@ -1,7 +1,7 @@
 import { MyForm } from "../commons/myForm/MyForm";
 import FormContent from "./form-content";
 import Loading from "../commons/loading";
-import useSignup from "@/hooks/useSignup";
+import useSignup from "@/hooks/signup/useSignup";
 
 export default function SignupForm() {
   const { onSubmit, signupLoading } = useSignup();

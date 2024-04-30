@@ -1,6 +1,6 @@
 import React from "react";
 import FindPasswordForm from "./findPassword-form";
-import { useSetMobileScreenSize } from "@/hooks/useSetMobileScreenSize";
+import { useSetMobileScreenSize } from "@/hooks/commons/useSetMobileScreenSize";
 
 export default function FindPasswordPage() {
   useSetMobileScreenSize();

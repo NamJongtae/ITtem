@@ -1,4 +1,4 @@
-import useDebouncing from "@/hooks/useDebouncing";
+import useDebouncing from "@/hooks/commons/useDebouncing";
 import SellIcon from "@/public/icons/money_icon.svg";
 import { RootState } from "@/store/store";
 import Link from "next/link";

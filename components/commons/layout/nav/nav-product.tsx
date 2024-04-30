@@ -1,6 +1,6 @@
-import useDebouncing from "@/hooks/useDebouncing";
+import useDebouncing from "@/hooks/commons/useDebouncing";
 import MyProduct from "@/public/icons/product_icon.svg";
-import { RootState } from '@/store/store';
+import { RootState } from "@/store/store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";

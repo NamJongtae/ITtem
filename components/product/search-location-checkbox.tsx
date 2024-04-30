@@ -1,4 +1,4 @@
-import useLocation from "@/hooks/useLocation";
+import useLocation from "@/hooks/commons/useLocation";
 import { locationSlice } from "@/store/locationSlice";
 import { AppDispatch } from "@/store/store";
 import { useEffect, useState } from "react";

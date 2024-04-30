@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useDropdownMenu from "./useDropDownMenu";
+import useDropdownMenu from "../commons/useDropDownMenu";
 
 export default function useMobileCategory() {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import useProfileImg from "@/hooks/useProfileImg";
+import useProfileImg from "@/hooks/signup/useProfileImg";
 import ProfileImgInput from "./profileImg-input";
 import ProfileImgInputBtn from "./profileImg-input-btn";
 

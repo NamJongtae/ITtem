@@ -61,6 +61,7 @@ export default function useLocation(productLocation?: ProductLocation) {
 
   return {
     address,
+    setAddress,
     fetchCurrentLocation,
   };
 }

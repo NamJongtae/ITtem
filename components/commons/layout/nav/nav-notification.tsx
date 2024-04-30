@@ -1,6 +1,6 @@
 import NotificatonIcon from "@/public/icons/notification_icon.svg";
 import NotificationModal from "../../notificationModal/notification-modal";
-import useNotification from "@/hooks/useNotification";
+import useNotification from "@/hooks/layout/useNotification";
 
 export default function NavNotification() {
   const { isOpenNotification, toggleNotification, notificationRef } =

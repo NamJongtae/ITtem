@@ -4,7 +4,7 @@ import EmailVerifyBtn from "../signup/stepBasicInfo/email-verify-Btn";
 import VerifyCodeBtns from "../signup/stepBasicInfo/verifyCode-btns";
 import { useFormContext } from "react-hook-form";
 import { useSelector } from "react-redux";
-import useVerifyEmail from "@/hooks/useVerifyEmail";
+import useVerifyEmail from "@/hooks/signup/useVerifyEmail";
 import { RootState } from "@/store/store";
 
 export default function VerifyCodeField() {

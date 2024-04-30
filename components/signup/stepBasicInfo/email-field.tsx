@@ -1,5 +1,5 @@
 import EmailError from "./email-error";
-import useSendToVerifyEmail from "@/hooks/useSendToVerifyEmail";
+import useSendToVerifyEmail from "@/hooks/signup/useSendToVerifyEmail";
 import SendVerifyEmailBtn from "./send-verify-email-btn";
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";

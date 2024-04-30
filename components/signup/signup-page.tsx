@@ -1,5 +1,4 @@
-
-import { useSetMobileScreenSize } from '@/hooks/useSetMobileScreenSize';
+import { useSetMobileScreenSize } from "@/hooks/commons/useSetMobileScreenSize";
 import SignupForm from "./signup-form";
 
 export default function SignupPage() {

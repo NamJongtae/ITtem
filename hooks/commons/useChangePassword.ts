@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useChangePasswordMutate from "./querys/useChangePasswordMutate";
+import useChangePasswordMutate from "../querys/useChangePasswordMutate";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { FieldValues } from "react-hook-form";

@@ -3,7 +3,7 @@ import NavSell from "./nav-sell";
 import NavMyProduct from "./nav-product";
 import NavHome from "./nav-home";
 import NavMobileMenu from "./nav-mobile-menu";
-import useMoblieNavMenu from "@/hooks/useMoblieNavMenu";
+import useMoblieNavMenu from "@/hooks/layout/useMoblieNavMenu";
 import NavMoblieMenuBtn from "./nav-moblie-menuBtn";
 import { useRouter } from "next/router";
 export default function MobileNav() {

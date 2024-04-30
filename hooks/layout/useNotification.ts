@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store/store";
-import { modalSlice } from "../store/modalSlice";
-import useDebouncing from "./useDebouncing";
+import { AppDispatch, RootState } from "../../store/store";
+import { modalSlice } from "../../store/modalSlice";
+import useDebouncing from "../commons/useDebouncing";
 import { toast } from "react-toastify";
 
 export default function useNotification() {

@@ -1,7 +1,7 @@
 import VerifyCodeInput from "./verifyCode-input";
 import VerifyCodeBtns from "./verifyCode-btns";
 import EmailVerifyBtn from "./email-verify-Btn";
-import useVerifyEmail from "@/hooks/useVerifyEmail";
+import useVerifyEmail from "@/hooks/signup/useVerifyEmail";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useFormContext } from "react-hook-form";

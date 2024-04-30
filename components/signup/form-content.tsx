@@ -1,4 +1,4 @@
-import { useFunnel } from "@/hooks/useFunnel";
+import { useFunnel } from "@/hooks/commons/useFunnel";
 import SignupSubTitle from "./signup-subTitle";
 import SignupStepper from "./signup-stepper";
 import SignupStepBasicInfo from './stepBasicInfo/signup-step-basicInfo';

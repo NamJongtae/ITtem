@@ -3,7 +3,7 @@ import CoreInputField from "../commons/coreInputField/core-input-field";
 import SendVerifyEmailBtn from "../signup/stepBasicInfo/send-verify-email-btn";
 import EmailError from "../signup/stepBasicInfo/email-error";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
-import useSendToVerifyEmail from "@/hooks/useSendToVerifyEmail";
+import useSendToVerifyEmail from "@/hooks/signup/useSendToVerifyEmail";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
