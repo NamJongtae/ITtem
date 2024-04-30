@@ -39,6 +39,25 @@ export enum ProductStatus {
   sold = "sold",
 }
 
+export type ProductImgData = { url: string; name: string };
+
+export interface ProductUploadData {
+  id: number;
+  name: string;
+  description: string;
+  userName: string;
+  date: string;
+  imgData: ProductImgData[];
+  price: number;
+  sellType: ProductSellType;
+  category: ProductCategory;
+  location: ProductLocation;
+  condition: ProductCondition;
+  returnPolicy: boolean;
+  transaction: ProductTransaction;
+  deliveryFee: boolean;
+}
+
 export type ProductLocation = { address_name: string; x: number; y: number };
 
 export interface ProductData {
