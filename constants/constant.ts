@@ -41,6 +41,7 @@ export const VERIFY_EMAIL_BLOCK_EXP = 60 * 60 * 24;
 export const VERIFY_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
+export const SESSION_QUERY_KEY = ["session"];
 export const AUTH_QUERY_KEY = ["auth"];
 export const ACCESS_TOKEN_KEY = process.env
   .NEXT_SECRET_ACCESS_TOKEN_KEY as string;
