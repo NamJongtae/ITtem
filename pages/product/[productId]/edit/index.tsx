@@ -1,5 +1,5 @@
+import ProductUploadPage from "@/components/productUpload/product-upload-page";
+
 export default function ProductEdit() {
-  return (
-    <div>ProductEdit</div>
-  )
+  return <ProductUploadPage isEdit />;
 }

@@ -1,12 +1,13 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { toast } from "react-toastify";
-import { ProductLocation } from "@/types/productTypes";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { locationSlice } from "@/store/locationSlice";
 
-export default function useLocation(productLocation?: ProductLocation) {
-  const [address, setAddress] = useState(productLocation);
+export default function useLocation(
+  saveLocation?: (address: string) => void
+) {
+
   const dispatch = useDispatch<AppDispatch>();
 
   const fetchAddressFromCoords = async (
@@ -43,8 +44,11 @@ export default function useLocation(productLocation?: ProductLocation) {
           const { latitude, longitude } = position.coords;
           const address = await fetchAddressFromCoords(latitude, longitude);
           if (address) {
-            setAddress({ address_name: address, x: latitude, y: longitude });
             dispatch(locationSlice.actions.saveLocation(address.split(" ")[0]));
+            if (!!saveLocation) {
+              console.log(address)
+              saveLocation(address);
+            }
           } else {
             toast.warn("주소를 찾을 수 없어요.");
           }
@@ -60,8 +64,6 @@ export default function useLocation(productLocation?: ProductLocation) {
   }, [dispatch]);
 
   return {
-    address,
-    setAddress,
     fetchCurrentLocation,
   };
 }

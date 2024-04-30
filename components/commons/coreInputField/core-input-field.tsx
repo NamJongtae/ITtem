@@ -74,7 +74,7 @@ export default function CoreInputField({
       </label>
       <div className="relative w-full">
         <input
-          className={inputClassName + " root_input"}
+          className={`${inputClassName ? inputClassName : "root_input"}`}
           id={inputId}
           type={inputType}
           placeholder={inputPlaceholder}

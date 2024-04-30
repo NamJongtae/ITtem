@@ -51,14 +51,12 @@ export interface ProductUploadData {
   price: number;
   sellType: ProductSellType;
   category: ProductCategory;
-  location: ProductLocation;
+  location: string;
   condition: ProductCondition;
   returnPolicy: boolean;
   transaction: ProductTransaction;
   deliveryFee: boolean;
 }
-
-export type ProductLocation = { address_name: string; x: number; y: number };
 
 export interface ProductData {
   id: number;
