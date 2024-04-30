@@ -31,6 +31,7 @@ export default function useSignoutMutate() {
       return { previousAuth };
     },
     onSuccess: (response) => {
+      queryClient.removeQueries({ queryKey: ["session"] });
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
