@@ -70,7 +70,15 @@ export default async function handler(
         sessionOptions
       );
 
-      await createAndSaveToken({ user: userData, session });
+      await createAndSaveToken({
+        user: {
+          uid: userData.uid,
+          nickname: userData.nickname,
+          email: userData.email,
+          profileImg: userData.profileImg,
+        },
+        session,
+      });
 
       res.status(200).json({
         message: "로그인에 성공했습니다.",
