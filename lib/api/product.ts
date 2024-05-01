@@ -70,3 +70,12 @@ export async function uploadProduct(
     throw error;
   }
 }
+
+export async function getProduct(id: string): Promise<ProductData> {
+  try {
+    const response = await customAxios(`/api/product/${id}`);
+    return response.data.product;
+  } catch (error) {
+    throw error;
+  }
+}
