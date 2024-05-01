@@ -17,7 +17,7 @@ export default function useProductTodayListInfiniteQuery({
     fetchNextPage: fetchNextPageTodayProductList,
     isFetchingNextPage: isFetchingNextPageTodayProductList,
     isLoading: isLoadingTodayProductList,
-    isError: isErrorTodayProductList,
+    error: todayProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: PRODUCT_TODAY_LIST_QUERY_KEY,
     queryFn: async ({ pageParam = 1 }) => {
@@ -25,6 +25,7 @@ export default function useProductTodayListInfiniteQuery({
       return response.data.product;
     },
     enabled: productListType === "TODAY",
+    retry: 0,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allpages) => {
       return lastPage.length === limit
@@ -39,6 +40,6 @@ export default function useProductTodayListInfiniteQuery({
     fetchNextPageTodayProductList,
     isFetchingNextPageTodayProductList,
     isLoadingTodayProductList,
-    isErrorTodayProductList,
+    todayProductListError,
   };
 }

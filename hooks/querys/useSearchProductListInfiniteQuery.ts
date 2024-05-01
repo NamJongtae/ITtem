@@ -27,7 +27,7 @@ export default function useSearchProductListInfiniteQuery({
     fetchNextPage: fetchNextPageSearchProductList,
     isFetchingNextPage: isFetchingNextPageSearchProductList,
     isLoading: isLoadingSearchProductList,
-    isError: isErrorSearchProductList,
+    error: searchProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: getSearchProductListQueryKey(category, keyword),
     queryFn: async ({ pageParam = 1 }) => {
@@ -40,6 +40,7 @@ export default function useSearchProductListInfiniteQuery({
       return response.data.product;
     },
     enabled: productListType === "SEARCH" && !!keyword,
+    retry: 0,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allpages) => {
       return lastPage.length === limit
@@ -54,6 +55,6 @@ export default function useSearchProductListInfiniteQuery({
     fetchNextPageSearchProductList,
     isFetchingNextPageSearchProductList,
     isLoadingSearchProductList,
-    isErrorSearchProductList,
+    searchProductListError,
   };
 }

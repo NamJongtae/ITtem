@@ -27,7 +27,7 @@ export default function useCategoryProductListInfiniteQuery({
     fetchNextPage: fetchNextPageCategoryProductList,
     isFetchingNextPage: isFetchingNextPageCategoryProductList,
     isLoading: isLoadingCategoryProductList,
-    isError: isErrorCategoryProductList,
+    error: categoryProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: getCategoryProductListQueryKey(category, location),
     queryFn: async ({ pageParam = 1 }) => {
@@ -40,6 +40,7 @@ export default function useCategoryProductListInfiniteQuery({
       return response.data.product;
     },
     enabled: productListType === "CATEGORY",
+    retry: 0,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allpages) => {
       return lastPage.length === limit
@@ -54,6 +55,6 @@ export default function useCategoryProductListInfiniteQuery({
     fetchNextPageCategoryProductList,
     isFetchingNextPageCategoryProductList,
     isLoadingCategoryProductList,
-    isErrorCategoryProductList,
+    categoryProductListError,
   };
 }
