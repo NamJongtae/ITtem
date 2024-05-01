@@ -17,7 +17,7 @@ import {
 import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
-import customAxios from "../customAixos";
+import customAxios from "../customAxios";
 
 export async function createAccount({
   email,

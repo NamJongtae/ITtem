@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import customAxios from "../customAixos";
+import customAxios from "../customAxios";
 import { ProductCategory, ProductData } from "@/types/productTypes";
 
 export async function getTodayProductList(
