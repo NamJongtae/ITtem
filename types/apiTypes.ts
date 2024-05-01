@@ -31,8 +31,8 @@ export interface NicknameDuplicationResponseData {
 }
 
 export interface UploadImgResponseData {
-  imgUrl: string;
-  fileName: string;
+  url: string;
+  name: string;
 }
 
 export interface UserData {

@@ -41,36 +41,20 @@ export enum ProductStatus {
 
 export type ProductImgData = { url: string; name: string };
 
-export interface ProductUploadData {
-  id: number;
-  name: string;
-  description: string;
-  userName: string;
-  date: string;
-  imgData: ProductImgData[];
-  price: number;
-  sellType: ProductSellType;
-  category: ProductCategory;
-  location: string;
-  condition: ProductCondition;
-  returnPolicy: boolean;
-  transaction: ProductTransaction;
-  deliveryFee: boolean;
-}
 
 export interface ProductData {
-  id: number;
+  id: string;
   name: string;
   description: string;
   userName: string;
-  createdAt: string;
+  createdAt: Date | string;
   status: ProductStatus;
-  report: boolean;
+  block: boolean;
   reportCount: number;
   likeCount: number;
   likeUserList: string[];
   viewCount: number;
-  imgUrls: string[];
+  imgData: ProductImgData[];
   price: number;
   location: string;
   sellType: ProductSellType;
