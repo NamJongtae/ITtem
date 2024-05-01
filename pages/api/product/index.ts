@@ -30,6 +30,11 @@ export default async function handler(
         .sort({ createdAt: -1 })
         .toArray();
 
+      if (!product.length) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
       res.status(200).json({ message: "상품조회에 성공했어요.", product });
     } catch (error) {
       console.error(error);
