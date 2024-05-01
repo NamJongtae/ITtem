@@ -3,7 +3,9 @@ import { toast } from "react-toastify";
 import { regenerateAccessToken } from "./api/auth";
 import { RegenerateAccessTokenResponseData } from "@/types/apiTypes";
 
-const customAxios = axios.create();
+const customAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+});
 
 customAxios.interceptors.response.use(
   (response) => {
