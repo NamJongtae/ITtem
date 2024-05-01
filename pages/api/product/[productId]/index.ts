@@ -1,4 +1,6 @@
+import { ERROR_MESSAGE } from "@/constants/constant";
 import { DBClient } from "@/lib/database";
+import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -24,7 +26,46 @@ export default async function handler(
 
       res.status(200).json({ message: "상품 조회에 성공했어요.", product });
     } catch (error) {
-      res.status(500).json({ message: "상품 조회에 실패했어요.\n잠시 후 다시 시도해주세요." });
+      res.status(500).json({
+        message: ERROR_MESSAGE,
+      });
+    } finally {
+      await DBClient.close();
+    }
+  }
+
+  if (req.method === "PATCH") {
+    try {
+      const isValidAuth = await checkAuthorization(req, res);
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
+      const { productId } = req.query;
+      const { productData } = req.body;
+
+      console.log(productData);
+      
+      await DBClient.connect();
+      const db = DBClient.db("ITtem");
+      const result = await db
+        .collection("product")
+        .findOneAndUpdate(
+          { id: productId },
+          { $set: productData },
+          { returnDocument: "after" }
+        );
+      if (!result) {
+        res.status(500).json({ message: "상품 수정에 실패했어요." });
+        return;
+      }
+      res
+        .status(200)
+        .json({ message: "상품 수정에 성공했어요.", product: result });
+    } catch (error) {
+      res.status(500).json({ message: ERROR_MESSAGE });
     } finally {
       await DBClient.close();
     }

@@ -79,3 +79,17 @@ export async function getProduct(id: string): Promise<ProductData> {
     throw error;
   }
 }
+
+export async function editProduct(
+  id: string,
+  productData: Partial<ProductData>
+): Promise<AxiosResponse<{ product: ProductData; message: string }>> {
+  try {
+    const response = await customAxios.patch(`/api/product/${id}`, {
+      productData,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
