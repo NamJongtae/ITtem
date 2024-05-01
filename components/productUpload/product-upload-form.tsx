@@ -8,41 +8,46 @@ import ProductUploadTransactionField from "./product-upload-transaction-field";
 import ProductUploadPriceField from "./product-upload-price-field";
 import ProductUploadDescField from "./product-upload-desc-field";
 import ProductUploadDeliveryFeeField from "./product-upload-deliveryFee-field";
-import ProductUploadSellTypeField from "./product-upload-Selltype-field";
+import ProductUploadSellTypeField from "./product-upload-sellType-field";
 import ProductUploadBtns from "./product-upload-btns";
 import { useEffect, useState } from "react";
 import {
   ProductCategory,
   ProductCondition,
-  ProductUploadData,
   ProductSellType,
   ProductTransaction,
+  ProductData,
+  ProductStatus,
 } from "@/types/productTypes";
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
-import { FieldValues } from "react-hook-form";
+import { v4 as uuid } from "uuid";
+import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
 
 interface IProps {
   isEdit?: boolean;
 }
 
 export default function ProductUploadForm({ isEdit }: IProps) {
+  const { handleClickSubmit, productSubmitLoading } = useProductUploadSubmit();
+  
   const [isLoading, setIsLoading] = useState(false);
-  const onSubmit = (values: FieldValues) => {
-    console.log(values);
-  };
-  const [productData, setProductData] = useState<ProductUploadData | null>(
-    null
-  );
-  const getDummyData = (): Promise<ProductUploadData> => {
+  const [productData, setProductData] = useState<ProductData | null>(null);
+  const getDummyData = (): Promise<ProductData> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          id: 0,
+          id: uuid(),
           name: "가방",
           description: "깨끗한 가방",
           userName: "Jon",
-          date: "2024.03.24",
+          status: ProductStatus.sold,
+          block: false,
+          reportCount: 0,
+          viewCount: 0,
+          likeCount: 0,
+          likeUserList: [],
+          createdAt: new Date("2024.03.21").toString(),
           sellType: ProductSellType.중고거래,
           category: ProductCategory.가방지갑,
           imgData: [
@@ -72,13 +77,13 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     }
   }, [isEdit]);
 
-  if (isLoading) {
+  if (isLoading || productSubmitLoading) {
     return <Loading />;
   }
 
   return (
     <MyForm
-      onSubmit={onSubmit}
+      onSubmit={handleClickSubmit}
       formOptions={{
         mode: "onChange",
         defaultValues: {
@@ -86,7 +91,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
           name: isEdit ? productData?.name : "",
           sellType: isEdit ? productData?.sellType : "",
           category: isEdit ? productData?.category : "",
-          location: isEdit ? productData?.location: "",
+          location: isEdit ? productData?.location : "",
           condition: isEdit ? productData?.condition : "",
           returnPolicy: isEdit ? productData?.returnPolicy : "",
           transaction: isEdit ? productData?.transaction : "",
