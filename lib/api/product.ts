@@ -57,3 +57,16 @@ export async function getSearchProductList({
     throw error;
   }
 }
+
+export async function uploadProduct(
+  productData: ProductData
+): Promise<AxiosResponse<ProductData>> {
+  try {
+    const response = await customAxios.post("/api/product/upload", {
+      productData,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
