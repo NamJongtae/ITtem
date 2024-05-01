@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ProductData, ProductStatus } from "@/types/productTypes";
 
 interface IProps {
-  data: Pick<ProductData, "imgUrls" | "status" | "name">;
+  data: Pick<ProductData, "imgData" | "status" | "name">;
 }
 
 export default function ProductListImg({ data }: IProps) {
@@ -23,10 +23,10 @@ export default function ProductListImg({ data }: IProps) {
         data.status !== ProductStatus.sold ? soldoutStyles : ""
       } relative flex h-full w-full`}
     >
-      {data.imgUrls.length === 1 || data.status !== ProductStatus.sold ? (
+      {data.imgData.length === 1 || data.status !== ProductStatus.sold ? (
         <Image
           className="w-full h-full object-cover object-center aspect-square"
-          src={data.imgUrls[0]}
+          src={data.imgData[0].url}
           alt={data.status !== ProductStatus.sold ? "soldout" : data.name}
           width={300}
           height={300}
@@ -34,7 +34,7 @@ export default function ProductListImg({ data }: IProps) {
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
         />
       ) : (
-        <ImgSlider imgUrls={data.imgUrls} imgWidth={300} imgHeight={300} />
+        <ImgSlider imgData={data.imgData} imgWidth={300} imgHeight={300} />
       )}
     </div>
   );

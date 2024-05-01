@@ -7,14 +7,15 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
+import { ProductImgData } from '@/types/productTypes';
 
 interface IProps {
-  imgUrls: string[];
+  imgData: ProductImgData[];
   imgWidth: number;
   imgHeight: number;
 }
 
-export default function ImgSlider({ imgUrls, imgWidth, imgHeight }: IProps) {
+export default function ImgSlider({ imgData, imgWidth, imgHeight }: IProps) {
   return (
     <>
       <Swiper
@@ -25,11 +26,11 @@ export default function ImgSlider({ imgUrls, imgWidth, imgHeight }: IProps) {
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
       >
-        {imgUrls.map((url, index) => (
-          <SwiperSlide key={url}>
+        {imgData?.map((data, index) => (
+          <SwiperSlide key={data.url}>
             <Image
               className="h-full w-full object-cover object-center"
-              src={url}
+              src={data.url}
               width={imgWidth}
               height={imgHeight}
               alt={`img_${index}`}

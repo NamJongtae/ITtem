@@ -11,7 +11,7 @@ export default function ImgPreviewList({ imgData, handleRemoveImg }: IProps) {
     <ul className="flex gap-5 mx-auto w-full overflow-y-hidden white-space-nowrap scrollbar pb-1">
       {imgData.map((data, index) => (
         <li
-          key={data.name}
+          key={data.url}
           className="relative w-48 h-48 border border-gray-400 box-content rounded-sm"
         >
           <Image

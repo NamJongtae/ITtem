@@ -18,9 +18,9 @@ export default function ProductListContent({ data }: IProps) {
         <span className="text-xs ml-[2px] font-extrabold">원</span>
       </p>
       <div className="mt-1 text-xs text-gray-400 flex justify-between gap-3">
-        <span className='truncate'>{data.location}</span>
-        <span className='shrink-0'>
-          {getDateFormat(data.createdAt)}
+        <span className="truncate">{data.location}</span>
+        <span className="shrink-0">
+          {getDateFormat(data.createdAt as string)}
         </span>
       </div>
     </div>

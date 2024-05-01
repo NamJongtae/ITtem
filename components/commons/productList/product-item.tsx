@@ -16,7 +16,7 @@ export default function ProductItem({ data }: IProps) {
       >
         <ProductListImg
           data={{
-            imgUrls: data.imgUrls,
+            imgData: data.imgData,
             status: data.status,
             name: data.name,
           }}

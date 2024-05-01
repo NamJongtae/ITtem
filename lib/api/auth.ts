@@ -12,7 +12,6 @@ import {
   SignoutResposeData,
   SignupRequsetData,
   SignupResponseData,
-  SocialType,
   VerifyEmailResponseData,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
@@ -34,7 +33,7 @@ export async function createAccount({
       email,
       password,
       nickname,
-      profileImg: imgData || "/icons/user_icon.svg",
+      profileImg: imgData || { url: "/icons/user_icon.svg", name: "" },
       introduce,
     });
     return response;
