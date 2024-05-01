@@ -10,19 +10,12 @@ import ProductUploadDescField from "./product-upload-desc-field";
 import ProductUploadDeliveryFeeField from "./product-upload-deliveryFee-field";
 import ProductUploadSellTypeField from "./product-upload-sellType-field";
 import ProductUploadBtns from "./product-upload-btns";
-import { useEffect, useState } from "react";
-import {
-  ProductCategory,
-  ProductCondition,
-  ProductSellType,
-  ProductTransaction,
-  ProductData,
-  ProductStatus,
-} from "@/types/productTypes";
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
-import { v4 as uuid } from "uuid";
 import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
+import useProductQuery from "@/hooks/querys/useProductQuery";
+import ProductListEmpty from "../commons/productList/product-list-empty";
+import { isAxiosError } from "axios";
 
 interface IProps {
   isEdit?: boolean;
@@ -30,55 +23,22 @@ interface IProps {
 
 export default function ProductUploadForm({ isEdit }: IProps) {
   const { handleClickSubmit, productSubmitLoading } = useProductUploadSubmit();
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [productData, setProductData] = useState<ProductData | null>(null);
-  const getDummyData = (): Promise<ProductData> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: uuid(),
-          name: "가방",
-          description: "깨끗한 가방",
-          userName: "Jon",
-          status: ProductStatus.sold,
-          block: false,
-          reportCount: 0,
-          viewCount: 0,
-          likeCount: 0,
-          likeUserList: [],
-          createdAt: new Date("2024.03.21").toString(),
-          sellType: ProductSellType.중고거래,
-          category: ProductCategory.가방지갑,
-          imgData: [
-            {
-              url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              name: "가방",
-            },
-          ],
-          price: 10000,
-          location: "서울 특별시 강남구",
-          condition: ProductCondition.S,
-          returnPolicy: true,
-          transaction: ProductTransaction.직거래,
-          deliveryFee: true,
-        });
-      }, 2000);
-    });
-  };
 
-  useEffect(() => {
-    if (isEdit) {
-      setIsLoading(true);
-      getDummyData().then((data) => {
-        setProductData(data);
-        setIsLoading(false);
-      });
-    }
-  }, [isEdit]);
+  const { productData, loadProductLoading, loadProductError } =
+    useProductQuery(isEdit);
 
-  if (isLoading || productSubmitLoading) {
+  if (loadProductLoading || productSubmitLoading) {
     return <Loading />;
+  }
+
+  if (loadProductError) {
+    if (isAxiosError<{ message: string }>(loadProductError)) {
+      return (
+        <ProductListEmpty
+          message={loadProductError.response?.data?.message || ""}
+        />
+      );
+    }
   }
 
   return (
@@ -87,7 +47,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
       formOptions={{
         mode: "onChange",
         defaultValues: {
-          img: isEdit ? productData?.imgData : "",
+          img: isEdit ? productData?.imgData : { url: "", name: "" },
           name: isEdit ? productData?.name : "",
           sellType: isEdit ? productData?.sellType : "",
           category: isEdit ? productData?.category : "",
