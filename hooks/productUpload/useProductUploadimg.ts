@@ -1,11 +1,14 @@
 import { useState, useCallback } from "react";
 import { toast } from "react-toastify";
-import { imgValidation } from '@/lib/imgValidation';
-import { ProductImgData } from '@/types/productTypes';
+import { imgValidation } from "@/lib/imgValidation";
+import { ProductImgData } from "@/types/productTypes";
+import { useFormContext } from "react-hook-form";
 
 export default function useProductUploadImg(imgData?: ProductImgData[]) {
+  const { setValue, getValues} = useFormContext();
   const [preview, setPreview] = useState<ProductImgData[]>(imgData || []);
-
+  const currentImgList = getValues("imgData");
+  
   const uploadValidationAndPreview = useCallback(
     (file: File) => {
       const fileName = file.name;
@@ -40,11 +43,16 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
         name: string;
       }[];
 
+      const fileArray = Array.from(files);
+      setValue("imgData", [...currentImgList, ...fileArray], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
       if (newPreviews.length > 0) {
         setPreview((prev) => [...prev, ...newPreviews]);
       }
     },
-    [preview, uploadValidationAndPreview]
+    [currentImgList, preview.length, setValue, uploadValidationAndPreview]
   );
 
   const handleImgUpload = useCallback(
@@ -72,9 +80,33 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
     [handleImgUpload]
   );
 
-  const handleRemoveImg = useCallback((idx: number) => {
-    setPreview((prev) => prev.filter((_, itemIdx) => itemIdx !== idx));
-  }, []);
+  const handleRemoveImg = useCallback(
+    (idx: number) => {
+      const currentImgList = getValues("imgData");
+      const currentPrevImgDataList = getValues("prevImgData");
+      setPreview((prev) => prev.filter((_, itemIdx) => itemIdx !== idx));
+
+      setValue(
+        "imgData",
+        currentImgList.filter((_: unknown, itemIdx: number) => itemIdx !== idx),
+        {
+          shouldDirty: true,
+          shouldValidate: true,
+        }
+      );
+      setValue(
+        "prevImgData",
+        currentPrevImgDataList.filter(
+          (_: unknown, itemIdx: number) => itemIdx !== idx
+        ),
+        {
+          shouldDirty: true,
+          shouldValidate: true,
+        }
+      );
+    },
+    [getValues, setValue]
+  );
 
   return { preview, handleOnChangeImg, handleRemoveImg, handleDropImgUpload };
 }
