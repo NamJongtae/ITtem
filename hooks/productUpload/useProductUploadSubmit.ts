@@ -14,7 +14,7 @@ export default function useProductUploadSubmit() {
   const { productUploadMuate, productUploadLoading } = useProductUploadMutate();
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const handleClickSubmit = async (values: FieldValues) => {
+  const handleClickProductUploadSubmit = async (values: FieldValues) => {
     const imgData = (await uploadMultiImgToFirestore(values.img)) as
       | ProductImgData[]
       | undefined;
@@ -45,5 +45,5 @@ export default function useProductUploadSubmit() {
     productUploadMuate(productData);
   };
 
-  return { handleClickSubmit, productSubmitLoading: productUploadLoading };
+  return { handleClickProductUploadSubmit, productSubmitLoading: productUploadLoading };
 }
