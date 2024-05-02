@@ -3,6 +3,9 @@ import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Portal from "@/components/commons/portal/Portal";
 import { ProductImgData } from "@/types/productTypes";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 interface IProps {
   imgData: ProductImgData[];
