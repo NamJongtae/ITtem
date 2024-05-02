@@ -10,7 +10,7 @@ import {
 import { UploadImgResponseData } from "@/types/apiTypes";
 
 export default function useProductEditSubmit() {
-  const { productEditMutate } = useProductEditMutate();
+  const { productEditMutate, productEditLoading } = useProductEditMutate();
   const queryClient = useQueryClient();
   const params = useParams();
   const productId = params?.productId;
@@ -68,5 +68,5 @@ export default function useProductEditSubmit() {
     productEditMutate(productEditData);
   };
 
-  return { handleClickProductEditSubmit };
+  return { handleClickProductEditSubmit, productEditLoading };
 }

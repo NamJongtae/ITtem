@@ -10,7 +10,7 @@ export default function useProductEditMutate() {
   const productId = params?.productId;
   const queryClient = useQueryClient();
 
-  const { mutate: productEditMutate, data: productData } = useMutation<
+  const { mutate: productEditMutate, data: productData, isPending: productEditLoading } = useMutation<
     AxiosResponse<{ product: ProductData; message: string }>,
     AxiosError,
     Partial<ProductData>
@@ -23,5 +23,5 @@ export default function useProductEditMutate() {
     },
   });
 
-  return { productEditMutate, productData };
+  return { productEditMutate, productData, productEditLoading };
 }

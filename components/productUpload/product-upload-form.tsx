@@ -23,15 +23,16 @@ interface IProps {
 }
 
 export default function ProductUploadForm({ isEdit }: IProps) {
-  const { handleClickProductUploadSubmit, productSubmitLoading } =
+  const { handleClickProductUploadSubmit, productUploadLoading } =
     useProductUploadSubmit();
 
   const { productData, loadProductLoading, loadProductError } =
     useProductQuery(isEdit);
 
-  const { handleClickProductEditSubmit } = useProductEditSubmit();
+  const { handleClickProductEditSubmit, productEditLoading } =
+    useProductEditSubmit();
 
-  if (loadProductLoading || productSubmitLoading) {
+  if (loadProductLoading || productUploadLoading || productEditLoading) {
     return <Loading />;
   }
 

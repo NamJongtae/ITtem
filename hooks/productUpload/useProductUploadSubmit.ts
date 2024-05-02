@@ -45,5 +45,5 @@ export default function useProductUploadSubmit() {
     productUploadMuate(productData);
   };
 
-  return { handleClickProductUploadSubmit, productSubmitLoading: productUploadLoading };
+  return { handleClickProductUploadSubmit, productUploadLoading};
 }
