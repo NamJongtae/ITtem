@@ -46,18 +46,12 @@ export default async function handler(
       const { productId } = req.query;
       const { productData } = req.body;
 
-      console.log(productData);
-      
       await DBClient.connect();
       const db = DBClient.db("ITtem");
       const result = await db
         .collection("product")
-        .findOneAndUpdate(
-          { id: productId },
-          { $set: productData },
-          { returnDocument: "after" }
-        );
-      if (!result) {
+        .findOneAndUpdate({ id: productId }, { $set: productData });
+        if (!result) {
         res.status(500).json({ message: "상품 수정에 실패했어요." });
         return;
       }
@@ -65,6 +59,7 @@ export default async function handler(
         .status(200)
         .json({ message: "상품 수정에 성공했어요.", product: result });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ message: ERROR_MESSAGE });
     } finally {
       await DBClient.close();
