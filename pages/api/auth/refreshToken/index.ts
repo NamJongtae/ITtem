@@ -1,12 +1,10 @@
 import { getIronSession } from "iron-session";
 import { sessionOptions } from "@/lib/server";
-import { generateToken, setTokenExp, verifyToken } from "@/lib/token";
+import { generateToken, verifyToken } from "@/lib/token";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken, saveToken } from "@/lib/api/redis";
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/constant";
+import { ACCESS_TOKEN_EXP, ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { IronSessionType } from "@/types/apiTypes";
-
-const ACCESS_TOKEN_EXP = setTokenExp(60);
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,7 +39,7 @@ export default async function handler(
       const newAccessToken = generateToken({
         payload: {
           user: decodeRefreshToken.data?.user,
-          exp: ACCESS_TOKEN_EXP,
+          exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP,
         },
         secret: ACCESS_TOKEN_KEY,
       });
@@ -50,7 +48,7 @@ export default async function handler(
         uid: decodeRefreshToken.data?.user.uid || "",
         token: newAccessToken,
         type: "accessToken",
-        exp: ACCESS_TOKEN_EXP,
+        exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP,
       });
 
       session.accessToken = newAccessToken;

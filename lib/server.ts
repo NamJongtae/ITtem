@@ -68,12 +68,12 @@ export async function createAndSaveToken({
   session: IronSessionType;
 }) {
   const accessToken = generateToken({
-    payload: { user, exp: ACCESS_TOKEN_EXP },
+    payload: { user, exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP },
     secret: ACCESS_TOKEN_KEY,
   });
 
   const refreshToken = generateToken({
-    payload: { user, exp: REFRESH_TOKEN_EXP },
+    payload: { user, exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP },
     secret: REFRESH_TOKEN_KEY as string,
   });
 
@@ -81,13 +81,13 @@ export async function createAndSaveToken({
     uid: user.uid,
     token: accessToken,
     type: "accessToken",
-    exp: ACCESS_TOKEN_EXP,
+    exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP,
   });
   await saveToken({
     uid: user.uid,
     token: refreshToken,
     type: "refreshToken",
-    exp: REFRESH_TOKEN_EXP,
+    exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP,
   });
 
   session.accessToken = accessToken;

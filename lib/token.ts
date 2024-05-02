@@ -30,10 +30,6 @@ export const verifyToken = (token: string, secret: string) => {
   }
 };
 
-export const setTokenExp = (time: number) => {
-  return Math.floor(Date.now() / 1000 + time);
-};
-
 export async function verifyTokenByJose(token: string, secret: string) {
   try {
     const { payload }: { payload: AuthData } = await jwtVerify(

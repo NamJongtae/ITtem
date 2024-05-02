@@ -1,4 +1,3 @@
-import { setTokenExp } from "@/lib/token";
 import { ProductCategory } from "@/types/productTypes";
 
 export const CATEGORY = [
@@ -19,7 +18,7 @@ export const CATEGORY = [
 ];
 
 export const ERROR_MESSAGE =
-  "알 수 없는 에러가 발생하였습니다.\n잠시 후 다시 시도해주세요.";
+  "알 수 없는 에러가 발생했어요.\n잠시 후 다시 시도해주세요.";
 
 export const EMAIL_REGEX = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 export const EMAIL_REGEX_ERRORMSG = "이메일 형식을 확인해주세요.";
@@ -48,8 +47,8 @@ export const ACCESS_TOKEN_KEY = process.env
 export const REFRESH_TOKEN_KEY = process.env
   .NEXT_SECRET_REFRESH_TOKEN_KEY as string;
 
-export const ACCESS_TOKEN_EXP = setTokenExp(60);
-export const REFRESH_TOKEN_EXP = setTokenExp(300);
+export const ACCESS_TOKEN_EXP = 60;
+export const REFRESH_TOKEN_EXP = 3600;
 
 export const PRODUCT_TODAY_LIST_QUERY_KEY = ["productList", "today"];
 
