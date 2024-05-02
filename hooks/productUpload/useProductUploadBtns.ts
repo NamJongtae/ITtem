@@ -13,7 +13,9 @@ export default function useProductUploadBtns(isEdit?: boolean) {
   const { errors, dirtyFields } = formState;
 
   const isDirties = isEdit
-    ? dirtyFields["img"] ||
+    ? dirtyFields["imgData"] ||
+      dirtyFields["prevImgData"] ||
+      dirtyFields["price"] ||
       dirtyFields["name"] ||
       dirtyFields["sellType"] ||
       dirtyFields["category"] ||
@@ -22,9 +24,10 @@ export default function useProductUploadBtns(isEdit?: boolean) {
       dirtyFields["returnPolicy"] ||
       dirtyFields["transaction"] ||
       dirtyFields["deliveryFee"] ||
-      dirtyFields["desc"]
+      dirtyFields["description"]
     : dirtyFields["name"] &&
-      dirtyFields["img"] &&
+      dirtyFields["imgData"] &&
+      dirtyFields["price"] &&
       dirtyFields["sellType"] &&
       dirtyFields["category"] &&
       dirtyFields["location"] &&
@@ -32,10 +35,10 @@ export default function useProductUploadBtns(isEdit?: boolean) {
       dirtyFields["returnPolicy"] &&
       dirtyFields["transaction"] &&
       dirtyFields["deliveryFee"] &&
-      dirtyFields["desc"];
+      dirtyFields["description"];
 
   const isErrors =
-    errors["img"] ||
+    errors["imgData"] ||
     errors["name"] ||
     errors["sellType"] ||
     errors["category"] ||
@@ -45,7 +48,7 @@ export default function useProductUploadBtns(isEdit?: boolean) {
     errors["transaction"] ||
     errors["deliveryFee"] ||
     errors["price"] ||
-    errors["desc"];
+    errors["description"];
 
   const isDisabled = !isDirties || !!isErrors;
 
