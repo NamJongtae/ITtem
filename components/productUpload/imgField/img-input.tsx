@@ -10,8 +10,9 @@ interface IProps {
 const ImgInput = forwardRef<HTMLInputElement, IProps>(
   ({ preview, onChangeImg }, inputRef) => {
     const { register } = useFormContext();
-    const { ref, ...rest } = register("img", {
+    const { ref, ...rest } = register("imgData", {
       onChange: onChangeImg,
+      validate: (values) => values.length || "이미지를 선택해주세요.",
     });
 
     return (
@@ -28,7 +29,7 @@ const ImgInput = forwardRef<HTMLInputElement, IProps>(
           multiple
           type="file"
           accept="image/jpeg, image/png, image/svg+xml"
-          id="img"
+          id="imgData"
           {...rest}
           ref={(e) => {
             ref(e);
@@ -39,6 +40,7 @@ const ImgInput = forwardRef<HTMLInputElement, IProps>(
             }
           }}
         />
+        <input className="hidden" {...register("prevImgData")} />
       </>
     );
   }

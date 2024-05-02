@@ -18,9 +18,9 @@ export default function ProductUploadDescField() {
         placeholder={
           "구매시기, 브랜드/모델명 자세한 상품의 상태 등을 입력해주세요.\n허위/사기 매물 등록시 제제 및 형사 처벌을 받을 수 있습니다."
         }
-        id="desc"
+        id="description"
         rows={6}
-        {...register("desc", {
+        {...register("description", {
           onChange: handleChangeProductDesc,
           maxLength: 1500,
           required: true,

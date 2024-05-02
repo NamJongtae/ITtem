@@ -15,7 +15,7 @@ export default function ProductUploadReturnPolicyField() {
           <input
             className="mr-2"
             type="radio"
-            defaultChecked={returnPolicy === true}
+            defaultChecked={returnPolicy === "가능"}
             value={"가능"}
             {...register("returnPolicy", {
               required: true,
@@ -27,7 +27,7 @@ export default function ProductUploadReturnPolicyField() {
           <input
             className="mr-2"
             type="radio"
-            defaultChecked={returnPolicy === false}
+            defaultChecked={returnPolicy === "불가능"}
             value={"불가능"}
             {...register("returnPolicy", {
               required: true,

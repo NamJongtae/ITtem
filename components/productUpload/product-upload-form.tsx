@@ -16,16 +16,20 @@ import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit
 import useProductQuery from "@/hooks/querys/useProductQuery";
 import ProductListEmpty from "../commons/productList/product-list-empty";
 import { isAxiosError } from "axios";
+import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
 
 interface IProps {
   isEdit?: boolean;
 }
 
 export default function ProductUploadForm({ isEdit }: IProps) {
-  const { handleClickSubmit, productSubmitLoading } = useProductUploadSubmit();
+  const { handleClickProductUploadSubmit, productSubmitLoading } =
+    useProductUploadSubmit();
 
   const { productData, loadProductLoading, loadProductError } =
     useProductQuery(isEdit);
+
+  const { handleClickProductEditSubmit } = useProductEditSubmit();
 
   if (loadProductLoading || productSubmitLoading) {
     return <Loading />;
@@ -43,11 +47,14 @@ export default function ProductUploadForm({ isEdit }: IProps) {
 
   return (
     <MyForm
-      onSubmit={handleClickSubmit}
+      onSubmit={
+        isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
+      }
       formOptions={{
         mode: "onChange",
         defaultValues: {
-          img: isEdit ? productData?.imgData : { url: "", name: "" },
+          imgData: isEdit ? productData?.imgData.map(() => ({})) : [],
+          prevImgData: isEdit ? productData?.imgData : [],
           name: isEdit ? productData?.name : "",
           sellType: isEdit ? productData?.sellType : "",
           category: isEdit ? productData?.category : "",
@@ -55,13 +62,9 @@ export default function ProductUploadForm({ isEdit }: IProps) {
           condition: isEdit ? productData?.condition : "",
           returnPolicy: isEdit ? productData?.returnPolicy : "",
           transaction: isEdit ? productData?.transaction : "",
-          deliveryFee: isEdit
-            ? productData?.deliveryFee
-              ? "포함"
-              : "비포함"
-            : "",
+          deliveryFee: isEdit ? productData?.deliveryFee : "",
           price: isEdit ? productData?.price : "",
-          desc: isEdit ? productData?.description : "",
+          description: isEdit ? productData?.description : "",
         },
       }}
     >

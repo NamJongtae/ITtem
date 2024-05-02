@@ -16,7 +16,7 @@ export default function ProductUploadDeliveryFeeField() {
             type="radio"
             value="포함"
             {...register("deliveryFee", { required: true })}
-            defaultChecked={deliveryFee === true}
+            defaultChecked={deliveryFee === "포함"}
           />
           포함
         </label>
@@ -26,7 +26,7 @@ export default function ProductUploadDeliveryFeeField() {
             type="radio"
             value="비포함"
             {...register("deliveryFee", { required: true })}
-            defaultChecked={deliveryFee === false}
+            defaultChecked={deliveryFee === "비포함"}
           />
           비포함
         </label>
