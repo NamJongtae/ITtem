@@ -71,12 +71,10 @@ export default async function handler(
           session,
         });
 
-        res
-          .status(201)
-          .json({
-            message: "회원가입에 성공했어요.",
-            user: { uid, email, nickname: userNickname, profileImg },
-          });
+        res.status(201).json({
+          message: "회원가입에 성공했어요.",
+          user: { uid, email, nickname: userNickname, profileImg },
+        });
         return;
       }
 
@@ -100,7 +98,7 @@ export default async function handler(
       }
 
       await createAndSaveToken({
-        user: dbUserData,
+        user: { uid, email, nickname, profileImg },
         session,
       });
 

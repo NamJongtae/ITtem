@@ -91,7 +91,7 @@ export default async function handler(
       }
 
       await createAndSaveToken({
-        user: dbUserData,
+        user: { uid, email, nickname, profileImg },
         session,
       });
 
