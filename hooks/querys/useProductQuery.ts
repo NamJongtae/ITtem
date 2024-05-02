@@ -5,7 +5,8 @@ import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 
 export default function useProductQuery(isEdit: boolean | undefined) {
-  const { productId } = useParams();
+  const params = useParams();
+  const productId = params?.productId;
 
   const {
     data: productData,
@@ -17,7 +18,7 @@ export default function useProductQuery(isEdit: boolean | undefined) {
       return product;
     },
     queryKey: ["product", productId],
-    enabled: isEdit,
+    enabled: isEdit && !!productId,
   });
 
   return { productData, loadProductLoading, loadProductError };
