@@ -1,4 +1,9 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { storage } from "../firebaseSetting";
 import { v4 as uuid } from "uuid";
 import { UploadImgResponseData } from "@/types/apiTypes";
@@ -37,4 +42,20 @@ export const uploadMultiImgToFirestore = async (
   // 모든 파일이 업로드되길 기다립니다.
   const uploadResults = await Promise.all(uploadPromises);
   return uploadResults;
+};
+
+export const deleteImgToFirestore = async (
+  productDataImgName: string[],
+  prevImgDataImgName: string[]
+) => {
+  const removeImgPromise = [];
+
+  for (let i = 0; i < productDataImgName.length; i++) {
+    if (!prevImgDataImgName.includes(productDataImgName[i])) {
+      removeImgPromise.push(
+        deleteObject(ref(storage, `images/${productDataImgName[i]}`))
+      );
+    }
+  }
+  await Promise.all(removeImgPromise);
 };
