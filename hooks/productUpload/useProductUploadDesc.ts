@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 
 export default function useProductUploadDesc() {
   const { watch, setValue } = useFormContext();
-  const productDesc = watch("desc");
+  const productDesc = watch("description");
 
 
   const handleChangeProductDesc = (
