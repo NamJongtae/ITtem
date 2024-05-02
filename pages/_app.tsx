@@ -1,5 +1,4 @@
 import "@/styles/global.css";
-import "swiper/css";
 import "react-toastify/dist/ReactToastify.css";
 import "@/styles/swiperStyles.css";
 import "@/styles/toast.css";
@@ -11,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import Head from "next/head";
 import { HydrationBoundary } from "@tanstack/react-query";
 import wrapper from "@/store/store";
-import Script from "next/script"; 
+import Script from "next/script";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -29,7 +28,6 @@ function kakaoInit() {
 }
 
 function App({ Component, pageProps }: AppProps) {
-
   return (
     <>
       <Head>
