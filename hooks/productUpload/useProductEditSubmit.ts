@@ -8,9 +8,13 @@ import {
   uploadMultiImgToFirestore,
 } from "@/lib/api/firebase";
 import { UploadImgResponseData } from "@/types/apiTypes";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function useProductEditSubmit() {
-  const { productEditMutate, productEditLoading } = useProductEditMutate();
+  const [productEditLoading, setProductEditLoading] = useState(false);
+
+  const { productEditMutate } = useProductEditMutate();
   const queryClient = useQueryClient();
   const params = useParams();
   const productId = params?.productId;
@@ -63,9 +67,18 @@ export default function useProductEditSubmit() {
     undefined;
 
   const handleClickProductEditSubmit = async (values: FieldValues) => {
-    await setProductEditData(values);
-    await deleteImages(values);
-    productEditMutate(productEditData);
+    try {
+      setProductEditLoading(true);
+      await setProductEditData(values);
+      await deleteImages(values);
+      await productEditMutate(productEditData);
+    } catch (error) {
+      toast.warn(
+        "상품 수정 중 에러가 발생했어요.\n잠시 후 다시 시도해 주세요."
+      );
+    } finally {
+      setProductEditLoading(false);
+    }
   };
 
   return { handleClickProductEditSubmit, productEditLoading };
