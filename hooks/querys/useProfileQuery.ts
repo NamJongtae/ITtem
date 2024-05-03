@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useProfileQuery(uid: string) {
-  const { data: profileData, error: profileDataError } = useQuery<
-    ProfileData,
-    AxiosError
-  >({
+  const {
+    data: profileData,
+    isLoading: loadProfileDataLoading,
+    error: loadProfileDataError,
+  } = useQuery<ProfileData, AxiosError>({
     queryKey: getProfileQueryKey(uid),
     queryFn: async () => {
       const response = await getUserProfile(uid);
@@ -16,5 +17,5 @@ export default function useProfileQuery(uid: string) {
     },
   });
 
-  return { profileData, profileDataError };
+  return { profileData, loadProfileDataLoading, loadProfileDataError };
 }
