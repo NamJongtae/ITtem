@@ -23,7 +23,7 @@ export default function useProductUploadSubmit() {
       id: uuid(),
       name: values.name,
       description: values.desc,
-      userName: user?.nickname || "",
+      uid: user?.uid || "",
       createdAt: new Date(),
       status: ProductStatus.sold,
       block: false,
