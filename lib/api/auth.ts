@@ -6,6 +6,7 @@ import {
   KaKaoAuthAccessTokenResponseData,
   KakaoAuthInfoResponseData,
   NicknameDuplicationResponseData,
+  ProfileResponseData,
   RegenerateAccessTokenResponseData,
   SessionCookiesResponseData,
   SigninResponseData,
@@ -342,6 +343,17 @@ export async function changePassword({
       password,
       isFindPw,
     });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUserProfile(
+  uid: string
+): Promise<AxiosResponse<ProfileResponseData>> {
+  try {
+    const response = await customAxios(`/api/profile/${uid}`);
     return response;
   } catch (error) {
     throw error;
