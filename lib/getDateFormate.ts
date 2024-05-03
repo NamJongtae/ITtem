@@ -19,9 +19,9 @@ export const getDateFormat = (time: string) => {
   } else if (diff <= 30 * 24 * 60 * 60) {
     return `${week}주 전`;
   } else {
-    return `${dataTime.getFullYear()}년 ${(
+    return `${dataTime.getFullYear()}. ${(
       "0" +
       (dataTime.getMonth() + 1)
-    ).slice(-2)}월 ${("0" + dataTime.getDate()).slice(-2)}일`;
+    ).slice(-2)}. ${("0" + dataTime.getDate()).slice(-2)}.`;
   }
 };
