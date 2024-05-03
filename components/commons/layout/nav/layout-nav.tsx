@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import NavAvata from "./nav-avata";
 import NavLogoutBtn from "./nav-logout-btn";
@@ -8,16 +7,10 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import NavSigninBtn from "./nav-signin-btn";
-import { useEffect, useState } from "react";
 
 export default function Nav() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLoading = useSelector((state: RootState) => state.auth.isLoading);
-  const [mouted, setMouted] = useState(false);
-
-  useEffect(() => {
-    setMouted(true);
-  }, []);
 
   return (
     <>
@@ -38,17 +31,13 @@ export default function Nav() {
           <NavSearchBar />
 
           <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
-            {mouted ? (
-              user ? (
-                <div className="flex items-center gap-3 w-full justify-end">
-                  <NavAvata />
-                  <NavLogoutBtn />
-                </div>
-              ) : isLoading ? null : (
-                <NavSigninBtn />
-              )
-            ) : (
-              <div className="flex items-center gap-3 w-full justify-end"></div>
+            {user ? (
+              <div className="flex items-center gap-3 w-full justify-end">
+                <NavAvata />
+                <NavLogoutBtn />
+              </div>
+            ) : isLoading ? null : (
+              <NavSigninBtn />
             )}
           </div>
         </div>
