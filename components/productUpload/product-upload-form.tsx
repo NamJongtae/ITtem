@@ -14,7 +14,7 @@ import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
 import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
 import useProductQuery from "@/hooks/querys/useProductQuery";
-import ProductListEmpty from "../commons/productList/product-list-empty";
+import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
 import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
 import { useSelector } from "react-redux";
@@ -46,14 +46,14 @@ export default function ProductUploadForm({ isEdit }: IProps) {
   if (loadProductError) {
     if (isAxiosError<{ message: string }>(loadProductError)) {
       return (
-        <ProductListEmpty
+        <Empty
           message={loadProductError.response?.data?.message || ""}
         />
       );
     }
   }
 
-  return !isEdit ||  user?.uid === productData?.uid ? (
+  return !isEdit || user?.uid === productData?.uid ? (
     <MyForm
       onSubmit={
         isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit

@@ -1,7 +1,7 @@
 import { ProductListType } from "@/types/productTypes";
-import ProductListEmpty from "./product-list-empty";
+import Empty from "../Empty";
 import { AxiosError } from "axios";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 interface IProps {
   productListType: ProductListType;
@@ -13,7 +13,7 @@ export default function ProductListError({ productListType, error }: IProps) {
   const keyword = search.get("keyword");
 
   return error.response?.status === 404 ? (
-    <ProductListEmpty
+    <Empty
       message={`${
         productListType === "TODAY"
           ? "오늘의 상품이 존재하지 않아요."
@@ -23,7 +23,7 @@ export default function ProductListError({ productListType, error }: IProps) {
       }`}
     />
   ) : (
-    <ProductListEmpty
+    <Empty
       message={`${
         productListType === "TODAY"
           ? "오늘의 상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요."
