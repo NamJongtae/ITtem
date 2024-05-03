@@ -33,6 +33,10 @@ export enum ProductSellType {
   무료나눔 = "무료나눔",
 }
 
+export type ProductReturnPolicy = "가능" | "불가능";
+
+export type ProductDeliveryFee = "포함" | "비포함";
+
 export enum ProductStatus {
   soldout = "soldout",
   trading = "trading",
@@ -59,9 +63,9 @@ export interface ProductData {
   sellType: ProductSellType;
   category: ProductCategory;
   condition: ProductCondition;
-  returnPolicy: boolean;
+  returnPolicy: ProductReturnPolicy;
   transaction: ProductTransaction;
-  deliveryFee: boolean;
+  deliveryFee: ProductDeliveryFee;
 }
 
 export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH";
