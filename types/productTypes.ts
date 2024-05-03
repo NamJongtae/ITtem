@@ -41,12 +41,11 @@ export enum ProductStatus {
 
 export type ProductImgData = { url: string; name: string };
 
-
 export interface ProductData {
   id: string;
   name: string;
   description: string;
-  userName: string;
+  uid: string;
   createdAt: Date | string;
   status: ProductStatus;
   block: boolean;
