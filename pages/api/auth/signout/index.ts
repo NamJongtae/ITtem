@@ -46,7 +46,7 @@ export default async function handler(
       console.error(error);
       res.status(500).json({ message: "로그아웃에 실패했어요." });
     } finally {
-      DBClient.close();
+      await DBClient.close();
     }
   }
 }
