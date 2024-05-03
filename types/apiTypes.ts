@@ -128,3 +128,18 @@ export interface KakaoAuthInfoResponseData {
     thumbnail_image?: string; // 110x110
   };
 }
+
+export interface ProfileData {
+  uid: string;
+  email: string;
+  nickname: string;
+  followers: string[];
+  followings: string[];
+  productList: string[];
+  reviewPercentage: number;
+}
+
+export interface ProfileResponseData {
+  profile: ProfileData;
+  message: string;
+}
