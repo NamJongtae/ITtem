@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 interface IProps {
-  imgData: ProductImgData[];
+  imgData: ProductImgData[] | undefined;
   closeModal: () => void;
 }
 
@@ -29,7 +29,7 @@ export default function ProductImgEnlargeModal({
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
         >
-          {imgData.map((data, index) => (
+          {imgData?.map((data, index) => (
             <SwiperSlide key={data.url + index} className="relative">
               <Image
                 className="w-auto h-auto object-contain obeject-center"

@@ -10,7 +10,7 @@ import Image from "next/image";
 import { ProductImgData } from '@/types/productTypes';
 
 interface IProps {
-  imgData: ProductImgData[];
+  imgData: ProductImgData[] | undefined;
   imgWidth: number;
   imgHeight: number;
 }
