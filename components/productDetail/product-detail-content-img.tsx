@@ -5,7 +5,7 @@ import useModal from "@/hooks/commons/useModal";
 import ProductImgEnlargeModal from "../productUpload/imgField/product-img-enlarge-modal";
 
 interface IProps {
-  productData: ProductData;
+  productData: ProductData | undefined;
 }
 
 export default function ProductDetailContentImg({ productData }: IProps) {
@@ -16,7 +16,7 @@ export default function ProductDetailContentImg({ productData }: IProps) {
       <div className="w-full h-80 md:h-80 md:w-1/2 lg:h-96">
         <div className="relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded-md overflow-hidden">
           <ImgSlider
-            imgData={productData.imgData}
+            imgData={productData?.imgData}
             imgWidth={512}
             imgHeight={384}
           />
@@ -36,7 +36,7 @@ export default function ProductDetailContentImg({ productData }: IProps) {
       </div>
       {isOpenModal && (
         <ProductImgEnlargeModal
-          imgData={productData.imgData}
+          imgData={productData?.imgData}
           closeModal={closeModal}
         />
       )}

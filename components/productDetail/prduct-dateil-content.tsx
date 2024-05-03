@@ -4,10 +4,11 @@ import ProductDetailContentInfo from "./product-detail-content-info";
 import ProductDetailContentImg from "./product-detail-content-img";
 
 interface IProps {
-  productData: ProductData;
+  productData: ProductData | undefined;
 }
 
 export default function PrductDateilContent({ productData }: IProps) {
+  
   return (
     <div className="md:flex block">
       <ProductDetailContentImg

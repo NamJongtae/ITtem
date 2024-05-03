@@ -4,16 +4,16 @@ import Image from "next/image";
 import ProductDetailReportBtn from "./product-detail-reportBtn";
 
 interface IProps {
-  productData: ProductData;
+  productData: ProductData | undefined;
 }
 
 export default function ProductDetailContentInfo({ productData }: IProps) {
   return (
     <>
-      <h3 className="text-gray-700 text-3xl md:text-4xl">{productData.name}</h3>
+      <h3 className="text-gray-700 text-3xl md:text-4xl">{productData?.name}</h3>
       <div className="mt-3 text-gray-700 font-semibold">
         <span className="text-3xl md:text-4xl ">
-          {productData.price.toLocaleString()}
+          {productData?.price.toLocaleString()}
         </span>
         <span className="ml-1 text-2xl">원</span>
       </div>
@@ -27,7 +27,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={14}
               height={28}
             />{" "}
-            {productData.likeCount}
+            {productData?.likeCount}
           </span>
           <span className="flex gap-2 items-center">
             <Image
@@ -37,7 +37,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={20}
               height={14}
             />{" "}
-            {productData.viewCount}
+            {productData?.viewCount}
           </span>
           <span className="flex gap-2 items-center">
             <Image
@@ -46,7 +46,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={16}
               height={16}
             />{" "}
-            {getDateFormat(productData.createdAt.toString())}
+            {getDateFormat(productData?.createdAt.toString() || "")}
           </span>
         </div>
         <ProductDetailReportBtn />
@@ -56,15 +56,15 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
         <ul>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">상품상태</p>
-            <p>{productData.condition}급</p>
+            <p>{productData?.condition}급</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">반품여부</p>
-            <p>{productData.returnPolicy}</p>
+            <p>{productData?.returnPolicy}</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">거래방식</p>
-            <p>{productData.transaction}</p>
+            <p>{productData?.transaction}</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">거래지역</p>
@@ -75,12 +75,12 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
                 width={12}
                 height={24}
               />{" "}
-              {productData.location}
+              {productData?.location}
             </p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">배송비</p>
-            <p>{productData.deliveryFee}</p>
+            <p>{productData?.deliveryFee}</p>
           </li>
         </ul>
       </div>
