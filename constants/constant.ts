@@ -65,3 +65,11 @@ export const getSearchProductListQueryKey = (
 ) => {
   return ["product", "search", keyword, category];
 };
+
+export const getProductQueryKey = (productId: string) => {
+  return ["product", productId]
+}
+
+export const getProfileQueryKey = (uid: string) => {
+  return ["category", uid];
+}
