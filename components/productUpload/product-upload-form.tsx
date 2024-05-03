@@ -17,12 +17,17 @@ import useProductQuery from "@/hooks/querys/useProductQuery";
 import ProductListEmpty from "../commons/productList/product-list-empty";
 import { isAxiosError } from "axios";
 import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import useProductEditCheckUser from "@/hooks/productUpload/useProductEditCheckUser";
 
 interface IProps {
   isEdit?: boolean;
 }
 
 export default function ProductUploadForm({ isEdit }: IProps) {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const { handleClickProductUploadSubmit, productUploadLoading } =
     useProductUploadSubmit();
 
@@ -31,6 +36,8 @@ export default function ProductUploadForm({ isEdit }: IProps) {
 
   const { handleClickProductEditSubmit, productEditLoading } =
     useProductEditSubmit();
+
+  useProductEditCheckUser(productData, isEdit);
 
   if (loadProductLoading || productUploadLoading || productEditLoading) {
     return <Loading />;
@@ -46,7 +53,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     }
   }
 
-  return (
+  return !isEdit ||  user?.uid === productData?.uid ? (
     <MyForm
       onSubmit={
         isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
@@ -82,5 +89,5 @@ export default function ProductUploadForm({ isEdit }: IProps) {
       <ProductUploadDescField />
       <ProductUploadBtns isEdit={isEdit} />
     </MyForm>
-  );
+  ) : null;
 }
