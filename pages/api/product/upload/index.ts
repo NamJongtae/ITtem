@@ -1,4 +1,5 @@
 import { DBClient } from "@/lib/database";
+import { checkAuthorization } from '@/lib/server';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -7,9 +8,16 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { productData } = req.body;
+      const isValidAuth = await checkAuthorization(req, res);
 
-      console.log(productData);
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
+
+      const { productData } = req.body;
 
       if (!productData) {
         res.status(422).json({ message: "상품 데이터가 없어요." });
