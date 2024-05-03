@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { IronSession } from "iron-session";
+import { ProductData } from "./productTypes";
 
 export interface VerifyEmailResponseData {
   message: string;
@@ -127,6 +128,16 @@ export interface KakaoAuthInfoResponseData {
     profile_image?: string; // 640x640
     thumbnail_image?: string; // 110x110
   };
+}
+
+export interface ProductListResponseData {
+  product: ProductData[];
+  message: string;
+}
+
+export interface ProductResponseData {
+  product: ProductData;
+  message: string;
 }
 
 export interface ProfileData {
