@@ -1,5 +1,9 @@
 import ProductUploadHeader from "./product-upload-header";
-import ProductUploadForm from "./product-upload-form";
+import dynamic from "next/dynamic";
+
+const ProductUploadForm = dynamic(() => import("./product-upload-form"), {
+  ssr: false,
+});
 
 interface IProps {
   isEdit?: boolean;
