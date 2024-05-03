@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
 import { ProductCategory, ProductData } from "@/types/productTypes";
+import { ProductListResponseData, ProductResponseData } from '@/types/apiTypes';
 
 export async function getTodayProductList(
   page: unknown = 1,
@@ -26,7 +27,7 @@ export async function getCategoryProductList({
   page: unknown;
   limit: number;
   location?: string;
-}): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
+}): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
       `/api/product?category=${category}&page=${page}&limit=${limit}&location=${location}`
@@ -47,7 +48,7 @@ export async function getSearchProductList({
   page: unknown;
   limit: number;
   keyword: string;
-}): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
+}): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
       `/api/product/search?keyword=${keyword}&category=${category}&page=${page}&limit=${limit}`
@@ -60,7 +61,7 @@ export async function getSearchProductList({
 
 export async function uploadProduct(
   productData: ProductData
-): Promise<AxiosResponse<ProductData>> {
+): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios.post("/api/product/upload", {
       productData,
@@ -71,10 +72,12 @@ export async function uploadProduct(
   }
 }
 
-export async function getProduct(id: string): Promise<ProductData> {
+export async function getProduct(
+  id: string
+): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios(`/api/product/${id}`);
-    return response.data.product;
+    return response;
   } catch (error) {
     throw error;
   }
@@ -83,7 +86,7 @@ export async function getProduct(id: string): Promise<ProductData> {
 export async function editProduct(
   id: string,
   productData: Partial<ProductData>
-): Promise<AxiosResponse<{ product: ProductData; message: string }>> {
+): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios.patch(`/api/product/${id}`, {
       productData,

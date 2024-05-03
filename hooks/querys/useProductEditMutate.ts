@@ -1,4 +1,5 @@
 import { editProduct } from "@/lib/api/product";
+import { ProductResponseData } from '@/types/apiTypes';
 import { ProductData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
@@ -11,7 +12,7 @@ export default function useProductEditMutate() {
   const queryClient = useQueryClient();
 
   const { mutateAsync: productEditMutate, data: productData} = useMutation<
-    AxiosResponse<{ product: ProductData; message: string }>,
+    AxiosResponse<ProductResponseData>,
     AxiosError,
     Partial<ProductData>
   >({
