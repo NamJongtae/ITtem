@@ -50,7 +50,7 @@ export interface ProductData {
   name: string;
   description: string;
   uid: string;
-  createdAt: Date | string;
+  createdAt?: Date | string;
   status: ProductStatus;
   block: boolean;
   reportCount: number;
