@@ -17,6 +17,7 @@ export default async function handler(
       await DBClient.connect();
       const db = DBClient.db("ITtem");
 
+
       if (!email) {
         res.status(422).json({ message: "이메일을 입력하지 않았어요." });
         return;
@@ -68,13 +69,13 @@ export default async function handler(
       );
 
       await createAndSaveToken({
-        user: { uid, email, nickname, profileImg: profileImg?.imgUrl },
+        user: { uid, email, nickname, profileImg: profileImg.url },
         session,
       });
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",
-        user: { nickname, profileImg: profileImg?.imgurl },
+        user: { nickname, profileImg: profileImg.url },
       });
     } catch (error) {
       console.error(error);
