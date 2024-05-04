@@ -27,10 +27,12 @@ export default function useProductTodayListInfiniteQuery({
     enabled: productListType === "TODAY",
     retry: 0,
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allpages) => {
-      return lastPage.length === limit
-        ? allpages.flat().length / limit + 1
-        : undefined;
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = allPages.length + 1;
+      if (lastPage.length < limit) {
+        return undefined;
+      }
+      return nextPage;
     },
   });
 
