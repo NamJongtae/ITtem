@@ -22,12 +22,12 @@ export default function ProductList({ productListType }: IProps) {
 
   return (
     <>
-      {error ? (
+      {error && !data ? (
         <ProductListError productListType={productListType} error={error} />
       ) : null}
 
       <InfiniteScroll
-        hasMore={hasNextPage}
+        hasMore={hasNextPage && !error}
         loadMore={() => {
           if (!isFetchingNextPage) fetchNextPage();
         }}

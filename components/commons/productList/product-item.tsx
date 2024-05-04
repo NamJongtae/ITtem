@@ -11,7 +11,7 @@ export default function ProductItem({ data }: IProps) {
   return (
     <li className="relative w-full h-full mx-auto">
       <Link
-        href={`/fleamarket/${data.id}`}
+        href={`/product/${data.id}`}
         className="mx-auto group flex w-full h-full max-w-xs flex-col overflow-hidden bg-white border "
       >
         <ProductListImg
