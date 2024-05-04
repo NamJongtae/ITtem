@@ -1,5 +1,5 @@
 import { ProductImgData } from "@/types/productTypes";
-import React, { forwardRef } from "react";
+import React, { ForwardedRef, forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface IProps {
@@ -8,9 +8,9 @@ interface IProps {
 }
 
 const ImgInput = forwardRef<HTMLInputElement, IProps>(
-  ({ preview, onChangeImg }, inputRef) => {
+  ({ preview, onChangeImg }, inputRef: ForwardedRef<HTMLInputElement>) => {
     const { register } = useFormContext();
-    const { ref, ...rest } = register("imgData", {
+    const { ...rest } = register("imgData", {
       onChange: onChangeImg,
       validate: (values) => values.length || "이미지를 선택해주세요.",
     });
@@ -31,14 +31,7 @@ const ImgInput = forwardRef<HTMLInputElement, IProps>(
           accept="image/jpeg, image/png, image/svg+xml"
           id="imgData"
           {...rest}
-          ref={(e) => {
-            ref(e);
-            if (typeof inputRef === "function") {
-              inputRef(e);
-            } else if (inputRef) {
-              inputRef.current = e;
-            }
-          }}
+          ref={inputRef}
         />
         <input className="hidden" {...register("prevImgData")} />
       </>
