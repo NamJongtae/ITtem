@@ -46,7 +46,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={16}
               height={16}
             />{" "}
-            {getDateFormat(productData?.createdAt.toString() || "")}
+            {getDateFormat(productData?.createdAt?.toString() || "")}
           </span>
         </div>
         <ProductDetailReportBtn />
