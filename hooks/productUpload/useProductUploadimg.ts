@@ -5,7 +5,7 @@ import { ProductImgData } from "@/types/productTypes";
 import { useFormContext } from "react-hook-form";
 
 export default function useProductUploadImg(imgData?: ProductImgData[]) {
-  const { setValue, getValues} = useFormContext();
+  const { setValue, getValues } = useFormContext();
   const [preview, setPreview] = useState<ProductImgData[]>(imgData || []);
   const currentImgList = getValues("imgData");
   
@@ -27,41 +27,35 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
     [preview]
   );
 
-  const handleFilesUpload = useCallback(
-    (files: FileList) => {
-      const availableSlots = 5 - preview.length;
+  const handleFilesUpload = (files: FileList) => {
+    const availableSlots = 5 - preview.length;
 
-      if (availableSlots - files.length < 0) {
-        toast.warn("최대 5개의 이미지까지 업로드 가능합니다.");
-        return;
-      }
+    if (availableSlots - files.length < 0) {
+      toast.warn("최대 5개의 이미지까지 업로드 가능합니다.");
+      return;
+    }
 
-      const newPreviews = Array.from(files)
-        .map(uploadValidationAndPreview)
-        .filter((preview) => preview !== undefined) as {
-        url: string;
-        name: string;
-      }[];
+    const newPreviews = Array.from(files)
+      .map(uploadValidationAndPreview)
+      .filter((preview) => preview !== undefined) as {
+      url: string;
+      name: string;
+    }[];
 
-      const fileArray = Array.from(files);
-      setValue("imgData", [...currentImgList, ...fileArray], {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      if (newPreviews.length > 0) {
-        setPreview((prev) => [...prev, ...newPreviews]);
-      }
-    },
-    [currentImgList, preview.length, setValue, uploadValidationAndPreview]
-  );
+    const currentImgNameList = currentImgList.map((file: File) => file.name);
+    const fileArray = Array.from(files).filter(
+      (file) => !currentImgNameList.includes(file.name)
+    );
 
-  const handleImgUpload = useCallback(
-    (fileList: FileList | null) => {
-      if (!fileList || fileList.length === 0) return;
-      handleFilesUpload(fileList);
-    },
-    [handleFilesUpload]
-  );
+    setValue("imgData", [...currentImgList, ...fileArray], {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    if (newPreviews.length > 0) {
+      setPreview((prev) => [...prev, ...newPreviews]);
+    }
+  };
 
   const handleDropImgUpload = useCallback(
     (e: React.DragEvent<HTMLButtonElement>) => {
@@ -75,9 +69,11 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
 
   const handleOnChangeImg = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      handleImgUpload(e.target.files);
+      const fileList = e.target.files;
+      if (!fileList || fileList.length === 0) return;
+      handleFilesUpload(fileList);
     },
-    [handleImgUpload]
+    [handleFilesUpload]
   );
 
   const handleRemoveImg = useCallback(
