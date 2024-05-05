@@ -42,6 +42,7 @@ export interface ProfileData {
   uid: string;
   email: string;
   nickname: string;
+  profileImg: string;
   followers: string[];
   followings: string[];
   productList: string[];
