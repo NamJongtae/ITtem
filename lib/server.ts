@@ -9,8 +9,8 @@ import {
   REFRESH_TOKEN_EXP,
   REFRESH_TOKEN_KEY,
 } from "@/constants/constant";
-import { Db } from "mongodb";
 import { v4 as uuid } from "uuid";
+import { User } from "./db/schema";
 
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
@@ -96,14 +96,12 @@ export async function createAndSaveToken({
   await session.save();
 }
 
-export async function createUniqueNickname(db: Db) {
+export async function createUniqueNickname() {
   const randomString = uuid().substring(0, 8);
   let userNickname = randomString;
   let isDuplicationNickname = true;
   while (isDuplicationNickname) {
-    const nicknameCheckResult = await db
-      .collection("user")
-      .findOne({ nickname: userNickname });
+    const nicknameCheckResult = await User.findOne({ nickname: userNickname });
     if (nicknameCheckResult) {
       // 닉네임이 중복될 경우, 랜덤 숫자를 추가하여 새로운 닉네임 생성
       userNickname = randomString;
