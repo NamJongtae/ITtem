@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
-import { ProductCategory, ProductData } from "@/types/productTypes";
+import { ProductCategory, ProductData, ProductUploadData } from "@/types/productTypes";
 import { ProductListResponseData, ProductResponseData } from '@/types/apiTypes';
 
 export async function getTodayProductList(
@@ -60,7 +60,7 @@ export async function getSearchProductList({
 }
 
 export async function uploadProduct(
-  productData: ProductData
+  productData: ProductUploadData
 ): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios.post("/api/product/upload", {

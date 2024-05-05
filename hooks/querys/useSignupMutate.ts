@@ -2,9 +2,8 @@ import { ERROR_MESSAGE } from "@/constants/constant";
 import { createAccount } from "@/lib/api/auth";
 import {
   SignupResponseData,
-  SignupRequsetData,
-  SocialType,
 } from "@/types/apiTypes";
+import { SignupData } from '@/types/authTypes';
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -20,14 +19,13 @@ export default function useSignupMutate() {
   } = useMutation<
     AxiosResponse<SignupResponseData>,
     AxiosError,
-    SignupRequsetData
+    SignupData
   >({
-    mutationFn: ({ email, password, profileImg, nickname, introduce }) =>
+    mutationFn: ({ email, password, profileImgFile, nickname, introduce }) =>
       createAccount({
-        socialType: SocialType.EMAIL,
         email,
         password,
-        profileImg,
+        profileImgFile,
         nickname,
         introduce,
       }),

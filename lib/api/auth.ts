@@ -1,5 +1,4 @@
 import {
-  AuthData,
   EmailDuplicationResponseData,
   GoogleAuthAccessTokenResponseData,
   GoogleAuthInfoResponseData,
@@ -11,7 +10,6 @@ import {
   SessionCookiesResponseData,
   SigninResponseData,
   SignoutResposeData,
-  SignupRequsetData,
   SignupResponseData,
   VerifyEmailResponseData,
 } from "@/types/apiTypes";
@@ -19,22 +17,30 @@ import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
+import { AuthData, SignupData } from "@/types/authTypes";
+import { toast } from "react-toastify";
 
 export async function createAccount({
   email,
   password,
   nickname,
-  profileImg,
+  profileImgFile,
   introduce,
-}: SignupRequsetData): Promise<AxiosResponse<SignupResponseData>> {
+}: SignupData): Promise<AxiosResponse<SignupResponseData>> {
+  let imgData;
   try {
-    const imgData = await uploadImgToFireStore(profileImg);
-
+    imgData = await uploadImgToFireStore(profileImgFile);
+  } catch (error) {
+    if (error instanceof Error) {
+      toast.warn(error.message);
+    }
+  }
+  try {
     const response = await customAxios.post("/api/auth/signup", {
       email,
       password,
       nickname,
-      profileImg: imgData || { url: "/icons/user_icon.svg", name: "" },
+      profileImgData: imgData || { url: "/icons/user_icon.svg", name: "" },
       introduce,
     });
     return response;
