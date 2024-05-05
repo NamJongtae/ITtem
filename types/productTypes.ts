@@ -68,4 +68,15 @@ export interface ProductData {
   deliveryFee: ProductDeliveryFee;
 }
 
+export type ProductUploadData = Omit<
+  ProductData,
+  | "id"
+  | "createdAt"
+  | "likeCount"
+  | "likeUserList"
+  | "viewCount"
+  | "block"
+  | "reportCount"
+>;
+
 export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH";

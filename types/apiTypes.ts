@@ -1,19 +1,10 @@
-import { ObjectId } from "mongodb";
 import { IronSession } from "iron-session";
 import { ProductData } from "./productTypes";
+import { AuthData, ProfileData } from './authTypes';
 
 export interface VerifyEmailResponseData {
   message: string;
   ok: boolean;
-}
-
-export interface SignupRequsetData {
-  socialType: SocialType;
-  email: string;
-  password: string;
-  profileImg: File | "";
-  nickname: string;
-  introduce: string;
 }
 
 export interface SignupResponseData {
@@ -34,30 +25,6 @@ export interface NicknameDuplicationResponseData {
 export interface UploadImgResponseData {
   url: string;
   name: string;
-}
-
-export interface UserData {
-  _id: ObjectId;
-  uid: string;
-  socialType: SocialType;
-  email: string;
-  password: string;
-  nickname: string;
-  profileImg: string;
-  profieImgfilename: string;
-  introduce: string;
-  productList: [];
-  wishList: [];
-  followers: [];
-  followings: [];
-  chatRoomList: [];
-}
-
-export interface AuthData {
-  uid: string;
-  email: string;
-  nickname: string;
-  profileImg: string;
 }
 
 export interface SigninResponseData {
@@ -104,12 +71,6 @@ export interface GoogleAuthInfoResponseData {
   verifired_email: boolean;
 }
 
-export const enum SocialType {
-  EMAIL = "EMAIL",
-  GOOGLE = "GOOGLE",
-  KAKAO = "KAKAO",
-}
-
 export interface KaKaoAuthAccessTokenResponseData {
   token_type: string;
   access_token: string;
@@ -138,16 +99,6 @@ export interface ProductListResponseData {
 export interface ProductResponseData {
   product: ProductData;
   message: string;
-}
-
-export interface ProfileData {
-  uid: string;
-  email: string;
-  nickname: string;
-  followers: string[];
-  followings: string[];
-  productList: string[];
-  reviewPercentage: number;
 }
 
 export interface ProfileResponseData {
