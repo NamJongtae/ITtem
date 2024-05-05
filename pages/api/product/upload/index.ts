@@ -1,5 +1,7 @@
-import { DBClient } from "@/lib/database";
+import dbConnect from "@/lib/db";
+import { Product } from "@/lib/db/schema";
 import { checkAuthorization } from "@/lib/server";
+import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -19,26 +21,30 @@ export default async function handler(
 
       const { productData } = req.body;
 
-      if (!productData) {
-        res.status(422).json({ message: "상품 데이터가 없어요." });
-        return;
-      }
-      const uploadProductData = { ...productData, createdAt: new Date() };
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-      await db.collection("product").insertOne(uploadProductData);
+      await dbConnect();
+      
+      const newProduct = new Product(productData);
 
-      res
-        .status(201)
-        .json({
-          message: "상품 등록에 성공했어요.",
-          product: uploadProductData,
-        });
+      await newProduct.save();
+
+      console.log(newProduct)
+
+      res.status(201).json({
+        message: "상품 등록에 성공했어요.",
+        product: newProduct,
+      });
     } catch (error) {
       console.error(error);
+      if (error instanceof mongoose.Error.ValidationError) {
+        const errorMessages = Object.values(error.errors).map(
+          (err) => err.message
+        );
+        res.status(422).json({
+          message: "유효하지 않은 값이 있어요.",
+          error: errorMessages,
+        });
+      }
       res.status(500).json({ message: "상품 등록에 실패하였어요." });
-    } finally {
-      await DBClient.close();
     }
   }
 }

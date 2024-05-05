@@ -1,14 +1,16 @@
 import { getToken } from "@/lib/api/redis";
-import { DBClient } from "@/lib/database";
+import mongoose from "mongoose";
+import { User } from "@/lib/db/schema";
 import {
   createAndSaveToken,
   createUniqueNickname,
   sessionOptions,
 } from "@/lib/server";
-import { IronSessionType, SocialType, UserData } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/apiTypes";
+import { LoginType } from "@/types/authTypes";
 import { getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
-import { v4 as uuid } from "uuid";
+import dbConnect from "@/lib/db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,12 +27,9 @@ export default async function handler(
     try {
       const googleUserData = user;
 
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-      const collection = db.collection("user");
-      const dbUserData = (await collection.findOne({
-        email: googleUserData.email,
-      })) as UserData | null;
+      await dbConnect();
+
+      const dbUserData = await User.findOne({ email: googleUserData.email });
 
       const session = await getIronSession<IronSessionType>(
         req,
@@ -40,45 +39,62 @@ export default async function handler(
 
       if (!dbUserData) {
         // 회원가입 로직
-        const userNickname = await createUniqueNickname(db);
+        try {
+          const userNickname = await createUniqueNickname();
 
-        const uid = uuid();
-        const email = googleUserData.email;
-        const profileImg = googleUserData.picture;
+          const email = googleUserData.email.toLowerCase();
+          const profileImg = googleUserData.picture;
 
-        await db.collection("user").insertOne({
-          email,
-          nickname: userNickname,
-          profileImg,
-          socialType: SocialType.GOOGLE,
-          profileImgFilename: "",
-          uid,
-          introduce: "",
-          productList: [],
-          wishList: [],
-          followers: [],
-          followings: [],
-          chatRoomList: [],
-        });
-
-        await createAndSaveToken({
-          user: {
-            uid,
+          const userData = {
             email,
+            password: "",
             nickname: userNickname,
             profileImg,
-          },
-          session,
-        });
+            loginType: LoginType.GOOGLE,
+            profileImgFilename: "",
+          };
 
-        res.status(201).json({
-          message: "회원가입에 성공했어요.",
-          user: { uid, email, nickname: userNickname, profileImg },
-        });
-        return;
+          const newUser = new User(userData);
+
+          await newUser.save();
+
+          await createAndSaveToken({
+            user: {
+              uid: newUser.uid,
+              email: newUser.email,
+              nickname: newUser.nickname,
+              profileImg: newUser.profileImg,
+            },
+            session,
+          });
+
+          res.status(201).json({
+            message: "회원가입에 성공했어요.",
+            user: {
+              uid: newUser.uid,
+              email: newUser.email,
+              nickname: newUser.nickname,
+              profileImg: newUser.profileImg,
+            },
+          });
+          return;
+        } catch (error) {
+          console.log(error);
+          if (error instanceof mongoose.Error.ValidationError) {
+            const errorMessages = Object.values(error.errors).map(
+              (err) => err.message
+            );
+            res.status(422).json({
+              message: "유효하지 않은 값이 있어요.",
+              error: errorMessages,
+            });
+          }
+          res.status(500).json({ message: "회원가입에 실패했어요." });
+          return;
+        }
       }
 
-      if (dbUserData.socialType !== "GOOGLE") {
+      if (dbUserData.loginType !== "GOOGLE") {
         res.status(401).json({ message: "이미 가입된 이메일입니다." });
         return;
       }
@@ -113,9 +129,9 @@ export default async function handler(
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "로그인에 실패했어요." });
-    } finally {
-      await DBClient.close();
+      res
+        .status(500)
+        .json({ message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요." });
     }
   }
 }

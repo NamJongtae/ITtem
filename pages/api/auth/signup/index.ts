@@ -1,11 +1,13 @@
 import { getVerifiedEmail } from "@/lib/api/redis";
 import { getHasdPassword } from "@/lib/api/auth";
-import { DBClient } from "@/lib/database";
-import { v4 as uuid } from "uuid";
+import dbConnect from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getIronSession } from "iron-session";
-import { IronSessionType, SocialType } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/apiTypes";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
+import { User } from "@/lib/db/schema";
+import { LoginType } from "@/types/authTypes";
+import mongoose from "mongoose";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,25 +15,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { email, password, nickname, profileImg, introduce } = req.body;
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-
-
-      if (!email) {
-        res.status(422).json({ message: "이메일을 입력하지 않았어요." });
-        return;
-      }
-
-      if (!password) {
-        res.status(422).json({ message: "비밀번호를 입력하지 않았어요." });
-        return;
-      }
-
-      if (!nickname) {
-        res.status(422).json({ message: "닉네임을 입력하지 않았어요." });
-        return;
-      }
+      const { email, password, nickname, profileImgData, introduce } = req.body;
 
       try {
         const isVerifyedEmail = await getVerifiedEmail(email);
@@ -45,22 +29,22 @@ export default async function handler(
       }
 
       const hashedPassword = await getHasdPassword(password);
-      const uid = uuid();
-      await db.collection("user").insertOne({
-        uid,
-        socialType: SocialType.EMAIL,
-        email,
+
+      await dbConnect();
+
+      const userData = {
+        loginType: LoginType.EMAIL,
+        email: email.toLowerCase(),
         password: hashedPassword,
         nickname,
-        profileImg: profileImg?.url || "/icons/user_icon.svg",
-        profieImgFilename: profileImg?.name || "",
+        profileImg: profileImgData.url,
+        profieImgFilename: profileImgData.name,
         introduce,
-        productList: [],
-        wishList: [],
-        followers: [],
-        followings: [],
-        chatRoomList: [],
-      });
+      };
+
+      const newUser = new User(userData);
+
+      await newUser.save();
 
       const session = await getIronSession<IronSessionType>(
         req,
@@ -69,19 +53,33 @@ export default async function handler(
       );
 
       await createAndSaveToken({
-        user: { uid, email, nickname, profileImg: profileImg.url },
+        user: {
+          uid: newUser.uid,
+          email: newUser.email,
+          nickname: newUser.nickname,
+          profileImg: newUser.profileImg,
+        },
         session,
       });
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",
-        user: { nickname, profileImg: profileImg.url },
+        user: { nickname, profileImg: profileImgData.url },
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "회원가입에 실패했어요." });
-    } finally {
-      await DBClient.close();
+      if (error instanceof mongoose.Error.ValidationError) {
+        const errorMessages = Object.values(error.errors).map(
+          (err) => err.message
+        );
+        res.status(422).json({
+          message: "유효하지 않은 값이 있어요.",
+          error: errorMessages,
+        });
+      }
+      res.status(500).json({
+        message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
     }
   }
 }

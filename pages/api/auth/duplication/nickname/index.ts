@@ -1,4 +1,5 @@
-import { DBClient } from "@/lib/database";
+import dbConnect from "@/lib/db";
+import { User } from '@/lib/db/schema';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -8,10 +9,10 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { nickname } = req.body;
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-      const isDuplication = await db
-        .collection("user")
+
+      await dbConnect();
+
+      const isDuplication = await User
         .findOne({ nickname: { $regex: new RegExp(nickname, "i") } });
 
       if (isDuplication) {
@@ -26,8 +27,6 @@ export default async function handler(
       res
         .status(500)
         .json({ message: "닉네임 확인에 실패하였습니다.", ok: false });
-    } finally {
-      await DBClient.close();
     }
   }
 }

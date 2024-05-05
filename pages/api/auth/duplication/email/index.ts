@@ -1,4 +1,5 @@
-import { DBClient } from "@/lib/database";
+import dbConnect from "@/lib/db";
+import { User } from "@/lib/db/schema";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -8,12 +9,12 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { email } = req.body;
-      
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-      const isDuplication = await db
-        .collection("user")
-        .findOne({ email: { $regex: new RegExp(email, "i") } });
+
+      await dbConnect();
+
+      const isDuplication = await User.findOne({
+        email: { $regex: new RegExp(email, "i") },
+      });
 
       if (isDuplication) {
         res
@@ -28,8 +29,6 @@ export default async function handler(
       res
         .status(500)
         .json({ message: "이메일 확인에 실패하였습니다.", ok: false });
-    } finally {
-      await DBClient.close();
-    }
+    } 
   }
 }

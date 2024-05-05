@@ -1,4 +1,5 @@
-import { DBClient } from "@/lib/database";
+import dbConnect from "@/lib/db";
+import { User } from "@/lib/db/schema";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -8,8 +9,8 @@ export default async function handler(
   if (req.method === "GET") {
     try {
       const { uid } = req.query;
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
+
+      await dbConnect();
 
       // 사용자 정보와 리뷰 점수 정보를 조인합니다.
       const aggregation = [
@@ -68,6 +69,7 @@ export default async function handler(
             uid: 1,
             email: 1,
             nickname: 1,
+            profileImg: 1,
             followers: 1,
             followings: 1,
             productList: 1,
@@ -76,10 +78,7 @@ export default async function handler(
         },
       ];
 
-      const userWithReviews = await db
-        .collection("user")
-        .aggregate(aggregation)
-        .toArray();
+      const userWithReviews = await User.aggregate(aggregation);
 
       if (!userWithReviews.length) {
         res.status(404).json({ message: "유저가 존재하지 않아요." });
@@ -95,8 +94,6 @@ export default async function handler(
       res.status(500).json({
         message: "유저 프로필 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
-    } finally {
-      await DBClient.close();
     }
   }
 }

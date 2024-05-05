@@ -1,11 +1,13 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { verifyPassword } from "@/lib/api/auth";
 import { getToken } from "@/lib/api/redis";
-import { DBClient } from "@/lib/database";
+import mongoose from "mongoose";
+import { User } from "@/lib/db/schema";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
-import { IronSessionType, UserData } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/apiTypes";
 import { getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,15 +22,16 @@ export default async function handler(
       }: { email: string; password: string; isDuplicateLogin: boolean } =
         req.body;
 
-      await DBClient.connect();
-      const db = DBClient.db("ITtem");
-      const collection = db.collection("user");
-      const userData = (await collection.findOne({
-        email: email.toLocaleLowerCase(),
-      })) as UserData | null;
+      if (!email || !password) {
+        res.status(422).json({ message: "유효하지 않은 값이 있어요." });
+      }
+
+      await dbConnect();
+
+      const userData = await User.findOne({ email: email.toLowerCase() });
 
       // 소셜 로그인으로 가입한 경우
-      if (userData?.socialType !== "EMAIL") {
+      if (userData?.loginType !== "EMAIL") {
         res
           .status(401)
           .json({ message: "이메일 혹은 비밀번호가 일치하지 않아요." });
@@ -91,9 +94,11 @@ export default async function handler(
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json(ERROR_MESSAGE);
-    } finally {
-      await DBClient.close();
+      res
+        .status(500)
+        .json({
+          message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        });
     }
   }
 }

@@ -31,7 +31,8 @@ export default async function handler(
         user: { ...kakaoUserData },
       });
     } catch (error) {
-      res.status(401).json({ message: "유저 정보를 가져오지못했어요." });
+      console.error(error)
+      res.status(500).json({ message: "유저 정보를 가져오지못했어요." });
     }
   }
 }

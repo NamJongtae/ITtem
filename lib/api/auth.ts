@@ -344,7 +344,7 @@ export async function changePassword({
   isFindPw?: boolean;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = await customAxios.post("/api/auth/changePassword", {
+    const response = await customAxios.patch("/api/auth/changePassword", {
       email,
       password,
       isFindPw,
