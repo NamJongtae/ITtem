@@ -1,6 +1,6 @@
 import { AUTH_QUERY_KEY } from "@/constants/constant";
 import { getUser } from "@/lib/api/auth";
-import { AuthData } from "@/types/apiTypes";
+import { AuthData } from '@/types/authTypes';
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

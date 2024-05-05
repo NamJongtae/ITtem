@@ -1,6 +1,6 @@
 import { getProfileQueryKey } from "@/constants/constant";
 import { getUserProfile } from "@/lib/api/auth";
-import { ProfileData } from "@/types/apiTypes";
+import { ProfileData } from '@/types/authTypes';
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
