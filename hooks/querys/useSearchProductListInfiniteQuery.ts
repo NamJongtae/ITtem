@@ -7,7 +7,7 @@ import {
 } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function useSearchProductListInfiniteQuery({
   limit = 10,
@@ -18,8 +18,8 @@ export default function useSearchProductListInfiniteQuery({
   category?: ProductCategory;
   productListType: ProductListType;
 }) {
-  const search = useSearchParams();
-  const keyword = search.get("keyword");
+  const router = useRouter();
+  const keyword = router.query?.keyword;
 
   const {
     data: searchProductListData,
@@ -29,25 +29,25 @@ export default function useSearchProductListInfiniteQuery({
     isLoading: isLoadingSearchProductList,
     error: searchProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: getSearchProductListQueryKey(category, keyword),
-    queryFn: async ({ pageParam = 1 }) => {
+    queryKey: getSearchProductListQueryKey(category, keyword as string),
+    queryFn: async ({ pageParam}) => {
       const response = await getSearchProductList({
         category,
-        page: pageParam,
+        cursor: pageParam,
         limit,
-        keyword: keyword || "",
+        keyword: (keyword as string) || "",
       });
-      return response.data.product;
+      return response.data.products;
     },
     enabled: productListType === "SEARCH" && !!keyword,
     retry: 0,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      const nextPage = allPages.length + 1;
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => {
+      const nextCursor = lastPage[lastPage.length - 1].createdAt;
       if (lastPage.length < limit) {
         return undefined;
       }
-      return nextPage;
+      return nextCursor;
     },
   });
 

@@ -92,7 +92,7 @@ export interface KakaoAuthInfoResponseData {
 }
 
 export interface ProductListResponseData {
-  product: ProductData[];
+  products: ProductData[];
   message: string;
 }
 

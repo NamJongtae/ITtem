@@ -46,6 +46,7 @@ export enum ProductStatus {
 export type ProductImgData = { url: string; name: string };
 
 export interface ProductData {
+  _id: string;
   id: string;
   name: string;
   description: string;
@@ -70,6 +71,7 @@ export interface ProductData {
 
 export type ProductUploadData = Omit<
   ProductData,
+  | "_id"
   | "id"
   | "createdAt"
   | "likeCount"

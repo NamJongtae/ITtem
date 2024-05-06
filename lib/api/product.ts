@@ -1,15 +1,19 @@
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
-import { ProductCategory, ProductData, ProductUploadData } from "@/types/productTypes";
-import { ProductListResponseData, ProductResponseData } from '@/types/apiTypes';
+import {
+  ProductCategory,
+  ProductData,
+  ProductUploadData,
+} from "@/types/productTypes";
+import { ProductListResponseData, ProductResponseData } from "@/types/apiTypes";
 
 export async function getTodayProductList(
-  page: unknown = 1,
+  cursor: unknown = null,
   limit: number = 10
-): Promise<AxiosResponse<{ product: ProductData[]; message: string }>> {
+): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
-      `/api/product/today?page=${page}&limit=${limit}`
+      `/api/product/today?${cursor ? `cursor=${cursor}` : ""}&limit=${limit}`
     );
     return response;
   } catch (error) {
@@ -19,19 +23,22 @@ export async function getTodayProductList(
 
 export async function getCategoryProductList({
   category = ProductCategory.전체,
-  page = 1,
+  cursor = null,
   limit = 10,
   location,
 }: {
   category: ProductCategory;
-  page: unknown;
+  cursor: unknown;
   limit: number;
   location?: string;
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
-      `/api/product?category=${category}&page=${page}&limit=${limit}&location=${location}`
+      `/api/product?category=${category}${
+        cursor ? `&cursor=${cursor}` : ""
+      }&limit=${limit}&location=${location}`
     );
+    console.log(response.data);
     return response;
   } catch (error) {
     throw error;
@@ -40,18 +47,20 @@ export async function getCategoryProductList({
 
 export async function getSearchProductList({
   category = ProductCategory.전체,
-  page = 1,
+  cursor = null,
   limit = 10,
   keyword,
 }: {
   category: ProductCategory;
-  page: unknown;
+  cursor: unknown;
   limit: number;
   keyword: string;
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
-      `/api/product/search?keyword=${keyword}&category=${category}&page=${page}&limit=${limit}`
+      `/api/product/search?keyword=${keyword}&category=${category}${
+        cursor ? `&cursor=${cursor}` : ""
+      }&limit=${limit}`
     );
     return response;
   } catch (error) {

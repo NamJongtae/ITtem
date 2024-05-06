@@ -30,24 +30,24 @@ export default function useCategoryProductListInfiniteQuery({
     error: categoryProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: getCategoryProductListQueryKey(category, location),
-    queryFn: async ({ pageParam = 1 }) => {
+    queryFn: async ({ pageParam }) => {
       const response = await getCategoryProductList({
         category,
-        page: pageParam,
+        cursor: pageParam,
         limit,
         location,
       });
-      return response.data.product;
+      return response.data.products;
     },
     enabled: productListType === "CATEGORY",
     retry: 0,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      const nextPage = allPages.length + 1;
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => {
+      const nextCursor = lastPage[lastPage.length - 1].createdAt;
       if (lastPage.length < limit) {
         return undefined;
       }
-      return nextPage;
+      return nextCursor;
     },
   });
 
