@@ -1,49 +1,58 @@
 import { uploadMultiImgToFirestore } from "@/lib/api/firebase";
 import {
-  ProductData,
   ProductImgData,
   ProductStatus,
+  ProductUploadData,
 } from "@/types/productTypes";
-import { v4 as uuid } from "uuid";
 import { FieldValues } from "react-hook-form";
 import useProductUploadMutate from "../querys/useProductUploadMutate";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function useProductUploadSubmit() {
-  const { productUploadMuate, productUploadLoading } = useProductUploadMutate();
+  const { productUploadMuate } = useProductUploadMutate();
   const user = useSelector((state: RootState) => state.auth.user);
+  const [productUploadLoading, setProductUploadLoading] = useState(false);
 
   const handleClickProductUploadSubmit = async (values: FieldValues) => {
-    const imgData = (await uploadMultiImgToFirestore(values.img)) as
-      | ProductImgData[]
-      | undefined;
+    try {
+      setProductUploadLoading(true);
+      const imgData = (await uploadMultiImgToFirestore(values.imgData)) as
+        | ProductImgData[]
+        | undefined;
 
-    const productData: ProductData = {
-      id: uuid(),
-      name: values.name,
-      description: values.desc,
-      uid: user?.uid || "",
-      createdAt: new Date(),
-      status: ProductStatus.sold,
-      block: false,
-      reportCount: 0,
-      likeCount: 0,
-      likeUserList: [],
-      viewCount: 0,
-      imgData: imgData || [],
-      price: parseInt(values.price, 10),
-      location: values.location,
-      sellType: values.sellType,
-      category: values.category,
-      condition: values.condition,
-      returnPolicy: values.returnPolicy,
-      transaction: values.transaction,
-      deliveryFee: values.deliveryFee,
-    };
+      const productData: ProductUploadData = {
+        name: values.name,
+        description: values.description,
+        uid: user?.uid || "",
+        imgData: imgData || [],
+        price: parseInt(values.price, 10),
+        location: values.location,
+        sellType: values.sellType,
+        category: values.category,
+        condition: values.condition,
+        returnPolicy: values.returnPolicy,
+        transaction: values.transaction,
+        deliveryFee: values.deliveryFee,
+      };
 
-    productUploadMuate(productData);
+      await productUploadMuate(productData);
+    } catch (error) {
+      if (isAxiosError<{ message: string }>(error)) {
+        toast.warn(error.response?.data.message);
+      } else if (error instanceof Error) {
+        toast.warn(error.message);
+      }
+    } finally {
+      setProductUploadLoading(false);
+    }
   };
 
-  return { handleClickProductUploadSubmit, productUploadLoading};
+  return {
+    handleClickProductUploadSubmit,
+    productUploadLoading,
+  };
 }

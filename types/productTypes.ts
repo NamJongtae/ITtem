@@ -73,6 +73,7 @@ export type ProductUploadData = Omit<
   ProductData,
   | "_id"
   | "id"
+  | "status"
   | "createdAt"
   | "likeCount"
   | "likeUserList"
