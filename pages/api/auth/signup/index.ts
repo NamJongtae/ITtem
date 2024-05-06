@@ -76,6 +76,7 @@ export default async function handler(
           message: "유효하지 않은 값이 있어요.",
           error: errorMessages,
         });
+        return;
       }
       res.status(500).json({
         message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요.",
