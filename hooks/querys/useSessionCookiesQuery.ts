@@ -5,13 +5,14 @@ import { AppDispatch } from "@/store/store";
 import { SessionCookiesResponseData } from "@/types/apiTypes";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 export default function useSessionCookiesQuery() {
   const dispatch = useDispatch<AppDispatch>();
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
   
   const { data, isSuccess, error, refetch } = useQuery<
     AxiosResponse<SessionCookiesResponseData>,

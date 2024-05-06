@@ -1,13 +1,13 @@
-import { getProductQueryKey } from '@/constants/constant';
+import { getProductQueryKey } from "@/constants/constant";
 import { getProduct } from "@/lib/api/product";
 import { ProductData } from "@/types/productTypes";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function useProductQuery(isEdit?: boolean) {
-  const params = useParams();
-  const productId = params?.productId || "";
+  const router = useRouter();
+  const productId = router.query?.productId;
 
   const {
     data: productData,
