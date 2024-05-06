@@ -45,6 +45,6 @@ export interface ProfileData {
   profileImg: string;
   followers: string[];
   followings: string[];
-  productList: string[];
+  productIds: string[];
   reviewPercentage: number;
 }
