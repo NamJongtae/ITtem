@@ -26,8 +26,8 @@ export default function useSigninMutate() {
       password: string;
       isDuplicationLogin?: boolean;
     }) => await sigin(email, password, isDuplicationLogin),
-    onSuccess: (response) => {
-      router.push("/");
+    onSuccess: async (response) => {
+      await router.push("/");
       dispatch(authSlice.actions.saveAuth(response.data.user));
     },
     onError: (error: unknown, variables) => {
