@@ -61,7 +61,7 @@ export default async function handler(
         { $set: { password: hashedPassword } }
       );
 
-      if (result.modifiedCount === 0) {
+      if (!result.acknowledged || result.modifiedCount === 0) {
         res.status(500).json({
           message: "비밀번호 변경에실패했어요.\n잠시 후 다시 시도해주세요.",
         });
