@@ -13,7 +13,7 @@ interface IProps {
   imgData?: ProductImgData[];
 }
 
-export default function SellImgField({ imgData }: IProps) {
+export default function ProductUploadImgField({ imgData }: IProps) {
   const { preview, handleOnChangeImg, handleRemoveImg, handleDropImgUpload } =
     useProductImg(imgData);
   const { isOpenModal, openModal, closeModal } = useModal();

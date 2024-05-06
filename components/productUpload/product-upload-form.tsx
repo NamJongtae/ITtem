@@ -1,15 +1,3 @@
-import ProductUploadImgField from "./imgField/product-upload-img-field";
-import ProductUploadNameField from "./product-upload-name-field";
-import ProductUploadCategoryField from "./product-upload-category-field";
-import ProductUploadLocationField from "./product-upload-location-field";
-import ProductUploadConditionField from "./product-upload-condition-field";
-import ProductUploadReturnPolicyField from "./product-upload-returnPolicy-field";
-import ProductUploadTransactionField from "./product-upload-transaction-field";
-import ProductUploadPriceField from "./product-upload-price-field";
-import ProductUploadDescField from "./product-upload-desc-field";
-import ProductUploadDeliveryFeeField from "./product-upload-deliveryFee-field";
-import ProductUploadSellTypeField from "./product-upload-sellType-field";
-import ProductUploadBtns from "./product-upload-btns";
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
 import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
@@ -20,6 +8,7 @@ import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useProductEditCheckUser from "@/hooks/productUpload/useProductEditCheckUser";
+import ProductUploadFormContent from "./product-upload-form-content";
 
 interface IProps {
   isEdit?: boolean;
@@ -28,28 +17,32 @@ interface IProps {
 export default function ProductUploadForm({ isEdit }: IProps) {
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const { handleClickProductUploadSubmit, productUploadLoading } =
-    useProductUploadSubmit();
+  const {
+    handleClickProductUploadSubmit,
+    productUploadLoading,
+  } = useProductUploadSubmit();
 
   const { productData, loadProductLoading, loadProductError } =
     useProductQuery(isEdit);
 
-  const { handleClickProductEditSubmit, productEditLoading } =
-    useProductEditSubmit();
+  const {
+    handleClickProductEditSubmit,
+    productEditLoading,
+  } = useProductEditSubmit();
 
   useProductEditCheckUser(productData, isEdit);
 
-  if (loadProductLoading || productUploadLoading || productEditLoading) {
+  if (
+    loadProductLoading ||
+    productUploadLoading ||
+    productEditLoading
+  ) {
     return <Loading />;
   }
 
   if (loadProductError) {
     if (isAxiosError<{ message: string }>(loadProductError)) {
-      return (
-        <Empty
-          message={loadProductError.response?.data?.message || ""}
-        />
-      );
+      return <Empty message={loadProductError.response?.data?.message || ""} />;
     }
   }
 
@@ -76,18 +69,10 @@ export default function ProductUploadForm({ isEdit }: IProps) {
         },
       }}
     >
-      <ProductUploadImgField imgData={productData?.imgData} />
-      <ProductUploadNameField />
-      <ProductUploadSellTypeField />
-      <ProductUploadCategoryField />
-      <ProductUploadLocationField />
-      <ProductUploadConditionField />
-      <ProductUploadReturnPolicyField />
-      <ProductUploadTransactionField />
-      <ProductUploadPriceField />
-      <ProductUploadDeliveryFeeField />
-      <ProductUploadDescField />
-      <ProductUploadBtns isEdit={isEdit} />
+      <ProductUploadFormContent
+        isEdit={isEdit}
+        imgData={productData?.imgData}
+      />
     </MyForm>
   ) : null;
 }
