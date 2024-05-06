@@ -1,4 +1,4 @@
-import dbConnect from '@/lib/db';
+import dbConnect from "@/lib/db";
 import { Product } from "@/lib/db/schema";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -8,15 +8,17 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      const { page, limit, category, keyword } = req.query;
+      const { cursor, limit, category, keyword } = req.query;
 
       await dbConnect();
 
-      const currentPage = parseInt(page as string) || 1;
-      const currentLimit = parseInt(limit as string) || 10;
-      const skip = (currentPage - 1) * currentLimit;
+      const todayStart = new Date();
 
-      let query = {};
+      const cursorDate = cursor ? new Date(cursor as string) : todayStart;
+      const currentLimit = parseInt(limit as string) || 10;
+
+      let query: object = { createdAt: { $lt: cursorDate } };
+
       if (category !== "전체") {
         query = { ...query, category };
       }
@@ -32,19 +34,18 @@ export default async function handler(
         };
       }
 
-      const product = await Product.find(query)
-        .skip(skip)
+      const products = await Product.find(query)
         .limit(currentLimit)
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1, _id: -1 });
 
-      res.status(200).json({ message: "검색에 성공했어요.", product });
+      res.status(200).json({ message: "검색에 성공했어요.", products });
 
       if (!keyword) {
         res.status(422).json({ message: "검색어가 존재하지 않아요." });
         return;
       }
 
-      if (!product.length) {
+      if (!products.length) {
         res.status(404).json({ message: "상품이 존재하지 않아요." });
         return;
       }
