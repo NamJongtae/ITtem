@@ -16,7 +16,7 @@ export default function useProductUploadMutate() {
     >({
       mutationFn: async (productData) => await uploadProduct(productData),
       onSuccess: async (response) => {
-        await router.push(`/product/${response.data.product.id}`);
+        await router.push(`/product/${response.data.product._id}`);
       },
     });
   return { productUploadMuate, productUploadLoading };

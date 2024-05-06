@@ -60,7 +60,7 @@ export default async function handler(
 
           await createAndSaveToken({
             user: {
-              uid: newUser.uid,
+              uid: newUser._id,
               email: newUser.email,
               nickname: newUser.nickname,
               profileImg: newUser.profileImg,
@@ -71,7 +71,7 @@ export default async function handler(
           res.status(201).json({
             message: "회원가입에 성공했어요.",
             user: {
-              uid: newUser.uid,
+              uid: newUser._id,
               email: newUser.email,
               nickname: newUser.nickname,
               profileImg: newUser.profileImg,
@@ -88,6 +88,7 @@ export default async function handler(
               message: "유효하지 않은 값이 있어요.",
               error: errorMessages,
             });
+            return;
           }
           res.status(500).json({ message: "회원가입에 실패했어요." });
           return;
@@ -100,7 +101,7 @@ export default async function handler(
       }
 
       // 로그인 로직
-      const { uid, email, nickname, profileImg } = dbUserData;
+      const { _id: uid, email, nickname, profileImg } = dbUserData;
 
       const refreshTokenData = await getToken(uid, "refreshToken");
 

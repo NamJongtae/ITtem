@@ -47,7 +47,6 @@ export type ProductImgData = { url: string; name: string };
 
 export interface ProductData {
   _id: string;
-  id: string;
   name: string;
   description: string;
   uid: string;
@@ -72,7 +71,6 @@ export interface ProductData {
 export type ProductUploadData = Omit<
   ProductData,
   | "_id"
-  | "id"
   | "status"
   | "createdAt"
   | "likeCount"

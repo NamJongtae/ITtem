@@ -38,7 +38,7 @@ export default function ProductList({ productListType }: IProps) {
               <ProductListPlaceholder listCount={12} />
             ) : (
               data?.map((item) => (
-                <Fragment key={item.id}>
+                <Fragment key={item._id}>
                   <ProductItem data={item} />
                 </Fragment>
               ))

@@ -1,13 +1,7 @@
-import { v4 as uuid } from "uuid";
 import mongoose from "mongoose";
 
 export const userSchema = new mongoose.Schema(
   {
-    uid: {
-      type: String,
-      unique: true,
-      default: () => uuid(),
-    },
     loginType: {
       type: String,
       required: [true, "로그인 유형이 없어요."],
@@ -29,7 +23,7 @@ export const userSchema = new mongoose.Schema(
     profileImg: { type: String, default: "/icons/user_icon.svg" },
     profieImgFilename: { type: String, default: "" },
     introduce: { type: String, default: "" },
-    productList: { type: [String], default: [] },
+    productIds: { type: [String], default: [] },
     wishList: { type: [String], default: [] },
     followers: { type: [String], default: [] },
     followings: { type: [String], default: [] },
@@ -43,7 +37,6 @@ export const User = mongoose.models?.User || mongoose.model("User", userSchema);
 
 export const productSchema = new mongoose.Schema(
   {
-    id: { type: String, unique: true, default: () => uuid() },
     name: { type: String, required: [true, "상품명이 없어요."] },
     description: { type: String, required: [true, "상품 설명이 없어요."] },
     uid: { type: String, required: [true, "유저 아이디가 없어요."] },

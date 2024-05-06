@@ -57,7 +57,7 @@ export default async function handler(
         return;
       }
 
-      const refreshTokenData = await getToken(userData.uid, "refreshToken");
+      const refreshTokenData = await getToken(userData._id, "refreshToken");
 
       if (refreshTokenData && !isDuplicateLogin) {
         res.status(409).json({
@@ -75,7 +75,7 @@ export default async function handler(
 
       await createAndSaveToken({
         user: {
-          uid: userData.uid,
+          uid: userData._id,
           nickname: userData.nickname,
           email: userData.email,
           profileImg: userData.profileImg,
@@ -86,7 +86,7 @@ export default async function handler(
       res.status(200).json({
         message: "로그인에 성공했습니다.",
         user: {
-          uid: userData.uid,
+          uid: userData._id,
           email: userData.email,
           nickname: userData.nickname,
           profileImg: userData.profileImg,

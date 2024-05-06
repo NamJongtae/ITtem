@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/db";
 import { User } from "@/lib/db/schema";
+import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,10 +13,15 @@ export default async function handler(
 
       await dbConnect();
 
+      if (!uid) {
+        res.status(422).json({ message: "유저 아이디가 없어요." });
+        return;
+      }
+
       // 사용자 정보와 리뷰 점수 정보를 조인합니다.
       const aggregation = [
         {
-          $match: { uid },
+          $match: { _id: new mongoose.Types.ObjectId(uid as string) },
         },
         {
           $lookup: {
@@ -66,7 +72,7 @@ export default async function handler(
         },
         {
           $project: {
-            uid: 1,
+            _id: 1,
             email: 1,
             nickname: 1,
             profileImg: 1,
@@ -85,7 +91,7 @@ export default async function handler(
         return;
       }
 
-      const profile = userWithReviews[0];
+      const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
       res
         .status(200)
         .json({ message: "유저 프로필 조회에 성공했어요.", profile });
