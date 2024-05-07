@@ -65,7 +65,7 @@ export default async function handler(
       const result = await Product.findOneAndUpdate(
         { _id: new mongoose.Types.ObjectId(productId as string) },
         { $set: productData },
-        { new: true }
+        { returnNewDocument: true }
       );
 
       if (!result) {
@@ -78,11 +78,9 @@ export default async function handler(
         .json({ message: "상품 수정에 성공했어요.", product: result });
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          message: "상품 수정에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
+      res.status(500).json({
+        message: "상품 수정에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
     }
   }
 }
