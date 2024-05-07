@@ -80,4 +80,4 @@ export type ProductUploadData = Omit<
   | "reportCount"
 >;
 
-export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH";
+export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH" | "PROFILE";

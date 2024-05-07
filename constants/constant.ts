@@ -67,9 +67,16 @@ export const getSearchProductListQueryKey = (
 };
 
 export const getProductQueryKey = (productId: string) => {
-  return ["product", productId]
-}
+  return ["product", productId];
+};
 
 export const getProfileQueryKey = (uid: string) => {
-  return ["category", uid];
-}
+  return ["profile", uid];
+};
+
+export const getProfileProductListQuerykey = (
+  uid: string,
+  category: string = "전체"
+) => {
+  return ["profile", uid, "product", category];
+};
