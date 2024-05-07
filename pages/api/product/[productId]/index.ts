@@ -30,6 +30,13 @@ export default async function handler(
         return;
       }
 
+      if (product.block) {
+        res
+          .status(409)
+          .json({ message: "신고에 의해 블라인드 처리된 상품이에요." });
+        return;
+      }
+
       res.status(200).json({ message: "상품 조회에 성공했어요.", product });
     } catch (error) {
       console.error("상품 조회 에러", error);
@@ -62,6 +69,7 @@ export default async function handler(
       }
 
       await dbConnect();
+
       const result = await Product.findOneAndUpdate(
         { _id: new mongoose.Types.ObjectId(productId as string) },
         { $set: productData },
