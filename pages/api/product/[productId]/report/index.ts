@@ -41,6 +41,10 @@ export default async function handler(
         res.status(409).json({ message: "이미 신고한 상품이에요." });
       }
 
+      if (product.uid === isValidAuth.auth.uid) {
+        res.status(409).json({ message: "본인 상품은 신고할 수 없어요." });
+      }
+
       const result = await Product.updateOne({ _id: productId }, [
         {
           $set: {
