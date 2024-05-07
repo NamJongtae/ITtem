@@ -17,7 +17,7 @@ export default async function handler(
       const cursorDate = cursor ? new Date(cursor as string) : todayStart;
       const currentLimit = parseInt(limit as string) || 10;
 
-      let query: object = { createdAt: { $lt: cursorDate } };
+      let query: object = { createdAt: { $lt: cursorDate }, block: false };
 
       if (category !== "전체") {
         query = { ...query, category };

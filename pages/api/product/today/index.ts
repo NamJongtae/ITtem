@@ -24,6 +24,7 @@ export default async function handler(
 
       const products = await Product.find({
         createdAt: { $gte: todayStart, $lt: cursorDate },
+        block: false,
       })
         .limit(pageLimit)
         .sort({ createdAt: -1, _id: -1 });
@@ -35,9 +36,7 @@ export default async function handler(
         return;
       }
 
-      res
-        .status(200)
-        .json({ message: "상품 조회에 성공했어요.", products });
+      res.status(200).json({ message: "상품 조회에 성공했어요.", products });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "상품 조회에 실패했어요." });

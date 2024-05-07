@@ -26,10 +26,10 @@ export default async function handler(
       let query: object = {
         _id: { $in: objectIdArray },
         createdAt: { $lt: cursorDate },
+        block: false,
       };
 
       query = category !== "전체" ? { category } : query;
-
 
       const products = await Product.find(query)
         .limit(pageLimit)
