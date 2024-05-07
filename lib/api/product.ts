@@ -132,6 +132,17 @@ export async function editProduct(
   }
 }
 
+export async function deleteProduct(
+  id: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.delete(`/api/product/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function reportProduct(
   id: string
 ): Promise<AxiosResponse<{ message: string }>> {
