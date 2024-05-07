@@ -29,7 +29,7 @@ export default function useProductUploadSubmit() {
         description: values.description,
         uid: user?.uid || "",
         imgData: imgData || [],
-        price: parseInt(values.price, 10),
+        price: parseInt(values.price.replace(",",""), 10),
         location: values.location,
         sellType: values.sellType,
         category: values.category,
