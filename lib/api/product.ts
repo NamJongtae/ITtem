@@ -68,6 +68,32 @@ export async function getSearchProductList({
   }
 }
 
+export async function getProfileProductList({
+  cursor = null,
+  limit = 10,
+  category = ProductCategory.전체,
+  productIds,
+}: {
+  category: ProductCategory;
+  cursor: unknown;
+  limit: number;
+  productIds: string[];
+}) {
+  try {
+    const response = await customAxios.post(
+      `/api/profile/product?${
+        cursor ? `cursor=${cursor}&` : ""
+      }category=${category}&limit=${limit}`,
+      {
+        productIds,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function uploadProduct(
   productData: ProductUploadData
 ): Promise<AxiosResponse<ProductResponseData>> {
