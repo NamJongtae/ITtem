@@ -9,18 +9,17 @@ export default function useProductEditMutate() {
   const router = useRouter();
   const productId = router.query?.productId;
 
-  const { mutateAsync: productEditMutate } =
-    useMutation<
-      AxiosResponse<ProductResponseData>,
-      AxiosError,
-      Partial<ProductData>
-    >({
-      mutationFn: (productData: Partial<ProductData>) =>
-        editProduct(productId as string, productData),
-      onSuccess: async (response) => {
-        await router.push(`/product/${response.data.product.id}`);
-      },
-    });
+  const { mutateAsync: productEditMutate } = useMutation<
+    AxiosResponse<ProductResponseData>,
+    AxiosError,
+    Partial<ProductData>
+  >({
+    mutationFn: (productData: Partial<ProductData>) =>
+      editProduct(productId as string, productData),
+    onSuccess: async (response) => {
+      await router.push(`/product/${response.data.product._id}`);
+    },
+  });
 
   return { productEditMutate };
 }
