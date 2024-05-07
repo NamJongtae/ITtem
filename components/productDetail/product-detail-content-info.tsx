@@ -1,8 +1,13 @@
 import { getDateFormat } from "@/lib/getDateFormate";
 import { ProductData } from "@/types/productTypes";
 import Image from "next/image";
-import ProductDetailReportBtn from "./product-detail-reportBtn";
-
+import dynamic from "next/dynamic";
+const ProductDetailReportBtn = dynamic(
+  () => import("./product-detail-reportBtn"),
+  {
+    ssr: false,
+  }
+);
 interface IProps {
   productData: ProductData | undefined;
 }
@@ -10,7 +15,9 @@ interface IProps {
 export default function ProductDetailContentInfo({ productData }: IProps) {
   return (
     <>
-      <h3 className="text-gray-700 text-3xl md:text-4xl">{productData?.name}</h3>
+      <h3 className="text-gray-700 text-3xl md:text-4xl">
+        {productData?.name}
+      </h3>
       <div className="mt-3 text-gray-700 font-semibold">
         <span className="text-3xl md:text-4xl ">
           {productData?.price.toLocaleString()}
@@ -49,7 +56,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
             {getDateFormat(productData?.createdAt?.toString() || "")}
           </span>
         </div>
-        <ProductDetailReportBtn />
+        <ProductDetailReportBtn productData={productData} />
       </div>
 
       <div className="mt-5">

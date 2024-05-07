@@ -1,13 +1,34 @@
+import { ProfileData } from "@/types/authTypes";
 import ProductDetailBuyBtn from "./product-detail-buyBtn";
 import ProductDetailChattingBtn from "./product-detail-chattingBtn";
 import ProductDetailWishBtn from "./product-detail-wishBtn";
+import { ProductData } from "@/types/productTypes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import ProductDetailDeleteBtn from "./product-detail-deleteBtn";
+import ProductDetailEditBtn from "./product-detail-EditBtn";
 
-export default function ProductDetailContentBtns() {
+interface IProps {
+  productData: ProductData | undefined;
+}
+
+export default function ProductDetailContentBtns({ productData }: IProps) {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <div className="flex items-center mt-6 gap-3">
-      <ProductDetailWishBtn />
-      <ProductDetailChattingBtn />
-      <ProductDetailBuyBtn />
+      {productData?.uid === user?.uid ? (
+        <>
+          <ProductDetailEditBtn />
+          <ProductDetailDeleteBtn />
+        </>
+      ) : (
+        <>
+          <ProductDetailWishBtn />
+          <ProductDetailChattingBtn />
+          <ProductDetailBuyBtn />
+        </>
+      )}
     </div>
   );
 }

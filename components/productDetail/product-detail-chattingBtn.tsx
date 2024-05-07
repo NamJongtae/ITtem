@@ -19,7 +19,7 @@ export default function ProductDetailChattingBtn() {
     <button
       type="button"
       onClick={handleClickChatting}
-      className="px-8 py-2 bg-yellow-500 text-white text-sm font-medium rounded hover:bg-yellow-400 focus:outline-none focus:bg-yellow-500 md:px-6"
+      className="px-8 py-2 bg-yellow-500 text-white text-sm font-medium rounded hover:betterhover:bg-yellow-400 focus:outline-none focus:bg-yellow-500 md:px-6"
     >
       채팅하기
     </button>
