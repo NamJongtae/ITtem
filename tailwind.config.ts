@@ -8,12 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors:{
-        rootColor:"#66a2fb"
+      colors: {
+        rootColor: "#66a2fb",
       },
       gridTemplateColumns: {
         autoFill: "repeat(auto-fill, minmax(220px, 1fr))",
         autoFill_180: "repeat(auto-fill, minmax(180px, 1fr))",
+        autoFill_140: "repeat(auto-fill, minmax(140px, 1fr))",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
