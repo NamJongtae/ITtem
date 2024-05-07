@@ -66,7 +66,7 @@ export default async function handler(
         return;
       }
 
-      res.status(200).json({ message: "상품 신고했어요." });
+      res.status(200).json({ message: "해당 상품을 신고했어요." });
     } catch (error) {
       console.error(error);
       res.status(500).json({
