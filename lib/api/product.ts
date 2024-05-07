@@ -131,3 +131,14 @@ export async function editProduct(
     throw error;
   }
 }
+
+export async function reportProduct(
+  id: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(`/api/product/${id}/report`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
