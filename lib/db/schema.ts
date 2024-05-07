@@ -44,6 +44,7 @@ export const productSchema = new mongoose.Schema(
     status: { type: String, default: "sold" },
     block: { type: Boolean, default: false },
     reportCount: { type: Number, default: 0 },
+    reportUserIds: { type: [String], default: [] },
     likeCount: { type: Number, default: 0 },
     likeUserList: { type: [String], default: [] },
     viewCount: { type: Number, default: 0 },
