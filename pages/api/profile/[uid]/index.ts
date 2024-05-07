@@ -78,7 +78,7 @@ export default async function handler(
             profileImg: 1,
             followers: 1,
             followings: 1,
-            productList: 1,
+            productIds: 1,
             reviewPercentage: 1,
           },
         },
