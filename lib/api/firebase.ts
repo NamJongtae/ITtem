@@ -36,7 +36,7 @@ export const uploadMultiImgToFirestore = async (
       // 각 파일에 대해 비동기 업로드 처리
       const fileName = `${uuid()}_${file.name}`;
       const uploadImgResponse = await uploadBytes(
-        ref(storage, `images/${fileName}`),
+        ref(storage, `images/product/${fileName}`),
         file
       );
       const url = await getDownloadURL(uploadImgResponse.ref);
@@ -60,7 +60,7 @@ export const deleteImgToFirestore = async (
   for (let i = 0; i < productDataImgName.length; i++) {
     if (!prevImgDataImgName.includes(productDataImgName[i])) {
       removeImgPromise.push(
-        deleteObject(ref(storage, `images/${productDataImgName[i]}`))
+        deleteObject(ref(storage, `images/product/${productDataImgName[i]}`))
       );
     }
   }
