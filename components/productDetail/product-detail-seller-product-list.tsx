@@ -1,17 +1,17 @@
 import useProfileProductListInfiniteQuery from "@/hooks/querys/useProfileProductListInfiniteQuery";
-import { ProfileData } from "@/types/authTypes";
 import Spinner from "../commons/spinner";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
 import ProductDetailSellerProductItem from "./product-detail-seller-product-item";
 import ProductDetailSellerProductMoreBtn from "./product-detail-seller-product-moreBtn";
+import { ProductDetailAuthData } from '@/types/productTypes';
 
 interface IProps {
-  profileData: ProfileData | undefined;
+  auth: ProductDetailAuthData | undefined;
 }
 
 export default function ProductDetailSellerProductList({
-  profileData,
+  auth,
 }: IProps) {
   const {
     profileProductListData,
@@ -19,7 +19,7 @@ export default function ProductDetailSellerProductList({
     profileProductListError,
   } = useProfileProductListInfiniteQuery({
     productListType: "PROFILE",
-    productIds: profileData?.productIds || [],
+    productIds: auth?.productIds || [],
     limit: 9,
   });
 
@@ -51,8 +51,7 @@ export default function ProductDetailSellerProductList({
             ))}
           </ul>
           <ProductDetailSellerProductMoreBtn
-            profileData={profileData}
-            profileProductListData={profileProductListData}
+            auth={auth}
           />
         </>
       )}

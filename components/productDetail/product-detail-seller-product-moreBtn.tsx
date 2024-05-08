@@ -1,30 +1,27 @@
-import { ProfileData } from "@/types/authTypes";
-import { ProductData } from "@/types/productTypes";
+import { ProductDetailAuthData } from "@/types/productTypes";
 import Link from "next/link";
 
 interface IProps {
-  profileData: ProfileData | undefined;
-  profileProductListData: ProductData[] | undefined;
+  auth: ProductDetailAuthData | undefined;
 }
 export default function ProductDetailSellerProductMoreBtn({
-  profileData,
-  profileProductListData,
+  auth,
 }: IProps) {
   const isShowMoreBtn =
-    profileData?.productIds &&
-    (profileProductListData?.length ?? 0) > 0 &&
-    profileData.productIds.slice(0, 6).length -
-      (profileProductListData?.length ?? 0) >
+  auth?.productIds &&
+    (auth?.recentProducts.length ?? 0) > 0 &&
+    auth.productIds.slice(0, 6).length -
+      (auth?.recentProducts.length ?? 0) >
       0;
 
   return (
     isShowMoreBtn && (
       <Link
-        href={`/profile/${profileData.uid}`}
+        href={`/profile/${auth.uid}`}
         className="inline-flex mt-5 border p-2 text-sm ml-[50%] -translate-x-[50%] rounded-sm betterhover:hover:bg-gray-100"
       >
         <span className="text-red-500">
-          {profileData.productIds.length - profileProductListData!.length}개
+          {auth.productIds.length - auth?.recentProducts!.length}개
         </span>
         의 상품 더보기{" "}
         <svg
