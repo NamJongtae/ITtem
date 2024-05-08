@@ -24,7 +24,7 @@ export const userSchema = new mongoose.Schema(
     profieImgFilename: { type: String, default: "" },
     introduce: { type: String, default: "" },
     productIds: { type: [String], default: [] },
-    wishList: { type: [String], default: [] },
+    wishProductIds: { type: [String], default: [] },
     followers: { type: [String], default: [] },
     followings: { type: [String], default: [] },
     chatRoomList: { type: [String], default: [] },
