@@ -57,8 +57,8 @@ export interface ProductData {
   block: boolean;
   reportCount: number;
   reportUserIds: string[];
-  likeCount: number;
-  likeUserList: string[];
+  wishCount: number;
+  wishUserIds: string[];
   viewCount: number;
   imgData: ProductImgData[];
   price: number;
@@ -78,6 +78,7 @@ export interface ProductDetailAuthData extends ProfileData {
 
 export interface ProductDetailData extends ProductData {
   isReport: boolean;
+  isWish: boolean;
   auth: ProductDetailAuthData;
 }
 
