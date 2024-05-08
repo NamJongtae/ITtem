@@ -1,3 +1,5 @@
+import { ProfileData } from "./authTypes";
+
 export enum ProductCategory {
   전체 = "전체",
   의류 = "의류",
@@ -54,6 +56,7 @@ export interface ProductData {
   status: ProductStatus;
   block: boolean;
   reportCount: number;
+  reportUserIds: string[];
   likeCount: number;
   likeUserList: string[];
   viewCount: number;
@@ -66,6 +69,16 @@ export interface ProductData {
   returnPolicy: ProductReturnPolicy;
   transaction: ProductTransaction;
   deliveryFee: ProductDeliveryFee;
+}
+
+export interface ProductDetailAuthData extends ProfileData {
+  recentProducts: ProductData[];
+  uid: string;
+}
+
+export interface ProductDetailData extends ProductData {
+  isReport: boolean;
+  auth: ProductDetailAuthData;
 }
 
 export type ProductUploadData = Omit<
