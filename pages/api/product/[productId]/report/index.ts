@@ -39,6 +39,7 @@ export default async function handler(
 
       if (product.reportUserIds.includes(isValidAuth.auth.uid)) {
         res.status(409).json({ message: "이미 신고한 상품이에요." });
+        return;
       }
 
       if (product.uid === isValidAuth.auth.uid) {
@@ -51,7 +52,7 @@ export default async function handler(
             reportCount: { $add: ["$reportCount", 1] },
             block: {
               $cond: {
-                if: { $gte: [{ $add: ["$reportCount", 1] }, 4] },
+                if: { $gte: [{ $add: ["$reportCount", 1] }, 5] },
                 then: true,
                 else: "$block",
               },
