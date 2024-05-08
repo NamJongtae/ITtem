@@ -1,6 +1,6 @@
 import { getProductQueryKey } from "@/constants/constant";
 import { getProduct } from "@/lib/api/product";
-import { ProductData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/productTypes";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -13,7 +13,7 @@ export default function useProductQuery(isEdit?: boolean) {
     data: productData,
     isLoading: loadProductLoading,
     error: loadProductError,
-  } = useQuery<ProductData, AxiosError>({
+  } = useQuery<ProductDetailData, AxiosError>({
     queryFn: async () => {
       const response = await getProduct(productId as string);
       return response.data.product;

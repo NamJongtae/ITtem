@@ -5,7 +5,7 @@ import {
   ProductData,
   ProductUploadData,
 } from "@/types/productTypes";
-import { ProductListResponseData, ProductResponseData } from "@/types/apiTypes";
+import { ProductDetailResponseData, ProductListResponseData, ProductResponseData } from "@/types/apiTypes";
 
 export async function getTodayProductList(
   cursor: unknown = null,
@@ -109,7 +109,7 @@ export async function uploadProduct(
 
 export async function getProduct(
   id: string
-): Promise<AxiosResponse<ProductResponseData>> {
+): Promise<AxiosResponse<ProductDetailResponseData>> {
   try {
     const response = await customAxios(`/api/product/${id}`);
     return response;
