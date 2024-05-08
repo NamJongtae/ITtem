@@ -5,7 +5,11 @@ import {
   ProductData,
   ProductUploadData,
 } from "@/types/productTypes";
-import { ProductDetailResponseData, ProductListResponseData, ProductResponseData } from "@/types/apiTypes";
+import {
+  ProductDetailResponseData,
+  ProductListResponseData,
+  ProductResponseData,
+} from "@/types/apiTypes";
 
 export async function getTodayProductList(
   cursor: unknown = null,
@@ -148,6 +152,28 @@ export async function reportProduct(
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.patch(`/api/product/${id}/report`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addWish(
+  id: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(`/api/product/${id}/wish`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteWish(
+  id: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.delete(`/api/product/${id}/wish`);
     return response;
   } catch (error) {
     throw error;
