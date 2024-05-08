@@ -1,14 +1,14 @@
 import Image from "next/image";
 import ImgSlider from "../commons/imgSlider/img-slider";
-import { ProductData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/productTypes";
 import useModal from "@/hooks/commons/useModal";
 import ProductImgEnlargeModal from "../productUpload/imgField/product-img-enlarge-modal";
 
 interface IProps {
-  productData: ProductData | undefined;
+  productDetailData: ProductDetailData | undefined;
 }
 
-export default function ProductDetailContentImg({ productData }: IProps) {
+export default function ProductDetailContentImg({ productDetailData }: IProps) {
   const { isOpenModal, openModal, closeModal } = useModal();
 
   return (
@@ -16,7 +16,7 @@ export default function ProductDetailContentImg({ productData }: IProps) {
       <div className="w-full h-80 md:h-80 md:w-1/2 lg:h-96">
         <div className="relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded-md overflow-hidden">
           <ImgSlider
-            imgData={productData?.imgData}
+            imgData={productDetailData?.imgData}
             imgWidth={512}
             imgHeight={384}
           />
@@ -36,7 +36,7 @@ export default function ProductDetailContentImg({ productData }: IProps) {
       </div>
       {isOpenModal && (
         <ProductImgEnlargeModal
-          imgData={productData?.imgData}
+          imgData={productDetailData?.imgData}
           closeModal={closeModal}
         />
       )}

@@ -1,19 +1,19 @@
 import useProductReportMutate from "@/hooks/querys/useProductReportMutate";
 import { RootState } from "@/store/store";
-import { ProductData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 
 interface IProps {
-  productData: ProductData | undefined;
+  productDetailData: ProductDetailData | undefined;
 }
 
-export default function ProductDetailReportBtn({ productData }: IProps) {
+export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   const { productReportMutate } = useProductReportMutate();
   const user = useSelector((state: RootState) => state.auth.user);
 
   return (
-    productData?.uid !== user?.uid && (
+    productDetailData?.uid !== user?.uid && (
       <button
         type="button"
         onClick={() => productReportMutate()}

@@ -1,5 +1,5 @@
 import { getDateFormat } from "@/lib/getDateFormate";
-import { ProductData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 const ProductDetailReportBtn = dynamic(
@@ -9,18 +9,18 @@ const ProductDetailReportBtn = dynamic(
   }
 );
 interface IProps {
-  productData: ProductData | undefined;
+  productDetailData: ProductDetailData | undefined;
 }
 
-export default function ProductDetailContentInfo({ productData }: IProps) {
+export default function ProductDetailContentInfo({ productDetailData }: IProps) {
   return (
     <>
       <h3 className="text-gray-700 text-3xl md:text-4xl">
-        {productData?.name}
+        {productDetailData?.name}
       </h3>
       <div className="mt-3 text-gray-700 font-semibold">
         <span className="text-3xl md:text-4xl ">
-          {productData?.price.toLocaleString()}
+          {productDetailData?.price.toLocaleString()}
         </span>
         <span className="ml-1 text-2xl">원</span>
       </div>
@@ -34,7 +34,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={14}
               height={28}
             />{" "}
-            {productData?.likeCount}
+            {productDetailData?.wishCount}
           </span>
           <span className="flex gap-2 items-center">
             <Image
@@ -44,7 +44,7 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={20}
               height={14}
             />{" "}
-            {productData?.viewCount}
+            {productDetailData?.viewCount}
           </span>
           <span className="flex gap-2 items-center">
             <Image
@@ -53,25 +53,25 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
               width={16}
               height={16}
             />{" "}
-            {getDateFormat(productData?.createdAt?.toString() || "")}
+            {getDateFormat(productDetailData?.createdAt?.toString() || "")}
           </span>
         </div>
-        <ProductDetailReportBtn productData={productData} />
+        <ProductDetailReportBtn productDetailData={productDetailData} />
       </div>
 
       <div className="mt-5">
         <ul>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">상품상태</p>
-            <p>{productData?.condition}급</p>
+            <p>{productDetailData?.condition}급</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">반품여부</p>
-            <p>{productData?.returnPolicy}</p>
+            <p>{productDetailData?.returnPolicy}</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">거래방식</p>
-            <p>{productData?.transaction}</p>
+            <p>{productDetailData?.transaction}</p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">거래지역</p>
@@ -82,12 +82,12 @@ export default function ProductDetailContentInfo({ productData }: IProps) {
                 width={12}
                 height={24}
               />{" "}
-              {productData?.location}
+              {productDetailData?.location}
             </p>
           </li>
           <li className="mb-3 flex gap-3">
             <p className="min-w-[70px] text-gray-500">배송비</p>
-            <p>{productData?.deliveryFee}</p>
+            <p>{productDetailData?.deliveryFee}</p>
           </li>
         </ul>
       </div>

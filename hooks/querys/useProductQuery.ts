@@ -10,7 +10,7 @@ export default function useProductQuery(isEdit?: boolean) {
   const productId = router.query?.productId;
 
   const {
-    data: productData,
+    data: productDetailData,
     isLoading: loadProductLoading,
     error: loadProductError,
   } = useQuery<ProductDetailData, AxiosError>({
@@ -22,5 +22,5 @@ export default function useProductQuery(isEdit?: boolean) {
     enabled: isEdit || !!productId,
   });
 
-  return { productData, loadProductLoading, loadProductError };
+  return { productDetailData, loadProductLoading, loadProductError };
 }
