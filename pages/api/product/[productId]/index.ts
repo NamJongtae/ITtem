@@ -58,7 +58,8 @@ export default async function handler(
         return;
       }
 
-      const isReport = product.reportUserIds.includes(uid);
+      const isReport = product.reportUserIds?.includes(uid);
+      const isWish = product.wishUserIds?.includes(uid);
 
       // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
       const aggregation = [
@@ -83,7 +84,7 @@ export default async function handler(
           $addFields: {
             isFollower: {
               $cond: {
-                if: { $eq: [uid, undefined] }, 
+                if: { $eq: [uid, undefined] },
                 then: false,
                 else: {
                   $in: [
@@ -176,6 +177,7 @@ export default async function handler(
         product: {
           ...product._doc,
           isReport,
+          isWish,
           auth: { ...userWithReviews[0], uid: userWithReviews[0]._id },
         },
       });
@@ -243,10 +245,13 @@ export default async function handler(
   }
 
   if (req.method === "DELETE") {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       const isValidAuth = await checkAuthorization(req, res);
 
       if (!isValidAuth.isValid) {
+        await session.endSession();
         res.status(401).json({
           message: isValidAuth.message,
         });
@@ -256,6 +261,7 @@ export default async function handler(
       const { productId } = req.query;
 
       if (!productId) {
+        await session.endSession();
         res.status(422).json({ message: "상품 아이디가 없어요." });
         return;
       }
@@ -264,14 +270,16 @@ export default async function handler(
 
       const product = await Product.findOne({
         _id: new mongoose.Types.ObjectId(productId as string),
-      });
+      }).session(session);
 
       if (!product) {
+        await session.endSession();
         res.status(404).json({ message: "상품이 존재하지 않아요." });
         return;
       }
 
       if (product.uid !== isValidAuth.auth.uid) {
+        await session.endSession();
         res
           .status(401)
           .json({ message: "잘못된 요청이에요. 로그인 정보를 확인해주세요." });
@@ -290,40 +298,41 @@ export default async function handler(
       } catch (error) {
         console.error(error);
         console.log("상품 이미지 삭제에 실패했어요.");
-        res.status(500).json({
-          message: "상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
-        return;
       }
 
-      const profileResult = await User.updateOne({
-        $pull: {
-          productIds: new mongoose.Types.ObjectId(product._id as string),
+      const profileResult = await User.updateOne(
+        { _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string) },
+        {
+          $pull: {
+            productIds: new mongoose.Types.ObjectId(product._id as string),
+          },
         },
-      });
+        { session }
+      );
 
-      if (!profileResult.acknowledged || profileResult.modifiedCount === 0) {
-        console.error("유저 프로필에서 상품 아이디 삭제에 실패했어요.");
-        res.status(500).json({
-          message: "상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
-        return;
+      const productResult = await Product.deleteOne(
+        {
+          _id: new mongoose.Types.ObjectId(productId as string),
+        },
+        { session }
+      );
+
+      if (
+        !profileResult.acknowledged ||
+        profileResult.modifiedCount === 0 ||
+        !productResult.acknowledged ||
+        productResult.deletedCount === 0
+      ) {
+        throw new Error("상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.");
       }
 
-      const result = await Product.deleteOne({
-        _id: new mongoose.Types.ObjectId(productId as string),
-      });
-
-      if (!result.acknowledged || result.deletedCount === 0) {
-        console.error("상품 삭제에 실패했어요.");
-        res.status(500).json({
-          message: "상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
-      }
-
+      await session.commitTransaction();
+      session.endSession();
       res.status(200).json({ message: "상품이 삭제됬어요." });
     } catch (error) {
       console.error(error);
+      await session.abortTransaction();
+      session.endSession();
       res.status(500).json({
         message: "상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
