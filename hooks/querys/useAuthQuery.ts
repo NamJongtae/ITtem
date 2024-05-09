@@ -1,12 +1,14 @@
 import { AUTH_QUERY_KEY } from "@/constants/constant";
 import { getUser } from "@/lib/api/auth";
-import { AuthData } from '@/types/authTypes';
+import { AuthData } from "@/types/authTypes";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function useAuthQuery(isExistSession: boolean) {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
+  const params = router.query;
 
   const {
     data: user,
@@ -22,7 +24,7 @@ export default function useAuthQuery(isExistSession: boolean) {
 
   useEffect(() => {
     if (isExistSession) refetchAuth();
-  }, [pathname, refetchAuth, isExistSession]);
+  }, [pathname, params, refetchAuth, isExistSession]);
 
   return { user, authIsLoading, authError, refetchAuth };
 }
