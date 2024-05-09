@@ -74,6 +74,8 @@ export const getProfileQueryKey = (uid: string) => {
   return ["profile", uid];
 };
 
+export const MY_PROFILE_QUERY_KEY = ["profile", "my"];
+
 export const getProfileProductListQuerykey = (
   uid: string,
   category: string = "전체"
