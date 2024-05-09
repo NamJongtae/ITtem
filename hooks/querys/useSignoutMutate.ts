@@ -1,9 +1,10 @@
-import { AUTH_QUERY_KEY } from "@/constants/constant";
+import { AUTH_QUERY_KEY, MY_PROFILE_QUERY_KEY, SESSION_QUERY_KEY } from "@/constants/constant";
 import { signout } from "@/lib/api/auth";
 import { authSlice } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
 import { SignoutResposeData } from "@/types/apiTypes";
-import { AuthData } from '@/types/authTypes';
+import { AuthData, ProfileData } from "@/types/authTypes";
+import { ProductData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -19,20 +20,32 @@ export default function useSignoutMutate() {
     AxiosResponse<SignoutResposeData>,
     AxiosError,
     undefined,
-    { previousAuth: AuthData | unknown }
+    {
+      previousAuth: AuthData | unknown;
+      previousMyProfile: ProductData | unknown;
+    }
   >({
     mutationFn: signout,
     onMutate: () => {
       const previousAuth: AuthData | unknown = queryClient.getQueriesData({
         queryKey: AUTH_QUERY_KEY,
       });
+
+      const previousMyProfile: ProfileData | unknown =
+        queryClient.getQueriesData({
+          queryKey: MY_PROFILE_QUERY_KEY,
+        });
+
       dispatch(authSlice.actions.resetAuth());
+
       queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
 
-      return { previousAuth };
+      queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+
+      return { previousAuth, previousMyProfile };
     },
     onSuccess: (response) => {
-      queryClient.removeQueries({ queryKey: ["session"] });
+      queryClient.removeQueries({ queryKey: SESSION_QUERY_KEY });
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
@@ -44,12 +57,18 @@ export default function useSignoutMutate() {
       }
     },
     onError: (error: unknown, _, context) => {
-      if (isAxiosError<{ message: string }>(error)) {
-        toast.warn(error.response?.data.message);
-      }
       if (context?.previousAuth) {
         queryClient.setQueryData(AUTH_QUERY_KEY, context.previousAuth);
         dispatch(authSlice.actions.saveAuth(context.previousAuth as AuthData));
+      }
+      if (context?.previousMyProfile) {
+        queryClient.setQueryData(
+          MY_PROFILE_QUERY_KEY,
+          context.previousMyProfile
+        );
+      }
+      if (isAxiosError<{ message: string }>(error)) {
+        toast.warn(error.response?.data.message);
       }
     },
   });
