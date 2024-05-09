@@ -365,3 +365,21 @@ export async function getUserProfile(
     throw error;
   }
 }
+
+export async function follow(uid: string) {
+  try {
+    const response = await customAxios.post(`/api/profile/${uid}/follow`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function unfollow(uid: string) {
+  try {
+    const response = await customAxios.delete(`/api/profile/${uid}/follow`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
