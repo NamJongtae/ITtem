@@ -15,9 +15,9 @@ export default function useProductDeleteMutate() {
       mutationFn: () => deleteProduct(productId as string),
       onSuccess: async (response) => {
         queryClient.invalidateQueries({
-          queryKey: PRODUCT_TODAY_LIST_QUERY_KEY,
+          queryKey: ["product"],
         });
-        await router.push("/");
+        await router.replace("/");
         toast.success(response.data.message);
       },
       onError: (error) => {
