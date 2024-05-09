@@ -366,6 +366,17 @@ export async function getUserProfile(
   }
 }
 
+export async function getMyProfile(): Promise<
+  AxiosResponse<ProfileResponseData>
+> {
+  try {
+    const response = await customAxios("/api/profile");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function follow(uid: string) {
   try {
     const response = await customAxios.post(`/api/profile/${uid}/follow`);
