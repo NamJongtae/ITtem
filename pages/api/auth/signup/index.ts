@@ -1,4 +1,4 @@
-import { getVerifiedEmail } from "@/lib/api/redis";
+import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
 import { getHasdPassword } from "@/lib/api/auth";
 import dbConnect from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -61,6 +61,8 @@ export default async function handler(
         },
         session,
       });
+
+      await deleteEmailVerifyCode(email);
 
       res.status(201).json({
         message: "회원가입에 성공했어요.",

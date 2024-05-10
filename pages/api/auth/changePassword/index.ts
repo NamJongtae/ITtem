@@ -1,5 +1,5 @@
 import { getHasdPassword, verifyPassword } from "@/lib/api/auth";
-import { getVerifiedEmail } from "@/lib/api/redis";
+import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
 import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
@@ -66,6 +66,8 @@ export default async function handler(
         });
         return;
       }
+
+      await deleteEmailVerifyCode(email, isFindPw);
 
       res.status(200).json({ message: "비밀번호가 변경되었어요." });
     } catch (error) {
