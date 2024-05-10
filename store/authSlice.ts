@@ -1,4 +1,4 @@
-import { AuthData } from "@/types/apiTypes";
+import { AuthData } from '@/types/authTypes';
 import { createSlice } from "@reduxjs/toolkit";
 
 const isClient = typeof window !== "undefined";

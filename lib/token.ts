@@ -1,4 +1,4 @@
-import { AuthData } from "@/types/apiTypes";
+import { AuthData } from '@/types/authTypes';
 import jwt, { JsonWebTokenError, JwtPayload, SignOptions } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
