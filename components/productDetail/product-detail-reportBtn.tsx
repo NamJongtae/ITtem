@@ -12,9 +12,14 @@ interface IProps {
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   const { productReportMutate } = useProductReportMutate();
   const user = useSelector((state: RootState) => state.auth.user);
+  const isReport = productDetailData?.reportUserIds.includes(user?.uid || "");
 
   const handleClickReport = () => {
-    if (productDetailData?.isReport) {
+    if (!user) {
+      toast.warn("로그인이 필요해요.");
+      return;
+    }
+    if (isReport) {
       toast.warn("이미 신고한 상품이에요.");
     } else {
       productReportMutate(undefined);
