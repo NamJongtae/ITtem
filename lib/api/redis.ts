@@ -79,6 +79,19 @@ export const getEmailVerifyCode = async (email: string, isFindPw?: boolean) => {
   }
 };
 
+export const deleteEmailVerifyCode = async (
+  email: string,
+  isFindPw?: boolean
+) => {
+  try {
+    const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
+    const result = await client.del(key);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export async function saveToken({
   uid,
   token,
