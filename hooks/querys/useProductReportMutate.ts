@@ -1,9 +1,11 @@
 import { getProductQueryKey } from "@/constants/constant";
 import { reportProduct } from "@/lib/api/product";
+import { RootState } from '@/store/store';
 import { ProductDetailData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useProductReportMutate() {
@@ -11,6 +13,7 @@ export default function useProductReportMutate() {
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
   const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
+  const myUid = useSelector((state: RootState) => state.auth.user);
 
   const { mutate: productReportMutate } = useMutation<
     AxiosResponse<{ message: string }>,
@@ -26,7 +29,12 @@ export default function useProductReportMutate() {
         PRODUCT_QUERYKEY
       ) as ProductDetailData;
 
-      const newProduct = { ...previousProduct, isReport: true };
+      const newProduct = {
+        ...previousProduct,
+        reportUserIds: [...previousProduct.reportUserIds, myUid],
+        reportCount: previousProduct.reportCount + 1,
+        block: previousProduct.reportCount >= 4,
+      };
 
       queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
 
