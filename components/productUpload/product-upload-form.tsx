@@ -22,7 +22,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     productUploadLoading,
   } = useProductUploadSubmit();
 
-  const { productData, loadProductLoading, loadProductError } =
+  const { productDetailData, loadProductLoading, loadProductError } =
     useProductQuery(isEdit);
 
   const {
@@ -30,7 +30,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     productEditLoading,
   } = useProductEditSubmit();
 
-  useProductEditCheckUser(productData, isEdit);
+  useProductEditCheckUser(productDetailData, isEdit);
 
   if (
     loadProductLoading ||
@@ -46,7 +46,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     }
   }
 
-  return !isEdit || user?.uid === productData?.uid ? (
+  return !isEdit || user?.uid === productDetailData?.uid ? (
     <MyForm
       onSubmit={
         isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
@@ -54,24 +54,24 @@ export default function ProductUploadForm({ isEdit }: IProps) {
       formOptions={{
         mode: "onChange",
         defaultValues: {
-          imgData: isEdit ? productData?.imgData.map(() => ({})) : [],
-          prevImgData: isEdit ? productData?.imgData : [],
-          name: isEdit ? productData?.name : "",
-          sellType: isEdit ? productData?.sellType : "",
-          category: isEdit ? productData?.category : "",
-          location: isEdit ? productData?.location : "",
-          condition: isEdit ? productData?.condition : "",
-          returnPolicy: isEdit ? productData?.returnPolicy : "",
-          transaction: isEdit ? productData?.transaction : "",
-          deliveryFee: isEdit ? productData?.deliveryFee : "",
-          price: isEdit ? productData?.price : "",
-          description: isEdit ? productData?.description : "",
+          imgData: isEdit ? productDetailData?.imgData.map(() => ({})) : [],
+          prevImgData: isEdit ? productDetailData?.imgData : [],
+          name: isEdit ? productDetailData?.name : "",
+          sellType: isEdit ? productDetailData?.sellType : "",
+          category: isEdit ? productDetailData?.category : "",
+          location: isEdit ? productDetailData?.location : "",
+          condition: isEdit ? productDetailData?.condition : "",
+          returnPolicy: isEdit ? productDetailData?.returnPolicy : "",
+          transaction: isEdit ? productDetailData?.transaction : "",
+          deliveryFee: isEdit ? productDetailData?.deliveryFee : "",
+          price: isEdit ? productDetailData?.price : "",
+          description: isEdit ? productDetailData?.description : "",
         },
       }}
     >
       <ProductUploadFormContent
         isEdit={isEdit}
-        imgData={productData?.imgData}
+        imgData={productDetailData?.imgData}
       />
     </MyForm>
   ) : null;
