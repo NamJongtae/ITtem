@@ -14,7 +14,7 @@ export default function useAddWishMutate() {
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
   const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
-  const myUid = useSelector((state: RootState) => state.auth.user);
+  const myUid = useSelector((state: RootState) => state.auth.user?.uid);
 
   const { mutate: addWishMutate } = useMutation<
     AxiosResponse<{ message: string }>,
@@ -46,7 +46,10 @@ export default function useAddWishMutate() {
 
       const newMyProfile = {
         ...previousMyProfile,
-        wishProductIds: [...previousMyProfile.wishProductIds, previousProduct.uid],
+        wishProductIds: [
+          ...previousMyProfile.wishProductIds,
+          previousProduct._id,
+        ],
       };
 
       queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
@@ -56,7 +59,6 @@ export default function useAddWishMutate() {
       return { previousProduct, previousMyProfile };
     },
     onError: (error, data, ctx) => {
-
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }

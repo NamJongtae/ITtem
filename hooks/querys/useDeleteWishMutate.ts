@@ -14,7 +14,7 @@ export default function useDeleteWishMutate() {
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
   const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
-  const myUid = useSelector((state: RootState) => state.auth.user);
+  const myUid = useSelector((state: RootState) => state.auth.user?.uid);
 
   const { mutate: deleteWishMutate } = useMutation<
     AxiosResponse<{ message: string }>,
@@ -46,9 +46,9 @@ export default function useDeleteWishMutate() {
 
       const newMyProfile = {
         ...previousMyProfile,
-        followings: [
-          ...previousMyProfile.followings.filter(
-            (id) => id !== previousProduct.uid
+        wishProductIds: [
+          ...previousMyProfile.wishProductIds.filter(
+            (id) => id !== previousProduct._id
           ),
         ],
       };
