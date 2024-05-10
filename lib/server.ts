@@ -10,7 +10,7 @@ import {
   REFRESH_TOKEN_KEY,
 } from "@/constants/constant";
 import { v4 as uuid } from "uuid";
-import { User } from "./db/schema";
+import { Model } from "mongoose";
 
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
@@ -96,7 +96,9 @@ export async function createAndSaveToken({
   await session.save();
 }
 
-export async function createUniqueNickname() {
+export async function createUniqueNickname(
+  User: Model<any, {}, {}, {}, any, any>
+) {
   const randomString = uuid().substring(0, 8);
   let userNickname = randomString;
   let isDuplicationNickname = true;
