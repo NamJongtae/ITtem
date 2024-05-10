@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 

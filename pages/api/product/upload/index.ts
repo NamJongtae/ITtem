@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/db";
-import { Product, User } from "@/lib/db/schema";
+import Product from "@/lib/db/models/Product";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -24,12 +25,14 @@ export default async function handler(
 
     const { productData } = req.body;
 
+    const myUid = isValidAuth?.auth?.uid;
+
     await dbConnect();
 
     const newProduct = new Product(productData);
 
     const updateResult = await User.updateOne(
-      { _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string) },
+      { _id: new mongoose.Types.ObjectId(myUid) },
       { $push: { productIds: newProduct._id } },
       { session }
     );
@@ -48,7 +51,7 @@ export default async function handler(
       product: newProduct,
     });
   } catch (error) {
-    await session.abortTransaction(); 
+    await session.abortTransaction();
     session.endSession();
     console.error(error);
     if (error instanceof mongoose.Error.ValidationError) {
@@ -61,10 +64,8 @@ export default async function handler(
       });
       return;
     }
-    res
-      .status(500)
-      .json({
-        message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요.",
-      });
+    res.status(500).json({
+      message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요.",
+    });
   }
 }

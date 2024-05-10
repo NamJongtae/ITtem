@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 
 export default async function handler(
@@ -32,15 +32,15 @@ export default async function handler(
 
       await dbConnect();
 
+      const myUid = isValidAuth?.auth?.uid;
+
       const my = await User.findOne({
-        _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+        _id: new mongoose.Types.ObjectId(myUid),
       });
 
       const user = await User.findOne({
         _id: new mongoose.Types.ObjectId(uid as string),
       });
-
-      const myUid = isValidAuth.auth.uid as string;
 
       if (!user) {
         res.status(404).json({
@@ -129,15 +129,15 @@ export default async function handler(
 
       await dbConnect();
 
+      const myUid = isValidAuth?.auth?.uid;
+
       const my = await User.findOne({
-        _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+        _id: new mongoose.Types.ObjectId(myUid),
       });
 
       const user = await User.findOne({
         _id: new mongoose.Types.ObjectId(uid as string),
       });
-
-      const myUid = isValidAuth.auth.uid as string;
 
       if (!user) {
         res.status(404).json({

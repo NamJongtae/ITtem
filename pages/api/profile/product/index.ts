@@ -1,4 +1,4 @@
-import { Product } from "@/lib/db/schema";
+import Product from "@/lib/db/models/Product";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 

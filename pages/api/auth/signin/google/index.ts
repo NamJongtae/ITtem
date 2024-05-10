@@ -1,6 +1,6 @@
 import { getToken } from "@/lib/api/redis";
 import mongoose from "mongoose";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import {
   createAndSaveToken,
   createUniqueNickname,
@@ -40,7 +40,7 @@ export default async function handler(
       if (!dbUserData) {
         // 회원가입 로직
         try {
-          const userNickname = await createUniqueNickname();
+          const userNickname = await createUniqueNickname(User);
 
           const email = googleUserData.email.toLowerCase();
           const profileImg = googleUserData.picture;

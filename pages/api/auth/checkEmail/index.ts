@@ -1,6 +1,5 @@
-import { ERROR_MESSAGE } from "@/constants/constant";
 import dbConnect from "@/lib/db";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -27,11 +26,9 @@ export default async function handler(
       res.status(200).json({ message: "존재하는 이메일이에요." });
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          message: "이메일 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
+      res.status(500).json({
+        message: "이메일 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
     }
   }
 }

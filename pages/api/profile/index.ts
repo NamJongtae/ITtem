@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
@@ -19,7 +19,8 @@ export default async function handler(
       });
       return;
     }
-    const myUid = isValidAuth.auth.uid as string;
+    
+    const myUid = isValidAuth?.auth?.uid;
 
     const profile = await User.findOne({
       _id: new mongoose.Types.ObjectId(myUid),

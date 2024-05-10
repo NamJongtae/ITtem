@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import { User } from '@/lib/db/schema';
+import User from "@/lib/db/models/User";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,8 +12,9 @@ export default async function handler(
 
       await dbConnect();
 
-      const isDuplication = await User
-        .findOne({ nickname: { $regex: new RegExp(nickname, "i") } });
+      const isDuplication = await User.findOne({
+        nickname: { $regex: new RegExp(nickname, "i") },
+      });
 
       if (isDuplication) {
         res

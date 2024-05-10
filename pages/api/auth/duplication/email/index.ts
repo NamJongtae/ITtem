@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -29,6 +29,6 @@ export default async function handler(
       res
         .status(500)
         .json({ message: "이메일 확인에 실패하였습니다.", ok: false });
-    } 
+    }
   }
 }

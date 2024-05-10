@@ -1,8 +1,6 @@
-import { ERROR_MESSAGE } from "@/constants/constant";
 import { verifyPassword } from "@/lib/api/auth";
 import { getToken } from "@/lib/api/redis";
-import mongoose from "mongoose";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
 import { IronSessionType } from "@/types/apiTypes";
 import { getIronSession } from "iron-session";
@@ -94,11 +92,9 @@ export default async function handler(
       });
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
+      res.status(500).json({
+        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
     }
   }
 }

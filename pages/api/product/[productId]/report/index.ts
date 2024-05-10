@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import mongoose from "mongoose";
-import { Product } from "@/lib/db/schema";
+import Product from "@/lib/db/models/Product";
 import { NextApiRequest, NextApiResponse } from "next";
 import { checkAuthorization } from "@/lib/server";
 
@@ -21,6 +21,8 @@ export default async function handler(
 
       const { productId } = req.query;
 
+      const myUid = isValidAuth?.auth?.uid;
+
       if (!productId) {
         res.status(422).json({ message: "상품 아이디가 없어요." });
         return;
@@ -37,12 +39,12 @@ export default async function handler(
         return;
       }
 
-      if (product.reportUserIds.includes(isValidAuth.auth.uid)) {
+      if (product.reportUserIds.includes(myUid)) {
         res.status(409).json({ message: "이미 신고한 상품이에요." });
         return;
       }
 
-      if (product.uid === isValidAuth.auth.uid) {
+      if (product.uid === myUid) {
         res.status(409).json({ message: "본인 상품은 신고할 수 없어요." });
       }
 
@@ -58,7 +60,7 @@ export default async function handler(
               },
             },
             reportUserIds: {
-              $concatArrays: ["$reportUserIds", [isValidAuth.auth.uid]],
+              $concatArrays: ["$reportUserIds", [myUid]],
             },
           },
         },

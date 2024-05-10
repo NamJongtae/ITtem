@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/db";
 import mongoose from "mongoose";
-import { Product, User } from "@/lib/db/schema";
+import Product from "@/lib/db/models/Product";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,15 +16,17 @@ export default async function handler(
     try {
       const isValidAuth = await checkAuthorization(req, res);
 
-      if (!isValidAuth.isValid) {
+      if (!isValidAuth?.isValid) {
         res.status(401).json({
-          message: isValidAuth.message,
+          message: isValidAuth?.message,
         });
         return;
       }
 
       const { productId } = req.query;
 
+      const myUid = isValidAuth?.auth?.uid;
+      
       if (!productId) {
         res.status(422).json({ message: "상품 아이디가 없어요." });
         return;
@@ -36,7 +39,7 @@ export default async function handler(
       });
 
       const user = await User.findOne({
-        _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+        _id: new mongoose.Types.ObjectId(myUid),
       });
 
       if (!product) {
@@ -50,7 +53,7 @@ export default async function handler(
       }
 
       if (
-        product.wishUserIds.includes(isValidAuth.auth.uid) &&
+        product.wishUserIds.includes(myUid) &&
         user.wishProductIds.includes(product._id)
       ) {
         res.status(409).json({ message: "이미 찜한 상품이에요." });
@@ -61,7 +64,7 @@ export default async function handler(
       if (!user.wishProductIds.includes(product._id)) {
         const profileResult = await User.updateOne(
           {
-            _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+            _id: new mongoose.Types.ObjectId(myUid),
           },
           {
             $push: {
@@ -79,13 +82,13 @@ export default async function handler(
       }
 
       // 상품 찜 목록에 유저 추가
-      if (!product.wishUserIds.includes(isValidAuth.auth.uid)) {
+      if (!product.wishUserIds.includes(myUid)) {
         const productResult = await Product.updateOne(
           {
             _id: new mongoose.Types.ObjectId(product._id as string),
           },
           {
-            $push: { wishUserIds: isValidAuth.auth.uid },
+            $push: { wishUserIds: myUid },
             $inc: { wishCount: 1 },
           },
           { session }
@@ -114,15 +117,17 @@ export default async function handler(
     try {
       const isValidAuth = await checkAuthorization(req, res);
 
-      if (!isValidAuth.isValid) {
+      if (!isValidAuth?.isValid) {
         res.status(401).json({
-          message: isValidAuth.message,
+          message: isValidAuth?.message,
         });
         return;
       }
 
       const { productId } = req.query;
 
+      const myUid = isValidAuth?.auth?.uid;
+      
       if (!productId) {
         res.status(422).json({ message: "상품 아이디가 없어요." });
         return;
@@ -135,7 +140,7 @@ export default async function handler(
       });
 
       const user = await User.findOne({
-        _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+        _id: new mongoose.Types.ObjectId(myUid),
       });
 
       if (!product) {
@@ -144,7 +149,7 @@ export default async function handler(
       }
 
       if (
-        !product.wishUserIds.includes(isValidAuth.auth.uid) &&
+        !product.wishUserIds.includes(isValidAuth?.auth?.uid) &&
         !user.wishProductIds.includes(product._id)
       ) {
         res.status(409).json({ message: "찜한 상품이 아니에요." });
@@ -154,7 +159,7 @@ export default async function handler(
       if (user.wishProductIds.includes(product._id)) {
         const profileResult = await User.updateOne(
           {
-            _id: new mongoose.Types.ObjectId(isValidAuth.auth.uid as string),
+            _id: new mongoose.Types.ObjectId(myUid),
           },
           { $pull: { wishProductIds: product._id } }
         );
@@ -163,12 +168,12 @@ export default async function handler(
         }
       }
 
-      if (product.wishUserIds.includes(isValidAuth.auth.uid)) {
-        const productResult = await Product.updateOne(
+      if (product.wishUserIds.includes(isValidAuth?.auth?.uid)) {
+      const productResult = await Product.updateOne(
           { _id: new mongoose.Types.ObjectId(productId as string) },
           {
             $inc: { wishCount: -1 },
-            $pull: { wishUserIds: isValidAuth.auth.uid },
+            $pull: { wishUserIds: isValidAuth?.auth?.uid },
           }
         );
         if (!productResult.acknowledged || productResult.modifiedCount === 0) {

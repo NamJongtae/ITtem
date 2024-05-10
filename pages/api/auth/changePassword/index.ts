@@ -1,8 +1,7 @@
-import { ERROR_MESSAGE } from "@/constants/constant";
 import { getHasdPassword, verifyPassword } from "@/lib/api/auth";
 import { getVerifiedEmail } from "@/lib/api/redis";
 import dbConnect from "@/lib/db";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 

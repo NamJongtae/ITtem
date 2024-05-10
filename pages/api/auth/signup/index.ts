@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getIronSession } from "iron-session";
 import { IronSessionType } from "@/types/apiTypes";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
-import { User } from "@/lib/db/schema";
+import User from "@/lib/db/models/User";
 import { LoginType } from "@/types/authTypes";
 import mongoose from "mongoose";
 
@@ -54,7 +54,7 @@ export default async function handler(
 
       await createAndSaveToken({
         user: {
-          uid: newUser.uid,
+          uid: newUser._id,
           email: newUser.email,
           nickname: newUser.nickname,
           profileImg: newUser.profileImg,

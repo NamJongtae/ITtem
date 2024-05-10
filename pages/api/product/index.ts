@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/db";
-import { Product } from "@/lib/db/schema";
+import Product from "@/lib/db/models/Product";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
