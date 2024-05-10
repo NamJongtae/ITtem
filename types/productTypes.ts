@@ -71,14 +71,13 @@ export interface ProductData {
   deliveryFee: ProductDeliveryFee;
 }
 
-export interface ProductDetailAuthData extends ProfileData {
+export interface ProductDetailAuthData
+  extends Omit<ProfileData, "wishProductIds"> {
   recentProducts: ProductData[];
   uid: string;
 }
 
 export interface ProductDetailData extends ProductData {
-  isReport: boolean;
-  isWish: boolean;
   auth: ProductDetailAuthData;
 }
 
@@ -87,11 +86,12 @@ export type ProductUploadData = Omit<
   | "_id"
   | "status"
   | "createdAt"
-  | "likeCount"
-  | "likeUserList"
+  | "wishCount"
+  | "wishUserIds"
   | "viewCount"
   | "block"
   | "reportCount"
+  | "reportUserIds"
 >;
 
 export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH" | "PROFILE";

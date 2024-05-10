@@ -46,5 +46,6 @@ export interface ProfileData {
   followers: string[];
   followings: string[];
   productIds: string[];
+  wishProductIds: string[];
   reviewPercentage: number;
 }
