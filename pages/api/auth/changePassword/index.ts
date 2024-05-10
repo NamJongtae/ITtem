@@ -3,6 +3,7 @@ import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
 import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
+import { LoginType } from "@/types/authTypes";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -14,6 +15,18 @@ export default async function handler(
       const { email, password, currentPassword, isFindPw } = req.body;
 
       await dbConnect();
+
+      const user = await User.findOne({ email });
+
+      if (user.loginType !== LoginType.EMAIL) {
+        res
+          .status(403)
+          .json({
+            message:
+              "소셜 로그인은 해당 소셜 홈페이지에서 비밀번호를 변경해주세요.",
+          });
+        return;
+      }
 
       if (isFindPw) {
         if (!email || !password) {
@@ -40,8 +53,6 @@ export default async function handler(
           });
           return;
         }
-
-        const user = await User.findOne({ email });
 
         const isVerifyPassword = await verifyPassword(
           currentPassword,
