@@ -1,22 +1,37 @@
 import useAddWishMutate from "@/hooks/querys/useAddWishMutate";
 import useDeleteWishMutate from "@/hooks/querys/useDeleteWishMutate";
+import { ProfileData } from "@/types/authTypes";
+import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 interface IProps {
-  isWish: boolean | undefined;
+  productDetailData: ProductDetailData | undefined;
+  myProfileData: ProfileData | undefined;
 }
 
-export default function ProductDetailWishBtn({ isWish }: IProps) {
+export default function ProductDetailWishBtn({
+  productDetailData,
+  myProfileData,
+}: IProps) {
   const { addWishMutate } = useAddWishMutate();
   const { deleteWishMutate } = useDeleteWishMutate();
+  const isWish =
+    !!myProfileData?.wishProductIds.includes(productDetailData?._id || "") &&
+    !!productDetailData?.wishUserIds.includes(myProfileData?.uid || "");
 
   const handleClickWish = () => {
+    if (!myProfileData) {
+      toast.warn("로그인이 필요해요.");
+      return;
+    }
     if (isWish) {
       deleteWishMutate(undefined);
     } else {
       addWishMutate(undefined);
     }
   };
+
   return (
     <button
       type="button"
