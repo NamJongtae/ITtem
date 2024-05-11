@@ -1,9 +1,11 @@
 import ProductDetailPage from "@/components/productDetail/product-detail";
-import { getProductQueryKey, getProfileQueryKey } from '@/constants/constant';
-import { getUserProfile } from '@/lib/api/auth';
+import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
 import { getProduct } from "@/lib/api/product";
-import { ProductData } from "@/types/productTypes";
+import customAxios from "@/lib/customAxios";
+import { sessionOptions } from "@/lib/server";
+import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
 
 export default function ProductDetail() {
@@ -13,8 +15,14 @@ export default function ProductDetail() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.productId;
+  const session = await getIronSession<IronSessionData>(
+    context.req,
+    context.res,
+    sessionOptions
+  );
+  const cookie = context.req.headers.cookie;
 
-  if(productId) {
+  if (productId) {
     await queryClient.prefetchQuery({
       queryKey: getProductQueryKey(productId as string),
       queryFn: async () => {
@@ -22,26 +30,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return reponse.data.product;
       },
     });
-  
-    const productData = queryClient.getQueryData([
-      "product",
-      productId,
-    ]) as ProductData;
-  
-    const uid = productData?.uid;
-  
-    if(uid) {
-      await queryClient.prefetchQuery({
-        queryKey: getProfileQueryKey(uid),
-        queryFn: async () => {
-          const profile = await getUserProfile(uid);
-          return profile.data.profile;
-        },
-      });
-    }
   }
-  
 
+  if (session.accessToken) {
+    await queryClient.prefetchQuery({
+      queryKey: MY_PROFILE_QUERY_KEY,
+      queryFn: async () => {
+        try {
+          const response = await customAxios("/api/profile", {
+            headers: {
+              Cookie: cookie,
+            },
+          });
+          return response.data.profile;
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    });
+  }
   return {
     props: { dehydratedState: dehydrate(queryClient) },
   };
