@@ -1,15 +1,21 @@
 import { ProductCategory, ProductListType } from "@/types/productTypes";
 import { useSearchParams } from "next/navigation";
-import React from "react";
 import useProductTodayListInfiniteQuery from "../querys/useProductTodayListInfiniteQuery";
 import useCategoryProductListInfiniteQuery from "../querys/useCategoryProductListInfiniteQuery";
 import useSearchProductListInfiniteQuery from "../querys/useSearchProductListInfiniteQuery";
+import useProfileProductListInfiniteQuery from "../querys/useProfileProductListInfiniteQuery";
 
-export default function useProductList(productListType: ProductListType) {
+export default function useProductList(
+  productListType: ProductListType,
+  productIds?: string[],
+  profileProductCategory?: ProductCategory
+) {
   const search = useSearchParams();
-  const keyword = search.get("keyword");
 
-  const category = (search.get("category") as ProductCategory) || null;
+  const category =
+    profileProductCategory ||
+    (search.get("category") as ProductCategory) ||
+    null;
   const {
     todayProductListData,
     hasNextPageTodayProductList,
@@ -43,11 +49,26 @@ export default function useProductList(productListType: ProductListType) {
     productListType,
   });
 
+  const {
+    profileProductListData,
+    hasNextPageProfileProductList,
+    fetchNextPageProfileProductList,
+    isFetchingNextPageProfileProductList,
+    isLoadingProfileProductList,
+    profileProductListError,
+  } = useProfileProductListInfiniteQuery({
+    category: category || undefined,
+    productListType,
+    productIds: productIds || [],
+  });
+
   const isLoading =
     productListType === "TODAY"
       ? isLoadingTodayProductList
       : productListType === "CATEGORY"
       ? isLoadingCategoryProductList
+      : productListType === "PROFILE"
+      ? isLoadingProfileProductList
       : isLoadingSearchProductList;
 
   const data =
@@ -55,6 +76,8 @@ export default function useProductList(productListType: ProductListType) {
       ? todayProductListData
       : productListType === "CATEGORY"
       ? categoryProductListData
+      : productListType === "PROFILE"
+      ? profileProductListData
       : searchProductListData;
 
   const fetchNextPage =
@@ -62,6 +85,8 @@ export default function useProductList(productListType: ProductListType) {
       ? fetchNextPageTodayProductList
       : productListType === "CATEGORY"
       ? fetchNextPageCategoryProductList
+      : productListType === "PROFILE"
+      ? fetchNextPageProfileProductList
       : fetchNextPageSearchProductList;
 
   const isFetchingNextPage =
@@ -69,6 +94,8 @@ export default function useProductList(productListType: ProductListType) {
       ? isFetchingNextPageTodayProductList
       : productListType === "CATEGORY"
       ? isFetchingNextPageCategoryProductList
+      : productListType === "PROFILE"
+      ? isFetchingNextPageProfileProductList
       : isFetchingNextPageSearchProductList;
 
   const hasNextPage =
@@ -76,6 +103,8 @@ export default function useProductList(productListType: ProductListType) {
       ? hasNextPageTodayProductList
       : productListType === "CATEGORY"
       ? hasNextPageCategoryProductList
+      : productListType === "PROFILE"
+      ? hasNextPageProfileProductList
       : hasNextPageSearchProductList;
 
   const error =
@@ -83,6 +112,8 @@ export default function useProductList(productListType: ProductListType) {
       ? todayProductListError
       : productListType === "CATEGORY"
       ? categoryProductListError
+      : productListType === "PROFILE"
+      ? profileProductListError
       : searchProductListError;
 
   return {
