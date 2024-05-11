@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 export const enum LoginType {
   EMAIL = "EMAIL",
@@ -43,9 +43,13 @@ export interface ProfileData {
   email: string;
   nickname: string;
   profileImg: string;
+  introduce: string;
   followers: string[];
   followings: string[];
   productIds: string[];
   wishProductIds: string[];
+  saleCount: number;
+  purchaseCount: number;
+  transactionCount: number;
   reviewPercentage: number;
 }
