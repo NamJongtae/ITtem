@@ -20,6 +20,7 @@ export default function useProductQuery(isEdit?: boolean) {
     },
     queryKey: getProductQueryKey(productId as string),
     enabled: isEdit || !!productId,
+    staleTime: 30 * 1000,
   });
 
   return { productDetailData, loadProductLoading, loadProductError };

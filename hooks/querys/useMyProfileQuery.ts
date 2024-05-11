@@ -16,6 +16,7 @@ export default function useMyProfileQuery() {
     },
     queryKey: MY_PROFILE_QUERY_KEY,
     enabled: !!user,
+    staleTime: 30 * 1000,
   });
 
   useEffect(() => {
