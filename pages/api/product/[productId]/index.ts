@@ -97,9 +97,30 @@ export default async function handler(
         },
         {
           $addFields: {
+            filteredProductIds: {
+              $filter: {
+                input: "$productIds",
+                as: "id",
+                cond: {
+                  $ne: [
+                    { $toObjectId: "$$id" },
+                    new mongoose.Types.ObjectId(productId as string),
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            lastTenProductIds: { $slice: ["$filteredProductIds", -9] },
+          },
+        },
+        {
+          $addFields: {
             convertedProductIds: {
               $map: {
-                input: "$productIds",
+                input: "$lastTenProductIds",
                 as: "id",
                 in: { $toObjectId: "$$id" },
               },
@@ -111,14 +132,14 @@ export default async function handler(
             from: "products",
             localField: "convertedProductIds",
             foreignField: "_id",
-            as: "recentProducts",
+            as: "recentProductsInfo",
           },
         },
         {
           $addFields: {
             recentProducts: {
               $filter: {
-                input: "$recentProducts",
+                input: "$recentProductsInfo",
                 as: "product",
                 cond: { $ne: ["$$product.block", true] },
               },
