@@ -39,6 +39,15 @@ export default async function handler(
         return;
       }
 
+      await Product.updateOne(
+        {
+          _id: new mongoose.Types.ObjectId(productId as string),
+        },
+        {
+          $inc: { viewCount: 1 },
+        }
+      );
+
       // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
       const aggregation = [
         {
