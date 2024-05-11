@@ -4,12 +4,17 @@ import { ProfileMenu } from "./profile-page";
 import ProfileDetailWish from "./profileDetailWish/profile-detail-wish";
 import ProfileDetailFollowing from "./profileDetailFollow/profile-detail-following";
 import ProfileDetailFollower from "./profileDetailFollow/profile-detail-follower";
+import { ProfileData } from "@/types/authTypes";
 
 interface IProps {
   profileMenu: ProfileMenu;
+  profileData: ProfileData | undefined;
 }
 
-export default function ProfileDetailContent({ profileMenu }: IProps) {
+export default function ProfileDetailContent({
+  profileMenu,
+  profileData,
+}: IProps) {
   switch (profileMenu) {
     case "판매상품": {
       return <ProfileDetailProduct />;

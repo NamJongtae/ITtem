@@ -3,7 +3,7 @@ import { ProfileMenu } from "./profile-page";
 interface IProps {
   profileMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
-  uid?: string;
+  uid: string | undefined;
 }
 
 export default function ProfileDetailMenu({
