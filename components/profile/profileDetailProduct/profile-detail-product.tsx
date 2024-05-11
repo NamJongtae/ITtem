@@ -1,7 +1,13 @@
+import ProductList from "@/components/commons/productList/product-list";
 import ProfileDetailProductCategory from "./profile-detail-product-category";
 import useProfileProductCategory from "@/hooks/profile/useProfileProductCategory";
+import { ProfileData } from "@/types/authTypes";
 
-export default function ProfileDetailProduct() {
+interface IProps {
+  profileData: ProfileData | undefined;
+}
+
+export default function ProfileDetailProduct({ profileData }: IProps) {
   const { category, selectCategory } = useProfileProductCategory();
 
   return (
@@ -14,6 +20,11 @@ export default function ProfileDetailProduct() {
         />
       </div>
 
+      <ProductList
+        productListType="PROFILE"
+        productIds={profileData?.productIds}
+        profileProductCategory={category}
+      />
     </div>
   );
 }
