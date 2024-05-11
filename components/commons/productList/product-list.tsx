@@ -2,15 +2,17 @@ import { Fragment } from "react";
 import ProductItem from "./product-item";
 import ProductListPlaceholder from "./product-list-placeholder";
 import InfiniteScroll from "react-infinite-scroller";
-import { ProductListType } from "@/types/productTypes";
+import { ProductCategory, ProductListType } from "@/types/productTypes";
 import ProductListError from "./product-list-error";
 import useProductList from "@/hooks/commons/useProductList";
 
 interface IProps {
   productListType: ProductListType;
+  productIds?: string[];
+  profileProductCategory?: ProductCategory;
 }
 
-export default function ProductList({ productListType }: IProps) {
+export default function ProductList({ productListType, productIds, profileProductCategory }: IProps) {
   const {
     isLoading,
     data,
@@ -18,7 +20,8 @@ export default function ProductList({ productListType }: IProps) {
     isFetchingNextPage,
     hasNextPage,
     error,
-  } = useProductList(productListType);
+  } = useProductList(productListType, productIds, profileProductCategory);
+  
 
   return (
     <>
@@ -39,7 +42,7 @@ export default function ProductList({ productListType }: IProps) {
             ) : (
               data?.map((item) => (
                 <Fragment key={item._id}>
-                  <ProductItem data={item} />
+                  <ProductItem data={item} category={profileProductCategory}/>
                 </Fragment>
               ))
             )}

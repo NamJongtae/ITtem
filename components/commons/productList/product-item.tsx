@@ -1,17 +1,18 @@
 import Link from "next/link";
 import ProductListImg from "./product-list-img";
 import ProductListContent from "./product-list-content";
-import { ProductData } from "@/types/productTypes";
+import { ProductCategory, ProductData } from "@/types/productTypes";
 
 interface IProps {
   data: ProductData;
+  category: ProductCategory | undefined;
 }
 
-export default function ProductItem({ data }: IProps) {
+export default function ProductItem({ data, category }: IProps) {
   return (
     <li className="relative w-full h-full mx-auto">
       <Link
-        href={`/product/${data._id}`}
+        href={`/product/${data._id}${category ? `?category=${category}` : ""}`}
         className="mx-auto group flex w-full h-full max-w-xs flex-col overflow-hidden bg-white border "
       >
         <ProductListImg
