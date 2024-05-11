@@ -21,7 +21,7 @@ export default function useProfileProductListInfiniteQuery({
   productIds: string[];
 }) {
   const router = useRouter();
-  const productId = router.query?.productId;
+  const uid = router.query?.uid;
 
   const {
     data: profileProductListData,
@@ -31,7 +31,7 @@ export default function useProfileProductListInfiniteQuery({
     isLoading: isLoadingProfileProductList,
     error: profileProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: getProfileProductListQuerykey(productId as string, category),
+    queryKey: getProfileProductListQuerykey(uid as string, category),
     queryFn: async ({ pageParam }) => {
       const response = await getProfileProductList({
         cursor: pageParam,
@@ -41,7 +41,7 @@ export default function useProfileProductListInfiniteQuery({
       });
       return response.data.products;
     },
-    enabled: productListType === "PROFILE" && productIds && !!productId,
+    enabled: productListType === "PROFILE" && productIds.length > 0 && !!uid,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
