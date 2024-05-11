@@ -2,18 +2,14 @@ import { ProductDetailData } from "@/types/productTypes";
 import dynamic from "next/dynamic";
 import ProductDetailContentInfo from "./product-detail-content-info";
 import ProductDetailContentImg from "./product-detail-content-img";
-const ProductDetailContentBtns = dynamic(
-  () => import("./product-detail-content-btns"),
-  {
-    ssr: false,
-  }
-);
+import ProductDetailContentBtns from './product-detail-content-btns';
+
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
-export default function PrductDateilContent({ productDetailData }: IProps) {
+export default function ProductDetailContent({ productDetailData }: IProps) {
   return (
     <div className="md:flex block">
       <ProductDetailContentImg productDetailData={productDetailData} />

@@ -1,11 +1,7 @@
 import { ProductDetailAuthData } from "@/types/productTypes";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-const ProductDetailSerllerFollowBtn = dynamic(
-  () => import("./product-detail-serller-followBtn"),
-  { ssr: false }
-);
+import ProductDetailSerllerFollowBtn from './product-detail-serller-followBtn';
 
 interface IProps {
   auth: ProductDetailAuthData;

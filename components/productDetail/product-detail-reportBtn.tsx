@@ -1,8 +1,7 @@
+import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
 import useProductReportMutate from "@/hooks/querys/useProductReportMutate";
-import { RootState } from "@/store/store";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 interface IProps {
@@ -11,11 +10,13 @@ interface IProps {
 
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   const { productReportMutate } = useProductReportMutate();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isReport = productDetailData?.reportUserIds.includes(user?.uid || "");
+  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const isReport = productDetailData?.reportUserIds.includes(
+    myProfileData?.uid || ""
+  );
 
   const handleClickReport = () => {
-    if (!user) {
+    if (!myProfileData) {
       toast.warn("로그인이 필요해요.");
       return;
     }
@@ -27,7 +28,8 @@ export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   };
 
   return (
-    productDetailData?.uid !== user?.uid && (
+    !loadMyProfileLoading &&
+    productDetailData?.uid !== myProfileData?.uid && (
       <button
         type="button"
         onClick={handleClickReport}

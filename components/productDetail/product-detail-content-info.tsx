@@ -1,18 +1,15 @@
 import { getDateFormat } from "@/lib/getDateFormate";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-const ProductDetailReportBtn = dynamic(
-  () => import("./product-detail-reportBtn"),
-  {
-    ssr: false,
-  }
-);
+import ProductDetailReportBtn from "./product-detail-reportBtn";
+
 interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
-export default function ProductDetailContentInfo({ productDetailData }: IProps) {
+export default function ProductDetailContentInfo({
+  productDetailData,
+}: IProps) {
   return (
     <>
       <h3 className="text-gray-700 text-3xl md:text-4xl">
@@ -46,7 +43,10 @@ export default function ProductDetailContentInfo({ productDetailData }: IProps) 
             />{" "}
             {productDetailData?.viewCount}
           </span>
-          <span className="flex gap-2 items-center">
+          <time
+            dateTime={productDetailData?.createdAt?.toString()}
+            className="flex gap-2 items-center"
+          >
             <Image
               src={"/icons/clock_icon.svg"}
               alt="게시일"
@@ -54,7 +54,7 @@ export default function ProductDetailContentInfo({ productDetailData }: IProps) 
               height={16}
             />{" "}
             {getDateFormat(productDetailData?.createdAt?.toString() || "")}
-          </span>
+          </time>
         </div>
         <ProductDetailReportBtn productDetailData={productDetailData} />
       </div>

@@ -1,5 +1,5 @@
 import Empty from "../commons/Empty";
-import ProductDetailSellerInfo from "./produdct-detail-seller-info";
+import ProductDetailSellerInfo from "./product-detail-seller-info";
 import ProductDetailSellerProductList from "./product-detail-seller-product-list";
 import { ProductDetailAuthData } from "@/types/productTypes";
 
@@ -7,7 +7,7 @@ interface IProps {
   auth: ProductDetailAuthData | undefined;
 }
 
-export default function ProductDeatilSeller({ auth }: IProps) {
+export default function ProductDetailSeller({ auth }: IProps) {
   return (
     <section className="basis-1/3">
       <h3 className="text-gray-600 text-xl font-medium">판매자 정보</h3>
