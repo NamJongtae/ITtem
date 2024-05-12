@@ -2,7 +2,7 @@ interface IProps {
   prevStepHandler: () => void;
 }
 
-export default function StepIntroudctBtns({ prevStepHandler }: IProps) {
+export default function StepIntrouduceBtns({ prevStepHandler }: IProps) {
   return (
     <div className="w-full flex flex-col gap-3 absolute bottom-3">
       <button className="button_primary">회원가입</button>
