@@ -21,7 +21,7 @@ export const userSchema = new mongoose.Schema(
     },
     nickname: { type: String, required: [true, "닉네임이 없어요."] },
     profileImg: { type: String, default: "/icons/user_icon.svg" },
-    profieImgFilename: { type: String, default: "" },
+    profileImgFilename: { type: String, default: "" },
     introduce: { type: String, default: "" },
     productIds: { type: [String], default: [] },
     wishProductIds: { type: [String], default: [] },

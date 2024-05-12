@@ -38,7 +38,7 @@ export default async function handler(
         password: hashedPassword,
         nickname,
         profileImg: profileImgData.url,
-        profieImgFilename: profileImgData.name,
+        profileImgFilename: profileImgData.name,
         introduce,
       };
 
