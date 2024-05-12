@@ -8,7 +8,7 @@ export default function ProductDetailSellerProductMoreBtn({ auth }: IProps) {
   const isShowMoreBtn =
     auth?.productIds &&
     (auth?.recentProducts.length ?? 0) > 0 &&
-    auth.productIds.slice.length -
+    auth.productIds.length -
       1 -
       (auth?.recentProducts.length ?? 0) >
       0;
