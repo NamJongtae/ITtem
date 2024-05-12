@@ -82,3 +82,9 @@ export const getProfileProductListQuerykey = (
 ) => {
   return ["profile", uid, "product", category];
 };
+
+export const getMyProfileProductListQuerykey = (
+  category: string = "전체"
+) => {
+  return ["profile", "my", "product", category];
+};
