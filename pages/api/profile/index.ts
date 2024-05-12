@@ -13,29 +13,90 @@ export default async function handler(
       await dbConnect();
 
       const isValidAuth = await checkAuthorization(req, res);
+      
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
 
       const myUid = isValidAuth?.auth?.uid;
 
-      const profile = await User.findOne({
-        _id: new mongoose.Types.ObjectId(myUid),
-      });
+      const aggregation = [
+        {
+          $match: { _id: new mongoose.Types.ObjectId(myUid as string) },
+        },
+        {
+          $lookup: {
+            from: "reviewScore",
+            localField: "uid",
+            foreignField: "uid",
+            as: "reviewInfo",
+          },
+        },
+        {
+          $unwind: {
+            path: "$reviewInfo",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            reviewPercentage: {
+              $cond: {
+                if: {
+                  $eq: [{ $ifNull: ["$reviewInfo.totalScore", null] }, null],
+                },
+                then: 0,
+                else: {
+                  $round: [
+                    {
+                      $multiply: [
+                        {
+                          $divide: [
+                            {
+                              $divide: [
+                                "$reviewInfo.totalScore",
+                                "$reviewInfo.totalReviewCount",
+                              ],
+                            },
+                            5,
+                          ],
+                        },
+                        100,
+                      ],
+                    },
+                    1,
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            password: 0,
+            __v: 0,
+            loginType:0
+          },
+        },
+      ];
 
-      if (!profile) {
+      const userWithReviews = await User.aggregate(aggregation);
+
+      if (!userWithReviews.length) {
         res.status(404).json({
           message: "유저가 존재하지 않습니다.\n로그인 정보를 확인해주세요.",
         });
         return;
       }
 
-      let profileData = { ...profile._doc, uid: profile._id };
-      delete profileData.password;
-      delete profileData.__v;
-      delete profileData.loginType;
-      delete profileData._id;
-
+      const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
+      delete profile._id;
       res.status(200).json({
         message: "프로필 조회에 성공했어요.",
-        profile: profileData,
+        profile,
       });
     } catch (error) {
       console.error(error);
