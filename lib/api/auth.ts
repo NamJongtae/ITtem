@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import { AuthData, SignupData } from "@/types/authTypes";
+import { AuthData, ProfileEditData, SignupData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -389,6 +389,19 @@ export async function follow(uid: string) {
 export async function unfollow(uid: string) {
   try {
     const response = await customAxios.delete(`/api/profile/${uid}/follow`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function editProfile(
+  profileEditData: ProfileEditData
+): Promise<AxiosResponse<ProfileResponseData>> {
+  try {
+    const response = await customAxios.patch("/api/profile", {
+      profileEditData,
+    });
     return response;
   } catch (error) {
     throw error;
