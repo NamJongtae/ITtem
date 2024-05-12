@@ -18,6 +18,11 @@ export default async function handler(
         return;
       }
 
+      if (uid.length < 24) {
+        res.status(404).json({ message: "유저가 존재하지 않아요." });
+        return;
+      }
+
       // 사용자 정보와 리뷰 점수 정보를 조인합니다.
       const aggregation = [
         {
@@ -72,18 +77,9 @@ export default async function handler(
         },
         {
           $project: {
-            _id: 1,
-            email: 1,
-            nickname: 1,
-            profileImg: 1,
-            introduce:1,
-            saleCount: 1,
-            purchaseCount: 1,
-            transactionCount: 1,
-            followers: 1,
-            followings: 1,
-            productIds: 1,
-            reviewPercentage: 1,
+            password: 0,
+            __v: 0,
+            loginType:0
           },
         },
       ];
