@@ -67,7 +67,7 @@ export default function useProductList(
       ? isLoadingTodayProductList
       : productListType === "CATEGORY"
       ? isLoadingCategoryProductList
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? isLoadingProfileProductList
       : isLoadingSearchProductList;
 
@@ -76,7 +76,7 @@ export default function useProductList(
       ? todayProductListData
       : productListType === "CATEGORY"
       ? categoryProductListData
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? profileProductListData
       : searchProductListData;
 
@@ -85,7 +85,7 @@ export default function useProductList(
       ? fetchNextPageTodayProductList
       : productListType === "CATEGORY"
       ? fetchNextPageCategoryProductList
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? fetchNextPageProfileProductList
       : fetchNextPageSearchProductList;
 
@@ -94,7 +94,7 @@ export default function useProductList(
       ? isFetchingNextPageTodayProductList
       : productListType === "CATEGORY"
       ? isFetchingNextPageCategoryProductList
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? isFetchingNextPageProfileProductList
       : isFetchingNextPageSearchProductList;
 
@@ -103,7 +103,7 @@ export default function useProductList(
       ? hasNextPageTodayProductList
       : productListType === "CATEGORY"
       ? hasNextPageCategoryProductList
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? hasNextPageProfileProductList
       : hasNextPageSearchProductList;
 
@@ -112,7 +112,7 @@ export default function useProductList(
       ? todayProductListError
       : productListType === "CATEGORY"
       ? categoryProductListError
-      : productListType === "PROFILE"
+      : productListType === "PROFILE" || productListType === "MY_PROFILE"
       ? profileProductListError
       : searchProductListError;
 
