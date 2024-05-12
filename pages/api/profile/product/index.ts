@@ -29,7 +29,7 @@ export default async function handler(
         block: false,
       };
 
-      query = category !== "전체" ? { category } : query;
+      query = category !== "전체" ? { ...query, category } : query;
 
       const products = await Product.find(query)
         .limit(pageLimit)
