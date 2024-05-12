@@ -43,6 +43,7 @@ export interface ProfileData {
   email: string;
   nickname: string;
   profileImg: string;
+  profileImgFilename: string;
   introduce: string;
   followers: string[];
   followings: string[];
@@ -52,4 +53,11 @@ export interface ProfileData {
   purchaseCount: number;
   transactionCount: number;
   reviewPercentage: number;
+}
+
+export interface ProfileEditData {
+  profileImg: string;
+  profileImgFilename: string;
+  nickname: string;
+  introduce: string;
 }
