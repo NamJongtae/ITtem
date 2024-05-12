@@ -6,6 +6,8 @@ import ProfileImgField from "@/components/signup/stepProfile/profileImg-field";
 import NicknameField from "@/components/signup/stepProfile/nickname-field";
 import IntroductField from "@/components/signup/setpIntroduce/introduce-field";
 import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+import useProfileEditSubmit from "@/hooks/profileEdit/useProfileEditSubmit";
+import Loading from "@/components/commons/loading";
 
 interface IProps {
   closeModal: () => void;
@@ -13,11 +15,17 @@ interface IProps {
 
 export default function ProfileEditModalForm({ closeModal }: IProps) {
   const { myProfileData } = useMyProfileQuery();
+  const { handleProfileEditSubmit, profileEditLoading } =
+    useProfileEditSubmit(closeModal);
+
+  if (profileEditLoading) {
+    return <Loading />;
+  }
 
   return (
     <MyForm
       onSubmit={(values: FieldValues) => {
-        console.log(values);
+        handleProfileEditSubmit(values);
       }}
       formOptions={{
         mode: "onChange",
@@ -35,7 +43,7 @@ export default function ProfileEditModalForm({ closeModal }: IProps) {
       <ProfileImgField />
       <NicknameField />
       <IntroductField />
-      <ProfileEditButtons closeModal={closeModal}/>
+      <ProfileEditButtons closeModal={closeModal} />
     </MyForm>
   );
 }
