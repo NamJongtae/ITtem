@@ -51,6 +51,20 @@ export const uploadMultiImgToFirestore = async (
   }
 };
 
+export const deleteProfileImgToFirestore = async (
+  profileDataImgName: string,
+  prevImgDataImgName: string
+) => {
+  try {
+    if (!profileDataImgName || !prevImgDataImgName) return;
+    if (profileDataImgName !== prevImgDataImgName) {
+      await deleteObject(ref(storage, `images/product/${profileDataImgName}`));
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deleteImgToFirestore = async (
   productDataImgName: string[],
   prevImgDataImgName: string[]
