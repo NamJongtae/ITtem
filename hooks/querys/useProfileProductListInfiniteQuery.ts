@@ -1,11 +1,21 @@
-import { getProfileProductListQuerykey } from "@/constants/constant";
+import {
+  MY_PROFILE_QUERY_KEY,
+  getMyProfileProductListQuerykey,
+  getProfileProductListQuerykey,
+} from "@/constants/constant";
 import { getProfileProductList } from "@/lib/api/product";
+import { RootState } from "@/store/store";
+import { ProfileData } from "@/types/authTypes";
 import {
   ProductCategory,
   ProductData,
   ProductListType,
 } from "@/types/productTypes";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
@@ -21,7 +31,15 @@ export default function useProfileProductListInfiniteQuery({
   productIds: string[];
 }) {
   const router = useRouter();
-  const uid = router.query?.uid;
+  const queryClient = useQueryClient();
+  const myProfile = queryClient.getQueryData(MY_PROFILE_QUERY_KEY) as
+    | ProfileData
+    | undefined;
+
+  const uid =
+    productListType === "MY_PROFILE"
+      ? myProfile?.uid || ""
+      : router.query?.uid || "";
 
   const {
     data: profileProductListData,
@@ -31,7 +49,10 @@ export default function useProfileProductListInfiniteQuery({
     isLoading: isLoadingProfileProductList,
     error: profileProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: getProfileProductListQuerykey(uid as string, category),
+    queryKey:
+      productListType === "MY_PROFILE"
+        ? getMyProfileProductListQuerykey(category)
+        : getProfileProductListQuerykey(uid as string, category),
     queryFn: async ({ pageParam }) => {
       const response = await getProfileProductList({
         cursor: pageParam,
@@ -41,7 +62,10 @@ export default function useProfileProductListInfiniteQuery({
       });
       return response.data.products;
     },
-    enabled: productListType === "PROFILE" && productIds.length > 0 && !!uid,
+    enabled:
+      (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
+      productIds.length > 0 &&
+      !!uid,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
