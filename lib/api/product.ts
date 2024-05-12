@@ -42,7 +42,6 @@ export async function getCategoryProductList({
         cursor ? `&cursor=${cursor}` : ""
       }&limit=${limit}&location=${location}`
     );
-    console.log(response.data);
     return response;
   } catch (error) {
     throw error;

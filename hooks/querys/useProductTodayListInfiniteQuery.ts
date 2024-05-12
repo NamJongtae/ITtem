@@ -3,7 +3,6 @@ import { getTodayProductList } from "@/lib/api/product";
 import { ProductData, ProductListType } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
 
 export default function useProductTodayListInfiniteQuery({
   limit = 10,
@@ -36,10 +35,6 @@ export default function useProductTodayListInfiniteQuery({
       return nextCursor;
     },
   });
-
-  useEffect(() => {
-    console.log(todayProductListData?.pages);
-  }, [todayProductListData]);
 
   return {
     todayProductListData: todayProductListData?.pages.flat(),
