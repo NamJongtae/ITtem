@@ -1,7 +1,6 @@
 import { deleteToken } from "@/lib/api/redis";
 import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,14 +10,6 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const isValidAuth = await checkAuthorization(req, res);
-
-      if (!isValidAuth.isValid) {
-        res.status(401).json({
-          message: isValidAuth.message,
-        });
-        return;
-      }
 
       const { email } = req.body;
 
@@ -28,8 +19,8 @@ export default async function handler(
         email,
       });
 
-      await deleteToken(dbUserData?.uid || "", "accessToken");
-      await deleteToken(dbUserData?.uid || "", "refreshToken");
+      await deleteToken(dbUserData?._id || "", "accessToken");
+      await deleteToken(dbUserData?._id || "", "refreshToken");
       res.status(200).json({ message: "성공적으로 토큰이 삭제됬어요." });
     } catch (error) {
       console.error(error);
