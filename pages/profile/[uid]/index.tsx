@@ -1,8 +1,12 @@
 import ProfilePage from "@/components/profile/profile-page";
-import { getProfileQueryKey } from "@/constants/constant";
+import { REFRESH_TOKEN_KEY, getProfileQueryKey } from "@/constants/constant";
 import { getUserProfile } from "@/lib/api/auth";
+import { sessionOptions } from "@/lib/server";
+import { verifyToken } from "@/lib/token";
+import { IronSessionData } from "@/types/apiTypes";
 
 import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
 
 export default function UserProfile() {
@@ -10,8 +14,31 @@ export default function UserProfile() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const queryClient = new QueryClient();
   const uid = context.query.uid;
+  const session = await getIronSession<IronSessionData>(
+    context.req,
+    context.res,
+    sessionOptions
+  );
+
+  if (session) {
+    const refreshToken = session.refreshToken;
+    const decodeToken = verifyToken(refreshToken, REFRESH_TOKEN_KEY);
+    const myUid = decodeToken?.data?.user.uid;
+
+    if (myUid) {
+      if (uid === myUid) {
+        return {
+          redirect: {
+            destination: "/profile",
+            permanent: false,
+          },
+        };
+      }
+    }
+  }
+
+  const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: getProfileQueryKey(uid as string),
