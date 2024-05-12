@@ -3,13 +3,13 @@ import { ProfileMenu } from "./profile-page";
 interface IProps {
   profileMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
-  uid: string | undefined;
+  my?: boolean;
 }
 
 export default function ProfileDetailMenu({
   profileMenu,
   handleClickMenu,
-  uid,
+  my,
 }: IProps) {
   return (
     <ul className="flex justify-between w-full h-full font-medium text-sm md:text-base">
@@ -29,7 +29,7 @@ export default function ProfileDetailMenu({
           거래후기
         </button>
       </li>
-      {!uid && (
+      {my && (
         <li
           className={`${
             profileMenu === "찜" && "bg-gray-700 text-white"

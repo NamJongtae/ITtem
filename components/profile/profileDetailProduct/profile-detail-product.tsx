@@ -5,9 +5,10 @@ import { ProfileData } from "@/types/authTypes";
 
 interface IProps {
   profileData: ProfileData | undefined;
+  my?: boolean;
 }
 
-export default function ProfileDetailProduct({ profileData }: IProps) {
+export default function ProfileDetailProduct({ profileData, my }: IProps) {
   const { category, selectCategory } = useProfileProductCategory();
 
   return (
@@ -21,7 +22,7 @@ export default function ProfileDetailProduct({ profileData }: IProps) {
       </div>
 
       <ProductList
-        productListType="PROFILE"
+        productListType={my ? "MY_PROFILE" : "PROFILE"}
         productIds={profileData?.productIds}
         profileProductCategory={category}
       />
