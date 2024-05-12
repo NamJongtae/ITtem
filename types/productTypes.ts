@@ -94,4 +94,4 @@ export type ProductUploadData = Omit<
   | "reportUserIds"
 >;
 
-export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH" | "PROFILE";
+export type ProductListType = "TODAY" | "CATEGORY" | "SEARCH" | "PROFILE" | "MY_PROFILE";
