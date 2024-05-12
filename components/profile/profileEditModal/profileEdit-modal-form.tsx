@@ -1,0 +1,41 @@
+import { MyForm } from "@/components/commons/myForm/MyForm";
+import { isMobile } from "react-device-detect";
+import ProfileEditButtons from "./profileEdit-buttons";
+import { FieldValues } from "react-hook-form";
+import ProfileImgField from "@/components/signup/stepProfile/profileImg-field";
+import NicknameField from "@/components/signup/stepProfile/nickname-field";
+import IntroductField from "@/components/signup/setpIntroduce/introduce-field";
+import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+
+interface IProps {
+  closeModal: () => void;
+}
+
+export default function ProfileEditModalForm({ closeModal }: IProps) {
+  const { myProfileData } = useMyProfileQuery();
+
+  return (
+    <MyForm
+      onSubmit={(values: FieldValues) => {
+        console.log(values);
+      }}
+      formOptions={{
+        mode: "onChange",
+        defaultValues: {
+          nickname: myProfileData ? myProfileData.nickname : "",
+          introduce: myProfileData ? myProfileData.introduce : "",
+          profileImg: myProfileData ? myProfileData.profileImg : "",
+        },
+      }}
+      className={`${
+        isMobile ? "h-screen center" : "max-w-[480px] center"
+      } fixed z-30 flex flex-col justify-center gap-3 w-full p-8 border bg-white`}
+    >
+      <h2 className="text-xl text-center font-semibold mb-5">프로필 수정</h2>
+      <ProfileImgField />
+      <NicknameField />
+      <IntroductField />
+      <ProfileEditButtons closeModal={closeModal}/>
+    </MyForm>
+  );
+}
