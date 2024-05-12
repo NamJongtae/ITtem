@@ -3,6 +3,7 @@ import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
+import { deleteProfileImgToFirestore } from "@/lib/api/firebase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +14,7 @@ export default async function handler(
       await dbConnect();
 
       const isValidAuth = await checkAuthorization(req, res);
-      
+
       if (!isValidAuth.isValid) {
         res.status(401).json({
           message: isValidAuth.message,
@@ -78,7 +79,7 @@ export default async function handler(
           $project: {
             password: 0,
             __v: 0,
-            loginType:0
+            loginType: 0,
           },
         },
       ];
@@ -102,6 +103,59 @@ export default async function handler(
       console.error(error);
       res.status(500).json({
         message: "프로필 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
+    }
+  }
+  if (req.method === "PATCH") {
+    try {
+      const { profileEditData } = req.body;
+
+      if (!profileEditData) {
+        res.status(422).json({ message: "프로필 데이터가 없어요." });
+        return;
+      }
+
+      const isValidAuth = await checkAuthorization(req, res);
+
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
+
+      const myUid = isValidAuth?.auth?.uid;
+
+      const profile = await User.findOne({
+        _id: new mongoose.Types.ObjectId(myUid),
+      });
+
+      if (profileEditData.profileImgFilename && profile.profileImgFilename)
+        try {
+          await deleteProfileImgToFirestore(
+            profileEditData.profileImgFilename,
+            profile.profileImgFilename
+          );
+        } catch (error) {
+          console.error("프로필 이미지 삭제에 실패했어요.", error);
+        }
+
+      const profileUpdateResult = await User.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(myUid),
+        },
+        { $set: profileEditData },
+        { returnNewDocument: true }
+      );
+
+      res.status(200).json({
+        message: "프로필을 수정했어요.",
+        profile: profileUpdateResult,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "프로필 수정에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }
