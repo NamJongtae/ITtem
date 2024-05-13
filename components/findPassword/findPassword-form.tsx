@@ -1,11 +1,12 @@
-import React from "react";
+import useChangePasswordMutate from "@/hooks/querys/useChangePasswordMutate";
+import { FieldValues } from "react-hook-form";
+import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
 import FormConent from "./form-content";
-import useChangePassword from "@/hooks/commons/useChangePassword";
-import Loading from "../commons/loading";
 
 export default function FindPasswordForm() {
-  const { handleSubmit, changePasswordLoading } = useChangePassword();
+  const { changePasswordMutate, changePasswordLoading } =
+    useChangePasswordMutate({ isFindPw: true });
 
   if (changePasswordLoading) {
     return <Loading />;
@@ -14,7 +15,9 @@ export default function FindPasswordForm() {
   return (
     <MyForm
       className="max-w-[400px] w-full h-[calc(100%-28px)] mx-auto"
-      onSubmit={handleSubmit}
+      onSubmit={(values: FieldValues) =>
+        changePasswordMutate({ email: values.email, password: values.password })
+      }
       formOptions={{
         mode: "onChange",
         defaultValues: {
