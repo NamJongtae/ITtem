@@ -1,5 +1,7 @@
 import {
   EmailDuplicationResponseData,
+  FollowersResponseData,
+  FollowingsResponseData,
   GoogleAuthAccessTokenResponseData,
   GoogleAuthInfoResponseData,
   KaKaoAuthAccessTokenResponseData,
@@ -17,7 +19,11 @@ import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import { AuthData, ProfileEditData, SignupData } from "@/types/authTypes";
+import {
+  AuthData,
+  ProfileEditData,
+  SignupData,
+} from "@/types/authTypes";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -405,6 +411,54 @@ export async function editProfile(
     const response = await customAxios.patch("/api/profile", {
       profileEditData,
     });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getFollowers({
+  cursor,
+  limit = 10,
+  userIds,
+}: {
+  cursor: unknown;
+  limit?: number;
+  userIds: string[] | undefined;
+}): Promise<AxiosResponse<FollowersResponseData>> {
+  try {
+    const response = await customAxios.post(
+      `/api/profile/followers?limit=${limit}${
+        cursor ? `&cursor=${cursor}` : ""
+      }`,
+      {
+        userIds,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getFollowings({
+  cursor,
+  limit = 10,
+  userIds,
+}: {
+  cursor: unknown;
+  limit?: number;
+  userIds: string[] | undefined;
+}): Promise<AxiosResponse<FollowingsResponseData>> {
+  try {
+    const response = await customAxios.post(
+      `/api/profile/followings?limit=${limit}${
+        cursor ? `&cursor=${cursor}` : ""
+      }`,
+      {
+        userIds,
+      }
+    );
     return response;
   } catch (error) {
     throw error;
