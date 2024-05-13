@@ -1,5 +1,6 @@
 import { getHasdPassword, verifyPassword } from "@/lib/api/auth";
 import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
+import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
@@ -16,21 +17,19 @@ export default async function handler(
 
       await dbConnect();
 
-      const user = await User.findOne({ email });
-
-      if (user.loginType !== LoginType.EMAIL) {
-        res
-          .status(403)
-          .json({
-            message:
-              "소셜 로그인은 해당 소셜 홈페이지에서 비밀번호를 변경해주세요.",
-          });
-        return;
-      }
-
       if (isFindPw) {
         if (!email || !password) {
           res.status(422).json({ message: "유효하지 않은 값이있어요." });
+          return;
+        }
+
+        const user = await User.findOne({ email });
+
+        if (user.loginType !== LoginType.EMAIL) {
+          res.status(403).json({
+            message:
+              "소셜 로그인은 해당 소셜 홈페이지에서 비밀번호를 변경해주세요.",
+          });
           return;
         }
 
@@ -39,8 +38,22 @@ export default async function handler(
           res.status(401).json({ message: "인증되지 않은 이메일입니다." });
           return;
         }
+
+        const hashedPassword = await getHasdPassword(password);
+
+        const result = await User.updateOne(
+          { email },
+          { $set: { password: hashedPassword } }
+        );
+
+        if (!result.acknowledged || result.modifiedCount === 0) {
+          res.status(500).json({
+            message: "비밀번호 변경에실패했어요.\n잠시 후 다시 시도해주세요.",
+          });
+          return;
+        }
       } else {
-        if (!email || !password || !currentPassword) {
+        if (!currentPassword || !password) {
           res.status(422).json({ message: "유효하지 않은 값이 있어요." });
           return;
         }
@@ -54,6 +67,20 @@ export default async function handler(
           return;
         }
 
+        const myUid = isValidAuth?.auth?.uid as string;
+
+        const user = await User.findOne({
+          _id: new mongoose.Types.ObjectId(myUid),
+        });
+
+        if (user.loginType !== LoginType.EMAIL) {
+          res.status(403).json({
+            message:
+              "소셜 로그인은 해당 소셜 홈페이지에서 비밀번호를 변경해주세요.",
+          });
+          return;
+        }
+
         const isVerifyPassword = await verifyPassword(
           currentPassword,
           user?.password || ""
@@ -63,19 +90,20 @@ export default async function handler(
           res.status(401).json({ message: "기존 비밀번호가 일치하지 않아요." });
           return;
         }
-      }
 
-      const hashedPassword = await getHasdPassword(password);
-      const result = await User.updateOne(
-        { email },
-        { $set: { password: hashedPassword } }
-      );
+        const hashedPassword = await getHasdPassword(password);
 
-      if (!result.acknowledged || result.modifiedCount === 0) {
-        res.status(500).json({
-          message: "비밀번호 변경에실패했어요.\n잠시 후 다시 시도해주세요.",
-        });
-        return;
+        const result = await User.updateOne(
+          { _id: new mongoose.Types.ObjectId(myUid) },
+          { $set: { password: hashedPassword } }
+        );
+
+        if (!result.acknowledged || result.modifiedCount === 0) {
+          res.status(500).json({
+            message: "비밀번호 변경에실패했어요.\n잠시 후 다시 시도해주세요.",
+          });
+          return;
+        }
       }
 
       await deleteEmailVerifyCode(email, isFindPw);
