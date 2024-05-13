@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { ProfileData } from "@/types/authTypes";
 import ProfileEditModal from "../profileEditModal/profileEdit-modal";
 import useModal from "@/hooks/commons/useModal";
+import ChangePasswordModal from "@/components/changPasswordModal/changePassword-modal";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,
@@ -23,6 +24,11 @@ export default function ProfileUserInfoCard({
     isOpenModal: isOpenProfileEditModal,
     openModal: openProfileEditModal,
     closeModal: closeProfileEditModal,
+  } = useModal();
+  const {
+    isOpenModal: isOpenChangePwModal,
+    openModal: openChangePwModl,
+    closeModal: closeChangePwModal,
   } = useModal();
 
   return (
@@ -93,7 +99,11 @@ export default function ProfileUserInfoCard({
               >
                 프로필 수정
               </button>
-              <button className="border py-2 px-4 w-full betterhover:hover:bg-gray-100">
+              <button
+                type="button"
+                onClick={openChangePwModl}
+                className="border py-2 px-4 w-full betterhover:hover:bg-gray-100"
+              >
                 비밀번호 변경
               </button>
             </>
@@ -106,6 +116,9 @@ export default function ProfileUserInfoCard({
       </div>
       {isOpenProfileEditModal && (
         <ProfileEditModal closeModal={closeProfileEditModal} />
+      )}
+      {isOpenChangePwModal && (
+        <ChangePasswordModal closeModal={closeChangePwModal} />
       )}
     </>
   );

@@ -28,6 +28,8 @@ interface IProps {
     | Record<string, Validate<any, FieldValues>>
     | undefined;
   hideError?: boolean;
+  labelHidden?: boolean;
+  labelClassName?: string;
 }
 
 export default function CoreInputField({
@@ -48,8 +50,10 @@ export default function CoreInputField({
   inputPattern,
   inputValidate,
   hideError,
+  labelHidden = true,
+  labelClassName,
 }: IProps) {
-  const { register, formState, watch, setValue, clearErrors, trigger } =
+  const { register, formState, watch, setValue, clearErrors } =
     useFormContext();
   const { ref, ...rest } = register(inputName, {
     required: inputRequired,
@@ -69,7 +73,10 @@ export default function CoreInputField({
 
   return (
     <>
-      <label className="sr-only" htmlFor={inputId}>
+      <label
+        className={labelHidden ? "sr-only" : labelClassName}
+        htmlFor={inputId}
+      >
         {label}
       </label>
       <div className="relative w-full">
