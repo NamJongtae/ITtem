@@ -61,9 +61,6 @@ export default async function handler(
           await createAndSaveToken({
             user: {
               uid: newUser._id,
-              email: newUser.email,
-              nickname: newUser.nickname,
-              profileImg: newUser.profileImg,
             },
             session,
           });
@@ -108,14 +105,13 @@ export default async function handler(
       if (refreshTokenData) {
         res.status(409).json({
           message:
-            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다.",
-          email,
+            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다."
         });
         return;
       }
 
       await createAndSaveToken({
-        user: { uid, email, nickname, profileImg },
+        user: { uid },
         session,
       });
 

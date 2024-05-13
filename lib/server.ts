@@ -64,7 +64,7 @@ export async function createAndSaveToken({
   user,
   session,
 }: {
-  user: { uid: string; email: string; nickname: string; profileImg: string };
+  user: { uid: string; };
   session: IronSessionType;
 }) {
   const accessToken = generateToken({

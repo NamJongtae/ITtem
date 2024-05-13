@@ -60,9 +60,6 @@ export default async function handler(
           await createAndSaveToken({
             user: {
               uid: newUser._id,
-              email: newUser.email,
-              nickname: newUser.nickname,
-              profileImg: newUser.profileImg || "/icons/user_icon.svg",
             },
             session,
           });
@@ -112,7 +109,7 @@ export default async function handler(
       }
 
       await createAndSaveToken({
-        user: { uid, email, nickname, profileImg },
+        user: { uid },
         session,
       });
 

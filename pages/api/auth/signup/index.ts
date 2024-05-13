@@ -55,9 +55,6 @@ export default async function handler(
       await createAndSaveToken({
         user: {
           uid: newUser._id,
-          email: newUser.email,
-          nickname: newUser.nickname,
-          profileImg: newUser.profileImg,
         },
         session,
       });
