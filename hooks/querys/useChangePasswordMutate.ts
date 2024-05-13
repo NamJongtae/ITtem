@@ -25,9 +25,9 @@ export default function useChangePasswordMutate({
     >({
       mutationFn: async ({ email, password, currentPassword }) =>
         await changePassword({ email, password, currentPassword, isFindPw }),
-      onSuccess: (response) => {
+      onSuccess: async (response) => {
         if (isFindPw) {
-          router.push("/signin");
+          await router.push("/signin");
         }
         if (closeModal) closeModal();
         toast.success(response.data.message);
