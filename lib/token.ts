@@ -1,4 +1,4 @@
-import { AuthData } from '@/types/authTypes';
+import { AuthData } from "@/types/authTypes";
 import jwt, { JsonWebTokenError, JwtPayload, SignOptions } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
@@ -21,7 +21,7 @@ export const verifyToken = (token: string, secret: string) => {
     return {
       isVaild: true,
       message: "Valid Token.",
-      data: decoode as { user: AuthData; lat: number; exp: number },
+      data: decoode as { user: { uid: string }; lat: number; exp: number },
     };
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
