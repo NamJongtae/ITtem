@@ -15,13 +15,17 @@ export default function PasswordCheckField() {
   );
 
   useEffect(() => {
-    if (passwordValue === passwordCheckValue) {
-      clearErrors("password-check");
-    } else {
+    if (
+      passwordValue.length >= 8 &&
+      passwordCheckValue.length >= 8 &&
+      passwordValue !== passwordCheckValue
+    ) {
       setError("password-check", {
         type: "validate",
         message: "비밀번호가 일치하지 않습니다.",
       });
+    } else {
+      clearErrors("password-check");
     }
   }, [passwordValue, passwordCheckValue, clearErrors, setError]);
 
