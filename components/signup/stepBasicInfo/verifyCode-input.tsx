@@ -17,10 +17,10 @@ export default function VerifyCodeInput({ verifyCodeRef }: IProps) {
     <div
       className={`${
         isFocus && "outline outline-2"
-      } relative flex  items-center w-full border rounded-md`}
+      } relative flex items-center w-full border rounded-md`}
     >
       <CoreInputField
-        inputClassName="border-hidden focus:outline-none group"
+        inputClassName="border-hidden focus:outline-none group root_input"
         label="인증코드"
         inputId="verifyCode"
         inputName="verifyCode"
