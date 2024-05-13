@@ -33,7 +33,7 @@ export default function ChangePasswordModalForm({ closeModal }: IProps) {
         defaultValues: {
           "current-password": "",
           password: "",
-          "passowrd-check": "",
+          "password-check": "",
         },
       }}
       className={`${

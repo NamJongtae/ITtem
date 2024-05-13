@@ -7,8 +7,8 @@ export default function ChangePasswordModalFormBtns({ closeModal }: IProps) {
   const { formState } = useFormContext();
 
   const isDirty =
-    formState.dirtyFields["current-password"] ||
-    formState.dirtyFields["password"] ||
+    formState.dirtyFields["current-password"] &&
+    formState.dirtyFields["password"] &&
     formState.dirtyFields["password-check"];
 
   const isErrors =
