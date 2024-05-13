@@ -337,16 +337,19 @@ export async function kakaoSignin(
 export async function changePassword({
   email,
   password,
+  currentPassword,
   isFindPw,
 }: {
-  email: string;
+  email?: string;
   password: string;
+  currentPassword?: string;
   isFindPw?: boolean;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.patch("/api/auth/changePassword", {
       email,
       password,
+      currentPassword,
       isFindPw,
     });
     return response;
