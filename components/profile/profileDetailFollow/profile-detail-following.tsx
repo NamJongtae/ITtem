@@ -1,11 +1,25 @@
-import React from "react";
 import ProfileDetailFollowList from "./profile-detail-follow-list";
+import { ProfileData } from '@/types/authTypes';
 
-export default function ProfileDetailFollowing() {
+interface IProps {
+  profileData: ProfileData | undefined;
+  myProfileData: ProfileData | undefined;
+}
+
+export default function ProfileDetailFollowing({
+  profileData,
+  myProfileData,
+}: IProps) {
   return (
     <div className="mt-8 pb-8">
-      <h2 className="font-semibold border-b pb-3 mb-5">팔로잉 5명</h2>
-      <ProfileDetailFollowList />
+      <h2 className="font-semibold border-b pb-3 mb-5">
+        팔로잉 {profileData?.followings?.length || 0}명
+      </h2>
+      <ProfileDetailFollowList
+        isFollowers={false}
+        profileData={profileData}
+        myProfileData={myProfileData}
+      />
     </div>
   );
 }

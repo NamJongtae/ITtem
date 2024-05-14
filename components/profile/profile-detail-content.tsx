@@ -9,12 +9,14 @@ import { ProfileData } from "@/types/authTypes";
 interface IProps {
   profileMenu: ProfileMenu;
   profileData: ProfileData | undefined;
+  myProfileData: ProfileData | undefined;
   my?: boolean;
 }
 
 export default function ProfileDetailContent({
   profileMenu,
   profileData,
+  myProfileData,
   my,
 }: IProps) {
   switch (profileMenu) {
@@ -28,10 +30,20 @@ export default function ProfileDetailContent({
       return <ProfileDetailWish />;
     }
     case "팔로잉": {
-      return <ProfileDetailFollowing />;
+      return (
+        <ProfileDetailFollowing
+          profileData={profileData}
+          myProfileData={myProfileData}
+        />
+      );
     }
     case "팔로워": {
-      return <ProfileDetailFollower />;
+      return (
+        <ProfileDetailFollower
+          profileData={profileData}
+          myProfileData={myProfileData}
+        />
+      );
     }
     default: {
       return null;

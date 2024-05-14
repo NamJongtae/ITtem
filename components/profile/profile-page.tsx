@@ -40,19 +40,19 @@ export default function ProfilePage({ my }: IProps) {
     );
   }
   return (
-    (my ? myProfileData : profileData) && (
-      <>
-        <ProfileUserInfo
-          handleClickMenu={handleClickMenu}
-          profileData={my ? myProfileData : profileData}
-        />
-        <ProfileDetail
-          profileMenu={profileMenu}
-          handleClickMenu={handleClickMenu}
-          profileData={my ? myProfileData : profileData}
-          my={my}
-        />
-      </>
-    )
-  );
+        <>
+          <ProfileUserInfo
+            handleClickMenu={handleClickMenu}
+            profileData={my ? myProfileData : profileData}
+            myProfileData={myProfileData}
+          />
+          <ProfileDetail
+            profileMenu={profileMenu}
+            handleClickMenu={handleClickMenu}
+            profileData={my ? myProfileData : profileData}
+            myProfileData={myProfileData}
+            my={my}
+          />
+        </>
+      );
 }

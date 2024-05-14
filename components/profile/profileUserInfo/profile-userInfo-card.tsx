@@ -14,11 +14,13 @@ const ReactStars = dynamic(() => import("react-stars"), {
 interface IProps {
   handleClickMenu: (menu: ProfileMenu) => void;
   profileData: ProfileData | undefined;
+  myProfileData: ProfileData | undefined;
 }
 
 export default function ProfileUserInfoCard({
   handleClickMenu,
   profileData,
+  myProfileData,
 }: IProps) {
   const {
     isOpenModal: isOpenProfileEditModal,
@@ -90,7 +92,7 @@ export default function ProfileUserInfoCard({
           <span className="text-sm">
             상품판매 {profileData?.saleCount || 0}회
           </span>
-          {profileData?.uid ? (
+          {myProfileData?.uid === profileData?.uid ? (
             <>
               <button
                 type="button"
