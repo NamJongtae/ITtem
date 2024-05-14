@@ -1,10 +1,10 @@
 import axios, { AxiosError, isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import { regenerateAccessToken } from "./api/auth";
 import { RegenerateAccessTokenResponseData } from "@/types/apiTypes";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
 const customAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: BASE_URL,
 });
 
 customAxios.interceptors.response.use(
@@ -19,15 +19,24 @@ customAxios.interceptors.response.use(
         error.response?.data.message === "만료된 토큰이에요."
       ) {
         try {
-          await regenerateAccessToken();
-          if (originalRequest) return customAxios(originalRequest);
+          const cookies = originalRequest?.headers["Cookie"];
+          const response = await axios(`${BASE_URL}/api/auth/refreshToken`, {
+            headers: {
+              Cookie: cookies,
+            },
+          });
+          const reposeCookies = response.config.headers["Cookie"];
+          originalRequest!.headers["Cookie"] = reposeCookies;
+          if (originalRequest) return axios(originalRequest);
         } catch (refreshError) {
           if (isAxiosError<RegenerateAccessTokenResponseData>(refreshError)) {
             if (refreshError.response?.status === 401) {
               toast.warn("로그인이 만료됬어요.", {
                 autoClose: 3000,
               });
-              location.replace("/signin");
+              if (typeof window !== "undefined") {
+                window.location.replace("/signin");
+              }
             }
             return Promise.reject(refreshError);
           }
