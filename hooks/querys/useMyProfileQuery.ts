@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export default function useMyProfileQuery() {
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryFn: async () => {
       const response = await getMyProfile();
       return response.data.profile;
@@ -27,5 +27,5 @@ export default function useMyProfileQuery() {
     }
   }, [isError]);
   
-  return { myProfileData: data, loadMyProfileLoading: isLoading };
+  return { myProfileData: data, loadMyProfileLoading: isPending };
 }
