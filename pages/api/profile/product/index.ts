@@ -11,7 +11,7 @@ export default async function handler(
       const { productIds } = req.body;
       const { cursor, category, limit } = req.query;
 
-      if (!productIds.length) {
+      if (!productIds) {
         res.status(422).json({ message: "유저 상품 아이디 목록이 없어요." });
         return;
       }
