@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   const cookie = context.req.headers.cookie;
 
-  if (session) {
+  if (session.refreshToken) {
     await queryClient.prefetchQuery({
       queryKey: MY_PROFILE_QUERY_KEY,
       queryFn: async () => {
@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
+          queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
           console.error(error);
         }
       },
