@@ -37,9 +37,7 @@ export default function useProfileProductListInfiniteQuery({
     | undefined;
 
   const uid =
-    productListType === "MY_PROFILE"
-      ? myProfile?.uid || ""
-      : router.query?.uid || "";
+    productListType === "MY_PROFILE" ? myProfile?.uid : router.query?.uid || "";
 
   const {
     data: profileProductListData,
@@ -63,9 +61,7 @@ export default function useProfileProductListInfiniteQuery({
       return response.data.products;
     },
     enabled:
-      (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
-      productIds.length > 0 &&
-      !!uid,
+      (productListType === "PROFILE" || productListType === "MY_PROFILE") && !!uid,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
