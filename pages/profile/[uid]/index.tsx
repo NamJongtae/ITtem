@@ -1,6 +1,11 @@
 import ProfilePage from "@/components/profile/profile-page";
-import { REFRESH_TOKEN_KEY, getProfileQueryKey } from "@/constants/constant";
+import {
+  MY_PROFILE_QUERY_KEY,
+  REFRESH_TOKEN_KEY,
+  getProfileQueryKey,
+} from "@/constants/constant";
 import { getUserProfile } from "@/lib/api/auth";
+import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
 import { IronSessionData } from "@/types/apiTypes";
@@ -10,18 +15,20 @@ import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
 
 export default function UserProfile() {
-  return <ProfilePage />;
+  return <ProfilePage my={false} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const uid = context.query.uid;
+  const queryClient = new QueryClient();
   const session = await getIronSession<IronSessionData>(
     context.req,
     context.res,
     sessionOptions
   );
+  const cookie = context.req.headers.cookie;
 
-  if (session) {
+  if (session.refreshToken) {
     const refreshToken = session.refreshToken;
     const decodeToken = verifyToken(refreshToken, REFRESH_TOKEN_KEY);
     const myUid = decodeToken?.data?.user.uid;
@@ -36,9 +43,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
       }
     }
+    
+    await queryClient.prefetchQuery({
+      queryKey: MY_PROFILE_QUERY_KEY,
+      queryFn: async () => {
+        try {
+          const response = await customAxios("/api/profile", {
+            headers: {
+              Cookie: cookie,
+            },
+          });
+          return response.data.profile;
+        } catch (error) {
+          queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+          console.error(error);
+        }
+      },
+    });
   }
-
-  const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: getProfileQueryKey(uid as string),
