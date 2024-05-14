@@ -83,8 +83,14 @@ export const getProfileProductListQuerykey = (
   return ["profile", uid, "product", category];
 };
 
-export const getMyProfileProductListQuerykey = (
-  category: string = "전체"
-) => {
+export const getMyProfileProductListQuerykey = (category: string = "전체") => {
   return ["profile", "my", "product", category];
+};
+
+export const getFollowersQueryKey = (uid: string) => {
+  return ["profile", uid, "followers"];
+};
+
+export const getFollowingsQueryKey = (uid: string) => {
+  return ["profile", uid, "followings"];
 };
