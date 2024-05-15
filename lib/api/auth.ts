@@ -14,16 +14,13 @@ import {
   SignoutResposeData,
   SignupResponseData,
   VerifyEmailResponseData,
+  WishResposeData,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import {
-  AuthData,
-  ProfileEditData,
-  SignupData,
-} from "@/types/authTypes";
+import { AuthData, ProfileEditData, SignupData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -457,6 +454,28 @@ export async function getFollowings({
       }`,
       {
         userIds,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProfileWish({
+  wishProductIds,
+  cursor,
+  limit = 10,
+}: {
+  wishProductIds: string[];
+  cursor: unknown;
+  limit?: number;
+}): Promise<AxiosResponse<WishResposeData>> {
+  try {
+    const response = await customAxios.post(
+      `/api/profile/wish?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
+      {
+        wishProductIds,
       }
     );
     return response;
