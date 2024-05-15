@@ -94,3 +94,5 @@ export const getFollowersQueryKey = (uid: string) => {
 export const getFollowingsQueryKey = (uid: string) => {
   return ["profile", uid, "followings"];
 };
+
+export const MY_PROFILE_WISH_QUERY_KEY = ["profile", "my", "wish"];
