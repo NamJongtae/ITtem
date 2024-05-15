@@ -27,7 +27,9 @@ export default function ProfileDetailContent({
       return <ProfileDetailReview />;
     }
     case "찜": {
-      return <ProfileDetailWish />;
+      return (
+        <ProfileDetailWish wishProductIds={myProfileData?.wishProductIds} />
+      );
     }
     case "팔로잉": {
       return (
