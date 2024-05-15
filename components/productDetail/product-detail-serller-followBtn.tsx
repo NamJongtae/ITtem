@@ -1,7 +1,5 @@
-import useFollowMutate from "@/hooks/querys/useFollowMutate";
+import useProductDetailFollowBtn from "@/hooks/productDetail/useProductDetailFollowBtn";
 import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
-import useUnfollowMutate from "@/hooks/querys/useUnfollowMutate";
-import { toast } from "react-toastify";
 
 interface IProps {
   uid: string;
@@ -12,24 +10,12 @@ export default function ProductDetailSerllerFollowBtn({
   uid,
   authFollowers,
 }: IProps) {
-  const { followMutate } = useFollowMutate(uid);
-  const { unfollowMutate } = useUnfollowMutate(uid);
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
-  const isFollow =
-    !!myProfileData?.followings?.includes(uid) &&
-    !!authFollowers.includes(myProfileData?.uid);
-
-  const handleClickfollow = () => {
-    if (!myProfileData) {
-      toast.warn("로그인이 필요해요.");
-      return;
-    }
-    if (isFollow) {
-      unfollowMutate();
-    } else {
-      followMutate();
-    }
-  };
+  const { isFollow, handleClickfollow } = useProductDetailFollowBtn({
+    uid,
+    authFollowers,
+    myProfileData,
+  });
 
   return (
     !loadMyProfileLoading && (
