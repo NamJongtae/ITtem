@@ -120,3 +120,8 @@ export interface FollowingsResponseData {
   followings: ProfileData[];
   message: string;
 }
+
+export interface WishResposeData {
+  products: ProductData[];
+  message: string;
+}
