@@ -483,3 +483,16 @@ export async function getProfileWish({
     throw error;
   }
 }
+
+export async function deleteProfileWish(
+  wishProductIds: string[]
+): Promise<AxiosResponse<WishResposeData>> {
+  try {
+    const response = await customAxios.delete("/api/profile/wish", {
+      data: { wishProductIds },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
