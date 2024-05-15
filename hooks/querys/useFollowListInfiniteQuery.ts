@@ -50,7 +50,7 @@ export default function useFollowListInfiniteQuery({
     enabled: !!uid,
     retry: 0,
     getNextPageParam: (lastPage) => {
-      const nextCursor = lastPage[lastPage.length - 1].uid;
+      const nextCursor = lastPage[lastPage.length - 1]?.uid;
       if (lastPage.length < limit) {
         return undefined;
       }
