@@ -29,7 +29,7 @@ export default async function handler(
           $match: {
             _id: {
               $in: objectIdArray,
-              $lt: new mongoose.Types.ObjectId(cursor as string),
+              $gt: new mongoose.Types.ObjectId(cursor as string),
             },
           },
         };
