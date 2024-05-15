@@ -21,8 +21,13 @@ export default async function handler(
       const { wishProductIds } = req.body;
       const { cursor, limit } = req.query;
 
-      if (!wishProductIds || wishProductIds.length === 0) {
+      if (!wishProductIds) {
         res.status(422).json({ message: "찜 목록 ID가 필요합니다." });
+        return;
+      }
+
+      if (!wishProductIds.length) {
+        res.status(422).json({ message: "찜 목록이 없어요." });
         return;
       }
 
