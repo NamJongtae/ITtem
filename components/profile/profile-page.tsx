@@ -43,13 +43,13 @@ export default function ProfilePage({ my }: IProps) {
         <>
           <ProfileUserInfo
             handleClickMenu={handleClickMenu}
-            profileData={my ? myProfileData : profileData}
+            userProfileData={my ? myProfileData : profileData}
             myProfileData={myProfileData}
           />
           <ProfileDetail
             profileMenu={profileMenu}
             handleClickMenu={handleClickMenu}
-            profileData={my ? myProfileData : profileData}
+            userProfileData={my ? myProfileData : profileData}
             myProfileData={myProfileData}
             my={my}
           />

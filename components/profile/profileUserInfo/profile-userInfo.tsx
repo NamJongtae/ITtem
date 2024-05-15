@@ -5,13 +5,13 @@ import { ProfileData } from "@/types/authTypes";
 
 interface IProps {
   handleClickMenu: (menu: ProfileMenu) => void;
-  profileData: ProfileData | undefined;
+  userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
 }
 
 export default function ProfileUserInfo({
   handleClickMenu,
-  profileData,
+  userProfileData,
   myProfileData,
 }: IProps) {
   return (
@@ -20,10 +20,10 @@ export default function ProfileUserInfo({
       <div className="flex flex-col gap-5 md:flex-row border py-5">
         <ProfileUserInfoCard
           handleClickMenu={handleClickMenu}
-          profileData={profileData}
+          userProfileData={userProfileData}
           myProfileData={myProfileData}
         />
-        <ProfileUserInfoIntroduce introuduce={profileData?.introduce} />
+        <ProfileUserInfoIntroduce introuduce={userProfileData?.introduce} />
       </div>
     </div>
   );

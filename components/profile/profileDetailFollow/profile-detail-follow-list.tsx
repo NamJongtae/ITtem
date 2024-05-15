@@ -1,12 +1,8 @@
-import Image from "next/image";
-import React from "react";
 import dynamic from "next/dynamic";
 import Empty from "@/components/commons/Empty";
 import InfiniteScroll from "react-infinite-scroller";
 import { isAxiosError } from "axios";
-import ProductListPlaceholder from "@/components/commons/productList/product-list-placeholder";
 import useFollowListInfiniteQuery from "@/hooks/querys/useFollowListInfiniteQuery";
-import Link from "next/link";
 import { ProfileData } from "@/types/authTypes";
 import ProfileDetailFollowItem from "./profile-detail-follow-item";
 import FollowListSkeletonUI from "./follow-list-skeletonUI";
@@ -17,18 +13,18 @@ const ReactStars = dynamic(() => import("react-stars"), {
 
 interface IProps {
   isFollowers: boolean;
-  profileData: ProfileData | undefined;
+  userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
 }
 
 export default function ProfileDetailFollowList({
   isFollowers,
-  profileData,
+  userProfileData,
   myProfileData,
 }: IProps) {
   const userIds = isFollowers
-    ? profileData?.followers
-    : profileData?.followings;
+    ? userProfileData?.followers
+    : userProfileData?.followings;
   const {
     data,
     isFetchingNextPage,
@@ -39,12 +35,12 @@ export default function ProfileDetailFollowList({
   } = useFollowListInfiniteQuery({
     isFollowers,
     userIds,
-    uid: profileData?.uid,
+    uid: userProfileData?.uid,
   });
 
   return (
     <>
-      {error && !data ? (
+      {error && !data || data?.length===0 ? (
         <Empty
           message={
             isAxiosError<{ message: string }>(error)
@@ -67,6 +63,7 @@ export default function ProfileDetailFollowList({
               <ProfileDetailFollowItem
                 key={item.uid}
                 data={item}
+                userProfileData={userProfileData}
                 myProfileData={myProfileData}
               />
             ))

@@ -8,20 +8,20 @@ import { ProfileData } from "@/types/authTypes";
 
 interface IProps {
   profileMenu: ProfileMenu;
-  profileData: ProfileData | undefined;
+  userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
   my?: boolean;
 }
 
 export default function ProfileDetailContent({
   profileMenu,
-  profileData,
+  userProfileData,
   myProfileData,
   my,
 }: IProps) {
   switch (profileMenu) {
     case "판매상품": {
-      return <ProfileDetailProduct profileData={profileData} my={my} />;
+      return <ProfileDetailProduct userProfileData={userProfileData} my={my} />;
     }
     case "거래후기": {
       return <ProfileDetailReview />;
@@ -32,7 +32,7 @@ export default function ProfileDetailContent({
     case "팔로잉": {
       return (
         <ProfileDetailFollowing
-          profileData={profileData}
+          userProfileData={userProfileData}
           myProfileData={myProfileData}
         />
       );
@@ -40,7 +40,7 @@ export default function ProfileDetailContent({
     case "팔로워": {
       return (
         <ProfileDetailFollower
-          profileData={profileData}
+          userProfileData={userProfileData}
           myProfileData={myProfileData}
         />
       );

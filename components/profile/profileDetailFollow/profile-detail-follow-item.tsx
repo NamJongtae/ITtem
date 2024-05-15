@@ -10,11 +10,13 @@ const ReactStars = dynamic(() => import("react-stars"), {
 
 interface IProps {
   data: ProfileData;
+  userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
 }
 
 export default function ProfileDetailFollowItem({
   data,
+  userProfileData,
   myProfileData,
 }: IProps) {
   return (
@@ -57,7 +59,8 @@ export default function ProfileDetailFollowItem({
       </div>
       <ProfileDetailFollowBtn
         myProfileData={myProfileData}
-        profileData={data}
+        userProfileData={userProfileData}
+        followProfileData={data}
       />
     </li>
   );

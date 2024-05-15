@@ -6,7 +6,7 @@ import { ProfileData } from "@/types/authTypes";
 interface IProps {
   profileMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
-  profileData: ProfileData | undefined;
+  userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
   my?: boolean;
 }
@@ -14,7 +14,7 @@ interface IProps {
 export default function ProfileDetail({
   profileMenu,
   handleClickMenu,
-  profileData,
+  userProfileData,
   myProfileData,
   my,
 }: IProps) {
@@ -27,7 +27,7 @@ export default function ProfileDetail({
       />
       <ProfileDetailContent
         profileMenu={profileMenu}
-        profileData={profileData}
+        userProfileData={userProfileData}
         myProfileData={myProfileData}
         my={my}
       />
