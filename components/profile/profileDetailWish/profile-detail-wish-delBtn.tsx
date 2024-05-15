@@ -1,8 +1,28 @@
+import useDeleteProfileWishMutate from "@/hooks/querys/useDeleteProfileWishMutate";
+import { toast } from "react-toastify";
+
 interface IProps {
+  selectedWish: string[];
   handleSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function ProfileDetailWishDelBtn({ handleSelectAll }: IProps) {
+export default function ProfileDetailWishDelBtn({
+  selectedWish,
+  handleSelectAll,
+}: IProps) {
+  const { deleteWishMutate } = useDeleteProfileWishMutate();
+
+  const handleClickDelete = () => {
+    if (!selectedWish.length) {
+      toast.warn("삭제 할 목록이 없어요.");
+      return;
+    }
+    const isDelete = confirm("정말 삭제하시겠어요?");
+    if (isDelete) {
+      deleteWishMutate(selectedWish);
+    }
+  };
+
   return (
     <div className="flex items-center w-full gap-2 mb-5">
       <div className="inline-flex items-center">
@@ -32,9 +52,16 @@ export default function ProfileDetailWishDelBtn({ handleSelectAll }: IProps) {
               ></path>
             </svg>
           </div>
+          <span className="sr-only">전체삭제</span>
         </label>
       </div>
-      <button className="font-medium betterhover:hover:text-red-500">선택 삭제</button>
+      <button
+        type="button"
+        onClick={handleClickDelete}
+        className="font-medium betterhover:hover:text-red-500"
+      >
+        선택 삭제
+      </button>
     </div>
   );
 }

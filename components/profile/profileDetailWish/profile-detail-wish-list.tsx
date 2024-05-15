@@ -44,13 +44,16 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
 
   return (
     <>
-      <ProfileDetailWishDelBtn handleSelectAll={handleSelectAll} />
+      <ProfileDetailWishDelBtn
+        selectedWish={selectedWish}
+        handleSelectAll={handleSelectAll}
+      />
       {(error && !data) || data?.length === 0 ? (
         <Empty
           message={
             isAxiosError<{ message: string }>(error)
               ? error.response?.data.message || ""
-              : ""
+              : "찜 목록이 없어요."
           }
         />
       ) : null}
