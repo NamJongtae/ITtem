@@ -9,6 +9,7 @@ import {
   NicknameDuplicationResponseData,
   ProfileResponseData,
   RegenerateAccessTokenResponseData,
+  ReviewsResponseData,
   SessionCookiesResponseData,
   SigninResponseData,
   SignoutResposeData,
@@ -491,6 +492,27 @@ export async function deleteProfileWish(
     const response = await customAxios.delete("/api/profile/wish", {
       data: { wishProductIds },
     });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProfileReviews({
+  uid,
+  cursor,
+  limit = 10,
+}: {
+  uid: string;
+  cursor: unknown;
+  limit?: number;
+}): Promise<AxiosResponse<ReviewsResponseData>> {
+  try {
+    const response = await customAxios(
+      `/api/profile/${uid}/review?limit=${limit}${
+        cursor ? `&cursor=${cursor}` : ""
+      }`
+    );
     return response;
   } catch (error) {
     throw error;
