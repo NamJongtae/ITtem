@@ -55,11 +55,16 @@ export default async function handler(
         },
         {
           $lookup: {
-            from: "reviewScore",
-            localField: "uid",
-            foreignField: "uid",
-            as: "reviewInfo",
-          },
+            from: "reviewScores", 
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$uid", product.uid as string] } 
+                }
+              }
+            ],
+            as: "reviewInfo" 
+          }
         },
         {
           $unwind: {
@@ -72,7 +77,7 @@ export default async function handler(
             reviewPercentage: {
               $cond: {
                 if: {
-                  $eq: [{ $ifNull: ["$reviewInfo.totalScore", null] }, null],
+                  $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null],
                 },
                 then: 0,
                 else: {
@@ -81,7 +86,7 @@ export default async function handler(
                       $multiply: [
                         {
                           $divide: [
-                            "$reviewInfo.totalScore",
+                            "$reviewInfo.totalReviewScore",
                             "$reviewInfo.totalReviewCount",
                           ],
                         },
