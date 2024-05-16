@@ -17,7 +17,9 @@ export default function ProductListError({ productListType, error }: IProps) {
       message={`${
         productListType === "TODAY"
           ? "오늘의 상품이 존재하지 않아요."
-          : productListType === "CATEGORY" || productListType === "PROFILE"
+          : productListType === "CATEGORY" ||
+            productListType === "PROFILE" ||
+            productListType === "MY_PROFILE"
           ? "상품이 존재하지 않아요."
           : `${'"' + keyword + '"'}에 대한 검색결과가 없어요.`
       }`}
