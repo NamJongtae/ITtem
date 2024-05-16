@@ -50,6 +50,14 @@ export const REFRESH_TOKEN_KEY = process.env
 export const ACCESS_TOKEN_EXP = 60;
 export const REFRESH_TOKEN_EXP = 3600;
 
+export const REVIEW_TAGS = [
+  "상품 정보와 실제 상품이 동일해요.",
+  "친절해요.",
+  "배송이 빨라요.",
+  "채팅 답변이 빨라요.",
+  "제품이 깔끔해요.",
+];
+
 export const PRODUCT_TODAY_LIST_QUERY_KEY = ["productList", "today"];
 
 export const getCategoryProductListQueryKey = (
