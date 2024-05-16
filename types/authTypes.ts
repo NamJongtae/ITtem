@@ -75,3 +75,19 @@ export interface ProfileEditData {
   nickname: string;
   introduce: string;
 }
+
+export interface ReviewData {
+  _id: string;
+  reviewScore: number;
+  productName: string;
+  productId: string;
+  content: string;
+  seller: string;
+  createdAt: string;
+  tags: number[];
+  reviewer: {
+    nickname: string;
+    profileImg: string;
+    uid: string;
+  };
+}

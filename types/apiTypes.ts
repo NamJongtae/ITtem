@@ -1,6 +1,6 @@
 import { IronSession } from "iron-session";
 import { ProductData, ProductDetailData } from "./productTypes";
-import { AuthData, ProfileData } from "./authTypes";
+import { AuthData, ProfileData, ReviewData } from "./authTypes";
 
 export interface VerifyEmailResponseData {
   message: string;
@@ -123,5 +123,10 @@ export interface FollowingsResponseData {
 
 export interface WishResposeData {
   products: ProductData[];
+  message: string;
+}
+
+export interface ReviewsResponseData {
+  reviews: ReviewData[];
   message: string;
 }
