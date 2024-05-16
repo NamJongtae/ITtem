@@ -30,54 +30,44 @@ export default async function handler(
         },
         {
           $lookup: {
-            from: "reviewScores", 
+            from: "reviewScores",
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$uid", myUid as string] } 
-                }
-              }
+                  $expr: { $eq: ["$uid", myUid as string] },
+                },
+              },
+              {
+                $addFields: {
+                  reviewPercentage: {
+                    $round: [
+                      {
+                        $multiply: [
+                          {
+                            $divide: ["$totalReviewScore", "$totalReviewCount"],
+                          },
+                          20,
+                        ],
+                      },
+                      1,
+                    ],
+                  },
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                  uid: 0,
+                },
+              },
             ],
-            as: "reviewInfo" 
-          }
+            as: "reviewInfo",
+          },
         },
         {
           $unwind: {
             path: "$reviewInfo",
             preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $addFields: {
-            reviewPercentage: {
-              $cond: {
-                if: {
-                  $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null],
-                },
-                then: 0,
-                else: {
-                  $round: [
-                    {
-                      $multiply: [
-                        {
-                          $divide: [
-                            {
-                              $divide: [
-                                "$reviewInfo.totalReviewScore",
-                                "$reviewInfo.totalReviewCount",
-                              ],
-                            },
-                            5,
-                          ],
-                        },
-                        100,
-                      ],
-                    },
-                    1,
-                  ],
-                },
-              },
-            },
           },
         },
         {
@@ -100,6 +90,7 @@ export default async function handler(
 
       const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
       delete profile._id;
+
       res.status(200).json({
         message: "프로필 조회에 성공했어요.",
         profile,

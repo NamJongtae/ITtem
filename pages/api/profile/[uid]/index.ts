@@ -30,61 +30,54 @@ export default async function handler(
         },
         {
           $lookup: {
-            from: "reviewScores", 
+            from: "reviewScores",
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$uid", uid as string] } 
-                }
-              }
+                  $expr: { $eq: ["$uid", uid as string] },
+                },
+              },
+              {
+                $addFields: {
+                  reviewPercentage: {
+                    $round: [
+                      {
+                        $multiply: [
+                          {
+                            $divide: ["$totalReviewScore", "$totalReviewCount"],
+                          },
+                          20,
+                        ],
+                      },
+                      1,
+                    ],
+                  },
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                  uid: 0,
+                },
+              },
             ],
-            as: "reviewInfo" 
-          }
+            as: "reviewInfo",
+          },
         },
         {
           $unwind: {
             path: "$reviewInfo",
-            preserveNullAndEmptyArrays: true, // 배열이 비어있거나 없는 경우도 문서 유지
-          },
-        },
-        {
-          $addFields: {
-            reviewPercentage: {
-              $cond: {
-                if: {
-                  $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null],
-                },
-                then: 0,
-                else: {
-                  $round: [
-                    {
-                      $multiply: [
-                        {
-                          $divide: [
-                            {
-                              $divide: [
-                                "$reviewInfo.totalReviewScore",
-                                "$reviewInfo.totalReviewCount",
-                              ],
-                            },
-                            5,
-                          ],
-                        },
-                        100,
-                      ],
-                    },
-                    1, // 소수점 첫째 자리까지 반올림
-                  ],
-                },
-              },
-            },
+            preserveNullAndEmptyArrays: true,
           },
         },
         {
           $project: {
+            email: 0,
             password: 0,
             __v: 0,
-            loginType:0
+            loginType: 0,
+            createdAt: 0,
+            chatRoomList: 0,
           },
         },
       ];
@@ -97,6 +90,8 @@ export default async function handler(
       }
 
       const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
+      delete profile._id;
+
       res
         .status(200)
         .json({ message: "유저 프로필 조회에 성공했어요.", profile });
