@@ -55,16 +55,16 @@ export default async function handler(
         },
         {
           $lookup: {
-            from: "reviewScores", 
+            from: "reviewScores",
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$uid", product.uid as string] } 
-                }
-              }
+                  $expr: { $eq: ["$uid", product.uid as string] },
+                },
+              },
             ],
-            as: "reviewInfo" 
-          }
+            as: "reviewInfo",
+          },
         },
         {
           $unwind: {
@@ -77,7 +77,10 @@ export default async function handler(
             reviewPercentage: {
               $cond: {
                 if: {
-                  $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null],
+                  $eq: [
+                    { $ifNull: ["$reviewInfo.totalReviewScore", null] },
+                    null,
+                  ],
                 },
                 then: 0,
                 else: {
@@ -153,15 +156,10 @@ export default async function handler(
         },
         {
           $project: {
-            _id: 1,
-            email: 1,
             nickname: 1,
             profileImg: 1,
-            followers: 1,
-            followings: 1,
-            productIds: 1,
-            reviewPercentage: 1,
             recentProducts: 1,
+            followers: 1,
           },
         },
       ];
