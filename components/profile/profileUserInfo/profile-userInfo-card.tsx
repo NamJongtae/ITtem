@@ -56,7 +56,7 @@ export default function ProfileUserInfoCard({
           <ReactStars
             size={20}
             half
-            value={((userProfileData?.reviewPercentage || 0) / 100) * 5}
+            value={((userProfileData?.reviewInfo?.reviewPercentage || 0) / 100) * 5}
             color1="#ddd"
             color2="#fec323"
             edit={false}

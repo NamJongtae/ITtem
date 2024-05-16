@@ -22,9 +22,9 @@ export default function ProfileUserInfoCardProductInfo({
 
         <button onClick={() => handleClickMenu("거래후기")}>
           평가{" "}
-          {userProfileData?.reviewPercentage === 0
-            ? "없음"
-            : `${userProfileData?.reviewPercentage}%`}
+          {userProfileData?.reviewInfo?.reviewPercentage
+            ? `${userProfileData?.reviewInfo?.reviewPercentage}%`
+            : "없음"}
         </button>
       </div>
       <span className="text-sm">

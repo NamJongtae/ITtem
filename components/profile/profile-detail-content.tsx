@@ -24,7 +24,7 @@ export default function ProfileDetailContent({
       return <ProfileDetailProduct userProfileData={userProfileData} my={my} />;
     }
     case "거래후기": {
-      return <ProfileDetailReview />;
+      return <ProfileDetailReview reviewInfo={userProfileData?.reviewInfo} />;
     }
     case "찜": {
       return (
