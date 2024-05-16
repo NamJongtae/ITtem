@@ -38,6 +38,19 @@ export interface AuthData {
   profileImg: string;
 }
 
+export type ReviewTagsData =
+  | "상품 정보와 실제 상품이 동일해요"
+  | "친절해요"
+  | "배송이 빨라요"
+  | "채팅 답변이 빨라요"
+  | "제품이 깔끔해요";
+
+export interface ReivewInfoData {
+  totalReviewScore: number;
+  totalReviewCount: number;
+  reviewPercentage: number;
+  tags: number[];
+}
 export interface ProfileData {
   uid: string;
   email: string;
@@ -52,6 +65,7 @@ export interface ProfileData {
   saleCount: number;
   purchaseCount: number;
   transactionCount: number;
+  reviewInfo?: ReivewInfoData;
   reviewPercentage: number;
 }
 
