@@ -1,3 +1,4 @@
+import dbConnect from '@/lib/db';
 import User from "@/lib/db/models/User";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -17,6 +18,8 @@ export default async function handler(
           .json({ message: "팔로워 유저 아이디 목록이 존재하지 않아요." });
         return;
       }
+
+      await dbConnect();
 
       const pageLimit = parseInt(limit as string, 10) || 10;
       const objectIdArray = userIds.map(

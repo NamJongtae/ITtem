@@ -1,3 +1,4 @@
+import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -15,6 +16,8 @@ export default async function handler(
         res.status(422).json({ message: "유저 상품 아이디 목록이 없어요." });
         return;
       }
+
+      await dbConnect();
 
       const todayStart = new Date();
       const cursorDate = cursor ? new Date(cursor as string) : todayStart;

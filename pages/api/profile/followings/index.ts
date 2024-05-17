@@ -1,3 +1,4 @@
+import dbConnect from '@/lib/db';
 import User from "@/lib/db/models/User";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -18,6 +19,8 @@ export default async function handler(
         return;
       }
 
+      await dbConnect();
+      
       const pageLimit = parseInt(limit as string, 10) || 10;
       const objectIdArray = userIds.map(
         (id: string) => new mongoose.Types.ObjectId(id)
@@ -110,7 +113,7 @@ export default async function handler(
         .sort({ _id: 1 });
 
       if (!followings.length) {
-        res.status(404).json({ message: "팔로잉 목록이 존재하지 않아요."});
+        res.status(404).json({ message: "팔로잉 목록이 존재하지 않아요." });
         return;
       }
 

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Product from "@/lib/db/models/Product";
 import { checkAuthorization } from "@/lib/server";
 import User from "@/lib/db/models/User";
+;import dbConnect from "@/lib/db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,7 +33,10 @@ export default async function handler(
         return;
       }
 
+      await dbConnect();
+
       const pageLimit = parseInt(limit as string, 10) || 10;
+
       const objectIdArray = wishProductIds.map(
         (id: string) => new mongoose.Types.ObjectId(id)
       );
