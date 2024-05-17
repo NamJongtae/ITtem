@@ -1,6 +1,6 @@
 import ProductDetailPage from "@/components/productDetail/product-detail";
 import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
-import { getProduct } from "@/lib/api/product";
+import { getProduct, incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
@@ -23,6 +23,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = context.req.headers.cookie;
 
   if (productId) {
+    
+    try {
+      await incrementViewCount(productId as string);
+    } catch (error) {
+      console.error(error);
+    }
+
     await queryClient.prefetchQuery({
       queryKey: getProductQueryKey(productId as string),
       queryFn: async () => {
