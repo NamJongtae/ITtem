@@ -18,7 +18,8 @@ export default function ProductDetailSerllerFollowBtn({
   });
 
   return (
-    !loadMyProfileLoading && (
+    !loadMyProfileLoading &&
+    uid !== myProfileData?.uid && (
       <button
         type="button"
         onClick={handleClickfollow}
