@@ -157,6 +157,19 @@ export async function reportProduct(
   }
 }
 
+export async function incrementViewCount(
+  productId: string
+): Promise<AxiosResponse<{ message: string; viewCount: number }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/view`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function addWish(
   id: string
 ): Promise<AxiosResponse<{ message: string }>> {
