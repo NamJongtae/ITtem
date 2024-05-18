@@ -9,6 +9,7 @@ import {
   ProductDetailResponseData,
   ProductListResponseData,
   ProductResponseData,
+  PurchaseProductResponseData,
 } from "@/types/apiTypes";
 
 export async function getTodayProductList(
@@ -161,9 +162,7 @@ export async function incrementViewCount(
   productId: string
 ): Promise<AxiosResponse<{ message: string; viewCount: number }>> {
   try {
-    const response = await customAxios.patch(
-      `/api/product/${productId}/view`
-    );
+    const response = await customAxios.patch(`/api/product/${productId}/view`);
     return response;
   } catch (error) {
     throw error;
@@ -186,6 +185,19 @@ export async function deleteWish(
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.delete(`/api/product/${id}/wish`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseProduct(
+  productId: string
+): Promise<AxiosResponse<PurchaseProductResponseData>> {
+  try {
+    const response = await customAxios.post(
+      `/api/product/${productId}/purchase`
+    );
     return response;
   } catch (error) {
     throw error;
