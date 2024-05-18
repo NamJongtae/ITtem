@@ -103,3 +103,66 @@ export type ProductListType =
   | "SEARCH"
   | "PROFILE"
   | "MY_PROFILE";
+
+export interface PurchaseTradingData {
+  _id: string;
+  buyer: string;
+  productId: string;
+  purchaseStartDate: string;
+  purchaseEndDate?: string;
+  status: TradingStatus;
+  process: PurchaseTradingProcess;
+  cancelReason?: string;
+  cancelStartDate?: string;
+  cancelEndDate?: string;
+  refundReason?: string;
+  refundStartDate?: string;
+  refundEndDate?: string;
+}
+
+export const enum TradingStatus {
+  TRADING = "TRADING",
+  CANCEL = "CANCEL",
+  REFUND = "REFUND",
+  END = "END",
+}
+
+export const enum SalesTradingProcess {
+  판매중 = "판매중",
+  구매요청확인 = "구매요청확인",
+  상품전달확인 = "상품전달확인",
+  구매자상품인수중 = "구매자상품인수중",
+  거래완료 = "거래완료",
+}
+
+export const enum PurchaseTradingProcess {
+  구매요청 = "구매요청",
+  판매자확인중 = "판매자확인중",
+  상품전달중 = "상품전달중",
+  상품인수확인 = "상품인수확인",
+  거래완료 = "거래완료",
+}
+
+export const enum PurchaseCancelProcess {
+  취소요청 = "취소요청",
+  거래취소 = "거래취소",
+}
+
+export const enum SalesCancelProcess {
+  취소요청확인 = "취소요청확인",
+  거래취소 = "거래취소",
+}
+
+export const enum PurchaseRefundProcess {
+  환불요청확인 = "환불요청확인",
+  환불상품전달확인 = "환불상품전달확인",
+  판매자환불승인확인중 = "판매자환불승인확인중",
+  환불완료 = "환불완료",
+}
+
+export const enum SalesRefeundProcess {
+  판매자확인중 = "판매자확인중",
+  환불상품전달중 = "환불상품전달중",
+  환불상품인수확인 = "환불상품인수확인",
+  환불완료 = "환불완료",
+}
