@@ -1,13 +1,28 @@
+import { ProductStatus } from "@/types/productTypes";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
-export default function ProductDetailEditBtn() {
+interface IProps {
+  productStatus: ProductStatus | undefined;
+}
+
+export default function ProductDetailEditBtn({ productStatus }: IProps) {
   const router = useRouter();
   const productId = router.query?.productId;
 
   const handleClickEdit = () => {
+    if (productStatus === "trading") {
+      toast.warn("거래중인 상품은 수정할 수 없어요.");
+      return;
+    }
+    if (productStatus === "soldout") {
+      toast.warn("판매된 상품은 수정할 수 없어요.");
+      return;
+    }
     router.push(`/product/${productId}/edit`);
   };
+  
   return (
     <button
       type="button"
