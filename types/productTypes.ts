@@ -145,12 +145,12 @@ export const enum PurchaseTradingProcess {
 
 export const enum PurchaseCancelProcess {
   취소요청 = "취소요청",
-  거래취소 = "거래취소",
+  취소완료 = "취소완료",
 }
 
 export const enum SalesCancelProcess {
   취소요청확인 = "취소요청확인",
-  거래취소 = "거래취소",
+  취소완료 = "취소완료",
 }
 
 export const enum PurchaseRefundProcess {
@@ -160,7 +160,7 @@ export const enum PurchaseRefundProcess {
   환불완료 = "환불완료",
 }
 
-export const enum SalesRefeundProcess {
+export const enum SalesRefundProcess {
   판매자확인중 = "판매자확인중",
   환불상품전달중 = "환불상품전달중",
   환불상품인수확인 = "환불상품인수확인",
