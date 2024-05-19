@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import {
+  PurchaseCancelProcess,
+  PurchaseRefundProcess,
   PurchaseTradingProcess,
+  SalesCancelProcess,
+  SalesRefundProcess,
   SalesTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
@@ -44,6 +48,10 @@ export default async function handler(
 
       const salesTrading = await SalesTrading.findOne(
         {
+          $and: [
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -66,6 +74,10 @@ export default async function handler(
 
       const purchaseTrading = await PurchaseTrading.findOne(
         {
+          $and: [
+            { process: { $ne: PurchaseCancelProcess.취소완료 } },
+            { process: { $ne: PurchaseRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -114,7 +126,9 @@ export default async function handler(
         salesTrading.process !== SalesTradingProcess.상품전달확인 &&
         purchaseTrading.process !== PurchaseTradingProcess.상품전달중
       ) {
-        res.status(409).json({ message: "상품 전달확인 단계가 아닌 상품입니다." });
+        res
+          .status(409)
+          .json({ message: "상품 전달확인 단계가 아닌 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -123,6 +137,10 @@ export default async function handler(
       if (salesTrading.process === SalesTradingProcess.상품전달확인) {
         const saleTradingUpdateResult = await SalesTrading.updateOne(
           {
+            $and: [
+              { process: { $ne: SalesCancelProcess.취소완료 } },
+              { process: { $ne: SalesRefundProcess.환불완료 } },
+            ],
             productId,
           },
           { process: SalesTradingProcess.구매자상품인수중 },
@@ -140,6 +158,10 @@ export default async function handler(
       if (purchaseTrading.process === PurchaseTradingProcess.상품전달중) {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
+            $and: [
+              { process: { $ne: PurchaseCancelProcess.취소완료 } },
+              { process: { $ne: PurchaseRefundProcess.환불완료 } },
+            ],
             productId,
           },
           { process: PurchaseTradingProcess.상품인수확인 },

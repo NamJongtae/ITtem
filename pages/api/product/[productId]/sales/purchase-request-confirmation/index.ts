@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import {
+  PurchaseCancelProcess,
+  PurchaseRefundProcess,
   PurchaseTradingProcess,
+  SalesCancelProcess,
+  SalesRefundProcess,
   SalesTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
@@ -30,7 +34,7 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
-      
+
       const { productId } = req.query;
 
       if (!productId) {
@@ -44,6 +48,10 @@ export default async function handler(
 
       const salesTrading = await SalesTrading.findOne(
         {
+          $and: [
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -66,6 +74,10 @@ export default async function handler(
 
       const purchaseTrading = await PurchaseTrading.findOne(
         {
+          $and: [
+            { process: { $ne: PurchaseCancelProcess.취소완료 } },
+            { process: { $ne: PurchaseRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -111,6 +123,10 @@ export default async function handler(
       if (salesTrading.process === SalesTradingProcess.구매요청확인) {
         const saleTradingUpdateResult = await SalesTrading.updateOne(
           {
+            $and: [
+              { process: { $ne: SalesCancelProcess.취소완료 } },
+              { process: { $ne: SalesRefundProcess.환불완료 } },
+            ],
             productId,
           },
           { process: SalesTradingProcess.상품전달확인 },
@@ -128,6 +144,10 @@ export default async function handler(
       if (purchaseTrading.process === PurchaseTradingProcess.판매자확인중) {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
+            $and: [
+              { process: { $ne: PurchaseCancelProcess.취소완료 } },
+              { process: { $ne: PurchaseRefundProcess.환불완료 } },
+            ],
             productId,
           },
           { process: PurchaseTradingProcess.상품전달중 },

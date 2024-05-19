@@ -4,7 +4,11 @@ import dbConnect from "@/lib/db";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import {
   ProductStatus,
+  PurchaseCancelProcess,
+  PurchaseRefundProcess,
   PurchaseTradingProcess,
+  SalesCancelProcess,
+  SalesRefundProcess,
   SalesTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
@@ -61,6 +65,10 @@ export default async function handler(
 
       const purchaseTrading = await PurchaseTrading.findOne(
         {
+          $and: [
+            { status: { $ne: PurchaseCancelProcess.취소완료 } },
+            { status: { $ne: PurchaseRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -83,6 +91,10 @@ export default async function handler(
 
       const salesTrading = await SalesTrading.findOne(
         {
+          $and: [
+            { status: { $ne: SalesCancelProcess.취소완료 } },
+            { status: { $ne: SalesRefundProcess.환불완료 } },
+          ],
           productId,
         },
         null,
@@ -142,6 +154,10 @@ export default async function handler(
       if (purchaseTrading.process === PurchaseTradingProcess.상품인수확인) {
         const purchaseOrderUpdateResult = await PurchaseTrading.updateOne(
           {
+            $and: [
+              { status: { $ne: PurchaseCancelProcess.취소완료 } },
+              { status: { $ne: PurchaseRefundProcess.환불완료 } },
+            ],
             productId,
           },
           {
@@ -163,6 +179,10 @@ export default async function handler(
       if (salesTrading.process === SalesTradingProcess.구매자상품인수중) {
         const salesTradingrUpdateResult = await SalesTrading.updateOne(
           {
+            $and: [
+              { status: { $ne: SalesCancelProcess.취소완료 } },
+              { status: { $ne: SalesRefundProcess.환불완료 } },
+            ],
             productId,
           },
           {
