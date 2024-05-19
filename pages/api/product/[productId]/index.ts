@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import Product from "@/lib/db/models/Product";
 import User from "@/lib/db/models/User";
-import { checkAuthorization, sessionOptions } from "@/lib/server";
+import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/db";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "@/lib/firebaseSetting";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData, ProductStatus } from "@/types/productTypes";
 
 export default async function handler(
   req: NextApiRequest,
@@ -151,7 +151,7 @@ export default async function handler(
             profileImg: 1,
             recentProducts: 1,
             followers: 1,
-            reviewPercentage:1,
+            reviewPercentage: 1,
           },
         },
       ];
@@ -205,6 +205,16 @@ export default async function handler(
 
       if (!product) {
         res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
+      if (product.status === ProductStatus.trading) {
+        res.status(404).json({ message: "거래중인 상품은 수정할 수 없어요." });
+        return;
+      }
+
+      if (product.status === ProductStatus.soldout) {
+        res.status(404).json({ message: "판매된 상품은 수정할 수 없어요." });
         return;
       }
 
@@ -273,6 +283,17 @@ export default async function handler(
           .json({ message: "잘못된 요청이에요. 로그인 정보를 확인해주세요." });
         return;
       }
+
+      if (product.status === ProductStatus.trading) {
+        res.status(404).json({ message: "거래중인 상품은 삭제할 수 없어요." });
+        return;
+      }
+
+      if (product.status === ProductStatus.soldout) {
+        res.status(404).json({ message: "판매된 상품은 삭제할 수 없어요." });
+        return;
+      }
+
       const productImgNameArray = product.imgData.map(
         (data: ProductImgData) => data.name
       );
