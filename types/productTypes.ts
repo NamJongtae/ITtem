@@ -138,7 +138,7 @@ export const enum SalesTradingProcess {
 export const enum PurchaseTradingProcess {
   구매요청 = "구매요청",
   판매자확인중 = "판매자확인중",
-  상품전달중 = "상품전달중",
+  판매자상품전달중 = "판매자상품전달중",
   상품인수확인 = "상품인수확인",
   거래완료 = "거래완료",
 }
@@ -154,15 +154,15 @@ export const enum SalesCancelProcess {
 }
 
 export const enum PurchaseRefundProcess {
-  환불요청확인 = "환불요청확인",
+  판매자확인중 = "판매자확인중",
   환불상품전달확인 = "환불상품전달확인",
-  판매자환불승인확인중 = "판매자환불승인확인중",
+  판매자환불상품인수확인중 = "판매자환불상품인수확인중",
   환불완료 = "환불완료",
 }
 
 export const enum SalesRefundProcess {
-  판매자확인중 = "판매자확인중",
-  환불상품전달중 = "환불상품전달중",
-  환불상품인수확인 = "환불상품인수확인",
+  환불요청확인 = "환불요청확인",
+  구매자환불상품전달중 = "구매자환불상품전달중",
+  판매자환불상품인수확인 = "판매자환불상품인수확인",
   환불완료 = "환불완료",
 }
