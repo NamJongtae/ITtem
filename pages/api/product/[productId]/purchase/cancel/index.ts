@@ -132,7 +132,9 @@ export default async function handler(
       }
 
       if (salesTrading.process === SalesTradingProcess.구매자상품인수중) {
-        res.status(409).json({ message: "판매자가 전달한 상품은 취소할 수 없어요." });
+        res
+          .status(409)
+          .json({ message: "판매자가 전달한 상품은 취소할 수 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -214,6 +216,7 @@ export default async function handler(
         });
 
         await newSalesTrading.save({ session });
+        res.status(200).json({ message: "상품 구매 취소에 성공했어요." });
       } else {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
@@ -262,11 +265,11 @@ export default async function handler(
         ) {
           throw new Error("상품 판매 정보 업데이트에 실패했어요.");
         }
+        res.status(200).json({ message: "상품 구매 취소요청에 성공했어요." });
       }
 
       await session.commitTransaction();
       session.endSession();
-      res.status(200).json({ message: "상품 구매 취소에 성공했어요." });
     } catch (error) {
       console.error(error);
       await session.abortTransaction();
