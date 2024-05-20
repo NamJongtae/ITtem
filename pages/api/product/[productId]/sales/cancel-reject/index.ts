@@ -75,6 +75,13 @@ export default async function handler(
       return;
     }
 
+    if (salesTrading.status !== TradingStatus.CANCEL) {
+      res.status(409).json({ message: "취소 요청한 상품이 아니에요." });
+      await session.abortTransaction();
+      session.endSession();
+      return;
+    }
+
     if (salesTrading.status === TradingStatus.REFUND) {
       res.status(409).json({ message: "환불 요청한 상품이에요." });
       await session.abortTransaction();

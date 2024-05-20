@@ -74,11 +74,8 @@ export default async function handler(
         return;
       }
 
-      if (
-        salesTrading.status === TradingStatus.CANCEL &&
-        salesTrading.process === SalesCancelProcess.취소완료
-      ) {
-        res.status(409).json({ message: "이미 취소가 완료된 상품이에요." });
+      if (salesTrading.status !== TradingStatus.CANCEL) {
+        res.status(409).json({ message: "취소 요청한 상품이 아니에요." });
         await session.abortTransaction();
         session.endSession();
         return;
