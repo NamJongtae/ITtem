@@ -164,7 +164,7 @@ export default async function handler(
       },
       {
         status: TradingStatus.TRADING,
-        process: PurchaseTradingProcess.상품전달중,
+        process: PurchaseTradingProcess.판매자상품전달중,
         $unset: { cancelStartDate: "", cancelReason: "" },
       },
       { session }

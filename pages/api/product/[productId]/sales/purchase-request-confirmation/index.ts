@@ -100,7 +100,7 @@ export default async function handler(
 
       if (
         salesTrading.process === SalesTradingProcess.상품전달확인 &&
-        purchaseTrading.process === PurchaseTradingProcess.상품전달중
+        purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중
       ) {
         res.status(409).json({ message: "이미 구매요청을 확인한 상품입니다." });
         await session.abortTransaction();
@@ -150,7 +150,7 @@ export default async function handler(
             ],
             productId,
           },
-          { process: PurchaseTradingProcess.상품전달중 },
+          { process: PurchaseTradingProcess.판매자상품전달중 },
           { session }
         );
 

@@ -124,7 +124,7 @@ export default async function handler(
 
       if (
         salesTrading.process !== SalesTradingProcess.상품전달확인 &&
-        purchaseTrading.process !== PurchaseTradingProcess.상품전달중
+        purchaseTrading.process !== PurchaseTradingProcess.판매자상품전달중
       ) {
         res
           .status(409)
@@ -155,7 +155,7 @@ export default async function handler(
         }
       }
 
-      if (purchaseTrading.process === PurchaseTradingProcess.상품전달중) {
+      if (purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중) {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
             $and: [
