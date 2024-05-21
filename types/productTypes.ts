@@ -123,7 +123,7 @@ export interface PurchaseTradingData {
 export const enum TradingStatus {
   TRADING = "TRADING",
   CANCEL = "CANCEL",
-  REFUND = "REFUND",
+  RETURN = "RETURN",
   END = "END",
 }
 
@@ -153,16 +153,16 @@ export const enum SalesCancelProcess {
   취소완료 = "취소완료",
 }
 
-export const enum PurchaseRefundProcess {
+export const enum PurchaseReturnProcess {
   판매자확인중 = "판매자확인중",
-  환불상품전달확인 = "환불상품전달확인",
-  판매자환불상품인수확인중 = "판매자환불상품인수확인중",
-  환불완료 = "환불완료",
+  반품상품전달확인 = "반품상품전달확인",
+  판매자반품상품인수확인중 = "판매자반품상품인수확인중",
+  반품완료 = "반품완료",
 }
 
-export const enum SalesRefundProcess {
-  환불요청확인 = "환불요청확인",
-  구매자환불상품전달중 = "구매자환불상품전달중",
-  판매자환불상품인수확인 = "판매자환불상품인수확인",
-  환불완료 = "환불완료",
+export const enum SalesReturnProcess {
+  반품요청확인 = "반품요청확인",
+  구매자반품상품전달중 = "구매자반품상품전달중",
+  판매자반품상품인수확인 = "판매자반품상품인수확인",
+  반품완료 = "반품완료",
 }
