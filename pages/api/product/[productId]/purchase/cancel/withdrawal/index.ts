@@ -1,10 +1,8 @@
 import dbConnect from "@/lib/db";
-import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
-  ProductStatus,
   PurchaseCancelProcess,
   PurchaseRefundProcess,
   PurchaseTradingProcess,
