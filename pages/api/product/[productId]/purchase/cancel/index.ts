@@ -6,9 +6,9 @@ import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
   PurchaseCancelProcess,
-  PurchaseRefundProcess,
+  PurchaseReturnProcess,
   SalesCancelProcess,
-  SalesRefundProcess,
+  SalesReturnProcess,
   SalesTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
@@ -59,7 +59,7 @@ export default async function handler(
         {
           $and: [
             { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseRefundProcess.환불완료 } },
+            { process: { $ne: PurchaseReturnProcess.반품완료 } },
           ],
           productId,
         },
@@ -105,8 +105,8 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.status === TradingStatus.REFUND) {
-        res.status(409).json({ message: "환불 요청한 상품이에요." });
+      if (purchaseTrading.status === TradingStatus.RETURN) {
+        res.status(409).json({ message: "반품 요청한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -116,7 +116,7 @@ export default async function handler(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesRefundProcess.환불완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
           ],
           productId,
         },
@@ -164,7 +164,7 @@ export default async function handler(
           {
             $and: [
               { process: { $ne: PurchaseCancelProcess.취소완료 } },
-              { process: { $ne: PurchaseRefundProcess.환불완료 } },
+              { process: { $ne: PurchaseReturnProcess.반품완료 } },
             ],
             productId,
           },
@@ -189,7 +189,7 @@ export default async function handler(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
-              { process: { $ne: SalesRefundProcess.환불완료 } },
+              { process: { $ne: SalesReturnProcess.반품완료 } },
             ],
             productId,
           },
@@ -222,7 +222,7 @@ export default async function handler(
           {
             $and: [
               { process: { $ne: PurchaseCancelProcess.취소완료 } },
-              { process: { $ne: PurchaseRefundProcess.환불완료 } },
+              { process: { $ne: PurchaseReturnProcess.반품완료 } },
             ],
             productId,
           },
@@ -246,7 +246,7 @@ export default async function handler(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
-              { process: { $ne: SalesRefundProcess.환불완료 } },
+              { process: { $ne: SalesReturnProcess.반품완료 } },
             ],
             productId,
           },

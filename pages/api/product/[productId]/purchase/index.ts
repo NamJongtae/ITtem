@@ -5,7 +5,7 @@ import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
   SalesCancelProcess,
-  SalesRefundProcess,
+  SalesReturnProcess,
   SalesTradingProcess,
 } from "@/types/productTypes";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -84,7 +84,7 @@ export default async function handler(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesRefundProcess.환불완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
           ],
           productId,
         },
@@ -103,7 +103,7 @@ export default async function handler(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesRefundProcess.환불완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
           ],
           productId,
         },
