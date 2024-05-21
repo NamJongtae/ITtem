@@ -19,9 +19,9 @@ export const purchaseTradingSchema = new mongoose.Schema(
     cancelReason: { type:String, required: false},
     cancelStartDate: { type: Date, required: false },
     cancelEndDate: { type: Date, required: false },
-    refundReason: { type:String, required: false},
-    refundStartDate: { type: Date, required: false },
-    refundEndDate: { type: Date, required: false },
+    returnReason: { type:String, required: false},
+    returnStartDate: { type: Date, required: false },
+    returnEndDate: { type: Date, required: false },
   },
   { collection: "purchaseTrading" }
 );

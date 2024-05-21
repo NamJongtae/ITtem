@@ -13,12 +13,12 @@ export const salesTradingSchema = new mongoose.Schema(
       required: false,
       default: SalesTradingProcess.판매중,
     },
-    cancelReason: { type:String, required: false},
+    cancelReason: { type: String, required: false },
     cancelStartDate: { type: Date, required: false },
     cancelEndDate: { type: Date, required: false },
-    refundReason: { type:String, required: false},
-    refundStartDate: { type: Date, required: false },
-    refundEndDate: { type: Date, required: false },
+    returnReason: { type: String, required: false },
+    returnStartDate: { type: Date, required: false },
+    returnEndDate: { type: Date, required: false },
   },
   { collection: "salesTrading" }
 );
