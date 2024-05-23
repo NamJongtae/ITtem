@@ -6,7 +6,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/db";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "@/lib/firebaseSetting";
-import { ProductImgData, ProductStatus } from "@/types/productTypes";
+import {
+  ProductImgData,
+  ProductStatus,
+  TradingStatus,
+} from "@/types/productTypes";
+import SalesTrading from "@/lib/db/models/SalesTrading";
 
 export default async function handler(
   req: NextApiRequest,
@@ -176,6 +181,8 @@ export default async function handler(
   }
 
   if (req.method === "PATCH") {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       const isValidAuth = await checkAuthorization(req, res);
       if (!isValidAuth.isValid) {
@@ -221,7 +228,7 @@ export default async function handler(
       const result = await Product.findOneAndUpdate(
         { _id: new mongoose.Types.ObjectId(productId as string) },
         { $set: productData },
-        { returnNewDocument: true }
+        { returnDocument: "after" }
       );
 
       if (!result) {
@@ -229,11 +236,26 @@ export default async function handler(
         return;
       }
 
+      if (productData.name) {
+        await SalesTrading.updateOne(
+          {
+            productId: new mongoose.Types.ObjectId(productId as string),
+            status: TradingStatus.TRADING,
+          },
+          { productName: result.name },
+          { session }
+        );
+      }
+
+      await session.commitTransaction();
+      session.endSession();
       res
         .status(200)
         .json({ message: "상품 수정에 성공했어요.", product: result });
     } catch (error) {
       console.error(error);
+      await session.abortTransaction();
+      session.endSession();
       res.status(500).json({
         message: "상품 수정에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
@@ -333,6 +355,20 @@ export default async function handler(
         productResult.deletedCount === 0
       ) {
         throw new Error("상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.");
+      }
+
+      const salesTradingDeleteResult = await SalesTrading.deleteOne(
+        {
+          productId: new mongoose.Types.ObjectId(productId as string),
+        },
+        { session }
+      );
+
+      if (
+        !salesTradingDeleteResult.acknowledged ||
+        salesTradingDeleteResult.deletedCount === 0
+      ) {
+        throw new Error("상품 판매 거래 정보 삭제에 실패했어요.");
       }
 
       await session.commitTransaction();

@@ -48,6 +48,7 @@ export default async function handler(
       const salesTrading= new SalesTrading({
         seller: newProduct.uid,
         productId: newProduct._id,
+        productName: newProduct.name,
       });
 
       await salesTrading.save({ session });
