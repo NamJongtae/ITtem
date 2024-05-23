@@ -5,6 +5,7 @@ export const salesTradingSchema = new mongoose.Schema(
   {
     seller: { type: String, required: [true, "판매자 ID가 없어요."] },
     productId: { type: String, required: [true, "상품 ID가 없어요."] },
+    productName:  { type: String, required: [true, "상품명이 없어요."] },
     saleStartDate: { type: Date, required: false, default: Date.now },
     saleEndDate: { type: Date, required: false },
     status: { type: String, required: false, default: TradingStatus.TRADING },
