@@ -72,13 +72,6 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.status === TradingStatus.END) {
-        res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       if (purchaseTrading.status !== TradingStatus.CANCEL) {
         res.status(409).json({ message: "취소 요청한 상품이 아니에요." });
         await session.abortTransaction();
@@ -88,6 +81,27 @@ export default async function handler(
 
       if (purchaseTrading.status === TradingStatus.RETURN) {
         res.status(409).json({ message: "반품 요청한 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
+        res.status(409).json({ message: "거래가 완료된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+        res.status(409).json({ message: "취소된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+        res.status(409).json({ message: "환불된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;

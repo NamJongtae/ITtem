@@ -98,8 +98,22 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.END) {
+      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+        res.status(409).json({ message: "취소된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+        res.status(409).json({ message: "환불된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;

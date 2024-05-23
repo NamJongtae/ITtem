@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import ReturnPurchaseReject from '@/lib/db/models/ReturnPurchaseReject';
+import ReturnPurchaseReject from "@/lib/db/models/ReturnPurchaseReject";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
@@ -101,8 +101,22 @@ export default async function handler(
         return;
       }
 
-      if (salesTrading.staus === TradingStatus.END) {
+      if (salesTrading.staus === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (salesTrading.staus === TradingStatus.CANCEL_END) {
+        res.status(409).json({ message: "취소된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (salesTrading.staus === TradingStatus.RETURN_END) {
+        res.status(409).json({ message: "환불된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -179,7 +193,7 @@ export default async function handler(
           {
             status: TradingStatus.TRADING,
             process: SalesTradingProcess.상품전달확인,
-            $unset: { returnStartDate: "" },
+            $unset: { returnStartDate: "", returnReason: "" },
           },
           { session }
         );
@@ -207,7 +221,7 @@ export default async function handler(
           {
             status: TradingStatus.TRADING,
             process: PurchaseTradingProcess.판매자상품전달중,
-            $unset: { returnStartDate: "" },
+            $unset: { returnStartDate: "", returnReason: "" },
           },
           { session }
         );

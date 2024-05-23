@@ -81,23 +81,6 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.status === TradingStatus.END) {
-        res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (
-        purchaseTrading.status === TradingStatus.CANCEL &&
-        purchaseTrading.process === PurchaseCancelProcess.취소완료
-      ) {
-        res.status(409).json({ message: "이미 취소 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       if (purchaseTrading.status === TradingStatus.CANCEL) {
         res.status(409).json({ message: "이미 취소 요청한 상품이에요." });
         await session.abortTransaction();
@@ -107,6 +90,27 @@ export default async function handler(
 
       if (purchaseTrading.status === TradingStatus.RETURN) {
         res.status(409).json({ message: "반품 요청한 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
+        res.status(409).json({ message: "거래가 완료된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+        res.status(409).json({ message: "취소된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+        res.status(409).json({ message: "환불된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -169,7 +173,7 @@ export default async function handler(
             productId,
           },
           {
-            status: TradingStatus.CANCEL,
+            status: TradingStatus.CANCEL_END,
             process: PurchaseCancelProcess.취소완료,
             cancelStartDate: currentDate,
             cancelEndDate: currentDate,
@@ -194,7 +198,7 @@ export default async function handler(
             productId,
           },
           {
-            status: TradingStatus.CANCEL,
+            status: TradingStatus.CANCEL_END,
             process: SalesCancelProcess.취소완료,
             cancelStartDate: currentDate,
             cancelEndDate: currentDate,
@@ -212,7 +216,7 @@ export default async function handler(
 
         const newSalesTrading = new SalesTrading({
           productId,
-          seller: myUid,
+          seller: salesTrading.seller,
         });
 
         await newSalesTrading.save({ session });
