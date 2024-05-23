@@ -76,6 +76,7 @@ export default async function handler(
       const purchaseTrading = new PurchaseTrading({
         buyer: myUid,
         productId,
+        productName: product.name,
       });
 
       await purchaseTrading.save({ session });
@@ -143,5 +144,4 @@ export default async function handler(
       });
     }
   }
-
 }
