@@ -124,7 +124,9 @@ export const enum TradingStatus {
   TRADING = "TRADING",
   CANCEL = "CANCEL",
   RETURN = "RETURN",
-  END = "END",
+  TRADING_END = "TRADING_END",
+  CANCEL_END = "CANCEL_END",
+  RETURN_END = "RETURN_END",
 }
 
 export const enum SalesTradingProcess {
