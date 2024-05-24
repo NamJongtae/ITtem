@@ -54,7 +54,15 @@ export default function useTradingInfiniteQuery(
     },
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
-      const nextCursor = lastPage[lastPage.length - 1]?._id;
+      let nextCursor;
+      if (currentMenu === "sale") {
+        nextCursor = (lastPage[lastPage.length - 1] as SaleTradingData)
+          ?.saleStartDate;
+      } else {
+        nextCursor = (lastPage[lastPage.length - 1] as PurchaseTradingData)
+          ?.purchaseStartDate;
+      }
+
       if (lastPage.length < limit) {
         return undefined;
       }
