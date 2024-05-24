@@ -103,7 +103,7 @@ export default async function handler(
       }
 
       if (purchaseTrading.staus === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "환불된 상품이에요." });
+        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -115,7 +115,7 @@ export default async function handler(
       ) {
         res
           .status(409)
-          .json({ message: "환불 철회가 가능한 단계가 아니에요." });
+          .json({ message: "반품 철회가 가능한 단계가 아니에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -195,7 +195,7 @@ export default async function handler(
         throw new Error("상품 판매 정보 업데이트에 실패했어요.");
       }
 
-      res.status(200).json({ message: "상품 환불 철회에 성공했어요." });
+      res.status(200).json({ message: "상품 반품 철회에 성공했어요." });
 
       await session.commitTransaction();
       session.endSession();
@@ -204,7 +204,7 @@ export default async function handler(
       await session.abortTransaction();
       session.endSession();
       res.status(500).json({
-        message: "상품 환불 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 반품 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }

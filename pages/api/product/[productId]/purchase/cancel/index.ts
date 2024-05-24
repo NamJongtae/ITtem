@@ -110,7 +110,7 @@ export default async function handler(
       }
 
       if (purchaseTrading.staus === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "환불된 상품이에요." });
+        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
