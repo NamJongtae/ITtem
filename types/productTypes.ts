@@ -104,22 +104,6 @@ export type ProductListType =
   | "PROFILE"
   | "MY_PROFILE";
 
-export interface PurchaseTradingData {
-  _id: string;
-  buyer: string;
-  productId: string;
-  purchaseStartDate: string;
-  purchaseEndDate?: string;
-  status: TradingStatus;
-  process: PurchaseTradingProcess;
-  cancelReason?: string;
-  cancelStartDate?: string;
-  cancelEndDate?: string;
-  refundReason?: string;
-  refundStartDate?: string;
-  refundEndDate?: string;
-}
-
 export const enum TradingStatus {
   TRADING = "TRADING",
   CANCEL = "CANCEL",
@@ -167,4 +151,46 @@ export const enum SalesReturnProcess {
   구매자반품상품전달중 = "구매자반품상품전달중",
   판매자반품상품인수확인 = "판매자반품상품인수확인",
   반품완료 = "반품완료",
+}
+
+export interface SaleTradingData {
+  _id: string;
+  seller: string;
+  productId: string;
+  status: TradingStatus;
+  process: SalesTradingProcess | SalesCancelProcess | SalesReturnProcess;
+  returnReason?: string,
+  cancelReason?: string,
+  saleStartDate: string;
+  saleEndDate?: string;
+  cancelStartDate?: string;
+  cancelEndDate?: string;
+  returnStartDate?: string;
+  returnEndDate?: string;
+  productData: {
+    name: string;
+    imgData: { url: string }[];
+    price: string;
+  };
+}
+
+export interface PurchaseTradingData {
+  _id: string;
+  seller: string;
+  productId: string;
+  status: TradingStatus;
+  process: PurchaseTradingProcess | PurchaseCancelProcess | PurchaseReturnProcess;
+  returnReason?: string,
+  cancelReason?: string,
+  purchaseStartDate: string;
+  purchaseEndDate?: string;
+  cancelStartDate?: string;
+  cancelEndDate?: string;
+  returnStartDate?: string;
+  returnEndDate?: string;
+  productData: {
+    name: string;
+    imgData: { url: string }[];
+    price: string;
+  };
 }

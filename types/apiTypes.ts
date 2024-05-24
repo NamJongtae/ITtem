@@ -2,7 +2,8 @@ import { IronSession } from "iron-session";
 import {
   ProductData,
   ProductDetailData,
-  PurchaseTradingData
+  PurchaseTradingData,
+  SaleTradingData
 } from "./productTypes";
 import { AuthData, ProfileData, ReviewData } from "./authTypes";
 
@@ -135,8 +136,12 @@ export interface ReviewsResponseData {
   message: string;
 }
 
-export interface PurchaseProductResponseData {
-  purchaseTrading: PurchaseTradingData;
-  message: string;
+export interface SalesTradingResponseData {
+  salesTrading : SaleTradingData[],
+  message: string,
 }
 
+export interface PurchaseTradingResponseData {
+  purchaseTrading : PurchaseTradingData[],
+  message: string,
+}
