@@ -1,12 +1,10 @@
 import {
   ProductManageDeatilMenu,
-  ProductManageMenu,
 } from "./product-manage-page";
 
 interface IPros {
   detailMenu: ProductManageDeatilMenu;
   handleClickDeatilMenu: (
-    e: React.MouseEvent<HTMLButtonElement>,
     detailMenu: ProductManageDeatilMenu
   ) => void;
 }
@@ -30,10 +28,10 @@ export default function ProductManageDetailMenu({
               menu === "거래중"
                 ? "TRADING"
                 : menu === "거래완료 내역"
-                ? "END"
-                : "CANCEL/RETURN"
+                ? "TRADING_END"
+                : "CANCEL_END/RETURN_END"
             }
-            onClick={(e) => handleClickDeatilMenu(e, menu)}
+            onClick={(e) => handleClickDeatilMenu(menu)}
             className={`${detailMenu === menu && "text-white bg-gray-700"} ${
               detailMenu !== menu && "betterhover:hover:bg-gray-100"
             } border border-gray-400 rounded-md py-2 px-4`}
