@@ -4,12 +4,14 @@ import {
   ProductCategory,
   ProductData,
   ProductUploadData,
+  TradingStatus,
 } from "@/types/productTypes";
 import {
   ProductDetailResponseData,
   ProductListResponseData,
   ProductResponseData,
-  PurchaseProductResponseData,
+  PurchaseTradingResponseData,
+  SalesTradingResponseData,
 } from "@/types/apiTypes";
 
 export async function getTodayProductList(
@@ -193,10 +195,56 @@ export async function deleteWish(
 
 export async function purchaseProduct(
   productId: string
-): Promise<AxiosResponse<PurchaseProductResponseData>> {
+): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.post(
       `/api/product/${productId}/purchase`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSalesTrading({
+  status = TradingStatus.TRADING,
+  cursor,
+  limit = 10,
+  search,
+}: {
+  status?: string;
+  cursor: unknown;
+  search?: string;
+  limit?: number;
+}): Promise<AxiosResponse<SalesTradingResponseData>> {
+  try {
+    const response = await customAxios(
+      `/api/sales-trading?status=${status}${search ? `&search=${search}` : ""}${
+        cursor ? `&cursor=${cursor}&limit=${limit}` : `&limit=${limit}`
+      }`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPurchaseTrading({
+  status = TradingStatus.TRADING,
+  cursor,
+  limit = 10,
+  search,
+}: {
+  status?: string;
+  cursor: unknown;
+  search?: string;
+  limit?: number;
+}): Promise<AxiosResponse<PurchaseTradingResponseData>> {
+  try {
+    const response = await customAxios(
+      `/api/purchase-trading?status=${status}${
+        search ? `&search=${search}` : ""
+      }${cursor ? `&cursor=${cursor}&limit=${limit}` : `&limit=${limit}`}`
     );
     return response;
   } catch (error) {
