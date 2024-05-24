@@ -122,9 +122,7 @@ export default async function handler(
       await session.commitTransaction();
       session.endSession();
 
-      res
-        .status(201)
-        .json({ message: "상품 구매요청에 성공했어요.", PurchaseTrading });
+      res.status(201).json({ message: "상품 구매요청에 성공했어요." });
     } catch (error) {
       console.error(error);
       await session.abortTransaction();
