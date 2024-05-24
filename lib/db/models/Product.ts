@@ -14,7 +14,7 @@ export const productSchema = new mongoose.Schema(
     wishUserIds: { type: [String], default: [] },
     viewCount: { type: Number, default: 0 },
     imgData: {
-      type: [{ url: String, name: String }],
+      type: [{ url: String, name: String, _id: false }],
       required: [true, "상품 이미지가 없어요."],
     },
     price: { type: Number, required: [true, "가격이 입력되지 않았어요."] },
@@ -53,4 +53,4 @@ export const productSchema = new mongoose.Schema(
 const Product =
   mongoose.models?.Product || mongoose.model("Product", productSchema);
 
-  export default Product
+export default Product;
