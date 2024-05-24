@@ -93,7 +93,7 @@ export default async function handler(
             returnReason: 1,
             cancelReason: 1,
             cancelStartDate: 1,
-            cacelEndDate: 1,
+            cancelEndDate: 1,
             returnStartDate: 1,
             returnEndDate: 1,
             process: 1,

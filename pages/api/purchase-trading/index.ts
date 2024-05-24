@@ -93,7 +93,7 @@ export default async function handler(
             returnReason: 1,
             cancelReason: 1,
             cancelStartDate: 1,
-            cacelEndDate: 1,
+            cancelEndDate: 1,
             returnStartDate: 1,
             returnEndDate: 1,
             process: 1,
@@ -101,11 +101,11 @@ export default async function handler(
           },
         },
       ];
-      const salesTrading = await PurchaseTrading.aggregate(aggregate);
+      const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
 
       res
         .status(200)
-        .json({ message: `${message} 목록 조회에 성공했어요.`, salesTrading });
+        .json({ message: `${message} 목록 조회에 성공했어요.`, purchaseTrading });
     } catch (error) {
       console.error(error);
       res.status(500).json({
