@@ -80,6 +80,7 @@ export default function PurchaseRequestRejectModal({
             </button>
             <button
               type="button"
+              onClick={closeModal}
               className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
             >
               취소하기
