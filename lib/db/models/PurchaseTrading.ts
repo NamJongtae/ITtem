@@ -8,6 +8,7 @@ export const purchaseTradingSchema = new mongoose.Schema(
   {
     buyer: { type: String, required: [true, "구매자 ID가 없어요."] },
     productId: { type: String, required: [true, "상품 ID가 없어요."] },
+    productName:  { type: String, required: [true, "상품명이 없어요."] },
     purchaseStartDate: { type: Date, required: false, default: Date.now },
     purchaseEndDate: { type: Date, required: false},
     status: { type: String, required: false, default: TradingStatus.TRADING },
