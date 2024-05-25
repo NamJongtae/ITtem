@@ -251,3 +251,119 @@ export async function getPurchaseTrading({
     throw error;
   }
 }
+
+export async function purchaseRequestConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/purchase-request-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseRequestReject(
+  productId: string,
+  cancelReason: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/purchase-request-reject`,
+      {
+        cancelReason,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productDeliveryConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/delivery-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseCancelConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/cancel-comfirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseCancelReject(
+  productId: string,
+  rejectReason: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/cancel-reject`,
+      {
+        rejectReason,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/return-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnReceiptConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/return-receipt-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnReject(
+  productId: string,
+  rejectReason: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/sales/return-reject`,
+      {
+        rejectReason,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
