@@ -49,6 +49,7 @@ export default async function handler(
         seller: newProduct.uid,
         productId: newProduct._id,
         productName: newProduct.name,
+        saleStartDate: newProduct.createdAt
       });
 
       await salesTrading.save({ session });
