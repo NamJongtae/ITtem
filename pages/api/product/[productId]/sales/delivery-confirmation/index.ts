@@ -105,21 +105,21 @@ export default async function handler(
         return;
       }
 
-      if (salesTrading.staus === TradingStatus.TRADING_END) {
+      if (salesTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.staus === TradingStatus.CANCEL_END) {
+      if (salesTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.staus === TradingStatus.RETURN_END) {
+      if (salesTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();

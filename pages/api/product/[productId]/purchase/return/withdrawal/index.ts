@@ -1,10 +1,8 @@
 import dbConnect from "@/lib/db";
-import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
-  ProductStatus,
   PurchaseCancelProcess,
   PurchaseReturnProcess,
   PurchaseTradingProcess,
@@ -88,21 +86,21 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
+      if (purchaseTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+      if (purchaseTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
