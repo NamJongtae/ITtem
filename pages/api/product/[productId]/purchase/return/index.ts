@@ -86,12 +86,6 @@ export default async function handler(
         return;
       }
 
-      if (myUid !== salesTrading.seller) {
-        res.status(401).json({ message: "잘못된 요청이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
 
       const purchaseTrading = await PurchaseTrading.findOne(
         {
@@ -111,6 +105,13 @@ export default async function handler(
         session.endSession();
         return;
       }
+      
+      if (myUid !== purchaseTrading.buyer) {
+        res.status(401).json({ message: "잘못된 요청이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
 
       if (purchaseTrading.status === TradingStatus.CANCEL) {
         res.status(409).json({ message: "취소 요청한 상품이에요." });
@@ -126,21 +127,21 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
+      if (purchaseTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+      if (purchaseTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
