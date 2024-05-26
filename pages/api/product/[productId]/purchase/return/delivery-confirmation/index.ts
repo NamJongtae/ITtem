@@ -98,28 +98,28 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.TRADING_END) {
+      if (purchaseTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.CANCEL_END) {
+      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (purchaseTrading.staus === TradingStatus.RETURN_END) {
+      if (purchaseTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (myUid !== purchaseTrading.seller) {
+      if (myUid !== purchaseTrading.buyer) {
         res.status(401).json({ message: "잘못된 요청이에요." });
         await session.abortTransaction();
         session.endSession();
@@ -127,7 +127,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process === SalesReturnProcess.판매자반품상품인수확인 &&
+        salesTrading.process === SalesReturnProcess.반품상품인수확인 &&
         purchaseTrading.process ===
           PurchaseReturnProcess.판매자반품상품인수확인중
       ) {
@@ -159,7 +159,7 @@ export default async function handler(
             productId,
           },
           {
-            process: SalesReturnProcess.판매자반품상품인수확인,
+            process: SalesReturnProcess.반품상품인수확인,
           },
           { session }
         );
@@ -203,7 +203,8 @@ export default async function handler(
       await session.abortTransaction();
       session.endSession();
       res.status(500).json({
-        message: "반품 상품 전달 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message:
+          "반품 상품 전달 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }
