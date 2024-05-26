@@ -1,7 +1,6 @@
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 import Image from "next/image";
 import ProductManageItemDate from "./product-manage-item-date";
-import { useRouter } from "next/router";
 import ProductManageItemBtns from "./product-manage-item-btns";
 import {
   ProductManageDeatilMenu,
@@ -19,9 +18,6 @@ export default function ProductManageItem({
   menu,
   detailMenu,
 }: IProps) {
-  const router = useRouter();
-  const status = router.query?.status;
-
   return (
     <li className="flex gap-3 flex-col sm:flex-row sm:items-center sm:justify-between border-b py-5">
       <div className="flex gap-3 items-center">
@@ -41,9 +37,9 @@ export default function ProductManageItem({
             <span className="inline-block w-16">가격</span>
             <span>{tradingData.productData.price}</span>원
           </div>
-          {status === "TRADING" && (
+          {detailMenu === "거래중" && (
             <div>
-              <span className="inline-block w-16">진행상태</span>
+              <span className="inline-block w-16">진행 상태</span>
               <span>{tradingData.process} </span>
             </div>
           )}
