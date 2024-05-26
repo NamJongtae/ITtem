@@ -1,5 +1,5 @@
 import SalesTrading from "@/lib/db/models/SalesTrading";
-import { checkAuthorization } from '@/lib/server';
+import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -42,8 +42,9 @@ export default async function handler(
       const currentStatus =
         status === "CANCEL_END/RETURN_END"
           ? ["CANCEL_END", "RETURN_END"]
-          : [status];
-
+          : status === "TRADING_END"
+          ? ["TRADING_END"]
+          : ["TRADING", "CANCEL", "RETURN"];
       let matchStage: any = {
         saleStartDate: { $lt: currentCursor },
         seller: myUid,

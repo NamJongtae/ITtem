@@ -42,7 +42,9 @@ export default async function handler(
       const currentStatus =
         status === "CANCEL_END/RETURN_END"
           ? ["CANCEL_END", "RETURN_END"]
-          : [status];
+          : status === "TRADING_END"
+          ? ["TRADING_END"]
+          : ["TRADING", "CANCEL", "RETURN"];
 
       let matchStage: any = {
         purchaseStartDate: { $lt: currentCursor },
@@ -105,7 +107,10 @@ export default async function handler(
 
       res
         .status(200)
-        .json({ message: `${message} 목록 조회에 성공했어요.`, purchaseTrading });
+        .json({
+          message: `${message} 목록 조회에 성공했어요.`,
+          purchaseTrading,
+        });
     } catch (error) {
       console.error(error);
       res.status(500).json({
