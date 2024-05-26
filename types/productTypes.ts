@@ -114,43 +114,43 @@ export const enum TradingStatus {
 }
 
 export const enum SalesTradingProcess {
-  판매중 = "판매중",
-  구매요청확인 = "구매요청확인",
-  상품전달확인 = "상품전달확인",
-  구매자상품인수중 = "구매자상품인수중",
-  거래완료 = "거래완료",
+  판매중 = "판매 중",
+  구매요청확인 = "구매 요청 확인",
+  상품전달확인 = "상품 전달 확인",
+  구매자상품인수중 = "구매자 상품 인수 중",
+  거래완료 = "거래 완료",
 }
 
 export const enum PurchaseTradingProcess {
-  구매요청 = "구매요청",
-  판매자확인중 = "판매자확인중",
-  판매자상품전달중 = "판매자상품전달중",
-  상품인수확인 = "상품인수확인",
-  거래완료 = "거래완료",
+  구매요청 = "구매 요청",
+  판매자확인중 = "판매자 확인 중",
+  판매자상품전달중 = "판매자 상품 전달중",
+  상품인수확인 = "상품 인수 확인",
+  거래완료 = "거래 완료",
 }
 
 export const enum PurchaseCancelProcess {
-  취소요청 = "취소요청",
-  취소완료 = "취소완료",
+  판매자확인중 = "판매자 확인 중",
+  취소완료 = "취소 완료",
 }
 
 export const enum SalesCancelProcess {
-  취소요청확인 = "취소요청확인",
-  취소완료 = "취소완료",
+  취소요청확인 = "취소 요청 확인",
+  취소완료 = "취소 완료",
 }
 
 export const enum PurchaseReturnProcess {
-  판매자확인중 = "판매자확인중",
-  반품상품전달확인 = "반품상품전달확인",
-  판매자반품상품인수확인중 = "판매자반품상품인수확인중",
-  반품완료 = "반품완료",
+  판매자확인중 = "판매자 확인 중",
+  반품상품전달확인 = "반품 상품 전달 확인",
+  판매자반품상품인수확인중 = "판매자 반품 상품 인수 확인 중",
+  반품완료 = "반품 완료",
 }
 
 export const enum SalesReturnProcess {
-  반품요청확인 = "반품요청확인",
-  구매자반품상품전달중 = "구매자반품상품전달중",
-  판매자반품상품인수확인 = "판매자반품상품인수확인",
-  반품완료 = "반품완료",
+  반품요청확인 = "반품 요청 확인",
+  구매자반품상품전달중 = "구매자 반품 상품 전달 중",
+  반품상품인수확인 = "반품 상품 인수 확인",
+  반품완료 = "반품 완료",
 }
 
 export interface SaleTradingData {
@@ -159,8 +159,8 @@ export interface SaleTradingData {
   productId: string;
   status: TradingStatus;
   process: SalesTradingProcess | SalesCancelProcess | SalesReturnProcess;
-  returnReason?: string,
-  cancelReason?: string,
+  returnReason?: string;
+  cancelReason?: string;
   saleStartDate: string;
   saleEndDate?: string;
   cancelStartDate?: string;
@@ -179,9 +179,12 @@ export interface PurchaseTradingData {
   seller: string;
   productId: string;
   status: TradingStatus;
-  process: PurchaseTradingProcess | PurchaseCancelProcess | PurchaseReturnProcess;
-  returnReason?: string,
-  cancelReason?: string,
+  process:
+    | PurchaseTradingProcess
+    | PurchaseCancelProcess
+    | PurchaseReturnProcess;
+  returnReason?: string;
+  cancelReason?: string;
   purchaseStartDate: string;
   purchaseEndDate?: string;
   cancelStartDate?: string;
