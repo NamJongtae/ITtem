@@ -367,3 +367,89 @@ export async function productReturnReject(
     throw error;
   }
 }
+
+export async function productReceiptConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/product-receipt-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseCancelRequest(
+  productId: string,
+  cancelReason: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/cancel`,
+      {
+        cancelReason,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function purchaseCancelRequestWithdrawal(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/cancel/withdrawal`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnRequest(
+  productId: string,
+  returnReason: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/return`,
+      {
+        returnReason,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnDeliveryConfirmation(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/return/delivery-confirmation`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function productReturnRequestWithdrawal(
+  productId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(
+      `/api/product/${productId}/purchase/return/withdrawal`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
