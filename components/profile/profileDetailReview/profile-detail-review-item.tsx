@@ -1,5 +1,5 @@
 import { REVIEW_TAGS } from "@/constants/constant";
-import { ReviewData } from "@/types/authTypes";
+import { ProfileReviewData } from "@/types/authTypes";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +9,7 @@ const ReactStars = dynamic(() => import("react-stars"), {
 });
 
 interface IProps {
-  review: ReviewData;
+  review: ProfileReviewData;
 }
 
 export default function ProfileDetailReviewItem({ review }: IProps) {
@@ -49,11 +49,11 @@ export default function ProfileDetailReviewItem({ review }: IProps) {
         </Link>
 
         <div className="flex flex-col">
-          <p className="mt-3 whitespace-pre-line">{review.content}</p>
+          <p className="mt-3 whitespace-pre-line">{review.reviewContent}</p>
           <ul className="flex text-xs mt-5 gap-3 flex-wrap">
             {REVIEW_TAGS.map(
               (tag, index) =>
-                review?.tags[index] === 1 && (
+                review?.reviewTags[index] === 1 && (
                   <li key={tag}>
                     <p className="bg-gray-100 py-1 px-2 rounded-md">{tag}</p>
                   </li>

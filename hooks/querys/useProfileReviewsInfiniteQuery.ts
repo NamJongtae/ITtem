@@ -1,6 +1,6 @@
 import { getProfileReviewsQueryKey } from "@/constants/constant";
 import { getProfileReviews } from "@/lib/api/auth";
-import { ReviewData } from "@/types/authTypes";
+import { ProfileReviewData } from "@/types/authTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -18,7 +18,7 @@ export default function useProfileReviewsInfiniteQuery({
     hasNextPage,
     fetchNextPage,
     error,
-  } = useInfiniteQuery<ReviewData[], AxiosError, InfiniteData<ReviewData>>({
+  } = useInfiniteQuery<ProfileReviewData[], AxiosError, InfiniteData<ProfileReviewData>>({
     queryKey: getProfileReviewsQueryKey(uid as string),
     queryFn: async ({ pageParam }) => {
       const response = getProfileReviews({ uid, cursor: pageParam, limit });
