@@ -22,7 +22,7 @@ export default function NavProduct() {
   return (
     <Link
       onClick={handleClickLink}
-      href={"/product/manage"}
+      href={"/product/manage?status=TRADING"}
       className={`inline-flex flex-col items-center gap-[2px] text-xs ${
         pathname === "/product/manage" && "text-indigo-500"
       }`}
