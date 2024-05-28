@@ -49,7 +49,7 @@ export interface ReivewInfoData {
   totalReviewScore: number;
   totalReviewCount: number;
   reviewPercentage: number;
-  tags: number[];
+  reviewTags: number[];
 }
 export interface ProfileData {
   uid: string;
@@ -76,15 +76,15 @@ export interface ProfileEditData {
   introduce: string;
 }
 
-export interface ReviewData {
+export interface ProfileReviewData {
   _id: string;
   reviewScore: number;
   productName: string;
   productId: string;
-  content: string;
+  reviewContent: string;
   seller: string;
   createdAt: string;
-  tags: number[];
+  reviewTags: number[];
   reviewer: {
     nickname: string;
     profileImg: string;
