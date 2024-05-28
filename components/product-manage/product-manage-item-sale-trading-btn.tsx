@@ -14,86 +14,72 @@ import SaleTradingPurchaseCancelRejectBtn from "./saleTradingBtn/sale-trading-pu
 import SaleTradingReturnConfirmationBtn from "./saleTradingBtn/sale-trading-return-confirmation-btn";
 import SaleTradingRetrunRejectBtn from "./saleTradingBtn/sale-trading-retrun-reject-btn";
 import SaleTradingChattingBtn from "./saleTradingBtn/sale-trading-chatting-btn";
-import SaleTradingReturnReceiptComfirmationBtn from "./saleTradingBtn/sale-trading-return-receipt-comfirmation-btn";
+import SaleTradingReturnReceiptConfirmationBtn from "./saleTradingBtn/sale-trading-return-receipt-confirmation-btn";
 import SaleTradingPurchaseRequestRejectBtn from "./saleTradingBtn/sale-trading-purchase-request-reject-btn";
 
 interface IProps {
   tradingData: SaleTradingData;
 }
 
+type ButtonComponent = (productId: string) => JSX.Element;
+
+interface ButtonComponents {
+  [key: string]: {
+    [key: string]: ButtonComponent;
+  };
+}
+
+const buttonComponents: ButtonComponents = {
+  [TradingStatus.TRADING]: {
+    [SalesTradingProcess.판매중]: (productId: string) => (
+      <>
+        <SaleTradingEditBtn productId={productId} />
+        <SaleTradingDeleteBtn productId={productId} />
+      </>
+    ),
+    [SalesTradingProcess.구매요청확인]: (productId: string) => (
+      <>
+        <SaleTradingPurchaseConfirmationBtn productId={productId} />
+        <SaleTradingPurchaseRequestRejectBtn productId={productId} />
+      </>
+    ),
+    [SalesTradingProcess.상품전달확인]: (productId: string) => (
+      <SaleTradingDeliveryConfirmationBtn productId={productId} />
+    ),
+    [SalesTradingProcess.구매자상품인수중]: () => <SaleTradingChattingBtn />,
+  },
+  [TradingStatus.CANCEL]: {
+    [SalesCancelProcess.취소요청확인]: (productId: string) => (
+      <>
+        <SaleTradingCancelConfirmationBtn productId={productId} />
+        <SaleTradingPurchaseCancelRejectBtn productId={productId} />
+      </>
+    ),
+  },
+  [TradingStatus.RETURN]: {
+    [SalesReturnProcess.반품요청확인]: (productId: string) => (
+      <SaleTradingReturnConfirmationBtn productId={productId} />
+    ),
+    [SalesReturnProcess.구매자반품상품전달중]: () => <SaleTradingChattingBtn />,
+    [SalesReturnProcess.반품상품인수확인]: (productId: string) => (
+      <>
+        <SaleTradingReturnReceiptConfirmationBtn productId={productId} />
+        <SaleTradingRetrunRejectBtn productId={productId} />
+      </>
+    ),
+  },
+};
+
 export default function ProductManageItemSaleTradingBtn({
   tradingData,
 }: IProps) {
-  if (tradingData.status === TradingStatus.TRADING) {
-    if (tradingData.process === SalesTradingProcess.판매중) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingEditBtn productId={tradingData.productId} />
-          <SaleTradingDeleteBtn productId={tradingData.productId} />
-        </div>
-      );
-    } else if (tradingData.process === SalesTradingProcess.구매요청확인) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingPurchaseConfirmationBtn
-            productId={tradingData.productId}
-          />
-          <SaleTradingPurchaseRequestRejectBtn
-            productId={tradingData.productId}
-          />
-        </div>
-      );
-    } else if (tradingData.process === SalesTradingProcess.상품전달확인) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingDeliveryConfirmationBtn
-            productId={tradingData.productId}
-          />
-        </div>
-      );
-    } else if (tradingData.process === SalesTradingProcess.구매자상품인수중) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingChattingBtn />
-        </div>
-      );
-    }
-  } else if (tradingData.status === TradingStatus.CANCEL) {
-    if (tradingData.process === SalesCancelProcess.취소요청확인) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingCancelConfirmationBtn productId={tradingData.productId} />
-          <SaleTradingPurchaseCancelRejectBtn
-            productId={tradingData.productId}
-          />
-        </div>
-      );
-    }
-  } else if (tradingData.status === TradingStatus.RETURN) {
-    if (tradingData.process === SalesReturnProcess.반품요청확인) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingReturnConfirmationBtn productId={tradingData.productId} />
-        </div>
-      );
-    } else if (
-      tradingData.process === SalesReturnProcess.구매자반품상품전달중
-    ) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingChattingBtn />
-        </div>
-      );
-    } else if (tradingData.process === SalesReturnProcess.반품상품인수확인) {
-      return (
-        <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <SaleTradingReturnReceiptComfirmationBtn
-            productId={tradingData.productId}
-          />
-          <SaleTradingRetrunRejectBtn productId={tradingData.productId} />
-        </div>
-      );
-    }
-  }
-  return null;
+  const { status, process, productId } = tradingData;
+
+  const Button = buttonComponents[status]?.[process];
+  
+  return Button ? (
+    <div className="flex flex-row justify-end sm:flex-col gap-3">
+      {Button(productId)}
+    </div>
+  ) : null;
 }
