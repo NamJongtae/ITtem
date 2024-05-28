@@ -1,5 +1,12 @@
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import {
+  PurchaseTradingData,
+  SaleTradingData,
+  TradingStatus,
+} from "@/types/productTypes";
 import { ProductManageMenu } from "./product-manage-page";
+import PurchaseTradingEndReviewUploadBtn from "./purchase-trading-end-btn/purchase-trading-end-review-upload-btn";
+import PurchaseTradingEndReviewBtn from "./purchase-trading-end-btn/purchase-trading-end-review-btn";
+import SaleTradingEndReviewBtn from "./modal/sale-trading-end-btn/sale-trading-end-review-btn";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -9,21 +16,30 @@ export default function ProductManageItemTradingEndBtn({
   tradingData,
   menu,
 }: IProps) {
-  if (tradingData.process === "거래완료") {
-    if (menu === "판매") {
+  if (menu === "판매") {
+    if (tradingData.isReviewed) {
       return (
         <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <button className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600">
-            리뷰보기
+          <SaleTradingEndReviewBtn productId={tradingData.productId} />
+        </div>
+      );
+    }
+  } else {
+    if (tradingData.isReviewed) {
+      return (
+        <div className="flex flex-row justify-end sm:flex-col gap-3">
+          <PurchaseTradingEndReviewBtn productId={tradingData.productId} />
+          <button className="text-sm sm:text-base px-4 py-2 bg-gray-500 text-white font-semibold betterhover:hover:bg-gray-600">
+            환불요청
           </button>
         </div>
       );
     } else {
       return (
         <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <button className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600">
-            리뷰작성
-          </button>
+          <PurchaseTradingEndReviewUploadBtn
+            productId={tradingData.productId}
+          />
           <button className="text-sm sm:text-base px-4 py-2 bg-gray-500 text-white font-semibold betterhover:hover:bg-gray-600">
             환불요청
           </button>
@@ -31,5 +47,6 @@ export default function ProductManageItemTradingEndBtn({
       );
     }
   }
+
   return null;
 }
