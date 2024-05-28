@@ -2,10 +2,11 @@ import { IronSession } from "iron-session";
 import {
   ProductData,
   ProductDetailData,
+  ProductReviewData,
   PurchaseTradingData,
-  SaleTradingData
+  SaleTradingData,
 } from "./productTypes";
-import { AuthData, ProfileData, ReviewData } from "./authTypes";
+import { AuthData, ProfileData, ProfileReviewData } from "./authTypes";
 
 export interface VerifyEmailResponseData {
   message: string;
@@ -96,52 +97,53 @@ export interface KakaoAuthInfoResponseData {
   };
 }
 
-export interface ProductListResponseData {
-  products: ProductData[];
+export interface ApiResponse<T> {
   message: string;
 }
 
-export interface ProductResponseData {
+export interface ProductListResponseData extends ApiResponse<ProductData[]> {
+  products: ProductData[];
+}
+
+export interface ProductResponseData extends ApiResponse<ProductData> {
   product: ProductData;
-  message: string;
 }
 
-export interface ProductDetailResponseData {
+export interface ProductDetailResponseData
+  extends ApiResponse<ProductDetailData> {
   product: ProductDetailData;
-  message: string;
 }
 
-export interface ProfileResponseData {
+export interface ProfileResponseData extends ApiResponse<ProfileData> {
   profile: ProfileData;
-  message: string;
 }
 
-export interface FollowersResponseData {
+export interface FollowersResponseData extends ApiResponse<ProfileData[]> {
   followers: ProfileData[];
-  message: string;
 }
 
-export interface FollowingsResponseData {
+export interface FollowingsResponseData extends ApiResponse<ProfileData[]> {
   followings: ProfileData[];
-  message: string;
 }
 
-export interface WishResposeData {
+export interface WishResponseData extends ApiResponse<ProductData[]> {
   products: ProductData[];
-  message: string;
 }
 
-export interface ReviewsResponseData {
-  reviews: ReviewData[];
-  message: string;
+export interface ReviewsResponseData extends ApiResponse<ProfileReviewData[]> {
+  reviews: ProfileReviewData[];
 }
 
-export interface SalesTradingResponseData {
-  salesTrading : SaleTradingData[],
-  message: string,
+export interface SalesTradingResponseData
+  extends ApiResponse<SaleTradingData[]> {
+  salesTrading: SaleTradingData[];
 }
 
-export interface PurchaseTradingResponseData {
-  purchaseTrading : PurchaseTradingData[],
-  message: string,
+export interface PurchaseTradingResponseData
+  extends ApiResponse<PurchaseTradingData[]> {
+  purchaseTrading: PurchaseTradingData[];
+}
+
+export interface ReviewResponseData extends ApiResponse<ProductReviewData> {
+  review: ProductReviewData;
 }
