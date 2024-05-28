@@ -5,7 +5,7 @@ interface IProps {
   productId: string;
 }
 
-export default function SaleTradingReturnReceiptComfirmationBtn({
+export default function SaleTradingReturnReceiptConfirmationBtn({
   productId,
 }: IProps) {
   const { productReturnReceiptConfirmationMutate } =
