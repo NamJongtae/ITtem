@@ -72,13 +72,13 @@ export default async function handler(
         },
         {
           $project: {
-            tags: 1,
+            reviewTags: 1,
             seller: 1,
             _id: 1,
             reviewScore: 1,
             productName: 1,
             productId: 1,
-            content: 1,
+            reviewContent: 1,
             createdAt: 1,
             "reviewer.nickname": 1,
             "reviewer.profileImg": 1,
