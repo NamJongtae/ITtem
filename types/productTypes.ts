@@ -172,6 +172,7 @@ export interface SaleTradingData {
     imgData: { url: string }[];
     price: string;
   };
+  isReviewed: boolean;
 }
 
 export interface PurchaseTradingData {
@@ -195,5 +196,16 @@ export interface PurchaseTradingData {
     name: string;
     imgData: { url: string }[];
     price: string;
+  };
+  isReviewed: boolean;
+}
+
+export interface ProductReviewData {
+  reviewTags: number[];
+  reviewScore: number;
+  reviewContent: number;
+  reviewer: {
+    nickname: string;
+    profileImg: string;
   };
 }
