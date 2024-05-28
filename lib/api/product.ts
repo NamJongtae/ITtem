@@ -11,6 +11,7 @@ import {
   ProductListResponseData,
   ProductResponseData,
   PurchaseTradingResponseData,
+  ReviewResponseData,
   SalesTradingResponseData,
 } from "@/types/apiTypes";
 
@@ -447,6 +448,43 @@ export async function productReturnRequestWithdrawal(
   try {
     const response = await customAxios.patch(
       `/api/product/${productId}/purchase/return/withdrawal`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getReview(
+  productId: string
+): Promise<AxiosResponse<ReviewResponseData>> {
+  try {
+    const response = await customAxios(`/api/product/${productId}/review`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function uploadReview({
+  productId,
+  reviewScore,
+  reviewContent,
+  reviewTags,
+}: {
+  productId: string;
+  reviewScore: number;
+  reviewContent: string;
+  reviewTags: number[];
+}): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.post(
+      `/api/product/${productId}/review`,
+      {
+        reviewScore,
+        reviewContent,
+        reviewTags,
+      }
     );
     return response;
   } catch (error) {
