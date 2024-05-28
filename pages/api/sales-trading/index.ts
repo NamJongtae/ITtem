@@ -99,6 +99,7 @@ export default async function handler(
             returnEndDate: 1,
             process: 1,
             status: 1,
+            isReviewed: 1,
           },
         },
       ];

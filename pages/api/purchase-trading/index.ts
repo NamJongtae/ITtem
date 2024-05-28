@@ -100,17 +100,16 @@ export default async function handler(
             returnEndDate: 1,
             process: 1,
             status: 1,
+            isReviewed: 1,
           },
         },
       ];
       const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
 
-      res
-        .status(200)
-        .json({
-          message: `${message} 목록 조회에 성공했어요.`,
-          purchaseTrading,
-        });
+      res.status(200).json({
+        message: `${message} 목록 조회에 성공했어요.`,
+        purchaseTrading,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({
