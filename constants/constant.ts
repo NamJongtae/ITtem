@@ -110,3 +110,7 @@ export const getProfileReviewsQueryKey = (uid: string) => [
   uid,
   "reviews",
 ];
+
+export const getProductReviewQueryKey = (productId: string) => {
+  return ["product", productId, "review"];
+};
