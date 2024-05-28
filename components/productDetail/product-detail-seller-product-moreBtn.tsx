@@ -6,9 +6,9 @@ interface IProps {
 }
 export default function ProductDetailSellerProductMoreBtn({ auth }: IProps) {
   const isShowMoreBtn =
-    auth?.productIds &&
+    auth?.recentProducts &&
     (auth?.recentProducts.length ?? 0) > 0 &&
-    auth.productIds.length -
+    auth.recentProducts.length -
       1 -
       (auth?.recentProducts.length ?? 0) >
       0;
@@ -20,7 +20,7 @@ export default function ProductDetailSellerProductMoreBtn({ auth }: IProps) {
         className="inline-flex mt-5 border p-2 text-sm ml-[50%] -translate-x-[50%] rounded-sm betterhover:hover:bg-gray-100"
       >
         <span className="text-red-500">
-          {auth.productIds.length - 1 - auth?.recentProducts!.length}개
+          {auth.recentProducts.length - 1 - auth?.recentProducts!.length}개
         </span>
         의 상품 더보기{" "}
         <svg
