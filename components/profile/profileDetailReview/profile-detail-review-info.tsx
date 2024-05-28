@@ -2,7 +2,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { ReivewInfoData } from "@/types/authTypes";
 import { REVIEW_TAGS } from "@/constants/constant";
-import Empty from "@/components/commons/Empty";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,
@@ -19,10 +18,6 @@ export default function ProfileDetailReviewInfo({ reviewInfo }: IProps) {
       ? (reviewInfo?.totalReviewScore || 0) /
         (reviewInfo?.totalReviewCount || 0)
       : 0;
-
-  if (!reviewInfo) {
-    return <Empty message="리뷰가 존재하지 않아요." />;
-  }
   
   return (
     <>
@@ -56,7 +51,7 @@ export default function ProfileDetailReviewInfo({ reviewInfo }: IProps) {
           >
             <p>{tag}</p>
             <span className="font-semibold text-gray-400">
-              {reviewInfo?.tags[index]}
+              {reviewInfo?.reviewTags[index]}
             </span>
           </li>
         ))}

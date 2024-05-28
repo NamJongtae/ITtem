@@ -1,6 +1,7 @@
 import { ReivewInfoData } from "@/types/authTypes";
 import ProfileDetailReviewInfo from "./profile-detail-review-info";
 import ProfileDetailReviewList from "./profile-detail-review-list";
+import Empty from '@/components/commons/Empty';
 
 interface IProps {
   reviewInfo: ReivewInfoData | undefined;
@@ -13,8 +14,15 @@ export default function ProfileDetailReview({ reviewInfo, uid }: IProps) {
       <h2 className="font-semibold border-b mb-5 pb-3">
         거래후기 {reviewInfo?.totalReviewCount || 0}건
       </h2>
-      <ProfileDetailReviewInfo reviewInfo={reviewInfo} />
-      <ProfileDetailReviewList uid={uid} />
+
+      {reviewInfo ? (
+        <>
+          <ProfileDetailReviewInfo reviewInfo={reviewInfo} />
+          <ProfileDetailReviewList uid={uid} />
+        </>
+      ) : (
+        <Empty message="리뷰가 존재하지 않아요." />
+      )}
     </div>
   );
 }
