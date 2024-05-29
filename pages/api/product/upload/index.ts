@@ -46,7 +46,7 @@ export default async function handler(
       }
 
       const salesTrading= new SalesTrading({
-        seller: newProduct.uid,
+        sellerId: newProduct.uid,
         productId: newProduct._id,
         productName: newProduct.name,
         saleStartDate: newProduct.createdAt

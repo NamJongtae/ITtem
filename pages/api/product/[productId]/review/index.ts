@@ -57,7 +57,7 @@ export default async function handler(
         },
         {
           $addFields: {
-            buyerObjectId: { $toObjectId: "$buyer" },
+            buyerObjectId: { $toObjectId: "$buyerId" },
           },
         },
         {
@@ -150,7 +150,7 @@ export default async function handler(
         return;
       }
 
-      if (myUid !== purchseTrading.buyer) {
+      if (myUid !== purchseTrading.buyerId) {
         res.status(401).json({ message: "잘못된 요청이에요." });
         await session.abortTransaction();
         session.endSession();
@@ -174,8 +174,8 @@ export default async function handler(
       }
 
       const review = new Review({
-        seller: saleTrading.seller,
-        buyer: myUid,
+        sellerId: saleTrading.sellerId,
+        buyerId: myUid,
         saleTradingId: saleTrading._id,
         purchaseTradingId: purchseTrading._id,
         productId,
@@ -189,7 +189,7 @@ export default async function handler(
 
       const sellerReviewScore = await ReviewScore.findOne(
         {
-          uid: saleTrading.seller,
+          uid: saleTrading.sellerId,
         },
         null,
         { session }
@@ -197,7 +197,7 @@ export default async function handler(
 
       if (!sellerReviewScore) {
         const newReviewScore = new ReviewScore({
-          uid: saleTrading.seller,
+          uid: saleTrading.sellerId,
           totalReviewCount: 1,
           totalReviewScore: reviewScore,
           reviewTags,
@@ -218,7 +218,7 @@ export default async function handler(
 
         const reviewScoreUpdateResult = await ReviewScore.updateOne(
           {
-            uid: saleTrading.seller,
+            uid: saleTrading.sellerId,
           },
           {
             $inc: {

@@ -68,7 +68,7 @@ export default async function handler(
       return;
     }
 
-    if (myUid !== salesTrading.seller) {
+    if (myUid !== salesTrading.sellerId) {
       res.status(401).json({ message: "잘못된 요청이에요." });
       await session.abortTransaction();
       session.endSession();
@@ -143,8 +143,8 @@ export default async function handler(
 
     const canceledPurchaseReject = new CanceledPurchaseReject({
       tradingId: purchaseTrading._id,
-      seller: salesTrading.seller,
-      buyer: purchaseTrading.buyer,
+      sellerId: salesTrading.sellerId,
+      buyerId: purchaseTrading.buyerId,
       cancelStartDate: purchaseTrading.cancelStartDate,
       productId,
       rejectReason,

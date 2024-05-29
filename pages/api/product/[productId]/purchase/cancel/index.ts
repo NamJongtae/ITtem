@@ -74,7 +74,7 @@ export default async function handler(
         return;
       }
 
-      if (myUid !== purchaseTrading.buyer) {
+      if (myUid !== purchaseTrading.buyerId) {
         res.status(401).json({ message: "잘못된 요청입니다." });
         await session.abortTransaction();
         session.endSession();
@@ -216,7 +216,7 @@ export default async function handler(
 
         const newSalesTrading = new SalesTrading({
           productId,
-          seller: salesTrading.seller,
+          seller: salesTrading.sellerId,
           saleStartDate: salesTrading.saleStartDate,
           productName: salesTrading.productName,
         });

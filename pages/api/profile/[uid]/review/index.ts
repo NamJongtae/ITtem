@@ -41,7 +41,7 @@ export default async function handler(
       const reviewsWithBuyerInfo = await Review.aggregate([
         {
           $match: {
-            seller: uid as string,
+            sellerId: uid as string,
             createdAt: { $lt: cursorDate },
           },
         },
@@ -53,7 +53,7 @@ export default async function handler(
         },
         {
           $addFields: {
-            convertedBuyerId: { $toObjectId: "$buyer" },
+            convertedBuyerId: { $toObjectId: "$buyerId" },
           },
         },
         {
@@ -73,7 +73,7 @@ export default async function handler(
         {
           $project: {
             reviewTags: 1,
-            seller: 1,
+            sellerId: 1,
             _id: 1,
             reviewScore: 1,
             productName: 1,
