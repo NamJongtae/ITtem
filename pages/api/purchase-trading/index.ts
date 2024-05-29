@@ -80,7 +80,7 @@ export default async function handler(
           },
         },
         {
-          $unwind: "$productData",
+          $unwind: { path: "$productData", preserveNullAndEmptyArrays: true },
         },
         {
           $addFields: {
@@ -96,7 +96,7 @@ export default async function handler(
           },
         },
         {
-          $unwind: "$sellerInfo",
+          $unwind: { path: "$sellerInfo", preserveNullAndEmptyArrays: true },
         },
         {
           $addFields: {
@@ -112,7 +112,7 @@ export default async function handler(
           },
         },
         {
-          $unwind: "$buyerInfo",
+          $unwind: { path: "$buyerInfo", preserveNullAndEmptyArrays: true },
         },
         {
           $project: {
