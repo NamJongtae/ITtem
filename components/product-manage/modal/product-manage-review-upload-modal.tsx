@@ -4,6 +4,7 @@ import { REVIEW_TAGS } from "@/constants/constant";
 import useProductUploadReviewMutate from "@/hooks/querys/useProductUploadReviewMutate";
 import { DevTool } from "@hookform/devtools";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect } from "react";
 import { isMobile } from "react-device-detect";
 import { Controller, FieldValues, useForm } from "react-hook-form";
@@ -45,7 +46,7 @@ export default function ProductManageReviewUploadModal({
 
   const onSubmit = (values: FieldValues) => {
     const isUploadReview = confirm(
-      "정말 리뷰를 등록 하겠어요? 등록 후 삭제/수정이 불가능합니다."
+      "정말 리뷰를 작성 하겠어요? 등록 후 삭제/수정이 불가능합니다."
     );
     if (isUploadReview) {
       uploadReviewMutate({
@@ -79,10 +80,16 @@ export default function ProductManageReviewUploadModal({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div
           className={`${
-            isMobile ? "h-screen center" : "max-w-[480px] center"
-          } fixed z-30 flex flex-col justify-center gap-3 w-full p-8 border bg-white`}
+            isMobile ? "h-screen" : "max-w-[480px]"
+          } fixed center z-30 flex flex-col gap-3 w-full p-8 border bg-white`}
         >
-          <h2 className="text-xl text-center font-semibold mb-3">리뷰 등록</h2>
+          <h2
+            className={`${
+              isMobile ? "mt-10" : "mt-3"
+            } text-xl text-center font-semibold mb-3`}
+          >
+            리뷰 작성
+          </h2>
           <div className="flex items-center justify-center mb-2 gap-3">
             <h3 className="sr-only">리뷰 점수</h3>
             <Controller
@@ -136,22 +143,26 @@ export default function ProductManageReviewUploadModal({
             placeholder="리뷰를 입력해주세요."
             maxLength={300}
           />
-          <div className="flex justify-end gap-3 mt-5">
-            <button
-              type="submit"
-              className="py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
-              disabled={isDisabled}
-            >
-              리뷰 등록
-            </button>
-            <button
-              type="button"
-              onClick={closeModal}
-              className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
-            >
-              취소하기
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="w-full mx-auto mt-5 py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
+            disabled={isDisabled}
+          >
+            리뷰 작성
+          </button>
+          <button
+            type="button"
+            onClick={closeModal}
+            className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
+          >
+            <Image
+              src={"/icons/x_icon.svg"}
+              alt="닫기"
+              width={12}
+              height={12}
+            />
+          </button>
         </div>
         <DevTool control={control} />
       </form>

@@ -33,11 +33,18 @@ export default function ProductManageReviewModal({
       />
       <div
         className={`${
-          isMobile ? "h-screen center" : "max-w-[480px] center"
-        } fixed z-30 flex flex-col justify-center gap-3 w-full p-8 border bg-white`}
+          isMobile ? "h-screen" : "max-w-[480px]"
+        } fixed center z-30 flex flex-col gap-3 w-full p-8 border bg-white`}
       >
-        <h2 className="text-xl text-center font-semibold mb-3">리뷰</h2>
-        <div className="flex justify-center items-center flex-col">
+        <h2
+          className={`${
+            isMobile ? "mt-10" : "mt-3"
+          } text-xl text-center font-semibold mb-3`}
+        >
+          리뷰
+        </h2>
+        <div className="flex justify-center items-center flex-col gap-2">
+          <h3 className="sr-only">작성자</h3>
           <Image
             className="w-20 h-20 object-cover object-center rounded-full border"
             src={data?.reviewer.profileImg || "/icons/user_icon.svg"}
@@ -83,9 +90,9 @@ export default function ProductManageReviewModal({
         <button
           type="button"
           onClick={closeModal}
-          className="absolute top-3 right-3 bg-gray-500 rounded-full p-[4px]"
+          className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
         >
-          <Image src={"/icons/x_icon.svg"} alt="닫기" width={14} height={14} />
+          <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />
         </button>
       </div>
     </Portal>
