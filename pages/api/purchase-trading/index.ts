@@ -48,7 +48,7 @@ export default async function handler(
 
       let matchStage: any = {
         purchaseStartDate: { $lt: currentCursor },
-        buyer: myUid,
+        buyerId: myUid,
         status: { $in: currentStatus },
       };
 
@@ -83,12 +83,47 @@ export default async function handler(
           $unwind: "$productData",
         },
         {
+          $addFields: {
+            convertedSellerId: { $toObjectId: "$sellerId" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "convertedSellerId",
+            foreignField: "_id",
+            as: "sellerInfo",
+          },
+        },
+        {
+          $unwind: "$sellerInfo",
+        },
+        {
+          $addFields: {
+            convertedbuyerId: { $toObjectId: "$buyerId" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "convertedbuyerId",
+            foreignField: "_id",
+            as: "buyerInfo",
+          },
+        },
+        {
+          $unwind: "$buyerInfo",
+        },
+        {
           $project: {
             "productData.name": 1,
             "productData.imgData.url": 1,
             "productData.price": 1,
+            "sellerInfo.nickname": 1,
+            "buyerInfo.nickname": 1,
             _id: 1,
-            seller: 1,
+            sellerId: 1,
+            buyerId: 1,
             productId: 1,
             purchaseStartDate: 1,
             purchaseEndDate: 1,

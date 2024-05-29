@@ -47,7 +47,7 @@ export default async function handler(
           : ["TRADING", "CANCEL", "RETURN"];
       let matchStage: any = {
         saleStartDate: { $lt: currentCursor },
-        seller: myUid,
+        sellerId: myUid,
         status: { $in: currentStatus },
       };
 
@@ -82,12 +82,47 @@ export default async function handler(
           $unwind: "$productData",
         },
         {
+          $addFields: {
+            convertedSellerId: { $toObjectId: "$sellerId" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "convertedSellerId",
+            foreignField: "_id",
+            as: "sellerInfo",
+          },
+        },
+        {
+          $unwind: "$sellerInfo",
+        },
+        {
+          $addFields: {
+            convertedbuyerId: { $toObjectId: "$buyerId" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "convertedbuyerId",
+            foreignField: "_id",
+            as: "buyerInfo",
+          },
+        },
+        {
+          $unwind: "$buyerInfo",
+        },
+        {
           $project: {
             "productData.name": 1,
             "productData.imgData.url": 1,
             "productData.price": 1,
+            "sellerInfo.nickname": 1,
+            "buyerInfo.nickname": 1,
             _id: 1,
-            seller: 1,
+            sellerId: 1,
+            buyerId: 1,
             productId: 1,
             saleStartDate: 1,
             saleEndDate: 1,
