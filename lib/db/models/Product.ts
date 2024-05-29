@@ -1,12 +1,44 @@
-import mongoose from "mongoose";
+import {
+  ProductCategory,
+  ProductCondition,
+  ProductSellType,
+  ProductStatus,
+  ProductTransaction,
+} from "@/types/productTypes";
+import mongoose, { Model } from "mongoose";
 
-export const productSchema = new mongoose.Schema(
+interface ProductDB {
+  name: string;
+  description: string;
+  uid: string;
+  createdAt: Date;
+  status: ProductStatus;
+  block: boolean;
+  reportCount: number;
+  reportUserIds: string[];
+  wishUserIds: string[];
+  wishCount: number;
+  viewCount: number;
+  imgData: { url: string; name: string }[];
+  price: number;
+  location: string;
+  sellType: ProductSellType;
+  category: ProductCategory;
+  condition: ProductCondition;
+  returnPolicy: string;
+  transaction: ProductTransaction;
+  deliveryFee: string;
+}
+
+interface ProductDBModel extends Model<ProductDB> {}
+
+export const productSchema = new mongoose.Schema<ProductDB>(
   {
     name: { type: String, required: [true, "상품명이 없어요."] },
     description: { type: String, required: [true, "상품 설명이 없어요."] },
     uid: { type: String, required: [true, "유저 아이디가 없어요."] },
     createdAt: { type: Date, default: Date.now },
-    status: { type: String, default: "sold" },
+    status: { type: String, default: ProductStatus.sold },
     block: { type: Boolean, default: false },
     reportCount: { type: Number, default: 0 },
     reportUserIds: { type: [String], default: [] },
@@ -51,6 +83,7 @@ export const productSchema = new mongoose.Schema(
 );
 
 const Product =
-  mongoose.models?.Product || mongoose.model("Product", productSchema);
+  mongoose.models?.Product ||
+  mongoose.model<ProductDB, ProductDBModel>("Product", productSchema);
 
 export default Product;

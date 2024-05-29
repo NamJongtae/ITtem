@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 interface ReviewScoreDB {
   uid: string;
@@ -6,6 +6,8 @@ interface ReviewScoreDB {
   totalReviewScore: number;
   reviewTags: number[];
 }
+
+interface ReviewScoreModel extends Model<ReviewScoreDB> {}
 
 export const reviewScoreSchema = new mongoose.Schema<ReviewScoreDB>(
   {
@@ -19,6 +21,9 @@ export const reviewScoreSchema = new mongoose.Schema<ReviewScoreDB>(
 
 const ReviewScore =
   mongoose.models?.ReviewScore ||
-  mongoose.model("ReviewScore", reviewScoreSchema);
+  mongoose.model<ReviewScoreDB, ReviewScoreModel>(
+    "ReviewScore",
+    reviewScoreSchema
+  );
 
 export default ReviewScore;

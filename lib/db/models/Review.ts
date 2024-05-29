@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 interface ReviewDB {
-  seller: string;
-  buyer: string;
+  sellerId: string;
+  buyerId: string;
   reviewScore: number;
   saleTradingId: string;
   purchaseTradingId: string;
@@ -13,10 +13,12 @@ interface ReviewDB {
   createdAt: Date;
 }
 
+interface ReviewDBModel extends Model<ReviewDB> {}
+
 export const reviewSchema = new mongoose.Schema<ReviewDB>(
   {
-    seller: { type: String, required: [true, "판매자 ID가 없어요."] },
-    buyer: { type: String, required: [true, "구매자 ID가 없어요."] },
+    sellerId: { type: String, required: [true, "판매자 ID가 없어요."] },
+    buyerId: { type: String, required: [true, "구매자 ID가 없어요."] },
     reviewScore: { type: Number, required: [true, "리뷰 점수가 없어요."] },
     saleTradingId: {
       type: String,
@@ -36,6 +38,7 @@ export const reviewSchema = new mongoose.Schema<ReviewDB>(
 );
 
 const Review =
-  mongoose.models?.Review || mongoose.model("Review", reviewSchema);
+  mongoose.models?.Review ||
+  mongoose.model<ReviewDB, ReviewDBModel>("Review", reviewSchema);
 
 export default Review;

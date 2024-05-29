@@ -1,6 +1,27 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 
-export const userSchema = new mongoose.Schema(
+interface UserDB {
+  loginType: string;
+  email: string;
+  password: string;
+  nickname: string;
+  profileImg: string;
+  profileImgFilename: string;
+  introduce: string;
+  productIds: string[];
+  wishProductIds: string[];
+  saleCount: number;
+  purchaseCount: number;
+  transactionCount: number;
+  followers: string[];
+  followings: string[];
+  chatRoomList: string[];
+  createdAt: Date;
+}
+
+interface UserDBModel extends Model<UserDB> {}
+
+export const userSchema = new mongoose.Schema<UserDB>(
   {
     loginType: {
       type: String,
@@ -13,10 +34,11 @@ export const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function () {
-        return (this as any).loginType === "Email"
-          ? "비밀번호가 없어요."
-          : false;
+      validate: {
+        validator: function (this: UserDB) {
+          return this.loginType !== "Email" || !!this.password;
+        },
+        message: "비밀번호가 없어요.",
       },
     },
     nickname: { type: String, required: [true, "닉네임이 없어요."] },
@@ -36,6 +58,8 @@ export const userSchema = new mongoose.Schema(
   { collection: "users" }
 );
 
-const User = mongoose.models?.User || mongoose.model("User", userSchema);
+const User =
+  mongoose.models?.User ||
+  mongoose.model<UserDB, UserDBModel>("User", userSchema);
 
 export default User;

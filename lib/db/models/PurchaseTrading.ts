@@ -2,7 +2,8 @@ import { PurchaseTradingProcess, TradingStatus } from "@/types/productTypes";
 import mongoose, { Model } from "mongoose";
 
 interface PurchaseTradingDB {
-  buyer: string;
+  sellerId: string;
+  buyerId: string;
   productId: string;
   productName: string;
   purchaseStartDate: Date;
@@ -22,7 +23,8 @@ interface PurchaseTradingDBModel extends Model<PurchaseTradingDB> {}
 
 export const purchaseTradingSchema = new mongoose.Schema<PurchaseTradingDB>(
   {
-    buyer: { type: String, required: [true, "구매자 ID가 없어요."] },
+    sellerId: { type: String, required: [true, "판매자 ID가 없어요."] },
+    buyerId: { type: String, required: [true, "구매자 ID가 없어요."] },
     productId: { type: String, required: [true, "상품 ID가 없어요."] },
     productName: { type: String, required: [true, "상품명이 없어요."] },
     purchaseStartDate: { type: Date, required: false, default: Date.now },
