@@ -73,15 +73,7 @@ export default async function handler(
         return;
       }
 
-      const purchaseTrading = new PurchaseTrading({
-        buyer: myUid,
-        productId,
-        productName: product.name,
-      });
-
-      await purchaseTrading.save({ session });
-
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SalesTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -93,14 +85,14 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      const salesTradingUpdateResult = await SalesTrading.updateOne(
+      const saleTradingUpdateResult = await SalesTrading.updateOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -108,16 +100,25 @@ export default async function handler(
           ],
           productId,
         },
-        { process: SalesTradingProcess.구매요청확인 },
+        { buyerId: myUid, process: SalesTradingProcess.구매요청확인 },
         { session }
       );
 
       if (
-        !salesTradingUpdateResult.acknowledged ||
-        salesTradingUpdateResult.modifiedCount === 0
+        !saleTradingUpdateResult.acknowledged ||
+        saleTradingUpdateResult.modifiedCount === 0
       ) {
         throw new Error("상품 판매 정보 status 업데이트에 실패했어요.");
       }
+
+      const purchaseTrading = new PurchaseTrading({
+        sellerId: saleTrading.sellerId,
+        buyerId: myUid,
+        productId,
+        productName: product.name,
+      });
+
+      await purchaseTrading.save({ session });
 
       await session.commitTransaction();
       session.endSession();
