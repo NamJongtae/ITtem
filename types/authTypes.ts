@@ -82,7 +82,7 @@ export interface ProfileReviewData {
   productName: string;
   productId: string;
   reviewContent: string;
-  seller: string;
+  sellerId: string;
   createdAt: string;
   reviewTags: number[];
   reviewer: {

@@ -155,7 +155,14 @@ export const enum SalesReturnProcess {
 
 export interface SaleTradingData {
   _id: string;
-  seller: string;
+  sellerId: string;
+  buyerId: string;
+  sellerInfo: {
+    nickname: string;
+  };
+  buyerInfo: {
+    nickname: string;
+  };
   productId: string;
   status: TradingStatus;
   process: SalesTradingProcess | SalesCancelProcess | SalesReturnProcess;
@@ -177,7 +184,14 @@ export interface SaleTradingData {
 
 export interface PurchaseTradingData {
   _id: string;
-  seller: string;
+  sellerId: string;
+  buyerId: string;
+  sellerInfo: {
+    nickname: string;
+  };
+  buyerInfo: {
+    nickname: string;
+  };
   productId: string;
   status: TradingStatus;
   process:
