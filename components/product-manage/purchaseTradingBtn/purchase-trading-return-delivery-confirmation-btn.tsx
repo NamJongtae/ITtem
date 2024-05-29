@@ -22,7 +22,7 @@ export default function PurchaseTradingReturnDeliveryConfirmationBtn({
       onClick={onClickDeliveryConfirmation}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
-      반품상품전달 확인
+      반품 상품 전달 확인
     </button>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import ProductManageReviewModal from "../product-manage-review-modal";
+import ProductManageReviewModal from "../modal/product-manage-review-modal";
 import useModal from "@/hooks/commons/useModal";
 
 interface IProps {
@@ -15,7 +15,7 @@ export default function SaleTradingEndReviewBtn({ productId }: IProps) {
         onClick={openModal}
         className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
       >
-        리뷰보기
+        리뷰 보기
       </button>
       {isOpenModal && (
         <ProductManageReviewModal
