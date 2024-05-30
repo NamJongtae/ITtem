@@ -212,7 +212,7 @@ export interface PurchaseTradingData {
   returnRejectReason?: string;
   cancelReason?: string;
   cancelRejectReason?: string;
-  purchaseStartDate?: string;
+  purchaseStartDate: string;
   purchaseEndDate?: string;
   cancelStartDate?: string;
   cancelEndDate?: string;
