@@ -13,7 +13,6 @@ import {
   TradingStatus,
 } from "@/types/productTypes";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import CanceledPurchaseReject from "@/lib/db/models/CanceledPurchaseReject";
 
 export default async function handler(
   req: NextApiRequest,
@@ -54,6 +53,8 @@ export default async function handler(
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesCancelProcess.취소거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } },
         ],
         productId,
       },
@@ -141,22 +142,43 @@ export default async function handler(
       return;
     }
 
-    const canceledPurchaseReject = new CanceledPurchaseReject({
-      tradingId: purchaseTrading._id,
+    const currentDate = new Date();
+    const cancelRejectSaleTrading = new SalesTrading({
       sellerId: salesTrading.sellerId,
-      buyerId: purchaseTrading.buyerId,
-      cancelStartDate: purchaseTrading.cancelStartDate,
+      buyerId: salesTrading.buyerId,
       productId,
-      rejectReason,
+      productName: salesTrading.productName,
+      saleStartDate: salesTrading.saleStartDate,
+      cancelStartDate: salesTrading.cancelStartDate,
+      cancelEndDate: currentDate,
+      cancelRejectReason: rejectReason,
+      status: TradingStatus.CANCEL_REJECT,
+      process: SalesCancelProcess.취소거절,
     });
 
-    await canceledPurchaseReject.save({ session });
+    const cancelRejectPurchaseTrading = new PurchaseTrading({
+      sellerId: salesTrading.sellerId,
+      buyerId: salesTrading.buyerId,
+      productId,
+      productName: salesTrading.productName,
+      purchaseStartDate: salesTrading.purchaseStartDate,
+      cancelStartDate: salesTrading.cancelStartDate,
+      cancelRejectDate: currentDate,
+      cancelRejectReason: rejectReason,
+      status: TradingStatus.CANCEL_REJECT,
+      process: PurchaseCancelProcess.취소거절,
+    });
+
+    await cancelRejectSaleTrading.save({ session });
+    await cancelRejectPurchaseTrading.save({ session });
 
     const salesTradingUpdateResult = await SalesTrading.updateOne(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesCancelProcess.취소거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } },
         ],
         productId,
       },

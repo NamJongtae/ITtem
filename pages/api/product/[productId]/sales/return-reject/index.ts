@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import ReturnPurchaseReject from "@/lib/db/models/ReturnPurchaseReject";
 import SalesTrading from "@/lib/db/models/SalesTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
@@ -66,6 +65,8 @@ export default async function handler(
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
             { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
           ],
           productId,
         },
@@ -234,16 +235,35 @@ export default async function handler(
         }
       }
 
-      const returnPurchaseReject = new ReturnPurchaseReject({
-        tradingId: purchaseTrading._id,
-        productId,
-        buyerId: purchaseTrading.buyerId,
+      const currentDate = new Date();
+      const returnRejectSaleTrading = new SalesTrading({
         sellerId: salesTrading.sellerId,
-        returnStartDate: purchaseTrading.returnStartDate,
-        rejectReason,
+        buyerId: salesTrading.buyerId,
+        productId,
+        productName: salesTrading.productName,
+        saleStartDate: salesTrading.saleStartDate,
+        returnStartDate: salesTrading.returnStartDate,
+        returnRejectDate: currentDate,
+        returnRejectReason: rejectReason,
+        status: TradingStatus.RETURN_REJECT,
+        process: SalesReturnProcess.반품거절,
       });
 
-      await returnPurchaseReject.save({ session });
+      const returnRejectPurchaseTrading = new PurchaseTrading({
+        sellerId: salesTrading.sellerId,
+        buyerId: salesTrading.buyerId,
+        productId,
+        productName: salesTrading.productName,
+        purchaseStartDate: purchaseTrading.purchaseStartDate,
+        returnStartDate: purchaseTrading.returnStartDate,
+        returnRejectDate: currentDate,
+        returnRejectReason: rejectReason,
+        status: TradingStatus.RETURN_REJECT,
+        process: PurchaseReturnProcess.반품거절,
+      });
+
+      await returnRejectSaleTrading.save({ session });
+      await returnRejectPurchaseTrading.save({ session });
 
       await session.commitTransaction();
       session.endSession();
