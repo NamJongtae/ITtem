@@ -1,11 +1,14 @@
 import useModal from "@/hooks/commons/useModal";
-import ProductManageReviewModal from "../modal/product-manage-review-modal";
+import ProductManageTradingDetailModal from "../../modal/product-manage-trading-detail-modal";
+import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 
 interface IProps {
-  productId: string;
+  tradingData: SaleTradingData | PurchaseTradingData;
 }
 
-export default function PurchaseTradingEndReviewBtn({ productId }: IProps) {
+export default function SeleTradingEndTradingDetailBtn({
+  tradingData,
+}: IProps) {
   const { isOpenModal, openModal, closeModal } = useModal();
   return (
     <>
@@ -14,11 +17,11 @@ export default function PurchaseTradingEndReviewBtn({ productId }: IProps) {
         onClick={openModal}
         className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
       >
-        리뷰 보기
+        거래 상세 정보
       </button>
       {isOpenModal && (
-        <ProductManageReviewModal
-          productId={productId}
+        <ProductManageTradingDetailModal
+          tradingData={tradingData}
           closeModal={closeModal}
         />
       )}

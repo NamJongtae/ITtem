@@ -1,5 +1,5 @@
 import useModal from "@/hooks/commons/useModal";
-import PurchaseCancelRejectModal from "../modal/seller/purchase-cancel-reject-modal";
+import PurchaseCancelRejectModal from "../../modal/seller/purchase-cancel-reject-modal";
 
 interface IProps {
   productId: string;

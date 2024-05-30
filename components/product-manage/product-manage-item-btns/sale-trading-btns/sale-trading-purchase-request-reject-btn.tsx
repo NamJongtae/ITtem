@@ -1,11 +1,13 @@
-import ProductReturnRejectModal from "../modal/seller/product-return-reject-modal";
 import useModal from "@/hooks/commons/useModal";
+import PurchaseRequestRejectModal from "../../modal/seller/purchase-request-reject-modal";
 
 interface IProps {
   productId: string;
 }
 
-export default function SaleTradingRetrunRejectBtn({ productId }: IProps) {
+export default function SaleTradingPurchaseRequestRejectBtn({
+  productId,
+}: IProps) {
   const { isOpenModal, openModal, closeModal } = useModal();
   return (
     <>
@@ -14,10 +16,10 @@ export default function SaleTradingRetrunRejectBtn({ productId }: IProps) {
         onClick={openModal}
         className="text-sm sm:text-base px-4 py-2 bg-gray-500 text-white font-semibold betterhover:hover:bg-gray-600"
       >
-        반품거절
+        구매요청 거절
       </button>
       {isOpenModal && (
-        <ProductReturnRejectModal
+        <PurchaseRequestRejectModal
           productId={productId}
           closeModal={closeModal}
         />

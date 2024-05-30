@@ -1,12 +1,13 @@
-import React from "react";
-import ProductManageReviewModal from "../modal/product-manage-review-modal";
 import useModal from "@/hooks/commons/useModal";
+import ProductManageReviewUploadModal from "../../modal/product-manage-review-upload-modal";
 
 interface IProps {
   productId: string;
 }
 
-export default function SaleTradingEndReviewBtn({ productId }: IProps) {
+export default function PurchaseTradingEndReviewUploadBtn({
+  productId,
+}: IProps) {
   const { isOpenModal, openModal, closeModal } = useModal();
   return (
     <>
@@ -15,10 +16,10 @@ export default function SaleTradingEndReviewBtn({ productId }: IProps) {
         onClick={openModal}
         className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
       >
-        리뷰 보기
+        리뷰 작성
       </button>
       {isOpenModal && (
-        <ProductManageReviewModal
+        <ProductManageReviewUploadModal
           productId={productId}
           closeModal={closeModal}
         />

@@ -5,13 +5,13 @@ import {
   PurchaseTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
-import PurchaseTradingChattingBtn from "./purchaseTradingBtn/purchase-trading-chatting-btn";
-import PurchaseTradingCancelBtn from "./purchaseTradingBtn/purchase-trading-cancel-btn";
-import PurchaseTradingReceiptConfirmationBtn from "./purchaseTradingBtn/purchase-trading-receipt-confirmation-btn";
-import PurchaseTradingReturnBtn from "./purchaseTradingBtn/purchase-trading-return-btn";
-import PurchaseTradingReturnwithdrawalBtn from "./purchaseTradingBtn/purchase-trading-reutrn-withdrawal-btn";
-import PurchaseTradingCancelWithdrawalBtn from "./purchaseTradingBtn/purchase-trading-cancel-withdrawal-btn";
-import PurchaseTradingReturnDeliveryConfirmationBtn from "./purchaseTradingBtn/purchase-trading-return-delivery-confirmation-btn";
+import PurchaseTradingChattingBtn from "./purchase-trading-chatting-btn";
+import PurchaseTradingCancelBtn from "./purchase-trading-cancel-btn";
+import PurchaseTradingReceiptConfirmationBtn from "./purchase-trading-receipt-confirmation-btn";
+import PurchaseTradingReturnBtn from "./purchase-trading-return-btn";
+import PurchaseTradingReturnwithdrawalBtn from "./purchase-trading-reutrn-withdrawal-btn";
+import PurchaseTradingCancelWithdrawalBtn from "./purchase-trading-cancel-withdrawal-btn";
+import PurchaseTradingReturnDeliveryConfirmationBtn from "./purchase-trading-return-delivery-confirmation-btn";
 
 interface IProps {
   tradingData: PurchaseTradingData;
@@ -67,9 +67,7 @@ const buttonComponents: ButtonComponents = {
   },
 };
 
-export default function ProductManageItemPurchaseTradingBtn({
-  tradingData,
-}: IProps) {
+export default function PurchaseTradingBtns({ tradingData }: IProps) {
   const { status, process, productId } = tradingData;
 
   const Button = buttonComponents[status]?.[process];

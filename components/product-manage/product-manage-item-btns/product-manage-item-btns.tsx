@@ -2,9 +2,9 @@ import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 import {
   ProductManageDeatilMenu,
   ProductManageMenu,
-} from "./product-manage-page";
+} from "../product-manage-page";
 import ProductManageItemTradingBtns from "./product-manage-item-trading-btns";
-import ProductManageItemTradingEndBtn from "./product-manage-item-trading-end-btn";
+import ProductManageItemTradingEndBtns from './product-manage-item-trading-end-btns';
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -16,14 +16,14 @@ export default function ProductManageItemBtns({
   menu,
   detailMenu,
 }: IProps) {
-  if (detailMenu === "거래중") {
-    return (
-      <ProductManageItemTradingBtns menu={menu} tradingData={tradingData} />
-    );
-  } else if (detailMenu === "거래완료 내역") {
-    return (
-      <ProductManageItemTradingEndBtn menu={menu} tradingData={tradingData} />
-    );
-  }
-  return null;
+  return (
+    <>
+      {detailMenu === "거래중" && (
+        <ProductManageItemTradingBtns menu={menu} tradingData={tradingData} />
+      )}
+      {detailMenu === "거래완료 내역" && (
+        <ProductManageItemTradingEndBtns menu={menu} tradingData={tradingData} />
+      )}
+    </>
+  );
 }

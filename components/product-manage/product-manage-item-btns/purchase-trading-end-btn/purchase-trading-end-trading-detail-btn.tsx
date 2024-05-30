@@ -1,6 +1,6 @@
 import useModal from "@/hooks/commons/useModal";
 import React from "react";
-import ProductManageTradingDetailModal from "../modal/product-manage-trading-detail-modal";
+import ProductManageTradingDetailModal from "../../modal/product-manage-trading-detail-modal";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 
 interface IProps {
