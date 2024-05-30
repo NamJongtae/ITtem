@@ -11,15 +11,15 @@ export default function ProductManageItemCancelReturnContent({
   return (
     <>
       {tradingData.cancelReason && (
-        <div>
+        <div className="flex items-center">
           <span className="inline-block w-16">취소 사유</span>
-          <span>{tradingData.cancelReason}</span>
+          <p className="whitespace-pre-wrap">{tradingData.cancelReason}</p>
         </div>
       )}
       {tradingData.returnReason && (
-        <div>
+        <div className="flex items-center">
           <span className="inline-block w-16">반품 사유</span>
-          <span>{tradingData.returnReason}</span>
+          <p className="whitespace-pre-wrap">{tradingData.returnReason}</p>
         </div>
       )}
       {tradingData.cancelStartDate && (

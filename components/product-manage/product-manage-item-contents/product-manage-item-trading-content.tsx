@@ -11,25 +11,31 @@ export default function ProductManageItemTradingContent({
   return (
     <>
       <div>
-        <span className="inline-block w-16">진행 상태</span>
+        <span className="inline-block w-16 font-medium">진행 상태</span>
         <span>{tradingData.process} </span>
       </div>
       {tradingData.cancelReason && (
-        <div>
-          <span className="inline-block w-16">취소 사유</span>
-          <span>{tradingData.cancelReason}</span>
+        <div className="flex mr-5">
+          <span className="inline-block w-16 font-medium">취소 사유</span>
+          <p className="whitespace-pre-wrap break-keep">
+            {tradingData.cancelReason}
+          </p>
         </div>
       )}
       {tradingData.returnReason && (
-        <div>
-          <span className="inline-block w-16">반품 사유</span>
-          <span>{tradingData.returnReason}</span>
+        <div className="flex mr-5">
+          <span className="inline-block w-16 font-medium shrink-0">
+            반품 사유
+          </span>
+          <p className="whitespace-pre-wrap break-keep">
+            {tradingData.returnReason}
+          </p>
         </div>
       )}
 
       {"saleStartDate" in tradingData && (
         <div>
-          <span className="inline-block w-16">등록일</span>
+          <span className="inline-block w-16 font-medium">등록일</span>
           <time dateTime={tradingData.saleStartDate}>
             {getTradingDateFormat(tradingData.saleStartDate)}
           </time>
@@ -37,7 +43,7 @@ export default function ProductManageItemTradingContent({
       )}
       {"saleEndDate" in tradingData && (
         <div>
-          <span className="inline-block w-16">판매 완료</span>
+          <span className="inline-block w-16 font-medium">판매 완료</span>
           <time dateTime={tradingData.saleEndDate}>
             {getTradingDateFormat(tradingData.saleEndDate!)}
           </time>
@@ -45,7 +51,7 @@ export default function ProductManageItemTradingContent({
       )}
       {"purchaseStartDate" in tradingData && (
         <div>
-          <span className="inline-block w-16">구매일</span>
+          <span className="inline-block w-16 font-medium">구매일</span>
           <time dateTime={tradingData.purchaseStartDate}>
             {getTradingDateFormat(tradingData.purchaseStartDate)}
           </time>
@@ -53,7 +59,7 @@ export default function ProductManageItemTradingContent({
       )}
       {"purchaseEndDate" in tradingData && (
         <div>
-          <span className="inline-block w-16">구매 완료</span>
+          <span className="inline-block w-16 font-medium">구매 완료</span>
           <time dateTime={tradingData.purchaseEndDate}>
             {getTradingDateFormat(tradingData.purchaseEndDate!)}
           </time>

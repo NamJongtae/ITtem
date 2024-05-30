@@ -1,4 +1,4 @@
-import { getTradingDateFormat } from '@/lib/getDateFormate';
+import { getTradingDateFormat } from "@/lib/getDateFormate";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 
 interface IProps {
@@ -11,19 +11,19 @@ export default function ProductManageItemCancelReturnRejectContent({
   return (
     <>
       {tradingData.cancelRejectReason && (
-        <div>
+        <div className="flex mr-5">
           <span className="inline-block w-16"> 거절 사유</span>
-          <time dateTime={tradingData.returnEndDate}>
+          <p className="whitespace-pre-wrap">
             {tradingData.cancelRejectReason}
-          </time>
+          </p>
         </div>
       )}
       {tradingData.returnRejectReason && (
-        <div>
+        <div className="flex mr-5">
           <span className="inline-block w-16"> 거절 사유</span>
-          <time dateTime={tradingData.returnEndDate}>
+          <p className="whitespace-pre-wrap">
             {tradingData.returnRejectReason}
-          </time>
+          </p>
         </div>
       )}
       {tradingData.cancelStartDate && (
