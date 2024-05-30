@@ -9,7 +9,8 @@ export type ProductManageMenu = "판매" | "구매";
 export type ProductManageDeatilMenu =
   | "거래중"
   | "거래완료 내역"
-  | "취소/반품 내역";
+  | "취소/반품 내역"
+  | "취소/반품 거절 내역";
 
 interface IProps {
   initalDetailMenu: ProductManageDeatilMenu;
@@ -27,16 +28,16 @@ export default function ProductManagePage({ initalDetailMenu }: IProps) {
     setMenu(menu);
   };
 
-  const handleClickDeatilMenu = (
-    detailMenu: ProductManageDeatilMenu
-  ) => {
+  const handleClickDeatilMenu = (detailMenu: ProductManageDeatilMenu) => {
     setDetailMenu(detailMenu);
     const status =
       detailMenu === "거래중"
         ? "TRADING"
         : detailMenu === "거래완료 내역"
         ? "TRADING_END"
-        : "CANCEL_END/RETURN_END";
+        : detailMenu === "취소/반품 내역"
+        ? "CANCEL_END/RETURN_END"
+        : "CANCEL_REJECT/RETURN_REJECT";
 
     const newUrl = `/product/manage${
       searchParams
