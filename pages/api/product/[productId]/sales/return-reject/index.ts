@@ -146,22 +146,10 @@ export default async function handler(
         salesTrading.process === SalesReturnProcess.구매자반품상품전달중 &&
         purchaseTrading.process === PurchaseReturnProcess.반품상품전달확인
       ) {
-        res
-          .status(409)
-          .json({ message: "이미 반품 요청이 확인된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (
-        salesTrading.process !== SalesReturnProcess.반품상품인수확인 &&
-        purchaseTrading.process !==
-          PurchaseReturnProcess.판매자반품상품인수확인중
-      ) {
-        res
-          .status(409)
-          .json({ message: "구매자 상품 전달 확인 후 반품 거절이 가능해요." });
+        res.status(409).json({
+          message:
+            "반품 요청을 확인한 상품은 반품 상품 확인 후 반품 거절이 가능해요.",
+        });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -182,57 +170,66 @@ export default async function handler(
         throw new Error("상품 status 업데이트에 실패했어요.");
       }
 
-      if (salesTrading.process === SalesReturnProcess.반품상품인수확인) {
-        const salesTradingUpdateResult = await SalesTrading.updateOne(
-          {
-            $and: [
-              { process: { $ne: SalesCancelProcess.취소완료 } },
-              { process: { $ne: SalesReturnProcess.반품완료 } },
-            ],
-            productId,
-          },
-          {
-            status: TradingStatus.TRADING,
-            process: SalesTradingProcess.상품전달확인,
-            $unset: { returnStartDate: "", returnReason: "" },
-          },
-          { session }
-        );
-
-        if (
-          !salesTradingUpdateResult.acknowledged ||
-          salesTradingUpdateResult.modifiedCount === 0
-        ) {
-          throw new Error("거래 상품 판매 정보 업데이트에 실패했어요.");
-        }
-      }
+      const salesTradingUpdateResult = await SalesTrading.updateOne(
+        {
+          $and: [
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
+          ],
+          productId,
+        },
+        {
+          status:
+            salesTrading.process === SalesReturnProcess.반품요청확인
+              ? TradingStatus.TRADING_END
+              : TradingStatus.TRADING,
+          process:
+            salesTrading.process === SalesReturnProcess.반품요청확인
+              ? SalesTradingProcess.거래완료
+              : SalesTradingProcess.상품전달확인,
+          $unset: { returnStartDate: "", returnReason: "" },
+        },
+        { session }
+      );
 
       if (
-        purchaseTrading.process ===
-        PurchaseReturnProcess.판매자반품상품인수확인중
+        !salesTradingUpdateResult.acknowledged ||
+        salesTradingUpdateResult.modifiedCount === 0
       ) {
-        const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
-          {
-            $and: [
-              { process: { $ne: PurchaseCancelProcess.취소완료 } },
-              { process: { $ne: PurchaseReturnProcess.반품완료 } },
-            ],
-            productId,
-          },
-          {
-            status: TradingStatus.TRADING,
-            process: PurchaseTradingProcess.판매자상품전달중,
-            $unset: { returnStartDate: "", returnReason: "" },
-          },
-          { session }
-        );
+        throw new Error("거래 상품 판매 정보 업데이트에 실패했어요.");
+      }
 
-        if (
-          !purchaseTradingUpdateResult.acknowledged ||
-          purchaseTradingUpdateResult.modifiedCount === 0
-        ) {
-          throw new Error("거래 상품 구매 정보 업데이트에 실패했어요.");
-        }
+      const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
+        {
+          $and: [
+            { process: { $ne: PurchaseCancelProcess.취소완료 } },
+            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
+          ],
+          productId,
+        },
+        {
+          status:
+            purchaseTrading.process === PurchaseReturnProcess.판매자확인중
+              ? TradingStatus.TRADING_END
+              : TradingStatus.TRADING,
+          process:
+            purchaseTrading.process === PurchaseReturnProcess.판매자확인중
+              ? PurchaseTradingProcess.거래완료
+              : PurchaseTradingProcess.판매자상품전달중,
+          $unset: { returnStartDate: "", returnReason: "" },
+        },
+        { session }
+      );
+
+      if (
+        !purchaseTradingUpdateResult.acknowledged ||
+        purchaseTradingUpdateResult.modifiedCount === 0
+      ) {
+        throw new Error("거래 상품 구매 정보 업데이트에 실패했어요.");
       }
 
       const currentDate = new Date();
