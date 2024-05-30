@@ -45,12 +45,13 @@ export default async function handler(
         session.endSession();
         return;
       }
-
       const salesTrading = await SalesTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
             { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
           ],
           productId,
         },

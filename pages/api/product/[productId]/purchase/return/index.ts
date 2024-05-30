@@ -60,7 +60,7 @@ export default async function handler(
         _id: new mongoose.Types.ObjectId(productId as string),
       });
 
-      if(!product.returnPolicy) {
+      if (!product.returnPolicy) {
         res.status(403).json({ message: "반품이 불가한 상품입니다." });
         await session.abortTransaction();
         session.endSession();
@@ -86,12 +86,13 @@ export default async function handler(
         return;
       }
 
-
       const purchaseTrading = await PurchaseTrading.findOne(
         {
           $and: [
-            { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
           ],
           productId,
         },
@@ -105,7 +106,7 @@ export default async function handler(
         session.endSession();
         return;
       }
-      
+
       if (myUid !== purchaseTrading.buyerId) {
         res.status(401).json({ message: "잘못된 요청이에요." });
         await session.abortTransaction();
@@ -182,8 +183,10 @@ export default async function handler(
       const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
         {
           $and: [
-            { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
           ],
           productId,
         },

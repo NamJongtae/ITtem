@@ -68,8 +68,10 @@ export default async function handler(
       const purchaseTrading = await PurchaseTrading.findOne(
         {
           $and: [
-            { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesCancelProcess.취소거절 } },
+            { process: { $ne: SalesReturnProcess.반품거절 } },
           ],
           productId,
         },
