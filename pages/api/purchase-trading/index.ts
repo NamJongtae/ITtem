@@ -19,11 +19,12 @@ export default async function handler(
     }
 
     const myUid = isValidAuth?.auth?.uid;
-
+    console.log(status);
     if (
       status !== "TRADING" &&
       status !== "TRADING_END" &&
-      status !== "CANCEL_END/RETURN_END"
+      status !== "CANCEL_END/RETURN_END" &&
+      status !== "CANCEL_REJECT/RETURN_REJECT"
     ) {
       res.status(422).json({ message: "올바르지 않은 status이에요." });
       return;
@@ -34,6 +35,8 @@ export default async function handler(
         ? "취소/반품"
         : status === "TRADING_END"
         ? "거래완료"
+        : status === "CANCEL_REJECT/RETURN_REJECT"
+        ? "취소/반품 거절"
         : "거래중";
 
     try {
@@ -44,6 +47,8 @@ export default async function handler(
           ? ["CANCEL_END", "RETURN_END"]
           : status === "TRADING_END"
           ? ["TRADING_END"]
+          : status === "CANCEL_REJECT/RETURN_REJECT"
+          ? ["CANCEL_REJECT", "RETURN_REJECT"]
           : ["TRADING", "CANCEL", "RETURN"];
 
       let matchStage: any = {
@@ -128,11 +133,15 @@ export default async function handler(
             purchaseStartDate: 1,
             purchaseEndDate: 1,
             returnReason: 1,
+            returnRejectReason: 1,
             cancelReason: 1,
+            cancelRejectReason: 1,
             cancelStartDate: 1,
             cancelEndDate: 1,
+            cancelRejectDate: 1,
             returnStartDate: 1,
             returnEndDate: 1,
+            returnRejectDate: 1,
             process: 1,
             status: 1,
             isReviewed: 1,
@@ -140,7 +149,7 @@ export default async function handler(
         },
       ];
       const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
-
+      console.log(purchaseTrading);
       res.status(200).json({
         message: `${message} 목록 조회에 성공했어요.`,
         purchaseTrading,
