@@ -16,7 +16,8 @@ export default function useTradingInfiniteQuery(
   status =
     status !== "TRADING" &&
     status !== "TRADING_END" &&
-    status !== "CANCEL_END/RETURN_END"
+    status !== "CANCEL_END/RETURN_END" &&
+    status !== "CANCEL_REJECT/RETURN_REJECT"
       ? "TRADING"
       : status;
 
