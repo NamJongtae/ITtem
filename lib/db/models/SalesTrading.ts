@@ -16,6 +16,10 @@ interface SaleTradingDB {
   returnReason: string;
   returnStartDate: Date;
   returnEndDate: Date;
+  cancelRejectDate: Date;
+  returnRejectDate: Date;
+  cancelRejectReason: string;
+  returnRejectReason: string;
   isReviewed: Boolean;
 }
 
@@ -41,15 +45,19 @@ export const salesTradingSchema = new mongoose.Schema<SaleTradingDB>(
     returnReason: { type: String, required: false },
     returnStartDate: { type: Date, required: false },
     returnEndDate: { type: Date, required: false },
+    cancelRejectDate: { type: Date, required: false },
+    returnRejectDate: { type: Date, required: false },
+    cancelRejectReason: { type: String, required: false },
+    returnRejectReason: { type: String, required: false },
     isReviewed: { type: Boolean, required: false, default: false },
   },
   { collection: "salesTrading" }
 );
 
 const SalesTrading =
-  mongoose.models?.SalesOrder ||
+  mongoose.models?.SalesTrading ||
   mongoose.model<SaleTradingDB, SaleTradingDBModel>(
-    "SalesOrder",
+    "SalesTrading",
     salesTradingSchema
   );
 

@@ -17,6 +17,10 @@ interface PurchaseTradingDB {
   returnStartDate: Date;
   returnEndDate: Date;
   isReviewed: Boolean;
+  cancelRejectDate: Date;
+  returnRejectDate: Date;
+  cancelRejectReason: string;
+  returnRejectReason: string;
 }
 
 interface PurchaseTradingDBModel extends Model<PurchaseTradingDB> {}
@@ -41,6 +45,10 @@ export const purchaseTradingSchema = new mongoose.Schema<PurchaseTradingDB>(
     returnReason: { type: String, required: false },
     returnStartDate: { type: Date, required: false },
     returnEndDate: { type: Date, required: false },
+    cancelRejectDate: { type: Date, required: false },
+    returnRejectDate: { type: Date, required: false },
+    cancelRejectReason: { type: String, required: false },
+    returnRejectReason: { type: String, required: false },
     isReviewed: { type: Boolean, required: false, default: false },
   },
   { collection: "purchaseTrading" }
