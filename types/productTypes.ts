@@ -111,6 +111,8 @@ export const enum TradingStatus {
   TRADING_END = "TRADING_END",
   CANCEL_END = "CANCEL_END",
   RETURN_END = "RETURN_END",
+  CANCEL_REJECT = "CANCEL_REJECT",
+  RETURN_REJECT = "RETURN_REJECT",
 }
 
 export const enum SalesTradingProcess {
@@ -132,11 +134,13 @@ export const enum PurchaseTradingProcess {
 export const enum PurchaseCancelProcess {
   판매자확인중 = "판매자 확인 중",
   취소완료 = "취소 완료",
+  취소거절 = "취소 거절",
 }
 
 export const enum SalesCancelProcess {
   취소요청확인 = "취소 요청 확인",
   취소완료 = "취소 완료",
+  취소거절 = "취소 거절",
 }
 
 export const enum PurchaseReturnProcess {
@@ -144,6 +148,7 @@ export const enum PurchaseReturnProcess {
   반품상품전달확인 = "반품 상품 전달 확인",
   판매자반품상품인수확인중 = "판매자 반품 상품 인수 확인 중",
   반품완료 = "반품 완료",
+  반품거절 = "반품 거절",
 }
 
 export const enum SalesReturnProcess {
@@ -151,6 +156,7 @@ export const enum SalesReturnProcess {
   구매자반품상품전달중 = "구매자 반품 상품 전달 중",
   반품상품인수확인 = "반품 상품 인수 확인",
   반품완료 = "반품 완료",
+  반품거절 = "반품 거절",
 }
 
 export interface SaleTradingData {
@@ -167,13 +173,17 @@ export interface SaleTradingData {
   status: TradingStatus;
   process: SalesTradingProcess | SalesCancelProcess | SalesReturnProcess;
   returnReason?: string;
+  returnRejectReason?: string;
   cancelReason?: string;
+  cancelRejectReason?: string;
   saleStartDate: string;
   saleEndDate?: string;
   cancelStartDate?: string;
   cancelEndDate?: string;
+  cancelRejectDate?: string;
   returnStartDate?: string;
   returnEndDate?: string;
+  returnRejectDate?: string;
   productData: {
     name: string;
     imgData: { url: string }[];
@@ -199,13 +209,17 @@ export interface PurchaseTradingData {
     | PurchaseCancelProcess
     | PurchaseReturnProcess;
   returnReason?: string;
+  returnRejectReason?: string;
   cancelReason?: string;
-  purchaseStartDate: string;
+  cancelRejectReason?: string;
+  purchaseStartDate?: string;
   purchaseEndDate?: string;
   cancelStartDate?: string;
   cancelEndDate?: string;
+  cancelRejectDate?: string;
   returnStartDate?: string;
   returnEndDate?: string;
+  returnRejectDate?: string;
   productData: {
     name: string;
     imgData: { url: string }[];
