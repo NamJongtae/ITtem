@@ -15,7 +15,7 @@ import {
   SignoutResposeData,
   SignupResponseData,
   VerifyEmailResponseData,
-  WishResposeData,
+  WishResponseData,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
 import { compare, hash } from "bcryptjs";
@@ -471,7 +471,7 @@ export async function getProfileWish({
   wishProductIds: string[];
   cursor: unknown;
   limit?: number;
-}): Promise<AxiosResponse<WishResposeData>> {
+}): Promise<AxiosResponse<WishResponseData>> {
   try {
     const response = await customAxios.post(
       `/api/profile/wish?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
@@ -487,7 +487,7 @@ export async function getProfileWish({
 
 export async function deleteProfileWish(
   wishProductIds: string[]
-): Promise<AxiosResponse<WishResposeData>> {
+): Promise<AxiosResponse<WishResponseData>> {
   try {
     const response = await customAxios.delete("/api/profile/wish", {
       data: { wishProductIds },
