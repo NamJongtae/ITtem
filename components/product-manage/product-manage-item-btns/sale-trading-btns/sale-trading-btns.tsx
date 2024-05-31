@@ -2,7 +2,7 @@ import {
   SaleTradingData,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import SaleTradingDeleteBtn from "./sale-trading-delete-btn";
@@ -31,22 +31,22 @@ interface ButtonComponents {
 
 const buttonComponents: ButtonComponents = {
   [TradingStatus.TRADING]: {
-    [SalesTradingProcess.판매중]: (productId: string) => (
+    [SaleTradingProcess.판매중]: (productId: string) => (
       <>
         <SaleTradingEditBtn productId={productId} />
         <SaleTradingDeleteBtn productId={productId} />
       </>
     ),
-    [SalesTradingProcess.구매요청확인]: (productId: string) => (
+    [SaleTradingProcess.구매요청확인]: (productId: string) => (
       <>
         <SaleTradingPurchaseConfirmationBtn productId={productId} />
         <SaleTradingPurchaseRequestRejectBtn productId={productId} />
       </>
     ),
-    [SalesTradingProcess.상품전달확인]: (productId: string) => (
+    [SaleTradingProcess.상품전달확인]: (productId: string) => (
       <SaleTradingDeliveryConfirmationBtn productId={productId} />
     ),
-    [SalesTradingProcess.구매자상품인수중]: () => <SaleTradingChattingBtn />,
+    [SaleTradingProcess.구매자상품인수중]: () => <SaleTradingChattingBtn />,
   },
   [TradingStatus.CANCEL]: {
     [SalesCancelProcess.취소요청확인]: (productId: string) => (
