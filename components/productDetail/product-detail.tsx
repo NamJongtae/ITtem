@@ -6,10 +6,13 @@ import ProductDetailSeller from "./product-detail-seller";
 import Loading from "../commons/loading";
 import { isAxiosError } from "axios";
 import ProductListEmpty from "../commons/Empty";
+import useAddRecentProduct from '@/hooks/productDetail/useAddRecentProduct';
 
 export default function ProductDetailPage() {
   const { productDetailData, loadProductLoading, loadProductError } =
     useProductQuery();
+
+    useAddRecentProduct(productDetailData)
 
   if (loadProductLoading) {
     return <Loading />;
