@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
@@ -10,7 +10,7 @@ import {
   PurchaseTradingProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import mongoose from "mongoose";
@@ -60,7 +60,7 @@ export default async function handler(
         return;
       }
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -74,49 +74,49 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (myUid !== salesTrading.sellerId) {
+      if (myUid !== saleTrading.sellerId) {
         res.status(401).json({ message: "잘못된 요청이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.CANCEL) {
+      if (saleTrading.status === TradingStatus.CANCEL) {
         res.status(409).json({ message: "취소 요청한 상품이 이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.RETURN) {
+      if (saleTrading.status === TradingStatus.RETURN) {
         res.status(409).json({ message: "반품 요청한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.TRADING_END) {
+      if (saleTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.CANCEL_END) {
+      if (saleTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.RETURN_END) {
+      if (saleTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
@@ -143,7 +143,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process !== SalesTradingProcess.구매요청확인 &&
+        saleTrading.process !== SaleTradingProcess.구매요청확인 &&
         purchaseTrading.process !== PurchaseTradingProcess.구매요청
       ) {
         res.status(409).json({ message: "구매요청 취소 단계가 아니에요." });
@@ -171,7 +171,7 @@ export default async function handler(
 
       const currentDate = new Date();
 
-      const salesTradingUpdateResult = await SalesTrading.updateOne(
+      const saleTradingUpdateResult = await SaleTrading.updateOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -191,8 +191,8 @@ export default async function handler(
       );
 
       if (
-        !salesTradingUpdateResult.acknowledged ||
-        salesTradingUpdateResult.modifiedCount === 0
+        !saleTradingUpdateResult.acknowledged ||
+        saleTradingUpdateResult.modifiedCount === 0
       ) {
         throw new Error("상품 판매 정보 업데이트에 실패했어요.");
       }
@@ -220,14 +220,14 @@ export default async function handler(
       ) {
         throw new Error("거래 상품 구매 status 업데이트에 실패했어요.");
       }
-      const newSalesTrading = new SalesTrading({
+      const newSaleTrading = new SaleTrading({
         productId,
         sellerId: myUid,
-        saleStartDate: salesTrading.saleStartDate,
-        productName: salesTrading.productName,
+        saleStartDate: saleTrading.saleStartDate,
+        productName: saleTrading.productName,
       });
 
-      await newSalesTrading.save();
+      await newSaleTrading.save();
 
       await session.commitTransaction();
       session.endSession();

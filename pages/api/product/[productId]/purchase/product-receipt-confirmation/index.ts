@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import {
   ProductStatus,
   PurchaseCancelProcess,
@@ -9,7 +9,7 @@ import {
   PurchaseTradingProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
@@ -91,7 +91,7 @@ export default async function handler(
         return;
       }
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -103,7 +103,7 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
@@ -146,7 +146,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process === SalesTradingProcess.거래완료 &&
+        saleTrading.process === SaleTradingProcess.거래완료 &&
         purchaseTrading.process === PurchaseTradingProcess.거래완료
       ) {
         res.status(409).json({ message: "이미 상품인수을 확인한 상품입니다." });
@@ -156,7 +156,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process !== SalesTradingProcess.구매자상품인수중 &&
+        saleTrading.process !== SaleTradingProcess.구매자상품인수중 &&
         purchaseTrading.process !== PurchaseTradingProcess.상품인수확인
       ) {
         res.status(409).json({ message: "상품 인수단계가 아닌 상품입니다." });
@@ -177,7 +177,7 @@ export default async function handler(
             productId,
           },
           {
-            process: SalesTradingProcess.거래완료,
+            process: SaleTradingProcess.거래완료,
             status: TradingStatus.TRADING_END,
             purchaseEndDate: currentDate,
           },
@@ -192,8 +192,8 @@ export default async function handler(
         }
       }
 
-      if (salesTrading.process === SalesTradingProcess.구매자상품인수중) {
-        const salesTradingrUpdateResult = await SalesTrading.updateOne(
+      if (saleTrading.process === SaleTradingProcess.구매자상품인수중) {
+        const saleTradingrUpdateResult = await SaleTrading.updateOne(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -202,7 +202,7 @@ export default async function handler(
             productId,
           },
           {
-            process: SalesTradingProcess.거래완료,
+            process: SaleTradingProcess.거래완료,
             status: TradingStatus.TRADING_END,
             saleEndDate: currentDate,
           },
@@ -210,8 +210,8 @@ export default async function handler(
         );
 
         if (
-          !salesTradingrUpdateResult.acknowledged ||
-          salesTradingrUpdateResult.modifiedCount === 0
+          !saleTradingrUpdateResult.acknowledged ||
+          saleTradingrUpdateResult.modifiedCount === 0
         ) {
           throw new Error("거래 상품 판매 status 업데이트에 실패했어요.");
         }

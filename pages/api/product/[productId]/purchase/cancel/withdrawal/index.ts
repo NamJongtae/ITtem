@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
   PurchaseCancelProcess,
@@ -8,7 +8,7 @@ import {
   PurchaseTradingProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import mongoose from "mongoose";
@@ -107,7 +107,7 @@ export default async function handler(
         return;
       }
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -121,7 +121,7 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
@@ -151,7 +151,7 @@ export default async function handler(
         throw new Error("상품 구매 정보 업데이트에 실패했어요.");
       }
 
-      const salesTradingUpdateResult = await SalesTrading.updateOne(
+      const saleTradingUpdateResult = await SaleTrading.updateOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -163,15 +163,15 @@ export default async function handler(
         },
         {
           status: TradingStatus.TRADING,
-          process: SalesTradingProcess.상품전달확인,
+          process: SaleTradingProcess.상품전달확인,
           $unset: { cancelStartDate: "", cancelReason: "" },
         },
         { session }
       );
 
       if (
-        !salesTradingUpdateResult.acknowledged ||
-        salesTradingUpdateResult.matchedCount === 0
+        !saleTradingUpdateResult.acknowledged ||
+        saleTradingUpdateResult.matchedCount === 0
       ) {
         throw new Error("상품 판매 정보 업데이트에 실패했어요.");
       }

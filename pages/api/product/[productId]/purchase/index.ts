@@ -6,11 +6,11 @@ import {
   ProductStatus,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
 } from "@/types/productTypes";
 import { NextApiRequest, NextApiResponse } from "next";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 
 export default async function handler(
   req: NextApiRequest,
@@ -73,7 +73,7 @@ export default async function handler(
         return;
       }
 
-      const saleTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -92,7 +92,7 @@ export default async function handler(
         return;
       }
 
-      const saleTradingUpdateResult = await SalesTrading.updateOne(
+      const saleTradingUpdateResult = await SaleTrading.updateOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -100,7 +100,7 @@ export default async function handler(
           ],
           productId,
         },
-        { buyerId: myUid, process: SalesTradingProcess.구매요청확인 },
+        { buyerId: myUid, process: SaleTradingProcess.구매요청확인 },
         { session }
       );
 

@@ -19,7 +19,7 @@ export default async function handler(
     }
 
     const myUid = isValidAuth?.auth?.uid;
-    console.log(status);
+   
     if (
       status !== "TRADING" &&
       status !== "TRADING_END" &&
@@ -149,7 +149,7 @@ export default async function handler(
         },
       ];
       const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
-      console.log(purchaseTrading);
+
       res.status(200).json({
         message: `${message} 목록 조회에 성공했어요.`,
         purchaseTrading,

@@ -1,4 +1,4 @@
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -147,11 +147,11 @@ export default async function handler(
           },
         },
       ];
-      const salesTrading = await SalesTrading.aggregate(aggregate);
+      const saleTrading = await SaleTrading.aggregate(aggregate);
 
       res
         .status(200)
-        .json({ message: `${message} 목록 조회에 성공했어요.`, salesTrading });
+        .json({ message: `${message} 목록 조회에 성공했어요.`, saleTrading });
     } catch (error) {
       console.error(error);
       res.status(500).json({

@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import {
   PurchaseCancelProcess,
   PurchaseReturnProcess,
   PurchaseTradingProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
@@ -46,7 +46,7 @@ export default async function handler(
 
       await dbConnect();
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -60,14 +60,14 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (myUid !== salesTrading.sellerId) {
+      if (myUid !== saleTrading.sellerId) {
         res.status(401).json({ message: "잘못된 요청입니다." });
         await session.abortTransaction();
         session.endSession();
@@ -93,35 +93,35 @@ export default async function handler(
         return;
       }
 
-      if (salesTrading.status === TradingStatus.CANCEL) {
+      if (saleTrading.status === TradingStatus.CANCEL) {
         res.status(409).json({ message: "구매자가 취소요청한 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.RETURN) {
+      if (saleTrading.status === TradingStatus.RETURN) {
         res.status(409).json({ message: "구매자가 반품요청한 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.TRADING_END) {
+      if (saleTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.CANCEL_END) {
+      if (saleTrading.status === TradingStatus.CANCEL_END) {
         res.status(409).json({ message: "취소된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.status === TradingStatus.RETURN_END) {
+      if (saleTrading.status === TradingStatus.RETURN_END) {
         res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
@@ -129,7 +129,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process === SalesTradingProcess.상품전달확인 &&
+        saleTrading.process === SaleTradingProcess.상품전달확인 &&
         purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중
       ) {
         res.status(409).json({ message: "이미 구매요청을 확인한 상품입니다." });
@@ -139,7 +139,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process !== SalesTradingProcess.구매요청확인 &&
+        saleTrading.process !== SaleTradingProcess.구매요청확인 &&
         purchaseTrading.process !== PurchaseTradingProcess.판매자확인중
       ) {
         res
@@ -150,8 +150,8 @@ export default async function handler(
         return;
       }
 
-      if (salesTrading.process === SalesTradingProcess.구매요청확인) {
-        const saleTradingUpdateResult = await SalesTrading.updateOne(
+      if (saleTrading.process === SaleTradingProcess.구매요청확인) {
+        const saleTradingUpdateResult = await SaleTrading.updateOne(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -159,7 +159,7 @@ export default async function handler(
             ],
             productId,
           },
-          { process: SalesTradingProcess.상품전달확인 },
+          { process: SaleTradingProcess.상품전달확인 },
           { session }
         );
 

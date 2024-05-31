@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
-import SalesTrading from '@/lib/db/models/SalesTrading';
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import mongoose from "mongoose";
@@ -45,14 +45,14 @@ export default async function handler(
         throw new Error("유저에 상품 아이디 등록에 실패했어요.");
       }
 
-      const salesTrading= new SalesTrading({
+      const saleTrading = new SaleTrading({
         sellerId: newProduct.uid,
         productId: newProduct._id,
         productName: newProduct.name,
-        saleStartDate: newProduct.createdAt
+        saleStartDate: newProduct.createdAt,
       });
 
-      await salesTrading.save({ session });
+      await saleTrading.save({ session });
 
       await session.commitTransaction();
       session.endSession();

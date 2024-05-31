@@ -11,7 +11,7 @@ import {
   ProductStatus,
   TradingStatus,
 } from "@/types/productTypes";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 
 export default async function handler(
   req: NextApiRequest,
@@ -237,7 +237,7 @@ export default async function handler(
       }
 
       if (productData.name) {
-        await SalesTrading.updateOne(
+        await SaleTrading.updateOne(
           {
             productId: new mongoose.Types.ObjectId(productId as string),
             status: TradingStatus.TRADING,
@@ -357,7 +357,7 @@ export default async function handler(
         throw new Error("상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.");
       }
 
-      const salesTradingDeleteResult = await SalesTrading.deleteOne(
+      const saleTradingDeleteResult = await SaleTrading.deleteOne(
         {
           productId: new mongoose.Types.ObjectId(productId as string),
         },
@@ -365,8 +365,8 @@ export default async function handler(
       );
 
       if (
-        !salesTradingDeleteResult.acknowledged ||
-        salesTradingDeleteResult.deletedCount === 0
+        !saleTradingDeleteResult.acknowledged ||
+        saleTradingDeleteResult.deletedCount === 0
       ) {
         throw new Error("상품 판매 거래 정보 삭제에 실패했어요.");
       }

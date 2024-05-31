@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
@@ -9,7 +9,7 @@ import {
   PurchaseReturnProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SalesTradingProcess,
+  SaleTradingProcess,
   TradingStatus,
 } from "@/types/productTypes";
 import mongoose from "mongoose";
@@ -116,7 +116,7 @@ export default async function handler(
         return;
       }
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -130,14 +130,14 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      if (salesTrading.process === SalesTradingProcess.구매자상품인수중) {
+      if (saleTrading.process === SaleTradingProcess.구매자상품인수중) {
         res
           .status(409)
           .json({ message: "판매자가 전달한 상품은 취소할 수 없어요." });
@@ -148,7 +148,7 @@ export default async function handler(
 
       const currentDate = new Date();
 
-      if (salesTrading.process === SalesTradingProcess.구매요청확인) {
+      if (saleTrading.process === SaleTradingProcess.구매요청확인) {
         const productUpdateResult = await Product.updateOne(
           {
             _id: new mongoose.Types.ObjectId(productId as string),
@@ -191,7 +191,7 @@ export default async function handler(
           throw new Error("상품 구매 정보 업데이트에 실패했어요.");
         }
 
-        const salesTradingUpdateResult = await SalesTrading.updateOne(
+        const saleTradingUpdateResult = await SaleTrading.updateOne(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -210,20 +210,20 @@ export default async function handler(
         );
 
         if (
-          !salesTradingUpdateResult.acknowledged ||
-          salesTradingUpdateResult.matchedCount === 0
+          !saleTradingUpdateResult.acknowledged ||
+          saleTradingUpdateResult.matchedCount === 0
         ) {
           throw new Error("상품 판매 정보 업데이트에 실패했어요.");
         }
 
-        const newSalesTrading = new SalesTrading({
+        const newSaleTrading = new SaleTrading({
           productId,
-          seller: salesTrading.sellerId,
-          saleStartDate: salesTrading.saleStartDate,
-          productName: salesTrading.productName,
+          seller: saleTrading.sellerId,
+          saleStartDate: saleTrading.saleStartDate,
+          productName: saleTrading.productName,
         });
 
-        await newSalesTrading.save({ session });
+        await newSaleTrading.save({ session });
         res.status(200).json({ message: "상품 구매 취소에 성공했어요." });
       } else {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
@@ -250,7 +250,7 @@ export default async function handler(
           throw new Error("상품 구매 정보 업데이트에 실패했어요.");
         }
 
-        const salesTradingUpdateResult = await SalesTrading.updateOne(
+        const saleTradingUpdateResult = await SaleTrading.updateOne(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -268,8 +268,8 @@ export default async function handler(
         );
 
         if (
-          !salesTradingUpdateResult.acknowledged ||
-          salesTradingUpdateResult.matchedCount === 0
+          !saleTradingUpdateResult.acknowledged ||
+          saleTradingUpdateResult.matchedCount === 0
         ) {
           throw new Error("상품 판매 정보 업데이트에 실패했어요.");
         }

@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import {
   PurchaseCancelProcess,
@@ -46,7 +46,7 @@ export default async function handler(
         return;
       }
 
-      const salesTrading = await SalesTrading.findOne(
+      const saleTrading = await SaleTrading.findOne(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -58,7 +58,7 @@ export default async function handler(
         { session }
       );
 
-      if (!salesTrading) {
+      if (!saleTrading) {
         res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
@@ -129,7 +129,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process === SalesReturnProcess.반품상품인수확인 &&
+        saleTrading.process === SalesReturnProcess.반품상품인수확인 &&
         purchaseTrading.process ===
           PurchaseReturnProcess.판매자반품상품인수확인중
       ) {
@@ -142,7 +142,7 @@ export default async function handler(
       }
 
       if (
-        salesTrading.process !== SalesReturnProcess.구매자반품상품전달중 &&
+        saleTrading.process !== SalesReturnProcess.구매자반품상품전달중 &&
         purchaseTrading.process !== PurchaseReturnProcess.반품상품전달확인
       ) {
         res.status(409).json({ message: "반품 상품전달확인 단계가 아니에요" });
@@ -151,8 +151,8 @@ export default async function handler(
         return;
       }
 
-      if (salesTrading.process === SalesReturnProcess.구매자반품상품전달중) {
-        const salesTradingUpdateResult = await SalesTrading.updateOne(
+      if (saleTrading.process === SalesReturnProcess.구매자반품상품전달중) {
+        const saleTradingUpdateResult = await SaleTrading.updateOne(
           {
             $and: [
               { process: { $ne: SalesCancelProcess.취소완료 } },
@@ -167,8 +167,8 @@ export default async function handler(
         );
 
         if (
-          !salesTradingUpdateResult.acknowledged ||
-          salesTradingUpdateResult.modifiedCount === 0
+          !saleTradingUpdateResult.acknowledged ||
+          saleTradingUpdateResult.modifiedCount === 0
         ) {
           throw new Error("거래 상품 판매 정보 업데이트에 실패했어요.");
         }

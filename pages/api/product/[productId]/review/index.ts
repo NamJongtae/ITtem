@@ -3,7 +3,7 @@ import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import { TradingStatus } from "@/types/productTypes";
-import SalesTrading from "@/lib/db/models/SalesTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import ReviewScore from "@/lib/db/models/ReviewScore";
 import mongoose from "mongoose";
 
@@ -38,7 +38,7 @@ export default async function handler(
         return;
       }
 
-      const saleTrading = await SalesTrading.findOne({
+      const saleTrading = await SaleTrading.findOne({
         productId,
         status: TradingStatus.TRADING_END,
       });
@@ -157,7 +157,7 @@ export default async function handler(
         return;
       }
 
-      const saleTrading = await SalesTrading.findOneAndUpdate(
+      const saleTrading = await SaleTrading.findOneAndUpdate(
         {
           productId,
           status: TradingStatus.TRADING_END,
