@@ -136,7 +136,7 @@ export interface ReviewsResponseData extends ApiResponse<ProfileReviewData[]> {
 
 export interface SalesTradingResponseData
   extends ApiResponse<SaleTradingData[]> {
-  salesTrading: SaleTradingData[];
+  saleTrading: SaleTradingData[];
 }
 
 export interface PurchaseTradingResponseData

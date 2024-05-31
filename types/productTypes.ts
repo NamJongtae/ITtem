@@ -1,5 +1,3 @@
-import { ProfileData } from "./authTypes";
-
 export enum ProductCategory {
   전체 = "전체",
   의류 = "의류",
@@ -115,7 +113,7 @@ export const enum TradingStatus {
   RETURN_REJECT = "RETURN_REJECT",
 }
 
-export const enum SalesTradingProcess {
+export const enum SaleTradingProcess {
   판매중 = "판매 중",
   구매요청확인 = "구매 요청 확인",
   상품전달확인 = "상품 전달 확인",
@@ -171,7 +169,7 @@ export interface SaleTradingData {
   };
   productId: string;
   status: TradingStatus;
-  process: SalesTradingProcess | SalesCancelProcess | SalesReturnProcess;
+  process: SaleTradingProcess | SalesCancelProcess | SalesReturnProcess;
   returnReason?: string;
   returnRejectReason?: string;
   cancelReason?: string;

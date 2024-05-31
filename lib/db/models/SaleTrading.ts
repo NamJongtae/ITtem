@@ -1,4 +1,4 @@
-import { SalesTradingProcess, TradingStatus } from "@/types/productTypes";
+import { SaleTradingProcess, TradingStatus } from "@/types/productTypes";
 import mongoose, { Model } from "mongoose";
 
 interface SaleTradingDB {
@@ -9,7 +9,7 @@ interface SaleTradingDB {
   saleStartDate: Date;
   saleEndDate: Date;
   status: TradingStatus;
-  process: SalesTradingProcess;
+  process: SaleTradingProcess;
   cancelReason: string;
   cancelStartDate: Date;
   cancelEndDate: Date;
@@ -25,7 +25,7 @@ interface SaleTradingDB {
 
 interface SaleTradingDBModel extends Model<SaleTradingDB> {}
 
-export const salesTradingSchema = new mongoose.Schema<SaleTradingDB>(
+export const saleTradingSchema = new mongoose.Schema<SaleTradingDB>(
   {
     sellerId: { type: String, required: [true, "판매자 ID가 없어요."] },
     buyerId: { type: String, required: false },
@@ -37,7 +37,7 @@ export const salesTradingSchema = new mongoose.Schema<SaleTradingDB>(
     process: {
       type: String,
       required: false,
-      default: SalesTradingProcess.판매중,
+      default: SaleTradingProcess.판매중,
     },
     cancelReason: { type: String, required: false },
     cancelStartDate: { type: Date, required: false },
@@ -54,11 +54,11 @@ export const salesTradingSchema = new mongoose.Schema<SaleTradingDB>(
   { collection: "salesTrading" }
 );
 
-const SalesTrading =
-  mongoose.models?.SalesTrading ||
+const SaleTrading =
+  mongoose.models?.SaleTrading ||
   mongoose.model<SaleTradingDB, SaleTradingDBModel>(
-    "SalesTrading",
-    salesTradingSchema
+    "SaleTrading",
+    saleTradingSchema
   );
 
-export default SalesTrading;
+export default SaleTrading;
