@@ -4,6 +4,17 @@ import { AppDispatch, RootState } from "../../store/store";
 import { modalSlice } from "../../store/modalSlice";
 import useDebouncing from "../commons/useDebouncing";
 import { toast } from "react-toastify";
+import {
+  equalTo,
+  onValue,
+  orderByChild,
+  query,
+  ref,
+  update,
+} from "firebase/database";
+import { database } from "@/lib/firebaseSetting";
+import { MessageData } from '@/types/notification';
+
 
 export default function useNotification() {
   const isOpenNotification = useSelector(
@@ -66,6 +77,30 @@ export default function useNotification() {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [closeNotification, isOpenNotification]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const messageRef = ref(database, `notification/${user.uid}/messages`);
+    const q = query(messageRef, orderByChild("isNotification"), equalTo(false));
+    const unsubscribe = onValue(q, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        (Object.entries(data) as [string, MessageData][]).forEach(
+          ([key, message]) => {
+            toast.info(message.content);
+            const messageRef = ref(
+              database,
+              `notification/${user.uid}/messages/${key}`
+            );
+            update(messageRef, { isNotification: true });
+          }
+        );
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   return { isOpenNotification, toggleNotification, notificationRef };
 }
