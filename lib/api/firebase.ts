@@ -1,12 +1,15 @@
 import {
   deleteObject,
   getDownloadURL,
-  ref,
+  ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-import { storage } from "../firebaseSetting";
+import { database, storage } from "../firebaseSetting";
 import { v4 as uuid } from "uuid";
 import { UploadImgResponseData } from "@/types/apiTypes";
+import { set, push, ref as databaseRef} from 'firebase/database';
+import { MessageData } from '@/types/notification';
+
 
 export const uploadImgToFireStore = async (
   file: File | ""
@@ -15,7 +18,7 @@ export const uploadImgToFireStore = async (
     if (file) {
       const fileName = `${uuid()}_${file.name}`;
       const uploadImgResponse = await uploadBytes(
-        ref(storage, `images/profile/${fileName}`),
+        storageRef(storage, `images/profile/${fileName}`),
         file
       );
       const url =
@@ -36,7 +39,7 @@ export const uploadMultiImgToFirestore = async (
       // 각 파일에 대해 비동기 업로드 처리
       const fileName = `${uuid()}_${file.name}`;
       const uploadImgResponse = await uploadBytes(
-        ref(storage, `images/product/${fileName}`),
+        storageRef(storage, `images/product/${fileName}`),
         file
       );
       const url = await getDownloadURL(uploadImgResponse.ref);
@@ -58,7 +61,7 @@ export const deleteProfileImgToFirestore = async (
   try {
     if (!profileDataImgName || !prevImgDataImgName) return;
     if (profileDataImgName !== prevImgDataImgName) {
-      await deleteObject(ref(storage, `images/product/${profileDataImgName}`));
+      await deleteObject(storageRef(storage, `images/product/${profileDataImgName}`));
     }
   } catch (error) {
     throw error;
@@ -74,9 +77,25 @@ export const deleteImgToFirestore = async (
   for (let i = 0; i < productDataImgName.length; i++) {
     if (!prevImgDataImgName.includes(productDataImgName[i])) {
       removeImgPromise.push(
-        deleteObject(ref(storage, `images/product/${productDataImgName[i]}`))
+        deleteObject(storageRef(storage, `images/product/${productDataImgName[i]}`))
       );
     }
   }
   await Promise.all(removeImgPromise);
+};
+
+export const sendNotificationMessage = (userId: string, message: string) => {
+  if(!userId) return;
+
+  const messageObj: MessageData = {
+    content: message, 
+    isRead: false,
+    isNotification: false,
+    timestamp: Date.now(),
+  };
+
+  const messageRef = databaseRef(database, "notification/" + userId + "/messages");
+
+  const newMessageRef = push(messageRef);
+  set(newMessageRef, messageObj);
 };
