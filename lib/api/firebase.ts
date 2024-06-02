@@ -7,9 +7,18 @@ import {
 import { database, storage } from "../firebaseSetting";
 import { v4 as uuid } from "uuid";
 import { UploadImgResponseData } from "@/types/apiTypes";
-import { set, push, ref as databaseRef} from 'firebase/database';
-import { MessageData } from '@/types/notification';
-
+import {
+  set,
+  push,
+  ref as databaseRef,
+  query,
+  ref,
+  get,
+  orderByKey,
+  endBefore,
+  limitToLast,
+} from "firebase/database";
+import { NotificationMessageData } from "@/types/notification";
 
 export const uploadImgToFireStore = async (
   file: File | ""
@@ -61,7 +70,9 @@ export const deleteProfileImgToFirestore = async (
   try {
     if (!profileDataImgName || !prevImgDataImgName) return;
     if (profileDataImgName !== prevImgDataImgName) {
-      await deleteObject(storageRef(storage, `images/product/${profileDataImgName}`));
+      await deleteObject(
+        storageRef(storage, `images/product/${profileDataImgName}`)
+      );
     }
   } catch (error) {
     throw error;
@@ -77,7 +88,9 @@ export const deleteImgToFirestore = async (
   for (let i = 0; i < productDataImgName.length; i++) {
     if (!prevImgDataImgName.includes(productDataImgName[i])) {
       removeImgPromise.push(
-        deleteObject(storageRef(storage, `images/product/${productDataImgName[i]}`))
+        deleteObject(
+          storageRef(storage, `images/product/${productDataImgName[i]}`)
+        )
       );
     }
   }
@@ -85,17 +98,59 @@ export const deleteImgToFirestore = async (
 };
 
 export const sendNotificationMessage = (userId: string, message: string) => {
-  if(!userId) return;
+  if (!userId) return;
 
-  const messageObj: MessageData = {
-    content: message, 
+  const messageObj: Omit<NotificationMessageData, "id"> = {
+    content: message,
     isRead: false,
     isNotification: false,
     timestamp: Date.now(),
   };
 
-  const messageRef = databaseRef(database, "notification/" + userId + "/messages");
+  const messageRef = databaseRef(database, `notification/${userId}/messages`);
 
   const newMessageRef = push(messageRef);
   set(newMessageRef, messageObj);
+};
+
+export const getNotificationMessage = async ({
+  userId,
+  lastKey,
+  limit = 10,
+}: {
+  userId: string;
+  lastKey?: unknown;
+  limit?: number;
+}): Promise<
+  { items: NotificationMessageData[]; nextKey: string | null }
+> => {
+  try {
+    const messagesRef = lastKey
+      ? query(
+          ref(database, `notification/${userId}/messages`),
+          orderByKey(),
+          endBefore(lastKey as string),
+          limitToLast(limit)
+        )
+      : query(
+          ref(database, `notification/${userId}/messages`),
+          orderByKey(),
+          limitToLast(limit)
+        );
+
+    const snapshot = await get(messagesRef);
+    const data = snapshot.val();
+
+    if (!data) return { items: [], nextKey: null };
+
+    const keys = Object.keys(data);
+    const items = keys.map((key) => ({ id: key, ...data[key] })).reverse();
+
+    const nextKey = items.length === limit ? items[items.length - 1].id : null;
+
+    return { items, nextKey };
+  } catch (error) {
+    console.error("Error fetching notification messages: ", error);
+    throw error;
+  }
 };
