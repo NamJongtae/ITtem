@@ -1,6 +1,8 @@
+import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
   PurchaseCancelProcess,
@@ -34,6 +36,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       const { productId } = req.query;
 
@@ -176,10 +186,15 @@ export default async function handler(
         throw new Error("상품 판매 정보 업데이트에 실패했어요.");
       }
 
-      res.status(200).json({ message: "상품 구매 취소 철회에 성공했어요." });
-
       await session.commitTransaction();
       session.endSession();
+
+      res.status(200).json({ message: "상품 구매 취소 철회에 성공했어요." });
+      
+      sendNotificationMessage(
+        saleTrading.sellerId,
+        `${user.nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`
+      );
     } catch (error) {
       console.error(error);
       await session.abortTransaction();

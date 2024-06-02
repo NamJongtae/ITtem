@@ -1,6 +1,8 @@
+import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
   PurchaseCancelProcess,
@@ -34,6 +36,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       await dbConnect();
 
@@ -199,7 +209,13 @@ export default async function handler(
 
       await session.commitTransaction();
       session.endSession();
+
       res.status(200).json({ message: "반품 상품 전달 확인에 성공했어요." });
+      
+      sendNotificationMessage(
+        saleTrading.sellerId,
+        `${user.nickname}님이 ${saleTrading.productName} 반품 상품을 전달 하였습니다.`
+      );
     } catch (error) {
       console.error(error);
       await session.abortTransaction();

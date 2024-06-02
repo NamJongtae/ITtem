@@ -13,6 +13,8 @@ import {
   TradingStatus,
 } from "@/types/productTypes";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
+import User from "@/lib/db/models/User";
+import { sendNotificationMessage } from "@/lib/api/firebase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -35,6 +37,14 @@ export default async function handler(
     }
 
     const myUid = isValidAuth?.auth?.uid;
+
+    const user = await User.findOne(
+      {
+        _id: new mongoose.Types.ObjectId(myUid as string),
+      },
+      null,
+      { session }
+    );
 
     await dbConnect();
 
@@ -222,9 +232,15 @@ export default async function handler(
 
     await session.commitTransaction();
     session.endSession();
+
     res.status(200).json({
       message: "취소요청 거부에 성공했어요.",
     });
+
+    sendNotificationMessage(
+      purchaseTrading.buyerId,
+      `${user.nickname}님이 ${purchaseTrading.productName} 상품에 구매 취소를 거절하였습니다.`
+    );
   } catch (error) {
     console.error(error);
     await session.abortTransaction();

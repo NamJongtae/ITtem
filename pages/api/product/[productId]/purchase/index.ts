@@ -11,6 +11,8 @@ import {
 import { NextApiRequest, NextApiResponse } from "next";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import { sendNotificationMessage } from "@/lib/api/firebase";
+import User from "@/lib/db/models/User";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,6 +34,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       const { productId } = req.query;
 
@@ -124,6 +134,11 @@ export default async function handler(
       session.endSession();
 
       res.status(201).json({ message: "상품 구매요청에 성공했어요." });
+
+      sendNotificationMessage(
+        saleTrading.sellerId,
+        `${user.nickname}님이 ${product.name} 상품에 구매요청을 하였습니다.`
+      );
     } catch (error) {
       console.error(error);
       await session.abortTransaction();

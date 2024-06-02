@@ -13,6 +13,8 @@ import {
 } from "@/types/productTypes";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import { checkAuthorization } from "@/lib/server";
+import User from "@/lib/db/models/User";
+import { sendNotificationMessage } from "@/lib/api/firebase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,6 +36,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       const { productId } = req.query;
 
@@ -198,6 +208,11 @@ export default async function handler(
       res.status(200).json({
         message: "구매요청 확인에 성공했어요.",
       });
+
+      sendNotificationMessage(
+        purchaseTrading.buyerId,
+        `${user.nickname}님이 ${purchaseTrading.productName} 상품 구매 요청을 확인하였습니다.`
+      );
     } catch (error) {
       console.error(error);
       await session.abortTransaction();

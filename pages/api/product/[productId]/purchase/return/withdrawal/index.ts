@@ -1,6 +1,8 @@
+import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
   PurchaseCancelProcess,
@@ -34,6 +36,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       const { productId } = req.query;
 
@@ -198,6 +208,11 @@ export default async function handler(
       }
 
       res.status(200).json({ message: "상품 반품 철회에 성공했어요." });
+
+      sendNotificationMessage(
+        saleTrading.sellerId,
+        `${user.nickname}님이 ${saleTrading.productName} 상품에 구매 반품을 철회 하였습니다.`
+      );
 
       await session.commitTransaction();
       session.endSession();

@@ -1,7 +1,9 @@
+import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
@@ -35,6 +37,14 @@ export default async function handler(
       }
 
       const myUid = isValidAuth?.auth?.uid;
+
+      const user = await User.findOne(
+        {
+          _id: new mongoose.Types.ObjectId(myUid as string),
+        },
+        null,
+        { session }
+      );
 
       const { productId } = req.query;
       const { cancelReason } = req.body;
@@ -218,13 +228,18 @@ export default async function handler(
 
         const newSaleTrading = new SaleTrading({
           productId,
-          seller: saleTrading.sellerId,
+          sellerId: saleTrading.sellerId,
           saleStartDate: saleTrading.saleStartDate,
           productName: saleTrading.productName,
         });
 
         await newSaleTrading.save({ session });
         res.status(200).json({ message: "상품 구매 취소에 성공했어요." });
+
+        sendNotificationMessage(
+          saleTrading.sellerId,
+          `${user.nickname}님이 ${saleTrading.productName} 상품을 구매 취소하였습니다.`
+        );
       } else {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
@@ -274,6 +289,11 @@ export default async function handler(
           throw new Error("상품 판매 정보 업데이트에 실패했어요.");
         }
         res.status(200).json({ message: "상품 구매 취소요청에 성공했어요." });
+
+        sendNotificationMessage(
+          saleTrading.sellerId,
+          `${user.nickname}님이 ${saleTrading.productName} 상품에 구매 취소 요청을 하였습니다.`
+        );
       }
 
       await session.commitTransaction();
