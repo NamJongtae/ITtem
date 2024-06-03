@@ -1,10 +1,27 @@
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import NotificationDeleteAllBtn from "./notification-delete-all-btn";
+import NotificationReadAllBtn from "./notification-read-all-btn";
+import { NotificationMessageData } from "@/types/notification";
+
 export default function NotificationBtn() {
+  const queryClient = useQueryClient();
+  const notificationMessagesData = queryClient.getQueryData([
+    "notification",
+  ]) as
+    | InfiniteData<{
+        messages: NotificationMessageData[];
+        nextKey: string | null;
+      }>
+    | undefined;
+
+  const messageData = notificationMessagesData?.pages
+    .map((data) => data.messages)
+    .flat();
+
   return (
-    <div className="flex gap-1 justify-end mr-3 mt-1">
-      <button className="relative text-[11px] before:bg-gray-400 before:absolute before:h-[11px] before:w-[1px] before:-right-1 before:top-1">
-        모두 읽음
-      </button>
-      <button className="text-[11px] ml-1">모두 삭제</button>
+    <div className="flex gap-2">
+      <NotificationReadAllBtn messageData={messageData} />
+      <NotificationDeleteAllBtn messageData={messageData} />
     </div>
   );
 }

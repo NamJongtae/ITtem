@@ -10,7 +10,6 @@ const NotificationModal = forwardRef<HTMLDivElement>((props, ref) => {
       ref={ref}
     >
       <NotificationHeader />
-      <NotificationBtn />
       <NotificationList />
     </div>
   );
