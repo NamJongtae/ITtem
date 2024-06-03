@@ -1,5 +1,4 @@
-import { readyNotificationMessage } from "@/lib/api/notification";
-import { RootState } from "@/store/store";
+import { readNotificationMessage } from "@/lib/api/notification";
 import { NotificationMessageData } from "@/types/notification";
 import {
   InfiniteData,
@@ -9,7 +8,7 @@ import {
 import { AxiosError, isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
-export default function useReadyNotificationMessageMutate() {
+export default function useReadNotificationMessageMutate() {
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation<
@@ -26,7 +25,7 @@ export default function useReadyNotificationMessageMutate() {
     }
   >({
     mutationFn: (messageId: string) =>
-      readyNotificationMessage(messageId),
+      readNotificationMessage(messageId),
     onMutate: async (messageId) => {
       await queryClient.cancelQueries({ queryKey: ["notification"] });
 

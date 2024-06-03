@@ -1,4 +1,4 @@
-import useReadyNotificationMessageMutate from "@/hooks/querys/useReadyNotificationMessageMutate";
+import useReadNotificationMessageMutate from "@/hooks/querys/useReadNotificationMessageMutate";
 
 interface IProps {
   messageId: string;
@@ -7,7 +7,7 @@ interface IProps {
 
 export default function NotificationItemReadBtn({ messageId, isRead }: IProps) {
   const { mutate } =
-    useReadyNotificationMessageMutate();
+  useReadNotificationMessageMutate();
 
   const onClickRead = () => {
     mutate(messageId);

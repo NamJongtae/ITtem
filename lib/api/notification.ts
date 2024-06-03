@@ -19,7 +19,7 @@ export const getNotificationMessage = async ({
   }
 };
 
-export const readyNotificationMessage = async (messageId: string) => {
+export const readNotificationMessage = async (messageId: string) => {
   try {
     await customAxios.patch(`/api/notification/${messageId}/read`);
   } catch (error) {
