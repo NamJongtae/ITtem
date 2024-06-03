@@ -7,6 +7,7 @@ import {
   SaleTradingData,
 } from "./productTypes";
 import { AuthData, ProfileData, ProfileReviewData } from "./authTypes";
+import { NotificationMessageData } from "./notification";
 
 export interface VerifyEmailResponseData {
   message: string;
@@ -146,4 +147,13 @@ export interface PurchaseTradingResponseData
 
 export interface ReviewResponseData extends ApiResponse<ProductReviewData> {
   review: ProductReviewData;
+}
+
+export interface NotificationResponseData
+  extends ApiResponse<{
+    messages: NotificationMessageData[];
+    nextKey: string;
+  }> {
+  messages: NotificationMessageData[];
+  nextKey: string;
 }
