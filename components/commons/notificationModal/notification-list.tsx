@@ -2,6 +2,7 @@ import useNotificationInfiniteQuery from "@/hooks/querys/useNotificationInfinite
 import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../spinner";
 import NotificationItem from "./notification-item";
+import Empty from "../Empty";
 
 export default function NotificationList() {
   const {
@@ -13,9 +14,19 @@ export default function NotificationList() {
     error,
   } = useNotificationInfiniteQuery();
 
-  const onClickDelete = () => {};
+  if (error) {
+    return (
+      <Empty
+        message={
+          "알림 메세지를 조회에 실패했어요.\n 잠시 후 다시 시도해주세요."
+        }
+      />
+    );
+  }
 
-  const onClickRead = () => {};
+  if (data?.length === 0) {
+    return <Empty message={"알림 메세지가 없어요."} />;
+  }
 
   return (
     <InfiniteScroll
@@ -36,8 +47,6 @@ export default function NotificationList() {
             <NotificationItem
               key={data.id}
               data={data}
-              onClickDelete={onClickDelete}
-              onClickRead={onClickRead}
             />
           ))
         )}
