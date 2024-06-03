@@ -123,7 +123,10 @@ export const getNotificationMessage = async ({
   userId: string;
   lastKey?: unknown;
   limit?: number;
-}): Promise<{ messages: NotificationMessageData[]; nextKey: string | null }> => {
+}): Promise<{
+  messages: NotificationMessageData[];
+  nextKey: string | null;
+}> => {
   try {
     const messagesRef = lastKey
       ? query(
@@ -146,7 +149,8 @@ export const getNotificationMessage = async ({
     const keys = Object.keys(data);
     const messages = keys.map((key) => ({ id: key, ...data[key] })).reverse();
 
-    const nextKey = messages.length === limit ? messages[messages.length - 1].id : null;
+    const nextKey =
+      messages.length === limit ? messages[messages.length - 1].id : null;
 
     return { messages, nextKey };
   } catch (error) {
@@ -186,6 +190,36 @@ export const deleteNotificationMessage = async ({
       database,
       `notification/${userId}/messages/${messageId}`
     );
+
+    await remove(messageRef);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const readAllNotificationMessage = async (userId: string) => {
+  try {
+    const messageRef = ref(database, `notification/${userId}/messages`);
+    const snapshot = await get(messageRef);
+    if (snapshot.exists()) {
+      const updates: { [key: string]: any } = {};
+      snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        if (key) {
+          updates[`notification/${userId}/messages/${key}/isRead`] = true;
+        }
+      });
+
+      await update(ref(database), updates);
+    } 
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAllNotificationMessage = async (userId: string) => {
+  try {
+    const messageRef = ref(database, `notification/${userId}/messages`);
 
     await remove(messageRef);
   } catch (error) {
