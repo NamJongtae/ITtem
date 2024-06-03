@@ -121,9 +121,7 @@ export const getNotificationMessage = async ({
   userId: string;
   lastKey?: unknown;
   limit?: number;
-}): Promise<
-  { items: NotificationMessageData[]; nextKey: string | null }
-> => {
+}): Promise<{ messages: NotificationMessageData[]; nextKey: string | null }> => {
   try {
     const messagesRef = lastKey
       ? query(
@@ -141,14 +139,14 @@ export const getNotificationMessage = async ({
     const snapshot = await get(messagesRef);
     const data = snapshot.val();
 
-    if (!data) return { items: [], nextKey: null };
+    if (!data) return { messages: [], nextKey: null };
 
     const keys = Object.keys(data);
-    const items = keys.map((key) => ({ id: key, ...data[key] })).reverse();
+    const messages = keys.map((key) => ({ id: key, ...data[key] })).reverse();
 
-    const nextKey = items.length === limit ? items[items.length - 1].id : null;
+    const nextKey = messages.length === limit ? messages[messages.length - 1].id : null;
 
-    return { items, nextKey };
+    return { messages, nextKey };
   } catch (error) {
     console.error("Error fetching notification messages: ", error);
     throw error;
