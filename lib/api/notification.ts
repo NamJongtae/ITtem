@@ -18,3 +18,21 @@ export const getNotificationMessage = async ({
     throw error;
   }
 };
+
+export const readyNotificationMessage = async (messageId: string) => {
+  try {
+    await customAxios.patch(`/api/notification/${messageId}/read`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteNotificationMessage = async (messageId: string) => {
+  try {
+    await customAxios.delete(
+      `/api/notification/${messageId}`
+    );
+  } catch (error) {
+    throw error;
+  }
+};
