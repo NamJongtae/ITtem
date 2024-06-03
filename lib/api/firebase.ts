@@ -17,6 +17,8 @@ import {
   orderByKey,
   endBefore,
   limitToLast,
+  update,
+  remove,
 } from "firebase/database";
 import { NotificationMessageData } from "@/types/notification";
 
@@ -149,6 +151,44 @@ export const getNotificationMessage = async ({
     return { messages, nextKey };
   } catch (error) {
     console.error("Error fetching notification messages: ", error);
+    throw error;
+  }
+};
+
+export const readyNotificationMessage = async ({
+  userId,
+  messageId,
+}: {
+  userId: string;
+  messageId: string;
+}) => {
+  try {
+    const messageRef = ref(
+      database,
+      `notification/${userId}/messages/${messageId}`
+    );
+
+    await update(messageRef, { isRead: true });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteNotificationMessage = async ({
+  userId,
+  messageId,
+}: {
+  userId: string;
+  messageId: string;
+}) => {
+  try {
+    const messageRef = ref(
+      database,
+      `notification/${userId}/messages/${messageId}`
+    );
+
+    await remove(messageRef);
+  } catch (error) {
     throw error;
   }
 };
