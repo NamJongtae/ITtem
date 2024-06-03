@@ -1,17 +1,13 @@
 import { getDateFormat } from "@/lib/getDateFormate";
 import { NotificationMessageData } from "@/types/notification";
+import NotificationItemReadBtn from "./notification-item-read-btn";
+import NotificationItemDeleteBtn from "./notification-item-delete-btn";
 
 interface IProps {
   data: NotificationMessageData;
-  onClickDelete: () => void;
-  onClickRead: () => void;
 }
 
-export default function NotificationItem({
-  data,
-  onClickDelete,
-  onClickRead,
-}: IProps) {
+export default function NotificationItem({ data }: IProps) {
   return (
     <li className="text-xs" key={data?.id}>
       <time className="text-[11px] mb-1 inline-block ml-1 text-gray-500">
@@ -24,20 +20,8 @@ export default function NotificationItem({
       >
         {data?.content}
       </p>
-      <button
-        onClick={onClickDelete}
-        className="float-end mt-1 mr-1 text-[11px]"
-      >
-        삭제
-      </button>
-      {!data?.isRead && (
-        <button
-          onClick={onClickRead}
-          className="float-end mt-1 mr-1 text-[11px]"
-        >
-          읽음
-        </button>
-      )}
+      <NotificationItemDeleteBtn messageId={data.id} />
+      <NotificationItemReadBtn messageId={data.id} isRead={data.isRead} />
     </li>
   );
 }
