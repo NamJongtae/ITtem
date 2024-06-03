@@ -1,0 +1,49 @@
+import { getNotificationMessage } from "@/lib/api/firebase";
+import { checkAuthorization } from "@/lib/server";
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === "GET") {
+    try {
+      const { lastKey, limit } = req.query;
+
+      const currentLimit = limit ? parseInt(limit as string, 10) : 10;
+
+      const isValidAuth = await checkAuthorization(req, res);
+
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
+
+      const myUid = isValidAuth?.auth?.uid;
+
+      if (!myUid) {
+        res.status(400).json({ message: "유저 ID가 존재하지 않아요." });
+        return;
+      }
+
+      const { messages, nextKey } = await getNotificationMessage({
+        userId: myUid,
+        lastKey,
+        limit: currentLimit,
+      });
+
+      res.status(200).json({
+        message: "알림 메세지 조회에 성공했어요.",
+        messages,
+        nextKey,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "알림 메세지 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
+    }
+  }
+}
