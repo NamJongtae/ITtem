@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react";
 import NotificationList from "./notification-list";
-import NotificationBtn from "./notification-btn";
 import NotificationHeader from "./notification-header";
 
 const NotificationModal = forwardRef<HTMLDivElement>((props, ref) => {

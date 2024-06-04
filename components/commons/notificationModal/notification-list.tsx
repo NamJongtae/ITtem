@@ -3,6 +3,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../spinner";
 import NotificationItem from "./notification-item";
 import Empty from "../Empty";
+import NotificationBtn from "./notification-btn";
 
 export default function NotificationList() {
   const {
@@ -20,16 +21,21 @@ export default function NotificationList() {
         message={
           "알림 메세지를 조회에 실패했어요.\n 잠시 후 다시 시도해주세요."
         }
+        messageSize="sm"
+        iconSize={50}
       />
     );
   }
 
   if (data?.length === 0) {
-    return <Empty message={"알림 메세지가 없어요."} />;
+    return (
+      <Empty message={"알림 메세지가 없어요."} messageSize="sm" iconSize={50} />
+    );
   }
 
   return (
     <div className="h-[380px] overflow-y-scroll">
+      {data && <NotificationBtn messageData={data} />}
       <InfiniteScroll
         useWindow={false}
         loadMore={() => {
@@ -41,7 +47,7 @@ export default function NotificationList() {
       >
         <ul className="flex flex-col w-full p-5 pt-2">
           {isLoading ? (
-            <li className="mx-auto">
+            <li className="absolute center">
               <Spinner />
             </li>
           ) : (
