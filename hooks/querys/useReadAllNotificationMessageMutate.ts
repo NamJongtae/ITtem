@@ -14,7 +14,7 @@ export default function useReadAllNotificationMessagesMutate() {
   const { mutate, isPending, error } = useMutation<
     void,
     AxiosError,
-    undefined,
+    string,
     {
       previousMessages:
         | InfiniteData<
@@ -24,7 +24,7 @@ export default function useReadAllNotificationMessagesMutate() {
         | undefined;
     }
   >({
-    mutationFn: readAllNotificationMessage,
+    mutationFn: (endKey) => readAllNotificationMessage(endKey),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["notification"] });
 

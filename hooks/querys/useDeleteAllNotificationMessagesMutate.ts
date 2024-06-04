@@ -14,7 +14,7 @@ export default function useDeleteAllNotificationMessagesMutate() {
   const { mutate, isPending, error } = useMutation<
     void,
     AxiosError,
-    undefined,
+    string,
     {
       previousMessages:
         | InfiniteData<
@@ -24,7 +24,7 @@ export default function useDeleteAllNotificationMessagesMutate() {
         | undefined;
     }
   >({
-    mutationFn: deleteAllNotificationMessage,
+    mutationFn: (endKey) => deleteAllNotificationMessage(endKey),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["notification"] });
 
@@ -35,10 +35,10 @@ export default function useDeleteAllNotificationMessagesMutate() {
           >
         | undefined;
 
-        queryClient.setQueryData(["notification"], {
-          pageParams: [], 
-          pages: [{ messages: [], nextKey: null }],
-        });
+      queryClient.setQueryData(["notification"], {
+        pageParams: [],
+        pages: [{ messages: [], nextKey: null }],
+      });
 
       return { previousMessages };
     },
