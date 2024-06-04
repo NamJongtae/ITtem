@@ -13,10 +13,12 @@ import {
   update,
 } from "firebase/database";
 import { database } from "@/lib/firebaseSetting";
-import { MessageData } from '@/types/notification';
-
+import { NotificationMessageData } from "@/types/notification";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function useNotification() {
+  const queryClient = useQueryClient();
+
   const isOpenNotification = useSelector(
     (state: RootState) => state.modal.isOpenNotification
   );
@@ -86,7 +88,7 @@ export default function useNotification() {
     const unsubscribe = onValue(q, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        (Object.entries(data) as [string, MessageData][]).forEach(
+        (Object.entries(data) as [string, NotificationMessageData][]).forEach(
           ([key, message]) => {
             toast.info(message.content);
             const messageRef = ref(
@@ -96,6 +98,7 @@ export default function useNotification() {
             update(messageRef, { isNotification: true });
           }
         );
+        queryClient.invalidateQueries({ queryKey: ["notification"] });
       }
     });
 
