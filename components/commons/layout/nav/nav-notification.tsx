@@ -3,16 +3,20 @@ import NotificationModal from "../../notificationModal/notification-modal";
 import useNotification from "@/hooks/layout/useNotification";
 
 export default function NavNotification() {
-  const { isOpenNotification, toggleNotification, notificationRef } =
-    useNotification();
+  const {
+    isOpenNotification,
+    toggleNotification,
+    notificationRef,
+    unreadCount,
+  } = useNotification();
 
   return (
     <>
       <button
         onClick={toggleNotification}
         className={`relative inline-flex flex-col items-center gap-[2px] text-xs text-gary-600 ${
-          true &&
-          "before:absolute before:right-[2px] before:top-[0px] before:w-[8px] before:h-[8px] before:rounded-full before:bg-red-400"
+          unreadCount !==0 &&
+          "before:absolute before:right-[2px] before:-top-[1px] before:w-[8px] before:h-[8px] before:rounded-full before:bg-red-400"
         } ${isOpenNotification && "text-indigo-500"}`}
         type="button"
       >
