@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { modalSlice } from "../../store/modalSlice";
@@ -6,6 +6,8 @@ import useDebouncing from "../commons/useDebouncing";
 import { toast } from "react-toastify";
 import {
   equalTo,
+  get,
+  increment,
   onValue,
   orderByChild,
   query,
@@ -17,6 +19,7 @@ import { NotificationMessageData } from "@/types/notification";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function useNotification() {
+  const [unreadCount, setUnreadCount] = useState(0);
   const queryClient = useQueryClient();
 
   const isOpenNotification = useSelector(
@@ -84,26 +87,51 @@ export default function useNotification() {
     if (!user) return;
 
     const messageRef = ref(database, `notification/${user.uid}/messages`);
+    const counterRef = ref(database, `notification/${user.uid}/counter`);
     const q = query(messageRef, orderByChild("isNotification"), equalTo(false));
-    const unsubscribe = onValue(q, (snapshot) => {
+
+    const unsubscribeMessage = onValue(q, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         (Object.entries(data) as [string, NotificationMessageData][]).forEach(
-          ([key, message]) => {
+          async ([key, message]) => {
             toast.info(message.content);
             const messageRef = ref(
               database,
               `notification/${user.uid}/messages/${key}`
             );
+
             update(messageRef, { isNotification: true });
+
+            const counterSnapshot = await get(counterRef);
+            if (counterSnapshot.exists()) {
+              await update(counterRef, { unreadCount: increment(1) });
+            } else {
+              await update(counterRef, { unreadCount: 1 });
+            }
           }
         );
         queryClient.invalidateQueries({ queryKey: ["notification"] });
       }
     });
 
-    return () => unsubscribe();
+    const unsubscribeCounter = onValue(counterRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setUnreadCount(data.unreadCount);
+      }
+    });
+
+    return () => {
+      unsubscribeMessage();
+      unsubscribeCounter();
+    };
   }, [user]);
 
-  return { isOpenNotification, toggleNotification, notificationRef };
+  return {
+    isOpenNotification,
+    toggleNotification,
+    notificationRef,
+    unreadCount,
+  };
 }
