@@ -4,8 +4,12 @@ import { toast } from "react-toastify";
 
 interface IProps {
   messageData: NotificationMessageData[] | undefined;
+  endKey: string;
 }
-export default function NotificationReadAllBtn({ messageData }: IProps) {
+export default function NotificationReadAllBtn({
+  messageData,
+  endKey,
+}: IProps) {
   const { mutate } = useReadAllNotificationMessagesMutate();
 
   const onClickReadAll = () => {
@@ -15,7 +19,7 @@ export default function NotificationReadAllBtn({ messageData }: IProps) {
     }
     const isRead = confirm("정말 모든 메세지를 읽음 처리하겠어요?");
     if (isRead) {
-      mutate(undefined);
+      mutate(endKey);
     }
   };
 

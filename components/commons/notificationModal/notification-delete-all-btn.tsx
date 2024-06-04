@@ -4,9 +4,13 @@ import { toast } from "react-toastify";
 
 interface IProps {
   messageData: NotificationMessageData[] | undefined;
+  endKey: string;
 }
 
-export default function NotificationDeleteAllBtn({ messageData }: IProps) {
+export default function NotificationDeleteAllBtn({
+  messageData,
+  endKey,
+}: IProps) {
   const { mutate } = useDeleteAllNotificationMessagesMutate();
 
   const onClickDeleteAll = () => {
@@ -16,7 +20,7 @@ export default function NotificationDeleteAllBtn({ messageData }: IProps) {
     }
     const isDelete = confirm("정말 모든 메세지를 삭제하겠어요?");
     if (isDelete) {
-      mutate(undefined);
+      mutate(endKey);
     }
   };
 

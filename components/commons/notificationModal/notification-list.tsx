@@ -35,7 +35,12 @@ export default function NotificationList() {
 
   return (
     <div className="h-[380px] overflow-y-scroll">
-      {data && <NotificationBtn messageData={data} />}
+      {data && (
+        <NotificationBtn
+          messageData={data}
+          endKey={data[data.length - 1].id}
+        />
+      )}
       <InfiniteScroll
         useWindow={false}
         loadMore={() => {
@@ -54,7 +59,7 @@ export default function NotificationList() {
             data?.map((data) => <NotificationItem key={data.id} data={data} />)
           )}
           {isFetchingNextPage && (
-            <li className="mx-auto w-full">
+            <li className="flex justify-center w-full">
               <Spinner />
             </li>
           )}
