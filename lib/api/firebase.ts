@@ -19,6 +19,7 @@ import {
   limitToLast,
   update,
   remove,
+  increment,
 } from "firebase/database";
 import { NotificationMessageData } from "@/types/notification";
 
@@ -172,7 +173,10 @@ export const readyNotificationMessage = async ({
       `notification/${userId}/messages/${messageId}`
     );
 
+    const counterRef = ref(database, `notification/${userId}/counter`);
+
     await update(messageRef, { isRead: true });
+    await update(counterRef, { unreadCount: increment(-1) });
   } catch (error) {
     throw error;
   }
@@ -190,6 +194,12 @@ export const deleteNotificationMessage = async ({
       database,
       `notification/${userId}/messages/${messageId}`
     );
+    const counterRef = ref(database, `notification/${userId}/counter`);
+
+    const messageSnapshot = await get(messageRef);
+    if (messageSnapshot.exists() && messageSnapshot.val().isRead === false) {
+      await update(counterRef, { unreadCount: increment(-1) });
+    }
 
     await remove(messageRef);
   } catch (error) {
@@ -200,6 +210,7 @@ export const deleteNotificationMessage = async ({
 export const readAllNotificationMessage = async (userId: string) => {
   try {
     const messageRef = ref(database, `notification/${userId}/messages`);
+    const counterRef = ref(database, `notification/${userId}/counter`);
     const snapshot = await get(messageRef);
     if (snapshot.exists()) {
       const updates: { [key: string]: any } = {};
@@ -211,7 +222,8 @@ export const readAllNotificationMessage = async (userId: string) => {
       });
 
       await update(ref(database), updates);
-    } 
+      await update(counterRef, { unreadCount: 0 });
+    }
   } catch (error) {
     throw error;
   }
@@ -220,8 +232,10 @@ export const readAllNotificationMessage = async (userId: string) => {
 export const deleteAllNotificationMessage = async (userId: string) => {
   try {
     const messageRef = ref(database, `notification/${userId}/messages`);
+    const counterRef = ref(database, `notification/${userId}/counter`);
 
     await remove(messageRef);
+    await update(counterRef, { unreadCount: 0 });
   } catch (error) {
     throw error;
   }
