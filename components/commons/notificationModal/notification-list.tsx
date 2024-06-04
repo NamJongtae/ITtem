@@ -29,33 +29,31 @@ export default function NotificationList() {
   }
 
   return (
-    <InfiniteScroll
-      loadMore={() => {
-        if (!isFetchingNextPage && hasNextPage && !error && !isLoading) {
-          fetchNextPage();
-        }
-      }}
-      hasMore={hasNextPage && !error && !isLoading}
-    >
-      <ul className="flex flex-col w-full overflow-y-scroll max-h-[345px] p-5 pt-2">
-        {isLoading ? (
-          <li className="mx-auto">
-            <Spinner />
-          </li>
-        ) : (
-          data?.map((data) => (
-            <NotificationItem
-              key={data.id}
-              data={data}
-            />
-          ))
-        )}
-        {isFetchingNextPage && (
-          <li className="mx-auto w-full">
-            <Spinner />
-          </li>
-        )}
-      </ul>
-    </InfiniteScroll>
+    <div className="h-[380px] overflow-y-scroll">
+      <InfiniteScroll
+        useWindow={false}
+        loadMore={() => {
+          if (!isFetchingNextPage && hasNextPage && !error && !isLoading) {
+            fetchNextPage();
+          }
+        }}
+        hasMore={hasNextPage && !error && !isLoading}
+      >
+        <ul className="flex flex-col w-full p-5 pt-2">
+          {isLoading ? (
+            <li className="mx-auto">
+              <Spinner />
+            </li>
+          ) : (
+            data?.map((data) => <NotificationItem key={data.id} data={data} />)
+          )}
+          {isFetchingNextPage && (
+            <li className="mx-auto w-full">
+              <Spinner />
+            </li>
+          )}
+        </ul>
+      </InfiniteScroll>
+    </div>
   );
 }
