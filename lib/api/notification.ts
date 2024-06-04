@@ -35,17 +35,21 @@ export const deleteNotificationMessage = async (messageId: string) => {
   }
 };
 
-export const readAllNotificationMessage = async () => {
+export const readAllNotificationMessage = async (endKey: string) => {
   try {
-    await customAxios.patch(`/api/notification`);
+    await customAxios.patch(`/api/notification`, {
+      endKey,
+    });
   } catch (error) {
     throw error;
   }
 };
 
-export const deleteAllNotificationMessage = async () => {
+export const deleteAllNotificationMessage = async (endKey: string) => {
   try {
-    await customAxios.delete(`/api/notification`);
+    await customAxios.delete(`/api/notification`, {
+      data: { endKey },
+    });
   } catch (error) {
     throw error;
   }

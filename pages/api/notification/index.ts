@@ -52,6 +52,12 @@ export default async function handler(
   }
   if (req.method === "PATCH") {
     try {
+      const { endKey } = req.body;
+
+      if (!endKey) {
+        res.status(422).json({ message: "읽음 처리할 범위 키가 없어요." });
+        return;
+      }
       const isValidAuth = await checkAuthorization(req, res);
 
       if (!isValidAuth.isValid) {
@@ -68,7 +74,7 @@ export default async function handler(
         return;
       }
 
-      await readAllNotificationMessage(myUid);
+      await readAllNotificationMessage({ userId: myUid, endKey });
 
       res.status(200).json({ message: "알림 메세지 읽음 처리에 성공했어요." });
     } catch (error) {
@@ -81,6 +87,13 @@ export default async function handler(
   }
   if (req.method === "DELETE") {
     try {
+      const { endKey } = req.body;
+
+      if (!endKey) {
+        res.status(422).json({ message: "삭제 처리할 범위 키가 없어요." });
+        return;
+      }
+
       const isValidAuth = await checkAuthorization(req, res);
 
       if (!isValidAuth.isValid) {
@@ -97,7 +110,7 @@ export default async function handler(
         return;
       }
 
-      await deleteAllNotificationMessage(myUid);
+      await deleteAllNotificationMessage({ userId: myUid, endKey });
 
       res.status(200).json({
         message: "알림 메세지 삭제에 성공했어요.",

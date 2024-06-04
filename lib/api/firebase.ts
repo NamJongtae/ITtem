@@ -20,6 +20,7 @@ import {
   update,
   remove,
   increment,
+  startAt,
 } from "firebase/database";
 import { NotificationMessageData } from "@/types/notification";
 
@@ -151,7 +152,7 @@ export const getNotificationMessage = async ({
     const messages = keys.map((key) => ({ id: key, ...data[key] })).reverse();
 
     const nextKey =
-      messages.length === limit ? messages[messages.length - 1].id : null;
+      messages.length >= limit ? messages[messages.length - 1].id : null;
 
     return { messages, nextKey };
   } catch (error) {
@@ -207,35 +208,81 @@ export const deleteNotificationMessage = async ({
   }
 };
 
-export const readAllNotificationMessage = async (userId: string) => {
+export const readAllNotificationMessage = async ({
+  userId,
+  endKey,
+}: {
+  userId: string;
+  endKey: string;
+}) => {
   try {
-    const messageRef = ref(database, `notification/${userId}/messages`);
+    const messagesRef = query(
+      ref(database, `notification/${userId}/messages`),
+      orderByKey(),
+      startAt(endKey)
+    );
     const counterRef = ref(database, `notification/${userId}/counter`);
-    const snapshot = await get(messageRef);
+
+    const snapshot = await get(messagesRef);
     if (snapshot.exists()) {
       const updates: { [key: string]: any } = {};
+      let unreadCountDecrease = 0;
       snapshot.forEach((childSnapshot) => {
         const key = childSnapshot.key;
         if (key) {
           updates[`notification/${userId}/messages/${key}/isRead`] = true;
+          unreadCountDecrease++;
         }
       });
 
       await update(ref(database), updates);
-      await update(counterRef, { unreadCount: 0 });
+      await update(counterRef, {
+        unreadCount: increment(-unreadCountDecrease),
+      });
     }
   } catch (error) {
     throw error;
   }
 };
 
-export const deleteAllNotificationMessage = async (userId: string) => {
+export const deleteAllNotificationMessage = async ({
+  userId,
+  endKey,
+}: {
+  userId: string;
+  endKey: string;
+}) => {
   try {
-    const messageRef = ref(database, `notification/${userId}/messages`);
+    const messagesRef = query(
+      ref(database, `notification/${userId}/messages`),
+      orderByKey(),
+      startAt(endKey)
+    );
     const counterRef = ref(database, `notification/${userId}/counter`);
 
-    await remove(messageRef);
-    await update(counterRef, { unreadCount: 0 });
+    const snapshot = await get(messagesRef);
+    if (snapshot.exists()) {
+      const updates: { [key: string]: any } = {};
+      let unreadCountDecrease = 0;
+
+      snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        const isRead = childSnapshot.val().isRead;
+        if (key) {
+          updates[`notification/${userId}/messages/${key}`] = null;
+          if (!isRead) {
+            unreadCountDecrease++;
+          }
+        }
+      });
+
+      await update(ref(database), updates);
+      if (unreadCountDecrease > 0) {
+        await update(counterRef, {
+          unreadCount: increment(-unreadCountDecrease),
+        });
+      }
+    }
   } catch (error) {
     throw error;
   }
