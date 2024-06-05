@@ -1,5 +1,5 @@
-export default function Chat() {
-  return (
-    <div>Chat</div>
-  )
+import ChatRoomListPage from "@/components/chat/chat-room-list-page";
+
+export default function ChatRooms() {
+  return <ChatRoomListPage />;
 }
