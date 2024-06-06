@@ -1,16 +1,22 @@
 import { RootState } from "@/store/store";
 import ChatIcon from "@/public/icons/chat_icon.svg";
-import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { ProductStatus } from "@/types/productTypes";
+import useStartChatMutate from "@/hooks/querys/useStartChatMutate";
 
 interface IProps {
   productStatus: ProductStatus | undefined;
+  productId: string | undefined;
+  userId: string | undefined;
 }
 
-export default function ProductDetailChattingBtn({ productStatus }: IProps) {
-  const router = useRouter();
+export default function ProductDetailChattingBtn({
+  productStatus,
+  productId,
+  userId,
+}: IProps) {
+  const { mutate } = useStartChatMutate();
   const user = useSelector((state: RootState) => state.auth.user);
 
   const handleClickChatting = () => {
@@ -26,7 +32,9 @@ export default function ProductDetailChattingBtn({ productStatus }: IProps) {
       toast.warn("로그인 후 이용해주세요.");
       return;
     }
-    router.push("/chat");
+    if (!productId || !userId) return;
+
+    mutate({ productId, userId });
   };
 
   return (

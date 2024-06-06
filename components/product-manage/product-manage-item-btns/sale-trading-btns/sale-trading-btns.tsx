@@ -21,7 +21,7 @@ interface IProps {
   tradingData: SaleTradingData;
 }
 
-type ButtonComponent = (productId: string) => JSX.Element;
+type ButtonComponent = (productId: string, userId: string) => JSX.Element;
 
 interface ButtonComponents {
   [key: string]: {
@@ -46,7 +46,10 @@ const buttonComponents: ButtonComponents = {
     [SaleTradingProcess.상품전달확인]: (productId: string) => (
       <SaleTradingDeliveryConfirmationBtn productId={productId} />
     ),
-    [SaleTradingProcess.구매자상품인수중]: () => <SaleTradingChattingBtn />,
+    [SaleTradingProcess.구매자상품인수중]: (
+      productId: string,
+      userId: string
+    ) => <SaleTradingChattingBtn productId={productId} userId={userId} />,
   },
   [TradingStatus.CANCEL]: {
     [SalesCancelProcess.취소요청확인]: (productId: string) => (
@@ -63,7 +66,10 @@ const buttonComponents: ButtonComponents = {
         <SaleTradingRetrunRejectBtn productId={productId} />
       </>
     ),
-    [SalesReturnProcess.구매자반품상품전달중]: () => <SaleTradingChattingBtn />,
+    [SalesReturnProcess.구매자반품상품전달중]: (
+      productId: string,
+      userId: string
+    ) => <SaleTradingChattingBtn productId={productId} userId={userId} />,
     [SalesReturnProcess.반품상품인수확인]: (productId: string) => (
       <>
         <SaleTradingReturnReceiptConfirmationBtn productId={productId} />
@@ -73,16 +79,14 @@ const buttonComponents: ButtonComponents = {
   },
 };
 
-export default function SaleTradingBtns({
-  tradingData,
-}: IProps) {
+export default function SaleTradingBtns({ tradingData }: IProps) {
   const { status, process, productId } = tradingData;
 
   const Button = buttonComponents[status]?.[process];
 
   return Button ? (
     <div className="flex flex-row justify-end sm:flex-col gap-3">
-      {Button(productId)}
+      {Button(productId, tradingData.buyerId)}
     </div>
   ) : null;
 }

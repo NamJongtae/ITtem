@@ -20,8 +20,8 @@ export default function ProductDetailContentBtns({
       <div className="flex items-center mt-6 gap-3 flex-wrap">
         {productDetailData?.uid === myProfileData?.uid ? (
           <>
-            <ProductDetailEditBtn productStatus={productDetailData?.status}/>
-            <ProductDetailDeleteBtn productStatus={productDetailData?.status}/>
+            <ProductDetailEditBtn productStatus={productDetailData?.status} />
+            <ProductDetailDeleteBtn productStatus={productDetailData?.status} />
           </>
         ) : (
           <>
@@ -29,7 +29,11 @@ export default function ProductDetailContentBtns({
               productDetailData={productDetailData}
               myProfileData={myProfileData}
             />
-            <ProductDetailChattingBtn productStatus={productDetailData?.status}/>
+            <ProductDetailChattingBtn
+              productStatus={productDetailData?.status}
+              userId={productDetailData?.uid}
+              productId={productDetailData?._id}
+            />
             <ProductDetailBuyBtn productStatus={productDetailData?.status} />
           </>
         )}

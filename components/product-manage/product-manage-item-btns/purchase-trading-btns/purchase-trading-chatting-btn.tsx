@@ -1,10 +1,26 @@
-import { useRouter } from "next/router";
+import Loading from "@/components/commons/loading";
+import useStartChatMutate from "@/hooks/querys/useStartChatMutate";
 
-export default function PurchaseTradingChattingBtn() {
-  const router = useRouter();
+interface IProps {
+  productId: string | undefined;
+  userId: string | undefined;
+}
+
+export default function PurchaseTradingChattingBtn({
+  productId,
+  userId,
+}: IProps) {
+  const { mutate, isPending } = useStartChatMutate();
   const onClickChatting = () => {
-    router.push("/chat");
+    if (!productId || !userId) return;
+
+    mutate({ productId, userId });
   };
+
+  if (isPending) {
+    return <Loading />;
+  }
+
   return (
     <button
       type="button"

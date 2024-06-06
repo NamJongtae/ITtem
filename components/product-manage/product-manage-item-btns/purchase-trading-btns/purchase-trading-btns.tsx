@@ -17,7 +17,7 @@ interface IProps {
   tradingData: PurchaseTradingData;
 }
 
-type ButtonComponent = (productId: string) => JSX.Element;
+type ButtonComponent = (productId: string, userId: string) => JSX.Element;
 
 interface ButtonComponents {
   [key: string]: {
@@ -27,15 +27,21 @@ interface ButtonComponents {
 
 const buttonComponents: ButtonComponents = {
   [TradingStatus.TRADING]: {
-    [PurchaseTradingProcess.판매자확인중]: (productId: string) => (
+    [PurchaseTradingProcess.판매자확인중]: (
+      productId: string,
+      userId: string
+    ) => (
       <>
-        <PurchaseTradingChattingBtn />
+        <PurchaseTradingChattingBtn productId={productId} userId={userId} />
         <PurchaseTradingCancelBtn productId={productId} />
       </>
     ),
-    [PurchaseTradingProcess.판매자상품전달중]: (productId: string) => (
+    [PurchaseTradingProcess.판매자상품전달중]: (
+      productId: string,
+      userId: string
+    ) => (
       <>
-        <PurchaseTradingChattingBtn />
+        <PurchaseTradingChattingBtn productId={productId} userId={userId} />
         <PurchaseTradingCancelBtn productId={productId} />
       </>
     ),
@@ -61,9 +67,10 @@ const buttonComponents: ButtonComponents = {
         <PurchaseTradingReturnwithdrawalBtn productId={productId} />
       </>
     ),
-    [PurchaseReturnProcess.판매자반품상품인수확인중]: () => (
-      <PurchaseTradingChattingBtn />
-    ),
+    [PurchaseReturnProcess.판매자반품상품인수확인중]: (
+      productId: string,
+      userId: string
+    ) => <PurchaseTradingChattingBtn productId={productId} userId={userId} />,
   },
 };
 
@@ -74,7 +81,7 @@ export default function PurchaseTradingBtns({ tradingData }: IProps) {
 
   return Button ? (
     <div className="flex flex-row justify-end sm:flex-col gap-3">
-      {Button(productId)}
+      {Button(productId, tradingData.sellerId)}
     </div>
   ) : null;
 }

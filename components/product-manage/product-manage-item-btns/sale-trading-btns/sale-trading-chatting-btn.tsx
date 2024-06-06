@@ -1,9 +1,16 @@
-import { useRouter } from "next/router";
+import useStartChatMutate from "@/hooks/querys/useStartChatMutate";
 
-export default function SaleTradingChattingBtn() {
-  const router = useRouter();
+interface IProps {
+  productId: string | undefined;
+  userId: string | undefined;
+}
+export default function SaleTradingChattingBtn({ productId, userId }: IProps) {
+  const { mutate } = useStartChatMutate();
+
   const onClickChatting = () => {
-    router.push("/chat");
+    if (!productId || !userId) return;
+
+    mutate({ productId, userId });
   };
   return (
     <button
