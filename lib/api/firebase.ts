@@ -4,7 +4,7 @@ import {
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-import { database, storage } from "../firebaseSetting";
+import { database, firestoreDB, storage } from "../firebaseSetting";
 import { v4 as uuid } from "uuid";
 import { UploadImgResponseData } from "@/types/apiTypes";
 import {
@@ -22,7 +22,17 @@ import {
   increment,
   startAt,
 } from "firebase/database";
+import {
+  addDoc,
+  arrayUnion,
+  doc,
+  query as firestoreQuery,
+  getDocs,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { NotificationMessageData } from "@/types/notification";
+import { collection, serverTimestamp } from "firebase/firestore";
 
 export const uploadImgToFireStore = async (
   file: File | ""
@@ -282,6 +292,78 @@ export const deleteAllNotificationMessage = async ({
           unreadCount: increment(-unreadCountDecrease),
         });
       }
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const startChat = async ({
+  productId,
+  myUid,
+  userId,
+  addChatRoomId,
+}: {
+  productId: string;
+  myUid: string;
+  userId: string;
+  addChatRoomId: (chatRoomId: string) => Promise<void>;
+}) => {
+  try {
+    const chatRoomsRef = collection(firestoreDB, "chatRooms");
+    const q = firestoreQuery(
+      chatRoomsRef,
+      where("productId", "==", productId),
+      where("participantIDs", "array-contains", myUid)
+    );
+
+    const querySnapshot = await getDocs(q);
+    let chatRoomId = null;
+    querySnapshot.forEach((doc) => {
+      const chatRoom = doc.data();
+      if (chatRoom.participantIDs.includes(userId)) {
+        chatRoomId = doc.id;
+        return;
+      }
+    });
+
+    if (chatRoomId) {
+      // 이미 존재하는 채팅방이 있음
+      return chatRoomId;
+    } else {
+      // 새로운 채팅방 생성
+      const newChatRoomData = {
+        productId,
+        participantIDs: [myUid, userId],
+        createdAt: serverTimestamp(),
+        lastMessage: null,
+        lastMessageTimestamp: null,
+        newMessageCount: {
+          [myUid]: 0,
+          [userId]: 0,
+        },
+        entered: {
+          [myUid]: false,
+          [userId]: false,
+        },
+        isAlarm: {
+          [myUid]: true,
+          [userId]: true,
+        },
+      };
+
+      const docRef = await addDoc(chatRoomsRef, newChatRoomData);
+      chatRoomId = docRef.id;
+      await addChatRoomId(chatRoomId);
+
+      // 사용자별 채팅방 ID 저장
+      const userChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", userId);
+      await setDoc(userChatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) }, { merge: true });
+      
+      const myChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", myUid);
+      await setDoc(myChatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) }, { merge: true });
+
+      return chatRoomId;
     }
   } catch (error) {
     throw error;
