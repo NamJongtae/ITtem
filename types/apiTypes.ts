@@ -157,3 +157,8 @@ export interface NotificationResponseData
   messages: NotificationMessageData[];
   nextKey: string;
 }
+
+export interface StartChatResponseData extends ApiResponse<string> {
+  chatRoomId: string;
+}
+
