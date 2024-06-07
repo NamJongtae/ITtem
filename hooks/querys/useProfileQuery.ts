@@ -5,9 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
-export default function useProfileQuery() {
+export default function useProfileQuery(uid?: string) {
   const router = useRouter();
-  const uid = router.query?.uid || "";
+  const currentUid = uid || router.query?.uid || "";
 
   const {
     data: profileData,
@@ -16,10 +16,10 @@ export default function useProfileQuery() {
   } = useQuery<ProfileData, AxiosError>({
     queryKey: getProfileQueryKey(uid as string),
     queryFn: async () => {
-      const response = await getUserProfile(uid as string);
+      const response = await getUserProfile(currentUid as string);
       return response.data.profile;
     },
-    enabled: !!uid,
+    enabled: !!currentUid,
     staleTime: 30 * 1000,
   });
 
