@@ -1,4 +1,4 @@
-import ChatRoomList from "./chat-room-list/chat-room-list";
+import ChatRoomList from "./chat-room-list";
 
 export default function ChatRoomListPage() {
   return (
