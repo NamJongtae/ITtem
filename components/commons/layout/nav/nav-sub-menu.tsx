@@ -4,9 +4,11 @@ import NavNotification from "./nav-notification";
 import NavSell from "./nav-sell";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import useNotificationChat from "@/hooks/chat/useNotificationChat";
 
 export default function NavSubMenu() {
   const user = useSelector((state: RootState) => state.auth.user);
+  useNotificationChat();
 
   return (
     <div className={`${!user && "invisible"} relative flex gap-3`}>
