@@ -1,4 +1,4 @@
-import ChatRoomPage from "@/components/chat/chat-room-page/chat-room-page";
+import ChatRoomPage from "@/components/chat/chatRoomPage/chat-room-page";
 
 export default function ChatRoom() {
   return <ChatRoomPage />;

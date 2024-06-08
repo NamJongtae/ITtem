@@ -2,25 +2,46 @@ import ChatSendIcon from "@/public/icons/chat_send_icon.svg";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import TextareaAutosize from "react-textarea-autosize";
-export default function ChatRoomForm() {
-  const { handleSubmit, register, formState } = useForm({
+import useSendToChatMessage from "@/hooks/querys/useSendToChatMessage";
+import { useRouter } from "next/router";
+import { MutableRefObject } from "react";
+
+interface IProps {
+  chatListRef: MutableRefObject<HTMLUListElement | null>;
+}
+
+export default function ChatRoomForm({ chatListRef }: IProps) {
+  const router = useRouter();
+  const { chatRoomId } = router.query;
+
+  const scrollToBottom = () => {
+    if (chatListRef.current) {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  };
+
+  const { mutate } = useSendToChatMessage(scrollToBottom);
+  const { handleSubmit, register, formState, resetField } = useForm({
     defaultValues: { message: "" },
     mode: "onSubmit",
   });
 
   const isDisable = !formState.isDirty || !!formState.errors["message"];
+
   const onSumbitMessage = (values: FieldValues) => {
-    if (!values.message || !values.message.trim()) {
+    const message = values.message;
+    if (!message || !values.message.trim()) {
       toast.warn("메세지를 입력해주세요.");
       return;
     }
-    console.log(values);
+    mutate({ chatRoomId: chatRoomId as string, message });
+    resetField("message");
   };
-  
+
   return (
     <form
       onSubmit={handleSubmit(onSumbitMessage)}
-      className="absolute bottom-0 flex justify-between items-center border-t w-full px-3 text-sm p-3 gap-2"
+      className="absolute bottom-0 flex justify-between items-center border-t w-full px-3 text-sm p-3 gap-2 bg-white"
     >
       <TextareaAutosize
         className="focus:outline-none focus:none resize-none text-black overflow-hidden leading-4 w-full"
