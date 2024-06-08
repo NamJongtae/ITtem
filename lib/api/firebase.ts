@@ -27,12 +27,16 @@ import {
   arrayUnion,
   doc,
   query as firestoreQuery,
+  getDoc,
   getDocs,
   setDoc,
+  updateDoc,
+  increment as firestoreIncrement,
   where,
 } from "firebase/firestore";
 import { NotificationMessageData } from "@/types/notification";
 import { collection, serverTimestamp } from "firebase/firestore";
+import { ChatRoomData } from "@/types/chatTypes";
 
 export const uploadImgToFireStore = async (
   file: File | ""
@@ -358,13 +362,60 @@ export const startChat = async ({
 
       // 사용자별 채팅방 ID 저장
       const userChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", userId);
-      await setDoc(userChatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) }, { merge: true });
-      
+      await setDoc(
+        userChatRoomIdsRef,
+        { chatRoomIds: arrayUnion(chatRoomId) },
+        { merge: true }
+      );
+
       const myChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", myUid);
-      await setDoc(myChatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) }, { merge: true });
+      await setDoc(
+        myChatRoomIdsRef,
+        { chatRoomIds: arrayUnion(chatRoomId) },
+        { merge: true }
+      );
 
       return chatRoomId;
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendToChatMessage = async ({
+  myUid,
+  chatRoomId,
+  message,
+}: {
+  myUid: string;
+  chatRoomId: string;
+  message: string;
+}) => {
+  try {
+    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+    const messagesCollectionRef = collection(chatRoomRef, "messages");
+    const snapshot = await getDoc(chatRoomRef);
+    const data = snapshot.data() as ChatRoomData;
+    const userId = data.participantIDs.filter((id) => id !== myUid)[0];
+
+    const messageObj = {
+      content: message,
+      timestamp: serverTimestamp(),
+      senderId: myUid,
+      isNotification: data.entered[userId] ? true : false,
+    };
+
+    await addDoc(messagesCollectionRef, messageObj);
+
+    const updateData: any = {
+      lastMessage: messageObj,
+    };
+
+    if (!data.entered[userId]) {
+      updateData[`newMessageCount.${userId}`] = firestoreIncrement(1);
+    }
+
+    await updateDoc(chatRoomRef, updateData);
   } catch (error) {
     throw error;
   }
