@@ -19,3 +19,21 @@ export async function startChat({
     throw error;
   }
 }
+
+export async function sendToChatMessage({
+  chatRoomId,
+  message,
+}: {
+  chatRoomId: string;
+  message: string;
+}): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.post(`/api/chat/message`, {
+      chatRoomId,
+      message,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
