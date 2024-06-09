@@ -10,8 +10,12 @@ import {
   onSnapshot,
   orderBy,
   query,
-  updateDoc,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
+import useEnterChatRoomMutate from "../querys/useEnterChatRoomMutate";
+import { isAxiosError } from "axios";
+import useLeaveChatRoomMutate from "../querys/useLeaveChatRoomMutate";
+import useResetMessageCountMutate from "../querys/useResetMessageCountMutate";
 
 export default function useChatRoom() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -23,42 +27,38 @@ export default function useChatRoom() {
   const router = useRouter();
   const { chatRoomId } = router.query;
 
-  function enterChatRoom({
-    myUid,
-    chatRoomId,
-  }: {
-    myUid: string;
-    chatRoomId: string;
-  }) {
-    const enteredRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-    updateDoc(enteredRef, {
-      [`entered.${myUid}`]: true,
-    });
-  }
-
-  function leaveChatRoom({
-    myUid,
-    chatRoomId,
-  }: {
-    myUid: string;
-    chatRoomId: string;
-  }) {
-    const enteredRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-    updateDoc(enteredRef, {
-      [`entered.${myUid}`]: false,
-    });
-  }
+  const { enterChatRoomMutate } = useEnterChatRoomMutate();
+  const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
+  const { resetChatMessageCountMutate } = useResetMessageCountMutate();
 
   useEffect(() => {
     if (!chatRoomId || !myUid) return;
 
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-    enterChatRoom({ myUid, chatRoomId: chatRoomId as string });
+
+    const enterChatRoom = async () => {
+      try {
+        await enterChatRoomMutate(chatRoomId as string);
+      } catch (error) {
+        if (isAxiosError<{ message: string }>(error)) {
+          toast.warn(error.response?.data.message);
+          router.push("/chat");
+          return;
+        }
+      }
+    };
+
+    enterChatRoom();
 
     const unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
-      const data = doc.data();
+      const data = doc.data() as ChatRoomData | null;
       if (data) {
-        setChatData(data as ChatRoomData);
+        data.participantIDs;
+        if (!(myUid in data.entered)) {
+          router.push("/chat");
+          return;
+        }
+        setChatData(data);
         setIsLoading(false);
       }
     });
@@ -77,15 +77,22 @@ export default function useChatRoom() {
         }
       });
 
-      updateDoc(chatRoomRef, { [`newMessageCount.${myUid}`]: 0 });
+      resetChatMessageCountMutate(chatRoomId as string);
     });
 
     return () => {
-      leaveChatRoom({ myUid, chatRoomId: chatRoomId as string });
+      const leaveChatRoom = async () => {
+        try {
+          await leaveChatRoomMutate(chatRoomId as string);
+        } catch (error) {
+          return;
+        }
+      };
+      leaveChatRoom();
       unsubscribeChatRoom();
       unsubscribeMessages();
     };
   }, [chatRoomId, myUid]);
 
-  return { chatData, messages, isLoading }; 
+  return { chatData, messages, isLoading };
 }
