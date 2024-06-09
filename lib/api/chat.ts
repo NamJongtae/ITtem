@@ -71,3 +71,14 @@ export async function sendToChatMessage({
     throw error;
   }
 }
+
+export async function exitChatRoom(
+  chatRoomId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch(`/api/chat/${chatRoomId}/exit`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
