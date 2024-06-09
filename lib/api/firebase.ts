@@ -395,11 +395,19 @@ export const enterChatRoom = async ({
       throw new Error("존재하지 않는 채팅방이에요.");
     }
     if (myUid in data?.entered) {
-      updateDoc(chatRoomRef, {
+      await updateDoc(chatRoomRef, {
         [`entered.${myUid}`]: false,
       });
     } else {
       throw new Error("잘못된 접근이에요.");
+    }
+
+    if (!data?.participantIDs.includes(myUid)) {
+      const chatRoomIdsRef = doc(firestoreDB, `chatRoomIds/${myUid}`);
+      await updateDoc(chatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) });
+      await updateDoc(chatRoomRef, {
+        participantIDs: arrayUnion(myUid),
+      });
     }
   } catch (error) {
     throw error;
@@ -513,19 +521,25 @@ export const exitChatRoom = async ({
     if (!chatRoomDoc.exists()) {
       throw new Error("존재하지 않는 채팅방이에요.");
     }
+
     const chatRoomData = chatRoomDoc.data();
     if (!chatRoomData.participantIDs.includes(myUid)) {
       throw new Error("잘못된 접근이에요.");
     }
-    const chatRoomIdsDoc = await getDoc(userChatRoomIdsRef);
 
+    const chatRoomIdsDoc = await getDoc(userChatRoomIdsRef);
     if (!chatRoomIdsDoc.exists()) {
       if (!chatRoomDoc.exists()) {
         throw new Error("유저 채팅방 목록이 존재하지 않아요.");
       }
     }
-    await updateDoc(chatRoomRef, { participantIDs: arrayRemove(myUid) });
-    await updateDoc(userChatRoomIdsRef, { chatRoomIds: arrayRemove(myUid) });
+
+    await updateDoc(chatRoomRef, {
+      participantIDs: arrayRemove(myUid),
+    });
+    await updateDoc(userChatRoomIdsRef, {
+      chatRoomIds: arrayRemove(chatRoomId),
+    });
   } catch (error) {
     throw error;
   }
