@@ -5,9 +5,15 @@ import ChatRoomHeaderProduct from "./chat-room-header-product";
 
 interface IProps {
   productId: string;
+  handleChatRoomExit: () => void;
+  resetChatRoomExit: () => void;
 }
 
-export default function ChatRoomHeader({ productId }: IProps) {
+export default function ChatRoomHeader({
+  productId,
+  handleChatRoomExit,
+  resetChatRoomExit,
+}: IProps) {
   const router = useRouter();
   const onClickBack = () => {
     router.push("/chat");
@@ -29,7 +35,10 @@ export default function ChatRoomHeader({ productId }: IProps) {
         }
         <ChatRoomHeaderProduct productId={productId} />
       </h2>
-      <ChatRoomMenu />
+      <ChatRoomMenu
+        handleChatRoomExit={handleChatRoomExit}
+        resetChatRoomExit={resetChatRoomExit}
+      />
     </div>
   );
 }

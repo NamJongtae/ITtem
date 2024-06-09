@@ -1,9 +1,26 @@
 import Image from "next/image";
 import ChatNotificationIcon from "@/public/icons/notification_icon.svg";
-import useDropdownMenu from '@/hooks/commons/useDropDownMenu';
+import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
+import useExitChatRoomMutate from "@/hooks/querys/useExitChatRoomMutate";
 
-export default function ChatRoomMenu() {
-  const {isOpenMenu, toggleMenu, menuRef} = useDropdownMenu();
+interface IProps {
+  handleChatRoomExit: () => void;
+  resetChatRoomExit: () => void;
+}
+export default function ChatRoomMenu({
+  handleChatRoomExit,
+  resetChatRoomExit,
+}: IProps) {
+  const { isOpenMenu, toggleMenu, menuRef } = useDropdownMenu();
+  const { exitChatRoomMutate } = useExitChatRoomMutate(resetChatRoomExit);
+
+  const exitChatRoom = () => {
+    const isExit = confirm("정말 채팅방을 나가겠어요?");
+    if (isExit) {
+      handleChatRoomExit();
+      exitChatRoomMutate();
+    }
+  };
 
   return (
     <div className="flex gap-3 items-center">
@@ -20,7 +37,11 @@ export default function ChatRoomMenu() {
           ref={menuRef}
         >
           <li>
-            <button className="py-2 px-4 w-full text-sm text-left betterhover:hover:bg-gray-100">
+            <button
+              type="button"
+              onClick={exitChatRoom}
+              className="py-2 px-4 w-full text-sm text-left betterhover:hover:bg-gray-100"
+            >
               나가기
             </button>
           </li>
