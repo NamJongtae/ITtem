@@ -306,12 +306,10 @@ export const startChat = async ({
   productId,
   myUid,
   userId,
-  addChatRoomId,
 }: {
   productId: string;
   myUid: string;
   userId: string;
-  addChatRoomId: (chatRoomId: string) => Promise<void>;
 }) => {
   try {
     const chatRoomsRef = collection(firestoreDB, "chatRooms");
@@ -358,7 +356,6 @@ export const startChat = async ({
 
       const docRef = await addDoc(chatRoomsRef, newChatRoomData);
       chatRoomId = docRef.id;
-      await addChatRoomId(chatRoomId);
 
       // 사용자별 채팅방 ID 저장
       const userChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", userId);

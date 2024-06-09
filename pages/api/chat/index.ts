@@ -1,9 +1,6 @@
 import { startChat } from "@/lib/api/firebase";
-import dbConnect from "@/lib/db";
-import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,30 +38,10 @@ export default async function handler(
         return;
       }
 
-      const addChatRoomId = async (chatRoomId: string) => {
-        try {
-          await dbConnect();
-
-          const myProfile = await User.updateOne(
-            {
-              _id: new mongoose.Types.ObjectId(myUid),
-            },
-            { $push: { chatRoomIds: chatRoomId  } }
-          );
-
-          if (!myProfile.acknowledged || myProfile.modifiedCount === 0) {
-            throw new Error("유저 프로필 채팅방 추가에 실패했어요.");
-          }
-        } catch (error) {
-          throw error;
-        }
-      };
-
       const chatRoomId = await startChat({
         productId,
         myUid,
         userId,
-        addChatRoomId,
       });
 
       res
