@@ -1,6 +1,7 @@
 import Spinner from "@/components/commons/spinner";
 import useProductQuery from "@/hooks/querys/useProductQuery";
 import Image from "next/image";
+import Link from "next/link";
 
 interface IProps {
   productId: string;
@@ -20,9 +21,9 @@ export default function ChatRoomHeaderProduct({ productId }: IProps) {
     );
   }
   return (
-    <>
+    <Link className="flex gap-2" href={`/product/${productDetailData._id}`}>
       <Image
-        className="rounded-full w-10 h-10 bg-center"
+        className="rounded-full w-10 h-10 object-cover object-center"
         src={productDetailData?.imgData[0].url || ""}
         alt={productDetailData?.name || ""}
         width={40}
@@ -38,6 +39,6 @@ export default function ChatRoomHeaderProduct({ productId }: IProps) {
           {productDetailData?.price} 원
         </span>
       </div>
-    </>
+    </Link>
   );
 }

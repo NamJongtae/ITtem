@@ -14,7 +14,7 @@ export default function ChatRoomUserMessage({ message }: IProps) {
     <li key={message.id} className="flex items-center gap-3">
       {profileData?.profileImg ? (
         <Image
-          className="rounded-xl self-start"
+          className="rounded-xl self-start w-10 h-10 object-cover object-center"
           src={profileData?.profileImg || ""}
           alt={profileData?.nickname || ""}
           width={40}

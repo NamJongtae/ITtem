@@ -16,7 +16,7 @@ export default function ChatRoomMessageList({ messages, chatListRef }: IProps) {
 
   return (
     <ul
-      className="flex flex-col gap-5 overflow-y-scroll w-full max-h-[calc(100vh-288px)] p-5"
+      className="flex flex-col gap-5 overflow-y-auto w-full max-h-[calc(100vh-288px)] p-5"
       ref={chatListRef}
     >
       {Object.entries(messages).map(([id, message]) =>

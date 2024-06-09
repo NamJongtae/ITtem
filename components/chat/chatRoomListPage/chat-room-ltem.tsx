@@ -33,7 +33,7 @@ export default function ChatRoomItem({ data }: IProps) {
       >
         {profileData ? (
           <Image
-            className="rounded-xl"
+            className="rounded-xl w-10 h-10 object-cover object-center"
             src={profileData?.profileImg || ""}
             alt={profileData?.nickname || ""}
             width={40}
