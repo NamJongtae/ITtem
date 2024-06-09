@@ -20,6 +20,41 @@ export async function startChat({
   }
 }
 
+export async function enterChatRoom(
+  chatRoomId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const reponse = await customAxios.patch(`/api/chat/${chatRoomId}/enter`);
+    return reponse;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function leaveChatRoom(
+  chatRoomId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const reponse = await customAxios.patch(`/api/chat/${chatRoomId}/leave`);
+    return reponse;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function resetChatMessageCount(
+  chatRoomId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const reponse = await customAxios.patch(
+      `/api/chat/${chatRoomId}/reset-message-count`
+    );
+    return reponse;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function sendToChatMessage({
   chatRoomId,
   message,
@@ -28,8 +63,7 @@ export async function sendToChatMessage({
   message: string;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = await customAxios.post(`/api/chat/message`, {
-      chatRoomId,
+    const response = await customAxios.post(`/api/chat/${chatRoomId}/message`, {
       message,
     });
     return response;
