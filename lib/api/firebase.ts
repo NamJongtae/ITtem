@@ -33,6 +33,7 @@ import {
   updateDoc,
   increment as firestoreIncrement,
   where,
+  arrayRemove,
 } from "firebase/firestore";
 import { NotificationMessageData } from "@/types/notification";
 import { collection, serverTimestamp } from "firebase/firestore";
@@ -373,6 +374,85 @@ export const startChat = async ({
       );
 
       return chatRoomId;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const enterChatRoom = async ({
+  myUid,
+  chatRoomId,
+}: {
+  myUid: string;
+  chatRoomId: string;
+}) => {
+  try {
+    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+    const chatRoomDoc = await getDoc(chatRoomRef);
+    const data = chatRoomDoc.data();
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+    if (myUid in data?.entered) {
+      updateDoc(chatRoomRef, {
+        [`entered.${myUid}`]: false,
+      });
+    } else {
+      throw new Error("잘못된 접근이에요.");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const leaveChatRoom = async ({
+  myUid,
+  chatRoomId,
+}: {
+  myUid: string;
+  chatRoomId: string;
+}) => {
+  try {
+    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+    const chatRoomDoc = await getDoc(chatRoomRef);
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+    const data = chatRoomDoc.data();
+    if (myUid in data?.entered) {
+      updateDoc(chatRoomRef, {
+        [`entered.${myUid}`]: false,
+      });
+    } else {
+      throw new Error("잘못된 접근이에요.");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetChatMessageCount = async ({
+  myUid,
+  chatRoomId,
+}: {
+  myUid: string;
+  chatRoomId: string;
+}) => {
+  try {
+    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+
+    const chatRoomDoc = await getDoc(chatRoomRef);
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+    const data = chatRoomDoc.data();
+    if (myUid in data?.newMessageCount) {
+      updateDoc(chatRoomRef, {
+        [`newMessageCount.${myUid}`]: 0,
+      });
+    } else {
+      throw new Error("잘못된 접근이에요.");
     }
   } catch (error) {
     throw error;
