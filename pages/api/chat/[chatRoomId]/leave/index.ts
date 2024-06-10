@@ -1,4 +1,4 @@
-import { enterChatRoom } from "@/lib/api/firebase";
+import { leaveChatRoom } from "@/lib/api/firebase";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -33,7 +33,7 @@ export default async function handler(
         return;
       }
 
-      await enterChatRoom({ myUid, chatRoomId: chatRoomId as string });
+      await leaveChatRoom({ myUid, chatRoomId: chatRoomId as string });
       res.status(200).json({ message: "채팅방 퇴장에 성공했어요." });
     } catch (error) {
       console.error(error);
