@@ -1,3 +1,4 @@
+import useNotificationChat from "@/hooks/chat/useNotificationChat";
 import useDebouncing from "@/hooks/commons/useDebouncing";
 import ChatIcon from "@/public/icons/chat_icon.svg";
 import { RootState } from "@/store/store";
@@ -10,6 +11,9 @@ export default function NavChat() {
   const router = useRouter();
   const pathname = router.pathname;
   const user = useSelector((state: RootState) => state.auth.user);
+  const totalMessageCount = useSelector(
+    (state: RootState) => state.chat.totalMessageCount
+  );
 
   const debouncing = useDebouncing();
 
@@ -20,12 +24,14 @@ export default function NavChat() {
     }
   }, 500);
 
+  useNotificationChat();
+
   return (
     <Link
       onClick={handleClickLink}
       href={"/chat"}
       className={`relative inline-flex flex-col items-center gap-[2px] text-xs text-gary-600 ${
-        true &&
+        totalMessageCount &&
         "before:absolute before:-right-[1px] before:-top-[2px] before:w-[8px] before:h-[8px] before:rounded-full before:bg-red-400"
       } ${pathname && pathname.includes("/chat") && "text-indigo-500"}`}
     >
