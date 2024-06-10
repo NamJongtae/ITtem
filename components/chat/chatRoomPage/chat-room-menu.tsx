@@ -1,5 +1,4 @@
 import Image from "next/image";
-import ChatNotificationIcon from "@/public/icons/notification_icon.svg";
 import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
 import useExitChatRoomMutate from "@/hooks/querys/useExitChatRoomMutate";
 
@@ -24,9 +23,6 @@ export default function ChatRoomMenu({
 
   return (
     <div className="flex gap-3 items-center">
-      <button role="알림">
-        <ChatNotificationIcon className="stroke-yellow-400 fill-yellow-400 w-5 h-5" />
-      </button>
       <button onClick={toggleMenu}>
         <Image src="/icons/dots_icon.svg" alt="나가기" width={20} height={20} />
       </button>
