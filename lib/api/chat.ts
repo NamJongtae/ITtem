@@ -42,19 +42,6 @@ export async function leaveChatRoom(
   }
 }
 
-export async function resetChatMessageCount(
-  chatRoomId: string
-): Promise<AxiosResponse<{ message: string }>> {
-  try {
-    const reponse = await customAxios.patch(
-      `/api/chat/${chatRoomId}/reset-message-count`
-    );
-    return reponse;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function sendToChatMessage({
   chatRoomId,
   message,

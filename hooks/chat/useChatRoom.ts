@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import useEnterChatRoomMutate from "../querys/useEnterChatRoomMutate";
 import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../querys/useLeaveChatRoomMutate";
-import useResetMessageCountMutate from "../querys/useResetMessageCountMutate";
 
 export default function useChatRoom() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -29,7 +28,6 @@ export default function useChatRoom() {
 
   const { enterChatRoomMutate } = useEnterChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
-  const { resetChatMessageCountMutate } = useResetMessageCountMutate();
 
   useEffect(() => {
     if (!chatRoomId || !myUid) return;
@@ -77,7 +75,6 @@ export default function useChatRoom() {
         }
       });
 
-      resetChatMessageCountMutate(chatRoomId as string);
     });
 
     return () => {
