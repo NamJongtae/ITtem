@@ -16,7 +16,7 @@ import useEnterChatRoomMutate from "../querys/useEnterChatRoomMutate";
 import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../querys/useLeaveChatRoomMutate";
 
-export default function useChatRoom() {
+export default function useChatRoom(isExit: boolean) {
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid;
 
@@ -30,7 +30,7 @@ export default function useChatRoom() {
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
 
   useEffect(() => {
-    if (!chatRoomId || !myUid) return;
+    if (!chatRoomId || !myUid || isExit) return;
 
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
 
@@ -89,7 +89,7 @@ export default function useChatRoom() {
       unsubscribeChatRoom();
       unsubscribeMessages();
     };
-  }, [chatRoomId, myUid]);
+  }, [chatRoomId, myUid, isExit]);
 
   return { chatData, messages, isLoading };
 }
