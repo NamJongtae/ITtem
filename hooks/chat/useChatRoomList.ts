@@ -7,10 +7,17 @@ import { useSelector } from "react-redux";
 
 export default function useChatRoomList() {
   const chatRoomIds = useSelector((state: RootState) => state.chat.chatRoomIds);
-  const [chatRoomData, setChatRoomData] = useState<ChatRoomData[]>([]);
+  const [chatRoomData, setChatRoomData] = useState<{
+    [key: string]: ChatRoomData;
+  }>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (chatRoomIds.length === 0) return;
+    if (chatRoomIds.length === 0) {
+      setIsLoading(false);
+      return;
+    }
+
     const unsubscribes = chatRoomIds.map((chatRoomId) => {
       const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
       return onSnapshot(chatRoomRef, (snapshot) => {
@@ -21,6 +28,7 @@ export default function useChatRoomList() {
             ...data,
           },
         }));
+        setIsLoading(false);
       });
     });
 
@@ -29,5 +37,5 @@ export default function useChatRoomList() {
     };
   }, [chatRoomIds]);
 
-  return { chatRoomData };
+  return { chatRoomData, isLoading };
 }
