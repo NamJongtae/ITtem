@@ -15,7 +15,6 @@ interface UserDB {
   transactionCount: number;
   followers: string[];
   followings: string[];
-  chatRoomList: string[];
   createdAt: Date;
 }
 
@@ -52,7 +51,6 @@ export const userSchema = new mongoose.Schema<UserDB>(
     transactionCount: { type: Number, default: 0 },
     followers: { type: [String], default: [] },
     followings: { type: [String], default: [] },
-    chatRoomList: { type: [String], default: [] },
     createdAt: { type: Date, default: Date.now },
   },
   { collection: "users" }
