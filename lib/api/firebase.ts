@@ -396,7 +396,7 @@ export const enterChatRoom = async ({
     }
     if (myUid in data?.entered) {
       await updateDoc(chatRoomRef, {
-        [`entered.${myUid}`]: false,
+        [`entered.${myUid}`]: true,
       });
     } else {
       throw new Error("잘못된 접근이에요.");
@@ -429,7 +429,7 @@ export const leaveChatRoom = async ({
     }
     const data = chatRoomDoc.data();
     if (myUid in data?.entered) {
-      updateDoc(chatRoomRef, {
+      await updateDoc(chatRoomRef, {
         [`entered.${myUid}`]: false,
       });
     } else {
