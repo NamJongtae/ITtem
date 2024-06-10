@@ -340,7 +340,6 @@ export const startChat = async ({
         participantIDs: [myUid, userId],
         createdAt: serverTimestamp(),
         lastMessage: null,
-        lastMessageTimestamp: null,
         newMessageCount: {
           [myUid]: 0,
           [userId]: 0,
@@ -358,18 +357,24 @@ export const startChat = async ({
       const docRef = await addDoc(chatRoomsRef, newChatRoomData);
       chatRoomId = docRef.id;
 
-      // 사용자별 채팅방 ID 저장
-      const userChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", userId);
+      // 사용자별 채팅방 ID 및 총 메세지 카운터 저장
+      const userRef = doc(firestoreDB, "userChatInfo", userId);
       await setDoc(
-        userChatRoomIdsRef,
-        { chatRoomIds: arrayUnion(chatRoomId) },
+        userRef,
+        {
+          chatRoomIds: arrayUnion(chatRoomId),
+          totalMessageCount: 0,
+        },
         { merge: true }
       );
 
-      const myChatRoomIdsRef = doc(firestoreDB, "chatRoomIds", myUid);
+      const myRef = doc(firestoreDB, "userChatInfo", myUid);
       await setDoc(
-        myChatRoomIdsRef,
-        { chatRoomIds: arrayUnion(chatRoomId) },
+        myRef,
+        {
+          chatRoomIds: arrayUnion(chatRoomId),
+          totalMessageCount: 0,
+        },
         { merge: true }
       );
 
@@ -389,7 +394,7 @@ export const enterChatRoom = async ({
 }) => {
   try {
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-    const chatRoomIdsRef = doc(firestoreDB, `chatRoomIds/${myUid}`);
+    const myChatInfoRef = doc(firestoreDB, `userChatInfo/${myUid}`);
     const chatRoomDoc = await getDoc(chatRoomRef);
     const data = chatRoomDoc.data();
     if (!chatRoomDoc.exists()) {
@@ -404,13 +409,17 @@ export const enterChatRoom = async ({
     }
 
     if (!data?.participantIDs.includes(myUid)) {
-      await updateDoc(chatRoomIdsRef, { chatRoomIds: arrayUnion(chatRoomId) });
+      await updateDoc(myChatInfoRef, { chatRoomIds: arrayUnion(chatRoomId) });
       await updateDoc(chatRoomRef, {
         participantIDs: arrayUnion(myUid),
       });
     }
 
     if (myUid in data?.newMessageCount) {
+      const messageCount = data?.newMessageCount[myUid];
+      await updateDoc(myChatInfoRef, {
+        totalMessageCount: firestoreIncrement(-messageCount || 0),
+      });
       await updateDoc(chatRoomRef, {
         [`newMessageCount.${myUid}`]: 0,
       });
@@ -463,6 +472,7 @@ export const sendToChatMessage = async ({
     const snapshot = await getDoc(chatRoomRef);
     const data = snapshot.data() as ChatRoomData;
     const userId = data.participantIDs.filter((id) => id !== myUid)[0];
+    const userChatInfoRef = doc(firestoreDB, `userChatInfo/${userId}`);
 
     const messageObj = {
       content: message,
@@ -479,6 +489,9 @@ export const sendToChatMessage = async ({
 
     if (!data.entered[userId]) {
       updateData[`newMessageCount.${userId}`] = firestoreIncrement(1);
+      await updateDoc(userChatInfoRef, {
+        totalMessageCount: firestoreIncrement(1),
+      });
     }
 
     await updateDoc(chatRoomRef, updateData);
@@ -496,7 +509,7 @@ export const exitChatRoom = async ({
 }) => {
   try {
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-    const userChatRoomIdsRef = doc(firestoreDB, `chatRoomIds/${myUid}`);
+    const userChatInfoRef = doc(firestoreDB, `userChatInfo/${myUid}`);
 
     const chatRoomDoc = await getDoc(chatRoomRef);
     if (!chatRoomDoc.exists()) {
@@ -508,8 +521,8 @@ export const exitChatRoom = async ({
       throw new Error("잘못된 접근이에요.");
     }
 
-    const chatRoomIdsDoc = await getDoc(userChatRoomIdsRef);
-    if (!chatRoomIdsDoc.exists()) {
+    const userChatInfoDoc = await getDoc(userChatInfoRef);
+    if (!userChatInfoDoc.exists()) {
       if (!chatRoomDoc.exists()) {
         throw new Error("유저 채팅방 목록이 존재하지 않아요.");
       }
@@ -518,7 +531,7 @@ export const exitChatRoom = async ({
     await updateDoc(chatRoomRef, {
       participantIDs: arrayRemove(myUid),
     });
-    await updateDoc(userChatRoomIdsRef, {
+    await updateDoc(userChatInfoRef, {
       chatRoomIds: arrayRemove(chatRoomId),
     });
   } catch (error) {
