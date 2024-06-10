@@ -5,9 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
-export default function useProductQuery(isEdit?: boolean) {
+export default function useProductQuery(isEdit?: boolean, productId?: string) {
   const router = useRouter();
-  const productId = router.query?.productId;
+  const currentProductId = productId || router.query?.productId;
 
   const {
     data: productDetailData,
@@ -15,11 +15,11 @@ export default function useProductQuery(isEdit?: boolean) {
     error: loadProductError,
   } = useQuery<ProductDetailData, AxiosError>({
     queryFn: async () => {
-      const response = await getProduct(productId as string);
+      const response = await getProduct(currentProductId as string);
       return response.data.product;
     },
-    queryKey: getProductQueryKey(productId as string),
-    enabled: isEdit || !!productId,
+    queryKey: getProductQueryKey(currentProductId as string),
+    enabled: isEdit || !!currentProductId,
     staleTime: 30 * 1000,
   });
 
