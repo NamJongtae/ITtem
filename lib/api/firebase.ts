@@ -34,6 +34,7 @@ import {
   increment as firestoreIncrement,
   where,
   arrayRemove,
+  deleteDoc,
 } from "firebase/firestore";
 import { NotificationMessageData } from "@/types/notification";
 import { collection, serverTimestamp } from "firebase/firestore";
@@ -527,13 +528,43 @@ export const exitChatRoom = async ({
         throw new Error("유저 채팅방 목록이 존재하지 않아요.");
       }
     }
-
     await updateDoc(chatRoomRef, {
       participantIDs: arrayRemove(myUid),
     });
     await updateDoc(userChatInfoRef, {
       chatRoomIds: arrayRemove(chatRoomId),
     });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteChatRoom = async (chatRoomId: string) => {
+  try {
+    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+
+    const chatRoomDoc = await getDoc(chatRoomRef);
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+
+    const chatRoomData = chatRoomDoc.data();
+
+    if (chatRoomData?.participantIDs.length === 0) {
+      const messagesRef = collection(
+        firestoreDB,
+        `chatRooms/${chatRoomId}/messages`
+      );
+      const messagesSnapshot = await getDocs(messagesRef);
+
+      const deleteMessagesPromises = messagesSnapshot.docs.map((messageDoc) =>
+        deleteDoc(messageDoc.ref)
+      );
+      await Promise.all(deleteMessagesPromises);
+      await deleteDoc(chatRoomRef);
+    } else {
+      throw new Error("채팅방 참여 인원이 있어 채팅방을 삭제할 수 없어요.");
+    }
   } catch (error) {
     throw error;
   }
