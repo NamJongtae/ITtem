@@ -14,6 +14,7 @@ export default function useNotificationChat() {
   useEffect(() => {
     if (!myUid) return;
     const chatRoomIdsRef = doc(firestoreDB, `userChatInfo/${myUid}`);
+    dispatch(chatSlice.actions.setChatRoomIdsLoading(true));
     const unsubscribe = onSnapshot(chatRoomIdsRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.data();
@@ -22,6 +23,7 @@ export default function useNotificationChat() {
         dispatch(chatSlice.actions.saveChatRoomIds(ids));
         dispatch(chatSlice.actions.saveTotalMessageCount(totalMessageCount));
       }
+      dispatch(chatSlice.actions.setChatRoomIdsLoading(false));
     });
 
     return () => unsubscribe();
