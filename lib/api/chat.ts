@@ -69,3 +69,15 @@ export async function exitChatRoom(
     throw error;
   }
 }
+
+export async function deleteChatRoom(
+  chatRoomId: string
+): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.delete(`/api/chat/${chatRoomId}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
