@@ -5,14 +5,14 @@ import ChatRoomHeaderProduct from "./chat-room-header-product";
 
 interface IProps {
   productId: string;
-  otherUserId: string;
+  participantIDs:string[];
   handleChatRoomExit: () => void;
   resetChatRoomExit: () => void;
 }
 
 export default function ChatRoomHeader({
   productId,
-  otherUserId,
+  participantIDs,
   handleChatRoomExit,
   resetChatRoomExit,
 }: IProps) {
@@ -38,7 +38,7 @@ export default function ChatRoomHeader({
         <ChatRoomHeaderProduct productId={productId} />
       </h2>
       <ChatRoomMenu
-        otherUserId={otherUserId}
+        participantIDs={participantIDs}
         handleChatRoomExit={handleChatRoomExit}
         resetChatRoomExit={resetChatRoomExit}
       />

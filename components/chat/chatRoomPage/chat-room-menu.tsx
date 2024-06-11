@@ -1,24 +1,27 @@
 import Image from "next/image";
 import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
-import useExitChatRoomMutate from "@/hooks/querys/useExitChatRoomMutate";
 import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
-import useMyProfileFollowMutate from "@/hooks/querys/useMyProfileFollowMutate";
 import ChatRoomExitBtn from "./chat-room-exit-btn";
 import ChatRoomFollowBtn from "./chat-room-follow-btn";
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 interface IProps {
-  otherUserId: string;
+  participantIDs: string[];
   handleChatRoomExit: () => void;
   resetChatRoomExit: () => void;
 }
 
 export default function ChatRoomMenu({
-  otherUserId,
+  participantIDs,
   handleChatRoomExit,
   resetChatRoomExit,
 }: IProps) {
   const { isOpenMenu, toggleMenu, closeMenu, menuRef } = useDropdownMenu();
   const { myProfileData } = useMyProfileQuery();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const myUid = user?.uid || "";
+  const otherUserId = participantIDs.filter((id) => id !== myUid)[0];
 
   return (
     <div className="flex gap-3 items-center">
@@ -33,6 +36,7 @@ export default function ChatRoomMenu({
         >
           <li>
             <ChatRoomExitBtn
+              participantIDs={participantIDs}
               handleChatRoomExit={handleChatRoomExit}
               resetChatRoomExit={resetChatRoomExit}
             />
