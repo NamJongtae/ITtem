@@ -7,13 +7,16 @@ import { useSelector } from "react-redux";
 
 export default function useChatRoomList() {
   const chatRoomIds = useSelector((state: RootState) => state.chat.chatRoomIds);
+  const chatRoodIdsLoading = useSelector(
+    (state: RootState) => state.chat.chatRoomIdsLoading
+  );
   const [chatRoomData, setChatRoomData] = useState<{
     [key: string]: ChatRoomData;
   }>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (chatRoomIds.length === 0) {
+    if (!chatRoodIdsLoading && chatRoomIds.length === 0) {
       setIsLoading(false);
       return;
     }
@@ -35,7 +38,7 @@ export default function useChatRoomList() {
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
-  }, [chatRoomIds]);
+  }, [chatRoodIdsLoading, chatRoomIds]);
 
   return { chatRoomData, isLoading };
 }
