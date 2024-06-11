@@ -4,6 +4,7 @@ export const chatSlice = createSlice({
   name: "chatSlice",
   initialState: {
     chatRoomIds: [],
+    chatRoomIdsLoading: true,
     totalMessageCount: 0,
   },
   reducers: {
@@ -18,6 +19,9 @@ export const chatSlice = createSlice({
     },
     resetTotalMessageCount: (state) => {
       state.totalMessageCount = 0;
+    },
+    setChatRoomIdsLoading: (state, action) => {
+      state.chatRoomIdsLoading = action.payload;
     },
   },
 });
