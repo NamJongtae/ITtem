@@ -6,6 +6,16 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    "animate-slideOutRight",
+    "animate-slideOutLeft",
+    "animate-entering",
+    "animate-leaving",
+    "animate-slideFadeOutRight",
+    "animate-bounceOpacity",
+    "animate-slideUp",
+    "animate-slideDown",
+  ],
   theme: {
     extend: {
       colors: {
