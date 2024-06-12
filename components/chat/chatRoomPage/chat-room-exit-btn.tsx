@@ -1,6 +1,7 @@
 import useDeleteChatRoomMutate from "@/hooks/querys/useDeleteChatRoomMutate";
 import useExitChatRoomMutate from "@/hooks/querys/useExitChatRoomMutate";
 import { isAxiosError } from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
@@ -45,8 +46,14 @@ export default function ChatRoomExitBtn({
     <button
       type="button"
       onClick={exitChatRoom}
-      className="py-2 px-4 w-full text-sm text-left betterhover:hover:bg-gray-100"
+      className="flex gap-2 py-2 px-4 text-sm"
     >
+      <Image
+        src={"/icons/logout_icon.svg"}
+        alt="나가기"
+        width={20}
+        height={20}
+      />
       나가기
     </button>
   );

@@ -1,10 +1,8 @@
 import Image from "next/image";
-import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
 import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
 import ChatRoomExitBtn from "./chat-room-exit-btn";
-import ChatRoomFollowBtn from "./chat-room-follow-btn";
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import useChatRoomMenu from "@/hooks/chat/useChatRoomMenu";
+import ChatRoomMenuUser from "./chat-room-menu-user";
 
 interface IProps {
   participantIDs: string[];
@@ -17,11 +15,8 @@ export default function ChatRoomMenu({
   handleChatRoomExit,
   resetChatRoomExit,
 }: IProps) {
-  const { isOpenMenu, toggleMenu, closeMenu, menuRef } = useDropdownMenu();
+  const { isOpenMenu, toggleMenu, menuRef } = useChatRoomMenu();
   const { myProfileData } = useMyProfileQuery();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const myUid = user?.uid || "";
-  const otherUserId = participantIDs.filter((id) => id !== myUid)[0];
 
   return (
     <div className="flex gap-3 items-center">
@@ -30,25 +25,31 @@ export default function ChatRoomMenu({
       </button>
 
       {isOpenMenu && (
-        <ul
-          className="absolute top-14 right-4 h-auto bg-white border rounded-md shadow-lg animate-entering"
-          ref={menuRef}
-        >
-          <li>
-            <ChatRoomExitBtn
+        <div className="absolute inset-0 z-20">
+          <div
+            onClick={toggleMenu}
+            className="absolute bg-black bg-opacity-50 inset-0"
+            role="backdrop"
+          />
+
+          <div
+            className="absolute w-1/2 xs:w-1/3 md:w-1/4 h-full right-0 bg-white animate-slideOutLeft"
+            ref={menuRef}
+          >
+            <h2 className="font-semibold border-b p-3">채팅방 메뉴</h2>
+            <ChatRoomMenuUser
               participantIDs={participantIDs}
-              handleChatRoomExit={handleChatRoomExit}
-              resetChatRoomExit={resetChatRoomExit}
+              myProfileData={myProfileData}
             />
-          </li>
-          <li>
-            <ChatRoomFollowBtn
-              otherUserId={otherUserId}
-              myFollowings={myProfileData?.followings}
-              closeMenu={closeMenu}
-            />
-          </li>
-        </ul>
+            <div className="absolute bottom-0 border-t w-full">
+              <ChatRoomExitBtn
+                participantIDs={participantIDs}
+                handleChatRoomExit={handleChatRoomExit}
+                resetChatRoomExit={resetChatRoomExit}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
