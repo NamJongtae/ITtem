@@ -1,5 +1,3 @@
-import { ProductCategory } from "@/types/productTypes";
-
 export const CATEGORY = [
   "전체",
   "의류",
@@ -15,6 +13,14 @@ export const CATEGORY = [
   "식품",
   "전자기기",
   "기타",
+];
+
+export const REVIEW_TAGS = [
+  "상품 정보와 실제 상품이 동일해요.",
+  "친절해요.",
+  "배송이 빨라요.",
+  "채팅 답변이 빨라요.",
+  "제품이 깔끔해요.",
 ];
 
 export const ERROR_MESSAGE =
@@ -40,8 +46,6 @@ export const VERIFY_EMAIL_BLOCK_EXP = 60 * 60 * 24;
 export const VERIFY_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
-export const SESSION_QUERY_KEY = ["session"];
-export const AUTH_QUERY_KEY = ["auth"];
 export const ACCESS_TOKEN_KEY = process.env
   .NEXT_SECRET_ACCESS_TOKEN_KEY as string;
 export const REFRESH_TOKEN_KEY = process.env
@@ -50,67 +54,4 @@ export const REFRESH_TOKEN_KEY = process.env
 export const ACCESS_TOKEN_EXP = 60;
 export const REFRESH_TOKEN_EXP = 3600;
 
-export const REVIEW_TAGS = [
-  "상품 정보와 실제 상품이 동일해요.",
-  "친절해요.",
-  "배송이 빨라요.",
-  "채팅 답변이 빨라요.",
-  "제품이 깔끔해요.",
-];
 
-export const PRODUCT_TODAY_LIST_QUERY_KEY = ["productList", "today"];
-
-export const getCategoryProductListQueryKey = (
-  category: ProductCategory,
-  location?: string
-) => {
-  return location ? ["product", category, "myLocation"] : ["product", category];
-};
-
-export const getSearchProductListQueryKey = (
-  category: ProductCategory,
-  keyword: string | null
-) => {
-  return ["product", "search", keyword, category];
-};
-
-export const getProductQueryKey = (productId: string) => {
-  return ["product", productId];
-};
-
-export const getProfileQueryKey = (uid: string) => {
-  return ["profile", uid];
-};
-
-export const MY_PROFILE_QUERY_KEY = ["profile", "my"];
-
-export const getProfileProductListQuerykey = (
-  uid: string,
-  category: string = "전체"
-) => {
-  return ["profile", uid, "product", category];
-};
-
-export const getMyProfileProductListQuerykey = (category: string = "전체") => {
-  return ["profile", "my", "product", category];
-};
-
-export const getFollowersQueryKey = (uid: string) => {
-  return ["profile", uid, "followers"];
-};
-
-export const getFollowingsQueryKey = (uid: string) => {
-  return ["profile", uid, "followings"];
-};
-
-export const MY_PROFILE_WISH_QUERY_KEY = ["profile", "my", "wish"];
-
-export const getProfileReviewsQueryKey = (uid: string) => [
-  "profile",
-  uid,
-  "reviews",
-];
-
-export const getProductReviewQueryKey = (productId: string) => {
-  return ["product", productId, "review"];
-};
