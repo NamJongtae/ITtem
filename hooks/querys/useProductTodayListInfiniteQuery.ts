@@ -1,5 +1,4 @@
-import { PRODUCT_TODAY_LIST_QUERY_KEY } from "@/constants/constant";
-import { getTodayProductList } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { ProductData, ProductListType } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,6 +10,8 @@ export default function useProductTodayListInfiniteQuery({
   limit?: number;
   productListType: ProductListType;
 }) {
+  const queryKeysConfig = queryKeys.product.list({ productListType, limit });
+
   const {
     data: todayProductListData,
     hasNextPage: hasNextPageTodayProductList,
@@ -19,11 +20,8 @@ export default function useProductTodayListInfiniteQuery({
     isLoading: isLoadingTodayProductList,
     error: todayProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: PRODUCT_TODAY_LIST_QUERY_KEY,
-    queryFn: async ({ pageParam }) => {
-      const response = await getTodayProductList(pageParam, limit);
-      return response.data.products;
-    },
+    queryKey: queryKeysConfig.queryKey,
+    queryFn: queryKeysConfig.queryFn as any,
     enabled: productListType === "TODAY",
     retry: 0,
     initialPageParam: null,

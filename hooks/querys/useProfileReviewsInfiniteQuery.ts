@@ -1,5 +1,4 @@
-import { getProfileReviewsQueryKey } from "@/constants/constant";
-import { getProfileReviews } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { ProfileReviewData } from "@/types/authTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,6 +10,8 @@ export default function useProfileReviewsInfiniteQuery({
   uid: string;
   limit?: number;
 }) {
+  const queryKeyConfing = queryKeys.product.review(uid as string);
+
   const {
     data,
     isLoading,
@@ -18,12 +19,13 @@ export default function useProfileReviewsInfiniteQuery({
     hasNextPage,
     fetchNextPage,
     error,
-  } = useInfiniteQuery<ProfileReviewData[], AxiosError, InfiniteData<ProfileReviewData>>({
-    queryKey: getProfileReviewsQueryKey(uid as string),
-    queryFn: async ({ pageParam }) => {
-      const response = getProfileReviews({ uid, cursor: pageParam, limit });
-      return (await response).data.reviews;
-    },
+  } = useInfiniteQuery<
+    ProfileReviewData[],
+    AxiosError,
+    InfiniteData<ProfileReviewData>
+  >({
+    queryKey: queryKeyConfing.queryKey,
+    queryFn: queryKeyConfing.queryFn as any,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;

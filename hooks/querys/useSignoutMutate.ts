@@ -1,5 +1,5 @@
-import { AUTH_QUERY_KEY, MY_PROFILE_QUERY_KEY, SESSION_QUERY_KEY } from "@/constants/constant";
 import { signout } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { authSlice } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
 import { SignoutResposeData } from "@/types/apiTypes";
@@ -15,6 +15,9 @@ export default function useSignoutMutate() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
+  const authQueryKey = queryKeys.auth.info._def;
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const sessionQueryKey = queryKeys.session.isExist.queryKey;
 
   const { mutate: signoutMutate } = useMutation<
     AxiosResponse<SignoutResposeData>,
@@ -28,24 +31,24 @@ export default function useSignoutMutate() {
     mutationFn: signout,
     onMutate: () => {
       const previousAuth: AuthData | unknown = queryClient.getQueriesData({
-        queryKey: AUTH_QUERY_KEY,
+        queryKey: authQueryKey,
       });
 
       const previousMyProfile: ProfileData | unknown =
         queryClient.getQueriesData({
-          queryKey: MY_PROFILE_QUERY_KEY,
+          queryKey: myProfileQueryKey,
         });
 
       dispatch(authSlice.actions.resetAuth());
 
-      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
+      queryClient.removeQueries({ queryKey: authQueryKey });
 
-      queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.removeQueries({ queryKey: myProfileQueryKey });
 
       return { previousAuth, previousMyProfile };
     },
     onSuccess: (response) => {
-      queryClient.removeQueries({ queryKey: SESSION_QUERY_KEY });
+      queryClient.removeQueries({ queryKey: sessionQueryKey });
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
@@ -58,14 +61,11 @@ export default function useSignoutMutate() {
     },
     onError: (error: unknown, _, context) => {
       if (context?.previousAuth) {
-        queryClient.setQueryData(AUTH_QUERY_KEY, context.previousAuth);
+        queryClient.setQueryData(authQueryKey, context.previousAuth);
         dispatch(authSlice.actions.saveAuth(context.previousAuth as AuthData));
       }
       if (context?.previousMyProfile) {
-        queryClient.setQueryData(
-          MY_PROFILE_QUERY_KEY,
-          context.previousMyProfile
-        );
+        queryClient.setQueryData(myProfileQueryKey, context.previousMyProfile);
       }
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);

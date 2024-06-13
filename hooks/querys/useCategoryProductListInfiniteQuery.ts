@@ -1,5 +1,4 @@
-import { getCategoryProductListQueryKey } from "@/constants/constant";
-import { getCategoryProductList } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import {
   ProductCategory,
@@ -20,6 +19,11 @@ export default function useCategoryProductListInfiniteQuery({
   productListType: ProductListType;
 }) {
   const location = useSelector((state: RootState) => state.location.location);
+  const querKeyConfing = queryKeys.product.list({
+    produdctCategory: category,
+    location,
+    limit,
+  });
 
   const {
     data: categoryProductListData,
@@ -28,17 +32,14 @@ export default function useCategoryProductListInfiniteQuery({
     isFetchingNextPage: isFetchingNextPageCategoryProductList,
     isLoading: isLoadingCategoryProductList,
     error: categoryProductListError,
-  } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: getCategoryProductListQueryKey(category, location),
-    queryFn: async ({ pageParam }) => {
-      const response = await getCategoryProductList({
-        category,
-        cursor: pageParam,
-        limit,
-        location,
-      });
-      return response.data.products;
-    },
+  } = useInfiniteQuery<
+    ProductData[],
+    AxiosError,
+    InfiniteData<ProductData>,
+    any
+  >({
+    queryKey: querKeyConfing.queryKey,
+    queryFn: querKeyConfing.queryFn as any,
     enabled: productListType === "CATEGORY",
     retry: 0,
     initialPageParam: null,

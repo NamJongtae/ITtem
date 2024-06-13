@@ -1,5 +1,4 @@
 import { deleteNotificationMessage } from "@/lib/api/notification";
-import { RootState } from "@/store/store";
 import { NotificationMessageData } from "@/types/notification";
 import {
   InfiniteData,

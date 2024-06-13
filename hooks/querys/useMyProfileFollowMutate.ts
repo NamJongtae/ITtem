@@ -1,8 +1,5 @@
-import {
-  MY_PROFILE_QUERY_KEY,
-  getFollowersQueryKey,
-} from "@/constants/constant";
 import { follow } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import {
@@ -18,21 +15,22 @@ export default function useMyProfileFollowMutate(uid: string) {
   const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid || "";
-  const MY_FOLLOWERS_QUERY_KEY = getFollowersQueryKey(myUid);
+  const myFollowersQueryKey = queryKeys.profile.my._ctx.followers._def;
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
   const { mutate: myProfilefollowMutate } = useMutation({
     mutationFn: () => follow(uid),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
 
-      await queryClient.cancelQueries({ queryKey: MY_FOLLOWERS_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myFollowersQueryKey });
 
-      const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
-      ) as ProfileData | undefined;
+      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
+        | ProfileData
+        | undefined;
 
       const previousMyFollowers = queryClient.getQueryData(
-        MY_FOLLOWERS_QUERY_KEY
+        myFollowersQueryKey
       ) as InfiniteData<ProfileData[], unknown> | undefined;
 
       const newMyProfile = {
@@ -55,10 +53,10 @@ export default function useMyProfileFollowMutate(uid: string) {
         }
       );
 
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       if (previousMyFollowers) {
-        queryClient.setQueryData(MY_FOLLOWERS_QUERY_KEY, {
+        queryClient.setQueryData(myFollowersQueryKey, {
           ...previousMyFollowers,
           pages: newMyFollowers,
         });
@@ -69,13 +67,10 @@ export default function useMyProfileFollowMutate(uid: string) {
     },
     onError: (error, data, ctx) => {
       console.error(error);
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, ctx?.previousMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       if (ctx?.previousMyFollowers) {
-        queryClient.setQueryData(
-          MY_FOLLOWERS_QUERY_KEY,
-          ctx.previousMyFollowers
-        );
+        queryClient.setQueryData(myFollowersQueryKey, ctx.previousMyFollowers);
       }
 
       if (isAxiosError<{ message: string }>(error)) {
@@ -83,9 +78,9 @@ export default function useMyProfileFollowMutate(uid: string) {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
       queryClient.invalidateQueries({
-        queryKey: MY_FOLLOWERS_QUERY_KEY,
+        queryKey: myFollowersQueryKey,
       });
     },
   });

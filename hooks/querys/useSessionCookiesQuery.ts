@@ -1,11 +1,9 @@
-import { SESSION_QUERY_KEY } from '@/constants/constant';
-import { getSessionCookies } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { authSlice } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
-import { SessionCookiesResponseData } from "@/types/apiTypes";
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
-import { useRouter } from 'next/router';
+
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -13,13 +11,10 @@ export default function useSessionCookiesQuery() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const pathname = router.pathname;
-  
-  const { data, isSuccess, error, refetch } = useQuery<
-    AxiosResponse<SessionCookiesResponseData>,
-    AxiosError
-  >({
-    queryFn: getSessionCookies,
-    queryKey: SESSION_QUERY_KEY,
+  let queryKeyConfig = queryKeys.session.isExist;
+  const { data, isSuccess, error, refetch } = useQuery({
+    queryFn: queryKeyConfig.queryFn,
+    queryKey: queryKeyConfig.queryKey,
   });
 
   useEffect(() => {
@@ -28,9 +23,9 @@ export default function useSessionCookiesQuery() {
     }
   }, [isSuccess, data, dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
     refetch();
-  },[pathname, refetch])
+  }, [pathname, refetch]);
 
   useEffect(() => {
     if (error) {

@@ -1,10 +1,13 @@
 import { purchaseCancelReject } from "@/lib/api/product";
+import { queryKeys } from '@/queryKeys';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export default function useCancelRejectMutate() {
   const queryClient = useQueryClient();
+  const productManageQueryKey = queryKeys.product.manage._def;
+
   const { mutate } = useMutation({
     mutationFn: ({
       productId,
@@ -16,7 +19,7 @@ export default function useCancelRejectMutate() {
     onSuccess: (response) => {
       toast.success(response.data.message);
       queryClient.invalidateQueries({
-        queryKey: ["product", "manage"],
+        queryKey: productManageQueryKey,
       });
     },
     onError: (error) => {

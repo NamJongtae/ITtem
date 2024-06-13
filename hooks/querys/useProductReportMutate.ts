@@ -1,6 +1,6 @@
-import { getProductQueryKey } from "@/constants/constant";
 import { reportProduct } from "@/lib/api/product";
-import { RootState } from '@/store/store';
+import { queryKeys } from "@/queryKeys";
+import { RootState } from "@/store/store";
 import { ProductDetailData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
@@ -12,7 +12,9 @@ export default function useProductReportMutate() {
   const router = useRouter();
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
-  const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
+  const productQueryKey = queryKeys.product.detail(
+    productId as string
+  ).queryKey;
   const myUid = useSelector((state: RootState) => state.auth.user);
 
   const { mutate: productReportMutate } = useMutation<
@@ -23,10 +25,10 @@ export default function useProductReportMutate() {
   >({
     mutationFn: () => reportProduct(productId as string),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: PRODUCT_QUERYKEY });
+      await queryClient.cancelQueries({ queryKey: productQueryKey });
 
       const previousProduct = queryClient.getQueryData(
-        PRODUCT_QUERYKEY
+        productQueryKey
       ) as ProductDetailData;
 
       const newProduct = {
@@ -36,7 +38,7 @@ export default function useProductReportMutate() {
         block: previousProduct.reportCount >= 4,
       };
 
-      queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
+      queryClient.setQueryData(productQueryKey, newProduct);
 
       toast.success("해당 상품을 신고했어요.");
 
@@ -45,10 +47,10 @@ export default function useProductReportMutate() {
     onError: (error, data, ctx) => {
       if (isAxiosError<{ message: string }>(error))
         toast.warn(error.response?.data.message);
-      queryClient.setQueryData(PRODUCT_QUERYKEY, ctx?.previousProduct);
+      queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: PRODUCT_QUERYKEY });
+      queryClient.invalidateQueries({ queryKey: productQueryKey });
     },
   });
 

@@ -1,5 +1,5 @@
-import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
 import { addWish } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
@@ -13,8 +13,11 @@ export default function useAddWishMutate() {
   const router = useRouter();
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
-  const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
+  const productQueryKey = queryKeys.product.detail(
+    productId as string
+  ).queryKey;
   const myUid = useSelector((state: RootState) => state.auth.user?.uid);
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
   const { mutate: addWishMutate } = useMutation<
     AxiosResponse<{ message: string }>,
@@ -25,17 +28,17 @@ export default function useAddWishMutate() {
     mutationFn: () => addWish(productId as string),
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: PRODUCT_QUERYKEY,
+        queryKey: productQueryKey,
       });
 
-      await queryClient.cancelQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
 
       const previousProduct = queryClient.getQueryData(
-        PRODUCT_QUERYKEY
+        productQueryKey
       ) as ProductDetailData;
 
       const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
+        myProfileQueryKey
       ) as ProfileData;
 
       const newProduct = {
@@ -52,8 +55,8 @@ export default function useAddWishMutate() {
         ],
       };
 
-      queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(productQueryKey, newProduct);
+      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       toast.success("찜 목록에 상품을 추가했어요.");
       return { previousProduct, previousMyProfile };
@@ -64,7 +67,7 @@ export default function useAddWishMutate() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: PRODUCT_QUERYKEY });
+      queryClient.invalidateQueries({ queryKey: productQueryKey });
     },
   });
 

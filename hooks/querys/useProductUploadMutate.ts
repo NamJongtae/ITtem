@@ -1,5 +1,5 @@
-import { getProfileProductListQuerykey } from "@/constants/constant";
 import { uploadProduct } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { ProductResponseData } from "@/types/apiTypes";
 import { ProductUploadData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 export default function useProductUploadMutate() {
   const router = useRouter();
   const queryCliecnt = useQueryClient();
+  const myProfileQueryKey = queryKeys.profile.my._ctx.products._def;
 
   const { mutateAsync: productUploadMuate, isPending: productUploadLoading } =
     useMutation<
@@ -20,7 +21,7 @@ export default function useProductUploadMutate() {
       onSuccess: async (response) => {
         await router.push(`/product/${response.data.product._id}`);
         queryCliecnt.invalidateQueries({
-          queryKey: getProfileProductListQuerykey(response.data.product.uid),
+          queryKey: myProfileQueryKey,
         });
       },
     });

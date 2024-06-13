@@ -1,4 +1,5 @@
 import { deleteProduct } from "@/lib/api/product";
+import { queryKeys } from '@/queryKeys';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -8,13 +9,14 @@ export default function useProductDeleteMutate(productId?: string) {
   const router = useRouter();
   const currentProductId = router.query?.productId || productId;
   const queryClient = useQueryClient();
+  const productQueryKey = queryKeys.product._def;
 
   const { mutate: productDeleteMutate, isPending: productDeleteLoading } =
     useMutation({
       mutationFn: () => deleteProduct(currentProductId as string),
       onSuccess: async (response) => {
         queryClient.invalidateQueries({
-          queryKey: ["product"],
+          queryKey: productQueryKey,
         });
         if (router.query?.productId) {
           await router.replace("/");

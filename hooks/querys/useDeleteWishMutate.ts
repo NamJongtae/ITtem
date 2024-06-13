@@ -1,5 +1,5 @@
-import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
 import { deleteWish } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
@@ -13,7 +13,10 @@ export default function useDeleteWishMutate() {
   const router = useRouter();
   const productId = router.query?.productId || "";
   const queryClient = useQueryClient();
-  const PRODUCT_QUERYKEY = getProductQueryKey(productId as string);
+  const myProfileQuerKey = queryKeys.profile.my.queryKey;
+  const productQueryKey = queryKeys.product.detail(
+    productId as string
+  ).queryKey;
   const myUid = useSelector((state: RootState) => state.auth.user?.uid);
 
   const { mutate: deleteWishMutate } = useMutation<
@@ -25,15 +28,15 @@ export default function useDeleteWishMutate() {
     mutationFn: () => deleteWish(productId as string),
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: PRODUCT_QUERYKEY,
+        queryKey: productQueryKey,
       });
 
       const previousProduct = queryClient.getQueryData(
-        PRODUCT_QUERYKEY
+        productQueryKey
       ) as ProductDetailData;
 
       const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
+        myProfileQuerKey
       ) as ProfileData;
 
       const newProduct = {
@@ -53,8 +56,8 @@ export default function useDeleteWishMutate() {
         ],
       };
 
-      queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(productQueryKey, newProduct);
+      queryClient.setQueryData(myProfileQuerKey, newMyProfile);
 
       toast.success("찜 목록에서 상품을 삭제했어요.");
 
@@ -62,14 +65,14 @@ export default function useDeleteWishMutate() {
     },
 
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(PRODUCT_QUERYKEY, ctx?.previousProduct);
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, ctx?.previousMyProfile);
+      queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
+      queryClient.setQueryData(myProfileQuerKey, ctx?.previousMyProfile);
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: PRODUCT_QUERYKEY });
+      queryClient.invalidateQueries({ queryKey: productQueryKey });
     },
   });
 

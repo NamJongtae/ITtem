@@ -1,16 +1,20 @@
 import { productReturnRequestWithdrawal } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export default function useProductReturnRequestWithdrawalMutate() {
   const queryClient = useQueryClient();
+  const productManageQuerykey = queryKeys.product.manage._def;
+
   const { mutate } = useMutation({
-    mutationFn: (productId: string) => productReturnRequestWithdrawal(productId),
+    mutationFn: (productId: string) =>
+      productReturnRequestWithdrawal(productId),
     onSuccess: (response) => {
       toast.success(response.data.message);
       queryClient.invalidateQueries({
-        queryKey: ["product", "manage"],
+        queryKey: productManageQuerykey,
       });
     },
     onError: (error) => {

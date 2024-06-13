@@ -1,5 +1,4 @@
-import { MY_PROFILE_QUERY_KEY } from "@/constants/constant";
-import { getMyProfile } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -8,13 +7,11 @@ import { toast } from "react-toastify";
 
 export default function useMyProfileQuery() {
   const user = useSelector((state: RootState) => state.auth.user);
+  const queryKeyConfing = queryKeys.profile.my;
 
   const { data, isPending, isError } = useQuery({
-    queryFn: async () => {
-      const response = await getMyProfile();
-      return response.data.profile;
-    },
-    queryKey: MY_PROFILE_QUERY_KEY,
+    queryFn: queryKeyConfing.queryFn,
+    queryKey: queryKeyConfing.queryKey,
     enabled: !!user,
     staleTime: 30 * 1000,
   });
@@ -26,6 +23,6 @@ export default function useMyProfileQuery() {
       );
     }
   }, [isError]);
-  
+
   return { myProfileData: data, loadMyProfileLoading: isPending };
 }

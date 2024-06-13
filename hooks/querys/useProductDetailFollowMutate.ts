@@ -1,5 +1,5 @@
-import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
 import { follow } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,22 +11,25 @@ export default function useProductDetailFollowMutate(uid: string) {
   const router = useRouter();
   const productId = router.query?.productId;
   const queryClient = useQueryClient();
-  const PRODUCT_QUERYKEY = getProductQueryKey((productId as string) || "");
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const productQueryKey = queryKeys.product.detail(
+    productId as string
+  ).queryKey;
 
   const { mutate: productDetailfollowMutate } = useMutation({
     mutationFn: () => follow(uid),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: PRODUCT_QUERYKEY });
+      await queryClient.cancelQueries({ queryKey: productQueryKey });
 
-      await queryClient.cancelQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
 
-      const previousProduct = queryClient.getQueryData(PRODUCT_QUERYKEY) as
+      const previousProduct = queryClient.getQueryData(productQueryKey) as
         | ProductDetailData
         | undefined;
 
-      const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
-      ) as ProfileData | undefined;
+      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
+        | ProfileData
+        | undefined;
 
       const newProduct = {
         ...previousProduct,
@@ -44,26 +47,26 @@ export default function useProductDetailFollowMutate(uid: string) {
         followings: [...(previousMyProfile?.followings || []), uid],
       };
 
-      queryClient.setQueryData(PRODUCT_QUERYKEY, newProduct);
+      queryClient.setQueryData(productQueryKey, newProduct);
 
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       toast.success("유저 팔로우에 성공했어요.");
 
       return { previousProduct, previousMyProfile };
     },
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(PRODUCT_QUERYKEY, ctx?.previousProduct);
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, ctx?.previousMyProfile);
+      queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
+      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
       if (isAxiosError<{ message: string }>(error)) {
         toast.error(error.response?.data.message);
       }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: PRODUCT_QUERYKEY,
+        queryKey: productQueryKey,
       });
-      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
     },
   });
   return { productDetailfollowMutate };

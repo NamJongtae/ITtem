@@ -1,9 +1,5 @@
-import {
-  MY_PROFILE_QUERY_KEY,
-  getFollowersQueryKey,
-  getFollowingsQueryKey,
-} from "@/constants/constant";
 import { unfollow } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import {
@@ -19,24 +15,25 @@ export default function useMyProfileUnfollowMutate(uid: string) {
   const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid;
-  const MY_FOLLOWINGS_QUERY_KEY = getFollowingsQueryKey(myUid || "");
-  const USER_FOLLOWERS_QUERY_KEY = getFollowersQueryKey(myUid || "");
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings._def;
+  const userFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers._def;
 
   const { mutate: myProfileUnfollowMutate } = useMutation({
     mutationFn: () => unfollow(uid),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: MY_PROFILE_QUERY_KEY });
-      await queryClient.cancelQueries({ queryKey: MY_FOLLOWINGS_QUERY_KEY });
-      await queryClient.cancelQueries({ queryKey: USER_FOLLOWERS_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
+      await queryClient.cancelQueries({ queryKey: myFollowingsQueryKey });
+      await queryClient.cancelQueries({ queryKey: userFollowersQueryKey });
 
-      const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
-      ) as ProfileData | undefined;
+      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
+        | ProfileData
+        | undefined;
       const previousMyFollowings = queryClient.getQueryData(
-        MY_FOLLOWINGS_QUERY_KEY
+        myFollowingsQueryKey
       ) as InfiniteData<ProfileData[]> | undefined;
       const previousUserFollowers = queryClient.getQueryData(
-        USER_FOLLOWERS_QUERY_KEY
+        userFollowersQueryKey
       ) as InfiniteData<ProfileData[]> | undefined;
 
       const newMyProfile = {
@@ -66,17 +63,17 @@ export default function useMyProfileUnfollowMutate(uid: string) {
         }
       );
 
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       if (previousMyFollowings) {
-        queryClient.setQueryData(MY_FOLLOWINGS_QUERY_KEY, {
+        queryClient.setQueryData(myFollowingsQueryKey, {
           ...previousMyFollowings,
           pages: newMyFollowings,
         });
       }
 
       if (previousUserFollowers) {
-        queryClient.setQueryData(USER_FOLLOWERS_QUERY_KEY, {
+        queryClient.setQueryData(userFollowersQueryKey, {
           ...previousUserFollowers,
           pages: newUserFollowers,
         });
@@ -88,17 +85,17 @@ export default function useMyProfileUnfollowMutate(uid: string) {
     onError: (error, data, ctx) => {
       console.error(error);
 
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, ctx?.previousMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       if (ctx?.previousMyFollowings)
         queryClient.setQueryData(
-          MY_FOLLOWINGS_QUERY_KEY,
+          myFollowingsQueryKey,
           ctx.previousMyFollowings
         );
 
       if (ctx?.previousUserFollowers) {
         queryClient.setQueryData(
-          USER_FOLLOWERS_QUERY_KEY,
+          userFollowersQueryKey,
           ctx.previousUserFollowers
         );
       }
@@ -108,12 +105,12 @@ export default function useMyProfileUnfollowMutate(uid: string) {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
       queryClient.invalidateQueries({
-        queryKey: USER_FOLLOWERS_QUERY_KEY,
+        queryKey: userFollowersQueryKey,
       });
       queryClient.invalidateQueries({
-        queryKey: MY_FOLLOWINGS_QUERY_KEY,
+        queryKey: myFollowingsQueryKey,
       });
     },
   });

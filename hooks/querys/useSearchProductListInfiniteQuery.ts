@@ -1,5 +1,4 @@
-import { getSearchProductListQueryKey } from "@/constants/constant";
-import { getSearchProductList } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import {
   ProductCategory,
   ProductData,
@@ -20,6 +19,11 @@ export default function useSearchProductListInfiniteQuery({
 }) {
   const router = useRouter();
   const keyword = router.query?.keyword;
+  const queryKeyConfig = queryKeys.product.search({
+    keyword: keyword as string,
+    category,
+    limit,
+  });
 
   const {
     data: searchProductListData,
@@ -29,21 +33,13 @@ export default function useSearchProductListInfiniteQuery({
     isLoading: isLoadingSearchProductList,
     error: searchProductListError,
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
-    queryKey: getSearchProductListQueryKey(category, keyword as string),
-    queryFn: async ({ pageParam}) => {
-      const response = await getSearchProductList({
-        category,
-        cursor: pageParam,
-        limit,
-        keyword: (keyword as string) || "",
-      });
-      return response.data.products;
-    },
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as any,
     enabled: productListType === "SEARCH" && !!keyword,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
-      const nextCursor = lastPage[lastPage.length - 1].createdAt;
+      const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
       if (lastPage.length < limit) {
         return undefined;
       }

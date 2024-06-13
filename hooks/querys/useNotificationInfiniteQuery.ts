@@ -1,4 +1,4 @@
-import { getNotificationMessage } from "@/lib/api/notification";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { NotificationMessageData } from "@/types/notification";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 export default function useNotificationInfiniteQuery(limit: number = 10) {
   const user = useSelector((state: RootState) => state.auth.user);
+  const queryKeyConfig = queryKeys.notification.messages(limit);
 
   const {
     data,
@@ -19,18 +20,8 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     Error,
     InfiniteData<{ messages: NotificationMessageData; nextKey: string }>
   >({
-    queryKey: ["notification"],
-    queryFn: async ({ pageParam }) => {
-      const response = await getNotificationMessage({
-        lastKey: pageParam,
-        limit,
-      });
-
-      return {
-        messages: response.data.messages,
-        nextKey: response.data.nextKey,
-      };
-    },
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as any,
     enabled: !!user,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage?.nextKey || undefined,

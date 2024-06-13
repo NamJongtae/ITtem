@@ -1,8 +1,4 @@
-import {
-  getFollowersQueryKey,
-  getFollowingsQueryKey,
-} from "@/constants/constant";
-import { getFollowers, getFollowings } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -18,6 +14,16 @@ export default function useFollowListInfiniteQuery({
   uid: string | undefined;
   limit?: number;
 }) {
+  const queryKeyConfing = isFollowers
+    ? queryKeys.profile.my._ctx.followers({
+        userIds: userIds as string[],
+        limit,
+      })
+    : queryKeys.profile.my._ctx.followings({
+        userIds: userIds as string[],
+        limit,
+      });
+
   const {
     data,
     isLoading,
@@ -26,26 +32,8 @@ export default function useFollowListInfiniteQuery({
     hasNextPage,
     error,
   } = useInfiniteQuery<ProfileData[], AxiosError, InfiniteData<ProfileData>>({
-    queryKey: isFollowers
-      ? getFollowersQueryKey(uid as string)
-      : getFollowingsQueryKey(uid as string),
-    queryFn: async ({ pageParam }) => {
-      if (isFollowers) {
-        const response = await getFollowers({
-          cursor: pageParam,
-          limit,
-          userIds,
-        });
-        return response.data.followers;
-      } else {
-        const response = await getFollowings({
-          cursor: pageParam,
-          limit,
-          userIds,
-        });
-        return response.data.followings;
-      }
-    },
+    queryKey: queryKeyConfing.queryKey,
+    queryFn: queryKeyConfing.queryFn as any,
     initialPageParam: null,
     enabled: !!uid,
     retry: 0,

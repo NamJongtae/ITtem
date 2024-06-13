@@ -1,18 +1,17 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import { getPurchaseTrading, getSalesTrading } from "@/lib/api/product";
+import { queryKeys } from "@/queryKeys";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
-export default function useTradingInfiniteQuery(
+export default function useTradeInfiniteQuery(
   menu: ProductManageMenu,
   limit: number = 10
 ) {
   const router = useRouter();
   const currentMenu = menu === "판매" ? "sale" : "purchase";
   let status = router.query?.status as string | undefined;
-  const search = router.query?.search as string | undefined;
   status =
     status !== "TRADING" &&
     status !== "TRADING_END" &&
@@ -20,6 +19,15 @@ export default function useTradingInfiniteQuery(
     status !== "CANCEL_REJECT/RETURN_REJECT"
       ? "TRADING"
       : status;
+  const search = router.query?.search as string | undefined;
+
+  const queryKeyConfig = queryKeys.product.manage({
+    currentMenu,
+    status,
+    search,
+    menu,
+    limit,
+  });
 
   const {
     data,
@@ -33,26 +41,8 @@ export default function useTradingInfiniteQuery(
     AxiosError,
     InfiniteData<SaleTradingData | PurchaseTradingData>
   >({
-    queryKey: ["product", "manage", currentMenu, status, search],
-    queryFn: async ({ pageParam }) => {
-      if (menu === "판매") {
-        const response = await getSalesTrading({
-          status,
-          cursor: pageParam,
-          search,
-          limit,
-        });
-        return response.data.salesTrading;
-      } else {
-        const response = await getPurchaseTrading({
-          status,
-          cursor: pageParam,
-          search,
-          limit,
-        });
-        return response.data.purchaseTrading;
-      }
-    },
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as any,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       let nextCursor;

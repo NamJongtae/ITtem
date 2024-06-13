@@ -1,10 +1,4 @@
-import {
-  MY_PROFILE_QUERY_KEY,
-  getMyProfileProductListQuerykey,
-  getProfileProductListQuerykey,
-} from "@/constants/constant";
-import { getProfileProductList } from "@/lib/api/product";
-import { RootState } from "@/store/store";
+import { profileQueryKey, queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import {
   ProductCategory,
@@ -32,12 +26,22 @@ export default function useProfileProductListInfiniteQuery({
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const myProfile = queryClient.getQueryData(MY_PROFILE_QUERY_KEY) as
+  const myProfile = queryClient.getQueryData(queryKeys.profile.my.queryKey) as
     | ProfileData
     | undefined;
-
   const uid =
     productListType === "MY_PROFILE" ? myProfile?.uid : router.query?.uid || "";
+
+  const queryKeyConfig =
+    productListType === "MY_PROFILE"
+      ? queryKeys.profile.my._ctx.products({
+          category,
+          limit,
+          productIds,
+        })
+      : profileQueryKey
+          .user(uid as string)
+          ._ctx.products({ category, limit, productIds });
 
   const {
     data: profileProductListData,
@@ -49,19 +53,12 @@ export default function useProfileProductListInfiniteQuery({
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey:
       productListType === "MY_PROFILE"
-        ? getMyProfileProductListQuerykey(category)
-        : getProfileProductListQuerykey(uid as string, category),
-    queryFn: async ({ pageParam }) => {
-      const response = await getProfileProductList({
-        cursor: pageParam,
-        category,
-        limit,
-        productIds,
-      });
-      return response.data.products;
-    },
+        ? queryKeyConfig.queryKey
+        : queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as any,
     enabled:
-      (productListType === "PROFILE" || productListType === "MY_PROFILE") && !!uid,
+      (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
+      !!uid,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {

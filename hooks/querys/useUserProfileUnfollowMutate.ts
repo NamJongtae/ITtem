@@ -1,9 +1,5 @@
-import {
-  MY_PROFILE_QUERY_KEY,
-  getFollowersQueryKey,
-  getProfileQueryKey,
-} from "@/constants/constant";
 import { unfollow } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import {
@@ -22,35 +18,41 @@ export default function useUserProfileUnfollowMutate(uid: string) {
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid || "";
   const urlQueryUid = router.query?.uid || "";
-  const USER_PROFILE_QUERY_KEY = getProfileQueryKey(urlQueryUid as string);
-  const USER_FOLLOWINGS_QUERY_KEY = getFollowersQueryKey(urlQueryUid as string);
-  const USER_FOLLOWERS_QUERY_KEY = getFollowersQueryKey(urlQueryUid as string);
+
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const userProfileQueryKey = queryKeys.profile.user(
+    urlQueryUid as string
+  ).queryKey;
+  const userFollowingsQueryKey = queryKeys.profile.user(urlQueryUid as string)
+    ._ctx.followings._def;
+  const userFollowersQueryKey = queryKeys.profile.user(urlQueryUid as string)
+    ._ctx.followers._def;
 
   const { mutate: userUnfollowMutate } = useMutation({
     mutationFn: () => unfollow(uid),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
 
-      await queryClient.cancelQueries({ queryKey: USER_PROFILE_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: userProfileQueryKey });
 
-      await queryClient.cancelQueries({ queryKey: USER_FOLLOWINGS_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: userFollowingsQueryKey });
 
-      await queryClient.cancelQueries({ queryKey: USER_FOLLOWERS_QUERY_KEY });
+      await queryClient.cancelQueries({ queryKey: userFollowersQueryKey });
 
-      const previousMyProfile = queryClient.getQueryData(
-        MY_PROFILE_QUERY_KEY
-      ) as ProfileData | undefined;
+      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
+        | ProfileData
+        | undefined;
 
       const previousUserProfile = queryClient.getQueryData(
-        USER_PROFILE_QUERY_KEY
+        userProfileQueryKey
       ) as ProfileData | undefined;
 
       const previousUserFollowings = queryClient.getQueryData(
-        USER_FOLLOWINGS_QUERY_KEY
+        userFollowingsQueryKey
       ) as InfiniteData<ProfileData[], unknown> | undefined;
 
       const previousUserFollowers = queryClient.getQueryData(
-        USER_FOLLOWERS_QUERY_KEY
+        userFollowersQueryKey
       ) as InfiniteData<ProfileData[], unknown> | undefined;
 
       const newMyProfile = {
@@ -61,7 +63,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
           ) || [],
       };
 
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, newMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       const newUserProfile = {
         ...previousUserProfile,
@@ -69,7 +71,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
           previousMyProfile?.followers.filter((data: string) => data !== uid) ||
           [],
       };
-      queryClient.setQueryData(USER_PROFILE_QUERY_KEY, newUserProfile);
+      queryClient.setQueryData(userProfileQueryKey, newUserProfile);
 
       if (previousUserFollowings) {
         const newUserFollowings = previousUserFollowings?.pages.map(
@@ -86,7 +88,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
             });
           }
         );
-        queryClient.setQueryData(USER_FOLLOWINGS_QUERY_KEY, {
+        queryClient.setQueryData(userFollowingsQueryKey, {
           ...previousUserFollowings,
           pages: newUserFollowings,
         });
@@ -107,7 +109,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
             });
           }
         );
-        queryClient.setQueryData(USER_FOLLOWERS_QUERY_KEY, {
+        queryClient.setQueryData(userFollowersQueryKey, {
           ...previousUserFollowers,
           pages: newUserFollowers,
         });
@@ -122,23 +124,20 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       };
     },
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(MY_PROFILE_QUERY_KEY, ctx?.previousMyProfile);
+      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
-      queryClient.setQueryData(
-        USER_PROFILE_QUERY_KEY,
-        ctx?.previousUserProfile
-      );
+      queryClient.setQueryData(userProfileQueryKey, ctx?.previousUserProfile);
 
       if (ctx?.previousUserFollowings) {
         queryClient.setQueryData(
-          USER_FOLLOWINGS_QUERY_KEY,
+          userFollowingsQueryKey,
           ctx.previousUserFollowings
         );
       }
 
       if (ctx?.previousUserFollowers) {
         queryClient.setQueryData(
-          USER_FOLLOWERS_QUERY_KEY,
+          userFollowersQueryKey,
           ctx.previousUserFollowers
         );
       }
@@ -148,16 +147,16 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
 
-      queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: userProfileQueryKey });
 
       queryClient.invalidateQueries({
-        queryKey: USER_FOLLOWINGS_QUERY_KEY,
+        queryKey: userFollowingsQueryKey,
       });
 
       queryClient.invalidateQueries({
-        queryKey: USER_FOLLOWERS_QUERY_KEY,
+        queryKey: userFollowersQueryKey,
       });
     },
   });

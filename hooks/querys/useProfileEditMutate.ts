@@ -1,5 +1,5 @@
-import { AUTH_QUERY_KEY, MY_PROFILE_QUERY_KEY } from "@/constants/constant";
 import { editProfile } from "@/lib/api/auth";
+import { queryKeys } from "@/queryKeys";
 import { ProfileResponseData } from "@/types/apiTypes";
 import { ProfileEditData } from "@/types/authTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 
 export default function useProfileEditMutate(closeModal: () => void) {
   const queryClient = useQueryClient();
+  const authQueryKey = queryKeys.auth._def;
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+
   const { mutateAsync: profileEditMutate } = useMutation<
     AxiosResponse<ProfileResponseData>,
     AxiosError,
@@ -18,8 +21,8 @@ export default function useProfileEditMutate(closeModal: () => void) {
     onSuccess: (response) => {
       closeModal();
       toast.success(response.data.message);
-      queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
-      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: authQueryKey });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
     },
   });
 
