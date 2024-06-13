@@ -1,4 +1,4 @@
-import useSignoutMutate from "@/hooks/querys/useSignoutMutate";
+import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { forwardRef } from "react";

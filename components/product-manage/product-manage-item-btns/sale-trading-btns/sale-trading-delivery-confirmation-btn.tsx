@@ -1,4 +1,4 @@
-import useDeliveryConfirmationMutate from "@/hooks/querys/useDeliveryConfirmationMutate";
+import useDeliveryConfirmationMutate from "@/hooks/reactQuery/mutations/trade/useDeliveryConfirmationMutate";
 
 interface IProps {
   productId: string;

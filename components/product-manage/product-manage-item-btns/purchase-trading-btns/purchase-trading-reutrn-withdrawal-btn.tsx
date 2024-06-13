@@ -1,4 +1,4 @@
-import useProductReturnRequestWithdrawalMutate from "@/hooks/querys/useProductReturnRequestWithdrawalMutate";
+import useProductReturnRequestWithdrawalMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnRequestWithdrawalMutate";
 
 interface IProps {
   productId: string;

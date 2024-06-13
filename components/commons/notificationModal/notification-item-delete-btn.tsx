@@ -1,4 +1,4 @@
-import useDeleteNotificationMessageMutate from "@/hooks/querys/useDeleteNotificationMessageMutate";
+import useDeleteNotificationMessageMutate from "@/hooks/reactQuery/mutations/notification/useDeleteNotificationMessageMutate";
 
 interface IProps {
   messageId: string;

@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import ProductManageModal from "../product-manage-modal";
-import useProductReturnRequestMutate from "@/hooks/querys/useProductReturnRequestMutate";
+import useProductReturnRequestMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnRequestMutate";
 
 interface IProps {
   productId: string;

@@ -1,8 +1,7 @@
-import useTradingInfiniteQuery from "@/hooks/querys/useTradingInfiniteQuery";
+import useTradeInfiniteQuery from "@/hooks/reactQuery/querys/trade/useTradeInfiniteQuery";
 import InfiniteScroll from "react-infinite-scroller";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
-import FollowListSkeletonUI from "../profile/profileDetailFollow/follow-list-skeletonUI";
 import ProductManageItem from "./product-manage-item";
 import {
   ProductManageDeatilMenu,
@@ -23,9 +22,9 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
     hasNextPage,
     fetchNextPage,
     error,
-  } = useTradingInfiniteQuery(menu);
+  } = useTradeInfiniteQuery(menu);
 
-  if ((error && !data) || data?.length === 0) {
+  if (error || data?.length === 0) {
     return (
       <Empty
         message={

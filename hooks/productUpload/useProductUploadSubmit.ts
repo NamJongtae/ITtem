@@ -5,7 +5,7 @@ import {
   ProductUploadData,
 } from "@/types/productTypes";
 import { FieldValues } from "react-hook-form";
-import useProductUploadMutate from "../querys/useProductUploadMutate";
+import useProductUploadMutate from "../reactQuery/mutations/product/useProductUploadMutate";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useState } from "react";
@@ -29,7 +29,7 @@ export default function useProductUploadSubmit() {
         description: values.description,
         uid: user?.uid || "",
         imgData: imgData || [],
-        price: parseInt(values.price.replace(",",""), 10),
+        price: parseInt(values.price.replace(",", ""), 10),
         location: values.location,
         sellType: values.sellType,
         category: values.category,

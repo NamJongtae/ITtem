@@ -1,5 +1,5 @@
-import useMyProfileFollowMutate from "@/hooks/querys/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "@/hooks/querys/useMyProfileUnfollowMutate";
+import useMyProfileFollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileFollowMutate";
+import useMyProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileUnfollowMutate";
 
 interface IProps {
   otherUserId: string;

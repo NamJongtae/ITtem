@@ -1,5 +1,5 @@
 import Image from "next/image";
-import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 import ChatRoomExitBtn from "./chat-room-exit-btn";
 import useChatRoomMenu from "@/hooks/chat/useChatRoomMenu";
 import ChatRoomMenuUser from "./chat-room-menu-user";

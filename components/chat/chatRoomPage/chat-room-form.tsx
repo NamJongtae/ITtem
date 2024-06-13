@@ -2,7 +2,7 @@ import ChatSendIcon from "@/public/icons/chat_send_icon.svg";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import TextareaAutosize from "react-textarea-autosize";
-import useSendToChatMessage from "@/hooks/querys/useSendToChatMessage";
+import useSendToChatMessageMutate from "@/hooks/reactQuery/mutations/chat/useSendToChatMessageMutate";
 import { useRouter } from "next/router";
 import { MutableRefObject } from "react";
 
@@ -20,7 +20,7 @@ export default function ChatRoomForm({ chatListRef }: IProps) {
     }
   };
 
-  const { mutate } = useSendToChatMessage(scrollToBottom);
+  const { mutate } = useSendToChatMessageMutate(scrollToBottom);
   const { handleSubmit, register, formState, resetField } = useForm({
     defaultValues: { message: "" },
     mode: "onSubmit",

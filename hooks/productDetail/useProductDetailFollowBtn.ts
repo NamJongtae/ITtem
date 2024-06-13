@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
-import useProductDetailFollowMutate from "../querys/useProductDetailFollowMutate";
-import useProductDetailUnfollowMutate from "../querys/useProductDetailUnfollowMutate";
+import useProductDetailFollowMutate from "../reactQuery/mutations/product/useProductDetailFollowMutate";
+import useProductDetailUnfollowMutate from "../reactQuery/mutations/product/useProductDetailUnfollowMutate";
 import { ProfileData } from "@/types/authTypes";
 
 export default function useProductDetailFollowBtn({

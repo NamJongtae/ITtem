@@ -1,5 +1,5 @@
-import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
-import useProductReportMutate from "@/hooks/querys/useProductReportMutate";
+import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
+import useProductReportMutate from "@/hooks/reactQuery/mutations/product/useProductReportMutate";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
 import { toast } from "react-toastify";

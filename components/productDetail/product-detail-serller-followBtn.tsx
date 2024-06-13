@@ -1,5 +1,5 @@
 import useProductDetailFollowBtn from "@/hooks/productDetail/useProductDetailFollowBtn";
-import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 
 interface IProps {
   uid: string;

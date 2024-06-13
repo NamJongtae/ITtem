@@ -1,4 +1,4 @@
-import useDeleteAllNotificationMessagesMutate from "@/hooks/querys/useDeleteAllNotificationMessagesMutate";
+import useDeleteAllNotificationMessagesMutate from "@/hooks/reactQuery/mutations/notification/useDeleteAllNotificationMessagesMutate";
 import { NotificationMessageData } from "@/types/notification";
 import { toast } from "react-toastify";
 

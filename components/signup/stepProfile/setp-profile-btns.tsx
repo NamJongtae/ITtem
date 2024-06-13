@@ -1,4 +1,4 @@
-import useNicknameDuplicationMutate from "@/hooks/querys/useNicknameDuplicationMutate";
+import useNicknameDuplicationMutate from "@/hooks/reactQuery/mutations/auth/useNicknameDuplicationMutate";
 import { NicknameDuplicationResponseData } from "@/types/apiTypes";
 import { isAxiosError } from "axios";
 import { useFormContext } from "react-hook-form";

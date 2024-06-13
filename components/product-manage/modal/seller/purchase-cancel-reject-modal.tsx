@@ -1,5 +1,5 @@
 import ProductManageModal from "../product-manage-modal";
-import useCancelRejectMutate from "@/hooks/querys/useCancelRejectMutate";
+import useCancelRejectMutate from "@/hooks/reactQuery/mutations/trade/useCancelRejectMutate";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {

@@ -1,4 +1,4 @@
-import useProfileQuery from "@/hooks/querys/useProfileQuery";
+import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 import { getChatDateFormat } from "@/lib/getDateFormate";
 import { ChatMessageData } from "@/types/chatTypes";
 import Image from "next/image";

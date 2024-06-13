@@ -5,7 +5,7 @@ import ChangePasswordModalCurrentPwField from "./changePassword-modal-currentPwF
 import ChagePasswordModalPwField from "./chagePassword-modal-PwField";
 import ChangePasswordModalPwCheckField from "./changePassword-modal-PwCheckField";
 import ChangePasswordModalFormBtns from "./changePassword-modal-form-btns";
-import useChangePasswordMutate from "@/hooks/querys/useChangePasswordMutate";
+import useChangePasswordMutate from "@/hooks/reactQuery/mutations/auth/useChangePasswordMutate";
 import Loading from "../commons/loading";
 
 interface IProps {

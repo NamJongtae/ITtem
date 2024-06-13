@@ -1,11 +1,11 @@
 import ProfileUserInfo from "./profileUserInfo/profile-userInfo";
 import ProfileDetail from "./profile-detail";
 import { useState } from "react";
-import useProfileQuery from "@/hooks/querys/useProfileQuery";
+import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 import Loading from "../commons/loading";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
-import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 
@@ -40,19 +40,19 @@ export default function ProfilePage({ my }: IProps) {
     );
   }
   return (
-        <>
-          <ProfileUserInfo
-            handleClickMenu={handleClickMenu}
-            userProfileData={my ? myProfileData : profileData}
-            myProfileData={myProfileData}
-          />
-          <ProfileDetail
-            profileMenu={profileMenu}
-            handleClickMenu={handleClickMenu}
-            userProfileData={my ? myProfileData : profileData}
-            myProfileData={myProfileData}
-            my={my}
-          />
-        </>
-      );
+    <>
+      <ProfileUserInfo
+        handleClickMenu={handleClickMenu}
+        userProfileData={my ? myProfileData : profileData}
+        myProfileData={myProfileData}
+      />
+      <ProfileDetail
+        profileMenu={profileMenu}
+        handleClickMenu={handleClickMenu}
+        userProfileData={my ? myProfileData : profileData}
+        myProfileData={myProfileData}
+        my={my}
+      />
+    </>
+  );
 }

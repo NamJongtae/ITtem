@@ -1,4 +1,4 @@
-import useProductDeleteMutate from "@/hooks/querys/useProducDeletetMutate";
+import useProductDeleteMutate from "@/hooks/reactQuery/mutations/product/useProducDeletetMutate";
 import Loading from "../commons/loading";
 import Image from "next/image";
 import { ProductStatus } from "@/types/productTypes";

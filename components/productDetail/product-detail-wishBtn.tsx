@@ -1,5 +1,5 @@
-import useAddWishMutate from "@/hooks/querys/useAddWishMutate";
-import useDeleteWishMutate from "@/hooks/querys/useDeleteWishMutate";
+import useAddWishMutate from "@/hooks/reactQuery/useAddWishMutate";
+import useDeleteWishMutate from "@/hooks/reactQuery/mutations/profile/useDeleteWishMutate";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";

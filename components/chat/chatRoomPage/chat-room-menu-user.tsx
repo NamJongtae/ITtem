@@ -2,7 +2,7 @@ import { ProfileData } from "@/types/authTypes";
 import ChatRoomFollowBtn from "./chat-room-follow-btn";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import useProfileQuery from "@/hooks/querys/useProfileQuery";
+import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 import Image from "next/image";
 
 interface IProps {

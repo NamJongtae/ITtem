@@ -1,4 +1,4 @@
-import usePurchaseCancelRequestWithdrawalMutate from "@/hooks/querys/usePurchaseCancelRequestWithdrawalMutate";
+import usePurchaseCancelRequestWithdrawalMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseCancelRequestWithdrawalMutate";
 
 interface IProps {
   productId: string;

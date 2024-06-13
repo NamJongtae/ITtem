@@ -1,4 +1,4 @@
-import useDeleteProfileWishMutate from "@/hooks/querys/useDeleteProfileWishMutate";
+import useDeleteProfileWishMutate from "@/hooks/reactQuery/mutations/profile/useDeleteProfileWishMutate";
 import { toast } from "react-toastify";
 
 interface IProps {

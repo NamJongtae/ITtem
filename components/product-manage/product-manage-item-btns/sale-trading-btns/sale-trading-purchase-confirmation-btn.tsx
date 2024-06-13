@@ -1,4 +1,4 @@
-import usePurchaseRequestConfirmationMutate from "@/hooks/querys/usePurchaseRequestConfirmationMutate";
+import usePurchaseRequestConfirmationMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseRequestConfirmationMutate";
 
 interface IProps {
   productId: string;

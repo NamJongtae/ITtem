@@ -1,4 +1,4 @@
-import useProductReceiptConfirmationMutate from '@/hooks/querys/useProductReceiptConfirmationMutate';
+import useProductReceiptConfirmationMutate from "@/hooks/reactQuery/mutations/product/useProductReceiptConfirmationMutate";
 
 interface IProps {
   productId: string;
@@ -7,7 +7,8 @@ interface IProps {
 export default function PurchaseTradingReceiptConfirmationBtn({
   productId,
 }: IProps) {
-  const { productReceiptConfirmationMutate } = useProductReceiptConfirmationMutate();
+  const { productReceiptConfirmationMutate } =
+    useProductReceiptConfirmationMutate();
 
   const onClickReceiptComfirmation = () => {
     const isReceiptConfirmation = confirm("정말 상품을 인수 확인을 하겠어요?");

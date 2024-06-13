@@ -1,4 +1,4 @@
-import useSignoutMutate from "@/hooks/querys/useSignoutMutate";
+import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
 import Image from "next/image";
 import React from "react";
 

@@ -1,4 +1,4 @@
-import usePurchaseCancelRequestMutate from "@/hooks/querys/usePurchaseCancelRequestMutate";
+import usePurchaseCancelRequestMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseCancelRequestMutate";
 import ProductManageModal from "../product-manage-modal";
 import { FieldValues } from "react-hook-form";
 

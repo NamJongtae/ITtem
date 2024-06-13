@@ -1,7 +1,7 @@
 import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
-import useProductReviewQuery from "@/hooks/querys/useProductReviewQuery";
+import useProductReviewQuery from "@/hooks/reactQuery/querys/product/useProductReviewQuery";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { isMobile } from "react-device-detect";

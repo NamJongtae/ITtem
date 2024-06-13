@@ -1,4 +1,4 @@
-import useProductDeleteMutate from "@/hooks/querys/useProducDeletetMutate";
+import useProductDeleteMutate from "@/hooks/reactQuery/mutations/product/useProducDeletetMutate";
 
 interface IProps {
   productId: string;

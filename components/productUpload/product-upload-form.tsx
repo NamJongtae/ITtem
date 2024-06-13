@@ -1,7 +1,7 @@
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
 import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
-import useProductQuery from "@/hooks/querys/useProductQuery";
+import useProductQuery from "@/hooks/reactQuery/mutations/product/useProductQuery";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
 import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
@@ -17,26 +17,18 @@ interface IProps {
 export default function ProductUploadForm({ isEdit }: IProps) {
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const {
-    handleClickProductUploadSubmit,
-    productUploadLoading,
-  } = useProductUploadSubmit();
+  const { handleClickProductUploadSubmit, productUploadLoading } =
+    useProductUploadSubmit();
 
   const { productDetailData, loadProductLoading, loadProductError } =
     useProductQuery(isEdit);
 
-  const {
-    handleClickProductEditSubmit,
-    productEditLoading,
-  } = useProductEditSubmit();
+  const { handleClickProductEditSubmit, productEditLoading } =
+    useProductEditSubmit();
 
   useProductEditCheckUser(productDetailData, isEdit);
 
-  if (
-    loadProductLoading ||
-    productUploadLoading ||
-    productEditLoading
-  ) {
+  if (loadProductLoading || productUploadLoading || productEditLoading) {
     return <Loading />;
   }
 

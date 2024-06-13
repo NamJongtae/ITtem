@@ -1,4 +1,4 @@
-import useNotificationInfiniteQuery from "@/hooks/querys/useNotificationInfiniteQuery";
+import useNotificationInfiniteQuery from "@/hooks/reactQuery/querys/notification/useNotificationInfiniteQuery";
 import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../spinner";
 import NotificationItem from "./notification-item";
@@ -36,10 +36,7 @@ export default function NotificationList() {
   return (
     <div className="h-[380px] overflow-y-scroll">
       {data && (
-        <NotificationBtn
-          messageData={data}
-          endKey={data[data.length - 1].id}
-        />
+        <NotificationBtn messageData={data} endKey={data[data.length - 1].id} />
       )}
       <InfiniteScroll
         useWindow={false}

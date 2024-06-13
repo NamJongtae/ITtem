@@ -1,4 +1,4 @@
-import { ProductManageMenu } from "./product-manage-page";
+import type { ProductManageMenu } from "./product-manage-page";
 
 interface IProps {
   menu: ProductManageMenu;

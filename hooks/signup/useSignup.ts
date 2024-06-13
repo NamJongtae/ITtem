@@ -1,5 +1,5 @@
 import { FieldValues } from "react-hook-form";
-import useSignupMutate from "../querys/useSignupMutate";
+import useSignupMutate from "../reactQuery/mutations/auth/useSignupMutate";
 
 export default function useSignup() {
   const { signupMutate, signupLoading } = useSignupMutate();

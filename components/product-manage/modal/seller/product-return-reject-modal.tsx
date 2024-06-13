@@ -1,5 +1,5 @@
 import ProductManageModal from "../product-manage-modal";
-import useReturnRejectMutate from "@/hooks/querys/useReturnReceiptReject.Mutate";
+import useReturnRejectMutate from "@/hooks/reactQuery/mutations/trade/useReturnReceiptReject.Mutate";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {
@@ -27,10 +27,15 @@ export default function ProductReturnRejectModal({
     <ProductManageModal
       closeModal={closeModal}
       title={"상품 반품 거절"}
-      options={["거절사유 선택", "구매자 파손 상품", "반품 기간 만료", "직접입력"]}
+      options={[
+        "거절사유 선택",
+        "구매자 파손 상품",
+        "반품 기간 만료",
+        "직접입력",
+      ]}
       name={"rejectReason"}
       submitBtnText={"반품거절"}
       onSubmit={onSubmit}
     />
-  )
+  );
 }

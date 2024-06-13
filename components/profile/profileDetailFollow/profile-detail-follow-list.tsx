@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Empty from "@/components/commons/Empty";
 import InfiniteScroll from "react-infinite-scroller";
 import { isAxiosError } from "axios";
-import useFollowListInfiniteQuery from "@/hooks/querys/useFollowListInfiniteQuery";
+import useFollowListInfiniteQuery from "@/hooks/reactQuery/querys/profile/useFollowListInfiniteQuery";
 import { ProfileData } from "@/types/authTypes";
 import ProfileDetailFollowItem from "./profile-detail-follow-item";
 import FollowListSkeletonUI from "./follow-list-skeletonUI";
@@ -40,7 +40,7 @@ export default function ProfileDetailFollowList({
 
   return (
     <>
-      {error && !data || data?.length===0 ? (
+      {(error && !data) || data?.length === 0 ? (
         <Empty
           message={
             isAxiosError<{ message: string }>(error)

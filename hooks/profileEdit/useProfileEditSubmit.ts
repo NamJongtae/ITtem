@@ -1,11 +1,9 @@
 import { MY_PROFILE_QUERY_KEY } from "@/constants/constant";
-import {
-  uploadImgToFireStore,
-} from "@/lib/api/firebase";
+import { uploadImgToFireStore } from "@/lib/api/firebase";
 import { ProfileData, ProfileEditData } from "@/types/authTypes";
 import { useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
-import useProfileEditMutate from "../querys/useProfileEditMutate";
+import useProfileEditMutate from "../reactQuery/querys/profile/useProfileEditMutate";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";

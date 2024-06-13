@@ -1,5 +1,5 @@
 import Empty from "@/components/commons/Empty";
-import useProfileWishInfiniteQuery from "@/hooks/querys/useProfileWishInfiniteQuery";
+import useProfileWishInfiniteQuery from "@/hooks/reactQuery/querys/profile/useProfileWishInfiniteQuery";
 import { isAxiosError } from "axios";
 import InfiniteScroll from "react-infinite-scroller";
 import ProfileDetailWishItem from "./profile-detail-wish-item";

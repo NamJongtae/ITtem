@@ -1,4 +1,4 @@
-import useCancelConfirmationMutate from "@/hooks/querys/useCancelConfirmationMutate";
+import useCancelConfirmationMutate from "@/hooks/reactQuery/mutations/trade/useCancelConfirmationMutate";
 
 interface IProps {
   productId: string;

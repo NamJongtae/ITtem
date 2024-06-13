@@ -5,7 +5,7 @@ import { FieldValues } from "react-hook-form";
 import ProfileImgField from "@/components/signup/stepProfile/profileImg-field";
 import NicknameField from "@/components/signup/stepProfile/nickname-field";
 import IntroductField from "@/components/signup/setpIntroduce/introduce-field";
-import useMyProfileQuery from "@/hooks/querys/useMyProfileQuery";
+import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 import useProfileEditSubmit from "@/hooks/profileEdit/useProfileEditSubmit";
 import Loading from "@/components/commons/loading";
 

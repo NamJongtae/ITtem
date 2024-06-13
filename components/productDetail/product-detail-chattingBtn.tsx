@@ -3,7 +3,7 @@ import ChatIcon from "@/public/icons/chat_icon.svg";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { ProductStatus } from "@/types/productTypes";
-import useStartChatMutate from "@/hooks/querys/useStartChatMutate";
+import useStartChatMutate from "@/hooks/reactQuery/mutations/chat/useStartChatMutate";
 
 interface IProps {
   productStatus: ProductStatus | undefined;

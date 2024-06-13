@@ -1,7 +1,7 @@
 import { MyForm } from "../commons/myForm/MyForm";
 import { FieldValues } from "react-hook-form";
 import SigninFormContent from "./signin-form-content";
-import useSigninMutate from "@/hooks/querys/useSigninMutate";
+import useSigninMutate from "@/hooks/reactQuery/mutations/auth/useSigninMutate";
 import Loading from "../commons/loading";
 
 export default function SigninForm() {

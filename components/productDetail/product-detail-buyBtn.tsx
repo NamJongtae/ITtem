@@ -1,4 +1,4 @@
-import usePurchaseProductMutate from "@/hooks/querys/usePurchaseProductMutate";
+import usePurchaseProductMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseProductMutate";
 import BuyIcon from "@/public/icons/money_icon.svg";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ export default function ProductDetailBuyBtn({ productStatus }: IProps) {
       purchaseProductMutate();
     }
   };
-  
+
   return (
     <button
       type="button"

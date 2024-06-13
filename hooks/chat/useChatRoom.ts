@@ -12,9 +12,9 @@ import {
   query,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
-import useEnterChatRoomMutate from "../querys/useEnterChatRoomMutate";
+import useEnterChatRoomMutate from "../reactQuery/mutations/chat/useEnterChatRoomMutate";
 import { isAxiosError } from "axios";
-import useLeaveChatRoomMutate from "../querys/useLeaveChatRoomMutate";
+import useLeaveChatRoomMutate from "../reactQuery/mutations/chat/useLeaveChatRoomMutate";
 
 export default function useChatRoom(isExit: boolean) {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -74,7 +74,6 @@ export default function useChatRoom(isExit: boolean) {
           setMessages((prevData) => [...prevData, messageData]);
         }
       });
-
     });
 
     return () => {

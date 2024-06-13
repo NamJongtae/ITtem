@@ -1,5 +1,5 @@
 import Spinner from "@/components/commons/spinner";
-import useProfileQuery from "@/hooks/querys/useProfileQuery";
+import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 import { getChatDateFormat, getDateFormat } from "@/lib/getDateFormate";
 import { RootState } from "@/store/store";
 import { ChatRoomData } from "@/types/chatTypes";

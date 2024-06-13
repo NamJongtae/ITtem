@@ -1,5 +1,5 @@
 import { FieldValues } from "react-hook-form";
-import useProductEditMutate from "../querys/useProductEditMutate";
+import useProductEditMutate from "../reactQuery/mutations/product/useProductEditMutate";
 import { ProductData, ProductImgData } from "@/types/productTypes";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -101,6 +101,6 @@ export default function useProductEditSubmit() {
 
   return {
     handleClickProductEditSubmit,
-    productEditLoading
+    productEditLoading,
   };
 }

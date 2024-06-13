@@ -1,6 +1,6 @@
 import Loading from "@/components/commons/loading";
-import useKakaoSigninMutate from "@/hooks/querys/useKakaoSigninMutate";
-import useKakaoUserInfoMutate from "@/hooks/querys/useKakaoUserInfoMutate";
+import useKakaoSigninMutate from "@/hooks/reactQuery/mutations/auth/useKakaoSigninMutate";
+import useKakaoUserInfoMutate from "@/hooks/reactQuery/mutations/auth/useKakaoUserInfoMutate";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 

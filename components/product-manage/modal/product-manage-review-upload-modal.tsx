@@ -1,7 +1,7 @@
 import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
-import useProductUploadReviewMutate from "@/hooks/querys/useProductUploadReviewMutate";
+import useProductUploadReviewMutate from "@/hooks/reactQuery/mutations/product/useProductUploadReviewMutate";
 import { DevTool } from "@hookform/devtools";
 import dynamic from "next/dynamic";
 import Image from "next/image";

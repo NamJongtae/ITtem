@@ -1,4 +1,4 @@
-import useReturnReceiptComfirmationMutate from "@/hooks/querys/useReturnReceiptComfirmationMutate";
+import useReturnReceiptComfirmationMutate from "@/hooks/reactQuery/mutations/trade/useReturnReceiptComfirmationMutate";
 import React from "react";
 
 interface IProps {

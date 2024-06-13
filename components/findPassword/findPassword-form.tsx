@@ -1,4 +1,4 @@
-import useChangePasswordMutate from "@/hooks/querys/useChangePasswordMutate";
+import useChangePasswordMutate from "@/hooks/reactQuery/mutations/auth/useChangePasswordMutate";
 import { FieldValues } from "react-hook-form";
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";

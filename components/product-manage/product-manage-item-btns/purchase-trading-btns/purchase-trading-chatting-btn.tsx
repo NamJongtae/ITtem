@@ -1,5 +1,5 @@
 import Loading from "@/components/commons/loading";
-import useStartChatMutate from "@/hooks/querys/useStartChatMutate";
+import useStartChatMutate from "@/hooks/reactQuery/mutations/chat/useStartChatMutate";
 
 interface IProps {
   productId: string | undefined;

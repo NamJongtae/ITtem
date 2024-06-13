@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
-export default function useSendToChatMessage(scrollToBottom: () => void) {
+export default function useSendToChatMessageMuate(scrollToBottom: () => void) {
   const { mutate } = useMutation<
     AxiosResponse<{ message: string }>,
     AxiosError,
