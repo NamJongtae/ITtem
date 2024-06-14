@@ -1,4 +1,4 @@
-import useAddWishMutate from "@/hooks/reactQuery/useAddWishMutate";
+import useAddWishMutate from '@/hooks/reactQuery/mutations/profile/useAddWishMutate';
 import useDeleteWishMutate from "@/hooks/reactQuery/mutations/profile/useDeleteWishMutate";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
