@@ -1,4 +1,4 @@
-import { getProfileWish } from "@/lib/api/auth";
+import { getProfileWish } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
 import { ProductData } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";

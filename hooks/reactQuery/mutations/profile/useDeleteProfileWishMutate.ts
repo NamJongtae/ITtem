@@ -1,4 +1,4 @@
-import { deleteProfileWish } from "@/lib/api/auth";
+import { deleteProfileWish } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import { ProductData } from "@/types/productTypes";

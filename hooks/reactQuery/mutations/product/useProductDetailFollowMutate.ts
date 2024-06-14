@@ -1,4 +1,4 @@
-import { follow } from "@/lib/api/auth";
+import { follow } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";

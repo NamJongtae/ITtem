@@ -1,4 +1,4 @@
-import { editProfile } from "@/lib/api/auth";
+import { editProfile } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
 import { ProfileResponseData } from "@/types/apiTypes";
 import { ProfileEditData } from "@/types/authTypes";

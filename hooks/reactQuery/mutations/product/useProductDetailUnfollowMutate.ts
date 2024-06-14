@@ -1,4 +1,4 @@
-import { unfollow } from "@/lib/api/auth";
+import { unfollow } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";

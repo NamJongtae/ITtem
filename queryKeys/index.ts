@@ -1,14 +1,5 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import {
-  getFollowers,
-  getFollowings,
-  getMyProfile,
-  getProfileReviews,
-  getProfileWish,
-  getSessionCookies,
-  getUser,
-  getUserProfile,
-} from "@/lib/api/auth";
+import { getSessionCookies, getUser } from "@/lib/api/auth";
 import { getNotificationMessage } from "@/lib/api/notification";
 import {
   getCategoryProductList,
@@ -20,6 +11,14 @@ import {
   getSearchProductList,
   getTodayProductList,
 } from "@/lib/api/product";
+import {
+  getFollowers,
+  getFollowings,
+  getMyProfile,
+  getProfileReviews,
+  getProfileWish,
+  getUserProfile,
+} from "@/lib/api/profile";
 import { ProductCategory, ProductListType } from "@/types/productTypes";
 import {
   createQueryKeys,
