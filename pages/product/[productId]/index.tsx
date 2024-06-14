@@ -1,5 +1,5 @@
 import ProductDetailPage from "@/components/productDetail/product-detail";
-import { MY_PROFILE_QUERY_KEY, getProductQueryKey } from "@/constants/constant";
+import { queryKeys } from "@/queryKeys";
 import { getProduct, incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
@@ -21,9 +21,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     sessionOptions
   );
   const cookie = context.req.headers.cookie;
+  const productQueryKeyConfing = queryKeys.product.detail(productId as string);
+  const myProfuileQueryKeyConfig = queryKeys.profile.my;
 
   if (productId) {
-    
     try {
       await incrementViewCount(productId as string);
     } catch (error) {
@@ -31,17 +32,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     await queryClient.prefetchQuery({
-      queryKey: getProductQueryKey(productId as string),
-      queryFn: async () => {
-        const reponse = await getProduct(productId as string);
-        return reponse.data.product;
-      },
+      queryKey: productQueryKeyConfing.queryKey,
+      queryFn: productQueryKeyConfing.queryFn,
     });
   }
 
   if (session.refreshToken) {
     await queryClient.prefetchQuery({
-      queryKey: MY_PROFILE_QUERY_KEY,
+      queryKey: myProfuileQueryKeyConfig.queryKey,
       queryFn: async () => {
         try {
           const response = await customAxios("/api/profile", {
@@ -51,7 +49,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
-          queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+          queryClient.removeQueries({
+            queryKey: myProfuileQueryKeyConfig.queryKey,
+          });
           console.error(error);
         }
       },

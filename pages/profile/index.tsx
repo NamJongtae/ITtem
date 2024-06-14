@@ -1,5 +1,5 @@
 import ProfilePage from "@/components/profile/profile-page";
-import { MY_PROFILE_QUERY_KEY } from "@/constants/constant";
+import { queryKeys } from '@/queryKeys';
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
@@ -20,10 +20,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     sessionOptions
   );
   const cookie = context.req.headers.cookie;
+  const myProfuileQueryKeyConfig = queryKeys.profile.my;
 
   if (session.refreshToken) {
     await queryClient.prefetchQuery({
-      queryKey: MY_PROFILE_QUERY_KEY,
+      queryKey: myProfuileQueryKeyConfig.queryKey,
       queryFn: async () => {
         try {
           const response = await customAxios("/api/profile", {
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
-          queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+          queryClient.removeQueries({ queryKey: myProfuileQueryKeyConfig.queryKey });
           console.error(error);
         }
       },

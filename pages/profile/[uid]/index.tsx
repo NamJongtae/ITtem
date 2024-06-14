@@ -1,10 +1,6 @@
 import ProfilePage from "@/components/profile/profile-page";
-import {
-  MY_PROFILE_QUERY_KEY,
-  REFRESH_TOKEN_KEY,
-  getProfileQueryKey,
-} from "@/constants/constant";
-import { getUserProfile } from "@/lib/api/auth";
+import { REFRESH_TOKEN_KEY } from "@/constants/constant";
+import { queryKeys } from "@/queryKeys";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
@@ -27,6 +23,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     sessionOptions
   );
   const cookie = context.req.headers.cookie;
+  const myProfuileQueryKeyConfig = queryKeys.profile.my;
+  const userProfileQueryKeyConfig = queryKeys.profile.user(uid as string);
 
   if (session.refreshToken) {
     const refreshToken = session.refreshToken;
@@ -43,9 +41,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
       }
     }
-    
+
     await queryClient.prefetchQuery({
-      queryKey: MY_PROFILE_QUERY_KEY,
+      queryKey: myProfuileQueryKeyConfig.queryKey,
       queryFn: async () => {
         try {
           const response = await customAxios("/api/profile", {
@@ -55,7 +53,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
-          queryClient.removeQueries({ queryKey: MY_PROFILE_QUERY_KEY });
+          queryClient.removeQueries({
+            queryKey: myProfuileQueryKeyConfig.queryKey,
+          });
           console.error(error);
         }
       },
@@ -63,11 +63,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   await queryClient.prefetchQuery({
-    queryKey: getProfileQueryKey(uid as string),
-    queryFn: async () => {
-      const response = await getUserProfile(uid as string);
-      return response.data.profile;
-    },
+    queryKey: userProfileQueryKeyConfig.queryKey,
+    queryFn: userProfileQueryKeyConfig.queryFn,
   });
 
   return {

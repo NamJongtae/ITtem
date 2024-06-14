@@ -1,7 +1,5 @@
 import ProductUploadPage from "@/components/productUpload/product-upload-page";
-import { getProductQueryKey } from "@/constants/constant";
-import { getProduct } from "@/lib/api/product";
-import { ProductData } from "@/types/productTypes";
+import { queryKeys } from '@/queryKeys';
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 
@@ -13,14 +11,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
 
   const productId = context.params?.productId;
+  const queryKeyConfing = queryKeys.product.detail(productId as string);
 
   if (productId) {
-    await queryClient.prefetchQuery<ProductData, Error>({
-      queryKey: getProductQueryKey(productId as string),
-      queryFn: async () => {
-        const reponse = await getProduct(productId as string);
-        return reponse.data.product;
-      },
+    await queryClient.prefetchQuery({
+      queryKey: queryKeyConfing.queryKey,
+      queryFn: queryKeyConfing.queryFn,
     });
   }
 
