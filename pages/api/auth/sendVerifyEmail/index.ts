@@ -62,7 +62,7 @@ export default async function handler(
           verfiyCode,
           isFindPw,
           parseInt(data.count) + 1,
-          parseInt(data.count) >= 9 ? VERIFY_EMAIL_BLOCK_EXP : VERIFY_EMAIL_EXP,
+          parseInt(data.count) >= 9 ? VERIFY_EMAIL_BLOCK_EXP : VERIFY_EMAIL_EXP
         );
       } else {
         await saveEmailVerifyCode(email, verfiyCode, isFindPw);
@@ -77,5 +77,7 @@ export default async function handler(
         ok: false,
       });
     }
+  } else {
+    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

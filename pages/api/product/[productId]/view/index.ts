@@ -41,5 +41,7 @@ export default async function handler(
       console.error(error);
       res.status(500).json({ message: "조회수 갱신에 실패했어요." });
     }
+  } else {
+    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

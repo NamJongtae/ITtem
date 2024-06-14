@@ -8,5 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     } else {
       res.status(200).json({message:"세션 쿠기가 존재하지 않아요.", ok: false });
     }
+  } else {
+    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

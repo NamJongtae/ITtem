@@ -3,7 +3,11 @@ import { sessionOptions } from "@/lib/server";
 import { generateToken, verifyToken } from "@/lib/token";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken, saveToken } from "@/lib/api/redis";
-import { ACCESS_TOKEN_EXP, ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/constant";
+import {
+  ACCESS_TOKEN_EXP,
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+} from "@/constants/constant";
 import { IronSessionType } from "@/types/apiTypes";
 
 export default async function handler(
@@ -30,7 +34,11 @@ export default async function handler(
         "refreshToken"
       );
 
-      if (!redisRefreshToken || redisRefreshToken !== refreshToken || !decodeRefreshToken?.isVaild) {
+      if (
+        !redisRefreshToken ||
+        redisRefreshToken !== refreshToken ||
+        !decodeRefreshToken?.isVaild
+      ) {
         session.destroy();
         res.status(401).json({ message: "세션이 만료됬어요." });
         return;
@@ -62,5 +70,7 @@ export default async function handler(
       console.log(error);
       res.status(422).json({ message: "토큰 발급에 실패 했어요." });
     }
+  } else {
+    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

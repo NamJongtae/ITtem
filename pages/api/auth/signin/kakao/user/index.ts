@@ -34,5 +34,7 @@ export default async function handler(
       console.error(error)
       res.status(500).json({ message: "유저 정보를 가져오지못했어요." });
     }
+  } else {
+    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }
