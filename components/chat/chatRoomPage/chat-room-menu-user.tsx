@@ -1,9 +1,7 @@
 import { ProfileData } from "@/types/authTypes";
 import ChatRoomFollowBtn from "./chat-room-follow-btn";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 import Image from "next/image";
+import useChatRoomMenuUser from "@/hooks/chat/useChatRoomMenuUser";
 
 interface IProps {
   participantIDs: string[];
@@ -13,13 +11,10 @@ export default function ChatRoomMenuUser({
   participantIDs,
   myProfileData,
 }: IProps) {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const myUid = user?.uid || "";
-  const isMe = (id: string) => {
-    return id === myProfileData?.uid;
-  };
-  const otherUserId = participantIDs.filter((id) => id !== myUid)[0];
-  const { profileData: otherUserProfileData } = useProfileQuery(otherUserId);
+  const { isMe, otherUserId, otherUserProfileData } = useChatRoomMenuUser({
+    participantIDs,
+    myProfileData,
+  });
 
   return (
     <ul className="flex flex-col p-3 gap-3 text-sm">

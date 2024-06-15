@@ -1,24 +1,10 @@
-import useDebouncing from "@/hooks/commons/useDebouncing";
+import useNavSell from "@/hooks/commons/layout/useNavSell";
 import SellIcon from "@/public/icons/money_icon.svg";
-import { RootState } from "@/store/store";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import React from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 export default function NavSell() {
-  const pathname = usePathname();
-  const user = useSelector((state: RootState) => state.auth.user);
-
-  const debouncing = useDebouncing();
-
-  const handleClickLink = debouncing((e: any) => {
-    if (!user) {
-      e.preventDefault();
-      toast.warn("로그인 후 이용해주세요.");
-    }
-  }, 300);
+  const { pathname, handleClickLink } = useNavSell();
 
   return (
     <Link

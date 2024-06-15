@@ -1,6 +1,6 @@
 import NotificatonIcon from "@/public/icons/notification_icon.svg";
 import NotificationModal from "../../notificationModal/notification-modal";
-import useNotification from "@/hooks/layout/useNotification";
+import useNotification from "@/hooks/commons/layout/useNotification";
 
 export default function NavNotification() {
   const {
@@ -15,7 +15,7 @@ export default function NavNotification() {
       <button
         onClick={toggleNotification}
         className={`relative inline-flex flex-col items-center gap-[2px] text-xs text-gary-600 ${
-          unreadCount !==0 &&
+          unreadCount !== 0 &&
           "before:absolute before:right-[2px] before:-top-[1px] before:w-[8px] before:h-[8px] before:rounded-full before:bg-red-400"
         } ${isOpenNotification && "text-indigo-500"}`}
         type="button"

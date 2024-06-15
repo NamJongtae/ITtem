@@ -1,4 +1,4 @@
-import useScrollToTop from "@/hooks/layout/useScrollToTop";
+import useScrollToTop from "@/hooks/commons/layout/useScrollToTop";
 
 export default function SideMenuTopBtn() {
   const { handleClickTop } = useScrollToTop();

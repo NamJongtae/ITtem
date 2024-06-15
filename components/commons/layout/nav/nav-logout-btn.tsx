@@ -1,13 +1,9 @@
-import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
+import useLogoutBtn from "@/hooks/commons/layout/useLogoutBtn";
 import Image from "next/image";
 import React from "react";
 
 export default function NavLogoutBtn() {
-  const { signoutMutate } = useSignoutMutate();
-
-  const handleClickLogout = () => {
-    signoutMutate(undefined);
-  };
+  const { handleClickLogout } = useLogoutBtn();
 
   return (
     <button

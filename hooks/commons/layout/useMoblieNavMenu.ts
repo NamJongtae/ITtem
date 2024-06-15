@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import useVisible from "../useVisible";
 
 export default function useMoblieNavMenu() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -26,5 +27,9 @@ export default function useMoblieNavMenu() {
     openMenu();
   };
 
-  return { isOpenMenu, toggleMenu, menuRef };
+  const { isVisible } = useVisible({
+    pathnames: ["signup", "signin", "findpassword"],
+  });
+
+  return { isOpenMenu, toggleMenu, menuRef, isVisible };
 }

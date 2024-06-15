@@ -1,5 +1,6 @@
+import useCoreInputField from "@/hooks/commons/coreInputField/useCoreInputField";
 import Image from "next/image";
-import { MutableRefObject, useRef } from "react";
+import { MutableRefObject } from "react";
 import {
   FieldValues,
   Validate,
@@ -53,23 +54,15 @@ export default function CoreInputField({
   labelHidden = true,
   labelClassName,
 }: IProps) {
-  const { register, formState, watch, setValue, clearErrors } =
-    useFormContext();
-  const { ref, ...rest } = register(inputName, {
-    required: inputRequired,
-    onChange: inputOnChange,
-    onBlur: inputOnBlur,
-    pattern: inputPattern,
-    validate: inputValidate,
+  const { ref, rest, error, value, resetInput } = useCoreInputField({
+    inputName,
+    inputRequired,
+    inputOnChange,
+    inputOnFocus,
+    inputOnBlur,
+    inputPattern,
+    inputValidate,
   });
-  const error = formState.errors[inputName];
-  const value = watch(inputName);
-  const resetInput = () => {
-    clearErrors(inputName);
-    setValue(inputName, "", {
-      shouldDirty: true,
-    });
-  };
 
   return (
     <>

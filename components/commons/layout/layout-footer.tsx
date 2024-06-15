@@ -1,14 +1,11 @@
-import { useRouter } from "next/router";
+import useVisible from "@/hooks/commons/useVisible";
 
 export default function Footer() {
-  const router = useRouter();
-  const pathname = router.pathname;
+  const { isVisible } = useVisible({
+    pathnames: ["signup", "signin", "findpassword"],
+  });
 
-  if (
-    pathname.includes("/signup") ||
-    pathname.includes("/signin") ||
-    pathname.includes("/findpassword")
-  ) {
+  if (isVisible) {
     return null;
   }
   return (

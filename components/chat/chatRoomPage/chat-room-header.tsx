@@ -2,10 +2,11 @@ import Image from "next/image";
 import ChatRoomMenu from "./chat-room-menu";
 import { useRouter } from "next/router";
 import ChatRoomHeaderProduct from "./chat-room-header-product";
+import useChatRoomHeader from "@/hooks/chat/useChatRoomHeader";
 
 interface IProps {
   productId: string;
-  participantIDs:string[];
+  participantIDs: string[];
   handleChatRoomExit: () => void;
   resetChatRoomExit: () => void;
 }
@@ -16,10 +17,7 @@ export default function ChatRoomHeader({
   handleChatRoomExit,
   resetChatRoomExit,
 }: IProps) {
-  const router = useRouter();
-  const onClickBack = () => {
-    router.push("/chat");
-  };
+  const { onClickBack } = useChatRoomHeader();
 
   return (
     <div className="flex items-center justify-between border-b px-5 py-3 min-h-[65px]">

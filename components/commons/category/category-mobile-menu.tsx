@@ -1,7 +1,7 @@
 import React from "react";
 import CategoryMobileBtn from "./category-mobile-btn";
 import CategoryMobileList from "./category-mobile-list";
-import useMobileCategory from "@/hooks/layout/useMobileCategory";
+import useMobileCategory from "@/hooks/commons/layout/useMobileCategory";
 
 interface IProps {
   currentCategory: string;

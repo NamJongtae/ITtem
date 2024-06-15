@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
 
 export default function useChatRoomMenu() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -26,5 +27,15 @@ export default function useChatRoomMenu() {
     openMenu();
   };
 
-  return { isOpenMenu, closeMenu, openMenu, toggleMenu, menuRef, timerRef };
+  const { myProfileData } = useMyProfileQuery();
+
+  return {
+    isOpenMenu,
+    closeMenu,
+    openMenu,
+    toggleMenu,
+    menuRef,
+    timerRef,
+    myProfileData,
+  };
 }

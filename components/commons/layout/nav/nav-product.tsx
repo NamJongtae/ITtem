@@ -1,23 +1,9 @@
-import useDebouncing from "@/hooks/commons/useDebouncing";
+import useNavProduct from "@/hooks/commons/layout/useNavProduct";
 import MyProduct from "@/public/icons/product_icon.svg";
-import { RootState } from "@/store/store";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 export default function NavProduct() {
-  const pathname = usePathname();
-  const user = useSelector((state: RootState) => state.auth.user);
-
-  const debouncing = useDebouncing();
-
-  const handleClickLink = debouncing((e: any) => {
-    if (!user) {
-      e.preventDefault();
-      toast.warn("로그인 후 이용해주세요.");
-    }
-  }, 500);
+  const { pathname, handleClickLink } = useNavProduct();
 
   return (
     <Link

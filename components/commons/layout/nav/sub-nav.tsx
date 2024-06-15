@@ -1,7 +1,7 @@
 import NavSubMenu from "./nav-sub-menu";
 import MenuIcon from "@/public/icons/menu_icon.svg";
 import NavCategoryMenu from "./nav-category-menu";
-import useNavCategory from "@/hooks/layout/useNavCategory";
+import useNavCategory from "@/hooks/commons/layout/useNavCategory";
 
 export default function SubNav() {
   const {

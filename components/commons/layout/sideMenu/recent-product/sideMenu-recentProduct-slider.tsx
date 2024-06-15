@@ -1,4 +1,4 @@
-import useRecentProductSlider from "@/hooks/layout/useRecentProductSlider";
+import useRecentProductSlider from "@/hooks/commons/layout/useRecentProductSlider";
 import { RecentProductData } from "@/types/productTypes";
 import SideMenuRecentProductSliderBtn from "./sideMenu-recentProduct-slider-btn";
 import SideMenuRecentProductSliderItem from "./sideMenu-recentProduct-slider-item";

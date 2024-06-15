@@ -1,20 +1,15 @@
-import Spinner from "@/components/commons/spinner";
-import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
-import { getChatDateFormat, getDateFormat } from "@/lib/getDateFormate";
-import { RootState } from "@/store/store";
+import useChatRoomItem from "@/hooks/chat/useChatRoomItem";
+import { getChatDateFormat } from "@/lib/getDateFormate";
 import { ChatRoomData } from "@/types/chatTypes";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 
 interface IProps {
   data: ChatRoomData & { id: string };
 }
 
 export default function ChatRoomItem({ data }: IProps) {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const myUid = user?.uid || "";
-  const { profileData } = useProfileQuery(data.lastMessage?.senderId);
+  const { myUid, profileData } = useChatRoomItem({ senderId: data.id });
 
   return (
     <li>

@@ -1,30 +1,9 @@
-import useNotificationChat from "@/hooks/chat/useNotificationChat";
-import useDebouncing from "@/hooks/commons/useDebouncing";
+import useNavChat from "@/hooks/commons/layout/useNavChat";
 import ChatIcon from "@/public/icons/chat_icon.svg";
-import { RootState } from "@/store/store";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 export default function NavChat() {
-  const router = useRouter();
-  const pathname = router.pathname;
-  const user = useSelector((state: RootState) => state.auth.user);
-  const totalMessageCount = useSelector(
-    (state: RootState) => state.chat.totalMessageCount
-  );
-
-  const debouncing = useDebouncing();
-
-  const handleClickLink = debouncing((e: any) => {
-    if (!user) {
-      e.preventDefault();
-      toast.warn("로그인 후 이용해주세요.");
-    }
-  }, 500);
-
-  useNotificationChat();
+  const { handleClickLink, pathname, totalMessageCount } = useNavChat();
 
   return (
     <Link

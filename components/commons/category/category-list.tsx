@@ -1,15 +1,13 @@
 import Link from "next/link";
 import { CATEGORY } from "@/constants/constant";
-import { usePathname, useSearchParams } from "next/navigation";
+import useCategoryList from '@/hooks/commons/category/useCategoryList';
 
 interface IProps {
   currentCategory: string;
 }
 
 export default function CategoryList({ currentCategory }: IProps) {
-  const pathname = usePathname();
-  const search = useSearchParams();
-  const keyword = search.get("keyword");
+  const { pathname, keyword } = useCategoryList();
 
   return (
     <ul className="hidden sm:grid sm:grid-cols-5 my-6 gap-1">

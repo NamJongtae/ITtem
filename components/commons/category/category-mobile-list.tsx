@@ -1,4 +1,4 @@
-import { CATEGORY } from '@/constants/constant';
+import { CATEGORY } from "@/constants/constant";
 import React, { forwardRef } from "react";
 
 interface IProps {
@@ -9,7 +9,6 @@ interface IProps {
   currentCategory: string;
 }
 
-// eslint-disable-next-line react/display-name
 const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
   ({ isOpenCategory, handleSelectCategory, currentCategory }, ref) => {
     return (
@@ -45,4 +44,5 @@ const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
   }
 );
 
+CategoryMobileList.displayName = "CategoryMobileList";
 export default CategoryMobileList;

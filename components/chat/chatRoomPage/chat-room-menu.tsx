@@ -1,5 +1,4 @@
 import Image from "next/image";
-import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 import ChatRoomExitBtn from "./chat-room-exit-btn";
 import useChatRoomMenu from "@/hooks/chat/useChatRoomMenu";
 import ChatRoomMenuUser from "./chat-room-menu-user";
@@ -15,8 +14,7 @@ export default function ChatRoomMenu({
   handleChatRoomExit,
   resetChatRoomExit,
 }: IProps) {
-  const { isOpenMenu, toggleMenu, menuRef } = useChatRoomMenu();
-  const { myProfileData } = useMyProfileQuery();
+  const { isOpenMenu, toggleMenu, menuRef, myProfileData } = useChatRoomMenu();
 
   return (
     <div className="flex gap-3 items-center">

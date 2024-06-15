@@ -1,15 +1,12 @@
-"use client";
-import { usePathname, useSearchParams } from "next/navigation";
-import React from "react";
 import { CATEGORY } from "@/constants/constant";
+import useCurrentCategory from "@/hooks/commons/category/useCurrentCategory";
 
 interface IPorops {
   className?: string;
 }
 
 export default function CategoryNav({ className }: IPorops) {
-  const search = useSearchParams();
-  const currentCategory = search.get("category");
+  const { currentCategory } = useCurrentCategory();
 
   return (
     <nav className={`flex self-start ${className}`}>

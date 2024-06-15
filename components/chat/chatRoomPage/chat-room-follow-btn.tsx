@@ -1,5 +1,4 @@
-import useMyProfileFollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileUnfollowMutate";
+import useChatRoomFollowBtn from "@/hooks/chat/useChatRoomFollowBtn";
 
 interface IProps {
   otherUserId: string;
@@ -9,21 +8,13 @@ export default function ChatRoomFollowBtn({
   otherUserId,
   myFollowings,
 }: IProps) {
-  const { myProfilefollowMutate } = useMyProfileFollowMutate(otherUserId);
-  const { myProfileUnfollowMutate } = useMyProfileUnfollowMutate(otherUserId);
-
-  const onClickFollow = () => {
-    myProfilefollowMutate();
-  };
-
-  const onClickUnfollow = () => {
-    myProfileUnfollowMutate();
-  };
-
-  const followBtnStyle =
-    "bg-rootColor betterhover:hover:bg-[#5588D9] text-white";
-  const unfollowBtnStyle = "bg-gray-200  betterhover:hover:bg-gray-300";
-  const isFollow = myFollowings?.includes(otherUserId);
+  const {
+    onClickFollow,
+    onClickUnfollow,
+    followBtnStyle,
+    unfollowBtnStyle,
+    isFollow,
+  } = useChatRoomFollowBtn({ otherUserId, myFollowings });
 
   return (
     <button

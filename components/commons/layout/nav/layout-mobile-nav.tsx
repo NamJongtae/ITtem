@@ -3,19 +3,13 @@ import NavSell from "./nav-sell";
 import NavMyProduct from "./nav-product";
 import NavHome from "./nav-home";
 import NavMobileMenu from "./nav-mobile-menu";
-import useMoblieNavMenu from "@/hooks/layout/useMoblieNavMenu";
+import useMoblieNavMenu from "@/hooks/commons/layout/useMoblieNavMenu";
 import NavMoblieMenuBtn from "./nav-moblie-menuBtn";
-import { useRouter } from "next/router";
-export default function MobileNav() {
-  const { isOpenMenu, toggleMenu, menuRef } = useMoblieNavMenu();
-  const router = useRouter();
-  const pathname = router.pathname;
 
-  if (
-    pathname.includes("/signup") ||
-    pathname.includes("/signin") ||
-    pathname.includes("/findpassword")
-  ) {
+export default function MobileNav() {
+  const { isOpenMenu, toggleMenu, menuRef, isVisible } = useMoblieNavMenu();
+
+  if (isVisible) {
     return null;
   }
 

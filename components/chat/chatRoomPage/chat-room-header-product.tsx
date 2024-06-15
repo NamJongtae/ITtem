@@ -1,4 +1,3 @@
-import Spinner from "@/components/commons/spinner";
 import useProductQuery from "@/hooks/reactQuery/mutations/product/useProductQuery";
 import Image from "next/image";
 import Link from "next/link";

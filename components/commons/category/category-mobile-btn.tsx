@@ -12,7 +12,6 @@ export default function CategoryMobileBtn({
   toggleCategory,
 }: IProps) {
   return (
-
       <button
         type="button"
         onClick={toggleCategory}

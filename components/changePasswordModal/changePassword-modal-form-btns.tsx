@@ -1,22 +1,11 @@
-import { useFormContext } from "react-hook-form";
+import useCheckDisabledBtn from '@/hooks/chatPasswordModal/useCheckDisabledBtn';
 
 interface IProps {
   closeModal: () => void;
 }
+
 export default function ChangePasswordModalFormBtns({ closeModal }: IProps) {
-  const { formState } = useFormContext();
-
-  const isDirty =
-    formState.dirtyFields["current-password"] &&
-    formState.dirtyFields["password"] &&
-    formState.dirtyFields["password-check"];
-
-  const isErrors =
-    formState.errors["current-password"] ||
-    formState.errors["password"] ||
-    formState.errors["password-check"];
-
-  const isDisabled = !isDirty || !!isErrors;
+  const { isDisabled } = useCheckDisabledBtn();
   
   return (
     <div className="mt-8 flex gap-3 justify-end">

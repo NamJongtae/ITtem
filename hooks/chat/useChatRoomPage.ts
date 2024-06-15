@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { firestoreDB } from "@/lib/firebaseSetting";
 import { useSelector } from "react-redux";
@@ -16,10 +16,11 @@ import useEnterChatRoomMutate from "../reactQuery/mutations/chat/useEnterChatRoo
 import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../reactQuery/mutations/chat/useLeaveChatRoomMutate";
 
-export default function useChatRoom(isExit: boolean) {
+export default function useChatRoomPage() {
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid;
 
+  const [isExit, setIsExit] = useState(false);
   const [chatData, setChatData] = useState<ChatRoomData | null>(null);
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,6 +29,16 @@ export default function useChatRoom(isExit: boolean) {
 
   const { enterChatRoomMutate } = useEnterChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
+
+  const handleChatRoomExit = () => {
+    setIsExit(true);
+  };
+
+  const resetChatRoomExit = () => {
+    setIsExit(false);
+  };
+
+  const chatListRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     if (!chatRoomId || !myUid || isExit) return;
@@ -90,5 +101,12 @@ export default function useChatRoom(isExit: boolean) {
     };
   }, [chatRoomId, myUid, isExit]);
 
-  return { chatData, messages, isLoading };
+  return {
+    chatData,
+    messages,
+    isLoading,
+    handleChatRoomExit,
+    resetChatRoomExit,
+    chatListRef,
+  };
 }

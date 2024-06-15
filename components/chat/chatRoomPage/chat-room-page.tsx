@@ -2,22 +2,17 @@ import ChatRoomHeader from "./chat-room-header";
 import ChatRoomMessage from "./chat-room-message-list";
 import ChatRoomForm from "./chat-room-form";
 import Loading from "@/components/commons/loading";
-import useChatRoom from "@/hooks/chat/useChatRoom";
-import { useRef, useState } from "react";
+import useChatRoomPage from "@/hooks/chat/useChatRoomPage";
 
 export default function ChatRoomPage() {
-  const [isExit, setIsExit] = useState(false);
-  const { chatData, messages, isLoading } = useChatRoom(isExit);
-
-  const handleChatRoomExit = () => {
-    setIsExit(true);
-  };
-
-  const resetChatRoomExit = () => {
-    setIsExit(false);
-  };
-
-  const chatListRef = useRef<HTMLUListElement | null>(null);
+  const {
+    chatData,
+    messages,
+    isLoading,
+    handleChatRoomExit,
+    resetChatRoomExit,
+    chatListRef,
+  } = useChatRoomPage();
 
   if (isLoading) {
     return <Loading />;

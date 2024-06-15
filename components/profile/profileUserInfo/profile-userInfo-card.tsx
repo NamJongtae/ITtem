@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { ProfileData } from "@/types/authTypes";
 import ProfileEditModal from "../profileEditModal/profileEdit-modal";
 import useModal from "@/hooks/commons/useModal";
-import ChangePasswordModal from "@/components/changPasswordModal/changePassword-modal";
+import ChangePasswordModal from "@/components/changePasswordModal/changePassword-modal";
 import ProfileUserInfoCardBtns from "./profile-userInfo-card-btns";
 import ProfileUserInfoCardFollowInfo from "./profile-userInfo-card-followInfo";
 import ProfileUserInfoCardProductInfo from "./profile-userInfo-card-productInfo";

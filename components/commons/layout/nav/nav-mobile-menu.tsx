@@ -1,3 +1,4 @@
+import useNavMobileMenu from "@/hooks/commons/layout/useNavMobileMenu";
 import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
@@ -10,19 +11,9 @@ interface IProps {
 
 const NavMobileMenu = forwardRef<HTMLUListElement, IProps>(
   ({ toggleMenu }: IProps, ref) => {
-    const router = useRouter();
-    const user = useSelector((state: RootState) => state.auth.user);
-    const { signoutMutate } = useSignoutMutate();
-
-    const handleClicksignin = () => {
-      router.push("/signin");
-      toggleMenu();
-    };
-
-    const handleClickSignout = () => {
-      signoutMutate(undefined);
-      toggleMenu();
-    };
+    const { user, handleClicksignin, handleClickSignout } = useNavMobileMenu({
+      toggleMenu,
+    });
 
     return (
       <>
