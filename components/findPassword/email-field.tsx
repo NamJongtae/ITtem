@@ -3,17 +3,15 @@ import CoreInputField from "../commons/coreInputField/core-input-field";
 import SendVerifyEmailBtn from "../signup/stepBasicInfo/send-verify-email-btn";
 import EmailError from "../signup/stepBasicInfo/email-error";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
-import useSendToVerifyEmail from "@/hooks/signup/useSendToVerifyEmail";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import useEmailField from "@/hooks/findPassword/useEmailField";
 
 export default function EmailField() {
-  const { isSendToVerifyEmail, handleClickSendToVerifyEmail, emailRef } =
-    useSendToVerifyEmail(true);
-
-  const isVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
-  );
+  const {
+    isSendToVerifyEmail,
+    handleClickSendToVerifyEmail,
+    emailRef,
+    isVerifyEmail,
+  } = useEmailField();
 
   return (
     !isVerifyEmail && (

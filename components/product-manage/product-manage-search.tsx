@@ -1,33 +1,14 @@
+import useProductManageSearch from "@/hooks/productManage/useProductManageSearch";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useRef } from "react";
 
 export default function ProductManageSearch() {
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const router = useRouter();
-  const searchParams = router.query?.search || "";
-
-  const onSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-    const searchValue = formData.get("search");
-    const statusParams = router.query?.status;
-
-    const newUrl = `/product/manage${
-      statusParams
-        ? searchValue
-          ? `?search=${searchValue}&status=${statusParams}`
-          : `?status=${statusParams}`
-        : searchValue
-        ? `?search=${searchValue}`
-        : ""
-    }`;
-    router.push(newUrl);
-  };
-
+  const { formRef, onSubmitSearch, searchParams } = useProductManageSearch();
   return (
-    <form className="relative w-full max-w-[330px]" ref={formRef} onSubmit={onSubmitSearch}>
+    <form
+      className="relative w-full max-w-[330px]"
+      ref={formRef}
+      onSubmit={onSubmitSearch}
+    >
       <label className="sr-only" id="search">
         검색
       </label>

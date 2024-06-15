@@ -1,4 +1,4 @@
-import useProductReturnDeliveryConfirmationMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnDeliveryConfirmationMutate";
+import usePurchaseTradingReturnDeliveryComfirmationBtn from "@/hooks/productManage/usePurchaseTradingReturnDeliveryComfirmationBtn";
 
 interface IProps {
   productId: string;
@@ -7,15 +7,9 @@ interface IProps {
 export default function PurchaseTradingReturnDeliveryConfirmationBtn({
   productId,
 }: IProps) {
-  const { productReturnDeliveryConfirmationMutate } =
-    useProductReturnDeliveryConfirmationMutate();
+  const { onClickDeliveryConfirmation } =
+    usePurchaseTradingReturnDeliveryComfirmationBtn({ productId });
 
-  const onClickDeliveryConfirmation = () => {
-    const isDeliveryConfirmation = confirm("정말 상품전달확인을 하겠어요?");
-    if (isDeliveryConfirmation) {
-      productReturnDeliveryConfirmationMutate(productId);
-    }
-  };
   return (
     <button
       type="button"

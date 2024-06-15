@@ -1,4 +1,5 @@
 import Portal from "@/components/commons/portal/Portal";
+import useProductManageModal from "@/hooks/productManage/useProductManageModal";
 import { DevTool } from "@hookform/devtools";
 import Image from "next/image";
 import { isMobile } from "react-device-detect";
@@ -20,20 +21,14 @@ export default function ProductManageModal({
   submitBtnText,
   onSubmit,
 }: IProps) {
-  const textareaName = name + "Text";
-  const { register, handleSubmit, watch, formState, control } = useForm({
-    mode: "onChange",
-    defaultValues: { [name]: "", [textareaName]: "" },
-  });
-
-  const selectValue = watch(name);
-  const textareaValue = watch(textareaName);
-
-  const isDisabled =
-    !formState.isDirty ||
-    !!formState.errors[name] ||
-    !!formState.errors[textareaName] ||
-    !!(selectValue === "직접입력" && !formState.dirtyFields[textareaName]);
+  const {
+    register,
+    handleSubmit,
+    control,
+    isDisabled,
+    selectValue,
+    textareaName,
+  } = useProductManageModal({ name });
 
   return (
     <Portal>

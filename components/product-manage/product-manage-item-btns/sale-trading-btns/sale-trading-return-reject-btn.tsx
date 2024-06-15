@@ -5,7 +5,7 @@ interface IProps {
   productId: string;
 }
 
-export default function SaleTradingRetrunRejectBtn({ productId }: IProps) {
+export default function SaleTradingReturnRejectBtn({ productId }: IProps) {
   const { isOpenModal, openModal, closeModal } = useModal();
   return (
     <>

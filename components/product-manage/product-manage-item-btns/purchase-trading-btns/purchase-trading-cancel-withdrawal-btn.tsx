@@ -1,4 +1,4 @@
-import usePurchaseCancelRequestWithdrawalMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseCancelRequestWithdrawalMutate";
+import usePurchaseTradingCancelWithdrawalBtn from "@/hooks/productManage/usePurchaseTradingCancelWithdrawalBtn";
 
 interface IProps {
   productId: string;
@@ -7,15 +7,9 @@ interface IProps {
 export default function PurchaseTradingCancelWithdrawalBtn({
   productId,
 }: IProps) {
-  const { purchaseCancelRequestWithdrawalMutate } =
-    usePurchaseCancelRequestWithdrawalMutate();
-
-  const onClickCancelWithdrawal = () => {
-    const isCancelWithdrawal = confirm("정말 취소요청을 철회 하겠어요?");
-    if (isCancelWithdrawal) {
-      purchaseCancelRequestWithdrawalMutate(productId);
-    }
-  };
+  const { onClickCancelWithdrawal } = usePurchaseTradingCancelWithdrawalBtn({
+    productId,
+  });
 
   return (
     <button

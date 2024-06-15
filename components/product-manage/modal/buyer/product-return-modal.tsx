@@ -1,6 +1,7 @@
 import { FieldValues } from "react-hook-form";
 import ProductManageModal from "../product-manage-modal";
 import useProductReturnRequestMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnRequestMutate";
+import useProductReturnModal from "@/hooks/productManage/useProductReturnModal";
 
 interface IProps {
   productId: string;
@@ -8,16 +9,7 @@ interface IProps {
 }
 
 export default function ProductReturnModal({ productId, closeModal }: IProps) {
-  const { productReturnRequestMutate } = useProductReturnRequestMutate();
-  const onSubmit = (values: FieldValues) => {
-    const returnReason: string =
-      values.returnReason === "직접입력"
-        ? values.returnReasonText
-        : values.returnReason;
-
-    productReturnRequestMutate({ productId, returnReason });
-    closeModal();
-  };
+  const { onSubmit } = useProductReturnModal({ closeModal, productId });
 
   return (
     <ProductManageModal

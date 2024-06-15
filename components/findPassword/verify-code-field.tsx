@@ -2,10 +2,7 @@ import React from "react";
 import VerifyCodeInput from "../signup/stepBasicInfo/verifyCode-input";
 import EmailVerifyBtn from "../signup/stepBasicInfo/email-verify-Btn";
 import VerifyCodeBtns from "../signup/stepBasicInfo/verifyCode-btns";
-import { useFormContext } from "react-hook-form";
-import { useSelector } from "react-redux";
-import useVerifyEmail from "@/hooks/signup/useVerifyEmail";
-import { RootState } from "@/store/store";
+import useVerifyCodeField from "@/hooks/findPassword/useVerifyCodeField";
 
 export default function VerifyCodeField() {
   const {
@@ -14,18 +11,10 @@ export default function VerifyCodeField() {
     resetSendToVerifyEmail,
     verifyCodeRef,
     verfiyEmailLoading,
-  } = useVerifyEmail(true);
-
-  const isSendToVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isSendToVerifyEmail
-  );
-  const isVerifiedEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
-  );
-
-  const { formState } = useFormContext();
-
-  const error = formState.errors["verifyCode"];
+    error,
+    isSendToVerifyEmail,
+    isVerifiedEmail,
+  } = useVerifyCodeField();
 
   return (
     isSendToVerifyEmail &&

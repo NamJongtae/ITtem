@@ -1,6 +1,7 @@
 import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
+import useReviewUploadModal from "@/hooks/productManage/useReviewUploadModal";
 import useProductUploadReviewMutate from "@/hooks/reactQuery/mutations/product/useProductUploadReviewMutate";
 import { DevTool } from "@hookform/devtools";
 import dynamic from "next/dynamic";
@@ -21,50 +22,16 @@ export default function ProductManageReviewUploadModal({
   closeModal,
   productId,
 }: IProps) {
-  const { uploadReviewMutate, uploadReviewLoading } =
-    useProductUploadReviewMutate(closeModal);
   const {
     register,
-    unregister,
-    handleSubmit,
-    setValue,
-    watch,
+    uploadReviewLoading,
     control,
-    formState,
-  } = useForm({
-    defaultValues: { score: 0, content: "", tags: REVIEW_TAGS.map(() => 0) },
-  });
-
-  const tags = watch("tags");
-  const score = watch("score");
-
-  const handleCheckboxChange = (index: number) => {
-    const updatedTags = [...tags];
-    updatedTags[index] = updatedTags[index] === 0 ? 1 : 0;
-    setValue("tags", updatedTags, { shouldDirty: true, shouldValidate: true });
-  };
-
-  const onSubmit = (values: FieldValues) => {
-    const isUploadReview = confirm(
-      "정말 리뷰를 작성 하겠어요? 등록 후 삭제/수정이 불가능합니다."
-    );
-    if (isUploadReview) {
-      uploadReviewMutate({
-        productId,
-        reviewScore: values.score,
-        reviewContent: values.content,
-        reviewTags: values.tags,
-      });
-    }
-  };
-
-  const isDisabled =
-    !formState.dirtyFields["score"] || !formState.dirtyFields["content"];
-
-  useEffect(() => {
-    register("tags");
-    return () => unregister("tags");
-  }, [register, unregister]);
+    tags,
+    score,
+    handleCheckboxChange,
+    onSubmit,
+    isDisabled,
+  } = useReviewUploadModal({ closeModal, productId });
 
   if (uploadReviewLoading) {
     return <Loading />;
@@ -77,7 +44,7 @@ export default function ProductManageReviewUploadModal({
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
         role="modal-backdrop"
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div
           className={`${
             isMobile ? "h-screen" : "max-w-[480px]"

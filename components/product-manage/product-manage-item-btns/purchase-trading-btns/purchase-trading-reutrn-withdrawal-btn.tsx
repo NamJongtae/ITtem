@@ -1,4 +1,4 @@
-import useProductReturnRequestWithdrawalMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnRequestWithdrawalMutate";
+import usePurchaseTradingReturnWithdrawalBtn from "@/hooks/productManage/usePurchaseTradingReturnWithdrawalBtn";
 
 interface IProps {
   productId: string;
@@ -7,20 +7,14 @@ interface IProps {
 export default function PurchaseTradingReturnwithdrawalBtn({
   productId,
 }: IProps) {
-  const { productReturnRequestWithdrawalMutate } =
-    useProductReturnRequestWithdrawalMutate();
-
-  const onClickReturnWithdrawal = () => {
-    const isReturnWithdrawal = confirm("정말 반품요청을 철회 하겠어요?");
-    if (isReturnWithdrawal) {
-      productReturnRequestWithdrawalMutate(productId);
-    }
-  };
+  const { handleClickReturnWithdrawal } = usePurchaseTradingReturnWithdrawalBtn(
+    { productId }
+  );
 
   return (
     <button
       type="button"
-      onClick={onClickReturnWithdrawal}
+      onClick={handleClickReturnWithdrawal}
       className="text-sm sm:text-base px-4 py-2 bg-gray-500 text-white font-semibold betterhover:hover:bg-gray-600"
     >
       반품 철회

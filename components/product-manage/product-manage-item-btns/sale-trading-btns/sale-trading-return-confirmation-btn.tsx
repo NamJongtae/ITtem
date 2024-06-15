@@ -1,5 +1,4 @@
-import useReturnConfirmationMutate from "@/hooks/reactQuery/mutations/trade/useReturnConfirmationMutate";
-import React from "react";
+import useSaleTradingReturnConfirmationBtn from "@/hooks/productManage/useSaleTradingReturnConfirmationBtn";
 
 interface IProps {
   productId: string;
@@ -8,19 +7,14 @@ interface IProps {
 export default function SaleTradingReturnConfirmationBtn({
   productId,
 }: IProps) {
-  const { productReturnConfirmationMutate } = useReturnConfirmationMutate();
-
-  const onClickReturnConfirmation = () => {
-    const isReturnConfirmation = confirm("정말 환불요청을 확인 하겠어요?");
-    if (isReturnConfirmation) {
-      productReturnConfirmationMutate(productId);
-    }
-  };
+  const { handleClickReturnConfirmation } = useSaleTradingReturnConfirmationBtn(
+    { productId }
+  );
 
   return (
     <button
       type="button"
-      onClick={onClickReturnConfirmation}
+      onClick={handleClickReturnConfirmation}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       반품요청 확인

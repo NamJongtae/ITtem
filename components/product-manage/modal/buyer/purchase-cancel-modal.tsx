@@ -1,6 +1,7 @@
 import usePurchaseCancelRequestMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseCancelRequestMutate";
 import ProductManageModal from "../product-manage-modal";
 import { FieldValues } from "react-hook-form";
+import usePurchaseCancelModal from "@/hooks/productManage/usePurchaseCancelModal";
 
 interface IProps {
   productId: string;
@@ -8,17 +9,7 @@ interface IProps {
 }
 
 export default function PurchaseCancelModal({ productId, closeModal }: IProps) {
-  const { purchaseCancelRequestMutate } = usePurchaseCancelRequestMutate();
-
-  const onSubmit = (values: FieldValues) => {
-    const cancelReason: string =
-      values.cancelReason === "직접입력"
-        ? values.cancelReasonText
-        : values.cancelReason;
-
-    purchaseCancelRequestMutate({ productId, cancelReason });
-    closeModal();
-  };
+  const { onSubmit } = usePurchaseCancelModal({ closeModal, productId });
 
   return (
     <ProductManageModal

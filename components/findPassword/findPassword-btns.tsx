@@ -1,31 +1,7 @@
-import { RootState } from "@/store/store";
-import { useRouter } from "next/router";
-import { useFormContext } from "react-hook-form";
-import { useSelector } from "react-redux";
+import useFindPasswordBtn from '@/hooks/findPassword/useFindPasswordBtn';
 
 export default function FindPasswordBtns() {
-  const { formState } = useFormContext();
-  const errors =
-    formState.errors["email"] ||
-    formState.errors["password"] ||
-    formState.errors["password-check"] ||
-    formState.errors["verifyCode"];
-  const isDirty =
-    formState.dirtyFields["email"] &&
-    formState.dirtyFields["password"] &&
-    formState.dirtyFields["password-check"] &&
-    formState.dirtyFields["verifyCode"];
-
-  const isVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
-  );
-  const isDisabled = !!errors || !isDirty || !isVerifyEmail;
-
-  const router = useRouter();
-
-  const handleCilckToback = () => {
-    router.push("/signin");
-  };
+  const {isDisabled, handleCilckToback} = useFindPasswordBtn();
 
   return (
     <div className="w-full flex flex-col gap-3">

@@ -1,4 +1,4 @@
-import usePurchaseRequestConfirmationMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseRequestConfirmationMutate";
+import useSaleTradingPurchaseConfirmationBtn from "@/hooks/productManage/useSaleTradingPurchaseConfirmationBtn";
 
 interface IProps {
   productId: string;
@@ -6,21 +6,13 @@ interface IProps {
 export default function SaleTradingPurchaseConfirmationBtn({
   productId,
 }: IProps) {
-  const { purchaseRequestConfirmationMutate } =
-    usePurchaseRequestConfirmationMutate();
-
-  const onClickPurchaseRequestConfirmation = () => {
-    const isPurchaseRequestConfirmation =
-      confirm("정말 구매요청을 확인 하겠어요?");
-    if (isPurchaseRequestConfirmation) {
-      purchaseRequestConfirmationMutate(productId);
-    }
-  };
+  const { handleClickPurchaseRequestConfirmation } =
+    useSaleTradingPurchaseConfirmationBtn({ productId });
 
   return (
     <button
       type="button"
-      onClick={onClickPurchaseRequestConfirmation}
+      onClick={handleClickPurchaseRequestConfirmation}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       구매요청 확인
