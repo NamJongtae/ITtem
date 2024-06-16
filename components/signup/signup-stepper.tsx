@@ -1,22 +1,17 @@
-import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import useSignupStepper from "@/hooks/signup/useSignupStepper";
 
 interface IProps {
   currentStep: "기본정보입력" | "프로필설정" | "소개글작성";
 }
 
 export default function SignupStepper({ currentStep }: IProps) {
-  const { formState } = useFormContext();
-  const defaultIsDirty =
-    formState.dirtyFields["email"] && formState.dirtyFields["password"];
-  const defaultInfoErrors =
-    formState.errors["email"] || formState.errors["password"];
-
-  const proflieIsDirty = formState.dirtyFields["nickname"];
-  const proflieErrors =
-    formState.errors["profileImg"] || formState.errors["nickname"];
-
-  const IntroductErrors = formState.errors["introduce"];
+  const {
+    defaultIsDirty,
+    defaultInfoErrors,
+    proflieIsDirty,
+    proflieErrors,
+    introduceErrors,
+  } = useSignupStepper();
 
   return (
     <ol className="flex items-center w-full space-x-8 space-y-0 pb-16">
@@ -79,7 +74,7 @@ export default function SignupStepper({ currentStep }: IProps) {
       <li className=" flex-1">
         <div
           className={`${
-            !IntroductErrors && currentStep === "소개글작성"
+            !introduceErrors && currentStep === "소개글작성"
               ? "border-indigo-600 "
               : currentStep === "소개글작성"
               ? "text-indigo-300"
@@ -88,7 +83,7 @@ export default function SignupStepper({ currentStep }: IProps) {
         >
           <span
             className={`${
-              !IntroductErrors && currentStep === "소개글작성"
+              !introduceErrors && currentStep === "소개글작성"
                 ? "text-indigo-600"
                 : currentStep === "소개글작성"
                 ? "text-indigo-300"

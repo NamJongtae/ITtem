@@ -1,10 +1,7 @@
-import {
-  useFormContext,
-} from "react-hook-form";
+import useEmailError from "@/hooks/signup/useEmailError";
 
 export default function EmailError() {
-  const { formState } = useFormContext();
-  const error = formState.errors["email"];
+  const { error } = useEmailError();
 
   return (
     error?.message && (

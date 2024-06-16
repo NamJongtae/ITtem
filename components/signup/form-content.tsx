@@ -9,6 +9,7 @@ import SignupStepIntroduce from "./setpIntroduce/signup-step-introduce";
 export default function FormContent() {
   const { Funnel, Step, currentStep, nextStepHandler, prevStepHandler } =
     useFunnel(["기본정보입력", "프로필설정", "소개글작성"]);
+    
   return (
     <>
       <SignupSubTitle currentStep={currentStep} />

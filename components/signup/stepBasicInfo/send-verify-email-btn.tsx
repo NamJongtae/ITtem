@@ -1,13 +1,13 @@
+import useSendVerifyEmailBtn from "@/hooks/signup/useSendVerifyEmailBtn";
 import { useFormContext } from "react-hook-form";
 
 interface IProps {
   handleClickSendToVerifyEmail: () => void;
 }
-export default function SendVerifyEmailBtn({ handleClickSendToVerifyEmail }: IProps) {
-  const { formState } = useFormContext();
-  const error = formState.errors["email"];
-  const isDirty = formState.dirtyFields["email"];
-  const isDisabled = !!error || !isDirty;
+export default function SendVerifyEmailBtn({
+  handleClickSendToVerifyEmail,
+}: IProps) {
+  const { isDisabled } = useSendVerifyEmailBtn();
 
   return (
     <button

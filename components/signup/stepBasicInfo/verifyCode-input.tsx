@@ -5,13 +5,14 @@ import {
   VERIFYCODE_REGEX,
   VERIFYCODE_REGEX_ERRORMSG,
 } from "@/constants/constant";
+import useVerifyCodeInput from "@/hooks/signup/useVerifyCodeInput";
 
 interface IProps {
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function VerifyCodeInput({ verifyCodeRef }: IProps) {
-  const [isFocus, setIsFocus] = useState(false);
+  const { isFocus, onFocus, onBlur } = useVerifyCodeInput();
 
   return (
     <div
@@ -29,14 +30,12 @@ export default function VerifyCodeInput({ verifyCodeRef }: IProps) {
         inputMaxLength={6}
         inputRequired={"인증코드를 입력해주세요."}
         hideError={true}
-        inputOnFocus={() => {
-          setIsFocus(true);
-        }}
+        inputOnFocus={onFocus}
         inputPattern={{
           value: VERIFYCODE_REGEX,
           message: VERIFYCODE_REGEX_ERRORMSG,
         }}
-        inputOnBlur={() => setIsFocus(false)}
+        inputOnBlur={onBlur}
         inputValidate={(value) => value.length === 6}
         inputRef={verifyCodeRef}
       />
