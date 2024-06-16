@@ -1,9 +1,6 @@
-import { RootState } from "@/store/store";
 import ChatIcon from "@/public/icons/chat_icon.svg";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { ProductStatus } from "@/types/productTypes";
-import useStartChatMutate from "@/hooks/reactQuery/mutations/chat/useStartChatMutate";
+import useProductDetailChattingBtn from "@/hooks/productDetail/useProductDetailChattingBtn";
 
 interface IProps {
   productStatus: ProductStatus | undefined;
@@ -16,26 +13,11 @@ export default function ProductDetailChattingBtn({
   productId,
   userId,
 }: IProps) {
-  const { mutate } = useStartChatMutate();
-  const user = useSelector((state: RootState) => state.auth.user);
-
-  const handleClickChatting = () => {
-    if (productStatus === "trading") {
-      toast.warn("현재 거래중인 상품이에요.");
-      return;
-    }
-    if (productStatus === "soldout") {
-      toast.warn("이미 판매된 상품이에요.");
-      return;
-    }
-    if (!user) {
-      toast.warn("로그인 후 이용해주세요.");
-      return;
-    }
-    if (!productId || !userId) return;
-
-    mutate({ productId, userId });
-  };
+  const { handleClickChatting } = useProductDetailChattingBtn({
+    productStatus,
+    productId,
+    userId,
+  });
 
   return (
     <button

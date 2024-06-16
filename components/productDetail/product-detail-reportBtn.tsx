@@ -1,31 +1,16 @@
-import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
-import useProductReportMutate from "@/hooks/reactQuery/mutations/product/useProductReportMutate";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
-import { toast } from "react-toastify";
+import useProductDetailReportBtn from "@/hooks/productDetail/useProductDetailReportBtn";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
-  const { productReportMutate } = useProductReportMutate();
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
-  const isReport = productDetailData?.reportUserIds.includes(
-    myProfileData?.uid || ""
-  );
-
-  const handleClickReport = () => {
-    if (!myProfileData) {
-      toast.warn("로그인이 필요해요.");
-      return;
-    }
-    if (isReport) {
-      toast.warn("이미 신고한 상품이에요.");
-    } else {
-      productReportMutate(undefined);
-    }
-  };
+  const { loadMyProfileLoading, myProfileData, handleClickReport } =
+    useProductDetailReportBtn({
+      reportUserIds: productDetailData?.reportUserIds,
+    });
 
   return (
     !loadMyProfileLoading &&

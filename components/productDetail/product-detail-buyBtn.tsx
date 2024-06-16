@@ -1,27 +1,13 @@
-import usePurchaseProductMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseProductMutate";
+import useProductDetailBuyBtn from '@/hooks/productDetail/useProductDetailBuyBtn';
 import BuyIcon from "@/public/icons/money_icon.svg";
 import { ProductStatus } from "@/types/productTypes";
-import { toast } from "react-toastify";
+
 
 interface IProps {
   productStatus: ProductStatus | undefined;
 }
 export default function ProductDetailBuyBtn({ productStatus }: IProps) {
-  const { purchaseProductMutate } = usePurchaseProductMutate();
-  const handleClickPurchase = () => {
-    if (productStatus === "trading") {
-      toast.warn("이미 거래중인 상품이에요.");
-      return;
-    }
-    if (productStatus === "soldout") {
-      toast.warn("이미 판매된 상품이에요.");
-      return;
-    }
-    const isPurchase = confirm("정말 구매하시겠어요?");
-    if (isPurchase) {
-      purchaseProductMutate();
-    }
-  };
+  const { handleClickPurchase } = useProductDetailBuyBtn({ productStatus });
 
   return (
     <button

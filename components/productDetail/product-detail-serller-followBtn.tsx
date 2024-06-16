@@ -1,5 +1,4 @@
 import useProductDetailFollowBtn from "@/hooks/productDetail/useProductDetailFollowBtn";
-import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
 
 interface IProps {
   uid: string;
@@ -10,12 +9,11 @@ export default function ProductDetailSerllerFollowBtn({
   uid,
   authFollowers,
 }: IProps) {
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
-  const { isFollow, handleClickfollow } = useProductDetailFollowBtn({
-    uid,
-    authFollowers,
-    myProfileData,
-  });
+  const { loadMyProfileLoading, myProfileData, isFollow, handleClickfollow } =
+    useProductDetailFollowBtn({
+      uid,
+      authFollowers,
+    });
 
   return (
     !loadMyProfileLoading &&

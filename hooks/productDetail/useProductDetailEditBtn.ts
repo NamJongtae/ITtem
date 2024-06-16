@@ -1,0 +1,32 @@
+import { RootState } from "@/store/store";
+import { ProductStatus } from "@/types/productTypes";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+interface IPrarms {
+  productStatus: ProductStatus | undefined;
+}
+
+export default function useProductDetailEditBtn({ productStatus }: IPrarms) {
+  const router = useRouter();
+  const productId = router.query?.productId;
+  const user = useSelector((state: RootState) => state.auth.user);
+  const handleClickEdit = () => {
+    if (productStatus === "trading") {
+      toast.warn("거래중인 상품은 수정할 수 없어요.");
+      return;
+    }
+    if (productStatus === "soldout") {
+      toast.warn("판매된 상품은 수정할 수 없어요.");
+      return;
+    }
+    if (!user) {
+      toast.warn("로그인 후 이용해주세요.");
+      return;
+    }
+    router.push(`/product/${productId}/edit`);
+  };
+
+  return { handleClickEdit };
+}

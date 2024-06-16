@@ -1,31 +1,16 @@
-import useProductDeleteMutate from "@/hooks/reactQuery/mutations/product/useProducDeletetMutate";
 import Loading from "../commons/loading";
 import Image from "next/image";
 import { ProductStatus } from "@/types/productTypes";
-import { toast } from "react-toastify";
+import useProductDetailDeleteBtn from "@/hooks/productDetail/useProductDetailDeleteBtn";
 
 interface IProps {
   productStatus: ProductStatus | undefined;
 }
 
 export default function ProductDetailDeleteBtn({ productStatus }: IProps) {
-  const { productDeleteMutate, productDeleteLoading } =
-    useProductDeleteMutate();
-
-  const handleClickDelete = () => {
-    if (productStatus === "trading") {
-      toast.warn("거래중인 상품은 삭제할 수 없어요.");
-      return;
-    }
-    if (productStatus === "soldout") {
-      toast.warn("판매된 상품은 삭제할 수 없어요.");
-      return;
-    }
-    const isDelete = confirm("정말 삭제하겠습니까?");
-    if (isDelete) {
-      productDeleteMutate();
-    }
-  };
+  const { productDeleteLoading, handleClickDelete } = useProductDetailDeleteBtn(
+    { productStatus }
+  );
 
   if (productDeleteLoading) {
     return <Loading />;

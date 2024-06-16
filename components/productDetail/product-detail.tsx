@@ -1,4 +1,3 @@
-import useProductQuery from "@/hooks/reactQuery/mutations/product/useProductQuery";
 import CategoryNav from "../commons/category/category-nav";
 import ProductDetailContent from "./product-detail-content";
 import ProductDetailDescrtion from "./product-detail-descrtion";
@@ -6,13 +5,10 @@ import ProductDetailSeller from "./product-detail-seller";
 import Loading from "../commons/loading";
 import { isAxiosError } from "axios";
 import ProductListEmpty from "../commons/Empty";
-import useAddRecentProduct from "@/hooks/productDetail/useAddRecentProduct";
+import useProductDetailPage from "@/hooks/productDetail/useProductDetailPage";
 
 export default function ProductDetailPage() {
-  const { productDetailData, loadProductLoading, loadProductError } =
-    useProductQuery();
-
-  useAddRecentProduct(productDetailData);
+  const { productDetailData, loadProductLoading, loadProductError } = useProductDetailPage();
 
   if (loadProductLoading) {
     return <Loading />;
