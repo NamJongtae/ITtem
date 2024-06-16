@@ -1,3 +1,4 @@
+import useProductUploadImgInput from "@/hooks/productUpload/useProductUploadImgInput";
 import { ProductImgData } from "@/types/productTypes";
 import React, { ForwardedRef, forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
@@ -9,12 +10,7 @@ interface IProps {
 
 const ImgInput = forwardRef<HTMLInputElement, IProps>(
   ({ preview, onChangeImg }, inputRef: ForwardedRef<HTMLInputElement>) => {
-    const { register } = useFormContext();
-    const { ...rest } = register("imgData", {
-      onChange: onChangeImg,
-      validate: (values) => values.length || "이미지를 선택해주세요.",
-    });
-
+    const { register, rest } = useProductUploadImgInput({ onChangeImg });
     return (
       <>
         <label className="sr-only" htmlFor="img">

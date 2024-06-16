@@ -1,9 +1,8 @@
-import useProductDesc from "@/hooks/productUpload/useProductUploadDesc";
-import { useFormContext } from "react-hook-form";
+import useProductUploadDescField from "@/hooks/productUpload/useProductUploadDescField";
 
 export default function ProductUploadDescField() {
-  const { productDesc, handleChangeProductDesc } = useProductDesc();
-  const { register } = useFormContext();
+  const { register, productDesc, handleChangeProductDesc } =
+    useProductUploadDescField();
 
   return (
     <div className="border-b py-8">

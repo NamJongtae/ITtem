@@ -1,8 +1,8 @@
-import { useFormContext } from "react-hook-form";
+import useProductUploadDeliveryFeeField from "@/hooks/productUpload/useProductUploadDeliveryFeeField";
 
 export default function ProductUploadDeliveryFeeField() {
-  const { register, getValues } = useFormContext();
-  const deliveryFee = getValues("deliveryFee")
+  const { register, deliveryFee } = useProductUploadDeliveryFeeField();
+
   return (
     <fieldset className="border-b pb-8">
       <legend className="sr-only">배송비</legend>

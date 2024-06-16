@@ -1,9 +1,8 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext } from "react-hook-form";
 
-export default function useProductUploadDesc() {
-  const { watch, setValue } = useFormContext();
+export default function useProductUploadDescField() {
+  const { register, watch, setValue } = useFormContext();
   const productDesc = watch("description");
-
 
   const handleChangeProductDesc = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -16,5 +15,5 @@ export default function useProductUploadDesc() {
     }
   };
 
-  return { productDesc, handleChangeProductDesc };
+  return { register, productDesc, handleChangeProductDesc };
 }

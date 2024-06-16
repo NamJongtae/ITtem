@@ -1,14 +1,18 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { toast } from "react-toastify";
 import { imgValidation } from "@/lib/imgValidation";
 import { ProductImgData } from "@/types/productTypes";
 import { useFormContext } from "react-hook-form";
+import useModal from "../commons/useModal";
 
-export default function useProductUploadImg(imgData?: ProductImgData[]) {
+export default function useProductUploadImgField(imgData?: ProductImgData[]) {
+  const { isOpenModal, openModal, closeModal } = useModal();
+  const imgInputRef = useRef<HTMLInputElement>(null);
+
   const { setValue, getValues } = useFormContext();
   const [preview, setPreview] = useState<ProductImgData[]>(imgData || []);
   const currentImgList = getValues("imgData");
-  
+
   const uploadValidationAndPreview = useCallback(
     (file: File) => {
       const fileName = file.name;
@@ -64,7 +68,7 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
       if (!files || files.length === 0) return;
       handleFilesUpload(files);
     },
-    [handleFilesUpload]
+    []
   );
 
   const handleOnChangeImg = useCallback(
@@ -73,7 +77,7 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
       if (!fileList || fileList.length === 0) return;
       handleFilesUpload(fileList);
     },
-    [handleFilesUpload]
+    []
   );
 
   const handleRemoveImg = useCallback(
@@ -104,5 +108,29 @@ export default function useProductUploadImg(imgData?: ProductImgData[]) {
     [getValues, setValue]
   );
 
-  return { preview, handleOnChangeImg, handleRemoveImg, handleDropImgUpload };
+  const handleOpenModal = () => {
+    if (preview.length === 0) {
+      toast.warn("이미지가 존재하지않습니다.");
+      return;
+    }
+    openModal();
+  };
+
+  const handleClickImgInput = () => {
+    if (!imgInputRef.current) return;
+    imgInputRef.current?.click();
+  };
+
+  return {
+    preview,
+    handleOnChangeImg,
+    handleRemoveImg,
+    handleDropImgUpload,
+    isOpenModal,
+    handleOpenModal,
+    handleClickImgInput,
+    openModal,
+    closeModal,
+    imgInputRef,
+  };
 }

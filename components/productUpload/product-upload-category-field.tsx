@@ -1,15 +1,10 @@
 import { CATEGORY } from "@/constants/constant";
+import useProductUploadCategoryField from "@/hooks/productUpload/useProductUploadCategoryField";
 import { ProductCategory } from "@/types/productTypes";
-import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
 
 export default function ProductUploadCategoryField() {
-  const { register, setValue, watch } = useFormContext();
-  const currentCategory = watch("category");
-
-  const handleClickCategory = (category: ProductCategory) => {
-    setValue("category", category, { shouldDirty: true });
-  };
+  const { register, currentCategory, handleClickCategory } =
+    useProductUploadCategoryField();
 
   return (
     <div className="border-b py-8">

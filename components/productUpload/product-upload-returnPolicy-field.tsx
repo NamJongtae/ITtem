@@ -1,8 +1,7 @@
-import { useFormContext } from "react-hook-form";
+import useProductUploadReturnPolicyField from "@/hooks/productUpload/useProductUploadReturnPolicyField";
 
 export default function ProductUploadReturnPolicyField() {
-  const { register, getValues } = useFormContext();
-  const returnPolicy = getValues("returnPolicy");
+  const { register, returnPolicy } = useProductUploadReturnPolicyField();
 
   return (
     <fieldset className="border-b pb-8">

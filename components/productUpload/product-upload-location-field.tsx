@@ -1,23 +1,17 @@
 import AddressModal from "../addressModal/address-modal";
-import useModal from "@/hooks/commons/useModal";
-import useProductUploadLocation from "@/hooks/productUpload/useProductUploadLocation";
-import { useFormContext } from "react-hook-form";
-
+import useProductUploadLocationField from "@/hooks/productUpload/useProductUploadLocationField";
 
 export default function ProductUploadLocationField() {
-  const { register } = useFormContext();
-  const { isOpenModal, openModal, closeModal } = useModal();
   const {
-    selectAddress,
+    register,
+    isOpenModal,
+    openModal,
+    closeModal,
     fetchCurrentLocation,
     selectNoPreferenceAddress,
-  } = useProductUploadLocation();
-
-  const addAddress = (address: string) => {
-    selectAddress(address);
-    closeModal();
-  };
-
+    addAddress,
+  } = useProductUploadLocationField();
+  
   return (
     <div className="border-b py-8">
       <label className="sr-only" htmlFor="location">

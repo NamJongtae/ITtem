@@ -1,8 +1,7 @@
-import { useFormContext } from "react-hook-form";
+import useProductUploadTransactionField from "@/hooks/productUpload/useProductUploadTransactionField";
 
 export default function ProductUploadTransactionField() {
-  const { register, getValues } = useFormContext();
-  const transaction = getValues("transaction");
+  const { register, transaction } = useProductUploadTransactionField();
 
   return (
     <fieldset className="border-b pb-8">

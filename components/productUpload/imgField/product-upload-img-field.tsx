@@ -1,36 +1,27 @@
-import { useRef } from "react";
 import ImgUploadBtn from "./img-upload-Btn";
-import { toast } from "react-toastify";
 import ProductImgEnlargeModal from "./product-img-enlarge-modal";
 import ImgEnlargeBtn from "./img-enlarge-btn";
 import ImgInput from "./img-input";
 import ImgPreviewList from "./img-preview-list";
-import useProductImg from "@/hooks/productUpload/useProductUploadimg";
-import useModal from "@/hooks/commons/useModal";
 import { ProductImgData } from "@/types/productTypes";
+import useProductUploadImgField from '@/hooks/productUpload/useProductUploadimgField';
 
 interface IProps {
   imgData?: ProductImgData[];
 }
 
 export default function ProductUploadImgField({ imgData }: IProps) {
-  const { preview, handleOnChangeImg, handleRemoveImg, handleDropImgUpload } =
-    useProductImg(imgData);
-  const { isOpenModal, openModal, closeModal } = useModal();
-  const imgInputRef = useRef<HTMLInputElement>(null);
-
-  const handleOpenModal = () => {
-    if (preview.length === 0) {
-      toast.warn("이미지가 존재하지않습니다.");
-      return;
-    }
-    openModal();
-  };
-
-  const handleClickImgInput = () => {
-    if (!imgInputRef.current) return;
-    imgInputRef.current?.click();
-  };
+  const {
+    preview,
+    handleOnChangeImg,
+    handleRemoveImg,
+    handleDropImgUpload,
+    isOpenModal,
+    handleOpenModal,
+    handleClickImgInput,
+    closeModal,
+    imgInputRef,
+  } = useProductUploadImgField(imgData);
 
   return (
     <div className="border-b py-8">

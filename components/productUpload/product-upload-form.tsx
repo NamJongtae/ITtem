@@ -9,32 +9,29 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useProductEditCheckUser from "@/hooks/productUpload/useProductEditCheckUser";
 import ProductUploadFormContent from "./product-upload-form-content";
+import useProductUploadForm from "@/hooks/productUpload/useProductUploadForm";
 
 interface IProps {
   isEdit?: boolean;
 }
 
 export default function ProductUploadForm({ isEdit }: IProps) {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const {
+    user,
+    handleClickProductUploadSubmit,
+    handleClickProductEditSubmit,
+    productDetailData,
+    isLoading,
+    isError,
+  } = useProductUploadForm({ isEdit });
 
-  const { handleClickProductUploadSubmit, productUploadLoading } =
-    useProductUploadSubmit();
-
-  const { productDetailData, loadProductLoading, loadProductError } =
-    useProductQuery(isEdit);
-
-  const { handleClickProductEditSubmit, productEditLoading } =
-    useProductEditSubmit();
-
-  useProductEditCheckUser(productDetailData, isEdit);
-
-  if (loadProductLoading || productUploadLoading || productEditLoading) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (loadProductError) {
-    if (isAxiosError<{ message: string }>(loadProductError)) {
-      return <Empty message={loadProductError.response?.data?.message || ""} />;
+  if (isError) {
+    if (isAxiosError<{ message: string }>(isError)) {
+      return <Empty message={isError.response?.data?.message || ""} />;
     }
   }
 

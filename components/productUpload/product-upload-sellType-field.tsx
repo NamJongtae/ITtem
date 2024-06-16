@@ -1,8 +1,7 @@
-import { useFormContext } from "react-hook-form";
+import useProductUploadSellTypeField from '@/hooks/productUpload/useProductUploadSellTypeField';
 
 export default function ProductUploadSellTypeField() {
-  const { register, getValues } = useFormContext();
-  const sellType = getValues("sellType");
+  const { register, sellType } = useProductUploadSellTypeField();
 
   return (
     <fieldset className="border-b pb-8">
