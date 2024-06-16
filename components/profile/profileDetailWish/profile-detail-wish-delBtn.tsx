@@ -1,5 +1,4 @@
-import useDeleteProfileWishMutate from "@/hooks/reactQuery/mutations/profile/useDeleteProfileWishMutate";
-import { toast } from "react-toastify";
+import useProfileDetailWishDelBtn from "@/hooks/profile/useProfileDetailWishDelBtn";
 
 interface IProps {
   selectedWish: string[];
@@ -10,18 +9,7 @@ export default function ProfileDetailWishDelBtn({
   selectedWish,
   handleSelectAll,
 }: IProps) {
-  const { deleteWishMutate } = useDeleteProfileWishMutate();
-
-  const handleClickDelete = () => {
-    if (!selectedWish.length) {
-      toast.warn("삭제 할 목록이 없어요.");
-      return;
-    }
-    const isDelete = confirm("정말 삭제하시겠어요?");
-    if (isDelete) {
-      deleteWishMutate(selectedWish);
-    }
-  };
+  const { handleClickDelete } = useProfileDetailWishDelBtn({ selectedWish });
 
   return (
     <div className="flex items-center w-full gap-2 mb-5">

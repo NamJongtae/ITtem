@@ -1,6 +1,6 @@
 import { MyForm } from "@/components/commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
-import ProfileEditButtons from "./profileEdit-buttons";
+import ProfileEditBtns from "./profileEdit-btns";
 import { FieldValues } from "react-hook-form";
 import ProfileImgField from "@/components/signup/stepProfile/profileImg-field";
 import NicknameField from "@/components/signup/stepProfile/nickname-field";
@@ -43,7 +43,7 @@ export default function ProfileEditModalForm({ closeModal }: IProps) {
       <ProfileImgField />
       <NicknameField />
       <IntroductField />
-      <ProfileEditButtons closeModal={closeModal} />
+      <ProfileEditBtns closeModal={closeModal} />
     </MyForm>
   );
 }

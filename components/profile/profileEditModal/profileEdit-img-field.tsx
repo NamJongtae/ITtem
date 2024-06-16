@@ -1,14 +1,8 @@
+import useProfileEidtImgField from "@/hooks/profile/useProfileEidtImgField";
 import Image from "next/image";
-import { useRef } from "react";
 
 export default function ProfileEditImgField() {
-  const imgInputRef = useRef<HTMLInputElement>(null);
-
-  const handleClickImgInput = (e:any) => {
-    if (!imgInputRef.current) return;
-    e.preventDefault();
-    imgInputRef.current.click();
-  };
+  const { handleClickImgInput, imgInputRef } = useProfileEidtImgField();
 
   return (
     <div className="flex items-center justify-center">

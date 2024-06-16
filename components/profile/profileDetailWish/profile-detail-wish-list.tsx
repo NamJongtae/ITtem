@@ -1,11 +1,10 @@
 import Empty from "@/components/commons/Empty";
-import useProfileWishInfiniteQuery from "@/hooks/reactQuery/querys/profile/useProfileWishInfiniteQuery";
 import { isAxiosError } from "axios";
 import InfiniteScroll from "react-infinite-scroller";
 import ProfileDetailWishItem from "./profile-detail-wish-item";
 import ProfileDetailWishSkeletonUI from "./profile-detail-wish-skeletonUI";
-import { useState } from "react";
 import ProfileDetailWishDelBtn from "./profile-detail-wish-delBtn";
+import useProfileDetailWishList from "@/hooks/profile/useProfileDetailWishList";
 
 interface IProps {
   wishProductIds: string[] | undefined;
@@ -19,28 +18,10 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
     fetchNextPage,
     hasNextPage,
     error,
-  } = useProfileWishInfiniteQuery({
-    wishProductIds: wishProductIds || [],
-  });
-  const [selectedWish, setSelectedWish] = useState<string[]>([]);
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      const allWishIds = data?.map((item) => item._id) || [];
-      setSelectedWish(allWishIds);
-    } else {
-      setSelectedWish([]);
-    }
-  };
-
-  const handleCheckWish = (id: string) => {
-    setSelectedWish((prevSelected) => {
-      if (prevSelected.includes(id)) {
-        return prevSelected.filter((wishId) => wishId !== id);
-      } else {
-        return [...prevSelected, id];
-      }
-    });
-  };
+    selectedWish,
+    handleSelectAll,
+    handleCheckWish,
+  } = useProfileDetailWishList({wishProductIds});
 
   return (
     <>

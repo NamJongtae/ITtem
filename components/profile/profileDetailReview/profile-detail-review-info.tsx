@@ -1,7 +1,7 @@
-import React from "react";
 import dynamic from "next/dynamic";
 import { ReivewInfoData } from "@/types/authTypes";
 import { REVIEW_TAGS } from "@/constants/constant";
+import useProfileDetailReviewInfo from "@/hooks/profile/useProfileDetailReviewInfo";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,
@@ -12,13 +12,11 @@ interface IProps {
 }
 
 export default function ProfileDetailReviewInfo({ reviewInfo }: IProps) {
-  const reviewStar =
-    (reviewInfo?.totalReviewScore || 0) > 0 &&
-    (reviewInfo?.totalReviewCount || 0) > 0
-      ? (reviewInfo?.totalReviewScore || 0) /
-        (reviewInfo?.totalReviewCount || 0)
-      : 0;
-  
+  const { reviewStar } = useProfileDetailReviewInfo({
+    totalReviewCount: reviewInfo?.totalReviewCount,
+    totalReviewScore: reviewInfo?.totalReviewScore,
+  });
+
   return (
     <>
       <div className="border p-3 rounded-md flex items-center justify-center">

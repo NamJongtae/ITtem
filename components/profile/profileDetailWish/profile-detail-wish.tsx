@@ -1,5 +1,3 @@
-import ProfileDetailWishDelBtn from "./profile-detail-wish-delBtn";
-import { useState } from "react";
 import ProfileDetailWishList from "./profile-detail-wish-list";
 
 interface IProps {

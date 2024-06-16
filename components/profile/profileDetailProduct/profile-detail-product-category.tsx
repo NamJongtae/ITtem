@@ -1,6 +1,7 @@
-import { CATEGORY } from '@/constants/constant';
-import useDropdownMenu from '@/hooks/commons/useDropDownMenu';
-import { ProductCategory } from '@/types/productTypes';
+import { CATEGORY } from "@/constants/constant";
+import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
+import useProfileDetailProductCategory from "@/hooks/profile/useProfileDetailProductCategory";
+import { ProductCategory } from "@/types/productTypes";
 
 interface IProps {
   currentCategory: ProductCategory;
@@ -10,12 +11,8 @@ export default function ProfileDetailProductCategory({
   currentCategory,
   selectCategory,
 }: IProps) {
-  const { isOpenMenu, closeMenu, toggleMenu, menuRef } = useDropdownMenu();
-
-  const handleClickCategory = (category: ProductCategory) => {
-    selectCategory(category);
-    closeMenu();
-  };
+  const { isOpenMenu, toggleMenu, menuRef, handleClickCategory } =
+    useProfileDetailProductCategory({ selectCategory });
 
   return (
     <div className="relative">

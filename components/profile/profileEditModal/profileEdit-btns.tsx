@@ -1,19 +1,11 @@
-import { useFormContext } from "react-hook-form";
+import useProfileEditBtns from "@/hooks/profile/useProfileEditBtns";
 
 interface IProps {
   closeModal: () => void;
 }
 
-export default function ProfileEditButtons({ closeModal }: IProps) {
-  const { formState } = useFormContext();
-
-  const isDirty = formState.isDirty;
-  const isError =
-    formState.errors["nickname"] ||
-    formState.errors["profileImg"] ||
-    formState.errors["introduce"];
-
-  const isDisabled = !isDirty || !!isError;
+export default function ProfileEditBtns({ closeModal }: IProps) {
+  const { isDisabled } = useProfileEditBtns();
 
   return (
     <div className="mt-8 flex gap-3 justify-end">
