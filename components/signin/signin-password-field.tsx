@@ -1,11 +1,7 @@
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
-import { useFormContext } from "react-hook-form";
 import CoreInputField from "../commons/coreInputField/core-input-field";
 
 export default function SigninPasswordField() {
-  const { register, formState } = useFormContext();
-  const error = formState.errors["password"];
-
   return (
     <div className="mb-5">
       <CoreInputField

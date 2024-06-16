@@ -1,11 +1,7 @@
-import { useFormContext } from "react-hook-form";
+import useSigninLoginBtn from "@/hooks/signin/useSigninLoginBtn";
 
 export default function SiginLoginBtn() {
-  const { formState } = useFormContext();
-  const errors = formState.errors["email"] || formState.errors["password"];
-  const isDrity =
-    formState.dirtyFields["email"] && formState.dirtyFields["password"];
-  const isDisabled = !!errors || !isDrity;
+  const { isDisabled } = useSigninLoginBtn();
 
   return (
     <button

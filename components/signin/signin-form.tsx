@@ -1,17 +1,10 @@
 import { MyForm } from "../commons/myForm/MyForm";
-import { FieldValues } from "react-hook-form";
 import SigninFormContent from "./signin-form-content";
-import useSigninMutate from "@/hooks/reactQuery/mutations/auth/useSigninMutate";
 import Loading from "../commons/loading";
+import useSigninForm from "@/hooks/signin/useSigninForm";
 
 export default function SigninForm() {
-  const { signinMutate, signinLoading } = useSigninMutate();
-
-  const onSubmit = async (data: FieldValues) => {
-    const email = data.email;
-    const password = data.password;
-    signinMutate({ email, password });
-  };
+  const { signinLoading, handleSingnin } = useSigninForm();
 
   if (signinLoading) {
     return <Loading />;
@@ -19,7 +12,7 @@ export default function SigninForm() {
 
   return (
     <MyForm
-      onSubmit={onSubmit}
+      onSubmit={handleSingnin}
       formOptions={{
         mode: "onChange",
         defaultValues: {
