@@ -1,8 +1,16 @@
-import React from "react";
+import React, { forwardRef, MutableRefObject, Ref } from "react";
 import CoreInputField from "../../commons/coreInputField/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
+import { optModalTabFocus } from "@/lib/optimizationTabFocus";
 
-export default function ChangePasswordModalCurrentPwField() {
+interface IProps {
+  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
+}
+const ChangePasswordModalCurrentPwField = forwardRef<
+  HTMLInputElement | null,
+  IProps
+>(({ submitBtnRef, cancelBtnRef }, ref) => {
   return (
     <div>
       <CoreInputField
@@ -21,7 +29,20 @@ export default function ChangePasswordModalCurrentPwField() {
         labelHidden={false}
         labelClassName="font-semibold"
         inputClassName={"border-b pb-3 w-full text-sm mt-4 focus:outline-none"}
+        inputRef={ref as MutableRefObject<HTMLInputElement | null>}
+        inputKeydown={(e) =>
+          optModalTabFocus({
+            event: e,
+            previousTarget: submitBtnRef.current?.disabled
+              ? cancelBtnRef.current
+              : submitBtnRef.current,
+          })
+        }
       />
     </div>
   );
-}
+});
+
+ChangePasswordModalCurrentPwField.displayName =
+  "ChangePasswordModalCurrentPwField";
+export default ChangePasswordModalCurrentPwField;
