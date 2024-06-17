@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export default function PurchaseTradingCancelBtn({ productId }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   return (
     <>
       <button
@@ -17,7 +17,10 @@ export default function PurchaseTradingCancelBtn({ productId }: IProps) {
         구매 취소
       </button>
       {isOpenModal && (
-        <PurchaseCancelModal productId={productId} closeModal={closeModal} />
+        <PurchaseCancelModal
+          productId={productId}
+          handleClickCloseBtn={handleClickCloseBtn}
+        />
       )}
     </>
   );

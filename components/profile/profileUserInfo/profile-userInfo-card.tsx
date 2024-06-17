@@ -27,12 +27,13 @@ export default function ProfileUserInfoCard({
   const {
     isOpenModal: isOpenProfileEditModal,
     openModal: openProfileEditModal,
-    closeModal: closeProfileEditModal,
+    handleClickCloseBtn: handleClickProfieEditCloseBtn,
   } = useModal();
+
   const {
     isOpenModal: isOpenChangePwModal,
     openModal: openChangePwModl,
-    closeModal: closeChangePwModal,
+    handleClickCloseBtn: handleClickChangePwCloseBtn,
   } = useModal();
 
   return (
@@ -56,7 +57,9 @@ export default function ProfileUserInfoCard({
           <ReactStars
             size={20}
             half
-            value={((userProfileData?.reviewInfo?.reviewPercentage || 0) / 100) * 5}
+            value={
+              ((userProfileData?.reviewInfo?.reviewPercentage || 0) / 100) * 5
+            }
             color1="#ddd"
             color2="#fec323"
             edit={false}
@@ -74,10 +77,14 @@ export default function ProfileUserInfoCard({
         </div>
       </div>
       {isOpenProfileEditModal && (
-        <ProfileEditModal closeModal={closeProfileEditModal} />
+        <ProfileEditModal
+          handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn}
+        />
       )}
       {isOpenChangePwModal && (
-        <ChangePasswordModal closeModal={closeChangePwModal} />
+        <ChangePasswordModal
+          handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
+        />
       )}
     </>
   );

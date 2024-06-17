@@ -6,17 +6,17 @@ import { isMobile } from "react-device-detect";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function ProductManageTradingDetailModal({
   tradingData,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
   return (
     <Portal>
       <div
-        onClick={closeModal}
+        onClick={handleClickCloseBtn}
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
         role="modal-backdrop"
       />
@@ -86,7 +86,10 @@ export default function ProductManageTradingDetailModal({
         </p>
         <button
           type="button"
-          onClick={closeModal}
+          onClick={() => {
+            console.log("a");
+            handleClickCloseBtn();
+          }}
           className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
         >
           <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />

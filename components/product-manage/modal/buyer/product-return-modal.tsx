@@ -1,19 +1,23 @@
-import { FieldValues } from "react-hook-form";
 import ProductManageModal from "../product-manage-modal";
-import useProductReturnRequestMutate from "@/hooks/reactQuery/mutations/trade/useProductReturnRequestMutate";
 import useProductReturnModal from "@/hooks/productManage/useProductReturnModal";
 
 interface IProps {
   productId: string;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
-export default function ProductReturnModal({ productId, closeModal }: IProps) {
-  const { onSubmit } = useProductReturnModal({ closeModal, productId });
+export default function ProductReturnModal({
+  productId,
+  handleClickCloseBtn,
+}: IProps) {
+  const { onSubmit } = useProductReturnModal({
+    closeModal: handleClickCloseBtn,
+    productId,
+  });
 
   return (
     <ProductManageModal
-      closeModal={closeModal}
+      handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 반품 요청"}
       options={[
         "반품사유 선택",

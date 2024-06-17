@@ -9,7 +9,7 @@ interface IProps {
 export default function SeleTradingEndTradingDetailBtn({
   tradingData,
 }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   return (
     <>
       <button
@@ -22,7 +22,7 @@ export default function SeleTradingEndTradingDetailBtn({
       {isOpenModal && (
         <ProductManageTradingDetailModal
           tradingData={tradingData}
-          closeModal={closeModal}
+          handleClickCloseBtn={handleClickCloseBtn}
         />
       )}
     </>

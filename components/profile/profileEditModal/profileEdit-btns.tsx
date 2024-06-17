@@ -1,17 +1,19 @@
 import useProfileEditBtns from "@/hooks/profile/useProfileEditBtns";
 
 interface IProps {
-  closeModal: () => void;
+  handleClickProfieEditCloseBtn: () => void;
 }
 
-export default function ProfileEditBtns({ closeModal }: IProps) {
+export default function ProfileEditBtns({
+  handleClickProfieEditCloseBtn,
+}: IProps) {
   const { isDisabled } = useProfileEditBtns();
 
   return (
     <div className="mt-8 flex gap-3 justify-end">
       <button
         type="button"
-        onClick={() => closeModal()}
+        onClick={handleClickProfieEditCloseBtn}
         className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
       >
         취소하기

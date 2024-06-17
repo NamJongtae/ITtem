@@ -3,10 +3,10 @@ import useProductManageModal from "@/hooks/productManage/useProductManageModal";
 import { DevTool } from "@hookform/devtools";
 import Image from "next/image";
 import { isMobile } from "react-device-detect";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 
 interface IProps {
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
   title: string;
   options: string[];
   name: string;
@@ -14,7 +14,7 @@ interface IProps {
   onSubmit: (values: FieldValues) => void;
 }
 export default function ProductManageModal({
-  closeModal,
+  handleClickCloseBtn,
   title,
   options,
   name,
@@ -33,7 +33,7 @@ export default function ProductManageModal({
   return (
     <Portal>
       <div
-        onClick={closeModal}
+        onClick={handleClickCloseBtn}
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
         role="modal-backdrop"
       />
@@ -84,7 +84,7 @@ export default function ProductManageModal({
           </button>
           <button
             type="button"
-            onClick={closeModal}
+            onClick={handleClickCloseBtn}
             className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
           >
             <Image

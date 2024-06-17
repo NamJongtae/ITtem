@@ -9,11 +9,13 @@ import useChangePasswordMutate from "@/hooks/reactQuery/mutations/auth/useChange
 import Loading from "../commons/loading";
 
 interface IProps {
-  closeModal: () => void;
+  handleClickChangePwCloseBtn: () => void;
 }
-export default function ChangePasswordModalForm({ closeModal }: IProps) {
+export default function ChangePasswordModalForm({
+  handleClickChangePwCloseBtn,
+}: IProps) {
   const { changePasswordMutate, changePasswordLoading } =
-    useChangePasswordMutate({ closeModal });
+    useChangePasswordMutate({ closeModal: handleClickChangePwCloseBtn });
 
   if (changePasswordLoading) {
     return <Loading />;
@@ -26,7 +28,6 @@ export default function ChangePasswordModalForm({ closeModal }: IProps) {
           password: values.password,
           currentPassword: values["current-password"],
         });
-        console.log(values);
       }}
       formOptions={{
         mode: "onChange",
@@ -44,7 +45,9 @@ export default function ChangePasswordModalForm({ closeModal }: IProps) {
       <ChangePasswordModalCurrentPwField />
       <ChagePasswordModalPwField />
       <ChangePasswordModalPwCheckField />
-      <ChangePasswordModalFormBtns closeModal={closeModal} />
+      <ChangePasswordModalFormBtns
+        handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
+      />
     </MyForm>
   );
 }

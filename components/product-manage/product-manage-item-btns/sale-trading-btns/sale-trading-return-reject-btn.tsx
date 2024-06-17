@@ -6,7 +6,8 @@ interface IProps {
 }
 
 export default function SaleTradingReturnRejectBtn({ productId }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } =
+    useModal();
   return (
     <>
       <button
@@ -19,7 +20,7 @@ export default function SaleTradingReturnRejectBtn({ productId }: IProps) {
       {isOpenModal && (
         <ProductReturnRejectModal
           productId={productId}
-          closeModal={closeModal}
+          handleClickCloseBtn={handleClickCloseBtn}
         />
       )}
     </>

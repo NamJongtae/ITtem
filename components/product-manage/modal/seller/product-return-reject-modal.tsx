@@ -4,12 +4,12 @@ import { FieldValues } from "react-hook-form";
 
 interface IProps {
   productId: string;
-  closeModal: () => void;
+  handleClickCloseBtn:()=>void;
 }
 
 export default function ProductReturnRejectModal({
   productId,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
   const { returnRejectMutate } = useReturnRejectMutate();
 
@@ -20,12 +20,12 @@ export default function ProductReturnRejectModal({
         : values.rejectReason;
 
     returnRejectMutate({ productId, rejectReason });
-    closeModal();
+    handleClickCloseBtn();
   };
 
   return (
     <ProductManageModal
-      closeModal={closeModal}
+      handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 반품 거절"}
       options={[
         "거절사유 선택",

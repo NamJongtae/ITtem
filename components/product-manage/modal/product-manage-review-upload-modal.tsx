@@ -2,24 +2,22 @@ import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
 import useReviewUploadModal from "@/hooks/productManage/useReviewUploadModal";
-import useProductUploadReviewMutate from "@/hooks/reactQuery/mutations/product/useProductUploadReviewMutate";
 import { DevTool } from "@hookform/devtools";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect } from "react";
 import { isMobile } from "react-device-detect";
-import { Controller, FieldValues, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,
 });
 
 interface IProps {
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
   productId: string;
 }
 export default function ProductManageReviewUploadModal({
-  closeModal,
+  handleClickCloseBtn,
   productId,
 }: IProps) {
   const {
@@ -31,7 +29,7 @@ export default function ProductManageReviewUploadModal({
     handleCheckboxChange,
     onSubmit,
     isDisabled,
-  } = useReviewUploadModal({ closeModal, productId });
+  } = useReviewUploadModal({ closeModal: handleClickCloseBtn, productId });
 
   if (uploadReviewLoading) {
     return <Loading />;
@@ -40,7 +38,7 @@ export default function ProductManageReviewUploadModal({
   return (
     <Portal>
       <div
-        onClick={closeModal}
+        onClick={handleClickCloseBtn}
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
         role="modal-backdrop"
       />
@@ -120,7 +118,7 @@ export default function ProductManageReviewUploadModal({
           </button>
           <button
             type="button"
-            onClick={closeModal}
+            onClick={handleClickCloseBtn}
             className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
           >
             <Image

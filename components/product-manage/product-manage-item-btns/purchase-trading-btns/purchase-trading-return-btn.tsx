@@ -1,5 +1,4 @@
 import useModal from "@/hooks/commons/useModal";
-import React from "react";
 import ProductReturnModal from "../../modal/buyer/product-return-modal";
 
 interface IProps {
@@ -7,7 +6,8 @@ interface IProps {
 }
 
 export default function PurchaseTradingReturnBtn({ productId }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } =
+    useModal();
   return (
     <>
       <button
@@ -18,7 +18,10 @@ export default function PurchaseTradingReturnBtn({ productId }: IProps) {
         반품 요청
       </button>
       {isOpenModal && (
-        <ProductReturnModal productId={productId} closeModal={closeModal} />
+        <ProductReturnModal
+          productId={productId}
+          handleClickCloseBtn={handleClickCloseBtn}
+        />
       )}
     </>
   );

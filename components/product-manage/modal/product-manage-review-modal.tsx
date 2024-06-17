@@ -11,15 +11,15 @@ const ReactStars = dynamic(() => import("react-stars"), {
 });
 interface IProps {
   productId: string;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function ProductManageReviewModal({
   productId,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
-  const { data, isLoading } = useProductReviewQuery({ productId, closeModal });
-
+  const { data, isLoading } = useProductReviewQuery({ productId, closeModal: handleClickCloseBtn });
+  
   if (isLoading) {
     return <Loading />;
   }
@@ -27,7 +27,7 @@ export default function ProductManageReviewModal({
   return (
     <Portal>
       <div
-        onClick={closeModal}
+        onClick={handleClickCloseBtn}
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
         role="modal-backdrop"
       />
@@ -89,7 +89,7 @@ export default function ProductManageReviewModal({
         </p>
         <button
           type="button"
-          onClick={closeModal}
+          onClick={handleClickCloseBtn}
           className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
         >
           <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />

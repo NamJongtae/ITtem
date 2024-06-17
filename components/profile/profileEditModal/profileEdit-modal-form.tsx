@@ -10,13 +10,15 @@ import useProfileEditSubmit from "@/hooks/profileEdit/useProfileEditSubmit";
 import Loading from "@/components/commons/loading";
 
 interface IProps {
-  closeModal: () => void;
+  handleClickProfieEditCloseBtn: () => void;
 }
 
-export default function ProfileEditModalForm({ closeModal }: IProps) {
+export default function ProfileEditModalForm({
+  handleClickProfieEditCloseBtn,
+}: IProps) {
   const { myProfileData } = useMyProfileQuery();
   const { handleProfileEditSubmit, profileEditLoading } =
-    useProfileEditSubmit(closeModal);
+    useProfileEditSubmit(handleClickProfieEditCloseBtn);
 
   if (profileEditLoading) {
     return <Loading />;
@@ -43,7 +45,7 @@ export default function ProfileEditModalForm({ closeModal }: IProps) {
       <ProfileImgField />
       <NicknameField />
       <IntroductField />
-      <ProfileEditBtns closeModal={closeModal} />
+      <ProfileEditBtns handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn} />
     </MyForm>
   );
 }

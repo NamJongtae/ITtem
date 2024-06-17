@@ -4,12 +4,12 @@ import { FieldValues } from "react-hook-form";
 
 interface IProps {
   productId: string;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function PurchaseCancelRejectModal({
   productId,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
   const { purchaseCancelRejectMutate } = useCancelRejectMutate();
 
@@ -20,12 +20,12 @@ export default function PurchaseCancelRejectModal({
         : values.rejectReason;
 
     purchaseCancelRejectMutate({ productId, rejectReason });
-    closeModal();
+    handleClickCloseBtn();
   };
 
   return (
     <ProductManageModal
-      closeModal={closeModal}
+      handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 구매 취소 거절"}
       options={["거절사유 선택", "이미 전달된 상품", "직접입력"]}
       name={"rejectReason"}
