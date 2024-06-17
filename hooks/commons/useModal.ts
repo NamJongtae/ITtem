@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
+import { useModalMobileBackBtn } from "./useModalMobileBackBtn";
 
 export default function useModal() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -11,6 +13,15 @@ export default function useModal() {
     setIsOpenModal(false);
   };
 
+  useModalMobileBackBtn({ closeModal, isOpenModal });
+
+  const handleClickCloseBtn = () => {
+    if (isMobile) {
+      history.back();
+    }
+    setIsOpenModal(false);
+  };
+
   useEffect(() => {
     if (isOpenModal) {
       document.body.style.overflow = "hidden";
@@ -19,5 +30,5 @@ export default function useModal() {
     }
   }, [isOpenModal]);
 
-  return {isOpenModal, openModal, closeModal};
+  return { isOpenModal, openModal, closeModal, handleClickCloseBtn };
 }
