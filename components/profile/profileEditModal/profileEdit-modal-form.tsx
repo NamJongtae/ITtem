@@ -1,13 +1,13 @@
 import { MyForm } from "@/components/commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
-import ProfileEditBtns from "./profileEdit-btns";
 import { FieldValues } from "react-hook-form";
 import ProfileImgField from "@/components/signup/stepProfile/profileImg-field";
 import NicknameField from "@/components/signup/stepProfile/nickname-field";
 import IntroductField from "@/components/signup/setpIntroduce/introduce-field";
-import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
-import useProfileEditSubmit from "@/hooks/profileEdit/useProfileEditSubmit";
 import Loading from "@/components/commons/loading";
+import ProfileEditCancelBtn from "./profileEdit-cancel-btn";
+import ProfileEditSubmitBtn from "./profileEdit-submit-btn";
+import useProfileEditModalForm from "@/hooks/profile/useProfileEditModalForm";
 
 interface IProps {
   handleClickProfieEditCloseBtn: () => void;
@@ -16,9 +16,17 @@ interface IProps {
 export default function ProfileEditModalForm({
   handleClickProfieEditCloseBtn,
 }: IProps) {
-  const { myProfileData } = useMyProfileQuery();
-  const { handleProfileEditSubmit, profileEditLoading } =
-    useProfileEditSubmit(handleClickProfieEditCloseBtn);
+  const {
+    myProfileData,
+    handleProfileEditSubmit,
+    profileEditLoading,
+    nicknameRef,
+    introduceRef,
+    cancelBtnRef,
+    submitBtnRef,
+    profileImgBtnRef,
+    profileImgResetBtnRef,
+  } = useProfileEditModalForm({ closeModal: handleClickProfieEditCloseBtn });
 
   if (profileEditLoading) {
     return <Loading />;
@@ -42,10 +50,32 @@ export default function ProfileEditModalForm({
       } fixed z-30 flex flex-col justify-center gap-3 w-full p-8 border bg-white`}
     >
       <h2 className="text-xl text-center font-semibold mb-5">프로필 수정</h2>
-      <ProfileImgField />
-      <NicknameField />
-      <IntroductField />
-      <ProfileEditBtns handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn} />
+      <ProfileImgField
+        profileImgBtnRef={profileImgBtnRef}
+        profileImgResetBtnRef={profileImgResetBtnRef}
+        nicknameRef={nicknameRef}
+        cancelBtnRef={cancelBtnRef}
+        submitBtnRef={submitBtnRef}
+      />
+      <NicknameField
+        nicknameRef={nicknameRef}
+        profileImgBtnRef={profileImgBtnRef}
+      />
+      <IntroductField introduceRef={introduceRef} />
+      <div className="mt-8 flex gap-3 justify-end">
+        <ProfileEditCancelBtn
+          ref={cancelBtnRef}
+          introduceRef={introduceRef}
+          profileImgResetBtnRef={profileImgResetBtnRef}
+          submitBtnRef={submitBtnRef}
+          handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn}
+        />
+        <ProfileEditSubmitBtn
+          ref={submitBtnRef}
+          cancelBtnRef={cancelBtnRef}
+          profileImgResetBtnRef={profileImgResetBtnRef}
+        />
+      </div>
     </MyForm>
   );
 }

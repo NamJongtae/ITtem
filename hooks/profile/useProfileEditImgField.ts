@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-export default function useProfileEidtImgField() {
+export default function useProfileEditImgField() {
   const imgInputRef = useRef<HTMLInputElement>(null);
 
   const handleClickImgInput = (e: any) => {

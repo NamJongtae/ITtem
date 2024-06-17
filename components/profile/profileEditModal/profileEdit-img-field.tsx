@@ -1,4 +1,4 @@
-import useProfileEidtImgField from "@/hooks/profile/useProfileEidtImgField";
+import useProfileEidtImgField from "@/hooks/profile/useProfileEditImgField";
 import Image from "next/image";
 
 export default function ProfileEditImgField() {
