@@ -1,4 +1,4 @@
-import { MyForm } from "../commons/myForm/MyForm";
+import { MyForm } from "../../commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
 import ChangePasswordModalCurrentPwField from "./changePassword-modal-currentPwField";
@@ -6,7 +6,7 @@ import ChagePasswordModalPwField from "./chagePassword-modal-PwField";
 import ChangePasswordModalPwCheckField from "./changePassword-modal-PwCheckField";
 import ChangePasswordModalFormBtns from "./changePassword-modal-form-btns";
 import useChangePasswordMutate from "@/hooks/reactQuery/mutations/auth/useChangePasswordMutate";
-import Loading from "../commons/loading";
+import Loading from "../../commons/loading";
 
 interface IProps {
   handleClickChangePwCloseBtn: () => void;

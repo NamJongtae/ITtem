@@ -1,4 +1,4 @@
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import CoreInputField from "../../commons/coreInputField/core-input-field";
 import usePasswordValidation from "@/hooks/chatPasswordModal/usePasswordValidation";
 
 export default function ChagePasswordModalPwField() {

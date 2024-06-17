@@ -1,4 +1,4 @@
-import Portal from "../commons/portal/Portal";
+import Portal from "../../commons/portal/Portal";
 import ChangePasswordModalForm from "./changePassword-modal-form";
 
 interface IProps {

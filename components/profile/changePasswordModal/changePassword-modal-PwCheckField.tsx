@@ -1,4 +1,4 @@
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import CoreInputField from "../../commons/coreInputField/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import usePasswordChkValidation from "@/hooks/chatPasswordModal/usePasswordChkValidation";
 
