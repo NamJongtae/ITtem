@@ -1,12 +1,7 @@
 import useCoreInputField from "@/hooks/commons/coreInputField/useCoreInputField";
 import Image from "next/image";
 import { MutableRefObject } from "react";
-import {
-  FieldValues,
-  Validate,
-  ValidationRule,
-  useFormContext,
-} from "react-hook-form";
+import { FieldValues, Validate, ValidationRule } from "react-hook-form";
 
 interface IProps {
   inputClassName?: string;
@@ -31,6 +26,7 @@ interface IProps {
   hideError?: boolean;
   labelHidden?: boolean;
   labelClassName?: string;
+  inputKeydown?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 export default function CoreInputField({
@@ -53,6 +49,7 @@ export default function CoreInputField({
   hideError,
   labelHidden = true,
   labelClassName,
+  inputKeydown,
 }: IProps) {
   const { ref, rest, error, value, resetInput } = useCoreInputField({
     inputName,
@@ -80,7 +77,7 @@ export default function CoreInputField({
           placeholder={inputPlaceholder}
           autoComplete="off"
           readOnly={inputReadOnly}
-          onFocus={inputOnFocus}
+          onKeyDown={inputKeydown}
           minLength={inputMinLength}
           maxLength={inputMaxLength}
           {...rest}
