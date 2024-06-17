@@ -1,4 +1,3 @@
-import { MY_PROFILE_QUERY_KEY } from "@/constants/constant";
 import { uploadImgToFireStore } from "@/lib/api/firebase";
 import { ProfileData, ProfileEditData } from "@/types/authTypes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -7,6 +6,7 @@ import useProfileEditMutate from "../reactQuery/querys/profile/useProfileEditMut
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { queryKeys } from "@/queryKeys";
 
 export default function useProfileEditSubmit(closeModal: () => void) {
   const [profileEditLoading, setProfileEditLoading] = useState(false);
@@ -14,8 +14,9 @@ export default function useProfileEditSubmit(closeModal: () => void) {
   const { profileEditMutate } = useProfileEditMutate(closeModal);
   let profileEditData = {} as ProfileEditData;
   const queryClient = useQueryClient();
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
-  const profileData = queryClient.getQueryData(MY_PROFILE_QUERY_KEY) as
+  const profileData = queryClient.getQueryData(myProfileQueryKey) as
     | ProfileData
     | undefined;
 
