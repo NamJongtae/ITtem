@@ -6,6 +6,7 @@ import ReviewUploadModalTextarea from "./review-upload-modal-textarea";
 import ReviewUploadModalSubmitBtn from "./review-upload-modal-submit-btn";
 import ReviewUploadModalCloseBtn from "./review-upload-modal-close-btn";
 import useReviewUploadModalFomContents from "@/hooks/productManage/useReviewUploadModalFomContents";
+import ReviewUploadModalHeader from "./review-upload-modal-header";
 
 interface IProps {
   handleClickCloseBtn: () => void;
@@ -23,13 +24,7 @@ export default function ReviewUploadModalFormContents({
         isMobile ? "h-screen" : "max-w-[480px]"
       } fixed center z-30 flex flex-col gap-3 w-full p-8 border bg-white`}
     >
-      <h2
-        className={`${
-          isMobile ? "mt-10" : "mt-3"
-        } text-xl text-center font-semibold mb-3`}
-      >
-        리뷰 작성
-      </h2>
+      <ReviewUploadModalHeader />
 
       <ReviewUploadModalReviewStar ref={starRef} closeBtnRef={closeBtnRef} />
 
