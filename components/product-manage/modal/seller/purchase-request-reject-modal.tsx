@@ -1,5 +1,5 @@
 import usePurchaseRequestRejectMutate from "@/hooks/reactQuery/mutations/trade/usePurchaseRequestRejectMutate";
-import ProductManageModal from "../product-manage-modal";
+import ReasonModal from "../commons/reasonModal/reason-modal";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {
@@ -24,7 +24,7 @@ export default function PurchaseRequestRejectModal({
   };
 
   return (
-    <ProductManageModal
+    <ReasonModal
       handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 구매 요청 거절"}
       options={[

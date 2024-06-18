@@ -1,4 +1,4 @@
-import ProductManageModal from "../product-manage-modal";
+import ReasonModal from "../commons/reasonModal/reason-modal";
 import useCancelRejectMutate from "@/hooks/reactQuery/mutations/trade/useCancelRejectMutate";
 import { FieldValues } from "react-hook-form";
 
@@ -24,7 +24,7 @@ export default function PurchaseCancelRejectModal({
   };
 
   return (
-    <ProductManageModal
+    <ReasonModal
       handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 구매 취소 거절"}
       options={["거절사유 선택", "이미 전달된 상품", "직접입력"]}

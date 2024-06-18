@@ -1,4 +1,4 @@
-import ProductManageModal from "../product-manage-modal";
+import ReasonModal from "../commons/reasonModal/reason-modal";
 import useProductReturnModal from "@/hooks/productManage/useProductReturnModal";
 
 interface IProps {
@@ -16,7 +16,7 @@ export default function ProductReturnModal({
   });
 
   return (
-    <ProductManageModal
+    <ReasonModal
       handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 반품 요청"}
       options={[

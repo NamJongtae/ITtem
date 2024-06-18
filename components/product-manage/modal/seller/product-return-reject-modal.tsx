@@ -1,10 +1,10 @@
-import ProductManageModal from "../product-manage-modal";
+import ReasonModal from "../commons/reasonModal/reason-modal";
 import useReturnRejectMutate from "@/hooks/reactQuery/mutations/trade/useReturnReceiptReject.Mutate";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {
   productId: string;
-  handleClickCloseBtn:()=>void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function ProductReturnRejectModal({
@@ -24,7 +24,7 @@ export default function ProductReturnRejectModal({
   };
 
   return (
-    <ProductManageModal
+    <ReasonModal
       handleClickCloseBtn={handleClickCloseBtn}
       title={"상품 반품 거절"}
       options={[
