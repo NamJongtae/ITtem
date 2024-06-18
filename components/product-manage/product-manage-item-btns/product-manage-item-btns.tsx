@@ -5,7 +5,7 @@ import {
 } from "../product-manage-page";
 import ProductManageItemTradingBtns from "./product-manage-item-trading-btns";
 import ProductManageItemTradingEndBtns from "./product-manage-item-trading-end-btns";
-import ProductManageItemCancelReturnBtns from './product-manage-item-cancel-return-btns';
+import ProductManageItemCancelReturnBtns from "./product-manage-item-cancel-return-btns";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -28,10 +28,10 @@ export default function ProductManageItemBtns({
           tradingData={tradingData}
         />
       )}
-      {detailMenu === "취소/반품 내역" ||
-        (detailMenu === "취소/반품 거절 내역" && (
-          <ProductManageItemCancelReturnBtns tradingData={tradingData} />
-        ))}
+      {(detailMenu === "취소/반품 내역" ||
+        detailMenu === "취소/반품 거절 내역") && (
+        <ProductManageItemCancelReturnBtns tradingData={tradingData} />
+      )}
     </div>
   );
 }
