@@ -1,5 +1,5 @@
 import React from "react";
-import ProductManageReviewModal from "../../modal/product-manage-review-modal";
+import ReviewModal from "../../modal/commons/reviewModal/review-modal";
 import useModal from "@/hooks/commons/useModal";
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export default function SaleTradingEndReviewBtn({ productId }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   return (
     <>
       <button
@@ -18,9 +18,9 @@ export default function SaleTradingEndReviewBtn({ productId }: IProps) {
         리뷰 보기
       </button>
       {isOpenModal && (
-        <ProductManageReviewModal
+        <ReviewModal
           productId={productId}
-          closeModal={closeModal}
+          handleClickCloseBtn={handleClickCloseBtn}
         />
       )}
     </>

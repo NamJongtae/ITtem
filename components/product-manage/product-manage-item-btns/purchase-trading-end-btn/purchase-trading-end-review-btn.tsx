@@ -1,13 +1,12 @@
 import useModal from "@/hooks/commons/useModal";
-import ProductManageReviewModal from "../../modal/product-manage-review-modal";
+import ReviewModal from "../../modal/commons/reviewModal/review-modal";
 
 interface IProps {
   productId: string;
 }
 
 export default function PurchaseTradingEndReviewBtn({ productId }: IProps) {
-  const { isOpenModal, openModal, handleClickCloseBtn } =
-    useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   return (
     <>
       <button
@@ -18,7 +17,7 @@ export default function PurchaseTradingEndReviewBtn({ productId }: IProps) {
         리뷰 보기
       </button>
       {isOpenModal && (
-        <ProductManageReviewModal
+        <ReviewModal
           productId={productId}
           handleClickCloseBtn={handleClickCloseBtn}
         />
