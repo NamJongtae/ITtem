@@ -1,5 +1,5 @@
 import useModal from "@/hooks/commons/useModal";
-import ProductManageReviewUploadModal from "../../modal/product-manage-review-upload-modal";
+import ReviewUploadModal from "../../modal/commons/reviewUploadModal/review-upload-modal";
 
 interface IProps {
   productId: string;
@@ -8,8 +8,7 @@ interface IProps {
 export default function PurchaseTradingEndReviewUploadBtn({
   productId,
 }: IProps) {
-  const { isOpenModal, openModal, handleClickCloseBtn } =
-    useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   return (
     <>
       <button
@@ -20,7 +19,7 @@ export default function PurchaseTradingEndReviewUploadBtn({
         리뷰 작성
       </button>
       {isOpenModal && (
-        <ProductManageReviewUploadModal
+        <ReviewUploadModal
           productId={productId}
           handleClickCloseBtn={handleClickCloseBtn}
         />

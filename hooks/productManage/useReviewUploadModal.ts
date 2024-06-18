@@ -14,28 +14,8 @@ export default function useReviewUploadModal({
 }: IPrarms) {
   const { uploadReviewMutate, uploadReviewLoading } =
     useProductUploadReviewMutate(closeModal);
-  const {
-    register,
-    unregister,
-    handleSubmit,
-    setValue,
-    watch,
-    control,
-    formState,
-  } = useForm({
-    defaultValues: { score: 0, content: "", tags: REVIEW_TAGS.map(() => 0) },
-  });
 
-  const tags = watch("tags");
-  const score = watch("score");
-
-  const handleCheckboxChange = (index: number) => {
-    const updatedTags = [...tags];
-    updatedTags[index] = updatedTags[index] === 0 ? 1 : 0;
-    setValue("tags", updatedTags, { shouldDirty: true, shouldValidate: true });
-  };
-
-  const onSubmit = handleSubmit((values: FieldValues) => {
+  const onSubmit = (values: FieldValues) => {
     const isUploadReview = confirm(
       "정말 리뷰를 작성 하겠어요? 등록 후 삭제/수정이 불가능합니다."
     );
@@ -47,24 +27,9 @@ export default function useReviewUploadModal({
         reviewTags: values.tags,
       });
     }
-  });
-
-  const isDisabled =
-    !formState.dirtyFields["score"] || !formState.dirtyFields["content"];
-
-  useEffect(() => {
-    register("tags");
-    return () => unregister("tags");
-  }, [register, unregister]);
-
+  };
   return {
-    register,
-    uploadReviewLoading,
-    control,
-    tags,
-    score,
-    handleCheckboxChange,
     onSubmit,
-    isDisabled,
+    uploadReviewLoading,
   };
 }
