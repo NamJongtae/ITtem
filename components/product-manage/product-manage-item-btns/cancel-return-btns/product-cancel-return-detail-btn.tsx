@@ -1,5 +1,5 @@
 import useModal from "@/hooks/commons/useModal";
-import ProductManageCancelReturnDetailModal from "../../modal/product-manage-cancel-return-detail-modal";
+import CancelAndReturnDetailModal from "../../modal/commons/cancelAndReturnDetailModal/cancel-and-return-detail-modal";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 
 interface IProps {
@@ -19,7 +19,7 @@ export default function ProductCancelReturnDetailBtn({ tradingData }: IProps) {
         거래 상세 정보
       </button>
       {isOpenModal && (
-        <ProductManageCancelReturnDetailModal
+        <CancelAndReturnDetailModal
           tradingData={tradingData}
           handleClickCloseBtn={handleClickCloseBtn}
         />
