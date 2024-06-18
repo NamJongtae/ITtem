@@ -1,6 +1,5 @@
 import useModal from "@/hooks/commons/useModal";
-import React from "react";
-import ProductManageTradingDetailModal from "../../modal/product-manage-trading-detail-modal";
+import TradeDetailModal from "../../modal/commons/trade-detail-modal/trade-detail-modal";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 
 interface IProps {
@@ -21,7 +20,7 @@ export default function PurchaseTradingEndTradingDetailBtn({
         거래 상세 정보
       </button>
       {isOpenModal && (
-        <ProductManageTradingDetailModal
+        <TradeDetailModal
           tradingData={tradingData}
           handleClickCloseBtn={handleClickCloseBtn}
         />
