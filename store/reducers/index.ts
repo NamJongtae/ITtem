@@ -1,13 +1,11 @@
 import { combineReducers, AnyAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
-import { modalSlice } from "../modalSlice";
 import { signupSlice } from "../signupSlice";
 import { authSlice } from "../authSlice";
 import { locationSlice } from "../locationSlice";
 import { chatSlice } from '../chatSlice';
 
 const combinedReducer = combineReducers({
-  modal: modalSlice.reducer,
   signup: signupSlice.reducer,
   auth: authSlice.reducer,
   location: locationSlice.reducer,

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store/store";
-import { modalSlice } from "../../../store/modalSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
 import {
@@ -17,15 +16,25 @@ import {
 import { database } from "@/lib/firebaseSetting";
 import { NotificationMessageData } from "@/types/notification";
 import { useQueryClient } from "@tanstack/react-query";
+import { isMobile } from "react-device-detect";
 
 export default function useNotification() {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const openModal = () => {
+    setIsOpenModal(true);
+  };
+
+  const closeModal = () => {
+    if (isMobile) {
+      history.back();
+    }
+    setIsOpenModal(false);
+  };
+
   const [unreadCount, setUnreadCount] = useState(0);
   const queryClient = useQueryClient();
 
-  const isOpenNotification = useSelector(
-    (state: RootState) => state.modal.isOpenNotification
-  );
-  const dispatch = useDispatch<AppDispatch>();
   const notificationRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -43,20 +52,20 @@ export default function useNotification() {
       handleClickLink();
       return;
     }
-    dispatch(modalSlice.actions.openNotification());
+    openModal();
   };
 
   const closeNotification = useCallback(() => {
     if (!notificationRef.current) return;
     notificationRef.current.classList.add("animate-leaving");
     timerRef.current = setTimeout(() => {
-      dispatch(modalSlice.actions.closeNotificaiton());
+      closeModal();
     }, 180);
     return;
   }, []);
 
   const toggleNotification = () => {
-    if (isOpenNotification) {
+    if (isOpenModal) {
       closeNotification();
       return;
     }
@@ -73,7 +82,7 @@ export default function useNotification() {
       }
     };
 
-    if (isOpenNotification) {
+    if (isOpenModal) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
@@ -81,7 +90,7 @@ export default function useNotification() {
       document.removeEventListener("mousedown", handleClickOutside);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [closeNotification, isOpenNotification]);
+  }, [closeNotification, isOpenModal]);
 
   useEffect(() => {
     if (!user) return;
@@ -129,7 +138,7 @@ export default function useNotification() {
   }, [user]);
 
   return {
-    isOpenNotification,
+    isOpenModal,
     toggleNotification,
     notificationRef,
     unreadCount,

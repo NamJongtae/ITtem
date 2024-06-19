@@ -20,8 +20,10 @@ export default function NotificationItem({ data }: IProps) {
       >
         {data?.content}
       </p>
-      <NotificationItemDeleteBtn messageId={data.id} />
-      <NotificationItemReadBtn messageId={data.id} isRead={data.isRead} />
+      <div className="flex justify-end">
+        <NotificationItemReadBtn messageId={data.id} isRead={data.isRead} />
+        <NotificationItemDeleteBtn messageId={data.id} />
+      </div>
     </li>
   );
 }
