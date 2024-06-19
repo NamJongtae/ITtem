@@ -1,8 +1,11 @@
 import { CATEGORY } from "@/constants/constant";
-import React, { forwardRef } from "react";
+import useCateogryMobileList from "@/hooks/commons/layout/useCateogryMobileList";
+import { escKeyClose, optimizationTabFocus } from "@/lib/optimizationKeyboard";
+import React, { forwardRef, useRef } from "react";
 
 interface IProps {
   isOpenCategory: boolean;
+  toggleMenu: () => void;
   handleSelectCategory: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
@@ -10,29 +13,33 @@ interface IProps {
 }
 
 const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
-  ({ isOpenCategory, handleSelectCategory, currentCategory }, ref) => {
+  (
+    { isOpenCategory, toggleMenu, handleSelectCategory, currentCategory },
+    ref
+  ) => {
+    const { setCategoryClassName, setCategoryBtnRef, categoryOnKeyDown } =
+      useCateogryMobileList({ currentCategory });
+
     return (
       isOpenCategory && (
         <ul
-          className="absolute sm:hidden right-[10px] z-10 mt-10 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
+          className="absolute sm:hidden right-[10px] mt-10 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
           role="menu"
           ref={ref}
           aria-orientation="vertical"
           aria-labelledby="menu-button"
-          tabIndex={-1}
+          onKeyDown={(e) => escKeyClose({ event: e, closeCb: toggleMenu })}
         >
-          {CATEGORY.map((category) => (
+          {CATEGORY.map((category, index) => (
             <li key={category} className="">
               <button
                 type="button"
                 data-category={category}
                 onClick={handleSelectCategory}
-                className={`${
-                  currentCategory === category &&
-                  "bg-gray-700 text-white betterhover:hover:text-black betterhover:hover:bg-gray-200"
-                } text-gray-700 block px-3 py-2 text-sm w-full text-left rounded-md betterhover:hover:bg-gray-100 transition duration-150 ease-in-out`}
+                className={setCategoryClassName(category)}
                 role="menuitem"
-                tabIndex={-1}
+                ref={setCategoryBtnRef(index)}
+                onKeyDown={(e) => categoryOnKeyDown(e, index)}
               >
                 {category}
               </button>

@@ -11,7 +11,7 @@ export default function CategoryMobileMenu({ currentCategory }: IProps) {
   const { isOpenMenu, toggleMenu, handleSelectMenu, menuRef } =
     useMobileCategory();
   return (
-    <div className="relative sm:hidden mx-auto px-3 flex justify-end z-20">
+    <div className="relative sm:hidden mx-auto px-3 flex justify-end z-[11]">
       <CategoryMobileBtn
         currentCategory={currentCategory}
         isOpenCategory={isOpenMenu}
@@ -20,6 +20,7 @@ export default function CategoryMobileMenu({ currentCategory }: IProps) {
       <CategoryMobileList
         isOpenCategory={isOpenMenu}
         currentCategory={currentCategory}
+        toggleMenu={toggleMenu}
         handleSelectCategory={handleSelectMenu}
         ref={menuRef}
       />
