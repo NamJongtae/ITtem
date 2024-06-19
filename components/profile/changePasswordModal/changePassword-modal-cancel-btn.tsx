@@ -1,4 +1,4 @@
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
@@ -23,7 +23,7 @@ const ChangePasswordModalCancelBtn = forwardRef<
         className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
         ref={ref}
         onKeyDown={(e) =>
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: pwCheckRef.current,
             nextTarget: submitBtnRef.current?.disabled

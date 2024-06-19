@@ -1,4 +1,4 @@
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
@@ -25,7 +25,7 @@ const ProfileEditCancelBtn = forwardRef<HTMLButtonElement, IProps>(
         onClick={handleClickProfieEditCloseBtn}
         className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
         onKeyDown={(e) =>
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: introduceRef.current,
             nextTarget: submitBtnRef.current?.disabled

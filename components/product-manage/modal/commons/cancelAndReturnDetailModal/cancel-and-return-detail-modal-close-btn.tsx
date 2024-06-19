@@ -1,5 +1,5 @@
 import { useFocusing } from "@/hooks/commons/useFocusing";
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -20,7 +20,7 @@ export default function CancelAndReturnDetailModalCloseBtn({
       className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
       ref={closeBtnRef}
       onKeyDown={(e) =>
-        optModalTabFocus({
+        optimizationTabFocus({
           event: e,
           previousTarget: closeBtnRef.current,
           nextTarget: closeBtnRef.current,

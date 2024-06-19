@@ -1,4 +1,4 @@
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
 import React, { MutableRefObject } from "react";
 
@@ -31,7 +31,7 @@ export default function ProfileImgInputBtn({
         className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img_upload_icon.svg')] before:rounded-full before:bg-center before:bg-cover"
         ref={profileImgBtnRef}
         onKeyDown={(e) =>
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: profileImgResetBtnRef.current,
             nextTarget: nicknameRef.current,
@@ -52,7 +52,7 @@ export default function ProfileImgInputBtn({
         className="absolute top-1 -right-1 bg-gray-500 rounded-full p-2"
         ref={profileImgResetBtnRef}
         onKeyDown={(e) =>
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: submitBtnRef.current?.disabled
               ? cancelBtnRef.current

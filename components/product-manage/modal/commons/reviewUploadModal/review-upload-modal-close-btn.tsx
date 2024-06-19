@@ -1,4 +1,4 @@
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
 import React, { MutableRefObject, forwardRef } from "react";
 
@@ -18,7 +18,7 @@ const ReviewUploadModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
         className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
         ref={ref}
         onKeyDown={(e) => {
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: submitBtnRef.current?.disabled
               ? textareaRef.current

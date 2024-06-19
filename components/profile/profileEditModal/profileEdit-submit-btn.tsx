@@ -1,5 +1,5 @@
 import useProfileEditSubmitBtn from "@/hooks/profile/useProfileEditSubmitBtn";
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
@@ -17,7 +17,7 @@ const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
         className="py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
         ref={ref}
         onKeyDown={(e) =>
-          optModalTabFocus({
+          optimizationTabFocus({
             event: e,
             previousTarget: cancelBtnRef.current,
             nextTarget: profileImgResetBtnRef.current,

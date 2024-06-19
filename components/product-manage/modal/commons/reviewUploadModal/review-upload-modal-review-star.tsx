@@ -1,6 +1,5 @@
-import { useFocusing } from "@/hooks/commons/useFocusing";
 import useReviewUploadModalReviewStar from "@/hooks/productManage/useReviewUploadModalReviewStar";
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import dynamic from "next/dynamic";
 import { MutableRefObject, forwardRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -25,7 +24,7 @@ const ReviewUploadModalReviewStar = forwardRef<HTMLDivElement | null, IProps>(
         tabIndex={0}
         ref={ref}
         onKeyDown={(e) =>
-          optModalTabFocus({ event: e, previousTarget: closeBtnRef.current })
+          optimizationTabFocus({ event: e, previousTarget: closeBtnRef.current })
         }
       >
         <h3 className="sr-only">리뷰 점수</h3>

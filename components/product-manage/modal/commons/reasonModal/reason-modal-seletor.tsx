@@ -1,5 +1,5 @@
 import useReasonModalSeletor from "@/hooks/productManage/useReasonModalSeletor";
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject } from "react";
 
 interface IProps {
@@ -30,7 +30,7 @@ export default function ReasonModalSeletor({
         if (selectorRef) selectorRef.current = e;
       }}
       onKeyDown={(e) =>
-        optModalTabFocus({
+        optimizationTabFocus({
           event: e,
           previousTarget: closeBtnRef.current,
           nextTarget: textareaRef.current?.disabled

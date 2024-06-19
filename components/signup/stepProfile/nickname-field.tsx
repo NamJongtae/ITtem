@@ -1,7 +1,7 @@
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
 import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from "@/constants/constant";
 import { useFocusing } from "@/hooks/commons/useFocusing";
-import { optModalTabFocus } from "@/lib/optimizationTabFocus";
+import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject } from "react";
 
 interface IProps {
@@ -9,7 +9,10 @@ interface IProps {
   profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 
-export default function NicknameField({ nicknameRef, profileImgBtnRef }: IProps) {
+export default function NicknameField({
+  nicknameRef,
+  profileImgBtnRef,
+}: IProps) {
   useFocusing(nicknameRef);
 
   return (
@@ -29,7 +32,10 @@ export default function NicknameField({ nicknameRef, profileImgBtnRef }: IProps)
         }}
         inputRef={nicknameRef}
         inputKeydown={(e) =>
-          optModalTabFocus({ event: e, previousTarget: profileImgBtnRef.current })
+          optimizationTabFocus({
+            event: e,
+            previousTarget: profileImgBtnRef.current,
+          })
         }
       />
     </div>
