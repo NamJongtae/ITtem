@@ -5,6 +5,7 @@ import CancelAndReturnDetailModalContent from "./cancel-and-return-detail-modal-
 import CancelAndReutrnDeatilModalReason from "./cancel-and-reutrn-deatil-modal-reason";
 import CancelAndReturnDetailModalDate from "./cancel-and-reurn-detail-modal-date";
 import CancelAndReturnDetailModalCloseBtn from "./cancel-and-return-detail-modal-close-btn";
+import { escKeyClose } from "@/lib/optimizationKeyboard";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -26,6 +27,9 @@ export default function CancelAndReturnDetailModal({
         className={`${
           isMobile ? "h-screen" : "max-w-[480px]"
         } fixed center z-30 flex flex-col gap-2 w-full p-8 border bg-white`}
+        onKeyDown={(e) =>
+          escKeyClose({ event: e, closeCb: handleClickCloseBtn })
+        }
       >
         <h2
           className={`${

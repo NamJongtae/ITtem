@@ -7,6 +7,7 @@ import ReviewUploadModalSubmitBtn from "./review-upload-modal-submit-btn";
 import ReviewUploadModalCloseBtn from "./review-upload-modal-close-btn";
 import useReviewUploadModalFomContents from "@/hooks/productManage/useReviewUploadModalFomContents";
 import ReviewUploadModalHeader from "./review-upload-modal-header";
+import { escKeyClose } from "@/lib/optimizationKeyboard";
 
 interface IProps {
   handleClickCloseBtn: () => void;
@@ -23,6 +24,7 @@ export default function ReviewUploadModalFormContents({
       className={`${
         isMobile ? "h-screen" : "max-w-[480px]"
       } fixed center z-30 flex flex-col gap-3 w-full p-8 border bg-white`}
+      onKeyDown={(e) => escKeyClose({ event: e, closeCb: handleClickCloseBtn })}
     >
       <ReviewUploadModalHeader />
 

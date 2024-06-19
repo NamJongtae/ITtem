@@ -12,6 +12,7 @@ import ReviewModalReviewContent from "./review-modal-review-content";
 import ReviewModalCloseBtn from "./review-modal-close-btn";
 import ReviewModalHeader from "./review-modal-header";
 import ReviewModalBackDrop from "./review-modal-back-drop";
+import { escKeyClose } from "@/lib/optimizationKeyboard";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,
@@ -38,11 +39,14 @@ export default function ReviewModal({
   return (
     <Portal>
       <ReviewModalBackDrop handleClickCloseBtn={handleClickCloseBtn} />
-      
+
       <div
         className={`${
           isMobile ? "h-screen" : "max-w-[480px]"
         } fixed center z-30 flex flex-col gap-3 w-full p-8 border bg-white`}
+        onKeyDown={(e) =>
+          escKeyClose({ event: e, closeCb: handleClickCloseBtn })
+        }
       >
         <ReviewModalHeader />
 

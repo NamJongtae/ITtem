@@ -4,6 +4,7 @@ import { isMobile } from "react-device-detect";
 import TradeDetailModalContent from "./trade-detail-modal-content";
 import TradeDetailModalCloseBtn from "./trade-detail-modal-close-btn";
 import TradeDetailModalDate from "./trade-detail-modal-date";
+import { escKeyClose } from '@/lib/optimizationKeyboard';
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -25,6 +26,7 @@ export default function TradeDetailModal({
         className={`${
           isMobile ? "h-screen" : "max-w-[480px]"
         } fixed center z-30 flex flex-col gap-2 w-full p-8 border bg-white`}
+        onKeyDown={(e) => escKeyClose({ event: e, closeCb: handleClickCloseBtn })}
       >
         <h2
           className={`${
