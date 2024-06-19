@@ -22,14 +22,14 @@ export default function useNavCategoryMenu({ currentCategory }: IPrarms) {
   };
 
   const firstCategoryRef = useRef<HTMLAnchorElement | null>(null);
-  const lastCatgoryRef = useRef<HTMLAnchorElement | null>(null);
+  const lastCategoryRef = useRef<HTMLAnchorElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLAnchorElement | null>(null);
 
   const setCategoryLinkRef = (index: number) => {
     return index === 0
       ? firstCategoryRef
       : index === CATEGORY.length - 1
-      ? lastCatgoryRef
+      ? lastCategoryRef
       : index === CATEGORY.length - 2
       ? lastCategoryPreviousRef
       : null;
@@ -48,7 +48,7 @@ export default function useNavCategoryMenu({ currentCategory }: IPrarms) {
     } else if (index === 0) {
       optimizationTabFocus({
         event: e,
-        previousTarget: lastCatgoryRef.current,
+        previousTarget: lastCategoryRef.current,
       });
     }
   };
