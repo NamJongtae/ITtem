@@ -3,7 +3,7 @@
  * @param {HTMLElement | null} params.previousTarget - 이전 포커싱 대상입니다.
  * @param {HTMLElement | null} [params.nextTarget] - 다음 포커싱 대상입니다.
  */
-export const optModalTabFocus = ({
+export const optimizationTabFocus = ({
   event,
   previousTarget,
   nextTarget,
@@ -19,5 +19,17 @@ export const optModalTabFocus = ({
   } else if (nextTarget && event.keyCode === 9) {
     event.preventDefault();
     nextTarget.focus();
+  }
+};
+
+export const escKeyClose = ({
+  event,
+  closeCb,
+}: {
+  event: React.KeyboardEvent<HTMLElement>;
+  closeCb: () => void;
+}) => {
+  if (event.keyCode === 27) {
+    closeCb();
   }
 };
