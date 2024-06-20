@@ -10,16 +10,15 @@ interface IPrarms {
 export default function useNavCategoryMenu({ currentCategory }: IPrarms) {
   const pathname = usePathname();
 
-  const setCategoryClassName = (category: string) => {
-    return `${
+  const activeCategoryClassName = (category: string) =>
+    `${
       (pathname.includes("product") &&
         currentCategory === null &&
         category === "전체") ||
       currentCategory === category
         ? "bg-red-400 text-white"
-        : "bg-none text-inherit"
-    } block pl-5 py-2 w-full h-full text-sm betterhover:hover:bg-red-400 betterhover:hover:text-white`;
-  };
+        : ""
+    }`;
 
   const firstCategoryRef = useRef<HTMLAnchorElement | null>(null);
   const lastCategoryRef = useRef<HTMLAnchorElement | null>(null);
@@ -53,5 +52,5 @@ export default function useNavCategoryMenu({ currentCategory }: IPrarms) {
     }
   };
 
-  return { setCategoryClassName, setCategoryLinkRef, categoryOnKeyDown };
+  return { activeCategoryClassName, setCategoryLinkRef, categoryOnKeyDown };
 }

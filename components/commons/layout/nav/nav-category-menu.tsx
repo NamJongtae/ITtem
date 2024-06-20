@@ -11,7 +11,7 @@ interface IProps {
 
 const NavCategoryMenu = forwardRef<HTMLDivElement, IProps>(
   ({ currentCategory, toggleCategory }, ref) => {
-    const { setCategoryClassName, setCategoryLinkRef, categoryOnKeyDown } =
+    const { activeCategoryClassName, setCategoryLinkRef, categoryOnKeyDown } =
       useNavCategoryMenu({ currentCategory });
 
     return (
@@ -34,7 +34,9 @@ const NavCategoryMenu = forwardRef<HTMLDivElement, IProps>(
                     ? "/product"
                     : `/product?category=${category}`
                 }`}
-                className={setCategoryClassName(category)}
+                className={`${activeCategoryClassName(
+                  category
+                )} block pl-5 py-2 w-full h-full text-sm betterhover:hover:bg-red-400 betterhover:hover:text-white`}
                 ref={setCategoryLinkRef(index)}
                 onKeyDown={(e) => {
                   categoryOnKeyDown(e, index);
