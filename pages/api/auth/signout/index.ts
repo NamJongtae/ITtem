@@ -22,15 +22,17 @@ export default async function handler(
       );
       const accessToken = session.accessToken;
       const decodeAccessToken = verifyToken(accessToken, ACCESS_TOKEN_KEY);
-
       await deleteToken(decodeAccessToken?.data?.user.uid || "", "accessToken");
       await deleteToken(
         decodeAccessToken?.data?.user.uid || "",
         "refreshToken"
       );
-      session.destroy();
 
       await dbConnect();
+      if (!decodeAccessToken?.data?.user.uid) {
+        return res.status(403).json("유효하지 않은 토큰입니다.");
+      }
+
       const user = await User.findOne({
         _id: new mongoose.Types.ObjectId(
           decodeAccessToken?.data?.user.uid || ""
@@ -43,6 +45,7 @@ export default async function handler(
         return;
       }
 
+      session.destroy();
       res.status(200).json({ message: "로그아웃에 성공했어요." });
     } catch (error) {
       console.error(error);
