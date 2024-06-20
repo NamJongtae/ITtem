@@ -1,18 +1,25 @@
 import Loading from "@/components/commons/loading";
 import useGoogleSigninMutate from "@/hooks/reactQuery/mutations/auth/useGoogleSigninMutate";
 import useGoogleUserInfo from "@/hooks/reactQuery/mutations/auth/useGoogleUserInfoMutate";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function GoogleAuth() {
-  const params = useSearchParams();
-  const code = params.get("code");
+  const router = useRouter();
+  const code = router.query?.code;
+  const error = router.query?.error;
   const { googleSigninMutate } = useGoogleSigninMutate();
   const { googleUserInfoMutate, user } = useGoogleUserInfo();
 
   useEffect(() => {
+    if (error) {
+      router.push("/signin");
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (code) {
-      googleUserInfoMutate(code);
+      googleUserInfoMutate(code as string);
     }
   }, [code, googleUserInfoMutate]);
 
