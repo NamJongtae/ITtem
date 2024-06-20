@@ -1,6 +1,7 @@
 import useProductLocationChkBox from "@/hooks/product/useProductLocationChkBox";
+import React from "react";
 
-export default function LocationCheckbox() {
+const LocationCheckbox = () => {
   const { checked, handleClickCheck } = useProductLocationChkBox();
 
   return (
@@ -36,4 +37,5 @@ export default function LocationCheckbox() {
       <span className="pl-1 text-sm">내 지역 검색</span>
     </div>
   );
-}
+};
+export default React.memo(LocationCheckbox);
