@@ -15,6 +15,7 @@ const config: Config = {
     "animate-bounceOpacity",
     "animate-slideUp",
     "animate-slideDown",
+    "bg-red-400",
   ],
   theme: {
     extend: {
