@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useModalMobileBackBtn } from "./useModalMobileBackBtn";
 
 export default function useModal() {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setIsOpenModal(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpenModal(false);
-  };
+  }, []);
 
   useModalMobileBackBtn({ closeModal, isOpenModal });
 
-  const handleClickCloseBtn = () => {
+  const handleClickCloseBtn = useCallback(() => {
     if (isMobile) {
       history.back();
     }
     setIsOpenModal(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (isOpenModal) {
