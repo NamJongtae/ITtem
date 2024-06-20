@@ -7,6 +7,7 @@ import { verifyToken } from "@/lib/token";
 import { IronSessionType } from "@/types/apiTypes";
 import { getIronSession } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
+import mongoose from "mongoose";
 
 export default async function handler(
   req: NextApiRequest,
@@ -30,12 +31,12 @@ export default async function handler(
       session.destroy();
 
       await dbConnect();
-
       const user = await User.findOne({
-        uid: decodeAccessToken?.data?.user.uid || "",
+        _id: new mongoose.Types.ObjectId(
+          decodeAccessToken?.data?.user.uid || ""
+        ),
       });
-
-      if (user?.socialType === "KAKAO") {
+      if (user?.loginType === "KAKAO") {
         res
           .status(202)
           .json({ message: "카카오 계정은 별도의 로그아웃이 필요해요." });
