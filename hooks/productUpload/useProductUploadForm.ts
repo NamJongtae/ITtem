@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import useProductUploadSubmit from "./useProductUploadSubmit";
 import useProductQuery from "../reactQuery/mutations/product/useProductQuery";
 import useProductEditSubmit from "./useProductEditSubmit";
-import useProductEditCheckUser from "./useProductEditCheckUser";
 
 interface IPrarms {
   isEdit?: boolean;
@@ -20,8 +19,6 @@ export default function useProductUploadForm({ isEdit }: IPrarms) {
 
   const { handleClickProductEditSubmit, productEditLoading } =
     useProductEditSubmit();
-
-  useProductEditCheckUser(productDetailData, isEdit);
 
   const isLoading =
     loadProductLoading || productUploadLoading || productEditLoading;
