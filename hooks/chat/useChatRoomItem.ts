@@ -3,7 +3,7 @@ import { RootState } from "@/store/store";
 import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
 
 interface IParams {
-  senderId: string;
+  senderId: string | undefined;
 }
 
 export default function useChatRoomItem({ senderId }: IParams) {
