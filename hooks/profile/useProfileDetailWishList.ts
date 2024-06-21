@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useProfileWishInfiniteQuery from "../reactQuery/querys/profile/useProfileWishInfiniteQuery";
 
 interface IPrarsm {
@@ -18,16 +18,19 @@ export default function useProfileDetailWishList({ wishProductIds }: IPrarsm) {
   });
 
   const [selectedWish, setSelectedWish] = useState<string[]>([]);
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      const allWishIds = data?.map((item) => item._id) || [];
-      setSelectedWish(allWishIds);
-    } else {
-      setSelectedWish([]);
-    }
-  };
+  const handleSelectAll = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.checked) {
+        const allWishIds = data?.map((item) => item._id) || [];
+        setSelectedWish(allWishIds);
+      } else {
+        setSelectedWish([]);
+      }
+    },
+    []
+  );
 
-  const handleCheckWish = (id: string) => {
+  const handleCheckWish = useCallback((id: string) => {
     setSelectedWish((prevSelected) => {
       if (prevSelected.includes(id)) {
         return prevSelected.filter((wishId) => wishId !== id);
@@ -35,7 +38,7 @@ export default function useProfileDetailWishList({ wishProductIds }: IPrarsm) {
         return [...prevSelected, id];
       }
     });
-  };
+  }, []);
 
   return {
     data,
