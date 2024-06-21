@@ -9,7 +9,9 @@ interface IProps {
 }
 
 export default function ChatRoomItem({ data }: IProps) {
-  const { myUid, profileData } = useChatRoomItem({ senderId: data.id });
+  const { myUid, profileData } = useChatRoomItem({
+    senderId: data.lastMessage?.senderId,
+  });
 
   return (
     <li>
