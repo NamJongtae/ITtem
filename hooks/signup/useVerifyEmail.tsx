@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useVerifyEmailMutate from "../reactQuery/mutations/auth/useVerifyEmailMutate";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ export default function useVerifyEmail(isFindPw?: boolean) {
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
   const { checkEmailMutate } = useCheckEmailMutate();
 
-  const handleClickVerifyEmail = async () => {
+  const handleClickVerifyEmail = useCallback(async () => {
     const email = getValues("email");
     const verifyCode = getValues("verifyCode");
     if (!verifyCode) {
@@ -31,9 +31,9 @@ export default function useVerifyEmail(isFindPw?: boolean) {
     }
 
     verifyEmailMuate({ email, verifyCode, isFindPw });
-  };
+  }, []);
 
-  const requestSendToVerifyEmail = async () => {
+  const requestSendToVerifyEmail = useCallback(async () => {
     const email = getValues("email");
 
     if (!email) {
@@ -60,11 +60,11 @@ export default function useVerifyEmail(isFindPw?: boolean) {
     dispatch(signupSlice.actions.setSendToVerifyEmailLoading(true));
     dispatch(signupSlice.actions.resetCounter());
     sendToVerifyEmailMutate({ email, isFindPw });
-  };
+  }, []);
 
-  const resetSendToVerifyEmail = () => {
+  const resetSendToVerifyEmail = useCallback(() => {
     dispatch(signupSlice.actions.resetSendToVerifyEmail());
-  };
+  }, []);
 
   useEffect(() => {
     if (!verifyCodeRef.current) return;
