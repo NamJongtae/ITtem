@@ -10,7 +10,9 @@ export default function useProfileReviewsInfiniteQuery({
   uid: string;
   limit?: number;
 }) {
-  const queryKeyConfing = queryKeys.product.review(uid as string);
+  const queryKeyConfing = queryKeys.profile
+    .user(uid as string)
+    ._ctx.reviews({ limit });
 
   const {
     data,
