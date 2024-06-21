@@ -1,4 +1,3 @@
-import React from "react";
 import Portal from "./portal/Portal";
 
 export default function Loading() {

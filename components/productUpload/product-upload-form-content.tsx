@@ -1,5 +1,4 @@
 import { ProductImgData } from '@/types/productTypes';
-import React from "react";
 import ProductUploadNameField from './product-upload-name-field';
 import ProductUploadSellTypeField from './product-upload-sellType-field';
 import ProductUploadCategoryField from './product-upload-category-field';

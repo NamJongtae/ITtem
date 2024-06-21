@@ -1,6 +1,6 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
-import React, { MutableRefObject } from "react";
+import { MutableRefObject } from "react";
 
 interface IProps {
   handleClickImgInput: () => void;

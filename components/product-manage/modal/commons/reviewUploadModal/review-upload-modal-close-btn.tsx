@@ -1,6 +1,6 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
-import React, { MutableRefObject, forwardRef } from "react";
+import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
   handleClickCloseBtn: () => void;

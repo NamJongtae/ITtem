@@ -1,10 +1,7 @@
 import useProductDetailWishBtn from "@/hooks/productDetail/useProductDetailWishBtn";
-import useAddWishMutate from "@/hooks/reactQuery/mutations/profile/useAddWishMutate";
-import useDeleteWishMutate from "@/hooks/reactQuery/mutations/profile/useDeleteWishMutate";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import Image from "next/image";
-import { toast } from "react-toastify";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;

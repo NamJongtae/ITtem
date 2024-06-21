@@ -1,4 +1,3 @@
-import React from "react";
 import CoreInputField from "../commons/coreInputField/core-input-field";
 import SendVerifyEmailBtn from "../signup/stepBasicInfo/send-verify-email-btn";
 import EmailError from "../signup/stepBasicInfo/email-error";

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import ChatRoomMenu from "./chat-room-menu";
-import { useRouter } from "next/router";
 import ChatRoomHeaderProduct from "./chat-room-header-product";
 import useChatRoomHeader from "@/hooks/chat/useChatRoomHeader";
 

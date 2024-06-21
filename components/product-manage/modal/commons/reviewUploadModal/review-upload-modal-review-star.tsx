@@ -2,7 +2,7 @@ import useReviewUploadModalReviewStar from "@/hooks/productManage/useReviewUploa
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import dynamic from "next/dynamic";
 import { MutableRefObject, forwardRef } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller } from "react-hook-form";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
   loading: () => <p>loading...</p>,

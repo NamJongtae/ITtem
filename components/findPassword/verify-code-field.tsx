@@ -1,4 +1,3 @@
-import React from "react";
 import VerifyCodeInput from "../signup/stepBasicInfo/verifyCode-input";
 import EmailVerifyBtn from "../signup/stepBasicInfo/email-verify-Btn";
 import VerifyCodeBtns from "../signup/stepBasicInfo/verifyCode-btns";

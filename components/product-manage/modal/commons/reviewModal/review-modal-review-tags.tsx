@@ -1,5 +1,4 @@
 import { REVIEW_TAGS } from "@/constants/constant";
-import React from "react";
 
 interface IProps {
   reviewTags: number[] | undefined;

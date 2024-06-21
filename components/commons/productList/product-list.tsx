@@ -12,7 +12,11 @@ interface IProps {
   profileProductCategory?: ProductCategory;
 }
 
-export default function ProductList({ productListType, productIds, profileProductCategory }: IProps) {
+export default function ProductList({
+  productListType,
+  productIds,
+  profileProductCategory,
+}: IProps) {
   const {
     isLoading,
     data,
@@ -21,7 +25,6 @@ export default function ProductList({ productListType, productIds, profileProduc
     hasNextPage,
     error,
   } = useProductList(productListType, productIds, profileProductCategory);
-  
 
   return (
     <>
@@ -42,7 +45,7 @@ export default function ProductList({ productListType, productIds, profileProduc
             ) : (
               data?.map((item) => (
                 <Fragment key={item._id}>
-                  <ProductItem data={item} category={profileProductCategory}/>
+                  <ProductItem data={item} category={profileProductCategory} />
                 </Fragment>
               ))
             )}

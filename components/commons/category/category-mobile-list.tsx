@@ -1,7 +1,7 @@
 import { CATEGORY } from "@/constants/constant";
 import useCateogryMobileList from "@/hooks/commons/layout/useCateogryMobileList";
-import { escKeyClose, optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import React, { forwardRef, useRef } from "react";
+import { escKeyClose } from "@/lib/optimizationKeyboard";
+import React, { forwardRef } from "react";
 
 interface IProps {
   isOpenCategory: boolean;

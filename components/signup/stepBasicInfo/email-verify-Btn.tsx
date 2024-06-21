@@ -1,5 +1,4 @@
 import useEmailVerifyBtn from "@/hooks/signup/useEmailVerifyBtn";
-import { useFormContext } from "react-hook-form";
 
 interface IProps {
   handleClickVerifyEmail: () => void;

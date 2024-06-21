@@ -1,9 +1,6 @@
 import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
-import { REVIEW_TAGS } from "@/constants/constant";
 import useProductReviewQuery from "@/hooks/reactQuery/querys/product/useProductReviewQuery";
-import dynamic from "next/dynamic";
-import Image from "next/image";
 import { isMobile } from "react-device-detect";
 import ReviewModalReviewStar from "./review-modal-review-star";
 import ReviewModalReviewTags from "./review-modal-review-tags";
@@ -13,10 +10,6 @@ import ReviewModalCloseBtn from "./review-modal-close-btn";
 import ReviewModalHeader from "./review-modal-header";
 import ReviewModalBackDrop from "./review-modal-back-drop";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => <p>loading...</p>,
-});
 
 interface IProps {
   productId: string;

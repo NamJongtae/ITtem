@@ -1,4 +1,4 @@
-import React, { forwardRef, MutableRefObject, Ref } from "react";
+import { forwardRef, MutableRefObject, Ref } from "react";
 import CoreInputField from "../../commons/coreInputField/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";

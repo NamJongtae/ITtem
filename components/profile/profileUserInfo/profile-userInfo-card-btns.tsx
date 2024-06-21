@@ -1,8 +1,5 @@
 import { ProfileData } from "@/types/authTypes";
 import ProfileUserInfoFollowBtn from "./profile-userInfo-follow-btn";
-import ProfileEditModal from "../profileEditModal/profileEdit-modal";
-import useModal from "@/hooks/commons/useModal";
-import ChangePasswordModal from "../changePasswordModal/changePassword-modal";
 import ProfileUserInfoCardChangePwBtn from "./profile-userInfo-card-changePw-btn";
 import ProfileUserInfoCardEditProfileBtn from "./profile-userInfo-card-edit-profile-btn";
 

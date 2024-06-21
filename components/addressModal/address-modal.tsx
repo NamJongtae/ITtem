@@ -1,5 +1,3 @@
-"use client";
-
 import Portal from "../commons/portal/Portal";
 import Image from "next/image";
 import useAddressModal from "@/hooks/productUpload/useAddressModal";

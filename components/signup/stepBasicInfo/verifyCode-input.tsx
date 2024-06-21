@@ -1,5 +1,5 @@
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
-import { MutableRefObject, useEffect, useState } from "react";
+import { MutableRefObject } from "react";
 import VerfiyCodeCounter from "./verfiyCode-counter";
 import {
   VERIFYCODE_REGEX,

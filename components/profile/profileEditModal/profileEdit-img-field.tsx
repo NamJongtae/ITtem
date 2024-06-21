@@ -1,6 +1,6 @@
 import useProfileImg from "@/hooks/signup/useProfileImg";
 import ProfileImgInput from "@/components/signup/stepProfile/profileImg-input";
-import { MutableRefObject, forwardRef } from "react";
+import { MutableRefObject } from "react";
 import ProfileEditImgInputBtn from "./profileEdit-Img-input-btn";
 
 interface IProps {

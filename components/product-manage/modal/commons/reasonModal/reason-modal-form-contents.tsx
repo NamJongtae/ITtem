@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import { MutableRefObject } from "react";
 import { isMobile } from "react-device-detect";
 import ReasonModalSeletor from "./reason-modal-seletor";
 import ReasonModalTextarea from "./reason-modal-textarea";

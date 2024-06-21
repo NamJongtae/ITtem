@@ -1,5 +1,4 @@
 import useVerifyEmailCounter from "@/hooks/signup/useVerifyEmailCounter";
-import React from "react";
 
 export default function VerfiyCodeCounter() {
   const { counter } = useVerifyEmailCounter();

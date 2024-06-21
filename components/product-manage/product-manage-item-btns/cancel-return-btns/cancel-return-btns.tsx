@@ -1,4 +1,3 @@
-import React from "react";
 import ProductCancelReturnDetailBtn from "./product-cancel-return-detail-btn";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 

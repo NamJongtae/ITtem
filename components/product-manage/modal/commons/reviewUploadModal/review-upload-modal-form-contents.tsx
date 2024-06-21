@@ -1,4 +1,3 @@
-import React from "react";
 import { isMobile } from "react-device-detect";
 import ReviewUploadModalReviewStar from "./review-upload-modal-review-star";
 import ReviewUploadModalReviewTags from "./review-upload-modal-review-tags";

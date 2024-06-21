@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Empty from "@/components/commons/Empty";
 import InfiniteScroll from "react-infinite-scroller";
 import { isAxiosError } from "axios";
@@ -6,10 +5,6 @@ import useFollowListInfiniteQuery from "@/hooks/reactQuery/querys/profile/useFol
 import { ProfileData } from "@/types/authTypes";
 import ProfileDetailFollowItem from "./profile-detail-follow-item";
 import FollowListSkeletonUI from "./follow-list-skeletonUI";
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => <p>loading...</p>,
-});
 
 interface IProps {
   isFollowers: boolean;

@@ -1,5 +1,4 @@
 import { CATEGORY } from "@/constants/constant";
-import useDropdownMenu from "@/hooks/commons/useDropDownMenu";
 import useProfileDetailProductCategory from "@/hooks/profile/useProfileDetailProductCategory";
 import { ProductCategory } from "@/types/productTypes";
 
