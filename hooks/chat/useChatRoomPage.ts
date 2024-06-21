@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { firestoreDB } from "@/lib/firebaseSetting";
 import { useSelector } from "react-redux";
@@ -30,13 +30,13 @@ export default function useChatRoomPage() {
   const { enterChatRoomMutate } = useEnterChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
 
-  const handleChatRoomExit = () => {
+  const handleChatRoomExit = useCallback(() => {
     setIsExit(true);
-  };
+  }, []);
 
-  const resetChatRoomExit = () => {
+  const resetChatRoomExit = useCallback(() => {
     setIsExit(false);
-  };
+  }, []);
 
   const chatListRef = useRef<HTMLUListElement | null>(null);
 
