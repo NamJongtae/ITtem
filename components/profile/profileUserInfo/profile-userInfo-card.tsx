@@ -2,9 +2,6 @@ import Image from "next/image";
 import { ProfileMenu } from "../profile-page";
 import dynamic from "next/dynamic";
 import { ProfileData } from "@/types/authTypes";
-import ProfileEditModal from "../profileEditModal/profileEdit-modal";
-import useModal from "@/hooks/commons/useModal";
-import ChangePasswordModal from "@/components/profile/changePasswordModal/changePassword-modal";
 import ProfileUserInfoCardBtns from "./profile-userInfo-card-btns";
 import ProfileUserInfoCardFollowInfo from "./profile-userInfo-card-followInfo";
 import ProfileUserInfoCardProductInfo from "./profile-userInfo-card-productInfo";
@@ -24,18 +21,6 @@ export default function ProfileUserInfoCard({
   userProfileData,
   myProfileData,
 }: IProps) {
-  const {
-    isOpenModal: isOpenProfileEditModal,
-    openModal: openProfileEditModal,
-    handleClickCloseBtn: handleClickProfieEditCloseBtn,
-  } = useModal();
-
-  const {
-    isOpenModal: isOpenChangePwModal,
-    openModal: openChangePwModl,
-    handleClickCloseBtn: handleClickChangePwCloseBtn,
-  } = useModal();
-
   return (
     <>
       <div className="relative flex flex-col gap-3 justify-center items-start basis-1/3 before:hidden before:md:block before:absolute before:bg-gray-200 before:top-0 before:-right-[10px] before:w-[1px] before:h-full">
@@ -71,21 +56,10 @@ export default function ProfileUserInfoCard({
           <ProfileUserInfoCardBtns
             myProfileData={myProfileData}
             userProfileData={userProfileData}
-            openProfileEditModal={openProfileEditModal}
-            openChangePwModl={openChangePwModl}
           />
         </div>
       </div>
-      {isOpenProfileEditModal && (
-        <ProfileEditModal
-          handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn}
-        />
-      )}
-      {isOpenChangePwModal && (
-        <ChangePasswordModal
-          handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
-        />
-      )}
+
     </>
   );
 }
