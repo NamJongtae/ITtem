@@ -9,7 +9,7 @@ import NavMoblieMenuBtn from "./nav-moblie-menuBtn";
 export default function MobileNav() {
   const { isOpenMenu, toggleMenu, menuRef, isVisible } = useMoblieNavMenu();
 
-  if (isVisible) {
+  if (!isVisible) {
     return null;
   }
 
