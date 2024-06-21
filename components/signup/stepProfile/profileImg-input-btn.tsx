@@ -21,7 +21,7 @@ export default function ProfileImgInputBtn({
       >
         <Image
           className="w-[110px] h-[110px] rounded-full bg-gray-200"
-          src={preview}
+          src={preview || "/icons/user_icon.svg"}
           alt="이미지 변경"
           width={110}
           height={110}
