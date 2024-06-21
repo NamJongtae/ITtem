@@ -1,13 +1,7 @@
 import Loading from "../commons/loading";
 import { MyForm } from "../commons/myForm/MyForm";
-import useProductUploadSubmit from "@/hooks/productUpload/useProductUploadSubmit";
-import useProductQuery from "@/hooks/reactQuery/mutations/product/useProductQuery";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
-import useProductEditSubmit from "@/hooks/productUpload/useProductEditSubmit";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import useProductEditCheckUser from "@/hooks/productUpload/useProductEditCheckUser";
 import ProductUploadFormContent from "./product-upload-form-content";
 import useProductUploadForm from "@/hooks/productUpload/useProductUploadForm";
 
@@ -17,7 +11,6 @@ interface IProps {
 
 export default function ProductUploadForm({ isEdit }: IProps) {
   const {
-    user,
     handleClickProductUploadSubmit,
     handleClickProductEditSubmit,
     productDetailData,
@@ -35,7 +28,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     }
   }
 
-  return !isEdit || user?.uid === productDetailData?.uid ? (
+  return (
     <MyForm
       onSubmit={
         isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
@@ -63,5 +56,5 @@ export default function ProductUploadForm({ isEdit }: IProps) {
         imgData={productDetailData?.imgData}
       />
     </MyForm>
-  ) : null;
+  );
 }

@@ -9,8 +9,6 @@ interface IPrarms {
 }
 
 export default function useProductUploadForm({ isEdit }: IPrarms) {
-  const user = useSelector((state: RootState) => state.auth.user);
-
   const { handleClickProductUploadSubmit, productUploadLoading } =
     useProductUploadSubmit();
 
@@ -25,7 +23,6 @@ export default function useProductUploadForm({ isEdit }: IPrarms) {
   const isError = loadProductError;
 
   return {
-    user,
     handleClickProductUploadSubmit,
     handleClickProductEditSubmit,
     productDetailData,
