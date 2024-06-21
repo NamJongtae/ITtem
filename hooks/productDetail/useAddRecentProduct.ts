@@ -1,7 +1,9 @@
-import { ProductDetailData, RecentProductData } from '@/types/productTypes';
-import { useEffect } from 'react';
+import { ProductDetailData, RecentProductData } from "@/types/productTypes";
+import { useEffect } from "react";
 
-export default function useAddRecentProduct(productDetailData: ProductDetailData | undefined) {
+export default function useAddRecentProduct(
+  productDetailData: ProductDetailData | undefined
+) {
   useEffect(() => {
     const recentProductKey = "recentProduct";
     const maxRecentProducts = 10;
@@ -19,16 +21,18 @@ export default function useAddRecentProduct(productDetailData: ProductDetailData
       (product) => product.productId !== productDetail.productId
     );
 
-    filteredRecent.unshift({
-      productId: productDetailData?._id || "",
-      productImg: productDetailData?.imgData[0].url || "",
-      productName: productDetailData?.name || "",
-    });
+    if (productDetailData) {
+      filteredRecent.unshift({
+        productId: productDetailData._id,
+        productImg: productDetailData.imgData[0].url,
+        productName: productDetailData.name,
+      });
 
-    if (filteredRecent.length > maxRecentProducts) {
-      filteredRecent.pop();
+      if (filteredRecent.length > maxRecentProducts) {
+        filteredRecent.pop();
+      }
+
+      localStorage.setItem(recentProductKey, JSON.stringify(filteredRecent));
     }
-
-    localStorage.setItem(recentProductKey, JSON.stringify(filteredRecent));
   }, []);
 }
