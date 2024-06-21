@@ -15,7 +15,7 @@ export default function GoogleAuth() {
     if (error) {
       router.push("/signin");
     }
-  }, [error]);
+  }, [error, router]);
 
   useEffect(() => {
     if (code) {
