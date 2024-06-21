@@ -11,8 +11,7 @@ export default function ChatRoomList() {
   }
 
   return (
-    <div>
-      <h2 className="px-5 py-3 font-semibold text-lg">채팅</h2>
+    <>
       <ul className="flex flex-col gap-5 overflow-y-auto p-5 max-h-[calc(100vh-301px)] md:max-h-[calc(100vh-237px)]">
         {Object.entries(chatRoomData).length === 0 && !isLoading ? (
           <Empty message="채팅방 목록이 존재하지 않아요." />
@@ -22,6 +21,6 @@ export default function ChatRoomList() {
           ))
         )}
       </ul>
-    </div>
+    </>
   );
 }
