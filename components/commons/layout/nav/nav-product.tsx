@@ -3,11 +3,10 @@ import MyProduct from "@/public/icons/product_icon.svg";
 import Link from "next/link";
 
 export default function NavProduct() {
-  const { pathname, handleClickLink } = useNavProduct();
+  const { pathname } = useNavProduct();
 
   return (
     <Link
-      onClick={handleClickLink}
       href={"/product/manage?status=TRADING"}
       className={`inline-flex flex-col items-center gap-[2px] text-xs ${
         pathname === "/product/manage" && "text-indigo-500"

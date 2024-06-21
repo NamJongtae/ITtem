@@ -3,11 +3,10 @@ import ChatIcon from "@/public/icons/chat_icon.svg";
 import Link from "next/link";
 
 export default function NavChat() {
-  const { handleClickLink, pathname, totalMessageCount } = useNavChat();
+  const { pathname, totalMessageCount } = useNavChat();
 
   return (
     <Link
-      onClick={handleClickLink}
       href={"/chat"}
       className={`relative inline-flex flex-col items-center gap-[2px] text-xs text-gary-600 ${
         totalMessageCount &&

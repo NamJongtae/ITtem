@@ -4,11 +4,10 @@ import Link from "next/link";
 import React from "react";
 
 export default function NavSell() {
-  const { pathname, handleClickLink } = useNavSell();
+  const { pathname } = useNavSell();
 
   return (
     <Link
-      onClick={handleClickLink}
       href={"/product/upload"}
       className={`inline-flex flex-col items-center gap-[2px] text-xs ${
         pathname === "/product/upload" && "text-indigo-500"
