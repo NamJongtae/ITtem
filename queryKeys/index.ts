@@ -283,10 +283,14 @@ export const profileQueryKey = createQueryKeys("profile", {
           return response.data.followings;
         },
       }),
-      reviews: ({ uid, limit }: { uid: string; limit: number }) => ({
+      reviews: ({ limit }: { limit: number }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
-          const response = getProfileReviews({ uid, cursor: pageParam, limit });
+          const response = getProfileReviews({
+            uid: userId,
+            cursor: pageParam,
+            limit,
+          });
           return (await response).data.reviews;
         },
       }),
