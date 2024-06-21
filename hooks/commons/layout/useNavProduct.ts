@@ -1,8 +1,11 @@
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function useNavProduct() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
+  const handleClickProduct = () => {
+    router.push("/product/manage?status=TRADING");
+  };
 
-
-  return { pathname };
+  return { pathname, handleClickProduct };
 }

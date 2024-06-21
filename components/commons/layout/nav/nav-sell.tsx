@@ -1,14 +1,13 @@
 import useNavSell from "@/hooks/commons/layout/useNavSell";
 import SellIcon from "@/public/icons/money_icon.svg";
-import Link from "next/link";
 import React from "react";
 
 export default function NavSell() {
-  const { pathname } = useNavSell();
+  const { pathname, handleClickSell } = useNavSell();
 
   return (
-    <Link
-      href={"/product/upload"}
+    <button
+      onClick={handleClickSell}
       className={`inline-flex flex-col items-center gap-[2px] text-xs ${
         pathname === "/product/upload" && "text-indigo-500"
       }`}
@@ -19,6 +18,6 @@ export default function NavSell() {
         } w-5 h-5`}
       />
       판매
-    </Link>
+    </button>
   );
 }

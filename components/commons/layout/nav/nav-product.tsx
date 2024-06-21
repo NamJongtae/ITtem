@@ -1,13 +1,12 @@
 import useNavProduct from "@/hooks/commons/layout/useNavProduct";
 import MyProduct from "@/public/icons/product_icon.svg";
-import Link from "next/link";
 
 export default function NavProduct() {
-  const { pathname } = useNavProduct();
+  const { pathname, handleClickProduct } = useNavProduct();
 
   return (
-    <Link
-      href={"/product/manage?status=TRADING"}
+    <button
+      onClick={handleClickProduct}
       className={`inline-flex flex-col items-center gap-[2px] text-xs ${
         pathname === "/product/manage" && "text-indigo-500"
       }`}
@@ -18,6 +17,6 @@ export default function NavProduct() {
         } w-5 h-5`}
       />
       상품
-    </Link>
+    </button>
   );
 }

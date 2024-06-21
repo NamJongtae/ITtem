@@ -10,7 +10,11 @@ export default function useNavChat() {
     (state: RootState) => state.chat.totalMessageCount
   );
 
+  const handleClickChat = () => {
+    router.push("/chat");
+  };
+
   useNotificationChat();
 
-  return { pathname, totalMessageCount };
+  return { pathname, totalMessageCount, handleClickChat };
 }
