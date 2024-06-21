@@ -13,7 +13,7 @@ export const checkWithAuthPathname = (pathname: string) => {
 // 로그아웃 상태 시 리다이렉트
 export const withAuth = (req: NextRequest) => {
   const url = req.nextUrl.clone();
-  url.pathname = "/";
+  url.pathname = "/signin";
   url.search = "";
   return NextResponse.redirect(url);
 };
