@@ -11,7 +11,8 @@ const SideMenuRecentProduct = dynamic(
 
 export default function SideMenu() {
   const { isVisible } = useVisible({ pathnames: ["chat", "signup", "signin"] });
-  if (isVisible) {
+  
+  if (!isVisible) {
     return null;
   }
 
