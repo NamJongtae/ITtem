@@ -66,6 +66,7 @@ export default function ReasonModalFormContents({
         submitBtnRef={submitBtnRef}
         textareaRef={textareaRef}
         selectorRef={selectorRef}
+        ref={closeBtnRef}
       />
     </div>
   );
