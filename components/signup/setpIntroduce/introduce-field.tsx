@@ -1,13 +1,7 @@
-import { MutableRefObject } from "react";
 import { useFormContext } from "react-hook-form";
 
-interface IProps {
-  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
-}
-
-export default function IntroductField({ introduceRef }: IProps) {
+export default function IntroductField() {
   const { register } = useFormContext();
-  const { ref, ...rest } = register("introduce");
   return (
     <div>
       <label className="sr-only" htmlFor="introduce">
@@ -19,11 +13,7 @@ export default function IntroductField({ introduceRef }: IProps) {
         id="introduce"
         placeholder="판매상품이나 자기를 소개해 주세요."
         maxLength={2000}
-        {...rest}
-        ref={(e) => {
-          ref(e);
-          if (introduceRef) introduceRef.current = e;
-        }}
+        {...register("introduce")}
       />
     </div>
   );

@@ -1,16 +1,30 @@
-export default function ProfileEditIntroduceField() {
+import { MutableRefObject } from "react";
+import { useFormContext } from "react-hook-form";
+
+interface IProps {
+  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
+}
+
+export default function IntroductField({ introduceRef }: IProps) {
+  const { register } = useFormContext();
+  const { ref, ...rest } = register("introduce");
   return (
-    <div className="mt-8">
-    <label className="font-semibold" htmlFor="nickname">
-      소개글
-    </label>
-    <textarea
-      className="border p-3 rounded-sm w-full resize-none scrollbar text-sm mt-4 focus:outline-none"
-      id="nickname"
-      rows={5}
-      placeholder="소개글을 입력하세요."
-    />
-    <span className="block text-sm text-end w-full mt-1">0/2000</span>
-  </div>
-  )
+    <div>
+      <label className="sr-only" htmlFor="introduce">
+        소개글
+      </label>
+      <textarea
+        className="root_input resize-none mt-3"
+        rows={6}
+        id="introduce"
+        placeholder="판매상품이나 자기를 소개해 주세요."
+        maxLength={2000}
+        {...rest}
+        ref={(e) => {
+          ref(e);
+          if (introduceRef) introduceRef.current = e;
+        }}
+      />
+    </div>
+  );
 }

@@ -1,20 +1,7 @@
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
 import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from "@/constants/constant";
-import { useFocusing } from "@/hooks/commons/useFocusing";
-import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject } from "react";
 
-interface IProps {
-  nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
-}
-
-export default function NicknameField({
-  nicknameRef,
-  profileImgBtnRef,
-}: IProps) {
-  useFocusing(nicknameRef);
-
+export default function NicknameField() {
   return (
     <div>
       <CoreInputField
@@ -30,13 +17,6 @@ export default function NicknameField({
           value: NICKNAME_REGEX,
           message: NICKNAME_REGEX_ERRORMSG,
         }}
-        inputRef={nicknameRef}
-        inputKeydown={(e) =>
-          optimizationTabFocus({
-            event: e,
-            previousTarget: profileImgBtnRef.current,
-          })
-        }
       />
     </div>
   );

@@ -1,31 +1,46 @@
-import useProfileEidtImgField from "@/hooks/profile/useProfileEditImgField";
-import Image from "next/image";
+import useProfileImg from "@/hooks/signup/useProfileImg";
+import ProfileImgInput from "@/components/signup/stepProfile/profileImg-input";
+import { MutableRefObject, forwardRef } from "react";
+import ProfileEditImgInputBtn from "./profileEdit-Img-input-btn";
 
-export default function ProfileEditImgField() {
-  const { handleClickImgInput, imgInputRef } = useProfileEidtImgField();
+interface IProps {
+  profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  nicknameRef: MutableRefObject<HTMLInputElement | null>;
+  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+}
+
+export default function ProfileEditImgField({
+  profileImgBtnRef,
+  profileImgResetBtnRef,
+  nicknameRef,
+  cancelBtnRef,
+  submitBtnRef,
+}: IProps) {
+  const {
+    handleClickImgInput,
+    resetProfileImg,
+    preview,
+    handleChangeImg,
+    imgInputRef,
+  } = useProfileImg();
 
   return (
     <div className="flex items-center justify-center">
-      <button
-        onClick={handleClickImgInput}
-        className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img_upload_icon.svg')] before:rounded-full before:bg-center before:bg-cover focus:outline-none"
-      >
-        <Image
-          className="w-[110px] h-[110px] rounded-full bg-gray-200"
-          src={"/icons/user_icon.svg"}
-          alt="이미지 변경"
-          width={110}
-          height={110}
-        />
-      </button>
-      <input
-        className="hidden"
-        type="file"
-        ref={imgInputRef}
-        multiple
-        name="img"
-        accept="image/jpeg, image/png, image/svg+xml"
-        id="img"
+      <ProfileEditImgInputBtn
+        handleClickImgInput={handleClickImgInput}
+        resetProfileImg={resetProfileImg}
+        preview={preview}
+        profileImgBtnRef={profileImgBtnRef}
+        profileImgResetBtnRef={profileImgResetBtnRef}
+        nicknameRef={nicknameRef}
+        cancelBtnRef={cancelBtnRef}
+        submitBtnRef={submitBtnRef}
+      />
+      <ProfileImgInput
+        handleChangeImg={handleChangeImg}
+        imgInputRef={imgInputRef}
       />
     </div>
   );
