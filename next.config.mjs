@@ -23,7 +23,7 @@ const nextConfig = {
         hostname: "lh3.googleusercontent.com",
       },
       {
-        protocol: "https",
+        protocol: "http",
         hostname: "k.kakaocdn.net",
       },
       {
