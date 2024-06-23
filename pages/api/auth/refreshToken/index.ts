@@ -70,7 +70,5 @@ export default async function handler(
       console.log(error);
       res.status(422).json({ message: "토큰 발급에 실패 했어요." });
     }
-  } else {
-    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

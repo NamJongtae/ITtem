@@ -31,7 +31,4 @@ export default async function handler(
       });
     }
   }
-  else {
-    res.status(405).json({ message: "잘못된 접근이에요." });
-  }
 }

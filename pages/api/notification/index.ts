@@ -121,7 +121,5 @@ export default async function handler(
         message: "알림 메세지 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
-  } else {
-    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }

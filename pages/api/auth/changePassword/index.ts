@@ -115,7 +115,5 @@ export default async function handler(
         .status(500)
         .json("비밀번호 변경에 실패하였습니다\n잠시 후 다시 시도해주세요.");
     }
-  } else {
-    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }
