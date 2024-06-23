@@ -31,35 +31,38 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
     [preview]
   );
 
-  const handleFilesUpload = (files: FileList) => {
-    const availableSlots = 5 - preview.length;
+  const handleFilesUpload = useCallback(
+    (files: FileList) => {
+      const availableSlots = 5 - preview.length;
 
-    if (availableSlots - files.length < 0) {
-      toast.warn("최대 5개의 이미지까지 업로드 가능합니다.");
-      return;
-    }
+      if (availableSlots - files.length < 0) {
+        toast.warn("최대 5개의 이미지까지 업로드 가능합니다.");
+        return;
+      }
 
-    const newPreviews = Array.from(files)
-      .map(uploadValidationAndPreview)
-      .filter((preview) => preview !== undefined) as {
-      url: string;
-      name: string;
-    }[];
+      const newPreviews = Array.from(files)
+        .map(uploadValidationAndPreview)
+        .filter((preview) => preview !== undefined) as {
+        url: string;
+        name: string;
+      }[];
 
-    const currentImgNameList = currentImgList.map((file: File) => file.name);
-    const fileArray = Array.from(files).filter(
-      (file) => !currentImgNameList.includes(file.name)
-    );
+      const currentImgNameList = currentImgList.map((file: File) => file.name);
+      const fileArray = Array.from(files).filter(
+        (file) => !currentImgNameList.includes(file.name)
+      );
 
-    setValue("imgData", [...currentImgList, ...fileArray], {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+      setValue("imgData", [...currentImgList, ...fileArray], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
 
-    if (newPreviews.length > 0) {
-      setPreview((prev) => [...prev, ...newPreviews]);
-    }
-  };
+      if (newPreviews.length > 0) {
+        setPreview((prev) => [...prev, ...newPreviews]);
+      }
+    },
+    [preview]
+  );
 
   const handleDropImgUpload = useCallback(
     (e: React.DragEvent<HTMLButtonElement>) => {
@@ -68,7 +71,7 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
       if (!files || files.length === 0) return;
       handleFilesUpload(files);
     },
-    []
+    [handleFilesUpload]
   );
 
   const handleOnChangeImg = useCallback(
@@ -77,7 +80,7 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
       if (!fileList || fileList.length === 0) return;
       handleFilesUpload(fileList);
     },
-    []
+    [handleFilesUpload]
   );
 
   const handleRemoveImg = useCallback(
@@ -108,18 +111,18 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
     [getValues, setValue]
   );
 
-  const handleOpenModal = () => {
+  const handleOpenModal = useCallback(() => {
     if (preview.length === 0) {
       toast.warn("이미지가 존재하지않습니다.");
       return;
     }
     openModal();
-  };
+  }, [preview]);
 
-  const handleClickImgInput = () => {
+  const handleClickImgInput = useCallback(() => {
     if (!imgInputRef.current) return;
     imgInputRef.current?.click();
-  };
+  }, [imgInputRef]);
 
   return {
     preview,
