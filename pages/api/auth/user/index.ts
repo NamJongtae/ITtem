@@ -38,7 +38,5 @@ export default async function handler(
       console.error(error);
       res.status(500).json({ message: ERROR_MESSAGE });
     }
-  } else {
-    res.status(405).json({ message: "잘못된 접근이에요." });
   }
 }
