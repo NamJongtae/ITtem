@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_KEY } from "@/constants/constant";
+import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { deleteToken } from "@/lib/api/redis";
 import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
@@ -20,22 +20,22 @@ export default async function handler(
         res,
         sessionOptions
       );
-      const accessToken = session.accessToken;
-      const decodeAccessToken = verifyToken(accessToken, ACCESS_TOKEN_KEY);
-      await deleteToken(decodeAccessToken?.data?.user.uid || "", "accessToken");
+      const refreshToken = session.refreshToken;
+      const decodeRefreshToken = verifyToken(refreshToken, REFRESH_TOKEN_KEY);
+      await deleteToken(decodeRefreshToken?.data?.user.uid || "", "accessToken");
       await deleteToken(
-        decodeAccessToken?.data?.user.uid || "",
+        decodeRefreshToken?.data?.user.uid || "",
         "refreshToken"
       );
 
       await dbConnect();
-      if (!decodeAccessToken?.data?.user.uid) {
+      if (!decodeRefreshToken?.data?.user.uid) {
         return res.status(403).json("유효하지 않은 토큰입니다.");
       }
 
       const user = await User.findOne({
         _id: new mongoose.Types.ObjectId(
-          decodeAccessToken?.data?.user.uid || ""
+          decodeRefreshToken?.data?.user.uid || ""
         ),
       });
       if (user?.loginType === "KAKAO") {

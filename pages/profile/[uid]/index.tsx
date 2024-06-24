@@ -9,20 +9,34 @@ import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
+import MetaHead from "@/components/metaHead/meta-head";
+import { getMetaData } from "@/lib/getMetaData";
+import { ProfileData } from "@/types/authTypes";
+import { MetaData } from "@/types/metaDataTypes";
 
-export default function UserProfile() {
-  return <ProfilePage my={false} />;
+interface IProps {
+  metaData: MetaData;
+}
+
+export default function UserProfile({ metaData }: IProps) {
+  return (
+    <>
+      <MetaHead {...metaData} />
+      <ProfilePage my={false} />
+    </>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const uid = context.query.uid;
+  const { req, res, query, resolvedUrl } = context;
+  const uid = query.uid;
   const queryClient = new QueryClient();
   const session = await getIronSession<IronSessionData>(
-    context.req,
-    context.res,
+    req,
+    res,
     sessionOptions
   );
-  const cookie = context.req.headers.cookie;
+  const cookie = req.headers.cookie;
   const myProfuileQueryKeyConfig = queryKeys.profile.my;
   const userProfileQueryKeyConfig = queryKeys.profile.user(uid as string);
 
@@ -66,8 +80,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     queryKey: userProfileQueryKeyConfig.queryKey,
     queryFn: userProfileQueryKeyConfig.queryFn,
   });
+  const userProfileData = queryClient.getQueryData(
+    userProfileQueryKeyConfig.queryKey
+  ) as ProfileData | undefined;
+
+  const metaData = getMetaData({
+    url: resolvedUrl,
+    title: `${userProfileData?.nickname || ""}님의 프로필`,
+  });
 
   return {
-    props: { dehydratedState: dehydrate(queryClient) },
+    props: { dehydratedState: dehydrate(queryClient), metaData },
   };
 };

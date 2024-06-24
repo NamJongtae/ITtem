@@ -1,14 +1,21 @@
 import ProfilePage from "@/components/profile/profile-page";
-import { queryKeys } from '@/queryKeys';
+import { queryKeys } from "@/queryKeys";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
+import MetaHead from "@/components/metaHead/meta-head";
+import { getMetaDataURL } from "@/lib/getMetaData";
 
 export default function MyProfile() {
-  return <ProfilePage my={true} />;
+  return (
+    <>
+      <MetaHead title="나의 프로필" url={getMetaDataURL("profile")} />
+      <ProfilePage my={true} />
+    </>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -34,7 +41,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
-          queryClient.removeQueries({ queryKey: myProfuileQueryKeyConfig.queryKey });
+          queryClient.removeQueries({
+            queryKey: myProfuileQueryKeyConfig.queryKey,
+          });
           console.error(error);
         }
       },

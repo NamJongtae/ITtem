@@ -1,26 +1,40 @@
 import ProductDetailPage from "@/components/productDetail/product-detail";
 import { queryKeys } from "@/queryKeys";
-import { getProduct, incrementViewCount } from "@/lib/api/product";
+import { incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
+import { getMetaData } from "@/lib/getMetaData";
+import { ProductData } from "@/types/productTypes";
+import { MetaData } from "@/types/metaDataTypes";
+import MetaHead from "@/components/metaHead/meta-head";
 
-export default function ProductDetail() {
-  return <ProductDetailPage />;
+interface IProps {
+  metaData: MetaData;
+}
+
+export default function ProductDetail({ metaData }: IProps) {
+  return (
+    <>
+      <MetaHead {...metaData} />
+      <ProductDetailPage />
+    </>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res, resolvedUrl, params } = context;
   const queryClient = new QueryClient();
-  const productId = context.params?.productId;
+  const productId = params?.productId;
   const session = await getIronSession<IronSessionData>(
-    context.req,
-    context.res,
+    req,
+    res,
     sessionOptions
   );
-  const cookie = context.req.headers.cookie;
+  const cookie = req.headers.cookie;
   const productQueryKeyConfing = queryKeys.product.detail(productId as string);
   const myProfuileQueryKeyConfig = queryKeys.profile.my;
 
@@ -36,6 +50,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       queryFn: productQueryKeyConfing.queryFn,
     });
   }
+
+  const productData = queryClient.getQueryData(
+    productQueryKeyConfing.queryKey
+  ) as ProductData | undefined;
+
+  const metaData = getMetaData({
+    url: resolvedUrl,
+    title: `상품-${productData?.name || ""}`,
+  });
 
   if (session.refreshToken) {
     await queryClient.prefetchQuery({
@@ -58,6 +81,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
   }
   return {
-    props: { dehydratedState: dehydrate(queryClient) },
+    props: { dehydratedState: dehydrate(queryClient), metaData },
   };
 };
