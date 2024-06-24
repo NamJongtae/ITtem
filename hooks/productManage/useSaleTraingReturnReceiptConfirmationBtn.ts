@@ -4,7 +4,7 @@ interface IPrarms {
   productId: string;
 }
 
-export default function useSaleTradingReturnConfirmationBtn({
+export default function useSaleTradingReturnReceiptConfirmationBtn({
   productId,
 }: IPrarms) {
   const { productReturnReceiptConfirmationMutate } =
