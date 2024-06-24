@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 
 export default function useReturnConfirmationMutate() {
   const queryClient = useQueryClient();
-  const notificationQueryKey = queryKeys.notification._def;
+  const productManageQueryKey = queryKeys.product.manage._def;
 
   const { mutate } = useMutation({
     mutationFn: (productId: string) => productReturnConfirmation(productId),
     onSuccess: (response) => {
       toast.success(response.data.message);
       queryClient.invalidateQueries({
-        queryKey: notificationQueryKey,
+        queryKey: productManageQueryKey,
       });
     },
     onError: (error) => {
