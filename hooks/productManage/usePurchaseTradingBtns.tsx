@@ -39,6 +39,14 @@ const buttonComponents: ButtonComponents = {
         <PurchaseTradingCancelBtn productId={productId} />
       </>
     ),
+    [PurchaseTradingProcess.판매자반품거절상품전달중]: ({
+      productId,
+      userId,
+    }) => (
+      <>
+        <PurchaseTradingChattingBtn productId={productId} userId={userId!} />
+      </>
+    ),
     [PurchaseTradingProcess.상품인수확인]: ({ productId }) => (
       <>
         <PurchaseTradingReceiptConfirmationBtn productId={productId} />
