@@ -28,7 +28,7 @@ export default function ProductList({
 
   return (
     <>
-      {error && !data ? (
+      {error ? (
         <ProductListError productListType={productListType} error={error} />
       ) : null}
 
