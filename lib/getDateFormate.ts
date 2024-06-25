@@ -37,11 +37,11 @@ export const getTradingDateFormat = (dateString: string) => {
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 
-export const getChatDateFormat = (inputDate: Date): string => {
+export const getChatRoomListDateFormat = (inputDate: Date): string => {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const dataTime = new Date(inputDate);
-  dataTime.setHours(0, 0, 0, 0); 
+  dataTime.setHours(0, 0, 0, 0);
 
   const diff = Math.floor((now.getTime() - dataTime.getTime()) / 1000);
   const diffInDays = diff / (60 * 60 * 24);
@@ -85,3 +85,41 @@ export const getChatDateFormat = (inputDate: Date): string => {
   });
 };
 
+export const getChattingDateFormat = (inputDate: Date): string => {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const dataTime = new Date(inputDate);
+  dataTime.setHours(0, 0, 0, 0);
+
+  const diff = Math.floor((now.getTime() - dataTime.getTime()) / 1000);
+  const diffInDays = diff / (60 * 60 * 24);
+
+  const formatTime = (date: Date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const period = hours < 12 ? "오전" : "오후";
+    const hourFor12 = hours % 12 === 0 ? 12 : hours % 12;
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+    return `${period} ${hourFor12}:${formattedMinutes}`;
+  };
+
+  // 자정을 기준으로 하루 이내 차이인 경우
+  if (diffInDays < 1) {
+    return formatTime(inputDate);
+  }
+
+  // 1년 이내 차이인 경우
+  if (diffInDays < 365) {
+    return new Date(inputDate).toLocaleDateString("ko-KR", {
+      month: "2-digit",
+      day: "2-digit",
+    });
+  }
+  
+  // 1년 이상 차이인 경우
+  return new Date(inputDate).toLocaleDateString("ko-KR", {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};

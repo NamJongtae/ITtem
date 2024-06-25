@@ -1,4 +1,4 @@
-import { getChatDateFormat } from '@/lib/getDateFormate';
+import { getChattingDateFormat } from '@/lib/getDateFormate';
 import { ChatMessageData } from "@/types/chatTypes";
 
 interface IProps {
@@ -13,7 +13,7 @@ export default function ChatRoomMyMessage({ message }: IProps) {
           {message.content}
         </p>
         <time className="text-[10px] text-gray-400">
-          {getChatDateFormat(message.timestamp.toDate())}
+          {getChattingDateFormat(message.timestamp.toDate())}
         </time>
       </div>
     </li>

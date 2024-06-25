@@ -1,5 +1,5 @@
 import useProfileQuery from "@/hooks/reactQuery/querys/profile/useProfileQuery";
-import { getChatDateFormat } from "@/lib/getDateFormate";
+import { getChattingDateFormat } from "@/lib/getDateFormate";
 import { ChatMessageData } from "@/types/chatTypes";
 import Image from "next/image";
 
@@ -33,7 +33,7 @@ export default function ChatRoomUserMessage({ message }: IProps) {
             {message.content}
           </p>
           <time className="text-[10px] text-gray-400">
-            {getChatDateFormat(message.timestamp.toDate())}
+            {getChattingDateFormat(message.timestamp.toDate())}
           </time>
         </div>
       </div>

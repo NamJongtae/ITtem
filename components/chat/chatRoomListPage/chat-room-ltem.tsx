@@ -1,5 +1,5 @@
 import useChatRoomItem from "@/hooks/chat/useChatRoomItem";
-import { getChatDateFormat } from "@/lib/getDateFormate";
+import { getChatRoomListDateFormat } from "@/lib/getDateFormate";
 import { ChatRoomData } from "@/types/chatTypes";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +53,7 @@ export default function ChatRoomItem({ data }: IProps) {
                 .toLocaleDateString()}
               className="text-[10px] text-gray-400"
             >
-              {getChatDateFormat(
+              {getChatRoomListDateFormat(
                 data.lastMessage?.timestamp.toDate() || new Date()
               )}
             </time>
