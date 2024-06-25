@@ -14,7 +14,7 @@ import {
 import { checkAuthorization } from "@/lib/server";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import User from "@/lib/db/models/User";
-import { sendNotificationMessage } from '@/lib/api/firebase';
+import { sendNotificationMessage } from "@/lib/api/firebase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -150,7 +150,9 @@ export default async function handler(
 
       if (
         saleTrading.process !== SaleTradingProcess.상품전달확인 &&
-        purchaseTrading.process !== PurchaseTradingProcess.판매자상품전달중
+        (purchaseTrading.process !== PurchaseTradingProcess.판매자상품전달중 ||
+          purchaseTrading.process !==
+            PurchaseTradingProcess.판매자반품거절상품전달중)
       ) {
         res
           .status(409)
@@ -181,7 +183,11 @@ export default async function handler(
         }
       }
 
-      if (purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중) {
+      if (
+        purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중 ||
+        purchaseTrading.process ===
+          PurchaseTradingProcess.판매자반품거절상품전달중
+      ) {
         const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
           {
             $and: [
