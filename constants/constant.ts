@@ -51,7 +51,7 @@ export const ACCESS_TOKEN_KEY = process.env
 export const REFRESH_TOKEN_KEY = process.env
   .NEXT_SECRET_REFRESH_TOKEN_KEY as string;
 
-export const ACCESS_TOKEN_EXP = 60;
-export const REFRESH_TOKEN_EXP = 3600;
+export const ACCESS_TOKEN_EXP = 60 * 60; // 1h
+export const REFRESH_TOKEN_EXP = 60 * 60 * 24 * 30; // 30d
 
 
