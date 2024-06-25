@@ -1,20 +1,27 @@
 import Image from "next/image";
 import ImgSlider from "../commons/imgSlider/img-slider";
-import { ProductDetailData } from "@/types/productTypes";
-import useModal from "@/hooks/commons/useModal";
+import { ProductDetailData, ProductStatus } from "@/types/productTypes";
 import ProductImgEnlargeModal from "../productUpload/imgField/product-img-enlarge-modal";
+import useProductDetailContentImg from "@/hooks/productDetail/useProductDetailContentImg";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
 export default function ProductDetailContentImg({ productDetailData }: IProps) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { imgBeforeStyle, isOpenModal, openModal, closeModal } =
+    useProductDetailContentImg({ productDetailData });
 
   return (
     <>
       <div className="w-full h-80 md:h-80 md:w-1/2 lg:h-96">
-        <div className="relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded-md overflow-hidden">
+        <div
+          className={`relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded-md overflow-hidden ${
+            productDetailData?.status !== ProductStatus.sold
+              ? imgBeforeStyle
+              : ""
+          }`}
+        >
           <ImgSlider
             imgData={productDetailData?.imgData}
             imgWidth={512}

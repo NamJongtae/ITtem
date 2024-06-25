@@ -1,7 +1,7 @@
 import ProductDetailBuyBtn from "./product-detail-buyBtn";
 import ProductDetailChattingBtn from "./product-detail-chattingBtn";
 import ProductDetailWishBtn from "./product-detail-wishBtn";
-import { ProductDetailData } from "@/types/productTypes";
+import { ProductDetailData, ProductStatus } from "@/types/productTypes";
 import ProductDetailDeleteBtn from "./product-detail-deleteBtn";
 import ProductDetailEditBtn from "./product-detail-EditBtn";
 import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
@@ -16,7 +16,8 @@ export default function ProductDetailContentBtns({
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
 
   return (
-    !loadMyProfileLoading && (
+    !loadMyProfileLoading &&
+    productDetailData?.status === ProductStatus.sold && (
       <div className="flex items-center mt-6 gap-3 flex-wrap">
         {productDetailData?.uid === myProfileData?.uid ? (
           <>
