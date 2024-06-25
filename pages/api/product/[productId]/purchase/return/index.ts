@@ -69,7 +69,7 @@ export default async function handler(
         _id: new mongoose.Types.ObjectId(productId as string),
       });
 
-      if (!product.returnPolicy) {
+      if (product.returnPolicy === "불가능") {
         res.status(403).json({ message: "반품이 불가한 상품입니다." });
         await session.abortTransaction();
         session.endSession();
