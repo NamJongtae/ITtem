@@ -229,7 +229,7 @@ export default async function handler(
           process:
             purchaseTrading.process === PurchaseReturnProcess.판매자확인중
               ? PurchaseTradingProcess.거래완료
-              : PurchaseTradingProcess.판매자상품전달중,
+              : PurchaseTradingProcess.판매자반품거절상품전달중,
           $unset: { returnStartDate: "", returnReason: "" },
         },
         { session }
