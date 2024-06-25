@@ -472,9 +472,9 @@ export const sendToChatMessage = async ({
     const messagesCollectionRef = collection(chatRoomRef, "messages");
     const snapshot = await getDoc(chatRoomRef);
     const data = snapshot.data() as ChatRoomData;
-    const userId = data.participantIDs.filter((id) => id !== myUid)[0];
+    const userId = Object.keys(data.entered).filter((id) => id !== myUid)[0];
     const userChatInfoRef = doc(firestoreDB, `userChatInfo/${userId}`);
-
+    
     const messageObj = {
       content: message,
       timestamp: serverTimestamp(),
@@ -488,7 +488,7 @@ export const sendToChatMessage = async ({
       lastMessage: messageObj,
     };
 
-    if (!data.entered[userId]) {
+    if (!data.entered[userId] && data.participantIDs.includes(userId)) {
       updateData[`newMessageCount.${userId}`] = firestoreIncrement(1);
       await updateDoc(userChatInfoRef, {
         totalMessageCount: firestoreIncrement(1),
