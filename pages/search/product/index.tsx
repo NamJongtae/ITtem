@@ -1,6 +1,6 @@
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import SearchPage from "@/components/search/search-page";
-import { getMetaData } from "@/lib/getMetaData";
+import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { MetaData } from "@/types/metaDataTypes";
 import { GetServerSideProps } from "next";
 
@@ -11,7 +11,7 @@ interface IProps {
 export default function Search({ metaData }: IProps) {
   return (
     <>
-      <MetaHead {...metaData} />
+      <DynamicMetaHead {...metaData} />
       <SearchPage />
     </>
   );
@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ? `상품검색-${keyword}-${category}`
     : `상품-${category}`;
 
-  const metaData = getMetaData({
+  const metaData = getDynamicMetaData({
     url: resolvedUrl,
     title,
   });

@@ -1,8 +1,8 @@
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import ProductManagePage, {
   ProductManageDeatilMenu,
 } from "@/components/product-manage/product-manage-page";
-import { getMetaData } from "@/lib/getMetaData";
+import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { GetServerSideProps } from "next";
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IProps {
 export default function ProductManage({ initalDetailMenu, metaData }: IProps) {
   return (
     <>
-      <MetaHead {...metaData} />
+      <DynamicMetaHead {...metaData} />
       <ProductManagePage initalDetailMenu={initalDetailMenu} />
     </>
   );
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       ? "거래완료 내역"
       : "거래중";
 
-  const metaData = getMetaData({
+  const metaData = getDynamicMetaData({
     url: resolvedUrl,
     title: `상품관리-${initalDetailMenu}`,
   });

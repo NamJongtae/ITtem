@@ -1,7 +1,7 @@
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import ProductUploadPage from "@/components/productUpload/product-upload-page";
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
-import { getMetaData } from "@/lib/getMetaData";
+import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
 import { queryKeys } from "@/queryKeys";
@@ -19,7 +19,7 @@ interface IProps {
 export default function ProductEdit({ metaData }: IProps) {
   return (
     <>
-      <MetaHead {...metaData} />
+      <DynamicMetaHead {...metaData} />
       <ProductUploadPage isEdit={true} />
     </>
   );
@@ -49,7 +49,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       queryKeys.product.detail(productId as string).queryKey
     ) as ProductDetailData | undefined;
 
-    const metaData = getMetaData({
+    const metaData = getDynamicMetaData({
       url: resolvedUrl,
       title: `상품-수정-${productData?.name || ""}`,
     });

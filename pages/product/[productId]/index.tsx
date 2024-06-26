@@ -7,10 +7,10 @@ import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
-import { getMetaData } from "@/lib/getMetaData";
+import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProductData } from "@/types/productTypes";
 import { MetaData } from "@/types/metaDataTypes";
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 
 interface IProps {
   metaData: MetaData;
@@ -19,7 +19,7 @@ interface IProps {
 export default function ProductDetail({ metaData }: IProps) {
   return (
     <>
-      <MetaHead {...metaData} />
+      <DynamicMetaHead {...metaData} />
       <ProductDetailPage />
     </>
   );
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     productQueryKeyConfing.queryKey
   ) as ProductData | undefined;
 
-  const metaData = getMetaData({
+  const metaData = getDynamicMetaData({
     url: resolvedUrl,
     title: `상품-${productData?.name || ""}`,
   });

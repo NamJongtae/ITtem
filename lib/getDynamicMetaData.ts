@@ -1,13 +1,13 @@
 import { getMetadataParams } from '@/types/metaDataTypes';
 
-export const getMetaData = ({
+export const getDynamicMetaData = ({
   url,
   description,
   title,
   image,
 }: getMetadataParams) => {
   const metaData = {
-    url: getMetaDataURL(url),
+    url: getDynamicMetaDataURL(url),
     title,
     description: description ?? null,
     image: image ?? null,
@@ -16,6 +16,6 @@ export const getMetaData = ({
   return metaData;
 };
 
-export const getMetaDataURL = (pathname: string) => {
+export const getDynamicMetaDataURL = (pathname: string) => {
   return `${process.env.NEXT_PUBLIC_BASE_URL}/${pathname}`;
 };

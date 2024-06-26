@@ -1,11 +1,12 @@
-import MetaHead from "@/components/metaHead/meta-head";
+
+import DynamicMetaHead from '@/components/dynamicMetaHead/dynamic-meta-head';
 import SignupPage from "@/components/signup/signup-page";
-import { getMetaDataURL } from "@/lib/getMetaData";
+import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
 
 export default function Signup() {
   return (
     <>
-      <MetaHead title="회원가입" url={getMetaDataURL("signup")} />
+      <DynamicMetaHead title="회원가입" url={getDynamicMetaDataURL("signup")} />
       <SignupPage />
     </>
   );

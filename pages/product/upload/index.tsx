@@ -1,11 +1,11 @@
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import ProductUploadPage from "@/components/productUpload/product-upload-page";
-import { getMetaDataURL } from "@/lib/getMetaData";
+import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
 
 export default function ProductUpload() {
   return (
     <>
-      <MetaHead title="상품 판매" url={getMetaDataURL("product/upload")} />
+      <DynamicMetaHead title="상품 판매" url={getDynamicMetaDataURL("product/upload")} />
       <ProductUploadPage isEdit={false} />
     </>
   );

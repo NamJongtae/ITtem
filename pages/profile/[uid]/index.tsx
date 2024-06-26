@@ -9,8 +9,8 @@ import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
-import MetaHead from "@/components/metaHead/meta-head";
-import { getMetaData } from "@/lib/getMetaData";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
+import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProfileData } from "@/types/authTypes";
 import { MetaData } from "@/types/metaDataTypes";
 
@@ -21,7 +21,7 @@ interface IProps {
 export default function UserProfile({ metaData }: IProps) {
   return (
     <>
-      <MetaHead {...metaData} />
+      <DynamicMetaHead {...metaData} />
       <ProfilePage my={false} />
     </>
   );
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     userProfileQueryKeyConfig.queryKey
   ) as ProfileData | undefined;
 
-  const metaData = getMetaData({
+  const metaData = getDynamicMetaData({
     url: resolvedUrl,
     title: `${userProfileData?.nickname || ""}님의 프로필`,
   });

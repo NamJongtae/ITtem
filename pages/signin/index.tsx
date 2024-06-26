@@ -1,11 +1,11 @@
-import MetaHead from "@/components/metaHead/meta-head";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import SigninPage from "@/components/signin/signin-page";
-import { getMetaDataURL } from "@/lib/getMetaData";
+import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
 
 export default function Signin() {
   return (
     <>
-      <MetaHead title="로그인" url={getMetaDataURL("signin")} />
+      <DynamicMetaHead title="로그인" url={getDynamicMetaDataURL("signin")} />
       <SigninPage />
     </>
   );
