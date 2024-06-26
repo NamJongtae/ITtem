@@ -1,0 +1,21 @@
+.Toastify__toast-container {
+  max-width: 420px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    max-width: 100%;
+  }
+}
+
+.Toastify__toast {
+  max-width: 100%;
+  font-size: 14px;
+  white-space: pre-line;
+  word-break: keep-all;
+  gap: 6px;
+  width: 100%;
+  font-weight: 900;
+  font-family:inherit
+}
