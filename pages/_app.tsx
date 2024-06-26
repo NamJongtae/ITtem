@@ -11,7 +11,7 @@ import { HydrationBoundary } from "@tanstack/react-query";
 import wrapper from "@/store/store";
 import Script from "next/script";
 import { Provider } from "react-redux";
-import MetaHead from "@/components/metaHead/meta-head";
+import DefaultHead from "@/components/defaultHead/default-head";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -33,7 +33,7 @@ function App({ Component, ...rest }: AppProps) {
 
   return (
     <Provider store={store}>
-      <MetaHead />
+      <DefaultHead />
       <ReactQueryProvider>
         <HydrationBoundary state={props.pageProps.dehydratedState}>
           <style jsx global>{`
