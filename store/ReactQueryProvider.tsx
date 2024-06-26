@@ -13,7 +13,9 @@ export default function ReactQueryProvider({
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: {},
+          queries: {
+            retry: 0,
+          },
         },
       })
   );
