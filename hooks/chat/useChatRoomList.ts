@@ -1,7 +1,6 @@
-import { firestoreDB } from "@/lib/firebaseSetting";
+import { getFirestoreDB } from '@/lib/firebaseSetting';
 import { RootState } from "@/store/store";
 import { ChatRoomData } from "@/types/chatTypes";
-import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -20,23 +19,37 @@ export default function useChatRoomList() {
       setIsLoading(false);
       return;
     }
-
-    const unsubscribes = chatRoomIds.map((chatRoomId) => {
-      const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-      return onSnapshot(chatRoomRef, (snapshot) => {
-        const data = snapshot.data() as ChatRoomData;
-        setChatRoomData((prevData) => ({
-          ...prevData,
-          [snapshot.id]: {
-            ...data,
-          },
-        }));
-        setIsLoading(false);
+  
+    const loadFirebase = async () => {
+      const firestoreDB = await getFirestoreDB();
+      const { doc, onSnapshot } = await import("firebase/firestore");
+      const unsubscribes = chatRoomIds.map((chatRoomId) => {
+        const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+        return onSnapshot(chatRoomRef, (snapshot) => {
+          const data = snapshot.data() as ChatRoomData;
+          setChatRoomData((prevData) => ({
+            ...prevData,
+            [snapshot.id]: {
+              ...data,
+            },
+          }));
+          setIsLoading(false);
+        });
       });
-    });
-
+  
+      return () => {
+        unsubscribes.forEach((unsubscribe) => unsubscribe());
+      };
+    };
+  
+    const unsubscribePromise = loadFirebase();
+  
     return () => {
-      unsubscribes.forEach((unsubscribe) => unsubscribe());
+      unsubscribePromise.then((unsubscribe) => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      });
     };
   }, [chatRoodIdsLoading, chatRoomIds]);
 

@@ -3,20 +3,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
-import {
-  equalTo,
-  get,
-  increment,
-  onValue,
-  orderByChild,
-  query,
-  ref,
-  update,
-} from "firebase/database";
-import { database } from "@/lib/firebaseSetting";
 import { NotificationMessageData } from "@/types/notification";
 import { useQueryClient } from "@tanstack/react-query";
 import { isMobile } from "react-device-detect";
+import { getRealtimeDB } from "@/lib/firebaseSetting";
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -94,46 +84,72 @@ export default function useNotification() {
 
   useEffect(() => {
     if (!user) return;
-
-    const messageRef = ref(database, `notification/${user.uid}/messages`);
-    const counterRef = ref(database, `notification/${user.uid}/counter`);
-    const q = query(messageRef, orderByChild("isNotification"), equalTo(false));
-
-    const unsubscribeMessage = onValue(q, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        (Object.entries(data) as [string, NotificationMessageData][]).forEach(
-          async ([key, message]) => {
-            toast.info(message.content);
-            const messageRef = ref(
-              database,
-              `notification/${user.uid}/messages/${key}`
-            );
-
-            update(messageRef, { isNotification: true });
-
-            const counterSnapshot = await get(counterRef);
-            if (counterSnapshot.exists()) {
-              await update(counterRef, { unreadCount: increment(1) });
-            } else {
-              await update(counterRef, { unreadCount: 1 });
+  
+    const loadFirebase = async () => {
+      const {
+        equalTo,
+        get,
+        increment,
+        onValue,
+        orderByChild,
+        query,
+        ref,
+        update,
+      } = await import("firebase/database");
+      const database = await getRealtimeDB();
+      const messageRef = ref(database, `notification/${user.uid}/messages`);
+      const counterRef = ref(database, `notification/${user.uid}/counter`);
+      const q = query(
+        messageRef,
+        orderByChild("isNotification"),
+        equalTo(false)
+      );
+  
+      const unsubscribeMessage = onValue(q, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          (Object.entries(data) as [string, NotificationMessageData][]).forEach(
+            async ([key, message]) => {
+              toast.info(message.content);
+              const messageRef = ref(
+                database,
+                `notification/${user.uid}/messages/${key}`
+              );
+  
+              update(messageRef, { isNotification: true });
+  
+              const counterSnapshot = await get(counterRef);
+              if (counterSnapshot.exists()) {
+                await update(counterRef, { unreadCount: increment(1) });
+              } else {
+                await update(counterRef, { unreadCount: 1 });
+              }
             }
-          }
-        );
-        queryClient.invalidateQueries({ queryKey: ["notification"] });
-      }
-    });
-
-    const unsubscribeCounter = onValue(counterRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setUnreadCount(data.unreadCount);
-      }
-    });
-
+          );
+          queryClient.invalidateQueries({ queryKey: ["notification"] });
+        }
+      });
+  
+      const unsubscribeCounter = onValue(counterRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setUnreadCount(data.unreadCount);
+        }
+      });
+  
+      return () => {
+        unsubscribeMessage();
+        unsubscribeCounter();
+      };
+    };
+  
+    const unsubscribePromise = loadFirebase();
     return () => {
-      unsubscribeMessage();
-      unsubscribeCounter();
+      unsubscribePromise.then((unsubscribe) => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      });
     };
   }, [user]);
 

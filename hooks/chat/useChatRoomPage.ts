@@ -1,20 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { firestoreDB } from "@/lib/firebaseSetting";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { ChatMessageData, ChatRoomData } from "@/types/chatTypes";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+
 import { toast } from "react-toastify";
 import useEnterChatRoomMutate from "../reactQuery/mutations/chat/useEnterChatRoomMutate";
 import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../reactQuery/mutations/chat/useLeaveChatRoomMutate";
+import { getFirestoreDB } from "@/lib/firebaseSetting";
 
 export default function useChatRoomPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -42,62 +36,77 @@ export default function useChatRoomPage() {
 
   useEffect(() => {
     if (!chatRoomId || !myUid || isExit) return;
-
-    const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-
-    const enterChatRoom = async () => {
-      try {
-        await enterChatRoomMutate(chatRoomId as string);
-      } catch (error) {
-        if (isAxiosError<{ message: string }>(error)) {
-          toast.warn(error.response?.data.message);
-          router.push("/chat");
-          return;
-        }
-      }
-    };
-
-    enterChatRoom();
-
-    const unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
-      const data = doc.data() as ChatRoomData | null;
-      if (data) {
-        data.participantIDs;
-        if (!(myUid in data.entered)) {
-          router.push("/chat");
-          return;
-        }
-        setChatData(data);
-        setIsLoading(false);
-      }
-    });
-
-    const messagesCollectionRef = collection(chatRoomRef, "messages");
-    const messagesQuery = query(
-      messagesCollectionRef,
-      orderBy("timestamp", "asc"),
-      orderBy("__name__", "asc")
-    );
-    const unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          const messageData = change.doc.data() as ChatMessageData;
-          setMessages((prevData) => [...prevData, messageData]);
-        }
-      });
-    });
-
-    return () => {
-      const leaveChatRoom = async () => {
+  
+    const loadFirebase = async () => {
+      const firestoreDB = await getFirestoreDB();
+      const { collection, doc, onSnapshot, orderBy, query } = await import(
+        "firebase/firestore"
+      );
+      const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+  
+      const enterChatRoom = async () => {
         try {
-          await leaveChatRoomMutate(chatRoomId as string);
+          await enterChatRoomMutate(chatRoomId as string);
         } catch (error) {
-          return;
+          if (isAxiosError<{ message: string }>(error)) {
+            toast.warn(error.response?.data.message);
+            router.push("/chat");
+            return;
+          }
         }
       };
-      leaveChatRoom();
-      unsubscribeChatRoom();
-      unsubscribeMessages();
+  
+      enterChatRoom();
+  
+      const unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
+        const data = doc.data() as ChatRoomData | null;
+        if (data) {
+          if (!(myUid in data.entered)) {
+            router.push("/chat");
+            return;
+          }
+          setChatData(data);
+          setIsLoading(false);
+        }
+      });
+  
+      const messagesCollectionRef = collection(chatRoomRef, "messages");
+      const messagesQuery = query(
+        messagesCollectionRef,
+        orderBy("timestamp", "asc"),
+        orderBy("__name__", "asc")
+      );
+      const unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const messageData = change.doc.data() as ChatMessageData;
+            setMessages((prevData) => [...prevData, messageData]);
+          }
+        });
+      });
+  
+      return () => {
+        const leaveChatRoom = async () => {
+          try {
+            await leaveChatRoomMutate(chatRoomId as string);
+          } catch (error) {
+            return;
+          }
+        };
+        leaveChatRoom();
+        unsubscribeChatRoom();
+        unsubscribeMessages();
+      };
+    };
+  
+    const unsubscribePromise = loadFirebase();
+  
+    return () => {
+      unsubscribePromise.then((unsubscribe) => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      });
     };
   }, [chatRoomId, myUid, isExit]);
 
