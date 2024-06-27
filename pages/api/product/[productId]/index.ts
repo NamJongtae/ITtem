@@ -5,13 +5,13 @@ import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/db";
 import { deleteObject, ref } from "firebase/storage";
-import { storage } from "@/lib/firebaseSetting";
 import {
   ProductImgData,
   ProductStatus,
   TradingStatus,
 } from "@/types/productTypes";
 import SaleTrading from "@/lib/db/models/SaleTrading";
+import { getStorageInstance } from "@/lib/firebaseSetting";
 
 export default async function handler(
   req: NextApiRequest,
@@ -321,6 +321,7 @@ export default async function handler(
       );
 
       try {
+        const storage = await getStorageInstance();
         const removeImgPromise = productImgNameArray.map((name: string) => {
           return deleteObject(ref(storage, `images/product/${name}`));
         });
