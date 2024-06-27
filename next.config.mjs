@@ -34,6 +34,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    fallbackNodePolyfills: false,
+  },
 };
 
 const withBundleAnalyzerConfig = withBundleAnalyzer({
