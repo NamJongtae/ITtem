@@ -13,8 +13,9 @@ export default function ChangePasswordModal({
       <div
         onClick={handleClickChangePwCloseBtn}
         className="fixed bg-black bg-opacity-50 inset-0 z-30"
-        role="modal-backdrop"
-      />
+      >
+        <span className="sr-only">backdrop</span>
+      </div>
       <ChangePasswordModalForm
         handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
       />

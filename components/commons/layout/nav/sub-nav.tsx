@@ -20,6 +20,7 @@ export default function SubNav() {
           onClick={toggleCategory}
           ref={buttonRef}
           onKeyDown={(e) => escKeyClose({ event: e, closeCb: toggleCategory })}
+          aria-label='카테고리 메뉴'
         >
           <MenuIcon
             className={`w-6 h-6 ${

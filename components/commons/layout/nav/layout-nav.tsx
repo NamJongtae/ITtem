@@ -13,7 +13,7 @@ export default function Nav() {
             <Link className="flex items-center gap-2" href="/">
               <Image
                 src={"/icons/logo.svg"}
-                alt="잇템"
+                alt=""
                 width={32}
                 height={32}
               />

@@ -21,7 +21,7 @@ export default function ProductManageSearch() {
       />
       <button
         type="submit"
-        className="absolute top-1/2 -translate-y-1/2 right-3"
+        className="absolute inline-flex items-center justify-center right-0 w-10 h-10"
       >
         <Image
           src={"/icons/search_icon.svg"}

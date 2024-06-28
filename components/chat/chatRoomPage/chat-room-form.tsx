@@ -10,7 +10,7 @@ interface IProps {
 export default function ChatRoomForm({ chatListRef }: IProps) {
   const { handleSubmit, register, isDisable, onSumbitMessage } =
     useChatRoomForm({ chatListRef });
-    
+
   return (
     <form
       onSubmit={handleSubmit(onSumbitMessage)}
@@ -26,7 +26,7 @@ export default function ChatRoomForm({ chatListRef }: IProps) {
           required: true,
         })}
       />
-      <button type="submit" disabled={isDisable}>
+      <button type="submit" disabled={isDisable} aria-label="전송">
         <ChatSendIcon
           className={`${isDisable ? "fill-gray-300" : "fill-blue-500"}`}
         />
