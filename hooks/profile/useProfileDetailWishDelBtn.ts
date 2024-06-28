@@ -1,11 +1,11 @@
 import { toast } from "react-toastify";
 import useDeleteProfileWishMutate from "../reactQuery/mutations/profile/useDeleteProfileWishMutate";
 
-interface IPrarms {
+interface IParams {
   selectedWish: string[];
 }
 
-export default function useProfileDetailWishDelBtn({ selectedWish }: IPrarms) {
+export default function useProfileDetailWishDelBtn({ selectedWish }: IParams) {
   const { deleteWishMutate } = useDeleteProfileWishMutate();
 
   const handleClickDelete = () => {

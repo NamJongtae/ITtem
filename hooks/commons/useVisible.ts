@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 
-interface IPrarms {
+interface IParams {
   pathnames: string[];
 }
 
-export default function useVisible({ pathnames }: IPrarms) {
+export default function useVisible({ pathnames }: IParams) {
   const router = useRouter();
   const pathname = router.pathname;
   const isVisible = !pathnames.some((path) => pathname.includes(path));

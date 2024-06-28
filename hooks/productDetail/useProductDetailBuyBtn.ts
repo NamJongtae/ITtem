@@ -4,11 +4,11 @@ import { RootState } from "@/store/store";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
 
-interface IPrarms {
+interface IParams {
   productStatus: ProductStatus | undefined;
 }
 
-export default function useProductDetailBuyBtn({ productStatus }: IPrarms) {
+export default function useProductDetailBuyBtn({ productStatus }: IParams) {
   const { purchaseProductMutate } = usePurchaseProductMutate();
   const user = useSelector((state: RootState) => state.auth.user);
 

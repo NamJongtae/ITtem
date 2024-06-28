@@ -2,7 +2,7 @@ import { MutableRefObject } from "react";
 import { useFormContext } from "react-hook-form";
 import { useFocusing } from "../commons/useFocusing";
 
-interface IPrarms {
+interface IParams {
   name: string;
   selectorRef: MutableRefObject<HTMLSelectElement | null>;
 }
@@ -10,7 +10,7 @@ interface IPrarms {
 export default function useReasonModalSeletor({
   name,
   selectorRef,
-}: IPrarms) {
+}: IParams) {
   const { register } = useFormContext();
   const { ref, ...rest } = register(name);
   useFocusing(selectorRef);

@@ -36,29 +36,32 @@ export default function useChatRoomPage() {
 
   useEffect(() => {
     if (!chatRoomId || !myUid || isExit) return;
-  
+
+    let unsubscribeChatRoom: any;
+    let unsubscribeMessages: any;
+
     const loadFirebase = async () => {
       const firestoreDB = await getFirestoreDB();
       const { collection, doc, onSnapshot, orderBy, query } = await import(
         "firebase/firestore"
       );
       const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-  
+
       const enterChatRoom = async () => {
         try {
           await enterChatRoomMutate(chatRoomId as string);
         } catch (error) {
-          if (isAxiosError<{ message: string }>(error)) {
+          if (isAxiosError(error)) {
             toast.warn(error.response?.data.message);
             router.push("/chat");
             return;
           }
         }
       };
-  
-      enterChatRoom();
-  
-      const unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
+
+      await enterChatRoom();
+
+      unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
         const data = doc.data() as ChatRoomData | null;
         if (data) {
           if (!(myUid in data.entered)) {
@@ -69,14 +72,15 @@ export default function useChatRoomPage() {
           setIsLoading(false);
         }
       });
-  
+
       const messagesCollectionRef = collection(chatRoomRef, "messages");
       const messagesQuery = query(
         messagesCollectionRef,
         orderBy("timestamp", "asc"),
         orderBy("__name__", "asc")
       );
-      const unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+
+      unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             const messageData = change.doc.data() as ChatMessageData;
@@ -84,29 +88,27 @@ export default function useChatRoomPage() {
           }
         });
       });
-  
-      return () => {
-        const leaveChatRoom = async () => {
-          try {
-            await leaveChatRoomMutate(chatRoomId as string);
-          } catch (error) {
-            return;
-          }
-        };
-        leaveChatRoom();
-        unsubscribeChatRoom();
-        unsubscribeMessages();
-      };
     };
-  
-    const unsubscribePromise = loadFirebase();
-  
+
+    loadFirebase();
+
     return () => {
-      unsubscribePromise.then((unsubscribe) => {
-        if (unsubscribe) {
-          unsubscribe();
+      const leaveChatRoom = async () => {
+        try {
+          await leaveChatRoomMutate(chatRoomId as string);
+        } catch (error) {
+          // 오류 처리 필요 시 추가
         }
-      });
+      };
+
+      leaveChatRoom();
+
+      if (unsubscribeChatRoom) {
+        unsubscribeChatRoom();
+      }
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
     };
   }, [chatRoomId, myUid, isExit]);
 

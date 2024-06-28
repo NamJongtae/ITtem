@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
-export default function useSaleTradingEditBtn({ productId }: IPrarms) {
+export default function useSaleTradingEditBtn({ productId }: IParams) {
   const router = useRouter();
   const handleClickEdit = () => {
     router.push(`/product/${productId}/edit`);

@@ -1,16 +1,17 @@
 import { toast } from "react-toastify";
 import useProductDetailFollowMutate from "../reactQuery/mutations/product/useProductDetailFollowMutate";
 import useProductDetailUnfollowMutate from "../reactQuery/mutations/product/useProductDetailUnfollowMutate";
-import { ProfileData } from "@/types/authTypes";
-import useMyProfileQuery from '../reactQuery/querys/profile/useMyProfileQuery';
+import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
+
+interface IParams {
+  uid: string;
+  authFollowers: string[];
+}
 
 export default function useProductDetailFollowBtn({
   uid,
   authFollowers,
-}: {
-  uid: string;
-  authFollowers: string[];
-}) {
+}: IParams) {
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
 
   const { productDetailfollowMutate } = useProductDetailFollowMutate(uid);

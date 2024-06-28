@@ -5,11 +5,11 @@ import {
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
-interface IPrarms {
+interface IParams {
   initalDetailMenu: ProductManageDeatilMenu;
 }
 
-export default function useProductManagePage({ initalDetailMenu }: IPrarms) {
+export default function useProductManagePage({ initalDetailMenu }: IParams) {
   const router = useRouter();
   const [menu, setMenu] = useState<ProductManageMenu>("판매");
   const [detailMenu, setDetailMenu] =

@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-interface IPrarms {
+interface IParams {
   productStatus: ProductStatus | undefined;
 }
 
-export default function useProductDetailEditBtn({ productStatus }: IPrarms) {
+export default function useProductDetailEditBtn({ productStatus }: IParams) {
   const router = useRouter();
   const productId = router.query?.productId;
   const user = useSelector((state: RootState) => state.auth.user);

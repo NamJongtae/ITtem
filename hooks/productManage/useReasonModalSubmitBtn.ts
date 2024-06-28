@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
 
-interface IPrarms {
+interface IParams {
   name: string;
 }
 
-export default function useReasonModalSubmitBtn({ name }: IPrarms) {
+export default function useReasonModalSubmitBtn({ name }: IParams) {
   const { formState, watch } = useFormContext();
   const selectValue = watch(name);
 

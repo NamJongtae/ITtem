@@ -2,11 +2,11 @@ import { toast } from "react-toastify";
 import useProductReportMutate from "../reactQuery/mutations/product/useProductReportMutate";
 import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
 
-interface IPrarms {
+interface IParams {
   reportUserIds: string[] | undefined;
 }
 
-export default function useProductDetailReportBtn({ reportUserIds }: IPrarms) {
+export default function useProductDetailReportBtn({ reportUserIds }: IParams) {
   const { productReportMutate } = useProductReportMutate();
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
   const isReport = reportUserIds?.includes(myProfileData?.uid || "");

@@ -84,7 +84,10 @@ export default function useNotification() {
 
   useEffect(() => {
     if (!user) return;
-  
+
+    let unsubscribeMessage: any;
+    let unsubscribeCounter: any;
+
     const loadFirebase = async () => {
       const {
         equalTo,
@@ -104,8 +107,8 @@ export default function useNotification() {
         orderByChild("isNotification"),
         equalTo(false)
       );
-  
-      const unsubscribeMessage = onValue(q, (snapshot) => {
+
+      unsubscribeMessage = onValue(q, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           (Object.entries(data) as [string, NotificationMessageData][]).forEach(
@@ -115,9 +118,9 @@ export default function useNotification() {
                 database,
                 `notification/${user.uid}/messages/${key}`
               );
-  
-              update(messageRef, { isNotification: true });
-  
+
+              await update(messageRef, { isNotification: true });
+
               const counterSnapshot = await get(counterRef);
               if (counterSnapshot.exists()) {
                 await update(counterRef, { unreadCount: increment(1) });
@@ -129,29 +132,26 @@ export default function useNotification() {
           queryClient.invalidateQueries({ queryKey: ["notification"] });
         }
       });
-  
-      const unsubscribeCounter = onValue(counterRef, (snapshot) => {
+
+      unsubscribeCounter = onValue(counterRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           setUnreadCount(data.unreadCount);
         }
       });
-  
-      return () => {
-        unsubscribeMessage();
-        unsubscribeCounter();
-      };
     };
-  
-    const unsubscribePromise = loadFirebase();
+
+    loadFirebase();
+
     return () => {
-      unsubscribePromise.then((unsubscribe) => {
-        if (unsubscribe) {
-          unsubscribe();
-        }
-      });
+      if (unsubscribeMessage) {
+        unsubscribeMessage();
+      }
+      if (unsubscribeCounter) {
+        unsubscribeCounter();
+      }
     };
-  }, [user]);
+  }, [user, setUnreadCount, queryClient]);
 
   return {
     isOpenModal,

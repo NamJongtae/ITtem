@@ -3,10 +3,10 @@ import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
-interface IPrarms {
+interface IParams {
   toggleMenu: () => void;
 }
-export default function useNavMobileMenu({ toggleMenu }: IPrarms) {
+export default function useNavMobileMenu({ toggleMenu }: IParams) {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const { signoutMutate } = useSignoutMutate();

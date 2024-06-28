@@ -1,12 +1,12 @@
 import usePurchaseCancelRequestWithdrawalMutate from "../reactQuery/mutations/trade/usePurchaseCancelRequestWithdrawalMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function usePurchaseTradingCancelWithdrawalBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { purchaseCancelRequestWithdrawalMutate } =
     usePurchaseCancelRequestWithdrawalMutate();
 

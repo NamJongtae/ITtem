@@ -3,11 +3,11 @@ import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { usePathname } from "next/navigation";
 import React, { useRef } from "react";
 
-interface IPrarms {
+interface IParams {
   currentCategory: string | null;
 }
 
-export default function useNavCategoryMenu({ currentCategory }: IPrarms) {
+export default function useNavCategoryMenu({ currentCategory }: IParams) {
   const pathname = usePathname();
 
   const activeCategoryClassName = (category: string) =>

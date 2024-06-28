@@ -1,12 +1,12 @@
 import useProductReturnRequestWithdrawalMutate from "../reactQuery/mutations/trade/useProductReturnRequestWithdrawalMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function usePurchaseTradingReturnWithdrawalBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productReturnRequestWithdrawalMutate } =
     useProductReturnRequestWithdrawalMutate();
 

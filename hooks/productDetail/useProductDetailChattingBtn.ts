@@ -4,7 +4,7 @@ import { RootState } from "@/store/store";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
 
-interface IPrarsm {
+interface IParams {
   productStatus: ProductStatus | undefined;
   productId: string | undefined;
   userId: string | undefined;
@@ -14,7 +14,7 @@ export default function useProductDetailChattingBtn({
   productStatus,
   productId,
   userId,
-}: IPrarsm) {
+}: IParams) {
   const { mutate } = useStartChatMutate();
   const user = useSelector((state: RootState) => state.auth.user);
 

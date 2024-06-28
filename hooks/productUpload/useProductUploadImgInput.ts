@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
 
-interface IPrarms {
+interface IParams {
   onChangeImg: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export default function useProductUploadImgInput({ onChangeImg }: IPrarms) {
+export default function useProductUploadImgInput({ onChangeImg }: IParams) {
   const { register } = useFormContext();
   const { ...rest } = register("imgData", {
     onChange: onChangeImg,

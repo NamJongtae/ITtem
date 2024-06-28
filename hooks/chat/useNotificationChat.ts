@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-
 import { getFirestoreDB } from "@/lib/firebaseSetting";
-
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { chatSlice } from "@/store/chatSlice";
@@ -14,34 +12,34 @@ export default function useNotificationChat() {
   useEffect(() => {
     if (!myUid) return;
 
+    let unsubscribe: any;
+
     const loadFirebase = async () => {
       const firestoreDB = await getFirestoreDB();
       const { doc, onSnapshot } = await import("firebase/firestore");
+
       const chatRoomIdsRef = doc(firestoreDB, `userChatInfo/${myUid}`);
       dispatch(chatSlice.actions.setChatRoomIdsLoading(true));
 
-      const unsubscribe = onSnapshot(chatRoomIdsRef, (snapshot) => {
+      unsubscribe = onSnapshot(chatRoomIdsRef, (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.data();
           const ids = data.chatRoomIds;
           const totalMessageCount = data.totalMessageCount;
+          console.log(ids);
           dispatch(chatSlice.actions.saveChatRoomIds(ids));
           dispatch(chatSlice.actions.saveTotalMessageCount(totalMessageCount));
         }
         dispatch(chatSlice.actions.setChatRoomIdsLoading(false));
       });
-
-      return unsubscribe;
     };
 
-    const unsubscribePromise = loadFirebase();
+    loadFirebase();
 
     return () => {
-      unsubscribePromise.then((unsubscribe) => {
-        if (unsubscribe) {
-          unsubscribe();
-        }
-      });
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
-  }, [myUid]);
+  }, [myUid, dispatch]);
 }

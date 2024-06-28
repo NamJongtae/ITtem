@@ -1,12 +1,12 @@
 import useProductReceiptConfirmationMutate from "../reactQuery/mutations/product/useProductReceiptConfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function usePurchastTradingCancelWithdrawalBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productReceiptConfirmationMutate } =
     useProductReceiptConfirmationMutate();
 

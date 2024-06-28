@@ -2,13 +2,13 @@ import React from "react";
 import useDropdownMenu from "../commons/useDropDownMenu";
 import { ProductCategory } from "@/types/productTypes";
 
-interface IPrarms {
+interface IParams {
   selectCategory: (category: ProductCategory) => void;
 }
 
 export default function useProfileDetailProductCategory({
   selectCategory,
-}: IPrarms) {
+}: IParams) {
   const { isOpenMenu, closeMenu, toggleMenu, menuRef } = useDropdownMenu();
 
   const handleClickCategory = (category: ProductCategory) => {

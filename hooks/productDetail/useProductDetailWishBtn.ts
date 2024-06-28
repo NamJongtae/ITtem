@@ -4,7 +4,7 @@ import useDeleteWishMutate from "../reactQuery/mutations/profile/useDeleteWishMu
 import { toast } from "react-toastify";
 import { ProductDetailData } from "@/types/productTypes";
 
-interface IPrarms {
+interface IParams {
   productDetailData: ProductDetailData | undefined;
   myProfileData: ProfileData | undefined;
 }
@@ -12,7 +12,7 @@ interface IPrarms {
 export default function useProductDetailWishBtn({
   productDetailData,
   myProfileData,
-}: IPrarms) {
+}: IParams) {
   const { addWishMutate } = useAddWishMutate();
   const { deleteWishMutate } = useDeleteWishMutate();
   const isWish =

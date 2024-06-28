@@ -1,7 +1,7 @@
 import usePurchaseCancelRequestMutate from "../reactQuery/mutations/trade/usePurchaseCancelRequestMutate";
 import { FieldValues } from "react-hook-form";
 
-interface IPrarms {
+interface IParams {
   closeModal: () => void;
   productId: string;
 }
@@ -9,7 +9,7 @@ interface IPrarms {
 export default function usePurchaseCancelModal({
   closeModal,
   productId,
-}: IPrarms) {
+}: IParams) {
   const { purchaseCancelRequestMutate } = usePurchaseCancelRequestMutate();
 
   const onSubmit = (values: FieldValues) => {

@@ -2,11 +2,11 @@ import { MutableRefObject } from "react";
 import { useFocusing } from "../commons/useFocusing";
 import { useFormContext } from "react-hook-form";
 
-interface IProps {
+interface IParams {
   starRef: MutableRefObject<HTMLDivElement | null>;
 }
 
-export default function useReviewUploadModalReviewStar({ starRef }: IProps) {
+export default function useReviewUploadModalReviewStar({ starRef }: IParams) {
   const { control, watch } = useFormContext();
   const score = watch("score");
 

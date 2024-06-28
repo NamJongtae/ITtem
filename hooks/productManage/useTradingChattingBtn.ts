@@ -1,6 +1,6 @@
 import useStartChatMutate from "../reactQuery/mutations/chat/useStartChatMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string | undefined;
   userId: string | undefined;
 }
@@ -8,7 +8,7 @@ interface IPrarms {
 export default function useTradingChattingBtn({
   productId,
   userId,
-}: IPrarms) {
+}: IParams) {
   const { mutate, isPending } = useStartChatMutate();
   const handleClickchatting = () => {
     if (!productId || !userId) return;
