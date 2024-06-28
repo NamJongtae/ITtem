@@ -34,11 +34,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    fallbackNodePolyfills: false,
-  },
 };
-
 const withBundleAnalyzerConfig = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })(nextConfig);
