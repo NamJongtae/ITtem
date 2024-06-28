@@ -4,7 +4,6 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
@@ -12,7 +11,10 @@ import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
 export default function MyProfile() {
   return (
     <>
-      <DynamicMetaHead title="나의 프로필" url={getDynamicMetaDataURL("profile")} />
+      <DynamicMetaHead
+        title="나의 프로필"
+        url={getDynamicMetaDataURL("profile")}
+      />
       <ProfilePage my={true} />
     </>
   );
@@ -20,7 +22,7 @@ export default function MyProfile() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
-
+  const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
     context.req,
     context.res,

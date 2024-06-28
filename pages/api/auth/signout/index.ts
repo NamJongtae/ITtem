@@ -21,7 +21,7 @@ export default async function handler(
         sessionOptions
       );
       const refreshToken = session.refreshToken;
-      const decodeRefreshToken = verifyToken(refreshToken, REFRESH_TOKEN_KEY);
+      const decodeRefreshToken = await verifyToken(refreshToken, REFRESH_TOKEN_KEY);
       await deleteToken(decodeRefreshToken?.data?.user.uid || "", "accessToken");
       await deleteToken(
         decodeRefreshToken?.data?.user.uid || "",

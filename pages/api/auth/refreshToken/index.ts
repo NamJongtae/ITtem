@@ -24,7 +24,7 @@ export default async function handler(
 
       const refreshToken = session.refreshToken;
 
-      const decodeRefreshToken = verifyToken(
+      const decodeRefreshToken = await verifyToken(
         refreshToken,
         REFRESH_TOKEN_KEY as string
       );
@@ -37,14 +37,14 @@ export default async function handler(
       if (
         !redisRefreshToken ||
         redisRefreshToken !== refreshToken ||
-        !decodeRefreshToken?.isVaild
+        !decodeRefreshToken?.isValid
       ) {
         session.destroy();
         res.status(401).json({ message: "세션이 만료됬어요." });
         return;
       }
 
-      const newAccessToken = generateToken({
+      const newAccessToken = await generateToken({
         payload: {
           user: decodeRefreshToken.data?.user,
           exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP,

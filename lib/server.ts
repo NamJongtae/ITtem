@@ -1,5 +1,5 @@
 import { IronSessionType } from "@/types/apiTypes";
-import { SessionOptions, getIronSession } from "iron-session";
+import { SessionOptions } from "iron-session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { generateToken, verifyToken } from "./token";
 import { getToken, saveToken } from "./api/redis";
@@ -27,20 +27,20 @@ export async function checkAuthorization(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionType>(
     req,
     res,
     sessionOptions
   );
-
   const accessToken = session.accessToken;
 
-  const decodeAccessToken = verifyToken(
+  const decodeAccessToken = await verifyToken(
     accessToken as string,
     process.env.NEXT_SECRET_ACCESS_TOKEN_KEY as string
   );
 
-  if (!decodeAccessToken?.isVaild) {
+  if (!decodeAccessToken?.isValid) {
     return { isValid: false, message: "만료된 토큰이에요." };
   }
 
@@ -64,15 +64,15 @@ export async function createAndSaveToken({
   user,
   session,
 }: {
-  user: { uid: string; };
+  user: { uid: string };
   session: IronSessionType;
 }) {
-  const accessToken = generateToken({
+  const accessToken = await generateToken({
     payload: { user, exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP },
     secret: ACCESS_TOKEN_KEY,
   });
 
-  const refreshToken = generateToken({
+  const refreshToken = await generateToken({
     payload: { user, exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP },
     secret: REFRESH_TOKEN_KEY as string,
   });

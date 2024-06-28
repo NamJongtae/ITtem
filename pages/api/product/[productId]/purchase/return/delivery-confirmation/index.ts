@@ -212,7 +212,7 @@ export default async function handler(
 
       res.status(200).json({ message: "반품 상품 전달 확인에 성공했어요." });
       
-      sendNotificationMessage(
+      await sendNotificationMessage(
         saleTrading.sellerId,
         `${user.nickname}님이 ${saleTrading.productName} 반품 상품을 전달 하였습니다.`
       );

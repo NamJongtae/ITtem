@@ -5,7 +5,6 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { getIronSession } from "iron-session";
 import { GetServerSideProps } from "next";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProductData } from "@/types/productTypes";
@@ -29,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, res, resolvedUrl, params } = context;
   const queryClient = new QueryClient();
   const productId = params?.productId;
+  const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
     req,
     res,
