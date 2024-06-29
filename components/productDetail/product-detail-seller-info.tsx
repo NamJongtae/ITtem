@@ -12,7 +12,7 @@ export default function ProductDetailSellerInfo({ auth }: IProps) {
     <div className="flex items-center gap-3">
       <Link
         href={`/profile/${auth.uid}`}
-        className="inline-flex items-center gap-4 rounded-md p-3 "
+        className="inline-flex items-center gap-4 rounded-md p-3 font-medium "
       >
         <Image
           className="inline-block h-14 w-14 cursor-pointer rounded-full object-cover object-center mr-1 border-2"

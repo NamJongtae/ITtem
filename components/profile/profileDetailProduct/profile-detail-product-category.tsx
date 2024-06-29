@@ -41,7 +41,7 @@ export default function ProfileDetailProductCategory({
       </button>
       {isOpenMenu && (
         <ul
-          className="absolute right-[0px] z-10 mt-1 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
+          className="absolute right-[0px] z-[11] mt-1 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
           role="menu"
           ref={menuRef}
           aria-orientation="vertical"

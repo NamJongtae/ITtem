@@ -19,7 +19,7 @@ export default function ProductManageItemContents({
     <div className="flex gap-3 items-center">
       <Image
         className="w-32 h-32 object-cover object-center"
-        src={tradingData.productData.imgData[0].url}
+        src={tradingData.productData?.imgData[0].url}
         alt=""
         width={120}
         height={120}
@@ -31,7 +31,7 @@ export default function ProductManageItemContents({
         </div>
         <div>
           <span className="inline-block w-16">가격</span>
-          <span>{tradingData.productData.price}</span>원
+          <span>{tradingData.productData.price.toLocaleString()}</span>원
         </div>
         {detailMenu === "거래중" && (
           <ProductManageItemTradingContent tradingData={tradingData} />
