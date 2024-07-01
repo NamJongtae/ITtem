@@ -1,4 +1,3 @@
-import ProfilePage from "@/components/profile/profile-page";
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { queryKeys } from "@/queryKeys";
 import customAxios from "@/lib/customAxios";
@@ -11,6 +10,8 @@ import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProfileData } from "@/types/authTypes";
 import { MetaData } from "@/types/metaDataTypes";
+import dynamic from "next/dynamic";
+const ProfilePage = dynamic(() => import("@/components/profile/profile-page"));
 
 interface IProps {
   metaData: MetaData;

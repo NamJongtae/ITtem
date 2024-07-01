@@ -1,4 +1,3 @@
-import ProfilePage from "@/components/profile/profile-page";
 import { queryKeys } from "@/queryKeys";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
@@ -7,6 +6,8 @@ import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
+import dynamic from "next/dynamic";
+const ProfilePage = dynamic(() => import("@/components/profile/profile-page"));
 
 export default function MyProfile() {
   return (
@@ -43,9 +44,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           });
           return response.data.profile;
         } catch (error) {
-          queryClient.removeQueries({
-            queryKey: myProfuileQueryKeyConfig.queryKey,
-          });
           console.error(error);
         }
       },

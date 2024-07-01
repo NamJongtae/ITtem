@@ -1,5 +1,4 @@
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
-import ProductUploadPage from "@/components/productUpload/product-upload-page";
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { sessionOptions } from "@/lib/server";
@@ -10,6 +9,11 @@ import { MetaData } from "@/types/metaDataTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetServerSidePropsContext } from "next";
+import dynamic from "next/dynamic";
+
+const ProductUploadPage = dynamic(
+  () => import("@/components/productUpload/product-upload-page")
+);
 
 interface IProps {
   metaData: MetaData;

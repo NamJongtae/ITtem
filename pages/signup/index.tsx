@@ -1,7 +1,7 @@
-
-import DynamicMetaHead from '@/components/dynamicMetaHead/dynamic-meta-head';
-import SignupPage from "@/components/signup/signup-page";
+import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
+import dynamic from "next/dynamic";
+const SignupPage = dynamic(() => import("@/components/signup/signup-page"));
 
 export default function Signup() {
   return (

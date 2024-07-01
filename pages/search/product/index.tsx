@@ -1,8 +1,9 @@
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
-import SearchPage from "@/components/search/search-page";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { MetaData } from "@/types/metaDataTypes";
 import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
+const SearchPage = dynamic(() => import("@/components/search/search-page"));
 
 interface IProps {
   metaData: MetaData;

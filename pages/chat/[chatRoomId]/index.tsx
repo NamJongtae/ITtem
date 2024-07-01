@@ -1,8 +1,9 @@
-import ChatRoomPage from "@/components/chat/chatRoomPage/chat-room-page";
-import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
-import { GetServerSideProps } from "next";
-import { MetaData } from "@/types/metaDataTypes";
-import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
+import dynamic from 'next/dynamic';
+import { GetServerSideProps } from 'next';
+import { MetaData } from '@/types/metaDataTypes';
+import { getDynamicMetaData } from '@/lib/getDynamicMetaData';
+import DynamicMetaHead from '@/components/dynamicMetaHead/dynamic-meta-head';
+const ChatRoomPage = dynamic(() => import('@/components/chat/chatRoomPage/chat-room-page'));
 
 interface IProps {
   metaData: MetaData;

@@ -1,4 +1,3 @@
-import ProductDetailPage from "@/components/productDetail/product-detail";
 import { queryKeys } from "@/queryKeys";
 import { incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
@@ -10,6 +9,10 @@ import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProductData } from "@/types/productTypes";
 import { MetaData } from "@/types/metaDataTypes";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
+import dynamic from "next/dynamic";
+const ProductDetailPage = dynamic(
+  () => import("@/components/productDetail/product-detail")
+);
 
 interface IProps {
   metaData: MetaData;

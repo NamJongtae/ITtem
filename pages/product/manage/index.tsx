@@ -1,9 +1,9 @@
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
-import ProductManagePage, {
-  ProductManageDeatilMenu,
-} from "@/components/product-manage/product-manage-page";
+import { ProductManageDeatilMenu } from '@/components/product-manage/product-manage-page';
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { GetServerSideProps } from "next";
+import dynamic from 'next/dynamic';
+const ProductManagePage = dynamic(()=>import("@/components/product-manage/product-manage-page"))
 
 interface IProps {
   initalDetailMenu: ProductManageDeatilMenu;
