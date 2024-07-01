@@ -78,11 +78,9 @@ export default function useProductEditSubmit() {
   const deleteImages = async (values: FieldValues) => {
     if (productEditData.imgData && values.prevImgData) {
       const productDataImgName = productData.imgData.map((data) => data.name);
-      console.log(productDataImgName);
       const prevImgDataImgName = values.prevImgData.map(
         (data: ProductImgData) => data.name
       );
-      console.log(prevImgDataImgName);
       await deleteImgToFirestore(productDataImgName, prevImgDataImgName);
     }
   };

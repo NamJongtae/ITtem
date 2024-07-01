@@ -26,7 +26,7 @@ export default function useNotificationChat() {
           const data = snapshot.data();
           const ids = data.chatRoomIds;
           const totalMessageCount = data.totalMessageCount;
-          console.log(ids);
+
           dispatch(chatSlice.actions.saveChatRoomIds(ids));
           dispatch(chatSlice.actions.saveTotalMessageCount(totalMessageCount));
         }
