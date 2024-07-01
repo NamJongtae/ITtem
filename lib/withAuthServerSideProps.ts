@@ -10,6 +10,7 @@ import { sessionOptions } from "./server";
 import { IronSessionType } from "@/types/apiTypes";
 import { verifyToken } from "./token";
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
+import { isAxiosError } from "axios";
 
 type GetServerSidePropsFunc<P = { [key: string]: any }> = (
   context: GetServerSidePropsContext
@@ -48,6 +49,18 @@ export const withAuthServerSideProps = (
             return response.data;
           } catch (error) {
             console.log(error);
+            if (
+              isAxiosError<{ message: string }>(error) &&
+              error.response?.data.message === "세션이 만료됬어요."
+            ) {
+              session.destroy();
+              return {
+                redirect: {
+                  destination: "/signin",
+                  permanent: false,
+                },
+              };
+            }
           }
         },
       });
