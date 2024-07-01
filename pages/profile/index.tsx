@@ -3,10 +3,10 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
 import dynamic from "next/dynamic";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
 const ProfilePage = dynamic(() => import("@/components/profile/profile-page"));
 
 export default function MyProfile() {
@@ -21,7 +21,7 @@ export default function MyProfile() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const queryClient = new QueryClient();
   const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
@@ -52,4 +52,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { dehydratedState: dehydrate(queryClient) },
   };
-};
+});

@@ -1,7 +1,7 @@
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
 import { MetaData } from "@/types/metaDataTypes";
-import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 const SearchPage = dynamic(() => import("@/components/search/search-page"));
 
@@ -18,7 +18,7 @@ export default function Search({ metaData }: IProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const { resolvedUrl, query } = context;
   const category = query?.category || "전체";
   const keyword = query?.keyword;
@@ -33,4 +33,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { metaData },
   };
-};
+});

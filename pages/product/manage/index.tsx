@@ -1,9 +1,11 @@
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
-import { ProductManageDeatilMenu } from '@/components/product-manage/product-manage-page';
+import { ProductManageDeatilMenu } from "@/components/product-manage/product-manage-page";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
-import { GetServerSideProps } from "next";
-import dynamic from 'next/dynamic';
-const ProductManagePage = dynamic(()=>import("@/components/product-manage/product-manage-page"))
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
+import dynamic from "next/dynamic";
+const ProductManagePage = dynamic(
+  () => import("@/components/product-manage/product-manage-page")
+);
 
 interface IProps {
   initalDetailMenu: ProductManageDeatilMenu;
@@ -19,7 +21,7 @@ export default function ProductManage({ initalDetailMenu, metaData }: IProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const status = context.query?.status;
   const { resolvedUrl } = context;
 
@@ -38,4 +40,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { initalDetailMenu, metaData },
   };
-};
+});

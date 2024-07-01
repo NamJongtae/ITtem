@@ -4,12 +4,12 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProductData } from "@/types/productTypes";
 import { MetaData } from "@/types/metaDataTypes";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import dynamic from "next/dynamic";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
 const ProductDetailPage = dynamic(
   () => import("@/components/productDetail/product-detail")
 );
@@ -27,7 +27,7 @@ export default function ProductDetail({ metaData }: IProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const { req, res, resolvedUrl, params } = context;
   const queryClient = new QueryClient();
   const productId = params?.productId;
@@ -86,4 +86,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { dehydratedState: dehydrate(queryClient), metaData },
   };
-};
+});

@@ -1,6 +1,8 @@
 import HomePage from "@/components/home/home-page";
 import MetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaDataURL } from "@/lib/getDynamicMetaData";
+import { GetServerSideProps } from "next";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
 
 export default function Home() {
   return (
@@ -10,3 +12,9 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withAuthServerSideProps(
+  async (context) => {
+    return { props: {} };
+  }
+);

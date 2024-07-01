@@ -3,12 +3,12 @@ import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
 import { queryKeys } from "@/queryKeys";
 import { IronSessionData } from "@/types/apiTypes";
 import { MetaData } from "@/types/metaDataTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 
 const ProductUploadPage = dynamic(
@@ -28,7 +28,7 @@ export default function ProductEdit({ metaData }: IProps) {
   );
 }
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withAuthServerSideProps(async (ctx) => {
   const queryClient = new QueryClient();
   const { query, resolvedUrl } = ctx;
   const { getIronSession } = await import("iron-session");
@@ -64,13 +64,12 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           metaData,
         },
       };
-    } else {
-      return {
-        redirect: {
-          destination: "/product",
-          permanent: false,
-        },
-      };
     }
   }
-}
+  return {
+    redirect: {
+      destination: "/product",
+      permanent: false,
+    },
+  };
+});
