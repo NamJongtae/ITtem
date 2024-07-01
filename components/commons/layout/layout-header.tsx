@@ -1,8 +1,4 @@
-import dynamic from "next/dynamic";
-
-const Nav = dynamic(() => import("./nav/layout-nav"), {
-  ssr: false,
-});
+import Nav from "./nav/layout-nav";
 
 export default function Header() {
   return (
