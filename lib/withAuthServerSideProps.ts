@@ -1,0 +1,80 @@
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { authSlice } from "@/store/authSlice";
+import wrapper from "@/store/store";
+import { AuthData } from "@/types/authTypes";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import customAxios from "./customAxios";
+import { queryKeys } from "@/queryKeys";
+import { getIronSession } from "iron-session";
+import { sessionOptions } from "./server";
+import { IronSessionType } from "@/types/apiTypes";
+import { verifyToken } from "./token";
+import { REFRESH_TOKEN_KEY } from "@/constants/constant";
+
+type GetServerSidePropsFunc<P = { [key: string]: any }> = (
+  context: GetServerSidePropsContext
+) => Promise<GetServerSidePropsResult<P>>;
+
+export const withAuthServerSideProps = (
+  getServerSidePropsFunc: GetServerSidePropsFunc
+) => {
+  return wrapper.getServerSideProps((store) => async (context) => {
+    const queryClient = new QueryClient();
+    const cookies = context.req.headers.cookie;
+
+    if (cookies) {
+      const session = await getIronSession<IronSessionType>(
+        context.req,
+        context.res,
+        sessionOptions
+      );
+
+      const refreshToken = session.refreshToken;
+      const decodeToken = await verifyToken(refreshToken, REFRESH_TOKEN_KEY);
+      const uid = decodeToken?.data?.user.uid;
+
+      await queryClient.prefetchQuery({
+        queryKey: queryKeys.auth.info(uid).queryKey,
+        queryFn: async () => {
+          try {
+            const response = await customAxios.get(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/user`,
+              {
+                headers: {
+                  Cookie: cookies,
+                },
+              }
+            );
+            return response.data;
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      });
+
+      const data = queryClient.getQueryData(
+        queryKeys.auth.info(uid).queryKey
+      ) as {
+        user: AuthData;
+        message: string;
+      };
+
+      if (data) store.dispatch(authSlice.actions.saveAuth(data.user));
+    }
+
+    let additionalProps = {};
+    if (getServerSidePropsFunc) {
+      const result = await getServerSidePropsFunc(context);
+      if ("props" in result) {
+        additionalProps = result.props;
+      }
+    }
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        ...additionalProps,
+      },
+    };
+  });
+};
