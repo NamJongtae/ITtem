@@ -298,13 +298,6 @@ export const profileQueryKey = createQueryKeys("profile", {
   }),
 });
 
-export const sessionQueryKey = createQueryKeys("session", {
-  isExist: {
-    queryKey: null,
-    queryFn: getSessionCookies,
-  },
-});
-
 export const notificationQueryKey = createQueryKeys("notification", {
   messages: (limit: number) => ({
     queryKey: [] as any,
@@ -326,6 +319,5 @@ export const queryKeys = mergeQueryKeys(
   authQueryKey,
   productQueryKey,
   profileQueryKey,
-  sessionQueryKey,
   notificationQueryKey
 );
