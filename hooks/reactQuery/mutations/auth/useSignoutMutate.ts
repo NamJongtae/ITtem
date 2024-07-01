@@ -17,7 +17,6 @@ export default function useSignoutMutate() {
   const queryClient = useQueryClient();
   const authQueryKey = queryKeys.auth.info().queryKey;
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const sessionQueryKey = queryKeys.session.isExist.queryKey;
 
   const { mutate: signoutMutate } = useMutation<
     AxiosResponse<SignoutResposeData>,
@@ -33,8 +32,6 @@ export default function useSignoutMutate() {
       queryClient.removeQueries({ queryKey: authQueryKey });
 
       queryClient.removeQueries({ queryKey: myProfileQueryKey });
-
-      queryClient.removeQueries({ queryKey: sessionQueryKey });
 
       dispatch(authSlice.actions.resetAuth());
       if (
