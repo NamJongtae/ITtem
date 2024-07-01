@@ -22,14 +22,12 @@ export const withAuthServerSideProps = (
   return wrapper.getServerSideProps((store) => async (context) => {
     const queryClient = new QueryClient();
     const cookies = context.req.headers.cookie;
-
-    if (cookies) {
-      const session = await getIronSession<IronSessionType>(
-        context.req,
-        context.res,
-        sessionOptions
-      );
-
+    const session = await getIronSession<IronSessionType>(
+      context.req,
+      context.res,
+      sessionOptions
+    );
+    if (cookies && session) {
       const refreshToken = session.refreshToken;
       const decodeToken = await verifyToken(refreshToken, REFRESH_TOKEN_KEY);
       const uid = decodeToken?.data?.user.uid;
@@ -54,12 +52,7 @@ export const withAuthServerSideProps = (
               error.response?.data.message === "세션이 만료됬어요."
             ) {
               session.destroy();
-              return {
-                redirect: {
-                  destination: "/signin",
-                  permanent: false,
-                },
-              };
+              return { message: "세션이 만료됬어요." };
             }
           }
         },
@@ -72,7 +65,17 @@ export const withAuthServerSideProps = (
         message: string;
       };
 
-      if (data) store.dispatch(authSlice.actions.saveAuth(data.user));
+      if (data) {
+        if (data.message === "세션이 만료됬어요.") {
+          return {
+            redirect: {
+              destination: "/signin",
+              permanent: false,
+            },
+          };
+        }
+        store.dispatch(authSlice.actions.saveAuth(data.user));
+      }
     }
 
     let additionalProps = {};
