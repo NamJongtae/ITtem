@@ -19,6 +19,7 @@ export default function NavNotification() {
         onKeyDown={(e) =>
           escKeyClose({ event: e, closeCb: toggleNotification })
         }
+        aria-label="알림"
       >
         <NotificatonIcon
           className={`w-6 h-6 md:w-5 md:h-5 ${
