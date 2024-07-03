@@ -31,7 +31,7 @@ export default function ChatRoomMenu({
           />
 
           <div
-            className="absolute w-1/2 xs:w-1/3 md:w-1/4 h-full right-0 bg-white animate-slideOutLeft"
+            className="absolute w-[280px] h-full right-0 bg-white animate-slideOutLeft"
             ref={menuRef}
           >
             <h2 className="font-semibold border-b p-3">채팅방 메뉴</h2>
