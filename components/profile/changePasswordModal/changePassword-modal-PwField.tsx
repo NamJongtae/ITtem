@@ -1,6 +1,6 @@
 import { MutableRefObject, forwardRef } from "react";
-import usePasswordValidation from "@/hooks/chatPasswordModal/usePasswordValidation";
-import CoreInputField from '@/components/commons/coreInputField/core-input-field';
+import usePasswordValidation from "@/hooks/changePasswordModal/usePasswordValidation";
+import CoreInputField from "@/components/commons/coreInputField/core-input-field";
 
 const ChangePasswordModalPwField = forwardRef<HTMLInputElement | null>(
   (props, ref) => {

@@ -16,9 +16,7 @@ export default function usePasswordChkValidation() {
         type: "validate",
         message: "비밀번호가 일치하지 않아요.",
       });
-    } else {
-      clearErrors("password-check");
-    }
+    } 
   }, [passwordValue, passwordCheckValue, setError, clearErrors]);
 
   return { passwordValue, passwordCheckValue };

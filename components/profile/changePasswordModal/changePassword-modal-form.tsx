@@ -6,7 +6,7 @@ import ChangePasswordModalPwField from "./changePassword-modal-PwField";
 import ChangePasswordModalPwCheckField from "./changePassword-modal-PwCheckField";
 import Loading from "../../commons/loading";
 import useChagePasswordModalForm from "@/hooks/profile/useChagePasswordModalForm";
-import ChangePasswordModalCancelBtn from "./changePassword-modal-cancel-btn";
+import ChangePasswordModalCloseBtn from "./changePassword-modal-close-btn";
 import ChangePasswordModalSubmitBtn from "./changePassword-modal-submit-btn";
 
 interface IProps {
@@ -21,7 +21,7 @@ export default function ChangePasswordModalForm({
     currentPwRef,
     pwRef,
     pwCheckRef,
-    cancelBtnRef,
+    closeBtnRef,
     submitBtnRef,
   } = useChagePasswordModalForm({
     closeModal: handleClickChangePwCloseBtn,
@@ -48,33 +48,32 @@ export default function ChangePasswordModalForm({
         },
       }}
       className={`${
-        isMobile ? "h-screen" : "max-w-[480px]"
-      } fixed center z-30 flex flex-col gap-5 justify-center w-full p-8 border bg-white`}
+        isMobile ? "h-screen pt-20" : "max-w-[480px] justify-center"
+      } fixed center z-30 flex flex-col gap-5 w-full p-8 border bg-white`}
     >
       <h2 className="text-xl text-center font-semibold mb-5">비밀번호 변경</h2>
       <ChangePasswordModalCurrentPwField
         ref={currentPwRef}
         submitBtnRef={submitBtnRef}
-        cancelBtnRef={cancelBtnRef}
+        closeBtnRef={closeBtnRef}
       />
       <ChangePasswordModalPwField ref={pwRef} />
       <ChangePasswordModalPwCheckField ref={pwCheckRef} />
 
-      <div className="mt-8 flex gap-3 justify-end">
-        <ChangePasswordModalCancelBtn
-          ref={cancelBtnRef}
-          currentPwRef={currentPwRef}
-          pwCheckRef={pwCheckRef}
-          submitBtnRef={submitBtnRef}
-          handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
-        />
-        <ChangePasswordModalSubmitBtn
-          ref={submitBtnRef}
-          currentPwRef={currentPwRef}
-          cancelBtnRef={cancelBtnRef}
-          handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
-        />
-      </div>
+      <ChangePasswordModalSubmitBtn
+        ref={submitBtnRef}
+        pwCheckRef={pwCheckRef}
+        closeBtnRef={closeBtnRef}
+        handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
+      />
+
+      <ChangePasswordModalCloseBtn
+        ref={closeBtnRef}
+        currentPwRef={currentPwRef}
+        pwCheckRef={pwCheckRef}
+        submitBtnRef={submitBtnRef}
+        handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
+      />
     </MyForm>
   );
 }

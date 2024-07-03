@@ -10,7 +10,7 @@ export default function useChagePasswordModalForm({ closeModal }: IParams) {
   const currentPwRef = useRef<HTMLInputElement | null>(null);
   const pwRef = useRef<HTMLInputElement | null>(null);
   const pwCheckRef = useRef<HTMLInputElement | null>(null);
-  const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const submitBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const { changePasswordMutate, changePasswordLoading } =
@@ -24,7 +24,7 @@ export default function useChagePasswordModalForm({ closeModal }: IParams) {
     currentPwRef,
     pwRef,
     pwCheckRef,
-    cancelBtnRef,
+    closeBtnRef,
     submitBtnRef,
   };
 }
