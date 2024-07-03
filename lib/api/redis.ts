@@ -46,7 +46,8 @@ export const getVerifiedEmail = async (email: string, isFindPw?: boolean) => {
     const redis = await client();
     const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
     const isVerify = await redis.hget(key, "isVerify");
-    return isVerify === "true";
+
+    return isVerify;
   } catch (error) {
     console.error("getVerifiedEmail error:", error);
     return false;
