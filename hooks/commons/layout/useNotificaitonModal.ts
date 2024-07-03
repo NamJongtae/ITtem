@@ -15,18 +15,4 @@ export default function useNotificaitonModal({
 }: IParams) {
   useFocusing(notificationModalRef);
   useModalMobileBackBtn({ isOpenModal, closeModal: toggleNotification });
-
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    if (
-      typeof notificationModalRef !== "function" &&
-      notificationModalRef?.current &&
-      e.relatedTarget &&
-      notificationModalRef.current.contains(e.relatedTarget as Node)
-    ) {
-      return;
-    }
-    toggleNotification();
-  };
-
-  return { handleBlur };
 }

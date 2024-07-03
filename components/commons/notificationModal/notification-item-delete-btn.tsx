@@ -7,7 +7,10 @@ interface IProps {
 export default function NotificationItemDeleteBtn({ messageId }: IProps) {
   const { mutate } = useDeleteNotificationMessageMutate();
   const onClickDelete = () => {
-    mutate(messageId);
+    const isDelete = confirm("정말 삭제하겠습니까?");
+    if (isDelete) {
+      mutate(messageId);
+    }
   };
 
   return (
