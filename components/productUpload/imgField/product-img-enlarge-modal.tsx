@@ -9,12 +9,12 @@ import "swiper/css/navigation";
 
 interface IProps {
   imgData: ProductImgData[] | undefined;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function ProductImgEnlargeModal({
   imgData,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
   return (
     <Portal>
@@ -41,7 +41,7 @@ export default function ProductImgEnlargeModal({
           ))}
         </Swiper>
         <button
-          onClick={closeModal}
+          onClick={handleClickCloseBtn}
           className="absolute text-white top-5 right-5 w-5 h-5 sm:w-auto sm:h-auto sm:top-8 sm:right-8 z-50"
         >
           <Image src={"/icons/x_icon.svg"} alt="닫기" width={30} height={30} />

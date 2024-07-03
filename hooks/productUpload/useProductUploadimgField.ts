@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import useModal from "../commons/useModal";
 
 export default function useProductUploadImgField(imgData?: ProductImgData[]) {
-  const { isOpenModal, openModal, closeModal } = useModal();
+  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
   const imgInputRef = useRef<HTMLInputElement>(null);
 
   const { setValue, getValues } = useFormContext();
@@ -133,7 +133,7 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
     handleOpenModal,
     handleClickImgInput,
     openModal,
-    closeModal,
+    handleClickCloseBtn,
     imgInputRef,
   };
 }
