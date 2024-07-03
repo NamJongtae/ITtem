@@ -48,32 +48,30 @@ export default async function handler(
         res.status(409).json({ message: "본인 상품은 신고할 수 없어요." });
       }
 
-      const result = await Product.updateOne({ _id: productId }, [
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productId },
         {
+          $inc: { reportCount: 1 },
+          $push: { reportUserIds: myUid },
           $set: {
-            reportCount: { $add: ["$reportCount", 1] },
-            block: {
-              $cond: {
-                if: { $gte: [{ $add: ["$reportCount", 1] }, 5] },
-                then: true,
-                else: "$block",
-              },
-            },
-            reportUserIds: {
-              $concatArrays: ["$reportUserIds", [myUid]],
-            },
+            block: product.reportCount >= 4,
           },
         },
-      ]);
+        { new: true }
+      );
 
-      if (!result.acknowledged || result.modifiedCount === 0) {
+      if (!updatedProduct) {
         res.status(500).json({
           message: "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요.",
         });
         return;
       }
-
-      res.status(200).json({ message: "해당 상품을 신고했어요." });
+      console.log(updatedProduct);
+      res.status(200).json({
+        message: updatedProduct.block
+          ? "상품 신고가 누적되어 블라인드 처리되었어요."
+          : "해당 상품을 신고했어요.",
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({
