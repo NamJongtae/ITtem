@@ -1,4 +1,5 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
+import Image from "next/image";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
@@ -8,7 +9,7 @@ interface IProps {
   handleClickProfieEditCloseBtn: () => void;
 }
 
-const ProfileEditCancelBtn = forwardRef<HTMLButtonElement, IProps>(
+const ProfileEditCloseBtn = forwardRef<HTMLButtonElement, IProps>(
   (
     {
       introduceRef,
@@ -23,22 +24,22 @@ const ProfileEditCancelBtn = forwardRef<HTMLButtonElement, IProps>(
         ref={ref}
         type="button"
         onClick={handleClickProfieEditCloseBtn}
-        className="py-2 px-4 bg-gray-400 text-white font-medium betterhover:hover:bg-gray-600"
+        className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
         onKeyDown={(e) =>
           optimizationTabFocus({
             event: e,
-            previousTarget: introduceRef.current,
-            nextTarget: submitBtnRef.current?.disabled
-              ? profileImgResetBtnRef.current
+            previousTarget: submitBtnRef.current?.disabled
+              ? introduceRef.current
               : submitBtnRef.current,
+            nextTarget: profileImgResetBtnRef.current,
           })
         }
       >
-        취소하기
+        <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />
       </button>
     );
   }
 );
 
-ProfileEditCancelBtn.displayName = "ProfileEditCancelBtn";
-export default ProfileEditCancelBtn;
+ProfileEditCloseBtn.displayName = "ProfileEditCloseBtn";
+export default ProfileEditCloseBtn;

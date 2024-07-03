@@ -7,7 +7,7 @@ interface IProps {
   profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
   profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
   nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
   submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 
@@ -15,7 +15,7 @@ export default function ProfileEditImgField({
   profileImgBtnRef,
   profileImgResetBtnRef,
   nicknameRef,
-  cancelBtnRef,
+  closeBtnRef,
   submitBtnRef,
 }: IProps) {
   const {
@@ -35,8 +35,7 @@ export default function ProfileEditImgField({
         profileImgBtnRef={profileImgBtnRef}
         profileImgResetBtnRef={profileImgResetBtnRef}
         nicknameRef={nicknameRef}
-        cancelBtnRef={cancelBtnRef}
-        submitBtnRef={submitBtnRef}
+        closeBtnRef={closeBtnRef}
       />
       <ProfileImgInput
         handleChangeImg={handleChangeImg}

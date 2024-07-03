@@ -2,7 +2,7 @@ import { MyForm } from "@/components/commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
 import Loading from "@/components/commons/loading";
-import ProfileEditCancelBtn from "./profileEdit-cancel-btn";
+import ProfileEditCloseBtn from "./profileEdit-close-btn";
 import ProfileEditSubmitBtn from "./profileEdit-submit-btn";
 import useProfileEditModalForm from "@/hooks/profile/useProfileEditModalForm";
 import ProfileEditImgField from "./profileEdit-img-field";
@@ -22,7 +22,7 @@ export default function ProfileEditModalForm({
     profileEditLoading,
     nicknameRef,
     introduceRef,
-    cancelBtnRef,
+    closeBtnRef,
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
@@ -46,15 +46,15 @@ export default function ProfileEditModalForm({
         },
       }}
       className={`${
-        isMobile ? "h-screen center" : "max-w-[480px] center"
-      } fixed z-30 flex flex-col justify-center gap-3 w-full p-8 border bg-white`}
+        isMobile ? "h-screen pt-20" : "max-w-[480px] justify-center"
+      } fixed z-30 center flex flex-col gap-3 w-full p-8 border bg-white`}
     >
       <h2 className="text-xl text-center font-semibold mb-5">프로필 수정</h2>
       <ProfileEditImgField
         profileImgBtnRef={profileImgBtnRef}
         profileImgResetBtnRef={profileImgResetBtnRef}
         nicknameRef={nicknameRef}
-        cancelBtnRef={cancelBtnRef}
+        closeBtnRef={closeBtnRef}
         submitBtnRef={submitBtnRef}
       />
       <ProfileEditNicknameField
@@ -62,20 +62,18 @@ export default function ProfileEditModalForm({
         profileImgBtnRef={profileImgBtnRef}
       />
       <ProfileEditIntroduceField introduceRef={introduceRef} />
-      <div className="mt-8 flex gap-3 justify-end">
-        <ProfileEditCancelBtn
-          ref={cancelBtnRef}
-          introduceRef={introduceRef}
-          profileImgResetBtnRef={profileImgResetBtnRef}
-          submitBtnRef={submitBtnRef}
-          handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn}
-        />
-        <ProfileEditSubmitBtn
-          ref={submitBtnRef}
-          cancelBtnRef={cancelBtnRef}
-          profileImgResetBtnRef={profileImgResetBtnRef}
-        />
-      </div>
+      <ProfileEditSubmitBtn
+        ref={submitBtnRef}
+        closeBtnRef={closeBtnRef}
+        introduceRef={introduceRef}
+      />
+      <ProfileEditCloseBtn
+        ref={closeBtnRef}
+        introduceRef={introduceRef}
+        profileImgResetBtnRef={profileImgResetBtnRef}
+        submitBtnRef={submitBtnRef}
+        handleClickProfieEditCloseBtn={handleClickProfieEditCloseBtn}
+      />
     </MyForm>
   );
 }

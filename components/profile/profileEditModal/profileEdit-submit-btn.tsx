@@ -3,24 +3,24 @@ import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
-  profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
+  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
-  ({ profileImgResetBtnRef, cancelBtnRef }, ref) => {
+  ({ introduceRef, closeBtnRef }, ref) => {
     const { isDisabled } = useProfileEditSubmitBtn();
 
     return (
       <button
         type="submit"
         disabled={isDisabled}
-        className="py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
+        className="mt-2 py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
         ref={ref}
         onKeyDown={(e) =>
           optimizationTabFocus({
             event: e,
-            previousTarget: cancelBtnRef.current,
-            nextTarget: profileImgResetBtnRef.current,
+            previousTarget: introduceRef.current,
+            nextTarget: closeBtnRef.current,
           })
         }
       >

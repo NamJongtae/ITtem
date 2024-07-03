@@ -1,3 +1,4 @@
+import useIntroduceField from "@/hooks/changePasswordModal/useIntroduceField";
 import { MutableRefObject } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -6,8 +7,8 @@ interface IProps {
 }
 
 export default function IntroductField({ introduceRef }: IProps) {
-  const { register } = useFormContext();
-  const { ref, ...rest } = register("introduce");
+  const { ref, rest } = useIntroduceField();
+
   return (
     <div>
       <label className="sr-only" htmlFor="introduce">

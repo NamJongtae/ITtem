@@ -9,7 +9,7 @@ interface IPrarms {
 export default function useProfileEditModalForm({ closeModal }: IPrarms) {
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const introduceRef = useRef<HTMLTextAreaElement | null>(null);
-  const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const submitBtnRef = useRef<HTMLButtonElement | null>(null);
   const profileImgBtnRef = useRef<HTMLButtonElement | null>(null);
   const profileImgResetBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -24,7 +24,7 @@ export default function useProfileEditModalForm({ closeModal }: IPrarms) {
     profileEditLoading,
     nicknameRef,
     introduceRef,
-    cancelBtnRef,
+    closeBtnRef,
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
