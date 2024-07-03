@@ -34,6 +34,7 @@
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
   - [🍪 ssr 쿠키 전달 문제](#-ssr-쿠키-전달-문제)
+  - [💫 Hydrate Redux state 초기화 문제](#-hydrate-redux-state-초기화-문제)
   - [🌍 vercel 배포 문제](#-vercel-배포-문제)
   - [🗜 middleware 토큰 인증 로직 구현 문제](#-middleware-토큰-인증-로직-구현-문제)
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
@@ -162,88 +163,6 @@ Serverless로 벡엔드 API를 구축하였습니다.
 
 | Route                                                            | Size    | First Load JS |
 | ---------------------------------------------------------------- | ------- | ------------- |
-| ○ /                                                              | 897 B   | 202 kB        |
-| ○ /404                                                           | 774 B   | 164 kB        |
-| ○ /signin                                                        | 3.5 kB  | 175 kB        |
-| ○ /signin/google                                                 | 1.36 kB | 161 kB        |
-| ○ /signin/kakao                                                  | 1.29 kB | 161 kB        |
-| ○ /signup                                                        | 4.24 kB | 181 kB        |
-| λ /api/auth/changePassword                                       | 0 B     | 159 kB        |
-| λ /api/auth/checkEmail                                           | 0 B     | 159 kB        |
-| λ /api/auth/deleteToken                                          | 0 B     | 159 kB        |
-| λ /api/auth/duplication/email                                    | 0 B     | 159 kB        |
-| λ /api/auth/duplication/nickname                                 | 0 B     | 159 kB        |
-| λ /api/auth/refreshToken                                         | 0 B     | 159 kB        |
-| λ /api/auth/sendVerifyEmail                                      | 0 B     | 159 kB        |
-| λ /api/auth/session                                              | 0 B     | 159 kB        |
-| λ /api/auth/signin                                               | 0 B     | 159 kB        |
-| λ /api/auth/signin/google                                        | 0 B     | 159 kB        |
-| λ /api/auth/signin/google/user                                   | 0 B     | 159 kB        |
-| λ /api/auth/signin/kakao                                         | 0 B     | 159 kB        |
-| λ /api/auth/signin/kakao/user                                    | 0 B     | 159 kB        |
-| λ /api/auth/signout                                              | 0 B     | 159 kB        |
-| λ /api/auth/signup                                               | 0 B     | 159 kB        |
-| λ /api/auth/user                                                 | 0 B     | 159 kB        |
-| λ /api/auth/verifyEmail                                          | 0 B     | 159 kB        |
-| λ /api/chat                                                      | 0 B     | 159 kB        |
-| λ /api/chat/[chatRoomId]                                         | 0 B     | 159 kB        |
-| λ /api/chat/[chatRoomId]/enter                                   | 0 B     | 159 kB        |
-| λ /api/chat/[chatRoomId]/exit                                    | 0 B     | 159 kB        |
-| λ /api/chat/[chatRoomId]/leave                                   | 0 B     | 159 kB        |
-| λ /api/chat/[chatRoomId]/message                                 | 0 B     | 159 kB        |
-| λ /api/notification                                              | 0 B     | 159 kB        |
-| λ /api/notification/[messageId]                                  | 0 B     | 159 kB        |
-| λ /api/notification/[messageId]/read                             | 0 B     | 159 kB        |
-| λ /api/product                                                   | 0 B     | 159 kB        |
-| λ /api/product/[productId]                                       | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase                              | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/cancel                       | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/cancel/withdrawal            | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/product-receipt-confirmation | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/return                       | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/return/delivery-confirmation | 0 B     | 159 kB        |
-| λ /api/product/[productId]/purchase/return/withdrawal            | 0 B     | 159 kB        |
-| λ /api/product/[productId]/report                                | 0 B     | 159 kB        |
-| λ /api/product/[productId]/review                                | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/cancel-comfirmation             | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/cancel-reject                   | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/delivery-confirmation           | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/purchase-request-confirmation   | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/purchase-request-reject         | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/return-confirmation             | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/return-receipt-confirmation     | 0 B     | 159 kB        |
-| λ /api/product/[productId]/sales/return-reject                   | 0 B     | 159 kB        |
-| λ /profile                                                       | 439 B   | 231 kB        |
-| λ /profile/[uid]                                                 | 354 B   | 231 kB        |
-| λ /search/product                                                | 2.73 kB | 204 kB        |
-| λ /product/[productId]                                           | 8.39 kB | 211 kB        |
-| λ /product/[productId]/edit                                      | 363 B   | 225 kB        |
-| λ /product/manage                                                | 10.1 kB | 197 kB        |
-| ○ /product/upload                                                | 427 B   | 225 kB        |
-| First Load JS shared by all                                      | 340 kB  |               |
-| ├ chunks/framework-03cd576e71e4cd66.js                           | 45.2 kB |               |
-| ├ chunks/main-2022d5fc3fdade3c.js                                | 31.9 kB |               |
-| ├ chunks/pages/\_app-0d627b907842ab6f.js                         | 80.1 kB |               |
-| ├ css/e523be9dea407922.css                                       | 181 kB  |               |
-| └ other shared chunks (total)                                    | 2.2 kB  |               |
-| Middleware                                                       | 42.1 kB |               |
-
-</details>
-
-- client에서 사용되지 않는 crypto, bcryptjs 모듈이 번들에 포함되어 있습니다.
-- firebase 모듈의 용량이 매우 크게 분포해 있습니다.
-- 번들 분석 결과 공통 번들 사이즈가 588MB로 나타났습니다.
-
-<br>
-
-**적용 후**
-![analyze2](https://github.com/NamJongtae/ITtem/assets/113427991/a4630da4-940c-44c9-95d9-fa7edb5e17ba)
-
-<details>
-<summary>분석 결과 보기</summary>
-
-| Route                                                            | Size    | First Load JS |
-| ---------------------------------------------------------------- | ------- | ------------- |
 | ○ /                                                              | 897 B   | 449 kB        |
 | /\_app                                                           | 0 B     | 407 kB        |
 | ○ /404                                                           | 774 B   | 412 kB        |
@@ -328,6 +247,88 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | ├ chunks/pages/\_app-aedf7feb874fe3ea.js                         | 328 kB  |               |
 | ├ css/a34982c1a8b93d6e.css                                       | 180 kB  |               |
 | └ other shared chunks (total)                                    | 2.06 kB |               |
+| Middleware                                                       | 42.1 kB |               |
+
+</details>
+
+- client에서 사용되지 않는 crypto, bcryptjs 모듈이 번들에 포함되어 있습니다.
+- firebase 모듈의 용량이 매우 크게 분포해 있습니다.
+- 번들 분석 결과 공통 번들 사이즈가 588MB로 나타났습니다.
+
+<br>
+
+**적용 후**
+![analyze2](https://github.com/NamJongtae/ITtem/assets/113427991/a4630da4-940c-44c9-95d9-fa7edb5e17ba)
+
+<details>
+<summary>분석 결과 보기</summary>
+
+| Route                                                            | Size    | First Load JS |
+| ---------------------------------------------------------------- | ------- | ------------- |
+| ○ /                                                              | 897 B   | 202 kB        |
+| ○ /404                                                           | 774 B   | 164 kB        |
+| ○ /signin                                                        | 3.5 kB  | 175 kB        |
+| ○ /signin/google                                                 | 1.36 kB | 161 kB        |
+| ○ /signin/kakao                                                  | 1.29 kB | 161 kB        |
+| ○ /signup                                                        | 4.24 kB | 181 kB        |
+| λ /api/auth/changePassword                                       | 0 B     | 159 kB        |
+| λ /api/auth/checkEmail                                           | 0 B     | 159 kB        |
+| λ /api/auth/deleteToken                                          | 0 B     | 159 kB        |
+| λ /api/auth/duplication/email                                    | 0 B     | 159 kB        |
+| λ /api/auth/duplication/nickname                                 | 0 B     | 159 kB        |
+| λ /api/auth/refreshToken                                         | 0 B     | 159 kB        |
+| λ /api/auth/sendVerifyEmail                                      | 0 B     | 159 kB        |
+| λ /api/auth/session                                              | 0 B     | 159 kB        |
+| λ /api/auth/signin                                               | 0 B     | 159 kB        |
+| λ /api/auth/signin/google                                        | 0 B     | 159 kB        |
+| λ /api/auth/signin/google/user                                   | 0 B     | 159 kB        |
+| λ /api/auth/signin/kakao                                         | 0 B     | 159 kB        |
+| λ /api/auth/signin/kakao/user                                    | 0 B     | 159 kB        |
+| λ /api/auth/signout                                              | 0 B     | 159 kB        |
+| λ /api/auth/signup                                               | 0 B     | 159 kB        |
+| λ /api/auth/user                                                 | 0 B     | 159 kB        |
+| λ /api/auth/verifyEmail                                          | 0 B     | 159 kB        |
+| λ /api/chat                                                      | 0 B     | 159 kB        |
+| λ /api/chat/[chatRoomId]                                         | 0 B     | 159 kB        |
+| λ /api/chat/[chatRoomId]/enter                                   | 0 B     | 159 kB        |
+| λ /api/chat/[chatRoomId]/exit                                    | 0 B     | 159 kB        |
+| λ /api/chat/[chatRoomId]/leave                                   | 0 B     | 159 kB        |
+| λ /api/chat/[chatRoomId]/message                                 | 0 B     | 159 kB        |
+| λ /api/notification                                              | 0 B     | 159 kB        |
+| λ /api/notification/[messageId]                                  | 0 B     | 159 kB        |
+| λ /api/notification/[messageId]/read                             | 0 B     | 159 kB        |
+| λ /api/product                                                   | 0 B     | 159 kB        |
+| λ /api/product/[productId]                                       | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase                              | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/cancel                       | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/cancel/withdrawal            | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/product-receipt-confirmation | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/return                       | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/return/delivery-confirmation | 0 B     | 159 kB        |
+| λ /api/product/[productId]/purchase/return/withdrawal            | 0 B     | 159 kB        |
+| λ /api/product/[productId]/report                                | 0 B     | 159 kB        |
+| λ /api/product/[productId]/review                                | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/cancel-comfirmation             | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/cancel-reject                   | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/delivery-confirmation           | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/purchase-request-confirmation   | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/purchase-request-reject         | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/return-confirmation             | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/return-receipt-confirmation     | 0 B     | 159 kB        |
+| λ /api/product/[productId]/sales/return-reject                   | 0 B     | 159 kB        |
+| λ /profile                                                       | 439 B   | 231 kB        |
+| λ /profile/[uid]                                                 | 354 B   | 231 kB        |
+| λ /search/product                                                | 2.73 kB | 204 kB        |
+| λ /product/[productId]                                           | 8.39 kB | 211 kB        |
+| λ /product/[productId]/edit                                      | 363 B   | 225 kB        |
+| λ /product/manage                                                | 10.1 kB | 197 kB        |
+| ○ /product/upload                                                | 427 B   | 225 kB        |
+| First Load JS shared by all                                      | 340 kB  |               |
+| ├ chunks/framework-03cd576e71e4cd66.js                           | 45.2 kB |               |
+| ├ chunks/main-2022d5fc3fdade3c.js                                | 31.9 kB |               |
+| ├ chunks/pages/\_app-0d627b907842ab6f.js                         | 80.1 kB |               |
+| ├ css/e523be9dea407922.css                                       | 181 kB  |               |
+| └ other shared chunks (total)                                    | 2.2 kB  |               |
 | Middleware                                                       | 42.1 kB |               |
 
 </details>
@@ -1200,6 +1201,168 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 <br>
 
+#### 💫 Hydrate Redux state 초기화 문제
+
+> 문제 상황
+
+- 유저 로그인 인증 로직을 SSR를 이용하여 prefetch하여 유저 정보를 HYDRATE로 Redux state에 저장하는 과정에서 기존 다른 Redux state가 초기화 되는 문제가 발생하였습니다.
+
+> 문제 원인
+
+- reducer 설정에서 HYDRATE가 Redux의 모든 state를 덮어쓰도록 설정되어 문제가 발생하였습니다.
+
+> 해결 방법
+
+- 1 ) `redux-persist`를 사용하여 기존 redux state 데이터를 저장하는 방법
+- 2 ) rootReducer에서 HYDRATE를 적용하지 않고, 각 slice에서 `extraReducers`를 사용하여 필요한 action에만 HYDRATE를 적용하는 방법
+- 두 번째 방법을 사용하여 문제를 해결하였습니다.
+
+> 해결 코드
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+**1 ) rootReducer HYDRATE 제거**
+**기존 코드**
+
+```javascript
+// store/reducers/index.ts
+import { combineReducers, AnyAction } from "@reduxjs/toolkit";
+import { signupSlice } from "../signupSlice";
+import { authSlice } from "../authSlice";
+import { locationSlice } from "../locationSlice";
+import { chatSlice } from "../chatSlice";
+
+const combinedReducer = combineReducers({
+  signup: signupSlice.reducer,
+  auth: authSlice.reducer,
+  location: locationSlice.reducer,
+  chat: chatSlice.reducer,
+});
+
+type CombinedState = ReturnType<typeof combinedReducer>;
+
+const rootReducer = (
+  state: CombinedState | undefined,
+  action: AnyAction
+): CombinedState => {
+  if (action.type === HYDRATE) {
+    const nextState = {
+      ...state,
+      ...action.payload,
+    };
+    return nextState;
+  } else {
+    return combinedReducer(state, action);
+  }
+};
+
+export default rootReducer;
+```
+
+<br>
+
+**수정 코드**
+
+```javascript
+// store/reducers/index.ts
+import { combineReducers, AnyAction } from "@reduxjs/toolkit";
+import { signupSlice } from "../signupSlice";
+import { authSlice } from "../authSlice";
+import { locationSlice } from "../locationSlice";
+import { chatSlice } from "../chatSlice";
+
+const combinedReducer = combineReducers({
+  signup: signupSlice.reducer,
+  auth: authSlice.reducer,
+  location: locationSlice.reducer,
+  chat: chatSlice.reducer,
+});
+
+type CombinedState = ReturnType<typeof combinedReducer>;
+
+const rootReducer = (
+  state: CombinedState | undefined,
+  action: AnyAction
+): CombinedState => {
+  return combinedReducer(state, action);
+};
+
+export default rootReducer;
+```
+
+- rootReducer의 HYDRATE를 제거하였습니다.
+
+<br>
+
+**2 ) HYDRATE가 필요한 slice에 extraReducer를 이용하여 변경**
+
+```javascript
+import { AuthData } from "@/types/authTypes";
+import { AnyAction, createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
+
+const isClient = typeof window !== "undefined";
+
+// 클라이언트 환경에서만 localStorage에 접근합니다.
+const storedUser = isClient
+  ? JSON.parse(localStorage.getItem("uid") || "null")
+  : null;
+
+export const authSlice = createSlice({
+  name: "authSlice",
+  initialState: {
+    user: storedUser as AuthData | null,
+    isLoading: true,
+  },
+  reducers: {
+    saveAuth: (
+      state,
+      action: {
+        payload: {
+          uid: string;
+          nickname: string;
+          email: string;
+          profileImg: string;
+        };
+        type: string;
+      }
+    ) => {
+      state.user = action.payload;
+      if (isClient) {
+        localStorage.setItem("uid", JSON.stringify(action.payload));
+      }
+    },
+    resetAuth: (state) => {
+      state.user = null;
+      if (isClient) {
+        localStorage.removeItem("uid");
+      }
+    },
+    setIsLoading: (state, action: { payload: boolean; type: string }) => {
+      state.isLoading = action.payload;
+    },
+  },
+  extraReducers(builder) {
+    builder.addCase(HYDRATE, (state, action: AnyAction) => {
+      return {
+        ...state,
+        ...action.payload.auth,
+      };
+    });
+  },
+});
+
+```
+
+- `extraReducers`를 통해 HYDRATE 적용
+
+</details>
+
+<br>
+
 #### 🌍 vercel 배포 문제
 
 > 문제 상황
@@ -1395,6 +1558,7 @@ export default customAxios;
 <br>
 
 ### 👀 구현 기능 미리보기 ( 제목 클릭 시 해당 기능 상세설명으로 이동됩니다. )
+👉 현재 상세 설명은 작성중입니다.
 
 | [🔗 로그인](#)                                                                                       | [🔗 소셜 로그인](#)                                                                                       | [🔗 회원가입](#)                                                                                       |
 | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -1412,7 +1576,7 @@ export default customAxios;
 | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | ![상품 신고/찜](https://github.com/NamJongtae/ITtem/assets/113427991/7a139fe0-28a4-426c-b3d4-692d89a169c2) | ![상품 삭제](https://github.com/NamJongtae/ITtem/assets/113427991/6a09ea99-e026-4e43-b673-85c777466fc9) | ![상품 관리](https://github.com/NamJongtae/ITtem/assets/113427991/8d7ec3a3-575c-4c80-ae75-0d0c1bce054e) |
 
-| [🔗 리뷰 작성](#)                                                                                       | [🔗 프로필 페이지](#)                                                                                       | [🔗 프로필 수정](#)                                                                                         |
+| [🔗 리뷰 작성](#)                                                                                       | [🔗 프로필 페이지](#)                                                                                       | [🔗 프로필 수정](#)                                                                                        |
 | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | ![리뷰 작성](https://github.com/NamJongtae/ITtem/assets/113427991/f36c7183-7cd8-4c12-8ac6-9fdbc258b697) | ![프로필 페이지](https://github.com/NamJongtae/ITtem/assets/113427991/99f348be-3f95-40a1-bd6a-38992d5970e7) | ![ 프로필 수정](https://github.com/NamJongtae/ITtem/assets/113427991/76e46d07-62c9-4102-a8a2-d0238eecf68c) |
 
