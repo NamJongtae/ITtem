@@ -1,5 +1,5 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import { getSessionCookies, getUser } from "@/lib/api/auth";
+import { getUser } from "@/lib/api/auth";
 import { getNotificationMessage } from "@/lib/api/notification";
 import {
   getCategoryProductList,
@@ -37,7 +37,7 @@ export const productQueryKey = createQueryKeys("product", {
     productListType,
     produdctCategory,
     location,
-    limit,
+    limit = 10,
   }: {
     productListType?: ProductListType;
     produdctCategory?: ProductCategory;
@@ -67,7 +67,7 @@ export const productQueryKey = createQueryKeys("product", {
   search: ({
     keyword,
     category,
-    limit,
+    limit = 10,
   }: {
     keyword?: string;
     category: ProductCategory;
@@ -103,7 +103,7 @@ export const productQueryKey = createQueryKeys("product", {
     status,
     search,
     menu,
-    limit,
+    limit = 10,
   }: {
     currentMenu: "sale" | "purchase";
     status: string;
@@ -144,7 +144,7 @@ export const profileQueryKey = createQueryKeys("profile", {
     contextQueries: {
       products: ({
         category,
-        limit,
+        limit = 10,
         productIds,
       }: {
         category: ProductCategory;
@@ -164,7 +164,7 @@ export const profileQueryKey = createQueryKeys("profile", {
       }),
       followers: ({
         userIds,
-        limit,
+        limit = 10,
       }: {
         userIds: string[];
         limit: number;
@@ -181,7 +181,7 @@ export const profileQueryKey = createQueryKeys("profile", {
       }),
       followings: ({
         userIds,
-        limit,
+        limit = 10,
       }: {
         userIds: string[];
         limit: number;
@@ -198,7 +198,7 @@ export const profileQueryKey = createQueryKeys("profile", {
       }),
       wish: ({
         wishProductIds,
-        limit,
+        limit = 10,
       }: {
         wishProductIds: string[];
         limit: number;
@@ -213,7 +213,7 @@ export const profileQueryKey = createQueryKeys("profile", {
           return response.data.products;
         },
       }),
-      reviews: ({ uid, limit }: { uid: string; limit: number }) => ({
+      reviews: ({ uid, limit = 10 }: { uid: string; limit: number }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
           const response = getProfileReviews({ uid, cursor: pageParam, limit });
@@ -231,7 +231,7 @@ export const profileQueryKey = createQueryKeys("profile", {
     contextQueries: {
       products: ({
         category,
-        limit,
+        limit = 10,
         productIds,
       }: {
         category: ProductCategory;
@@ -251,7 +251,7 @@ export const profileQueryKey = createQueryKeys("profile", {
       }),
       followers: ({
         userIds,
-        limit,
+        limit = 10,
       }: {
         userIds: string[];
         limit: number;
@@ -268,7 +268,7 @@ export const profileQueryKey = createQueryKeys("profile", {
       }),
       followings: ({
         userIds,
-        limit,
+        limit = 10,
       }: {
         userIds: string[];
         limit: number;
@@ -283,7 +283,7 @@ export const profileQueryKey = createQueryKeys("profile", {
           return response.data.followings;
         },
       }),
-      reviews: ({ limit }: { limit: number }) => ({
+      reviews: ({ limit = 10 }: { limit: number }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
           const response = getProfileReviews({
@@ -299,7 +299,7 @@ export const profileQueryKey = createQueryKeys("profile", {
 });
 
 export const notificationQueryKey = createQueryKeys("notification", {
-  messages: (limit: number) => ({
+  messages: (limit: number = 10) => ({
     queryKey: [] as any,
     queryFn: async ({ pageParam }) => {
       const response = await getNotificationMessage({
