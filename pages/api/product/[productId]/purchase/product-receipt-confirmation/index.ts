@@ -242,6 +242,14 @@ export default async function handler(
         throw new Error("상품 status 업데이트에 실패했어요.");
       }
 
+      await User.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(saleTrading.sellerId as string),
+        },
+        { $inc: { saleCount: 1 } },
+        { session }
+      );
+
       await session.commitTransaction();
       session.endSession();
 
