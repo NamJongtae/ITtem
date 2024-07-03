@@ -30,12 +30,15 @@ export default function useChatRoomList() {
         const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
         return onSnapshot(chatRoomRef, (snapshot) => {
           const data = snapshot.data() as ChatRoomData;
-          setChatRoomData((prevData) => ({
-            ...prevData,
-            [snapshot.id]: {
-              ...data,
-            },
-          }));
+          if (data.lastMessage) {
+            setChatRoomData((prevData) => ({
+              ...prevData,
+              [snapshot.id]: {
+                ...data,
+              },
+            }));
+          }
+
           setIsLoading(false);
         });
       });
