@@ -27,7 +27,7 @@ export default function useProfileDetailWishList({ wishProductIds }: IParams) {
         setSelectedWish([]);
       }
     },
-    []
+    [data]
   );
 
   const handleCheckWish = useCallback((id: string) => {
