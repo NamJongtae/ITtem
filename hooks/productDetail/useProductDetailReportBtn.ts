@@ -19,7 +19,10 @@ export default function useProductDetailReportBtn({ reportUserIds }: IParams) {
     if (isReport) {
       toast.warn("이미 신고한 상품이에요.");
     } else {
-      productReportMutate(undefined);
+      const isReport = confirm("정말 신고하겠습니까?");
+      if (isReport) {
+        productReportMutate(undefined);
+      }
     }
   };
 
