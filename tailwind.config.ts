@@ -19,6 +19,7 @@ const config: Config = {
     "before:content-['판매완료']",
     "before:content-['거래중']",
     "before:text-3xl",
+    "bg-rootColor betterhover:hover:bg-[#5588D9] text-white",
   ],
   theme: {
     extend: {
