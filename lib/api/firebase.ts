@@ -66,10 +66,11 @@ export const deleteProfileImgToFirestore = async (
     const firebaseStorage = await import("firebase/storage");
     const storage = await getStorageInstance();
     const { deleteObject, ref: storageRef } = firebaseStorage;
+
     if (!profileDataImgName || !prevImgDataImgName) return;
     if (profileDataImgName !== prevImgDataImgName) {
       await deleteObject(
-        storageRef(storage, `images/product/${profileDataImgName}`)
+        storageRef(storage, `images/profile/${prevImgDataImgName}`)
       );
     }
   } catch (error) {
