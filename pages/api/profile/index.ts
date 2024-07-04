@@ -122,6 +122,16 @@ export default async function handler(
 
       const myUid = isValidAuth?.auth?.uid;
 
+      if (profileEditData.nickname) {
+        const checkDuplicationNickname = await User.findOne({
+          nickname: profileEditData.nickname,
+        });
+        if (checkDuplicationNickname) {
+          res.status(401).json({ message: "중복된 닉네임 입니다." });
+          return;
+        }
+      }
+
       const profile = await User.findOne({
         _id: new mongoose.Types.ObjectId(myUid),
       });
