@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import Loading from "@/components/commons/loading";
 import ProfileEditCloseBtn from "./profileEdit-close-btn";
 import ProfileEditSubmitBtn from "./profileEdit-submit-btn";
-import useProfileEditModalForm from "@/hooks/profile/useProfileEditModalForm";
+import useProfileEditModalForm from "@/hooks/profileEdit/useProfileEditModalForm";
 import ProfileEditImgField from "./profileEdit-img-field";
 import ProfileEditNicknameField from "./profileEdit-nickname-field";
 import ProfileEditIntroduceField from "./profileEdit-introduce-field";
@@ -55,7 +55,6 @@ export default function ProfileEditModalForm({
         profileImgResetBtnRef={profileImgResetBtnRef}
         nicknameRef={nicknameRef}
         closeBtnRef={closeBtnRef}
-        submitBtnRef={submitBtnRef}
       />
       <ProfileEditNicknameField
         nicknameRef={nicknameRef}

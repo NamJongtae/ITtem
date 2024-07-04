@@ -1,4 +1,4 @@
-import useProfileEditSubmitBtn from "@/hooks/profile/useProfileEditSubmitBtn";
+import useProfileEditSubmitBtn from "@/hooks/profileEdit/useProfileEditSubmitBtn";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 

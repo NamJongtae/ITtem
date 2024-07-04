@@ -8,7 +8,6 @@ interface IProps {
   profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
   nicknameRef: MutableRefObject<HTMLInputElement | null>;
   closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 
 export default function ProfileEditImgField({
@@ -16,7 +15,6 @@ export default function ProfileEditImgField({
   profileImgResetBtnRef,
   nicknameRef,
   closeBtnRef,
-  submitBtnRef,
 }: IProps) {
   const {
     handleClickImgInput,

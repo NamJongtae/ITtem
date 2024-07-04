@@ -1,5 +1,5 @@
 import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
-import useProfileEditSubmit from "../profileEdit/useProfileEditSubmit";
+import useProfileEditSubmit from "./useProfileEditSubmit";
 import { useRef } from "react";
 
 interface IPrarms {
