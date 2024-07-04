@@ -15,9 +15,14 @@
 ### 📃 목차 (클릭 시 해당 목차로 이동합니다.)
 
 - [🙋‍♂ 프로젝트 소개](#-프로젝트-소개)
+
 - [📆 개발기간](#-개발기간)
+
 - [⚙ 개발환경](#-개발환경)
+
 - [🔩 벡엔드&API](#-벡엔드--api)
+
+- [📜 API Router 명세](#-api-router-명세)
 
 - [⛓ 아키텍처](#-아키텍처)
 
@@ -83,6 +88,94 @@ Serverless로 벡엔드 API를 구축하였습니다.
 ### ⛓ 아키텍처
 
 ![architecture](https://github.com/NamJongtae/ITtem/assets/113427991/2aac45da-4f19-40f4-a98f-466d6af1095e)
+
+### 📜 API Router 명세
+<details>
+<summary>API 전체 엔드 포인트 보기</summary>
+
+<br>
+
+| 기능                           | 메서드 | 엔드포인트                         |
+| ------------------------------ | ------ | ---------------------------------- |
+| **유저(auth)**                             |
+| 로그인                         | POST   | /api/auth/signin                   |
+| Kakao 소셜 로그인              | POST   | /api/auth/signin/kakao             |
+| Kakao 계정 데이터 조회         | POST   | /api/auth/signin/kakao/user        |
+| Google 소셜 로그인             | POST   | /api/auth/signin/google            |
+| Google 계정 데이터 조회        | POST   | /api/auth/signin/google/user       |
+| 회원가입                       | POST   | /api/auth/signup                   |
+| 이메일 중복 확인               | POST   | /api/auth/dulication/email         |
+| 닉네임 중복 확인               | POST   | /api/auth/dulication/nickname      |
+| 이메일 확인                    | POST   | /api/auth/checkEmail               |
+| 비밀번호 찾기/변경             | PATCH  | /api/auth/changePassword           |
+| 이메일 인증 메일 전송          | POST   | /api/auth/sendVerifyEmail          |
+| 이메일 인증                    | POST   | /api/auth/verfiyEmail              |
+| 유저 인증                      | GET    | /api/auth/user                     |
+| 세션 쿠키 확인                 | GET    | /api/auth/session                  |
+| 토큰 삭제                      | DELETE | /api/auth/deleteToken              |
+| 로그아웃                       | GET    | /api/auth/signout                  |
+| **프로필(profile)**                             |
+| 나의 프로필 조회               | GET    | /api/profile                       |
+| 프로필 수정                    | PATCH  | /api/profile                       |
+| 프로필 팔로워 목록 조회        | POST   | /api/profile/followers?cursor={cursor}&limit={limit} |
+| 프로필 팔로잉 목록 조회        | POST   | /api/profile/followings            |
+| 프로필 상품 목록 조회          | POST   | /api/profile/product?category={category}&limit={limit}&cursor={cursor} |
+| 프로필 찜 목록 조회            | POST   | /api/profile/wish?cursor={cursor}&limit={limit} |
+| 유저 찜 목록 삭제              | DELETE | /api/profile/wish                  |
+| 유저 프로필 조회               | GET    | /api/:uid/profile                  |
+| 유저 팔로우                    | POST   | /api/profile/:uid/follow           |
+| 유저 언팔로우                  | POST   | /api/profile/:uid/follow           |
+| 유저 리뷰 목록 조회            | GET    | /api/profile/:uid/review           |
+| **상품(product)**                          |
+| 상품 조회                      | GET   | /api/product                        |
+| 상품 검색                      | GET   | /api/product/search?cursor={cursor}&limit={limit}&category={category}&keyword={keyword}                  |
+| 오늘의 상품 조회                | GET   | /api/product/today?cursor={cursor}&limit={limit} |
+| 상품 업로드                    | POST   | /api/product/upload                |
+| 상품 상세                      | GET   | /api/product/:produId               |
+| 상품 수정                      | PATCH   | /api/product/:produId             |
+| 상품 삭제                      | DELETE   | /api/product/:produId            |
+| 상품 구매                      | GET   | /api/product/:productId/purchase    |
+| 상품 신고                      | PATCH  | /api/product/:productId/report     |
+| 상품 리뷰 조회                 | GET   | /api/product/:prodcutId/review       |
+| 상품 리뷰 작성                  | POST  | /api/product/:productId/review       |
+| 상품 찜                         | PATCH   | /api/product/:productId/wish        |
+| 상품 찜해제                    | DELETE   |  /api/product/:productId/wish        |
+| 상품 조회수 증가                | PATCH   | /api/product/:productId/view       |
+| 상품 구매 취소                  | PATCH   | /api/product/:productId/purchase/cancel |
+| 상품 구매 취소 철회             | PATCH   | /api/product/:productId/purchase/cancel/withdrawal  |
+| 상품 인수 확인                  | PATCH   | /api/product/:productId/purchase/product-receipt-confirmation  |
+| 상품 반품                      | PATCH   | /api/product/:productId/purchase/return |
+| 상품 반품 철회                  | PATCH   | /api/product/:productId/purchase/return/withdrawal       |
+| 상품 반품 전달 확인              | PATCH   | /api/product/:productId/purchase/return/delivery-confirmation  |
+| 상품 구매 요청 확인             | PATCH   | /api/product/:productId/sales/purchase-request-confirmation     |
+| 상품 구매 요청 거절             | PATCH   | /api/product/:productId/sales/purchase-request-reject  |
+| 상품 전달 확인                  | PATCH   | /api/product/:productId/sales/delivery-confirmation     |
+| 상품 취소 요청 확인              | PATCH   | /api/product/:productId/sales/cancel-comfirmation      |
+| 상품 취소 요청 거절               | PATCH   | /api/product /:productId/sales/cancel-reject          |
+| 상품 반품 요청 확인               | PATCH   | /api/product/:productId/sales/return-confirmation     |
+| 상품 반품 요청 거절               | PATCH   | /api/product/:productId/sales/return-reject           |
+| **거래 정보(trading)**                          |
+| 판매 거래 정보 조회                | GET   | /api/trading/sales?cursor={cursor}&limit={limt}&status={status}&search={search} |
+| 구매 거래 정보 조회                | GET   | /api/trading/purchase?cursor={cursor}&limit={limt}&status={status}&search={search}  |
+| **채팅(chat)**                          |
+| 채팅방 조회                       | POST   | /api/chat                          |
+| 채팅방 삭제                       | DELETE   | /api/product/:chatRoomId          |
+| 채팅방 입장                       | PATCH   | /api/chat/:chatRoomId/enter       |
+| 채팅방 퇴장                       | PATCH   | /api//chat/:chatRoomId/exit       |
+| 채팅방 나가기                     | PATCH   | /api/product/:chatRoomId/leave     |
+| 채팅방 메세지 전송                 | POST   | /api/product/:chatRoomId/message     |
+| **알림(notification)**                         |
+| 알림 메세지 조회                   | GET   | /api/notification                        |
+| 알림 메세지 전체 삭제               | DELETE   | /api/notification                        |
+| 알림 메세지 전체 읽음               | PATCH   | /api/notification                        |
+| 알림 메세지 삭제                    | DELETE   | /api/notification/:messageId             |
+| 알림 메세지 읽음                    | PATCH   | /api/notification /:messageId              |
+
+</details>
+
+[👉 API Router 상세 명세 보기](https://github.com/NamJongtae/ITtem/wiki/API-Router-%EB%AA%85%EC%84%B8)
+
+<br>
 
 ### 💡 프레임워크 및 라이브러리 사용 이유
 
