@@ -90,86 +90,88 @@ Serverless로 벡엔드 API를 구축하였습니다.
 ![architecture](https://github.com/NamJongtae/ITtem/assets/113427991/2aac45da-4f19-40f4-a98f-466d6af1095e)
 
 ### 📜 API Router 명세
+
 <details>
 <summary>API 전체 엔드 포인트 보기</summary>
 
 <br>
 
-| 기능                           | 메서드 | 엔드포인트                         |
-| ------------------------------ | ------ | ---------------------------------- |
-| **유저(auth)**                             |
-| 로그인                         | POST   | /api/auth/signin                   |
-| Kakao 소셜 로그인              | POST   | /api/auth/signin/kakao             |
-| Kakao 계정 데이터 조회         | POST   | /api/auth/signin/kakao/user        |
-| Google 소셜 로그인             | POST   | /api/auth/signin/google            |
-| Google 계정 데이터 조회        | POST   | /api/auth/signin/google/user       |
-| 회원가입                       | POST   | /api/auth/signup                   |
-| 이메일 중복 확인               | POST   | /api/auth/dulication/email         |
-| 닉네임 중복 확인               | POST   | /api/auth/dulication/nickname      |
-| 이메일 확인                    | POST   | /api/auth/checkEmail               |
-| 비밀번호 찾기/변경             | PATCH  | /api/auth/changePassword           |
-| 이메일 인증 메일 전송          | POST   | /api/auth/sendVerifyEmail          |
-| 이메일 인증                    | POST   | /api/auth/verfiyEmail              |
-| 유저 인증                      | GET    | /api/auth/user                     |
-| 세션 쿠키 확인                 | GET    | /api/auth/session                  |
-| 토큰 삭제                      | DELETE | /api/auth/deleteToken              |
-| 로그아웃                       | GET    | /api/auth/signout                  |
-| **프로필(profile)**                             |
-| 나의 프로필 조회               | GET    | /api/profile                       |
-| 프로필 수정                    | PATCH  | /api/profile                       |
-| 프로필 팔로워 목록 조회        | POST   | /api/profile/followers?cursor={cursor}&limit={limit} |
-| 프로필 팔로잉 목록 조회        | POST   | /api/profile/followings            |
-| 프로필 상품 목록 조회          | POST   | /api/profile/product?category={category}&limit={limit}&cursor={cursor} |
-| 프로필 찜 목록 조회            | POST   | /api/profile/wish?cursor={cursor}&limit={limit} |
-| 유저 찜 목록 삭제              | DELETE | /api/profile/wish                  |
-| 유저 프로필 조회               | GET    | /api/:uid/profile                  |
-| 유저 팔로우                    | POST   | /api/profile/:uid/follow           |
-| 유저 언팔로우                  | POST   | /api/profile/:uid/follow           |
-| 유저 리뷰 목록 조회            | GET    | /api/profile/:uid/review           |
-| **상품(product)**                          |
-| 상품 조회                      | GET   | /api/product                        |
-| 상품 검색                      | GET   | /api/product/search?cursor={cursor}&limit={limit}&category={category}&keyword={keyword}                  |
-| 오늘의 상품 조회                | GET   | /api/product/today?cursor={cursor}&limit={limit} |
-| 상품 업로드                    | POST   | /api/product/upload                |
-| 상품 상세                      | GET   | /api/product/:produId               |
-| 상품 수정                      | PATCH   | /api/product/:produId             |
-| 상품 삭제                      | DELETE   | /api/product/:produId            |
-| 상품 구매                      | GET   | /api/product/:productId/purchase    |
-| 상품 신고                      | PATCH  | /api/product/:productId/report     |
-| 상품 리뷰 조회                 | GET   | /api/product/:prodcutId/review       |
-| 상품 리뷰 작성                  | POST  | /api/product/:productId/review       |
-| 상품 찜                         | PATCH   | /api/product/:productId/wish        |
-| 상품 찜해제                    | DELETE   |  /api/product/:productId/wish        |
-| 상품 조회수 증가                | PATCH   | /api/product/:productId/view       |
-| 상품 구매 취소                  | PATCH   | /api/product/:productId/purchase/cancel |
-| 상품 구매 취소 철회             | PATCH   | /api/product/:productId/purchase/cancel/withdrawal  |
-| 상품 인수 확인                  | PATCH   | /api/product/:productId/purchase/product-receipt-confirmation  |
-| 상품 반품                      | PATCH   | /api/product/:productId/purchase/return |
-| 상품 반품 철회                  | PATCH   | /api/product/:productId/purchase/return/withdrawal       |
-| 상품 반품 전달 확인              | PATCH   | /api/product/:productId/purchase/return/delivery-confirmation  |
-| 상품 구매 요청 확인             | PATCH   | /api/product/:productId/sales/purchase-request-confirmation     |
-| 상품 구매 요청 거절             | PATCH   | /api/product/:productId/sales/purchase-request-reject  |
-| 상품 전달 확인                  | PATCH   | /api/product/:productId/sales/delivery-confirmation     |
-| 상품 취소 요청 확인              | PATCH   | /api/product/:productId/sales/cancel-comfirmation      |
-| 상품 취소 요청 거절               | PATCH   | /api/product /:productId/sales/cancel-reject          |
-| 상품 반품 요청 확인               | PATCH   | /api/product/:productId/sales/return-confirmation     |
-| 상품 반품 요청 거절               | PATCH   | /api/product/:productId/sales/return-reject           |
-| **거래 정보(trading)**                          |
-| 판매 거래 정보 조회                | GET   | /api/trading/sales?cursor={cursor}&limit={limt}&status={status}&search={search} |
-| 구매 거래 정보 조회                | GET   | /api/trading/purchase?cursor={cursor}&limit={limt}&status={status}&search={search}  |
-| **채팅(chat)**                          |
-| 채팅방 조회                       | POST   | /api/chat                          |
-| 채팅방 삭제                       | DELETE   | /api/product/:chatRoomId          |
-| 채팅방 입장                       | PATCH   | /api/chat/:chatRoomId/enter       |
-| 채팅방 퇴장                       | PATCH   | /api//chat/:chatRoomId/exit       |
-| 채팅방 나가기                     | PATCH   | /api/product/:chatRoomId/leave     |
-| 채팅방 메세지 전송                 | POST   | /api/product/:chatRoomId/message     |
-| **알림(notification)**                         |
-| 알림 메세지 조회                   | GET   | /api/notification                        |
-| 알림 메세지 전체 삭제               | DELETE   | /api/notification                        |
-| 알림 메세지 전체 읽음               | PATCH   | /api/notification                        |
-| 알림 메세지 삭제                    | DELETE   | /api/notification/:messageId             |
-| 알림 메세지 읽음                    | PATCH   | /api/notification /:messageId              |
+| 기능                    | 메서드 | 엔드포인트                                                                              |
+| ----------------------- | ------ | --------------------------------------------------------------------------------------- |
+| **유저(auth)**          |
+| 로그인                  | POST   | /api/auth/signin                                                                        |
+| Kakao 소셜 로그인       | POST   | /api/auth/signin/kakao                                                                  |
+| Kakao 계정 데이터 조회  | POST   | /api/auth/signin/kakao/user                                                             |
+| Google 소셜 로그인      | POST   | /api/auth/signin/google                                                                 |
+| Google 계정 데이터 조회 | POST   | /api/auth/signin/google/user                                                            |
+| 회원가입                | POST   | /api/auth/signup                                                                        |
+| 이메일 중복 확인        | POST   | /api/auth/dulication/email                                                              |
+| 닉네임 중복 확인        | POST   | /api/auth/dulication/nickname                                                           |
+| 이메일 확인             | POST   | /api/auth/checkEmail                                                                    |
+| 비밀번호 찾기/변경      | PATCH  | /api/auth/changePassword                                                                |
+| 이메일 인증 메일 전송   | POST   | /api/auth/sendVerifyEmail                                                               |
+| 이메일 인증             | POST   | /api/auth/verfiyEmail                                                                   |
+| 유저 인증               | GET    | /api/auth/user                                                                          |
+| 세션 쿠키 확인          | GET    | /api/auth/session                                                                       |
+| 토큰 재발급             | POST   | /api/auth/refreshToken                                                                  |
+| 토큰 삭제               | DELETE | /api/auth/deleteToken                                                                   |
+| 로그아웃                | GET    | /api/auth/signout                                                                       |
+| **프로필(profile)**     |
+| 나의 프로필 조회        | GET    | /api/profile                                                                            |
+| 프로필 수정             | PATCH  | /api/profile                                                                            |
+| 프로필 팔로워 목록 조회 | POST   | /api/profile/followers?cursor={cursor}&limit={limit}                                    |
+| 프로필 팔로잉 목록 조회 | POST   | /api/profile/followings                                                                 |
+| 프로필 상품 목록 조회   | POST   | /api/profile/product?category={category}&limit={limit}&cursor={cursor}                  |
+| 프로필 찜 목록 조회     | POST   | /api/profile/wish?cursor={cursor}&limit={limit}                                         |
+| 유저 찜 목록 삭제       | DELETE | /api/profile/wish                                                                       |
+| 유저 프로필 조회        | GET    | /api/:uid/profile                                                                       |
+| 유저 팔로우             | POST   | /api/profile/:uid/follow                                                                |
+| 유저 언팔로우           | POST   | /api/profile/:uid/follow                                                                |
+| 유저 리뷰 목록 조회     | GET    | /api/profile/:uid/review                                                                |
+| **상품(product)**       |
+| 상품 조회               | GET    | /api/product                                                                            |
+| 상품 검색               | GET    | /api/product/search?cursor={cursor}&limit={limit}&category={category}&keyword={keyword} |
+| 오늘의 상품 조회        | GET    | /api/product/today?cursor={cursor}&limit={limit}                                        |
+| 상품 업로드             | POST   | /api/product/upload                                                                     |
+| 상품 상세               | GET    | /api/product/:produId                                                                   |
+| 상품 수정               | PATCH  | /api/product/:produId                                                                   |
+| 상품 삭제               | DELETE | /api/product/:produId                                                                   |
+| 상품 구매               | GET    | /api/product/:productId/purchase                                                        |
+| 상품 신고               | PATCH  | /api/product/:productId/report                                                          |
+| 상품 리뷰 조회          | GET    | /api/product/:prodcutId/review                                                          |
+| 상품 리뷰 작성          | POST   | /api/product/:productId/review                                                          |
+| 상품 찜                 | PATCH  | /api/product/:productId/wish                                                            |
+| 상품 찜해제             | DELETE | /api/product/:productId/wish                                                            |
+| 상품 조회수 증가        | PATCH  | /api/product/:productId/view                                                            |
+| 상품 구매 취소          | PATCH  | /api/product/:productId/purchase/cancel                                                 |
+| 상품 구매 취소 철회     | PATCH  | /api/product/:productId/purchase/cancel/withdrawal                                      |
+| 상품 인수 확인          | PATCH  | /api/product/:productId/purchase/product-receipt-confirmation                           |
+| 상품 반품               | PATCH  | /api/product/:productId/purchase/return                                                 |
+| 상품 반품 철회          | PATCH  | /api/product/:productId/purchase/return/withdrawal                                      |
+| 상품 반품 전달 확인     | PATCH  | /api/product/:productId/purchase/return/delivery-confirmation                           |
+| 상품 구매 요청 확인     | PATCH  | /api/product/:productId/sales/purchase-request-confirmation                             |
+| 상품 구매 요청 거절     | PATCH  | /api/product/:productId/sales/purchase-request-reject                                   |
+| 상품 전달 확인          | PATCH  | /api/product/:productId/sales/delivery-confirmation                                     |
+| 상품 취소 요청 확인     | PATCH  | /api/product/:productId/sales/cancel-comfirmation                                       |
+| 상품 취소 요청 거절     | PATCH  | /api/product /:productId/sales/cancel-reject                                            |
+| 상품 반품 요청 확인     | PATCH  | /api/product/:productId/sales/return-confirmation                                       |
+| 상품 반품 요청 거절     | PATCH  | /api/product/:productId/sales/return-reject                                             |
+| **거래 정보(trading)**  |
+| 판매 거래 정보 조회     | GET    | /api/trading/sales?cursor={cursor}&limit={limt}&status={status}&search={search}         |
+| 구매 거래 정보 조회     | GET    | /api/trading/purchase?cursor={cursor}&limit={limt}&status={status}&search={search}      |
+| **채팅(chat)**          |
+| 채팅방 조회             | POST   | /api/chat                                                                               |
+| 채팅방 삭제             | DELETE | /api/chat/:chatRoomId                                                                   |
+| 채팅방 입장             | PATCH  | /api/chat/:chatRoomId/enter                                                             |
+| 채팅방 퇴장             | PATCH  | /api/chat/:chatRoomId/exit                                                              |
+| 채팅방 나가기           | PATCH  | /api/chat/:chatRoomId/leave                                                             |
+| 채팅방 메세지 전송      | POST   | /api/chat/:chatRoomId/message                                                           |
+| **알림(notification)**  |
+| 알림 메세지 조회        | GET    | /api/notification                                                                       |
+| 알림 메세지 전체 삭제   | DELETE | /api/notification                                                                       |
+| 알림 메세지 전체 읽음   | PATCH  | /api/notification                                                                       |
+| 알림 메세지 삭제        | DELETE | /api/notification/:messageId                                                            |
+| 알림 메세지 읽음        | PATCH  | /api/notification /:messageId                                                           |
 
 </details>
 
@@ -1486,6 +1488,80 @@ export const authSlice = createSlice({
 ```
 
 - 프로젝트 최상단 vercel.json를 추가해주고 지역설정을 변경하였습니다.
+</details>
+
+<br>
+
+#### 🐞 504 Gateway Timeout Error
+
+> 문제 상황
+
+- vercel에 프로젝트 배포후 504 gateway timeout를 해결를 위해 region을 변경하였지만 로그인 이후 빈번하게 504 Gateway Timeout 발생하였습니다.
+
+> 문제 원인
+
+- MongoDB의 DB 연결을 캐싱하여 사용했습니다. 유저 인증 API Router에서 dbConnect 함수를 빠트려 배포하여 초기 DB 연결이 이루어지지 않은 상태에서 DB에 접근하려고 했기 때문에 DB에서 연결이 이루어질 때까지 계속 요청을 보냈고, 결국 10초 지연 시간을 초과하여 문제가 발생했습니다.
+- 종종 제대로 동작했던 이유는 캐싱된 DB 연결을 사용했기 때문에 연결이 한 번 이루어진 뒤에는 문제가 발생하지 않았기 때문입니다.
+
+> 해결 방법
+
+- 해결방법은 유저 인증 api router에 dbConnect 함수를 추가하여 해결할 수 있었습니다.
+
+> 해결 코드
+
+<details>
+<summary>코드보기</summary>
+
+```javascript
+// /api/auth/user
+import User from "@/lib/db/models/User";
+import mongoose from "mongoose";
+import { checkAuthorization } from "@/lib/server";
+import { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/db";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === "GET") {
+    try {
+      const isValidAuth = await checkAuthorization(req, res);
+
+      if (!isValidAuth.isValid) {
+        res.status(401).json({
+          message: isValidAuth.message,
+        });
+        return;
+      }
+
+      const myUid = isValidAuth?.auth?.uid;
+
+      await dbConnect(); // dbConnect 추가 => 에러 해결
+
+      const user = await User.findOne({
+        _id: new mongoose.Types.ObjectId(myUid),
+      });
+
+      res.status(200).json({
+        message: "유저정보를 성공적으로 불러왔어요.",
+        user: {
+          uid: user._id,
+          nickname: user.nickname,
+          profileImg: user.profileImg,
+          email: user.email,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "유저 인증에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      });
+    }
+  }
+}
+```
+
 </details>
 
 <br>
