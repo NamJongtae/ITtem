@@ -202,8 +202,8 @@ export async function deleteAllToken(
   email: string
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = customAxios.post("/api/auth/deleteToken", {
-      email,
+    const response = customAxios.delete("/api/auth/deleteToken", {
+      data: { email },
     });
     return response;
   } catch (error) {
