@@ -1,6 +1,6 @@
 import { ProductData } from "@/types/productTypes";
-import Image from "next/image";
 import Link from "next/link";
+import FallbackImage from '../commons/FallbackImage';
 
 interface IProps {
   productData: ProductData | undefined;
@@ -19,7 +19,7 @@ export default function ProductDetailSellerProductItem({
         className="w-full h-full aspect-square"
         href={`/product/${productData?._id}`}
       >
-        <Image
+        <FallbackImage
           className="mx-auto w-full h-full aspect-square object-cover object-center"
           src={productData?.imgData[0].url || ""}
           width={316}

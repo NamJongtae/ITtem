@@ -6,6 +6,7 @@ import { ProductImgData } from "@/types/productTypes";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import FallbackImage from '@/components/commons/FallbackImage';
 
 interface IProps {
   imgData: ProductImgData[] | undefined;
@@ -31,7 +32,7 @@ export default function ProductImgEnlargeModal({
         >
           {imgData?.map((data, index) => (
             <SwiperSlide key={data.url + index} className="relative">
-              <Image
+              <FallbackImage
                 className="w-auto h-auto object-contain obeject-center"
                 src={data.url}
                 alt={data.name}

@@ -4,7 +4,7 @@ import ProductManageItemTradingContent from "./product-manage-item-trading-conte
 import ProductManageItemTradingEndContent from "./product-manage-item-trading-end-content";
 import ProductManageItemCancelReturnContent from "./product-manage-item-cancel-return-content";
 import ProductManageItemCancelReturnRejectContent from "./product-manage-item-cancel-return-reject-content";
-import Image from "next/image";
+import FallbackImage from '@/components/commons/FallbackImage';
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
@@ -17,7 +17,7 @@ export default function ProductManageItemContents({
 }: IProps) {
   return (
     <div className="flex gap-3 items-center">
-      <Image
+      <FallbackImage
         className="w-32 h-32 object-cover object-center"
         src={tradingData.productImg}
         alt=""
