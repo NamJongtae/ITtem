@@ -21,16 +21,23 @@ export default async function handler(
         sessionOptions
       );
       const refreshToken = session.refreshToken;
-      const decodeRefreshToken = await verifyToken(refreshToken, REFRESH_TOKEN_KEY);
-      await deleteToken(decodeRefreshToken?.data?.user.uid || "", "accessToken");
+      const decodeRefreshToken = await verifyToken(
+        refreshToken,
+        REFRESH_TOKEN_KEY
+      );
+      await deleteToken(
+        decodeRefreshToken?.data?.user.uid || "",
+        "accessToken"
+      );
       await deleteToken(
         decodeRefreshToken?.data?.user.uid || "",
         "refreshToken"
       );
 
       await dbConnect();
+      
       if (!decodeRefreshToken?.data?.user.uid) {
-        return res.status(403).json("유효하지 않은 토큰입니다.");
+        return res.status(403).json({ message: "유효하지 않은 토큰입니다." });
       }
 
       const user = await User.findOne({

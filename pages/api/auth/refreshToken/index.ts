@@ -68,7 +68,7 @@ export default async function handler(
       });
     } catch (error) {
       console.log(error);
-      res.status(422).json({ message: "토큰 발급에 실패 했어요." });
+      res.status(500).json({ message: "토큰 발급에 실패 했어요." });
     }
   }
 }
