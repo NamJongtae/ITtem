@@ -1,4 +1,4 @@
-import usePurchaseRequestConfirmationMutate from "../reactQuery/mutations/trade/usePurchaseRequestConfirmationMutate";
+import usePurchaseRequestConfirmationMutate from "../reactQuery/mutations/trading/usePurchaseRequestConfirmationMutate";
 
 interface IParams {
   productId: string;

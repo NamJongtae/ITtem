@@ -1,4 +1,4 @@
-import useDeliveryConfirmationMutate from "../reactQuery/mutations/trade/useDeliveryConfirmationMutate";
+import useDeliveryConfirmationMutate from "../reactQuery/mutations/trading/useDeliveryConfirmationMutate";
 
 interface IParams {
   productId: string;

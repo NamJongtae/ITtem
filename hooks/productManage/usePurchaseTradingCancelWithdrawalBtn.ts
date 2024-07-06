@@ -1,4 +1,4 @@
-import usePurchaseCancelRequestWithdrawalMutate from "../reactQuery/mutations/trade/usePurchaseCancelRequestWithdrawalMutate";
+import usePurchaseCancelRequestWithdrawalMutate from "../reactQuery/mutations/trading/usePurchaseCancelRequestWithdrawalMutate";
 
 interface IParams {
   productId: string;

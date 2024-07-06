@@ -1,4 +1,4 @@
-import useCancelConfirmationMutate from "../reactQuery/mutations/trade/useCancelConfirmationMutate";
+import useCancelConfirmationMutate from "../reactQuery/mutations/trading/useCancelConfirmationMutate";
 
 interface IParams {
   productId: string;

@@ -5,9 +5,7 @@ import {
   getCategoryProductList,
   getProduct,
   getProfileProductList,
-  getPurchaseTrading,
   getReview,
-  getSalesTrading,
   getSearchProductList,
   getTodayProductList,
 } from "@/lib/api/product";
@@ -19,6 +17,7 @@ import {
   getProfileWish,
   getUserProfile,
 } from "@/lib/api/profile";
+import { getPurchaseTrading, getSalesTrading } from "@/lib/api/trading";
 import { ProductCategory, ProductListType } from "@/types/productTypes";
 import {
   createQueryKeys,

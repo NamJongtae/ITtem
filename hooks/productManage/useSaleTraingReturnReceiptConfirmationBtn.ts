@@ -1,4 +1,4 @@
-import useReturnReceiptComfirmationMutate from "../reactQuery/mutations/trade/useReturnReceiptComfirmationMutate";
+import useReturnReceiptComfirmationMutate from "../reactQuery/mutations/trading/useReturnReceiptComfirmationMutate";
 
 interface IParams {
   productId: string;

@@ -1,4 +1,4 @@
-import useProductReturnRequestWithdrawalMutate from "../reactQuery/mutations/trade/useProductReturnRequestWithdrawalMutate";
+import useProductReturnRequestWithdrawalMutate from "../reactQuery/mutations/trading/useProductReturnRequestWithdrawalMutate";
 
 interface IParams {
   productId: string;

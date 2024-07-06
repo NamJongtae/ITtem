@@ -1,5 +1,5 @@
 import ReasonModal from "../commons/reasonModal/reason-modal";
-import useReturnRejectMutate from "@/hooks/reactQuery/mutations/trade/useReturnReceiptReject.Mutate";
+import useReturnRejectMutate from "@/hooks/reactQuery/mutations/trading/useReturnReceiptReject.Mutate";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {

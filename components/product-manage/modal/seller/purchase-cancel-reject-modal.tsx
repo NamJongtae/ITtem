@@ -1,5 +1,5 @@
 import ReasonModal from "../commons/reasonModal/reason-modal";
-import useCancelRejectMutate from "@/hooks/reactQuery/mutations/trade/useCancelRejectMutate";
+import useCancelRejectMutate from "@/hooks/reactQuery/mutations/trading/useCancelRejectMutate";
 import { FieldValues } from "react-hook-form";
 
 interface IProps {

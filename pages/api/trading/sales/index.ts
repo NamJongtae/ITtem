@@ -1,4 +1,4 @@
-import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
+import SaleTrading from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -19,7 +19,7 @@ export default async function handler(
     }
 
     const myUid = isValidAuth?.auth?.uid;
-   
+
     if (
       status !== "TRADING" &&
       status !== "TRADING_END" &&
@@ -50,10 +50,9 @@ export default async function handler(
           : status === "CANCEL_REJECT/RETURN_REJECT"
           ? ["CANCEL_REJECT", "RETURN_REJECT"]
           : ["TRADING", "CANCEL", "RETURN"];
-
       let matchStage: any = {
-        purchaseStartDate: { $lt: currentCursor },
-        buyerId: myUid,
+        saleStartDate: { $lt: currentCursor },
+        sellerId: myUid,
         status: { $in: currentStatus },
       };
 
@@ -66,26 +65,10 @@ export default async function handler(
           $match: matchStage,
         },
         {
-          $sort: { purchaseStartDate: -1 },
+          $sort: { saleStartDate: -1 },
         },
         {
           $limit: currentLimit,
-        },
-        {
-          $addFields: {
-            convertedProductId: { $toObjectId: "$productId" },
-          },
-        },
-        {
-          $lookup: {
-            from: "products",
-            localField: "convertedProductId",
-            foreignField: "_id",
-            as: "productData",
-          },
-        },
-        {
-          $unwind: { path: "$productData", preserveNullAndEmptyArrays: true },
         },
         {
           $addFields: {
@@ -121,17 +104,17 @@ export default async function handler(
         },
         {
           $project: {
-            "productData.name": 1,
-            "productData.imgData.url": 1,
-            "productData.price": 1,
             "sellerInfo.nickname": 1,
             "buyerInfo.nickname": 1,
             _id: 1,
             sellerId: 1,
             buyerId: 1,
             productId: 1,
-            purchaseStartDate: 1,
-            purchaseEndDate: 1,
+            productName: 1,
+            productPrice:1,
+            productImg:1,
+            saleStartDate: 1,
+            saleEndDate: 1,
             returnReason: 1,
             returnRejectReason: 1,
             cancelReason: 1,
@@ -148,12 +131,15 @@ export default async function handler(
           },
         },
       ];
-      const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
+      const saleTrading = await SaleTrading.aggregate(aggregate);
 
-      res.status(200).json({
-        message: `${message} 목록 조회에 성공했어요.`,
-        purchaseTrading,
-      });
+      if(saleTrading.length===0) {
+        res.status(404).json({message: `${message} 목록이 없어요.`});
+        return;
+      }
+      res
+        .status(200)
+        .json({ message: `${message} 목록 조회에 성공했어요.`, saleTrading });
     } catch (error) {
       console.error(error);
       res.status(500).json({

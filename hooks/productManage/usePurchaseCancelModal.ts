@@ -1,4 +1,4 @@
-import usePurchaseCancelRequestMutate from "../reactQuery/mutations/trade/usePurchaseCancelRequestMutate";
+import usePurchaseCancelRequestMutate from "../reactQuery/mutations/trading/usePurchaseCancelRequestMutate";
 import { FieldValues } from "react-hook-form";
 
 interface IParams {

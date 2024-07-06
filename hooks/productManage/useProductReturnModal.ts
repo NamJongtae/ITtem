@@ -1,5 +1,5 @@
 import { FieldValues } from "react-hook-form";
-import useProductReturnRequestMutate from "../reactQuery/mutations/trade/useProductReturnRequestMutate";
+import useProductReturnRequestMutate from "../reactQuery/mutations/trading/useProductReturnRequestMutate";
 
 interface IParams {
   closeModal: () => void;

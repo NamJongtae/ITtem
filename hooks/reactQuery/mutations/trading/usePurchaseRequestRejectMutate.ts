@@ -1,10 +1,10 @@
-import { productReturnReject } from "@/lib/api/product";
+import { purchaseRequestReject } from "@/lib/api/trading";
 import { queryKeys } from '@/queryKeys';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
-export default function useReturnRejectMutate() {
+export default function usePurchaseRequestRejectMutate() {
   const queryClient = useQueryClient();
   const productManageQueryKey = queryKeys.product.manage._def;
 
@@ -15,7 +15,7 @@ export default function useReturnRejectMutate() {
     }: {
       productId: string;
       rejectReason: string;
-    }) => productReturnReject(productId, rejectReason),
+    }) => purchaseRequestReject(productId, rejectReason),
     onSuccess: (response) => {
       toast.success(response.data.message);
       queryClient.invalidateQueries({
@@ -29,5 +29,5 @@ export default function useReturnRejectMutate() {
     },
   });
 
-  return { returnRejectMutate: mutate };
+  return { purchaseRequestRejectMutate: mutate };
 }
