@@ -38,19 +38,24 @@ export default async function handler(
         return;
       }
 
-      const chatRoomId = await startChat({
+      const { chatRoomId, isExistRoom } = await startChat({
         productId,
         myUid,
         userId,
       });
 
-      res
-        .status(201)
-        .json({ message: "채팅방 조회에 성공했어요.", chatRoomId });
+      res.status(isExistRoom ? 200 : 201).json({
+        message: `${
+          isExistRoom
+            ? "채팅방 조회에 성공했어요."
+            : "채팅방 생성 및 조회에 성공했어요."
+        } `,
+        chatRoomId,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        message: "채팅방 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "채팅방 생성/조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }

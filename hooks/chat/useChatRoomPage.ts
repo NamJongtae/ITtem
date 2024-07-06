@@ -5,10 +5,10 @@ import { RootState } from "@/store/store";
 import { ChatMessageData, ChatRoomData } from "@/types/chatTypes";
 
 import { toast } from "react-toastify";
-import useEnterChatRoomMutate from "../reactQuery/mutations/chat/useEnterChatRoomMutate";
 import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../reactQuery/mutations/chat/useLeaveChatRoomMutate";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
+import useJoinChatRoomMutate from "../reactQuery/mutations/chat/useJoinChatRoomMutate";
 
 export default function useChatRoomPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -21,7 +21,7 @@ export default function useChatRoomPage() {
   const router = useRouter();
   const { chatRoomId } = router.query;
 
-  const { enterChatRoomMutate } = useEnterChatRoomMutate();
+  const { joinChatRoomMutate } = useJoinChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
 
   const handleChatRoomExit = useCallback(() => {
@@ -47,9 +47,9 @@ export default function useChatRoomPage() {
       );
       const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
 
-      const enterChatRoom = async () => {
+      const joinChatRoom = async () => {
         try {
-          await enterChatRoomMutate(chatRoomId as string);
+          await joinChatRoomMutate(chatRoomId as string);
         } catch (error) {
           if (isAxiosError(error)) {
             toast.warn(error.response?.data.message);
@@ -59,7 +59,7 @@ export default function useChatRoomPage() {
         }
       };
 
-      await enterChatRoom();
+      await joinChatRoom();
 
       unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
         const data = doc.data() as ChatRoomData | null;

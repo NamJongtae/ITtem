@@ -17,7 +17,7 @@ export default async function handler(
       }
 
       if (!message) {
-        res.status(422).json({ message: "메세지가 없어요." });
+        res.status(422).json({ message: "전송할 메세지가 없어요." });
         return;
       }
 
@@ -37,9 +37,19 @@ export default async function handler(
         message,
         chatRoomId: chatRoomId as string,
       });
-      res.status(201).json({ message: " 메세지 전송에 성공했어요." });
+      res.status(201).json({ message: "메세지 전송에 성공했어요." });
     } catch (error) {
       console.error(error);
+      if (error instanceof Error) {
+        if (error.message === "존재하지 않는 채팅방이에요.") {
+          res.status(404).json({ message: error.message });
+          return;
+        }
+        if (error.message === "잘못된 접근이에요.") {
+          res.status(403).json({ message: error.message });
+          return;
+        }
+      }
       res.status(500).json({
         message: "메세지 전송에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });

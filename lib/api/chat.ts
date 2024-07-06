@@ -20,11 +20,11 @@ export async function startChat({
   }
 }
 
-export async function enterChatRoom(
+export async function joinChatRoom(
   chatRoomId: string
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const reponse = await customAxios.patch(`/api/chat/${chatRoomId}/enter`);
+    const reponse = await customAxios.patch(`/api/chat/${chatRoomId}/join`);
     return reponse;
   } catch (error) {
     throw error;
