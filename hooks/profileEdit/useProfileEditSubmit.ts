@@ -2,7 +2,7 @@ import { uploadImgToFireStore } from "@/lib/api/firebase";
 import { ProfileData, ProfileEditData } from "@/types/authTypes";
 import { useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
-import useProfileEditMutate from "../reactQuery/querys/profile/useProfileEditMutate";
+import useProfileEditMutate from "../reactQuery/mutations/profile/useProfileEditMutate";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
