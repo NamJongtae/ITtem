@@ -28,7 +28,7 @@ export default async function handler(
       await dbConnect();
 
       const dbUserData = await User.findOne({
-        email: kakaoUserData.id.toString().email,
+        email: kakaoUserData.id.toString(),
       });
 
       const session = await getIronSession<IronSessionType>(
