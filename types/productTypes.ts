@@ -169,6 +169,9 @@ export interface SaleTradingData {
     nickname: string;
   };
   productId: string;
+  productName: string;
+  productPrice: Number;
+  productImg: string;
   status: TradingStatus;
   process: SaleTradingProcess | SalesCancelProcess | SalesReturnProcess;
   returnReason?: string;
@@ -183,11 +186,6 @@ export interface SaleTradingData {
   returnStartDate?: string;
   returnEndDate?: string;
   returnRejectDate?: string;
-  productData: {
-    name: string;
-    imgData: { url: string }[];
-    price: string;
-  };
   isReviewed: boolean;
 }
 
@@ -202,6 +200,9 @@ export interface PurchaseTradingData {
     nickname: string;
   };
   productId: string;
+  productName: string;
+  productPrice: Number;
+  productImg: string;
   status: TradingStatus;
   process:
     | PurchaseTradingProcess
@@ -219,11 +220,6 @@ export interface PurchaseTradingData {
   returnStartDate?: string;
   returnEndDate?: string;
   returnRejectDate?: string;
-  productData: {
-    name: string;
-    imgData: { url: string }[];
-    price: string;
-  };
   isReviewed: boolean;
 }
 
