@@ -6,6 +6,8 @@ interface PurchaseTradingDB {
   buyerId: string;
   productId: string;
   productName: string;
+  productPrice: number;
+  productImg: string;
   purchaseStartDate: Date;
   purchaseEndDate: Date;
   status: TradingStatus;
@@ -30,6 +32,8 @@ export const purchaseTradingSchema = new mongoose.Schema<PurchaseTradingDB>(
     sellerId: { type: String, required: [true, "판매자 ID가 없어요."] },
     buyerId: { type: String, required: [true, "구매자 ID가 없어요."] },
     productId: { type: String, required: [true, "상품 ID가 없어요."] },
+    productPrice: { type: Number, require: [true, "상품 가격이 없어요"]},
+    productImg: { type: String, require: [true, "상품 이미지가 없어요"]},
     productName: { type: String, required: [true, "상품명이 없어요."] },
     purchaseStartDate: { type: Date, required: false, default: Date.now },
     purchaseEndDate: { type: Date, required: false },
