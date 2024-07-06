@@ -41,6 +41,7 @@
   - [🍪 ssr 쿠키 전달 문제](#-ssr-쿠키-전달-문제)
   - [💫 Hydrate Redux state 초기화 문제](#-hydrate-redux-state-초기화-문제)
   - [🌍 vercel 배포 문제](#-vercel-배포-문제)
+  - [❗ 504 Gateway Timeout Error](#-504-gateway-timeout-error)
   - [🗜 middleware 토큰 인증 로직 구현 문제](#-middleware-토큰-인증-로직-구현-문제)
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
 
@@ -162,7 +163,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | **채팅(chat)**          |
 | 채팅방 조회             | POST   | /api/chat                                                                               |
 | 채팅방 삭제             | DELETE | /api/chat/:chatRoomId                                                                   |
-| 채팅방 입장             | PATCH  | /api/chat/:chatRoomId/enter                                                             |
+| 채팅방 입장             | PATCH  | /api/chat/:chatRoomId/join                                                            |
 | 채팅방 퇴장             | PATCH  | /api/chat/:chatRoomId/exit                                                              |
 | 채팅방 나가기           | PATCH  | /api/chat/:chatRoomId/leave                                                             |
 | 채팅방 메세지 전송      | POST   | /api/chat/:chatRoomId/message                                                           |
@@ -1492,7 +1493,7 @@ export const authSlice = createSlice({
 
 <br>
 
-#### 🐞 504 Gateway Timeout Error
+#### ❗ 504 Gateway Timeout Error
 
 > 문제 상황
 
