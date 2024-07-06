@@ -41,12 +41,12 @@ export default function CancelAndReturnDetailModal({
 
         <CancelAndReturnDetailModalContent
           name="상품명"
-          value={tradingData.productData.name}
+          value={tradingData.productName}
         />
 
         <CancelAndReturnDetailModalContent
           name="상품가격"
-          value={tradingData.productData.price + " 원"}
+          value={tradingData.productPrice + " 원"}
         />
 
         <CancelAndReturnDetailModalContent

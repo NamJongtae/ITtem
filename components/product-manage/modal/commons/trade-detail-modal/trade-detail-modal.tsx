@@ -38,12 +38,12 @@ export default function TradeDetailModal({
 
         <TradeDetailModalContent
           name="상품명"
-          value={tradingData.productData.name}
+          value={tradingData.productName}
         />
 
         <TradeDetailModalContent
           name="상품가격"
-          value={tradingData.productData.price + " 원"}
+          value={tradingData.productPrice.toLocaleString() + " 원"}
         />
 
         <TradeDetailModalContent
