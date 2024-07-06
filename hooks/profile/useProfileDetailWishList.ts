@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import useProfileWishInfiniteQuery from "../reactQuery/querys/profile/useProfileWishInfiniteQuery";
+import useProfileWishInfiniteQuery from "../reactQuery/queries/profile/useProfileWishInfiniteQuery";
 
 interface IParams {
   wishProductIds: string[] | undefined;

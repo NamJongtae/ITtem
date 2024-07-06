@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
+import useMyProfileQuery from "../reactQuery/queries/profile/useMyProfileQuery";
 
 export default function useChatRoomMenu() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);

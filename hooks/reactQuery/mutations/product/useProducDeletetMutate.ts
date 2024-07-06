@@ -15,12 +15,10 @@ export default function useProductDeleteMutate(productId?: string) {
     useMutation({
       mutationFn: () => deleteProduct(currentProductId as string),
       onSuccess: async (response) => {
-        queryClient.removeQueries({
-          queryKey: productQueryKey,
-        });
         if (router.query?.productId) {
           router.replace("/product");
         }
+        queryClient.invalidateQueries({ queryKey: productQueryKey });
 
         toast.success(response.data.message);
       },

@@ -1,7 +1,7 @@
 import { RootState } from "@/store/store";
 import { ProfileData } from "@/types/authTypes";
 import { useSelector } from "react-redux";
-import useProfileQuery from "../reactQuery/querys/profile/useProfileQuery";
+import useProfileQuery from "../reactQuery/queries/profile/useProfileQuery";
 
 interface IParams {
   participantIDs: string[];

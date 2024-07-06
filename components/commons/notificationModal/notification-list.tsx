@@ -1,4 +1,4 @@
-import useNotificationInfiniteQuery from "@/hooks/reactQuery/querys/notification/useNotificationInfiniteQuery";
+import useNotificationInfiniteQuery from "@/hooks/reactQuery/queries/notification/useNotificationInfiniteQuery";
 import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../spinner";
 import NotificationItem from "./notification-item";

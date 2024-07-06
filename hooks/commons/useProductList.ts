@@ -1,9 +1,9 @@
 import { ProductCategory, ProductListType } from "@/types/productTypes";
 import { useSearchParams } from "next/navigation";
-import useProductTodayListInfiniteQuery from "../reactQuery/querys/product/useProductTodayListInfiniteQuery";
-import useCategoryProductListInfiniteQuery from "../reactQuery/querys/product/useCategoryProductListInfiniteQuery";
-import useSearchProductListInfiniteQuery from "../reactQuery/querys/product/useSearchProductListInfiniteQuery";
-import useProfileProductListInfiniteQuery from "../reactQuery/querys/profile/useProfileProductListInfiniteQuery";
+import useProductTodayListInfiniteQuery from "../reactQuery/queries/product/useProductTodayListInfiniteQuery";
+import useCategoryProductListInfiniteQuery from "../reactQuery/queries/product/useCategoryProductListInfiniteQuery";
+import useSearchProductListInfiniteQuery from "../reactQuery/queries/product/useSearchProductListInfiniteQuery";
+import useProfileProductListInfiniteQuery from "../reactQuery/queries/profile/useProfileProductListInfiniteQuery";
 
 export default function useProductList(
   productListType: ProductListType,

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import useProductReportMutate from "../reactQuery/mutations/product/useProductReportMutate";
-import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
+import useMyProfileQuery from "../reactQuery/queries/profile/useMyProfileQuery";
 
 interface IParams {
   reportUserIds: string[] | undefined;

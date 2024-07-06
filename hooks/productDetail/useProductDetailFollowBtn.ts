@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import useProductDetailFollowMutate from "../reactQuery/mutations/product/useProductDetailFollowMutate";
 import useProductDetailUnfollowMutate from "../reactQuery/mutations/product/useProductDetailUnfollowMutate";
-import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
+import useMyProfileQuery from "../reactQuery/queries/profile/useMyProfileQuery";
 
 interface IParams {
   uid: string;
