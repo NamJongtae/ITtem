@@ -25,16 +25,18 @@ customAxios.interceptors.response.use(
               Cookie: cookies,
             },
           });
-          const reposeCookies = response.config.headers["Cookie"];
-          originalRequest!.headers["Cookie"] = reposeCookies;
+          const reposeCookies = response.headers["set-cookie"];
+          if (reposeCookies) {
+            originalRequest!.headers["Cookie"] = reposeCookies.join("; ");
+          }
           if (originalRequest) return axios(originalRequest);
         } catch (refreshError) {
           if (isAxiosError<RegenerateAccessTokenResponseData>(refreshError)) {
             if (refreshError.response?.status === 401) {
-              toast.warn("로그인이 만료됬어요.", {
-                autoClose: 3000,
-              });
               if (typeof window !== "undefined") {
+                toast.warn("로그인이 만료됬어요.", {
+                  autoClose: 3000,
+                });
                 window.location.replace("/signin");
               }
             }

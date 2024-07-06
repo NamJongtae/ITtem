@@ -76,11 +76,11 @@ const buttonComponents: ButtonComponents = {
   },
 };
 
-interface IPrarms {
+interface IParams {
   tradingData: PurchaseTradingData;
 }
 
-export default function usePurchaseTradingBtns({ tradingData }: IPrarms) {
+export default function usePurchaseTradingBtns({ tradingData }: IParams) {
   const { status, process, productId, sellerId } = tradingData;
 
   const Button = buttonComponents[status]?.[process];

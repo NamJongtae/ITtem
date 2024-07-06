@@ -35,7 +35,7 @@ export default function ChatRoomHeaderProduct({ productId }: IProps) {
           </span>
         </div>
         <span className="block text-xs font-semibold text-gray-400">
-          {productDetailData?.price} 원
+          {productDetailData?.price.toLocaleString()} 원
         </span>
       </div>
     </Link>

@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
-import useProfileWishInfiniteQuery from "../reactQuery/querys/profile/useProfileWishInfiniteQuery";
+import useProfileWishInfiniteQuery from "../reactQuery/queries/profile/useProfileWishInfiniteQuery";
 
-interface IPrarsm {
+interface IParams {
   wishProductIds: string[] | undefined;
 }
 
-export default function useProfileDetailWishList({ wishProductIds }: IPrarsm) {
+export default function useProfileDetailWishList({ wishProductIds }: IParams) {
   const {
     data,
     isLoading,
@@ -27,7 +27,7 @@ export default function useProfileDetailWishList({ wishProductIds }: IPrarsm) {
         setSelectedWish([]);
       }
     },
-    []
+    [data]
   );
 
   const handleCheckWish = useCallback((id: string) => {

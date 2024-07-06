@@ -24,14 +24,7 @@ export default async function handler(
         return;
       }
 
-      const myUid = isValidAuth?.auth?.uid;
-
-      if (!myUid) {
-        res.status(400).json({
-          message: "유저 ID가 없어요.",
-        });
-        return;
-      }
+      const myUid = isValidAuth?.auth?.uid || "";
 
       await leaveChatRoom({ myUid, chatRoomId: chatRoomId as string });
       res.status(200).json({ message: "채팅방 퇴장에 성공했어요." });
@@ -42,7 +35,7 @@ export default async function handler(
           res.status(404).json({ message: error.message });
           return;
         } else if (error.message === "잘못된 접근이에요.") {
-          res.status(400).json({ message: error.message });
+          res.status(403).json({ message: error.message });
           return;
         }
       }

@@ -6,6 +6,7 @@ import { TradingStatus } from "@/types/productTypes";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import ReviewScore from "@/lib/db/models/ReviewScore";
 import mongoose from "mongoose";
+import dbConnect from '@/lib/db';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,9 +25,11 @@ export default async function handler(
       }
 
       if (!productId) {
-        res.status(422).json({ message: "상품 ID가 없어요." });
+        res.status(422).json({ message: "상품 아이디가 없어요." });
         return;
       }
+
+      await dbConnect();
 
       const purchaseTrading = await PurchaseTrading.findOne({
         productId,
@@ -34,8 +37,7 @@ export default async function handler(
       });
 
       if (!purchaseTrading) {
-        res.status(404).json({ message: "구매 거래 정보가 없어요." });
-        return;
+        throw new Error("구매 거래 정보가 없어요.");
       }
 
       const saleTrading = await SaleTrading.findOne({
@@ -44,8 +46,7 @@ export default async function handler(
       });
 
       if (!saleTrading) {
-        res.status(404).json({ message: "판매 거래 정보가 없어요." });
-        return;
+        throw new Error("판매 거래 정보가 없어요.");
       }
 
       const review = await Review.aggregate([
@@ -83,17 +84,17 @@ export default async function handler(
       ]);
 
       if (!review.length) {
-        res.status(404).json({ message: "리뷰가 없어요." });
+        res.status(404).json({ message: "상품 리뷰가 없어요." });
         return;
       }
 
       res
         .status(200)
-        .json({ message: "리뷰 조회에 성공했어요.", review: review[0] });
+        .json({ message: "상품 리뷰 조회에 성공했어요.", review: review[0] });
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        message: "리뷰 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 리뷰 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }
@@ -117,18 +118,8 @@ export default async function handler(
 
       const myUid = isValidAuth?.auth?.uid;
 
-      if (
-        (!reviewContent || !reviewContent.trim()) &&
-        !reviewTags.includes(1)
-      ) {
-        res.status(422).json({ message: "리뷰 내용이 없어요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       if (!productId) {
-        res.status(422).json({ message: "상품 ID가 없어요." });
+        res.status(422).json({ message: "상품 아이디가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -144,10 +135,7 @@ export default async function handler(
       );
 
       if (!purchseTrading) {
-        res.status(404).json({ message: "구매 거래 정보가 없어요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
+        throw new Error("구매 거래 정보가 없어요.");
       }
 
       if (myUid !== purchseTrading.buyerId) {
@@ -167,10 +155,7 @@ export default async function handler(
       );
 
       if (!saleTrading) {
-        res.status(404).json({ message: "판매 거래 정보가 없어요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
+        throw new Error("판매 거래 정보가 없어요.");
       }
 
       const review = new Review({
@@ -238,7 +223,7 @@ export default async function handler(
         }
       }
 
-      res.status(201).json({ message: "리뷰 등록에 성공했어요." });
+      res.status(201).json({ message: "상품 리뷰 작성에 성공했어요." });
       await session.commitTransaction();
       session.endSession();
     } catch (error) {
@@ -257,7 +242,7 @@ export default async function handler(
       }
       res
         .status(500)
-        .json("리뷰 등록에 실패했어요.\n잠시 후 다시 시도해주세요.");
+        .json("상품 리뷰 작성에 실패했어요.\n잠시 후 다시 시도해주세요.");
     }
   }
 }

@@ -16,7 +16,7 @@ export default async function handler(
 
       if (!uid) {
         res.status(422).json({
-          message: "팔로우할 유저 아이디가 없어요.",
+          message: "팔로우할 유저 ID가 없어요.",
         });
         return;
       }
@@ -33,6 +33,13 @@ export default async function handler(
       await dbConnect();
 
       const myUid = isValidAuth?.auth?.uid;
+
+      if (myUid === uid) {
+        res.status(409).json({
+          message: "자신을 팔로우 할 수 없어요.",
+        });
+        return;
+      }
 
       const my = await User.findOne({
         _id: new mongoose.Types.ObjectId(myUid),
@@ -113,7 +120,7 @@ export default async function handler(
 
       if (!uid) {
         res.status(422).json({
-          message: "언팔로우할 유저 아이디가 없어요.",
+          message: "언팔로우할 유저 ID가 없어요.",
         });
         return;
       }
@@ -131,6 +138,13 @@ export default async function handler(
 
       const myUid = isValidAuth?.auth?.uid;
 
+      if (myUid === uid) {
+        res.status(409).json({
+          message: "자신을 언팔로우 할 수 없어요.",
+        });
+        return;
+      }
+
       const my = await User.findOne({
         _id: new mongoose.Types.ObjectId(myUid),
       });
@@ -147,7 +161,7 @@ export default async function handler(
       }
 
       if (!my.followings.includes(uid) && !user.followers.includes(myUid)) {
-        res.status(409).json({ message: "이미 삭제된 유저입니다." });
+        res.status(409).json({ message: "이미 언팔로우한 유저입니다." });
       }
 
       if (my.followings.includes(uid)) {

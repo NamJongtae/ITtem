@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const checkWithOutAuthPathname = (pathname: string) => {
-  return pathname.startsWith("/signup") || pathname.startsWith("/signin");
+  return (
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/signin") ||
+    pathname.startsWith("/findpassword")
+  );
 };
 
 // 로그아웃 상태일 때만 접근 가능

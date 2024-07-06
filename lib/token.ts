@@ -1,8 +1,6 @@
 import { AuthData } from "@/types/authTypes";
-import jwt, { JsonWebTokenError, JwtPayload, SignOptions } from "jsonwebtoken";
-import { jwtVerify } from "jose";
-
-export const generateToken = ({
+import { JwtPayload, SignOptions } from "jsonwebtoken";
+export const generateToken = async ({
   payload,
   options,
   secret,
@@ -11,34 +9,37 @@ export const generateToken = ({
   options?: SignOptions;
   secret: string;
 }) => {
+  const jwt = await import("jsonwebtoken");
   const token = jwt.sign(payload, secret, options);
   return token;
 };
 
-export const verifyToken = (token: string, secret: string) => {
+export const verifyToken = async (token: string, secret: string) => {
   try {
-    const decoode = jwt.verify(token, secret);
+    const jwt = await import("jsonwebtoken");
+    const decode = jwt.verify(token, secret);
     return {
-      isVaild: true,
+      isValid: true,
       message: "Valid Token.",
-      data: decoode as { user: { uid: string }; lat: number; exp: number },
+      data: decode as { user: { uid: string }; lat: number; exp: number },
     };
   } catch (error) {
-    if (error instanceof JsonWebTokenError) {
-      return { isVaild: false, message: error.message };
+    if (error instanceof (await import("jsonwebtoken")).JsonWebTokenError) {
+      return { isValid: false, message: error.message };
     }
   }
 };
 
 export async function verifyTokenByJose(token: string, secret: string) {
   try {
+    const { jwtVerify } = await import("jose");
     const { payload }: { payload: AuthData } = await jwtVerify(
       token,
       new TextEncoder().encode(secret)
     );
     return { isValid: true, data: payload };
   } catch (error) {
-    if (error instanceof JsonWebTokenError) {
+    if (error instanceof (await import("jsonwebtoken")).JsonWebTokenError) {
       return { isValid: false, message: error.message };
     }
   }

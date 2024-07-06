@@ -1,6 +1,6 @@
 import { ProductData } from "@/types/productTypes";
-import Image from "next/image";
 import Link from "next/link";
+import FallbackImage from '../commons/FallbackImage';
 
 interface IProps {
   productData: ProductData | undefined;
@@ -19,15 +19,15 @@ export default function ProductDetailSellerProductItem({
         className="w-full h-full aspect-square"
         href={`/product/${productData?._id}`}
       >
-        <Image
+        <FallbackImage
           className="mx-auto w-full h-full aspect-square object-cover object-center"
           src={productData?.imgData[0].url || ""}
           width={316}
           height={316}
           alt={productData?.name || ""}
         />
-        <div className="absolute bottom-0 bg-black bg-opacity-50 w-full text-white h-5 text-[14px] xl:h-4 xl:text-xs inline-flex justify-center items-center">
-          <span>{productData?.price}</span> 원
+        <div className="absolute bottom-0 bg-black bg-opacity-50 w-full text-white h-7 xl:h-4 xl:text-xs inline-flex justify-center items-center">
+          <span>{productData?.price.toLocaleString()} 원</span>
         </div>
       </Link>
     </li>

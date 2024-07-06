@@ -1,7 +1,5 @@
 import dbConnect from "@/lib/db";
-import mongoose from "mongoose";
 import Review from "@/lib/db/models/Review";
-import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -23,7 +21,7 @@ export default async function handler(
       const { uid, limit, cursor } = req.query;
 
       if (!uid) {
-        res.status(422).json({ message: "유저 아이디가 없어요." });
+        res.status(422).json({ message: "유저 ID가 없어요." });
         return;
       }
 
@@ -99,7 +97,7 @@ export default async function handler(
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        message: "리뷰 목록 조회에 실패했어요\n잠시 후 다시 시도해주세요.",
+        message: "리뷰 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }

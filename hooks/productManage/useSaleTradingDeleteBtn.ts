@@ -1,10 +1,10 @@
 import useProductDeleteMutate from "../reactQuery/mutations/product/useProducDeletetMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
-export default function useSaleTradingDeleteBtn({ productId }: IPrarms) {
+export default function useSaleTradingDeleteBtn({ productId }: IParams) {
   const { productDeleteMutate } = useProductDeleteMutate(productId);
 
   const handleClickProductDelete = () => {

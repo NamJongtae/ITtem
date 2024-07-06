@@ -34,12 +34,12 @@ export default async function handler(
       }
 
       res.status(200).json({
-        message: "조회수 갱신에 성공했어요.",
+        message: "상품 조회수 갱신에 성공했어요.",
         viewCount: product.viewCount,
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "조회수 갱신에 실패했어요." });
+      res.status(500).json({ message: "상품 조회수 갱신에 실패했어요." });
     }
   }
 }

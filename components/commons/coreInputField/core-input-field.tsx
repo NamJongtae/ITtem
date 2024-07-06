@@ -90,10 +90,10 @@ export default function CoreInputField({
           <button
             type="button"
             onClick={resetInput}
-            className="absolute right-3 bg-gray-700 bg-opacity-50 rounded-full p-1 top-1/2 -translate-y-1/2"
+            className="absolute right-0 inline-flex justify-center items-center w-10 h-full"
           >
             <Image
-              className="w-2 h-2 object-cover object-center"
+              className="w-4 h-4 p-1 rounded-full object-center bg-gray-500"
               src={"/icons/x_icon.svg"}
               alt="초기화"
               width={10}

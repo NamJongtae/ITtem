@@ -1,9 +1,7 @@
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import useProductUploadReviewMutate from "../reactQuery/mutations/product/useProductUploadReviewMutate";
-import { REVIEW_TAGS } from "@/constants/constant";
-import { useEffect } from "react";
 
-interface IPrarms {
+interface IParams {
   closeModal: () => void;
   productId: string;
 }
@@ -11,7 +9,7 @@ interface IPrarms {
 export default function useReviewUploadModal({
   closeModal,
   productId,
-}: IPrarms) {
+}: IParams) {
   const { uploadReviewMutate, uploadReviewLoading } =
     useProductUploadReviewMutate(closeModal);
 

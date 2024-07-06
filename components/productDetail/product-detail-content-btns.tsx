@@ -4,7 +4,7 @@ import ProductDetailWishBtn from "./product-detail-wishBtn";
 import { ProductDetailData, ProductStatus } from "@/types/productTypes";
 import ProductDetailDeleteBtn from "./product-detail-deleteBtn";
 import ProductDetailEditBtn from "./product-detail-EditBtn";
-import useMyProfileQuery from "@/hooks/reactQuery/querys/profile/useMyProfileQuery";
+import useMyProfileQuery from "@/hooks/reactQuery/queries/profile/useMyProfileQuery";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;

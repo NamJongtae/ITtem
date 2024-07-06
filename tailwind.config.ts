@@ -16,6 +16,10 @@ const config: Config = {
     "animate-slideUp",
     "animate-slideDown",
     "bg-red-400",
+    "before:content-['판매완료']",
+    "before:content-['거래중']",
+    "before:text-3xl",
+    "bg-rootColor betterhover:hover:bg-[#5588D9] text-white",
   ],
   theme: {
     extend: {

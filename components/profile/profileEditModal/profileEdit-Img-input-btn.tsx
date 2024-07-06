@@ -9,8 +9,7 @@ interface IProps {
   profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
   profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
   nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 
 export default function ProfileEditImgInputBtn({
@@ -20,8 +19,7 @@ export default function ProfileEditImgInputBtn({
   profileImgBtnRef,
   profileImgResetBtnRef,
   nicknameRef,
-  cancelBtnRef,
-  submitBtnRef,
+  closeBtnRef,
 }: IProps) {
   return (
     <div className="relative">
@@ -54,9 +52,7 @@ export default function ProfileEditImgInputBtn({
         onKeyDown={(e) =>
           optimizationTabFocus({
             event: e,
-            previousTarget: submitBtnRef.current?.disabled
-              ? cancelBtnRef.current
-              : submitBtnRef.current,
+            previousTarget: closeBtnRef.current,
             nextTarget: profileImgBtnRef.current,
           })
         }

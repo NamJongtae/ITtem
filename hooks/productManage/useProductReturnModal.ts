@@ -1,7 +1,7 @@
 import { FieldValues } from "react-hook-form";
-import useProductReturnRequestMutate from "../reactQuery/mutations/trade/useProductReturnRequestMutate";
+import useProductReturnRequestMutate from "../reactQuery/mutations/trading/useProductReturnRequestMutate";
 
-interface IPrarms {
+interface IParams {
   closeModal: () => void;
   productId: string;
 }
@@ -9,7 +9,7 @@ interface IPrarms {
 export default function useProductReturnModal({
   closeModal,
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productReturnRequestMutate } = useProductReturnRequestMutate();
   const onSubmit = (values: FieldValues) => {
     const returnReason: string =

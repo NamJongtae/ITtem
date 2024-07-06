@@ -1,5 +1,5 @@
 import { readNotificationMessage } from "@/lib/api/notification";
-import { queryKeys } from '@/queryKeys';
+import { queryKeys } from "@/queryKeys";
 import { NotificationMessageData } from "@/types/notification";
 import {
   InfiniteData,
@@ -11,7 +11,8 @@ import { toast } from "react-toastify";
 
 export default function useReadNotificationMessageMutate() {
   const queryClient = useQueryClient();
-  const notificationQueryKey = queryKeys.notification._def;
+  const notificationMessagesQueryKey =
+    queryKeys.notification.messages().queryKey;
 
   const { mutate, isPending, error } = useMutation<
     void,
@@ -26,12 +27,15 @@ export default function useReadNotificationMessageMutate() {
         | undefined;
     }
   >({
-    mutationFn: (messageId: string) =>
-      readNotificationMessage(messageId),
+    mutationFn: (messageId: string) => readNotificationMessage(messageId),
     onMutate: async (messageId) => {
-      await queryClient.cancelQueries({ queryKey: notificationQueryKey });
+      await queryClient.cancelQueries({
+        queryKey: notificationMessagesQueryKey,
+      });
 
-      const previousMessages = queryClient.getQueryData(notificationQueryKey) as
+      const previousMessages = queryClient.getQueryData(
+        notificationMessagesQueryKey
+      ) as
         | InfiniteData<
             { messages: NotificationMessageData[]; nextKey: string },
             unknown
@@ -59,7 +63,7 @@ export default function useReadNotificationMessageMutate() {
         }
       );
 
-      queryClient.setQueryData(notificationQueryKey, {
+      queryClient.setQueryData(notificationMessagesQueryKey, {
         ...previousMessages,
         pages: newPages,
       });
@@ -67,10 +71,13 @@ export default function useReadNotificationMessageMutate() {
       return { previousMessages };
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: notificationQueryKey });
+      queryClient.invalidateQueries({ queryKey: notificationMessagesQueryKey });
     },
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(notificationQueryKey, ctx?.previousMessages);
+      queryClient.setQueryData(
+        notificationMessagesQueryKey,
+        ctx?.previousMessages
+      );
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }

@@ -1,12 +1,12 @@
-import useProductReturnDeliveryConfirmationMutate from "../reactQuery/mutations/trade/useProductReturnDeliveryConfirmationMutate";
+import useProductReturnDeliveryConfirmationMutate from "../reactQuery/mutations/trading/useProductReturnDeliveryConfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function usePurchaseTradingReturnDeliveryComfirmationBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productReturnDeliveryConfirmationMutate } =
     useProductReturnDeliveryConfirmationMutate();
 

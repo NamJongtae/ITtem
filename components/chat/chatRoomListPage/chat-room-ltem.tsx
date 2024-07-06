@@ -58,7 +58,9 @@ export default function ChatRoomItem({ data }: IProps) {
               )}
             </time>
           </div>
-          <p className="text-xs text-gray-400">{data.lastMessage?.content}</p>
+          <p className="text-xs text-ellipsis break-words line-clamp-2 overflow-hidden text-gray-400">
+            {data.lastMessage?.content}
+          </p>
         </div>
       </Link>
     </li>

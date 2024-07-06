@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 export default function useReadAllNotificationMessagesMutate() {
   const queryClient = useQueryClient();
-  const notificationQueryKey = queryKeys.notification._def;
+  const notificationMessagesQueryKey = queryKeys.notification.messages().queryKey;
 
   const { mutate, isPending, error } = useMutation<
     void,
@@ -28,10 +28,10 @@ export default function useReadAllNotificationMessagesMutate() {
   >({
     mutationFn: (endKey) => readAllNotificationMessage(endKey),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: notificationQueryKey });
+      await queryClient.cancelQueries({ queryKey: notificationMessagesQueryKey });
 
       const previousMessages = queryClient.getQueryData(
-        notificationQueryKey
+        notificationMessagesQueryKey
       ) as
         | InfiniteData<
             { messages: NotificationMessageData[]; nextKey: string },
@@ -54,7 +54,7 @@ export default function useReadAllNotificationMessagesMutate() {
         }
       );
 
-      queryClient.setQueryData(notificationQueryKey, {
+      queryClient.setQueryData(notificationMessagesQueryKey, {
         ...previousMessages,
         pages: newPages,
       });
@@ -62,10 +62,10 @@ export default function useReadAllNotificationMessagesMutate() {
       return { previousMessages };
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: notificationQueryKey });
+      queryClient.invalidateQueries({ queryKey: notificationMessagesQueryKey });
     },
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(notificationQueryKey, ctx?.previousMessages);
+      queryClient.setQueryData(notificationMessagesQueryKey, ctx?.previousMessages);
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }

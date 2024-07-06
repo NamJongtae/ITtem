@@ -1,12 +1,12 @@
-import useDeliveryConfirmationMutate from "../reactQuery/mutations/trade/useDeliveryConfirmationMutate";
+import useDeliveryConfirmationMutate from "../reactQuery/mutations/trading/useDeliveryConfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function useSaleTradingDeliveryConfirmationBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productDeliveryConfirmationMutate } = useDeliveryConfirmationMutate();
 
   const handleClickDeliveryConfirmation = () => {

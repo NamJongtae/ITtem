@@ -24,18 +24,9 @@ export default async function handler(
         return;
       }
 
-      const myUid = isValidAuth?.auth?.uid;
-
-      if (!myUid) {
-        res.status(400).json({
-          message: "유저 ID가 없어요.",
-        });
-        return;
-      }
-
       await deleteChatRoom(chatRoomId as string);
 
-      res.status(201).json({ message: "채팅방 삭제에 성공했어요." });
+      res.status(200).json({ message: "채팅방 삭제에 성공했어요." });
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -45,7 +36,7 @@ export default async function handler(
         } else if (
           error.message === "채팅방 참여 인원이 있어 채팅방을 삭제할 수 없어요."
         ) {
-          res.status(400).json({ message: error.message });
+          res.status(409).json({ message: error.message });
           return;
         }
       }

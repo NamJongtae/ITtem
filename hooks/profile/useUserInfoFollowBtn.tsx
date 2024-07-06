@@ -3,13 +3,15 @@ import useUserProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/u
 import { ProfileData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 
+interface IParams {
+  myProfileData: ProfileData | undefined;
+  userProfileData: ProfileData | undefined;
+}
+
 export default function useUserInfoFollowBtn({
   myProfileData,
   userProfileData,
-}: {
-  myProfileData: ProfileData | undefined;
-  userProfileData: ProfileData | undefined;
-}) {
+}: IParams) {
   const { userFollowMutate } = useUserProfileFollowMutate(
     userProfileData?.uid || ""
   );

@@ -7,14 +7,8 @@ export default function NavSearchBar() {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative w-full max-w-[200px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] ml-auto mr-5 md:ml-0 md:mr-0 bg-black"
+      className="relative w-full max-w-[200px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] ml-auto mr-5 md:ml-0 md:mr-0 flex"
     >
-      <button
-        type="submit"
-        className="absolute inset-y-0 right-3 flex items-center"
-      >
-        <Image src="/icons/search_icon.svg" alt="검색" width={20} height={20} />
-      </button>
       <label htmlFor="search" className="sr-only">
         Search
       </label>
@@ -25,6 +19,9 @@ export default function NavSearchBar() {
         placeholder="상품명, 지역명 검색"
         {...register("keyword")}
       />
+      <button type="submit" className="absolute inline-flex justify-center items-center right-0 w-10 h-10">
+        <Image src="/icons/search_icon.svg" alt="검색" width={20} height={20} />
+      </button>
     </form>
   );
 }

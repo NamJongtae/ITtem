@@ -1,18 +1,17 @@
-import ProfilePage from "@/components/profile/profile-page";
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { queryKeys } from "@/queryKeys";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
 import { IronSessionData } from "@/types/apiTypes";
-
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { getIronSession } from "iron-session";
-import { GetServerSideProps } from "next";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProfileData } from "@/types/authTypes";
 import { MetaData } from "@/types/metaDataTypes";
+import dynamic from "next/dynamic";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
+const ProfilePage = dynamic(() => import("@/components/profile/profile-page"));
 
 interface IProps {
   metaData: MetaData;
@@ -27,10 +26,11 @@ export default function UserProfile({ metaData }: IProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const { req, res, query, resolvedUrl } = context;
   const uid = query.uid;
   const queryClient = new QueryClient();
+  const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
     req,
     res,
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session.refreshToken) {
     const refreshToken = session.refreshToken;
-    const decodeToken = verifyToken(refreshToken, REFRESH_TOKEN_KEY);
+    const decodeToken = await verifyToken(refreshToken, REFRESH_TOKEN_KEY);
     const myUid = decodeToken?.data?.user.uid;
 
     if (myUid) {
@@ -92,4 +92,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { dehydratedState: dehydrate(queryClient), metaData },
   };
-};
+});

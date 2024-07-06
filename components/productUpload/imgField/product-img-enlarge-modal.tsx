@@ -6,15 +6,16 @@ import { ProductImgData } from "@/types/productTypes";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import FallbackImage from '@/components/commons/FallbackImage';
 
 interface IProps {
   imgData: ProductImgData[] | undefined;
-  closeModal: () => void;
+  handleClickCloseBtn: () => void;
 }
 
 export default function ProductImgEnlargeModal({
   imgData,
-  closeModal,
+  handleClickCloseBtn,
 }: IProps) {
   return (
     <Portal>
@@ -31,7 +32,7 @@ export default function ProductImgEnlargeModal({
         >
           {imgData?.map((data, index) => (
             <SwiperSlide key={data.url + index} className="relative">
-              <Image
+              <FallbackImage
                 className="w-auto h-auto object-contain obeject-center"
                 src={data.url}
                 alt={data.name}
@@ -41,7 +42,7 @@ export default function ProductImgEnlargeModal({
           ))}
         </Swiper>
         <button
-          onClick={closeModal}
+          onClick={handleClickCloseBtn}
           className="absolute text-white top-5 right-5 w-5 h-5 sm:w-auto sm:h-auto sm:top-8 sm:right-8 z-50"
         >
           <Image src={"/icons/x_icon.svg"} alt="닫기" width={30} height={30} />

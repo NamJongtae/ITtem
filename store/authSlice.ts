@@ -1,5 +1,6 @@
-import { AuthData } from '@/types/authTypes';
-import { createSlice } from "@reduxjs/toolkit";
+import { AuthData } from "@/types/authTypes";
+import { AnyAction, createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 const isClient = typeof window !== "undefined";
 
@@ -41,5 +42,13 @@ export const authSlice = createSlice({
     setIsLoading: (state, action: { payload: boolean; type: string }) => {
       state.isLoading = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(HYDRATE, (state, action: AnyAction) => {
+      return {
+        ...state,
+        ...action.payload.auth,
+      };
+    });
   },
 });

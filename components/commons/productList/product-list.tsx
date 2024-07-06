@@ -26,33 +26,31 @@ export default function ProductList({
     error,
   } = useProductList(productListType, productIds, profileProductCategory);
 
-  return (
-    <>
-      {error ? (
-        <ProductListError productListType={productListType} error={error} />
-      ) : null}
+  if (error) {
+    return <ProductListError productListType={productListType} error={error} />;
+  }
 
-      <InfiniteScroll
-        hasMore={hasNextPage && !error}
-        loadMore={() => {
-          if (!isFetchingNextPage) fetchNextPage();
-        }}
-      >
-        <div className="max-w-[1024px] mx-auto pb-12">
-          <ul className="grid gap-5 grid-cols-autoFill mt-6 px-8 ">
-            {isLoading ? (
-              <ProductListPlaceholder listCount={12} />
-            ) : (
-              data?.map((item) => (
-                <Fragment key={item._id}>
-                  <ProductItem data={item} category={profileProductCategory} />
-                </Fragment>
-              ))
-            )}
-            {isFetchingNextPage && <ProductListPlaceholder listCount={12} />}
-          </ul>
-        </div>
-      </InfiniteScroll>
-    </>
+  return (
+    <InfiniteScroll
+      hasMore={hasNextPage && !error}
+      loadMore={() => {
+        if (!isFetchingNextPage) fetchNextPage();
+      }}
+    >
+      <div className="max-w-[1024px] mx-auto pb-12">
+        <ul className="grid gap-5 grid-cols-autoFill mt-6 px-8 ">
+          {isLoading ? (
+            <ProductListPlaceholder listCount={12} />
+          ) : (
+            data?.map((item) => (
+              <Fragment key={item._id}>
+                <ProductItem data={item} category={profileProductCategory} />
+              </Fragment>
+            ))
+          )}
+          {isFetchingNextPage && <ProductListPlaceholder listCount={12} />}
+        </ul>
+      </div>
+    </InfiniteScroll>
   );
 }

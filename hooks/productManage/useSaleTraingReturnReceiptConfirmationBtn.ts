@@ -1,12 +1,12 @@
-import useReturnReceiptComfirmationMutate from "../reactQuery/mutations/trade/useReturnReceiptComfirmationMutate";
+import useReturnReceiptComfirmationMutate from "../reactQuery/mutations/trading/useReturnReceiptComfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function useSaleTradingReturnReceiptConfirmationBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { productReturnReceiptConfirmationMutate } =
     useReturnReceiptComfirmationMutate();
 

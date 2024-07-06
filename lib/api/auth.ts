@@ -1,27 +1,21 @@
 import {
   EmailDuplicationResponseData,
-  FollowersResponseData,
-  FollowingsResponseData,
   GoogleAuthAccessTokenResponseData,
   GoogleAuthInfoResponseData,
   KaKaoAuthAccessTokenResponseData,
   KakaoAuthInfoResponseData,
   NicknameDuplicationResponseData,
-  ProfileResponseData,
   RegenerateAccessTokenResponseData,
-  ReviewsResponseData,
   SessionCookiesResponseData,
   SigninResponseData,
   SignoutResposeData,
   SignupResponseData,
   VerifyEmailResponseData,
-  WishResponseData,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
-import { compare, hash } from "bcryptjs";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import { AuthData, ProfileEditData, SignupData } from "@/types/authTypes";
+import { AuthData, SignupData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -55,6 +49,8 @@ export async function createAccount({
 
 export async function getHasdPassword(password: string) {
   try {
+    const { hash } = await import("bcryptjs");
+
     const hashedPassword = await hash(password, 12);
     return hashedPassword;
   } catch (error) {
@@ -65,6 +61,8 @@ export async function getHasdPassword(password: string) {
 
 export async function verifyPassword(password: string, hashedPassword: string) {
   try {
+    const { compare } = await import("bcryptjs");
+
     const isVerify = await compare(password, hashedPassword);
     return isVerify;
   } catch (error) {
@@ -204,8 +202,8 @@ export async function deleteAllToken(
   email: string
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = customAxios.post("/api/auth/deleteToken", {
-      email,
+    const response = customAxios.delete("/api/auth/deleteToken", {
+      data: { email },
     });
     return response;
   } catch (error) {

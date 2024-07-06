@@ -1,13 +1,13 @@
+import useIntroduceField from "@/hooks/changeProfileModal/useIntroduceField";
 import { MutableRefObject } from "react";
-import { useFormContext } from "react-hook-form";
 
 interface IProps {
   introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
 }
 
 export default function IntroductField({ introduceRef }: IProps) {
-  const { register } = useFormContext();
-  const { ref, ...rest } = register("introduce");
+  const { ref, rest } = useIntroduceField();
+
   return (
     <div>
       <label className="sr-only" htmlFor="introduce">

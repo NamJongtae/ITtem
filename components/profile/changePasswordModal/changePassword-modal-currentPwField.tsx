@@ -1,16 +1,20 @@
-import { forwardRef, MutableRefObject, Ref } from "react";
+import { forwardRef, MutableRefObject, Ref, useEffect } from "react";
 import CoreInputField from "../../commons/coreInputField/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
+import { useFormContext } from "react-hook-form";
+import useCurrentPwValidation from "@/hooks/changePasswordModal/useCurrentPwValidation";
 
 interface IProps {
   submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  cancelBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 const ChangePasswordModalCurrentPwField = forwardRef<
   HTMLInputElement | null,
   IProps
->(({ submitBtnRef, cancelBtnRef }, ref) => {
+>(({ submitBtnRef, closeBtnRef }, ref) => {
+  const { validatePassword } = useCurrentPwValidation();
+
   return (
     <div>
       <CoreInputField
@@ -26,6 +30,7 @@ const ChangePasswordModalCurrentPwField = forwardRef<
           value: PASSWORD_REGEX,
           message: PASSWORD_REGEX_ERRORMSG,
         }}
+        inputValidate={(value) => validatePassword(value)}
         labelHidden={false}
         labelClassName="font-semibold"
         inputClassName={"border-b pb-3 w-full text-sm mt-4 focus:outline-none"}
@@ -33,9 +38,7 @@ const ChangePasswordModalCurrentPwField = forwardRef<
         inputKeydown={(e) =>
           optimizationTabFocus({
             event: e,
-            previousTarget: submitBtnRef.current?.disabled
-              ? cancelBtnRef.current
-              : submitBtnRef.current,
+            previousTarget: closeBtnRef.current,
           })
         }
       />

@@ -1,12 +1,12 @@
-import useCancelConfirmationMutate from "../reactQuery/mutations/trade/useCancelConfirmationMutate";
+import useCancelConfirmationMutate from "../reactQuery/mutations/trading/useCancelConfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function useTradingCancelConfirmationBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { purchaseCancelConfirmationMutate } = useCancelConfirmationMutate();
 
   const handleClickCancelConfirmation = () => {

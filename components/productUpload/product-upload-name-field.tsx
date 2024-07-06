@@ -2,8 +2,7 @@ import useProductName from "@/hooks/productUpload/useProductUploadName";
 import CoreInputField from "../commons/coreInputField/core-input-field";
 
 export default function ProductUploadNameField() {
-  const { productName, handleChangeProductName } =
-    useProductName();
+  const { productName, handleChangeProductName } = useProductName();
 
   return (
     <div className="border-b py-8">
@@ -16,7 +15,7 @@ export default function ProductUploadNameField() {
           inputId="name"
           inputName="name"
           inputType="text"
-          inputClassName="block w-full max-w-sm border border-gray-400 pl-4 pr-6 py-3"
+          inputClassName="w-full max-w-sm border border-gray-400 pl-4 pr-6 py-3"
           inputMaxLength={20}
           inputRequired
           inputPlaceholder="상품명을 입력해주세요."

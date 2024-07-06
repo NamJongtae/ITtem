@@ -3,8 +3,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
-import Image from "next/image";
 import { ProductImgData } from '@/types/productTypes';
+import FallbackImage from '../FallbackImage';
 
 interface IProps {
   imgData: ProductImgData[] | undefined;
@@ -25,7 +25,7 @@ export default function ImgSlider({ imgData, imgWidth, imgHeight }: IProps) {
       >
         {imgData?.map((data, index) => (
           <SwiperSlide key={data.url}>
-            <Image
+            <FallbackImage
               className="h-full w-full object-cover object-center"
               src={data.url}
               width={imgWidth}

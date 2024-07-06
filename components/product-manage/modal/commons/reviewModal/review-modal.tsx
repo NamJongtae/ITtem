@@ -1,6 +1,6 @@
 import Loading from "@/components/commons/loading";
 import Portal from "@/components/commons/portal/Portal";
-import useProductReviewQuery from "@/hooks/reactQuery/querys/product/useProductReviewQuery";
+import useProductReviewQuery from "@/hooks/reactQuery/queries/product/useProductReviewQuery";
 import { isMobile } from "react-device-detect";
 import ReviewModalReviewStar from "./review-modal-review-star";
 import ReviewModalReviewTags from "./review-modal-review-tags";

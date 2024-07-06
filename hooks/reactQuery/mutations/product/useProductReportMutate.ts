@@ -40,7 +40,11 @@ export default function useProductReportMutate() {
 
       queryClient.setQueryData(productQueryKey, newProduct);
 
-      toast.success("해당 상품을 신고했어요.");
+      toast.success(
+        previousProduct.reportCount >= 4
+          ? "상품 신고가 누적되어 블라인드 처리되었어요."
+          : "해당 상품을 신고했어요."
+      );
 
       return { previousProduct };
     },

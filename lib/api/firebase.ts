@@ -1,50 +1,22 @@
-import {
-  deleteObject,
-  getDownloadURL,
-  ref as storageRef,
-  uploadBytes,
-} from "firebase/storage";
-import { database, firestoreDB, storage } from "../firebaseSetting";
 import { v4 as uuid } from "uuid";
 import { UploadImgResponseData } from "@/types/apiTypes";
-import {
-  set,
-  push,
-  ref as databaseRef,
-  query,
-  ref,
-  get,
-  orderByKey,
-  endBefore,
-  limitToLast,
-  update,
-  remove,
-  increment,
-  startAt,
-} from "firebase/database";
-import {
-  addDoc,
-  arrayUnion,
-  doc,
-  query as firestoreQuery,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  increment as firestoreIncrement,
-  where,
-  arrayRemove,
-  deleteDoc,
-} from "firebase/firestore";
+
 import { NotificationMessageData } from "@/types/notification";
-import { collection, serverTimestamp } from "firebase/firestore";
 import { ChatRoomData } from "@/types/chatTypes";
+import {
+  getFirestoreDB,
+  getRealtimeDB,
+  getStorageInstance,
+} from "../firebaseSetting";
 
 export const uploadImgToFireStore = async (
   file: File | ""
 ): Promise<UploadImgResponseData | undefined> => {
   try {
     if (file) {
+      const firebaseStorage = await import("firebase/storage");
+      const storage = await getStorageInstance();
+      const { uploadBytes, ref: storageRef, getDownloadURL } = firebaseStorage;
       const fileName = `${uuid()}_${file.name}`;
       const uploadImgResponse = await uploadBytes(
         storageRef(storage, `images/profile/${fileName}`),
@@ -64,9 +36,12 @@ export const uploadMultiImgToFirestore = async (
 ): Promise<UploadImgResponseData[] | undefined> => {
   try {
     if (!files) return;
+    const firebaseStorage = await import("firebase/storage");
+    const { uploadBytes, ref: storageRef, getDownloadURL } = firebaseStorage;
     const uploadPromises = [...files].map(async (file) => {
       // 각 파일에 대해 비동기 업로드 처리
       const fileName = `${uuid()}_${file.name}`;
+      const storage = await getStorageInstance();
       const uploadImgResponse = await uploadBytes(
         storageRef(storage, `images/product/${fileName}`),
         file
@@ -88,10 +63,14 @@ export const deleteProfileImgToFirestore = async (
   prevImgDataImgName: string
 ) => {
   try {
+    const firebaseStorage = await import("firebase/storage");
+    const storage = await getStorageInstance();
+    const { deleteObject, ref: storageRef } = firebaseStorage;
+
     if (!profileDataImgName || !prevImgDataImgName) return;
     if (profileDataImgName !== prevImgDataImgName) {
       await deleteObject(
-        storageRef(storage, `images/product/${profileDataImgName}`)
+        storageRef(storage, `images/profile/${prevImgDataImgName}`)
       );
     }
   } catch (error) {
@@ -104,7 +83,9 @@ export const deleteImgToFirestore = async (
   prevImgDataImgName: string[]
 ) => {
   const removeImgPromise = [];
-
+  const firebaseStorage = await import("firebase/storage");
+  const storage = await getStorageInstance();
+  const { deleteObject, ref: storageRef } = firebaseStorage;
   for (let i = 0; i < productDataImgName.length; i++) {
     if (!prevImgDataImgName.includes(productDataImgName[i])) {
       removeImgPromise.push(
@@ -117,9 +98,14 @@ export const deleteImgToFirestore = async (
   await Promise.all(removeImgPromise);
 };
 
-export const sendNotificationMessage = (userId: string, message: string) => {
+export const sendNotificationMessage = async (
+  userId: string,
+  message: string
+) => {
   if (!userId) return;
-
+  const firebaseDatabase = await import("firebase/database");
+  const database = await getRealtimeDB();
+  const { push, set, ref: databaseRef } = firebaseDatabase;
   const messageObj: Omit<NotificationMessageData, "id"> = {
     content: message,
     isRead: false,
@@ -146,6 +132,10 @@ export const getNotificationMessage = async ({
   nextKey: string | null;
 }> => {
   try {
+    const database = await getRealtimeDB();
+    const firebaseDatabase = await import("firebase/database");
+    const { query, orderByKey, ref, endBefore, limitToLast, get } =
+      firebaseDatabase;
     const messagesRef = lastKey
       ? query(
           ref(database, `notification/${userId}/messages`),
@@ -160,6 +150,11 @@ export const getNotificationMessage = async ({
         );
 
     const snapshot = await get(messagesRef);
+
+    if (!snapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
     const data = snapshot.val();
 
     if (!data) return { messages: [], nextKey: null };
@@ -185,10 +180,19 @@ export const readyNotificationMessage = async ({
   messageId: string;
 }) => {
   try {
+    const database = await getRealtimeDB();
+    const firebaseDatabase = await import("firebase/database");
+    const { update, ref, increment, get } = firebaseDatabase;
     const messageRef = ref(
       database,
       `notification/${userId}/messages/${messageId}`
     );
+
+    const messageSnapshot = await get(messageRef);
+
+    if (!messageSnapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
 
     const counterRef = ref(database, `notification/${userId}/counter`);
 
@@ -207,6 +211,9 @@ export const deleteNotificationMessage = async ({
   messageId: string;
 }) => {
   try {
+    const database = await getRealtimeDB();
+    const firebaseDatabase = await import("firebase/database");
+    const { update, ref, increment, get, remove } = firebaseDatabase;
     const messageRef = ref(
       database,
       `notification/${userId}/messages/${messageId}`
@@ -214,7 +221,12 @@ export const deleteNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const messageSnapshot = await get(messageRef);
-    if (messageSnapshot.exists() && messageSnapshot.val().isRead === false) {
+
+    if (!messageSnapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
+    if (messageSnapshot.val().isRead === false) {
       await update(counterRef, { unreadCount: increment(-1) });
     }
 
@@ -232,6 +244,10 @@ export const readAllNotificationMessage = async ({
   endKey: string;
 }) => {
   try {
+    const database = await getRealtimeDB();
+    const firebaseDatabase = await import("firebase/database");
+    const { update, ref, increment, get, query, orderByKey, startAt } =
+      firebaseDatabase;
     const messagesRef = query(
       ref(database, `notification/${userId}/messages`),
       orderByKey(),
@@ -240,22 +256,25 @@ export const readAllNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const snapshot = await get(messagesRef);
-    if (snapshot.exists()) {
-      const updates: { [key: string]: any } = {};
-      let unreadCountDecrease = 0;
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        if (key) {
-          updates[`notification/${userId}/messages/${key}/isRead`] = true;
-          unreadCountDecrease++;
-        }
-      });
 
-      await update(ref(database), updates);
-      await update(counterRef, {
-        unreadCount: increment(-unreadCountDecrease),
-      });
+    if (!snapshot.exists) {
+      throw new Error("잘못된 접근이에요.");
     }
+
+    const updates: { [key: string]: any } = {};
+    let unreadCountDecrease = 0;
+    snapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      if (key) {
+        updates[`notification/${userId}/messages/${key}/isRead`] = true;
+        unreadCountDecrease++;
+      }
+    });
+
+    await update(ref(database), updates);
+    await update(counterRef, {
+      unreadCount: increment(-unreadCountDecrease),
+    });
   } catch (error) {
     throw error;
   }
@@ -269,6 +288,10 @@ export const deleteAllNotificationMessage = async ({
   endKey: string;
 }) => {
   try {
+    const database = await getRealtimeDB();
+    const firebaseDatabase = await import("firebase/database");
+    const { update, ref, increment, get, query, orderByKey, startAt } =
+      firebaseDatabase;
     const messagesRef = query(
       ref(database, `notification/${userId}/messages`),
       orderByKey(),
@@ -277,27 +300,30 @@ export const deleteAllNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const snapshot = await get(messagesRef);
-    if (snapshot.exists()) {
-      const updates: { [key: string]: any } = {};
-      let unreadCountDecrease = 0;
 
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        const isRead = childSnapshot.val().isRead;
-        if (key) {
-          updates[`notification/${userId}/messages/${key}`] = null;
-          if (!isRead) {
-            unreadCountDecrease++;
-          }
+    if (!snapshot.exists) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
+    const updates: { [key: string]: any } = {};
+    let unreadCountDecrease = 0;
+
+    snapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      const isRead = childSnapshot.val().isRead;
+      if (key) {
+        updates[`notification/${userId}/messages/${key}`] = null;
+        if (!isRead) {
+          unreadCountDecrease++;
         }
-      });
-
-      await update(ref(database), updates);
-      if (unreadCountDecrease > 0) {
-        await update(counterRef, {
-          unreadCount: increment(-unreadCountDecrease),
-        });
       }
+    });
+
+    await update(ref(database), updates);
+    if (unreadCountDecrease > 0) {
+      await update(counterRef, {
+        unreadCount: increment(-unreadCountDecrease),
+      });
     }
   } catch (error) {
     throw error;
@@ -314,6 +340,19 @@ export const startChat = async ({
   userId: string;
 }) => {
   try {
+    const firestore = await import("firebase/firestore");
+    const {
+      query: firestoreQuery,
+      where,
+      getDocs,
+      addDoc,
+      doc,
+      setDoc,
+      arrayUnion,
+      collection,
+      serverTimestamp,
+    } = firestore;
+    const firestoreDB = await getFirestoreDB();
     const chatRoomsRef = collection(firestoreDB, "chatRooms");
     const q = firestoreQuery(
       chatRoomsRef,
@@ -333,7 +372,7 @@ export const startChat = async ({
 
     if (chatRoomId) {
       // 이미 존재하는 채팅방이 있음
-      return chatRoomId;
+      return { chatRoomId, isExistRoom: true };
     } else {
       // 새로운 채팅방 생성
       const newChatRoomData = {
@@ -379,7 +418,7 @@ export const startChat = async ({
         { merge: true }
       );
 
-      return chatRoomId;
+      return { chatRoomId, isExistRoom: false };
     }
   } catch (error) {
     throw error;
@@ -394,6 +433,15 @@ export const enterChatRoom = async ({
   chatRoomId: string;
 }) => {
   try {
+    const firestoreDB = await getFirestoreDB();
+    const firestore = await import("firebase/firestore");
+    const {
+      updateDoc,
+      doc,
+      getDoc,
+      arrayUnion,
+      increment: firestoreIncrement,
+    } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const myChatInfoRef = doc(firestoreDB, `userChatInfo/${myUid}`);
     const chatRoomDoc = await getDoc(chatRoomRef);
@@ -440,6 +488,9 @@ export const leaveChatRoom = async ({
   chatRoomId: string;
 }) => {
   try {
+    const firestoreDB = await getFirestoreDB();
+    const firestore = await import("firebase/firestore");
+    const { updateDoc, doc, getDoc } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const chatRoomDoc = await getDoc(chatRoomRef);
     if (!chatRoomDoc.exists()) {
@@ -468,13 +519,34 @@ export const sendToChatMessage = async ({
   message: string;
 }) => {
   try {
+    const firestoreDB = await getFirestoreDB();
+    const firestore = await import("firebase/firestore");
+    const {
+      updateDoc,
+      doc,
+      getDoc,
+      addDoc,
+      collection,
+      serverTimestamp,
+      increment: firestoreIncrement,
+    } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const messagesCollectionRef = collection(chatRoomRef, "messages");
     const snapshot = await getDoc(chatRoomRef);
     const data = snapshot.data() as ChatRoomData;
-    const userId = Object.keys(data.entered).filter((id) => id !== myUid)[0];
+    const userlist = Object.keys(data.entered);
+    const userId = userlist.filter((id) => id !== myUid)[0];
     const userChatInfoRef = doc(firestoreDB, `userChatInfo/${userId}`);
-    
+    const chatRoomDoc = await getDoc(chatRoomRef);
+
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+
+    if (!userlist.includes(myUid)) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
     const messageObj = {
       content: message,
       timestamp: serverTimestamp(),
@@ -509,6 +581,9 @@ export const exitChatRoom = async ({
   chatRoomId: string;
 }) => {
   try {
+    const firestoreDB = await getFirestoreDB();
+    const firestore = await import("firebase/firestore");
+    const { updateDoc, doc, getDoc, arrayRemove } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const userChatInfoRef = doc(firestoreDB, `userChatInfo/${myUid}`);
 
@@ -541,6 +616,9 @@ export const exitChatRoom = async ({
 
 export const deleteChatRoom = async (chatRoomId: string) => {
   try {
+    const firestoreDB = await getFirestoreDB();
+    const firestore = await import("firebase/firestore");
+    const { deleteDoc, doc, getDoc, getDocs, collection } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
 
     const chatRoomDoc = await getDoc(chatRoomRef);

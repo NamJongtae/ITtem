@@ -10,8 +10,14 @@ export default function ProfileDetailProductCategory({
   currentCategory,
   selectCategory,
 }: IProps) {
-  const { isOpenMenu, toggleMenu, menuRef, handleClickCategory } =
-    useProfileDetailProductCategory({ selectCategory });
+  const {
+    isOpenMenu,
+    toggleMenu,
+    menuRef,
+    handleClickCategory,
+    setCategoryBtnRef,
+    categoryOnKeyDown,
+  } = useProfileDetailProductCategory({ selectCategory });
 
   return (
     <div className="relative">
@@ -41,14 +47,14 @@ export default function ProfileDetailProductCategory({
       </button>
       {isOpenMenu && (
         <ul
-          className="absolute right-[0px] z-10 mt-1 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
+          className="absolute right-[0px] z-[11] mt-1 w-[105px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-x-hidden overflow-y-scroll p-1 max-h-[222px] scrollbar-hide animate-entering"
           role="menu"
           ref={menuRef}
           aria-orientation="vertical"
           aria-labelledby="menu-button"
           tabIndex={-1}
         >
-          {CATEGORY.map((category) => (
+          {CATEGORY.map((category, index) => (
             <li key={category} className="">
               <button
                 type="button"
@@ -58,7 +64,8 @@ export default function ProfileDetailProductCategory({
                   "bg-gray-700 text-white betterhover:hover:text-black betterhover:hover:bg-gray-200"
                 } text-gray-700 block px-3 py-2 text-sm w-full text-left rounded-md betterhover:hover:bg-gray-100 transition duration-150 ease-in-out`}
                 role="menuitem"
-                tabIndex={-1}
+                ref={setCategoryBtnRef(index)}
+                onKeyDown={(e) => categoryOnKeyDown(e, index)}
               >
                 {category}
               </button>

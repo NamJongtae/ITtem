@@ -1,12 +1,12 @@
-import usePurchaseRequestConfirmationMutate from "../reactQuery/mutations/trade/usePurchaseRequestConfirmationMutate";
+import usePurchaseRequestConfirmationMutate from "../reactQuery/mutations/trading/usePurchaseRequestConfirmationMutate";
 
-interface IPrarms {
+interface IParams {
   productId: string;
 }
 
 export default function useSaleTradingPurchaseConfirmationBtn({
   productId,
-}: IPrarms) {
+}: IParams) {
   const { purchaseRequestConfirmationMutate } =
     usePurchaseRequestConfirmationMutate();
 

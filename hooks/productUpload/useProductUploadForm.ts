@@ -1,14 +1,12 @@
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
 import useProductUploadSubmit from "./useProductUploadSubmit";
 import useProductQuery from "../reactQuery/mutations/product/useProductQuery";
 import useProductEditSubmit from "./useProductEditSubmit";
 
-interface IPrarms {
+interface IParams {
   isEdit?: boolean;
 }
 
-export default function useProductUploadForm({ isEdit }: IPrarms) {
+export default function useProductUploadForm({ isEdit }: IParams) {
   const { handleClickProductUploadSubmit, productUploadLoading } =
     useProductUploadSubmit();
 

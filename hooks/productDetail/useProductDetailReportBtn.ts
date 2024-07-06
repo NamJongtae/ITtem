@@ -1,12 +1,12 @@
 import { toast } from "react-toastify";
 import useProductReportMutate from "../reactQuery/mutations/product/useProductReportMutate";
-import useMyProfileQuery from "../reactQuery/querys/profile/useMyProfileQuery";
+import useMyProfileQuery from "../reactQuery/queries/profile/useMyProfileQuery";
 
-interface IPrarms {
+interface IParams {
   reportUserIds: string[] | undefined;
 }
 
-export default function useProductDetailReportBtn({ reportUserIds }: IPrarms) {
+export default function useProductDetailReportBtn({ reportUserIds }: IParams) {
   const { productReportMutate } = useProductReportMutate();
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
   const isReport = reportUserIds?.includes(myProfileData?.uid || "");
@@ -19,7 +19,10 @@ export default function useProductDetailReportBtn({ reportUserIds }: IPrarms) {
     if (isReport) {
       toast.warn("이미 신고한 상품이에요.");
     } else {
-      productReportMutate(undefined);
+      const isReport = confirm("정말 신고하겠습니까?");
+      if (isReport) {
+        productReportMutate(undefined);
+      }
     }
   };
 

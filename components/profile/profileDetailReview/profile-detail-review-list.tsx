@@ -1,4 +1,4 @@
-import useProfileReviewsInfiniteQuery from "@/hooks/reactQuery/querys/profile/useProfileReviewsInfiniteQuery";
+import useProfileReviewsInfiniteQuery from "@/hooks/reactQuery/queries/profile/useProfileReviewsInfiniteQuery";
 import Empty from "@/components/commons/Empty";
 import { isAxiosError } from "axios";
 import InfiniteScroll from "react-infinite-scroller";

@@ -19,7 +19,7 @@ export default function ProductUploadImgField({ imgData }: IProps) {
     isOpenModal,
     handleOpenModal,
     handleClickImgInput,
-    closeModal,
+    handleClickCloseBtn,
     imgInputRef,
   } = useProductUploadImgField(imgData);
 
@@ -43,7 +43,7 @@ export default function ProductUploadImgField({ imgData }: IProps) {
       </div>
 
       {isOpenModal && (
-        <ProductImgEnlargeModal imgData={preview} closeModal={closeModal} />
+        <ProductImgEnlargeModal imgData={preview} handleClickCloseBtn={handleClickCloseBtn} />
       )}
     </div>
   );

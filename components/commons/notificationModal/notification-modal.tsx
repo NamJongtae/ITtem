@@ -11,7 +11,7 @@ interface IProps {
 
 const NotificationModal = forwardRef<HTMLDivElement, IProps>(
   ({ isOpenModal, toggleNotification }, ref) => {
-    const { handleBlur } = useNotificaitonModal({
+    useNotificaitonModal({
       isOpenModal,
       toggleNotification,
       notificationModalRef: ref as MutableRefObject<HTMLDivElement | null>,
@@ -24,7 +24,6 @@ const NotificationModal = forwardRef<HTMLDivElement, IProps>(
         onKeyDown={(e) =>
           escKeyClose({ event: e, closeCb: toggleNotification })
         }
-        onBlur={handleBlur}
       >
         <NotificationHeader />
         <NotificationList />

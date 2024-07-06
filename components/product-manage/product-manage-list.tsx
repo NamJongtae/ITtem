@@ -1,4 +1,4 @@
-import useTradeInfiniteQuery from "@/hooks/reactQuery/querys/trade/useTradeInfiniteQuery";
+import useTradeInfiniteQuery from "@/hooks/reactQuery/queries/trade/useTradeInfiniteQuery";
 import InfiniteScroll from "react-infinite-scroller";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";

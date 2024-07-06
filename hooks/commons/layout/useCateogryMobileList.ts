@@ -2,11 +2,11 @@ import { CATEGORY } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { useRef } from "react";
 
-interface IPrarms {
+interface IParams {
   currentCategory: string | null;
 }
 
-export default function useCateogryMobileList({ currentCategory }: IPrarms) {
+export default function useCateogryMobileList({ currentCategory }: IParams) {
   const firstCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLButtonElement | null>(null);

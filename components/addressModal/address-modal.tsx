@@ -1,6 +1,7 @@
 import Portal from "../commons/portal/Portal";
 import Image from "next/image";
 import useAddressModal from "@/hooks/productUpload/useAddressModal";
+import { isMobile } from "react-device-detect";
 
 interface IProps {
   closeModal: () => void;
@@ -18,7 +19,11 @@ export default function AddressModal({ closeModal, addAddress }: IProps) {
         className="fixed bg-black bg-opacity-50 inset-0 z-40"
         role="modal-backdrop"
       />
-      <div className="fixed center w-[500px] h-[500px] bg-white p-5 rounded-sm z-50">
+      <div
+        className={`${
+          isMobile ? "w-full h-screen" : "w-[500px] h-[500px]"
+        } fixed center bg-white p-5 rounded-sm z-50`}
+      >
         <h2 className="font-semibold text-2xl border-b-2 border-gray-700 pb-5">
           주소 검색
         </h2>
@@ -40,7 +45,11 @@ export default function AddressModal({ closeModal, addAddress }: IProps) {
             />
           </button>
         </form>
-        <ul className="mt-5 h-[316px] overflow-y-scroll scrollbar">
+        <ul
+          className={`${
+            isMobile ? "h-[calc(100vh-180px)]" : "h-[316px]"
+          } mt-5 overflow-y-auto scrollbar`}
+        >
           {addressData.map((data) => (
             <li key={data} className="w-full border-b">
               <button

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import Product from "@/lib/db/models/Product";
 import { checkAuthorization } from "@/lib/server";
 import User from "@/lib/db/models/User";
-;import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db";
 
 export default async function handler(
   req: NextApiRequest,
@@ -54,6 +54,7 @@ export default async function handler(
       };
 
       const products = await Product.find(query)
+        .select("_id price name imgData createdAt location")
         .limit(pageLimit)
         .sort({ _id: 1 });
 
@@ -84,7 +85,7 @@ export default async function handler(
       }
 
       if (!wishProductIds || !wishProductIds.length) {
-        res.status(422).json({ message: "삭제할 찜 목록 아이디가 없어요." });
+        res.status(422).json({ message: "삭제할 찜 목록 ID가 없어요." });
         return;
       }
 
@@ -103,6 +104,13 @@ export default async function handler(
         },
         { returnNewDocument: true }
       );
+
+      if (!deleteResult) {
+        res.status(500).json({
+          message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
 
       res.status(200).json({
         message: "찜 목록 삭제에 성공했어요.",

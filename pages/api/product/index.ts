@@ -24,6 +24,9 @@ export default async function handler(
         : query;
 
       const products = await Product.find(query)
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
         .limit(currentLimit)
         .sort({ createdAt: -1, _id: -1 });
 

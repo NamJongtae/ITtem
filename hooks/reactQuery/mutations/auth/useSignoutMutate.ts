@@ -17,7 +17,6 @@ export default function useSignoutMutate() {
   const queryClient = useQueryClient();
   const authQueryKey = queryKeys.auth.info().queryKey;
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const sessionQueryKey = queryKeys.session.isExist.queryKey;
 
   const { mutate: signoutMutate } = useMutation<
     AxiosResponse<SignoutResposeData>,
@@ -34,14 +33,12 @@ export default function useSignoutMutate() {
 
       queryClient.removeQueries({ queryKey: myProfileQueryKey });
 
-      queryClient.removeQueries({ queryKey: sessionQueryKey });
-
       dispatch(authSlice.actions.resetAuth());
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
         router.replace(
-          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=http://${process.env.NEXT_PUBLIC_BASE_URL}/signin`
+          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/signin`
         );
       } else {
         router.replace("/signin");

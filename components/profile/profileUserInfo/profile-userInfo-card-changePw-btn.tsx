@@ -1,5 +1,5 @@
 import useModal from "@/hooks/commons/useModal";
-import ProfileEditModal from "../profileEditModal/profileEdit-modal";
+import ChangePasswordModal from "../changePasswordModal/changePassword-modal";
 
 export default function ProfileUserInfoCardChangePwBtn() {
   const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
@@ -15,7 +15,9 @@ export default function ProfileUserInfoCardChangePwBtn() {
       </button>
 
       {isOpenModal && (
-        <ProfileEditModal handleClickCloseBtn={handleClickCloseBtn} />
+        <ChangePasswordModal
+          handleClickChangePwCloseBtn={handleClickCloseBtn}
+        />
       )}
     </>
   );

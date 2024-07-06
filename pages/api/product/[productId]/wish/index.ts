@@ -26,9 +26,9 @@ export default async function handler(
       const { productId } = req.query;
 
       const myUid = isValidAuth?.auth?.uid;
-      
+
       if (!productId) {
-        res.status(422).json({ message: "상품 아이디가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -48,7 +48,7 @@ export default async function handler(
       }
 
       if (!user) {
-        res.status(404).json({ message: "유저가 존재하지 않아요." });
+        res.status(401).json({ message: "유저가 존재하지 않아요." });
         return;
       }
 
@@ -77,7 +77,7 @@ export default async function handler(
         );
 
         if (!profileResult.acknowledged || profileResult.modifiedCount === 0) {
-          throw new Error("유저 찜 목록에 상품 아이디 추가에 실패했어요.");
+          throw new Error("유저 찜 목록에 상품 ID 추가에 실패했어요.");
         }
       }
 
@@ -95,7 +95,7 @@ export default async function handler(
         );
 
         if (!productResult.acknowledged || productResult.modifiedCount === 0) {
-          throw new Error("상품 찜 목록에 유저 아이디 추가에 실패했어요.");
+          throw new Error("상품 찜 목록에 유저 ID 추가에 실패했어요.");
         }
       }
 
@@ -127,9 +127,9 @@ export default async function handler(
       const { productId } = req.query;
 
       const myUid = isValidAuth?.auth?.uid;
-      
+
       if (!productId) {
-        res.status(422).json({ message: "상품 아이디가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -142,6 +142,11 @@ export default async function handler(
       const user = await User.findOne({
         _id: new mongoose.Types.ObjectId(myUid),
       });
+
+      if (!user) {
+        res.status(401).json({ message: "유저가 존재하지 않아요." });
+        return;
+      }
 
       if (!product) {
         res.status(404).json({ message: "상품이 존재하지 않아요." });
@@ -164,12 +169,12 @@ export default async function handler(
           { $pull: { wishProductIds: product._id } }
         );
         if (!profileResult.acknowledged || profileResult.modifiedCount === 0) {
-          throw new Error("유저 찜 목록에서 상품 아이디 삭제에 실패했어요.");
+          throw new Error("유저 찜 목록에서 상품 ID 삭제에 실패했어요.");
         }
       }
 
       if (product.wishUserIds.includes(isValidAuth?.auth?.uid)) {
-      const productResult = await Product.updateOne(
+        const productResult = await Product.updateOne(
           { _id: new mongoose.Types.ObjectId(productId as string) },
           {
             $inc: { wishCount: -1 },
@@ -177,7 +182,7 @@ export default async function handler(
           }
         );
         if (!productResult.acknowledged || productResult.modifiedCount === 0) {
-          throw new Error("상품 찜 목록에서 유저 아이디 삭제에 실패했어요.");
+          throw new Error("상품 찜 목록에서 유저 ID 삭제에 실패했어요.");
         }
       }
 

@@ -5,7 +5,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-interface IPrarms {
+interface IParams {
   inputName: string;
   inputRequired?: string | ValidationRule<boolean> | undefined;
   inputOnChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -26,7 +26,7 @@ export default function useCoreInputField({
   inputOnBlur,
   inputPattern,
   inputValidate,
-}: IPrarms) {
+}: IParams) {
   const { register, formState, watch, setValue, clearErrors } =
     useFormContext();
   const { ref, ...rest } = register(inputName, {

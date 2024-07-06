@@ -1,16 +1,18 @@
-import ProductDetailPage from "@/components/productDetail/product-detail";
 import { queryKeys } from "@/queryKeys";
 import { incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { IronSessionData } from "@/types/apiTypes";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { getIronSession } from "iron-session";
-import { GetServerSideProps } from "next";
 import { getDynamicMetaData } from "@/lib/getDynamicMetaData";
 import { ProductData } from "@/types/productTypes";
 import { MetaData } from "@/types/metaDataTypes";
 import DynamicMetaHead from "@/components/dynamicMetaHead/dynamic-meta-head";
+import dynamic from "next/dynamic";
+import { withAuthServerSideProps } from "@/lib/withAuthServerSideProps";
+const ProductDetailPage = dynamic(
+  () => import("@/components/productDetail/product-detail")
+);
 
 interface IProps {
   metaData: MetaData;
@@ -25,10 +27,11 @@ export default function ProductDetail({ metaData }: IProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthServerSideProps(async (context) => {
   const { req, res, resolvedUrl, params } = context;
   const queryClient = new QueryClient();
   const productId = params?.productId;
+  const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
     req,
     res,
@@ -83,4 +86,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { dehydratedState: dehydrate(queryClient), metaData },
   };
-};
+});

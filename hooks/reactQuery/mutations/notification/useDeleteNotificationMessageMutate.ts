@@ -1,4 +1,5 @@
 import { deleteNotificationMessage } from "@/lib/api/notification";
+import { queryKeys } from "@/queryKeys";
 import { NotificationMessageData } from "@/types/notification";
 import {
   InfiniteData,
@@ -10,6 +11,8 @@ import { toast } from "react-toastify";
 
 export default function useDeleteNotificationMessageMutate() {
   const queryClient = useQueryClient();
+  const notificationMessagesQueryKey =
+    queryKeys.notification.messages().queryKey;
 
   const { mutate, isPending, error } = useMutation<
     void,
@@ -24,12 +27,16 @@ export default function useDeleteNotificationMessageMutate() {
         | undefined;
     }
   >({
-    mutationFn: (messageId: string) =>
-      deleteNotificationMessage(messageId),
+    mutationFn: (messageId: string) => deleteNotificationMessage(messageId),
     onMutate: async (messageId) => {
-      await queryClient.cancelQueries({ queryKey: ["notification"] });
+      await queryClient.cancelQueries({
+        queryKey: notificationMessagesQueryKey,
+      });
 
-      const previousMessages = queryClient.getQueryData(["notification"]) as
+      const previousMessages = queryClient.getQueryData([
+        "notification",
+        "messages",
+      ]) as
         | InfiniteData<
             { messages: NotificationMessageData[]; nextKey: string },
             unknown
@@ -50,7 +57,7 @@ export default function useDeleteNotificationMessageMutate() {
         }
       );
 
-      queryClient.setQueryData(["notification"], {
+      queryClient.setQueryData(notificationMessagesQueryKey, {
         ...previousMessages,
         pages: newPages,
       });
@@ -58,7 +65,7 @@ export default function useDeleteNotificationMessageMutate() {
       return { previousMessages };
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notification"] });
+      queryClient.invalidateQueries({ queryKey: notificationMessagesQueryKey });
     },
     onError: (error, data, ctx) => {
       queryClient.setQueryData(["notification"], ctx?.previousMessages);

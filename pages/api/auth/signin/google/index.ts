@@ -105,7 +105,7 @@ export default async function handler(
       if (refreshTokenData) {
         res.status(409).json({
           message:
-            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 아이디입니다."
+            "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
         });
         return;
       }

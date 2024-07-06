@@ -28,6 +28,11 @@ export default async function handler(
     const verfiyCode = uuid().substring(0, 6).toUpperCase();
     const { email, isFindPw } = req.body;
 
+    if (!email) {
+      res.status(422).json({ message: "이메일이 없어요.", ok: false });
+      return;
+    }
+
     const html = emailHTML(verfiyCode, isFindPw);
     const mailOptions = {
       from: process.env.NEXT_SECRET_SMTP_USER,
@@ -44,6 +49,7 @@ export default async function handler(
         res.status(403).json({
           message:
             "인증메일 전송, 인증 일일 시도 횟수를 초과하여\n24시간 동안 요청이 제한되요.",
+          ok: false,
         });
         return;
       }
@@ -72,8 +78,8 @@ export default async function handler(
         .json({ message: "메일로 인증번호가 전송됬어요.", ok: true });
     } catch (error) {
       console.log(error);
-      res.status(422).json({
-        message: "인증번호 전송에 실패했어요.",
+      res.status(500).json({
+        message: "인증번호 전송에 실패했어요.\n잠시후 다시 시도해주세요.",
         ok: false,
       });
     }

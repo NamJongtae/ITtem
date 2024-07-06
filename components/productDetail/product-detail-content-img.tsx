@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default function ProductDetailContentImg({ productDetailData }: IProps) {
-  const { imgBeforeStyle, isOpenModal, openModal, closeModal } =
+  const { imgBeforeStyle, isOpenModal, openModal, handleClickCloseBtn } =
     useProductDetailContentImg({ productDetailData });
 
   return (
@@ -44,7 +44,7 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
       {isOpenModal && (
         <ProductImgEnlargeModal
           imgData={productDetailData?.imgData}
-          closeModal={closeModal}
+          handleClickCloseBtn={handleClickCloseBtn}
         />
       )}
     </>

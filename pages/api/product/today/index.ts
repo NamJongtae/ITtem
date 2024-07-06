@@ -26,20 +26,23 @@ export default async function handler(
         createdAt: { $gte: todayStart, $lt: cursorDate },
         block: false,
       })
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
         .limit(pageLimit)
         .sort({ createdAt: -1, _id: -1 });
 
       if (!products.length) {
         res
           .status(404)
-          .json({ message: "오늘 생성된 상품이 존재하지 않아요." });
+          .json({ message: "오늘의 상품이 존재하지 않아요." });
         return;
       }
 
       res.status(200).json({ message: "상품 조회에 성공했어요.", products });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "상품 조회에 실패했어요." });
+      res.status(500).json({ message: "상품 조회에 실패했어요.\n잠시 후 다시 시도해주세요" });
     }
   }
 }

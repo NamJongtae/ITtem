@@ -1,4 +1,5 @@
 import { deleteAllNotificationMessage } from "@/lib/api/notification";
+import { queryKeys } from "@/queryKeys";
 import { NotificationMessageData } from "@/types/notification";
 import {
   InfiniteData,
@@ -10,6 +11,8 @@ import { toast } from "react-toastify";
 
 export default function useDeleteAllNotificationMessagesMutate() {
   const queryClient = useQueryClient();
+  const notificationMessagesQueryKey =
+    queryKeys.notification.messages().queryKey;
 
   const { mutate, isPending, error } = useMutation<
     void,
@@ -26,16 +29,20 @@ export default function useDeleteAllNotificationMessagesMutate() {
   >({
     mutationFn: (endKey) => deleteAllNotificationMessage(endKey),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["notification"] });
+      await queryClient.cancelQueries({
+        queryKey: notificationMessagesQueryKey,
+      });
 
-      const previousMessages = queryClient.getQueryData(["notification"]) as
+      const previousMessages = queryClient.getQueryData(
+        notificationMessagesQueryKey
+      ) as
         | InfiniteData<
             { messages: NotificationMessageData[]; nextKey: string },
             unknown
           >
         | undefined;
 
-      queryClient.setQueryData(["notification"], {
+      queryClient.setQueryData(notificationMessagesQueryKey, {
         pageParams: [],
         pages: [{ messages: [], nextKey: null }],
       });
@@ -43,10 +50,13 @@ export default function useDeleteAllNotificationMessagesMutate() {
       return { previousMessages };
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notification"] });
+      queryClient.invalidateQueries({ queryKey: notificationMessagesQueryKey });
     },
     onError: (error, data, ctx) => {
-      queryClient.setQueryData(["notification"], ctx?.previousMessages);
+      queryClient.setQueryData(
+        notificationMessagesQueryKey,
+        ctx?.previousMessages
+      );
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
