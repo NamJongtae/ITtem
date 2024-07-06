@@ -30,6 +30,8 @@ export const getServerSideProps = withAuthServerSideProps(async (context) => {
       ? "취소/반품 내역"
       : status === "TRADING_END"
       ? "거래완료 내역"
+      : status === "CANCEL_REJECT/RETURN_REJECT"
+      ? "취소/반품 거절 내역"
       : "거래중";
 
   const metaData = getDynamicMetaData({
