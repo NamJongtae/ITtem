@@ -4,6 +4,7 @@ import { checkAuthorization } from "@/lib/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import { deleteProfileImgToFirestore } from "@/lib/api/firebase";
+import { ProfileData } from "@/types/authTypes";
 
 export default async function handler(
   req: NextApiRequest,
@@ -146,17 +147,28 @@ export default async function handler(
           console.error("프로필 이미지 삭제에 실패했어요.", error);
         }
 
-      const profileUpdateResult = await User.findOneAndUpdate(
+      const profileUpdateResult = (await User.findOneAndUpdate(
         {
           _id: new mongoose.Types.ObjectId(myUid),
         },
         { $set: profileEditData },
         { returnNewDocument: true }
-      );
+      )) as ProfileData | undefined;
+
+      if (!profileUpdateResult) {
+        res.status(500).json({
+          message: "프로필 수정에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
 
       res.status(200).json({
         message: "프로필을 수정했어요.",
-        profile: profileUpdateResult,
+        profile: {
+          profileImg: profileUpdateResult?.profileImg,
+          nickname: profileUpdateResult?.nickname,
+          introduce: profileUpdateResult?.introduce,
+        },
       });
     } catch (error) {
       console.error(error);

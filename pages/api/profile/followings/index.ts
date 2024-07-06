@@ -1,4 +1,4 @@
-import dbConnect from '@/lib/db';
+import dbConnect from "@/lib/db";
 import User from "@/lib/db/models/User";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -15,12 +15,12 @@ export default async function handler(
       if (!userIds) {
         res
           .status(422)
-          .json({ message: "팔로잉 유저 아이디 목록이 존재하지 않아요." });
+          .json({ message: "팔로잉 유저 ID 목록이 존재하지 않아요." });
         return;
       }
 
       await dbConnect();
-      
+
       const pageLimit = parseInt(limit as string, 10) || 10;
       const objectIdArray = userIds.map(
         (id: string) => new mongoose.Types.ObjectId(id)
@@ -101,9 +101,13 @@ export default async function handler(
         },
         {
           $project: {
-            password: 0,
-            __v: 0,
-            loginType: 0,
+            nickname: 1,
+            profileImg: 1,
+            followers: 1,
+            followings: 1,
+            reviewPercentage: 1,
+            uid: 1,
+            productIds: 1,
           },
         },
       ];

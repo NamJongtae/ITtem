@@ -13,7 +13,7 @@ export default async function handler(
       const { cursor, category, limit } = req.query;
 
       if (!productIds) {
-        res.status(422).json({ message: "유저 상품 아이디 목록이 없어요." });
+        res.status(422).json({ message: "유저 상품 ID 목록이 없어요." });
         return;
       }
 
@@ -35,6 +35,9 @@ export default async function handler(
       query = category !== "전체" ? { ...query, category } : query;
 
       const products = await Product.find(query)
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
         .limit(pageLimit)
         .sort({ createdAt: -1, _id: -1 });
 

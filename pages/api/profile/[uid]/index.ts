@@ -14,7 +14,7 @@ export default async function handler(
       await dbConnect();
 
       if (!uid) {
-        res.status(422).json({ message: "유저 아이디가 없어요." });
+        res.status(422).json({ message: "유저 ID가 없어요." });
         return;
       }
 
@@ -78,6 +78,9 @@ export default async function handler(
             loginType: 0,
             createdAt: 0,
             chatRoomList: 0,
+            profileImgFilename: 0,
+            wishProductIds: 0,
+            "reviewInfo.__v":0
           },
         },
       ];
@@ -91,7 +94,7 @@ export default async function handler(
 
       const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
       delete profile._id;
-
+      console.log(profile);
       res
         .status(200)
         .json({ message: "유저 프로필 조회에 성공했어요.", profile });
