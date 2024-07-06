@@ -22,7 +22,7 @@ export default async function handler(
       const { productId } = req.query;
 
       if (!productId) {
-        res.status(422).json({ message: "상품 아이디가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -191,11 +191,14 @@ export default async function handler(
         });
         return;
       }
+
+      const myUid = isValidAuth?.auth?.uid;
+
       const { productId } = req.query;
       const { productData } = req.body;
 
       if (!productId) {
-        res.status(422).json({ message: "상품 id가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -215,13 +218,21 @@ export default async function handler(
         return;
       }
 
+      if (product.uid !== myUid) {
+        await session.endSession();
+        res
+          .status(401)
+          .json({ message: "잘못된 요청이에요.\n로그인 정보를 확인해주세요." });
+        return;
+      }
+
       if (product.status === ProductStatus.trading) {
-        res.status(404).json({ message: "거래중인 상품은 수정할 수 없어요." });
+        res.status(409).json({ message: "거래중인 상품은 수정할 수 없어요." });
         return;
       }
 
       if (product.status === ProductStatus.soldout) {
-        res.status(404).json({ message: "판매된 상품은 수정할 수 없어요." });
+        res.status(409).json({ message: "판매된 상품은 수정할 수 없어요." });
         return;
       }
 
@@ -242,7 +253,11 @@ export default async function handler(
             productId: new mongoose.Types.ObjectId(productId as string),
             status: TradingStatus.TRADING,
           },
-          { productName: result.name },
+          {
+            productName: result.name,
+            productPrice: result.price,
+            productImg: result.imgData[0].url,
+          },
           { session }
         );
       }
@@ -282,7 +297,7 @@ export default async function handler(
 
       if (!productId) {
         await session.endSession();
-        res.status(422).json({ message: "상품 아이디가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -302,7 +317,7 @@ export default async function handler(
         await session.endSession();
         res
           .status(401)
-          .json({ message: "잘못된 요청이에요. 로그인 정보를 확인해주세요." });
+          .json({ message: "잘못된 요청이에요.\n로그인 정보를 확인해주세요." });
         return;
       }
 
@@ -361,6 +376,7 @@ export default async function handler(
       const saleTradingDeleteResult = await SaleTrading.deleteOne(
         {
           productId: new mongoose.Types.ObjectId(productId as string),
+          status: TradingStatus.TRADING,
         },
         { session }
       );

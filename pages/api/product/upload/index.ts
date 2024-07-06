@@ -42,13 +42,15 @@ export default async function handler(
       );
 
       if (!updateResult.acknowledged || updateResult.modifiedCount === 0) {
-        throw new Error("유저에 상품 아이디 등록에 실패했어요.");
+        throw new Error("유저에 상품 ID 등록에 실패했어요.");
       }
 
       const saleTrading = new SaleTrading({
         sellerId: newProduct.uid,
         productId: newProduct._id,
         productName: newProduct.name,
+        productPrice: newProduct.price,
+        productImg: newProduct.imgData[0].url,
         saleStartDate: newProduct.createdAt,
       });
 

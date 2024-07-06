@@ -69,8 +69,13 @@ export default async function handler(
         _id: new mongoose.Types.ObjectId(productId as string),
       });
 
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
       if (product.returnPolicy === "불가능") {
-        res.status(403).json({ message: "반품이 불가한 상품입니다." });
+        res.status(403).json({ message: "반품이 불가한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -132,20 +137,6 @@ export default async function handler(
 
       if (purchaseTrading.status === TradingStatus.RETURN) {
         res.status(409).json({ message: "이미 반품 요청한 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -218,7 +209,7 @@ export default async function handler(
       await session.commitTransaction();
       session.endSession();
 
-      res.status(200).json({ message: "반품 요청에 성공했어요." });
+      res.status(200).json({ message: "상품 반품 요청에 성공했어요." });
 
       sendNotificationMessage(
         saleTrading.sellerId,
@@ -229,7 +220,7 @@ export default async function handler(
       await session.abortTransaction();
       session.endSession();
       res.status(500).json({
-        message: "반품 요청에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 반품 요청에 실패했어요.\n잠시 후 다시 시도해주세요.",
       });
     }
   }

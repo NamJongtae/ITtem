@@ -35,6 +35,9 @@ export default async function handler(
       }
 
       const products = await Product.find(query)
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
         .limit(currentLimit)
         .sort({ createdAt: -1, _id: -1 });
 
@@ -49,10 +52,9 @@ export default async function handler(
       }
 
       res.status(200).json({ message: "검색에 성공했어요.", products });
-
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "검색에 실패했어요." });
+      res.status(500).json({ message: "검색에 실패했어요.\n잠시 후 다시 시도해주세요" });
     }
   }
 }

@@ -1,5 +1,6 @@
 import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
+import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import User from "@/lib/db/models/User";
@@ -56,10 +57,19 @@ export default async function handler(
 
       await dbConnect();
 
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
       const purchaseTrading = await PurchaseTrading.findOne(
         {
           $and: [
-            { process: { $ne: PurchaseCancelProcess.취소완료 } },
+            { process: { $ne: SalesCancelProcess.취소완료 } },
             { process: { $ne: PurchaseReturnProcess.반품완료 } },
           ],
           productId,
@@ -98,20 +108,6 @@ export default async function handler(
 
       if (purchaseTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -190,7 +186,7 @@ export default async function handler(
       session.endSession();
 
       res.status(200).json({ message: "상품 구매 취소 철회에 성공했어요." });
-      
+
       sendNotificationMessage(
         saleTrading.sellerId,
         `${user.nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`

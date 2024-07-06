@@ -65,6 +65,15 @@ export default async function handler(
 
       await dbConnect();
 
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
       const purchaseTrading = await PurchaseTrading.findOne(
         {
           $and: [
@@ -78,14 +87,16 @@ export default async function handler(
       );
 
       if (!purchaseTrading) {
-        res.status(404).json({ message: "거래중인 구매 상품 정보가 없어요." });
+        res
+          .status(404)
+          .json({ message: "거래중인 구매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
       if (myUid !== purchaseTrading.buyerId) {
-        res.status(401).json({ message: "잘못된 요청입니다." });
+        res.status(401).json({ message: "잘못된 요청이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -112,20 +123,6 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       const saleTrading = await SaleTrading.findOne(
         {
           $and: [
@@ -141,7 +138,9 @@ export default async function handler(
       );
 
       if (!saleTrading) {
-        res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
+        res
+          .status(404)
+          .json({ message: "거래중인 판매 상품 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -214,6 +213,8 @@ export default async function handler(
             process: SalesCancelProcess.취소완료,
             cancelStartDate: currentDate,
             cancelEndDate: currentDate,
+            productName: product.name,
+            price: product.price,
             cancelReason,
           },
           { session }
@@ -231,6 +232,8 @@ export default async function handler(
           sellerId: saleTrading.sellerId,
           saleStartDate: saleTrading.saleStartDate,
           productName: saleTrading.productName,
+          productPrice: saleTrading.productPrice,
+          productImg: saleTrading.productImg,
         });
 
         await newSaleTrading.save({ session });

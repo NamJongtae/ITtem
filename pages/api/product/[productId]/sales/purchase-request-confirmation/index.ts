@@ -15,6 +15,7 @@ import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import { checkAuthorization } from "@/lib/server";
 import User from "@/lib/db/models/User";
 import { sendNotificationMessage } from "@/lib/api/firebase";
+import Product from '@/lib/db/models/Product';
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,6 +56,16 @@ export default async function handler(
       }
 
       await dbConnect();
+
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
 
       const saleTrading = await SaleTrading.findOne(
         {
@@ -104,14 +115,14 @@ export default async function handler(
       }
 
       if (saleTrading.status === TradingStatus.CANCEL) {
-        res.status(409).json({ message: "구매자가 취소요청한 상품입니다." });
+        res.status(409).json({ message: "구매자가 취소요청한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
       if (saleTrading.status === TradingStatus.RETURN) {
-        res.status(409).json({ message: "구매자가 반품요청한 상품입니다." });
+        res.status(409).json({ message: "구매자가 반품요청한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -124,25 +135,11 @@ export default async function handler(
         return;
       }
 
-      if (saleTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (saleTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       if (
         saleTrading.process === SaleTradingProcess.상품전달확인 &&
         purchaseTrading.process === PurchaseTradingProcess.판매자상품전달중
       ) {
-        res.status(409).json({ message: "이미 구매요청을 확인한 상품입니다." });
+        res.status(409).json({ message: "이미 상품 구매 요청을 확인한 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;

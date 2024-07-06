@@ -54,19 +54,32 @@ export default async function handler(
 
       await dbConnect();
 
-      const existingPurcahseProduct = await Product.findOne({
+      const product = await Product.findOne({
         _id: new mongoose.Types.ObjectId(productId as string),
-        status: ProductStatus.trading,
       });
 
-      if (existingPurcahseProduct) {
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      if (product.status === ProductStatus.trading) {
         res.status(409).json({ message: "이미 거래중인 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
-      const product = await Product.findOneAndUpdate(
+      if (product.status === ProductStatus.soldout) {
+        res.status(409).json({ message: "이미 판매된 상품이에요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
+      const productUpdateResult = await Product.findOneAndUpdate(
         {
           _id: new mongoose.Types.ObjectId(productId as string),
         },
@@ -76,8 +89,12 @@ export default async function handler(
         { session }
       );
 
-      if (!product) {
-        res.status(404).json({ message: "상품이 존재하지 않아요." });
+      if (!productUpdateResult) {
+        res
+          .status(500)
+          .json({
+            message: "상품 구매에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -96,7 +113,7 @@ export default async function handler(
       );
 
       if (!saleTrading) {
-        res.status(404).json({ message: "거래중인 판매 상품 정보가 없어요." });
+        res.status(404).json({ message: "판매 상품 거래 정보가 없어요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -126,6 +143,8 @@ export default async function handler(
         buyerId: myUid,
         productId,
         productName: product.name,
+        productPrice: product.price,
+        productImg: product.imgData[0].url,
       });
 
       await purchaseTrading.save({ session });
@@ -133,7 +152,7 @@ export default async function handler(
       await session.commitTransaction();
       session.endSession();
 
-      res.status(201).json({ message: "상품 구매요청에 성공했어요." });
+      res.status(201).json({ message: "상품 구매에 성공했어요." });
 
       sendNotificationMessage(
         saleTrading.sellerId,

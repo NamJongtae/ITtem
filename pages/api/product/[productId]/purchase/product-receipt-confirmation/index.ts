@@ -141,25 +141,11 @@ export default async function handler(
         return;
       }
 
-      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
       if (
         saleTrading.process === SaleTradingProcess.거래완료 &&
         purchaseTrading.process === PurchaseTradingProcess.거래완료
       ) {
-        res.status(409).json({ message: "이미 상품인수을 확인한 상품입니다." });
+        res.status(409).json({ message: "이미 상품인수을 확인한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -169,7 +155,7 @@ export default async function handler(
         saleTrading.process !== SaleTradingProcess.구매자상품인수중 &&
         purchaseTrading.process !== PurchaseTradingProcess.상품인수확인
       ) {
-        res.status(409).json({ message: "상품 인수단계가 아닌 상품입니다." });
+        res.status(409).json({ message: "상품 인수단계가 아닌 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;

@@ -1,5 +1,6 @@
 import { sendNotificationMessage } from '@/lib/api/firebase';
 import dbConnect from "@/lib/db";
+import Product from '@/lib/db/models/Product';
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import User from '@/lib/db/models/User';
@@ -55,6 +56,18 @@ export default async function handler(
         session.endSession();
         return;
       }
+
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
       const saleTrading = await SaleTrading.findOne(
         {
           $and: [
@@ -91,7 +104,7 @@ export default async function handler(
       }
 
       if (saleTrading.status !== TradingStatus.RETURN) {
-        res.status(409).json({ message: "반품을 요청한 상품이 아니에요." });
+        res.status(409).json({ message: "구매자가 반품 요청한 상품이 아니에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -99,20 +112,6 @@ export default async function handler(
 
       if (saleTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (saleTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (saleTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -153,7 +152,7 @@ export default async function handler(
         saleTrading.process !== SalesReturnProcess.반품요청확인 &&
         purchaseTrading.process !== PurchaseReturnProcess.판매자확인중
       ) {
-        res.status(409).json({ message: "반품 확인 단계가 아니에요" });
+        res.status(409).json({ message: "상품 반품 요청 확인 단계가 아니에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -206,7 +205,7 @@ export default async function handler(
       await session.commitTransaction();
       session.endSession();
 
-      res.status(200).json({ message: "반품 요청 확인에 성공했어요." });
+      res.status(200).json({ message: "상품 반품 요청 확인에 성공했어요." });
 
       sendNotificationMessage(
         purchaseTrading.buyerId,

@@ -1,9 +1,9 @@
-import { sendNotificationMessage } from '@/lib/api/firebase';
+import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
-import User from '@/lib/db/models/User';
+import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
   ProductStatus,
@@ -183,7 +183,11 @@ export default async function handler(
         sellerId: saleTrading.sellerId,
         saleStartDate: saleTrading.saleStartDate,
         productName: saleTrading.productName,
+        productPrice: saleTrading.productPrice,
+        productImg: saleTrading.productImg,
       });
+
+      console.log(productId);
 
       await newSaleTrading.save({ session });
 

@@ -1,11 +1,11 @@
 import { sendNotificationMessage } from "@/lib/api/firebase";
 import dbConnect from "@/lib/db";
+import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 import {
-  PurchaseCancelProcess,
   PurchaseReturnProcess,
   PurchaseTradingProcess,
   SalesCancelProcess,
@@ -56,6 +56,15 @@ export default async function handler(
 
       await dbConnect();
 
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
       const purchaseTrading = await PurchaseTrading.findOne(
         {
           $and: [
@@ -100,20 +109,6 @@ export default async function handler(
 
       if (purchaseTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (purchaseTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;

@@ -58,6 +58,17 @@ export default async function handler(
         return;
       }
 
+      const product = await Product.findOne({
+        _id: new mongoose.Types.ObjectId(productId as string),
+      });
+
+      if (!product) {
+        res.status(404).json({ message: "상품이 존재하지 않아요." });
+        await session.abortTransaction();
+        session.endSession();
+        return;
+      }
+
       const saleTrading = await SaleTrading.findOne(
         {
           $and: [
@@ -87,14 +98,14 @@ export default async function handler(
       }
 
       if (saleTrading.status !== TradingStatus.CANCEL) {
-        res.status(409).json({ message: "취소 요청한 상품이 아니에요." });
+        res.status(409).json({ message: "구매자가 취소 요청한 상품이 아니에요." });
         await session.abortTransaction();
         session.endSession();
         return;
       }
 
       if (saleTrading.status === TradingStatus.RETURN) {
-        res.status(409).json({ message: "반품 요청한 상품이에요." });
+        res.status(409).json({ message: "구매자가 반품 요청한 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -102,20 +113,6 @@ export default async function handler(
 
       if (saleTrading.status === TradingStatus.TRADING_END) {
         res.status(409).json({ message: "거래가 완료된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (saleTrading.status === TradingStatus.CANCEL_END) {
-        res.status(409).json({ message: "취소된 상품이에요." });
-        await session.abortTransaction();
-        session.endSession();
-        return;
-      }
-
-      if (saleTrading.status === TradingStatus.RETURN_END) {
-        res.status(409).json({ message: "반품된 상품이에요." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -146,7 +143,7 @@ export default async function handler(
       ) {
         res
           .status(409)
-          .json({ message: "상품 취소확인 단계가 아닌 상품입니다." });
+          .json({ message: "상품 취소 확인 단계가 아닌 상품입니다." });
         await session.abortTransaction();
         session.endSession();
         return;
@@ -223,6 +220,8 @@ export default async function handler(
         sellerId: myUid,
         sellStartDate: saleTrading.sellStartDate,
         productName: saleTrading.productName,
+        productPrice: saleTrading.productPrice,
+        productImg: saleTrading.productImg,
       });
 
       await newSaleTrading.save();
@@ -231,7 +230,7 @@ export default async function handler(
       session.endSession();
 
       res.status(200).json({
-        message: "취소요청 확인에 성공했어요. 거래가 취소 되었어요.",
+        message: "상품 취소 요청 확인에 성공했어요.",
       });
 
       sendNotificationMessage(

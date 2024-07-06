@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Product from "@/lib/db/models/Product";
 import { NextApiRequest, NextApiResponse } from "next";
 import { checkAuthorization } from "@/lib/server";
+import { ProductStatus } from "@/types/productTypes";
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +25,7 @@ export default async function handler(
       const myUid = isValidAuth?.auth?.uid;
 
       if (!productId) {
-        res.status(422).json({ message: "상품 아이디가 없어요." });
+        res.status(422).json({ message: "상품 ID가 없어요." });
         return;
       }
 
@@ -36,6 +37,13 @@ export default async function handler(
 
       if (!product) {
         res.status(404).json({ message: "상품이 존재하지 않아요." });
+        return;
+      }
+
+      if (product.status === ProductStatus.soldout) {
+        res
+          .status(409)
+          .json({ message: "이미 판매된 상품은 신고할 수 없어요." });
         return;
       }
 
