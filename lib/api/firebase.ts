@@ -150,6 +150,11 @@ export const getNotificationMessage = async ({
         );
 
     const snapshot = await get(messagesRef);
+
+    if (!snapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
     const data = snapshot.val();
 
     if (!data) return { messages: [], nextKey: null };
@@ -177,11 +182,17 @@ export const readyNotificationMessage = async ({
   try {
     const database = await getRealtimeDB();
     const firebaseDatabase = await import("firebase/database");
-    const { update, ref, increment } = firebaseDatabase;
+    const { update, ref, increment, get } = firebaseDatabase;
     const messageRef = ref(
       database,
       `notification/${userId}/messages/${messageId}`
     );
+
+    const messageSnapshot = await get(messageRef);
+
+    if (!messageSnapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
 
     const counterRef = ref(database, `notification/${userId}/counter`);
 
@@ -210,7 +221,12 @@ export const deleteNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const messageSnapshot = await get(messageRef);
-    if (messageSnapshot.exists() && messageSnapshot.val().isRead === false) {
+
+    if (!messageSnapshot.exists()) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
+    if (messageSnapshot.val().isRead === false) {
       await update(counterRef, { unreadCount: increment(-1) });
     }
 
@@ -240,22 +256,25 @@ export const readAllNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const snapshot = await get(messagesRef);
-    if (snapshot.exists()) {
-      const updates: { [key: string]: any } = {};
-      let unreadCountDecrease = 0;
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        if (key) {
-          updates[`notification/${userId}/messages/${key}/isRead`] = true;
-          unreadCountDecrease++;
-        }
-      });
 
-      await update(ref(database), updates);
-      await update(counterRef, {
-        unreadCount: increment(-unreadCountDecrease),
-      });
+    if (!snapshot.exists) {
+      throw new Error("잘못된 접근이에요.");
     }
+
+    const updates: { [key: string]: any } = {};
+    let unreadCountDecrease = 0;
+    snapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      if (key) {
+        updates[`notification/${userId}/messages/${key}/isRead`] = true;
+        unreadCountDecrease++;
+      }
+    });
+
+    await update(ref(database), updates);
+    await update(counterRef, {
+      unreadCount: increment(-unreadCountDecrease),
+    });
   } catch (error) {
     throw error;
   }
@@ -281,27 +300,30 @@ export const deleteAllNotificationMessage = async ({
     const counterRef = ref(database, `notification/${userId}/counter`);
 
     const snapshot = await get(messagesRef);
-    if (snapshot.exists()) {
-      const updates: { [key: string]: any } = {};
-      let unreadCountDecrease = 0;
 
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        const isRead = childSnapshot.val().isRead;
-        if (key) {
-          updates[`notification/${userId}/messages/${key}`] = null;
-          if (!isRead) {
-            unreadCountDecrease++;
-          }
+    if (!snapshot.exists) {
+      throw new Error("잘못된 접근이에요.");
+    }
+
+    const updates: { [key: string]: any } = {};
+    let unreadCountDecrease = 0;
+
+    snapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      const isRead = childSnapshot.val().isRead;
+      if (key) {
+        updates[`notification/${userId}/messages/${key}`] = null;
+        if (!isRead) {
+          unreadCountDecrease++;
         }
-      });
-
-      await update(ref(database), updates);
-      if (unreadCountDecrease > 0) {
-        await update(counterRef, {
-          unreadCount: increment(-unreadCountDecrease),
-        });
       }
+    });
+
+    await update(ref(database), updates);
+    if (unreadCountDecrease > 0) {
+      await update(counterRef, {
+        unreadCount: increment(-unreadCountDecrease),
+      });
     }
   } catch (error) {
     throw error;
@@ -350,7 +372,7 @@ export const startChat = async ({
 
     if (chatRoomId) {
       // 이미 존재하는 채팅방이 있음
-      return chatRoomId;
+      return { chatRoomId, isExistRoom: true };
     } else {
       // 새로운 채팅방 생성
       const newChatRoomData = {
@@ -396,7 +418,7 @@ export const startChat = async ({
         { merge: true }
       );
 
-      return chatRoomId;
+      return { chatRoomId, isExistRoom: false };
     }
   } catch (error) {
     throw error;
@@ -512,8 +534,18 @@ export const sendToChatMessage = async ({
     const messagesCollectionRef = collection(chatRoomRef, "messages");
     const snapshot = await getDoc(chatRoomRef);
     const data = snapshot.data() as ChatRoomData;
-    const userId = Object.keys(data.entered).filter((id) => id !== myUid)[0];
+    const userlist = Object.keys(data.entered);
+    const userId = userlist.filter((id) => id !== myUid)[0];
     const userChatInfoRef = doc(firestoreDB, `userChatInfo/${userId}`);
+    const chatRoomDoc = await getDoc(chatRoomRef);
+
+    if (!chatRoomDoc.exists()) {
+      throw new Error("존재하지 않는 채팅방이에요.");
+    }
+
+    if (!userlist.includes(myUid)) {
+      throw new Error("잘못된 접근이에요.");
+    }
 
     const messageObj = {
       content: message,
