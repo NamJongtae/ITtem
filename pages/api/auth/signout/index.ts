@@ -34,6 +34,8 @@ export default async function handler(
         "refreshToken"
       );
 
+      session.destroy();
+
       await dbConnect();
       
       if (!decodeRefreshToken?.data?.user.uid) {
@@ -52,7 +54,6 @@ export default async function handler(
         return;
       }
 
-      session.destroy();
       res.status(200).json({ message: "로그아웃에 성공했어요." });
     } catch (error) {
       console.error(error);
