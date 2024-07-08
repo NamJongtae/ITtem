@@ -151,10 +151,6 @@ export const getNotificationMessage = async ({
 
     const snapshot = await get(messagesRef);
 
-    if (!snapshot.exists()) {
-      throw new Error("잘못된 접근이에요.");
-    }
-
     const data = snapshot.val();
 
     if (!data) return { messages: [], nextKey: null };
@@ -320,10 +316,21 @@ export const deleteAllNotificationMessage = async ({
     });
 
     await update(ref(database), updates);
+
     if (unreadCountDecrease > 0) {
-      await update(counterRef, {
-        unreadCount: increment(-unreadCountDecrease),
-      });
+      const messagesRef = query(
+        ref(database, `notification/${userId}/messages`)
+      );
+      const snapshot = await get(messagesRef);
+      if (!snapshot.exists()) {
+        await update(counterRef, {
+          unreadCount: 0,
+        });
+      } else {
+        await update(counterRef, {
+          unreadCount: increment(-unreadCountDecrease),
+        });
+      }
     }
   } catch (error) {
     throw error;
