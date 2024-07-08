@@ -1,6 +1,8 @@
 import { signout } from "@/lib/api/auth";
 import { queryKeys } from "@/queryKeys";
 import { authSlice } from "@/store/authSlice";
+import { chatSlice } from "@/store/chatSlice";
+import { notificationSlice } from '@/store/notification';
 import { AppDispatch } from "@/store/store";
 import { SignoutResposeData } from "@/types/apiTypes";
 import { AuthData } from "@/types/authTypes";
@@ -34,6 +36,8 @@ export default function useSignoutMutate() {
       queryClient.removeQueries({ queryKey: myProfileQueryKey });
 
       dispatch(authSlice.actions.resetAuth());
+      dispatch(chatSlice.actions.resetChatState());
+      dispatch(notificationSlice.actions.resetUnreadCount());
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
