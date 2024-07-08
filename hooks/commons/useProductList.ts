@@ -1,21 +1,33 @@
 import { ProductCategory, ProductListType } from "@/types/productTypes";
-import { useSearchParams } from "next/navigation";
 import useProductTodayListInfiniteQuery from "../reactQuery/queries/product/useProductTodayListInfiniteQuery";
 import useCategoryProductListInfiniteQuery from "../reactQuery/queries/product/useCategoryProductListInfiniteQuery";
 import useSearchProductListInfiniteQuery from "../reactQuery/queries/product/useSearchProductListInfiniteQuery";
 import useProfileProductListInfiniteQuery from "../reactQuery/queries/profile/useProfileProductListInfiniteQuery";
+import { useRouter } from "next/router";
 
 export default function useProductList(
   productListType: ProductListType,
   productIds?: string[],
   profileProductCategory?: ProductCategory
 ) {
-  const search = useSearchParams();
+  const router = useRouter();
+  const keyword = router.query?.keyword;
+
+  const emptyMessage = `${
+    productListType === "TODAY"
+      ? "오늘의 상품이 존재하지 않아요."
+      : productListType === "CATEGORY" ||
+        productListType === "PROFILE" ||
+        productListType === "MY_PROFILE"
+      ? "상품이 존재하지 않아요."
+      : `${'"' + keyword + '"'}에 대한 검색결과가 없어요.`
+  }`;
 
   const category =
     profileProductCategory ||
-    (search.get("category") as ProductCategory) ||
+    (router.query?.category as ProductCategory) ||
     null;
+    
   const {
     todayProductListData,
     hasNextPageTodayProductList,
@@ -123,5 +135,6 @@ export default function useProductList(
     isFetchingNextPage,
     hasNextPage,
     error,
+    emptyMessage,
   };
 }
