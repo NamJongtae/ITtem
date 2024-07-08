@@ -5,6 +5,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { ProductCategory, ProductListType } from "@/types/productTypes";
 import ProductListError from "./product-list-error";
 import useProductList from "@/hooks/commons/useProductList";
+import Empty from "../Empty";
 
 interface IProps {
   productListType: ProductListType;
@@ -24,10 +25,15 @@ export default function ProductList({
     isFetchingNextPage,
     hasNextPage,
     error,
+    emptyMessage,
   } = useProductList(productListType, productIds, profileProductCategory);
 
   if (error) {
     return <ProductListError productListType={productListType} error={error} />;
+  }
+
+  if (data?.length === 0) {
+    return <Empty message={emptyMessage} />;
   }
 
   return (
