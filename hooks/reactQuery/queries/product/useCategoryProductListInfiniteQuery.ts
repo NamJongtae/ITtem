@@ -44,7 +44,7 @@ export default function useCategoryProductListInfiniteQuery({
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
-      const nextCursor = lastPage[lastPage.length - 1].createdAt;
+      const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
       if (lastPage.length < limit) {
         return undefined;
       }
