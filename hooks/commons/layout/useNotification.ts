@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store/store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
 import { NotificationMessageData } from "@/types/notification";
 import { useQueryClient } from "@tanstack/react-query";
 import { isMobile } from "react-device-detect";
 import { getRealtimeDB } from "@/lib/firebaseSetting";
+import { notificationSlice } from "@/store/notification";
+import { queryKeys } from "@/queryKeys";
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -22,7 +24,10 @@ export default function useNotification() {
     setIsOpenModal(false);
   };
 
-  const [unreadCount, setUnreadCount] = useState(0);
+  const unreadCount = useSelector(
+    (state: RootState) => state.notification.unreadCount
+  );
+  const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -129,14 +134,16 @@ export default function useNotification() {
               }
             }
           );
-          queryClient.invalidateQueries({ queryKey: ["notification"] });
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.notification.messages().queryKey,
+          });
         }
       });
 
       unsubscribeCounter = onValue(counterRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          setUnreadCount(data.unreadCount);
+          dispatch(notificationSlice.actions.saveUnreadCount(data.unreadCount));
         }
       });
     };
@@ -151,7 +158,7 @@ export default function useNotification() {
         unsubscribeCounter();
       }
     };
-  }, [user, setUnreadCount, queryClient]);
+  }, [user]);
 
   return {
     isOpenModal,
