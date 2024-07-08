@@ -83,11 +83,6 @@ export default async function handler(
         },
       ]);
 
-      if (!review.length) {
-        res.status(404).json({ message: "상품 리뷰가 없어요." });
-        return;
-      }
-
       res
         .status(200)
         .json({ message: "상품 리뷰 조회에 성공했어요.", review: review[0] });

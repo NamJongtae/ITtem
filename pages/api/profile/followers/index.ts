@@ -116,11 +116,6 @@ export default async function handler(
         .limit(pageLimit)
         .sort({ _id: 1 });
 
-      if (!followers.length) {
-        res.status(404).json({ message: "팔로워 목록이 존재하지 않아요." });
-        return;
-      }
-
       const newFollowers = followers.map(({ _id, ...rest }) => rest);
 
       res.status(200).json({

@@ -87,11 +87,6 @@ export default async function handler(
 
       const userWithReviews = await User.aggregate(aggregation);
 
-      if (!userWithReviews.length) {
-        res.status(404).json({ message: "유저가 존재하지 않아요." });
-        return;
-      }
-
       const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
       delete profile._id;
       console.log(profile);

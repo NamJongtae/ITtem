@@ -41,11 +41,6 @@ export default async function handler(
         .limit(pageLimit)
         .sort({ createdAt: -1, _id: -1 });
 
-      if (!products.length) {
-        res.status(404).json({ message: "유저 상품 목록이 존재하지 않아요." });
-        return;
-      }
-
       res
         .status(200)
         .json({ message: "유저 상품 목록 조회에 성공했어요.", products });

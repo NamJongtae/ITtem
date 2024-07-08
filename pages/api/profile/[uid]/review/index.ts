@@ -85,11 +85,6 @@ export default async function handler(
         },
       ]);
 
-      if (!reviewsWithBuyerInfo.length) {
-        res.status(404).json({ message: "리뷰 목록이 없어요." });
-        return;
-      }
-
       res.status(200).json({
         message: "리뷰 목록 조회에 성공했어요.",
         reviews: reviewsWithBuyerInfo,

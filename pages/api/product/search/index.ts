@@ -46,11 +46,6 @@ export default async function handler(
         return;
       }
 
-      if (!products.length) {
-        res.status(404).json({ message: "상품이 존재하지 않아요." });
-        return;
-      }
-
       res.status(200).json({ message: "검색에 성공했어요.", products });
     } catch (error) {
       console.error(error);
