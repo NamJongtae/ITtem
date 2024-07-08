@@ -33,17 +33,23 @@ export default function ProfileDetailFollowList({
     uid: userProfileData?.uid,
   });
 
+  if (error && !data) {
+    <Empty
+      message={
+        isAxiosError<{ message: string }>(error)
+          ? error.response?.data.message || ""
+          : ""
+      }
+    />;
+  }
+  if (data?.length === 0) {
+    return (
+      <Empty message={`${isFollowers ? "팔로워" : "팔로잉"} 목록이 없어요.`} />
+    );
+  }
+
   return (
     <>
-      {(error && !data) || data?.length === 0 ? (
-        <Empty
-          message={
-            isAxiosError<{ message: string }>(error)
-              ? error.response?.data.message || ""
-              : ""
-          }
-        />
-      ) : null}
       <InfiniteScroll
         hasMore={hasNextPage && !error}
         loadMore={() => {
