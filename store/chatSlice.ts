@@ -11,7 +11,12 @@ export const chatSlice = createSlice({
     saveChatRoomIds: (state, action) => {
       state.chatRoomIds = action.payload;
     },
-    resetLocation: (state) => {
+    resetChatState: (state) => {
+      state.chatRoomIds = [];
+      state.totalMessageCount = 0;
+      state.chatRoomIdsLoading = true;
+    },
+    resetChatRoomId: (state) => {
       state.chatRoomIds = [];
     },
     saveTotalMessageCount: (state, action) => {
