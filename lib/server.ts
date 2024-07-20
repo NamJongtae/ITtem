@@ -1,6 +1,5 @@
 import { IronSessionType } from "@/types/apiTypes";
 import { SessionOptions } from "iron-session";
-import { NextApiRequest, NextApiResponse } from "next";
 import { generateToken, verifyToken } from "./token";
 import { getToken, saveToken } from "./api/redis";
 import {
@@ -11,7 +10,26 @@ import {
 } from "@/constants/constant";
 import { v4 as uuid } from "uuid";
 import { Model } from "mongoose";
+import { cookies } from "next/headers";
 
+export const getSmtpTransport = async () => {
+  "use server"
+  const nodemailer = await import("nodemailer");
+  return nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: process.env.NEXT_SECRET_SMTP_USER,
+      pass: process.env.NEXT_SECRET_SMTP_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+};
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
   cookieName: "session",
@@ -23,14 +41,10 @@ export const sessionOptions: SessionOptions = {
   },
 };
 
-export async function checkAuthorization(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function checkAuthorization() {
   const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionType>(
-    req,
-    res,
+    cookies(),
     sessionOptions
   );
   const accessToken = session.accessToken;
