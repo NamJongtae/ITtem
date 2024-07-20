@@ -1,4 +1,6 @@
-import Loading from "../commons/loading";
+"use client";
+
+import Loading from "@/app/loading";
 import { MyForm } from "../commons/myForm/MyForm";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";

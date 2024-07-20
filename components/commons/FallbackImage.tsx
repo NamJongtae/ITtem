@@ -1,3 +1,5 @@
+"use client";
+
 import Image, { ImageProps } from "next/image";
 import React, { useState } from "react";
 
@@ -7,7 +9,7 @@ interface IProps extends ImageProps {
 
 export default function FallbackImage({
   fallbackSrc = "/images/no_image.png",
-  ...props 
+  ...props
 }: IProps) {
   const [isImgError, setIsImgError] = useState<boolean>(false);
 

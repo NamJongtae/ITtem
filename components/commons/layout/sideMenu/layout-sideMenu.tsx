@@ -1,13 +1,8 @@
-import dynamic from "next/dynamic";
+"use client";
+
 import SideMenuTopBtn from "./top-btn/sideMenu-top-btn";
 import useVisible from "@/hooks/commons/useVisible";
-
-const SideMenuRecentProduct = dynamic(
-  import("./recent-product/sideMenu-recentProduct"),
-  {
-    ssr: false,
-  }
-);
+import SideMenuRecentProduct from './recent-product/sideMenu-recentProduct';
 
 export default function SideMenu() {
   const { isVisible } = useVisible({ pathnames: ["chat", "signup", "signin"] });

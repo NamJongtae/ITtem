@@ -1,13 +1,15 @@
 import Header from "./layout-header";
 import Footer from "./layout-footer";
 import MobileNav from "./nav/layout-mobile-nav";
-import SideMenu from './sideMenu/layout-sideMenu';
+import dynamic from "next/dynamic";
+const SideMenu = dynamic(() => import("./sideMenu/layout-sideMenu"), {
+  ssr: false,
+});
 
 interface IProps {
   children: React.ReactNode;
 }
 export default function Layout({ children }: IProps) {
-
   return (
     <>
       <Header />

@@ -1,3 +1,5 @@
+"use client";
+
 import { CATEGORY } from "@/constants/constant";
 import useCurrentCategory from "@/hooks/commons/category/useCurrentCategory";
 

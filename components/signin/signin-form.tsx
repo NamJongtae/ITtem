@@ -1,6 +1,8 @@
+"use client";
+
 import { MyForm } from "../commons/myForm/MyForm";
 import SigninFormContent from "./signin-form-content";
-import Loading from "../commons/loading";
+import Loading from "@/app/loading";
 import useSigninForm from "@/hooks/signin/useSigninForm";
 
 export default function SigninForm() {

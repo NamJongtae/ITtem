@@ -1,4 +1,4 @@
-import Loading from "@/components/commons/loading";
+import Loading from "@/app/loading";
 import { MyForm } from "@/components/commons/myForm/MyForm";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";

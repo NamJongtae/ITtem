@@ -7,8 +7,7 @@ interface IProps {
   error: AxiosError<unknown, any>;
 }
 
-export default function ProductListError({ productListType }: IProps) {
-
+export default function ProductListError({ productListType, error }: IProps) {
   return (
     <Empty
       message={`${

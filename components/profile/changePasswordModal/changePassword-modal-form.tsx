@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import ChangePasswordModalCurrentPwField from "./changePassword-modal-currentPwField";
 import ChangePasswordModalPwField from "./changePassword-modal-PwField";
 import ChangePasswordModalPwCheckField from "./changePassword-modal-PwCheckField";
-import Loading from "../../commons/loading";
+import Loading from "@/app/loading";
 import useChagePasswordModalForm from "@/hooks/profile/useChagePasswordModalForm";
 import ChangePasswordModalCloseBtn from "./changePassword-modal-close-btn";
 import ChangePasswordModalSubmitBtn from "./changePassword-modal-submit-btn";

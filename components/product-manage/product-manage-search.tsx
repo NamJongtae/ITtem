@@ -2,7 +2,7 @@ import useProductManageSearch from "@/hooks/productManage/useProductManageSearch
 import Image from "next/image";
 
 export default function ProductManageSearch() {
-  const { formRef, onSubmitSearch, searchParams } = useProductManageSearch();
+  const { formRef, onSubmitSearch, search } = useProductManageSearch();
   return (
     <form
       className="relative w-full max-w-[330px]"
@@ -16,7 +16,7 @@ export default function ProductManageSearch() {
         className="border border-gray-400 py-2 pl-4 pr-8 w-full"
         placeholder="상품명"
         name={"search"}
-        defaultValue={searchParams}
+        defaultValue={search}
         id="search"
       />
       <button

@@ -2,6 +2,8 @@ import ProductList from "@/components/commons/productList/product-list";
 import ProfileDetailProductCategory from "./profile-detail-product-category";
 import useProfileProductCategory from "@/hooks/profile/useProfileProductCategory";
 import { ProfileData } from "@/types/authTypes";
+import { Suspense } from "react";
+import ProductListPlaceholder from "@/components/commons/productList/product-list-placeholder";
 
 interface IProps {
   userProfileData: ProfileData | undefined;
@@ -21,11 +23,19 @@ export default function ProfileDetailProduct({ userProfileData, my }: IProps) {
         />
       </div>
 
-      <ProductList
-        productListType={my ? "MY_PROFILE" : "PROFILE"}
-        productIds={userProfileData?.productIds}
-        profileProductCategory={category}
-      />
+      <Suspense
+        fallback={
+          <ul>
+            <ProductListPlaceholder />
+          </ul>
+        }
+      >
+        <ProductList
+          productListType={my ? "MY_PROFILE" : "PROFILE"}
+          productIds={userProfileData?.productIds}
+          profileProductCategory={category}
+        />
+      </Suspense>
     </div>
   );
 }

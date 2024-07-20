@@ -1,4 +1,4 @@
-import Loading from "@/components/commons/loading";
+import Loading from "@/app/loading";
 import Portal from "@/components/commons/portal/Portal";
 import useProductReviewQuery from "@/hooks/reactQuery/queries/product/useProductReviewQuery";
 import { isMobile } from "react-device-detect";

@@ -1,3 +1,5 @@
+"use client";
+
 import useProductLocationChkBox from "@/hooks/product/useProductLocationChkBox";
 import React from "react";
 

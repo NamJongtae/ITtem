@@ -1,6 +1,8 @@
+"use client";
+
 import ProfileUserInfo from "./profileUserInfo/profile-userInfo";
 import ProfileDetail from "./profile-detail";
-import Loading from "../commons/loading";
+import Loading from "@/app/loading";
 import Empty from "../commons/Empty";
 import { isAxiosError } from "axios";
 import useProfilePage from "@/hooks/profile/useProfilePage";
@@ -30,7 +32,7 @@ export default function ProfilePage({ my }: IProps) {
       <Empty
         message={
           (isAxiosError<{ message: string }>(error) &&
-          error.response?.data.message) ||
+            error.response?.data.message) ||
           ""
         }
       />

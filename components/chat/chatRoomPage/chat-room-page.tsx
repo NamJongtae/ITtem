@@ -1,7 +1,9 @@
+"use client";
+
 import ChatRoomHeader from "./chat-room-header";
 import ChatRoomMessage from "./chat-room-message-list";
 import ChatRoomForm from "./chat-room-form";
-import Loading from "@/components/commons/loading";
+import Loading from "@/app/loading";
 import useChatRoomPage from "@/hooks/chat/useChatRoomPage";
 
 export default function ChatRoomPage() {

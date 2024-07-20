@@ -1,3 +1,5 @@
+"use client";
+
 import useNavSearchBar from "@/hooks/commons/layout/useNavSearchBar";
 import Image from "next/image";
 
@@ -19,7 +21,10 @@ export default function NavSearchBar() {
         placeholder="상품명, 지역명 검색"
         {...register("keyword")}
       />
-      <button type="submit" className="absolute inline-flex justify-center items-center right-0 w-10 h-10">
+      <button
+        type="submit"
+        className="absolute inline-flex justify-center items-center right-0 w-10 h-10"
+      >
         <Image src="/icons/search_icon.svg" alt="검색" width={20} height={20} />
       </button>
     </form>

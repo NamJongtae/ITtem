@@ -1,6 +1,6 @@
 import useNavMobileMenu from "@/hooks/commons/layout/useNavMobileMenu";
 import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import { forwardRef } from "react";
 import { useSelector } from "react-redux";

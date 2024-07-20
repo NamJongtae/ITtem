@@ -1,6 +1,8 @@
+"use client";
+
 import useChatRoomList from "@/hooks/chat/useChatRoomList";
 import ChatRoomItem from "./chat-room-ltem";
-import Loading from "@/components/commons/loading";
+import Loading from "@/app/loading";
 import Empty from "@/components/commons/Empty";
 
 export default function ChatRoomList() {

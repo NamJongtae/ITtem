@@ -1,3 +1,4 @@
+"use client";
 import useVisible from "@/hooks/commons/useVisible";
 
 export default function Footer() {

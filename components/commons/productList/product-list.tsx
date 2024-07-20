@@ -1,3 +1,5 @@
+"use client";
+
 import { Fragment } from "react";
 import ProductItem from "./product-item";
 import ProductListPlaceholder from "./product-list-placeholder";
@@ -46,7 +48,7 @@ export default function ProductList({
       <div className="max-w-[1024px] mx-auto pb-12">
         <ul className="grid gap-5 grid-cols-autoFill mt-6 px-8 ">
           {isLoading ? (
-            <ProductListPlaceholder listCount={12} />
+            <ProductListPlaceholder listCount={8} />
           ) : (
             data?.map((item) => (
               <Fragment key={item._id}>

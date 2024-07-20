@@ -1,3 +1,5 @@
+"use client";
+
 import FindPasswordForm from "./findPassword-form";
 import { useSetMobileScreenSize } from "@/hooks/commons/useSetMobileScreenSize";
 

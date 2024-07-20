@@ -1,3 +1,5 @@
+"use client";
+
 import CategoryList from "./category-list";
 import CategoryMobileMenu from "./category-mobile-menu";
 import useCurrentCategory from "@/hooks/commons/category/useCurrentCategory";

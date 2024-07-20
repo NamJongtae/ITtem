@@ -1,7 +1,7 @@
 import { MyForm } from "@/components/commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
-import Loading from "@/components/commons/loading";
+import Loading from "@/app/loading";
 import ProfileEditCloseBtn from "./profileEdit-close-btn";
 import ProfileEditSubmitBtn from "./profileEdit-submit-btn";
 import useProfileEditModalForm from "@/hooks/profileEdit/useProfileEditModalForm";

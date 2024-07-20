@@ -1,13 +1,13 @@
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import CoreInputField from "../commons/coreInputField/core-input-field";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 
 export default function PasswordField() {
   const isVerifyEmail = useSelector(
     (state: RootState) => state.signup.isVerifedEmail
   );
-  
+
   return (
     isVerifyEmail && (
       <div>

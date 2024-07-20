@@ -1,3 +1,5 @@
+"use client";
+
 import useRecentProductSlider from "@/hooks/commons/layout/useRecentProductSlider";
 import { RecentProductData } from "@/types/productTypes";
 import SideMenuRecentProductSliderBtn from "./sideMenu-recentProduct-slider-btn";

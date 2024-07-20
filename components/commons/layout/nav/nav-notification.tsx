@@ -1,3 +1,5 @@
+"use client";
+
 import NotificatonIcon from "@/public/icons/notification_icon.svg";
 import NotificationModal from "../../notificationModal/notification-modal";
 import useNotification from "@/hooks/commons/layout/useNotification";

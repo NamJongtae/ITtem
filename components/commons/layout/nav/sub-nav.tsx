@@ -1,8 +1,10 @@
-import NavSubMenu from "./nav-sub-menu";
+"use client";
+
 import MenuIcon from "@/public/icons/menu_icon.svg";
 import NavCategoryMenu from "./nav-category-menu";
 import useNavCategory from "@/hooks/commons/layout/useNavCategory";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
+import NavSubMenu from "./nav-sub-menu";
 
 export default function SubNav() {
   const {
@@ -20,7 +22,7 @@ export default function SubNav() {
           onClick={toggleCategory}
           ref={buttonRef}
           onKeyDown={(e) => escKeyClose({ event: e, closeCb: toggleCategory })}
-          aria-label='카테고리 메뉴'
+          aria-label="카테고리 메뉴"
         >
           <MenuIcon
             className={`w-6 h-6 ${

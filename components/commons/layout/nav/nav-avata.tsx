@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 
 export default function NavAvata() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -13,7 +15,7 @@ export default function NavAvata() {
         className="border-2 border-gray-300 inline-block h-9 w-9 cursor-pointer rounded-full object-cover object-center"
         width={36}
         height={36}
-        alt={user?.nickname||""}
+        alt={user?.nickname || ""}
       />
       <p className="relative hidden lg:inline">
         <span className="font-semibold ml-2">{user?.nickname}</span> 님

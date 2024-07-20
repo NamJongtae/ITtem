@@ -7,6 +7,7 @@ interface IProps {
 
 export default function PurchaseTradingEndReviewBtn({ productId }: IProps) {
   const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
+
   return (
     <>
       <button

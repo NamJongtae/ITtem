@@ -2,10 +2,7 @@ import Link from "next/link";
 import NavSearchBar from "./nav-searchbar";
 import SubNav from "./sub-nav";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-const NavAuth = dynamic(() => import("./nav-auth"), {
-  ssr: false,
-});
+import NavAuth from './nav-auth';
 
 export default function Nav() {
   return (

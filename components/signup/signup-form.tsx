@@ -1,6 +1,6 @@
 import { MyForm } from "../commons/myForm/MyForm";
 import FormContent from "./form-content";
-import Loading from "../commons/loading";
+import Loading from "@/app/loading";
 import useSignup from "@/hooks/signup/useSignup";
 
 export default function SignupForm() {

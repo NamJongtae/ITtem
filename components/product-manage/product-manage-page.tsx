@@ -1,8 +1,11 @@
+"use client";
+
 import ProductManageMenu from "./product-manage-menu";
 import ProductManageList from "./product-manage-list";
 import ProductManageDetailMenu from "./product-manage-detail-menu";
 import ProductManageSearch from "./product-manage-search";
 import useProductManagePage from "@/hooks/productManage/useProductManagePage";
+import { useSearchParams } from "next/navigation";
 
 export type ProductManageMenu = "판매" | "구매";
 export type ProductManageDeatilMenu =
@@ -11,11 +14,19 @@ export type ProductManageDeatilMenu =
   | "취소/반품 내역"
   | "취소/반품 거절 내역";
 
-interface IProps {
-  initalDetailMenu: ProductManageDeatilMenu;
-}
+export default function ProductManagePage() {
+  const searchParam = useSearchParams();
+  const status = searchParam.get("status");
 
-export default function ProductManagePage({ initalDetailMenu }: IProps) {
+  const initalDetailMenu =
+    status === "CANCEL_END/RETURN_END"
+      ? "취소/반품 내역"
+      : status === "TRADING_END"
+      ? "거래완료 내역"
+      : status === "CANCEL_REJECT/RETURN_REJECT"
+      ? "취소/반품 거절 내역"
+      : "거래중";
+
   const { menu, detailMenu, handleClickMenu, handleClickDeatilMenu } =
     useProductManagePage({ initalDetailMenu });
 

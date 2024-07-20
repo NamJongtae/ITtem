@@ -1,4 +1,4 @@
-import Loading from "../commons/loading";
+import Loading from "@/app/loading";
 import Image from "next/image";
 import { ProductStatus } from "@/types/productTypes";
 import useProductDetailDeleteBtn from "@/hooks/productDetail/useProductDetailDeleteBtn";

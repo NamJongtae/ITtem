@@ -1,6 +1,5 @@
 import FallbackImage from '@/components/commons/FallbackImage';
 import { RecentProductData } from "@/types/productTypes";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -21,7 +20,6 @@ export default function SideMenuRecentProductSliderItem({
           height={160}
           placeholder="blur"
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-
         />
       </Link>
     </li>

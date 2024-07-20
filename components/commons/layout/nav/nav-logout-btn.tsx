@@ -1,3 +1,5 @@
+"use client";
+
 import useLogoutBtn from "@/hooks/commons/layout/useLogoutBtn";
 import Image from "next/image";
 import React from "react";
