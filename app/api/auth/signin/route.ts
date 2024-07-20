@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password, isDuplicateLogin } = await req.json();
 
-    console.log(email);
-
     if (!email || !password) {
       return NextResponse.json(
         { message: "유효하지 않은 값이 있어요." },

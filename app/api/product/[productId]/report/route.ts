@@ -87,7 +87,6 @@ export async function PATCH(
       );
     }
 
-    console.log(updatedProduct);
     return NextResponse.json(
       {
         message: updatedProduct.block

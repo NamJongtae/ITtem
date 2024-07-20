@@ -43,7 +43,6 @@ export default function useLocation(saveLocation?: (address: string) => void) {
           if (address) {
             dispatch(locationSlice.actions.saveLocation(address.split(" ")[0]));
             if (!!saveLocation) {
-              console.log(address);
               saveLocation(address);
             }
           } else {

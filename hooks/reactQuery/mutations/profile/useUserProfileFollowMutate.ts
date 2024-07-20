@@ -119,7 +119,6 @@ export default function useUserProfileFollowMutate(uid: string) {
       };
     },
     onError: (error, data, ctx) => {
-      console.log(error);
       queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       queryClient.setQueryData(userProfileQueryKey, ctx?.previousUserProfile);
