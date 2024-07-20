@@ -1,5 +1,5 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import { getUser } from "@/lib/api/auth";
+import { getSessionCookies, getUser } from "@/lib/api/auth";
 import { getNotificationMessage } from "@/lib/api/notification";
 import {
   getCategoryProductList,
@@ -314,9 +314,17 @@ export const notificationQueryKey = createQueryKeys("notification", {
   }),
 });
 
+export const sessionQueryKey = createQueryKeys("session", {
+  isExist: {
+    queryKey: null,
+    queryFn: getSessionCookies,
+  },
+});
+
 export const queryKeys = mergeQueryKeys(
   authQueryKey,
   productQueryKey,
   profileQueryKey,
-  notificationQueryKey
+  notificationQueryKey,
+  sessionQueryKey
 );
