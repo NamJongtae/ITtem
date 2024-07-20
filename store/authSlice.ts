@@ -13,6 +13,7 @@ export const authSlice = createSlice({
   name: "authSlice",
   initialState: {
     user: storedUser as AuthData | null,
+    isLoading: true,
   },
   reducers: {
     saveAuth: (
@@ -38,13 +39,8 @@ export const authSlice = createSlice({
         localStorage.removeItem("uid");
       }
     },
-  },
-  extraReducers(builder) {
-    builder.addCase(HYDRATE, (state, action: AnyAction) => {
-      return {
-        ...state,
-        ...action.payload.auth,
-      };
-    });
+    setIsLoading: (state, action: { payload: boolean; type: string }) => {
+      state.isLoading = action.payload;
+    },
   },
 });
