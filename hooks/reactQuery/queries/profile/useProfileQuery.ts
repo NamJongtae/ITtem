@@ -1,10 +1,10 @@
 import { queryKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 export default function useProfileQuery(uid?: string) {
-  const router = useRouter();
-  const currentUid = uid || router.query?.uid || "";
+  const searchParams = useSearchParams();
+  const currentUid = uid || searchParams.get("uid") || "";
   const queryKeyConfig = queryKeys.profile.user(currentUid as string);
 
   const {

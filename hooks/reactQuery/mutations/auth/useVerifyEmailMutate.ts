@@ -7,7 +7,7 @@ import { VerifyEmailResponseData } from "@/types/apiTypes";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { signupSlice } from "@/store/signupSlice";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 
 export default function useVerifyEmailMutate() {
   const dispatch = useDispatch<AppDispatch>();

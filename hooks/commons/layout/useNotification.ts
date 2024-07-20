@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store/store";
+import { AppDispatch, RootState } from "../../../store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
 import { NotificationMessageData } from "@/types/notification";

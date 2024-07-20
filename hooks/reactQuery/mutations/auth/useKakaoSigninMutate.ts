@@ -1,6 +1,6 @@
 import { deleteAllToken, kakaoSignin } from "@/lib/api/auth";
 import { authSlice } from "@/store/authSlice";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 import {
   KakaoAuthInfoResponseData,
   SigninResponseData,

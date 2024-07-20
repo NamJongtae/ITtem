@@ -3,7 +3,7 @@ import { queryKeys } from "@/queryKeys";
 import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function useTradeInfiniteQuery(
   menu: ProductManageMenu,
@@ -11,7 +11,8 @@ export default function useTradeInfiniteQuery(
 ) {
   const router = useRouter();
   const currentMenu = menu === "판매" ? "sale" : "purchase";
-  let status = router.query?.status as string | undefined;
+  const searchParams = useSearchParams();
+  let status = searchParams.get("status") as string | undefined;
   status =
     status !== "TRADING" &&
     status !== "TRADING_END" &&
@@ -19,7 +20,7 @@ export default function useTradeInfiniteQuery(
     status !== "CANCEL_REJECT/RETURN_REJECT"
       ? "TRADING"
       : status;
-  const search = router.query?.search as string | undefined;
+  const search = searchParams.get("search") as string | undefined;
 
   const queryKeyConfig = queryKeys.product.manage({
     currentMenu,

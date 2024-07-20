@@ -2,7 +2,7 @@ import {
   ProductManageDeatilMenu,
   ProductManageMenu,
 } from "@/components/product-manage/product-manage-page";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
 interface IParams {
@@ -15,7 +15,8 @@ export default function useProductManagePage({ initalDetailMenu }: IParams) {
   const [detailMenu, setDetailMenu] =
     useState<ProductManageDeatilMenu>(initalDetailMenu);
 
-  const searchParams = router.query?.search || "";
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
 
   const handleClickMenu = useCallback((menu: ProductManageMenu) => {
     setMenu(menu);
@@ -34,9 +35,7 @@ export default function useProductManagePage({ initalDetailMenu }: IParams) {
           : "CANCEL_REJECT/RETURN_REJECT";
 
       const newUrl = `/product/manage${
-        searchParams
-          ? `?search=${searchParams}&status=${status}`
-          : `?status=${status}`
+        search ? `?search=${search}&status=${status}` : `?status=${status}`
       }`;
       router.push(newUrl);
     },

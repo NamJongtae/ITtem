@@ -1,5 +1,5 @@
 import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import {
   ProductCategory,
   ProductData,
@@ -7,6 +7,7 @@ import {
 } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function useCategoryProductListInfiniteQuery({

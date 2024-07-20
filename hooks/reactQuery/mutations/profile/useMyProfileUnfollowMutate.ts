@@ -1,6 +1,6 @@
 import { unfollow } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProfileData } from "@/types/authTypes";
 import {
   InfiniteData,

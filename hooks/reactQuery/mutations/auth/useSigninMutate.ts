@@ -1,11 +1,11 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { sigin } from "@/lib/api/auth";
 import { authSlice } from "@/store/authSlice";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 import { SigninResponseData } from "@/types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -27,8 +27,8 @@ export default function useSigninMutate() {
       isDuplicationLogin?: boolean;
     }) => await sigin(email, password, isDuplicationLogin),
     onSuccess: async (response) => {
-      await router.push("/");
       dispatch(authSlice.actions.saveAuth(response.data.user));
+      router.replace("/");
     },
     onError: (error: unknown, variables) => {
       if (isAxiosError<SigninResponseData, any>(error)) {

@@ -4,12 +4,12 @@ import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useParams } from 'next/navigation';
 import { toast } from "react-toastify";
 
 export default function useProductDetailFollowMutate(uid: string) {
-  const router = useRouter();
-  const productId = router.query?.productId;
+  const params = useParams();
+  const productId = params?.productId || "";
   const queryClient = useQueryClient();
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
   const productQueryKey = queryKeys.product.detail(

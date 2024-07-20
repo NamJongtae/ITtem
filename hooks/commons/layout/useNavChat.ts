@@ -1,11 +1,11 @@
-import { RootState } from "@/store/store";
-import { useRouter } from "next/router";
+import { RootState } from "@/store";
+import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import useNotificationChat from "@/hooks/chat/useNotificationChat";
 
 export default function useNavChat() {
   const router = useRouter();
-  const pathname = router.pathname;
+  const pathname = usePathname();
   const totalMessageCount = useSelector(
     (state: RootState) => state.chat.totalMessageCount
   );

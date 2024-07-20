@@ -1,8 +1,6 @@
-import { getReview } from "@/lib/api/product";
 import { queryKeys } from "@/queryKeys";
-import { ProductReviewData } from "@/types/productTypes";
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse, isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -15,12 +13,9 @@ export default function useProductReviewQuery({
 }) {
   const productReviewQueryKey = queryKeys.product.review(productId).queryKey;
 
-  const { data, isLoading, error } = useQuery<ProductReviewData, AxiosError>({
+  const { data, isLoading, error } = useQuery({
     queryKey: productReviewQueryKey,
-    queryFn: async () => {
-      const response = await getReview(productId);
-      return response.data.review;
-    },
+    queryFn: queryKeys.product.review(productId).queryFn,
   });
 
   useEffect(() => {

@@ -1,13 +1,10 @@
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 import { locationSlice } from "@/store/locationSlice";
 
-export default function useLocation(
-  saveLocation?: (address: string) => void
-) {
-
+export default function useLocation(saveLocation?: (address: string) => void) {
   const dispatch = useDispatch<AppDispatch>();
 
   const fetchAddressFromCoords = async (
@@ -46,7 +43,7 @@ export default function useLocation(
           if (address) {
             dispatch(locationSlice.actions.saveLocation(address.split(" ")[0]));
             if (!!saveLocation) {
-              console.log(address)
+              console.log(address);
               saveLocation(address);
             }
           } else {

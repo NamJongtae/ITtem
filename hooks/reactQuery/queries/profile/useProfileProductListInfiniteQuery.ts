@@ -11,8 +11,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "next/router";
-
+import { useSearchParams } from "next/navigation";
 export default function useProfileProductListInfiniteQuery({
   limit = 10,
   category = ProductCategory.전체,
@@ -24,13 +23,13 @@ export default function useProfileProductListInfiniteQuery({
   productListType: ProductListType;
   productIds: string[];
 }) {
-  const router = useRouter();
+  const search = useSearchParams();
   const queryClient = useQueryClient();
   const myProfile = queryClient.getQueryData(queryKeys.profile.my.queryKey) as
     | ProfileData
     | undefined;
   const uid =
-    productListType === "MY_PROFILE" ? myProfile?.uid : router.query?.uid || "";
+    productListType === "MY_PROFILE" ? myProfile?.uid : search.get("uid") || "";
 
   const queryKeyConfig =
     productListType === "MY_PROFILE"

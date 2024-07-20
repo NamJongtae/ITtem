@@ -4,7 +4,7 @@ import { ProductResponseData } from "@/types/apiTypes";
 import { ProductUploadData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function useProductUploadMutate() {
   const router = useRouter();

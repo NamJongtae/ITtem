@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { MutableRefObject } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import useSendToChatMessageMutate from "@/hooks/reactQuery/mutations/chat/useSendToChatMessageMutate";
@@ -9,8 +9,8 @@ interface IParams {
 }
 
 export default function useChatRoomForm({ chatListRef }: IParams) {
-  const router = useRouter();
-  const { chatRoomId } = router.query;
+  const params = useParams();
+  const { chatRoomId } = params;
 
   const scrollToBottom = () => {
     if (chatListRef.current) {

@@ -1,9 +1,8 @@
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function useNavSell() {
   const router = useRouter();
-  const pathname = router.pathname;
+  const pathname = usePathname();
 
   const handleClickSell = () => {
     router.push("/product/upload");

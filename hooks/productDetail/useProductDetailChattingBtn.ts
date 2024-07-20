@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import useStartChatMutate from "../reactQuery/mutations/chat/useStartChatMutate";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
 

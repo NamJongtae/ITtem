@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useLocation from "../commons/useLocation";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 import { useDispatch } from "react-redux";
 import { locationSlice } from "@/store/locationSlice";
 

@@ -1,6 +1,6 @@
 import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
-import { RootState } from "@/store/store";
-import { useRouter } from "next/router";
+import { RootState } from "@/store";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 
 interface IParams {

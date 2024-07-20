@@ -1,6 +1,6 @@
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProductStatus } from "@/types/productTypes";
-import { useRouter } from "next/router";
+import { useRouter, useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,8 @@ interface IParams {
 
 export default function useProductDetailEditBtn({ productStatus }: IParams) {
   const router = useRouter();
-  const productId = router.query?.productId;
+  const params = useParams();
+  const productId = params?.productId;
   const user = useSelector((state: RootState) => state.auth.user);
   const handleClickEdit = () => {
     if (productStatus === "trading") {

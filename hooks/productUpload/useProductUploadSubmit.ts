@@ -6,7 +6,7 @@ import {
 } from "@/types/productTypes";
 import { FieldValues } from "react-hook-form";
 import useProductUploadMutate from "../reactQuery/mutations/product/useProductUploadMutate";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { isAxiosError } from "axios";

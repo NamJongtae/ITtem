@@ -2,16 +2,16 @@ import { ProductCategory, ProductListType } from "@/types/productTypes";
 import useProductTodayListInfiniteQuery from "../reactQuery/queries/product/useProductTodayListInfiniteQuery";
 import useCategoryProductListInfiniteQuery from "../reactQuery/queries/product/useCategoryProductListInfiniteQuery";
 import useSearchProductListInfiniteQuery from "../reactQuery/queries/product/useSearchProductListInfiniteQuery";
-import useProfileProductListInfiniteQuery from "../reactQuery/queries/profile/useProfileProductListInfiniteQuery";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
+import useProfileProductListInfiniteQuery from '../reactQuery/queries/profile/useProfileProductListInfiniteQuery';
 
 export default function useProductList(
   productListType: ProductListType,
   productIds?: string[],
   profileProductCategory?: ProductCategory
 ) {
-  const router = useRouter();
-  const keyword = router.query?.keyword;
+  const search = useSearchParams();
+  const keyword = search.get("keyword");
 
   const emptyMessage = `${
     productListType === "TODAY"
@@ -25,9 +25,9 @@ export default function useProductList(
 
   const category =
     profileProductCategory ||
-    (router.query?.category as ProductCategory) ||
+    (search.get("category") as ProductCategory) ||
     null;
-    
+
   const {
     todayProductListData,
     hasNextPageTodayProductList,

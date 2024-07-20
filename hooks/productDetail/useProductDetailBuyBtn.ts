@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import usePurchaseProductMutate from "../reactQuery/mutations/product/usePurchaseProductMutate";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
 

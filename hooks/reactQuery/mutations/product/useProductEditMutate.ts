@@ -3,11 +3,12 @@ import { ProductResponseData } from "@/types/apiTypes";
 import { ProductData } from "@/types/productTypes";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 
 export default function useProductEditMutate() {
   const router = useRouter();
-  const productId = router.query?.productId;
+  const params = useParams();
+  const productId = params?.productId || "";
 
   const { mutateAsync: productEditMutate } = useMutation<
     AxiosResponse<ProductResponseData>,

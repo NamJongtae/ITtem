@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ChatMessageData, ChatRoomData } from "@/types/chatTypes";
 
 import { toast } from "react-toastify";
@@ -19,7 +19,8 @@ export default function useChatRoomPage() {
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
-  const { chatRoomId } = router.query;
+  const params = useParams();
+  const { chatRoomId } = params;
 
   const { joinChatRoomMutate } = useJoinChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();

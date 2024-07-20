@@ -2,14 +2,14 @@ import { signout } from "@/lib/api/auth";
 import { queryKeys } from "@/queryKeys";
 import { authSlice } from "@/store/authSlice";
 import { chatSlice } from "@/store/chatSlice";
-import { notificationSlice } from '@/store/notification';
-import { AppDispatch } from "@/store/store";
+import { notificationSlice } from "@/store/notification";
+import { AppDispatch } from "@/store";
 import { SignoutResposeData } from "@/types/apiTypes";
 import { AuthData } from "@/types/authTypes";
 import { ProductData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -35,8 +35,11 @@ export default function useSignoutMutate() {
 
       queryClient.removeQueries({ queryKey: myProfileQueryKey });
 
+      queryClient.removeQueries({ queryKey: queryKeys.session._def });
+
       dispatch(authSlice.actions.resetAuth());
       dispatch(chatSlice.actions.resetChatState());
+
       dispatch(notificationSlice.actions.resetUnreadCount());
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."

@@ -1,10 +1,10 @@
 import { queryKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 
 export default function useProductQuery(isEdit?: boolean, productId?: string) {
-  const router = useRouter();
-  const currentProductId = productId || router.query?.productId;
+  const params = useParams();
+  const currentProductId = productId || params?.productId;
   const queryKeyConfig = queryKeys.product.detail(currentProductId as string);
 
   const {

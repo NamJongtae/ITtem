@@ -1,23 +1,24 @@
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
 
 export default function useProductManageSearch() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const router = useRouter();
-  const searchParams = router.query?.search || "";
+  const searchParams = useSearchParams(); 
+  const search = searchParams.get("search") || "";
+  const status = searchParams.get("status") || "";
 
   const onSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
     const searchValue = formData.get("search");
-    const statusParams = router.query?.status;
 
     const newUrl = `/product/manage${
-      statusParams
+      status
         ? searchValue
-          ? `?search=${searchValue}&status=${statusParams}`
-          : `?status=${statusParams}`
+          ? `?search=${searchValue}&status=${status}`
+          : `?status=${status}`
         : searchValue
         ? `?search=${searchValue}`
         : ""
@@ -25,5 +26,5 @@ export default function useProductManageSearch() {
     router.push(newUrl);
   };
 
-  return { formRef, onSubmitSearch, searchParams };
+  return { formRef, onSubmitSearch, search };
 }

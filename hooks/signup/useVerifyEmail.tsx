@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import useEmailDuplicationMutate from "../reactQuery/mutations/auth/useEmailDuplicationMutate";
 import useSendToVerifyEmailMutate from "../reactQuery/mutations/auth/useSendToVerifyEmailMutate";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store";
 import { signupSlice } from "@/store/signupSlice";
 import useCheckEmailMutate from "../reactQuery/mutations/auth/useCheckEmailMutate";
 

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import useSendToVerifyEmail from "../signup/useSendToVerifyEmail";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 
 export default function useEmailField() {
   const { isSendToVerifyEmail, handleClickSendToVerifyEmail, emailRef } =

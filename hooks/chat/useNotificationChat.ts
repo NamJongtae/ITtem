@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store";
 import { chatSlice } from "@/store/chatSlice";
 
 export default function useNotificationChat() {

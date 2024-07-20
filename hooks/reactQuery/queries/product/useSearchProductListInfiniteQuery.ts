@@ -6,7 +6,7 @@ import {
 } from "@/types/productTypes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 export default function useSearchProductListInfiniteQuery({
   limit = 10,
@@ -17,8 +17,8 @@ export default function useSearchProductListInfiniteQuery({
   category?: ProductCategory;
   productListType: ProductListType;
 }) {
-  const router = useRouter();
-  const keyword = router.query?.keyword;
+  const search = useSearchParams();
+  const keyword = search.get("keyword");
   const queryKeyConfig = queryKeys.product.search({
     keyword: keyword as string,
     category,

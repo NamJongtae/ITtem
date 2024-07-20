@@ -13,7 +13,7 @@ export default function useEmailDuplicationMutate() {
     AxiosError,
     string
   >({
-    mutationFn: (email: string) => checkEmailDuplication(email),
+    mutationFn: async (email: string) => await checkEmailDuplication(email),
     onError: (error: unknown) => {
       if (isAxiosError<EmailDuplicationResponseData>(error)) {
         if (error.response?.status === 401) {

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import useProductDeleteMutate from "../reactQuery/mutations/product/useProducDeletetMutate";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProductStatus } from "@/types/productTypes";
 import { toast } from "react-toastify";
 

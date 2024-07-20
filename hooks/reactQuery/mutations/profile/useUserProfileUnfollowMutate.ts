@@ -1,6 +1,6 @@
 import { unfollow } from "@/lib/api/profile";
 import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProfileData } from "@/types/authTypes";
 import {
   InfiniteData,
@@ -8,16 +8,16 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useUserProfileUnfollowMutate(uid: string) {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.auth.user);
   const myUid = user?.uid || "";
-  const urlQueryUid = router.query?.uid || "";
+  const searchParams = useSearchParams();
+  const urlQueryUid = searchParams.get("uid") || "";
 
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
   const userProfileQueryKey = queryKeys.profile.user(

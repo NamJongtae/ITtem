@@ -1,5 +1,5 @@
 import { getFirestoreDB } from "@/lib/firebaseSetting";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ChatRoomData } from "@/types/chatTypes";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

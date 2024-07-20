@@ -1,17 +1,17 @@
 import { deleteWish } from "@/lib/api/product";
 import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { ProfileData } from "@/types/authTypes";
 import { ProductDetailData } from "@/types/productTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useDeleteWishMutate() {
-  const router = useRouter();
-  const productId = router.query?.productId || "";
+  const params = useParams();
+  const productId = params?.productId || "";
   const queryClient = useQueryClient();
   const myProfileQuerKey = queryKeys.profile.my.queryKey;
   const productQueryKey = queryKeys.product.detail(

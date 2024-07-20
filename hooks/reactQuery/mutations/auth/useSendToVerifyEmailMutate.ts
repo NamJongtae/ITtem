@@ -5,7 +5,7 @@ import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerifyEmailResponseData } from "@/types/apiTypes";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch } from "@/store";
 import { signupSlice } from "@/store/signupSlice";
 import { useFormContext } from "react-hook-form";
 

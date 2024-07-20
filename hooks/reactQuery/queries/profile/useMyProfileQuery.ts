@@ -1,5 +1,5 @@
 import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store/store";
+import { RootState } from "@/store";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
