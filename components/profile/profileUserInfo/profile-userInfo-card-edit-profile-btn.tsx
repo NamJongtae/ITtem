@@ -1,22 +1,15 @@
-import useModal from "@/hooks/commons/useModal";
-import React from "react";
-import ProfileEditModal from "../profileEditModal/profileEdit-modal";
+import Link from "next/link";
 
 export default function ProfileUserInfoCardEditProfileBtn() {
-  const { isOpenModal, openModal, handleClickCloseBtn } = useModal();
-
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="border py-2 px-4 w-full betterhover:hover:bg-gray-100"
+      <Link
+        href={"/profile/edit"}
+        className="border py-2 px-4 w-full betterhover:hover:bg-gray-100 text-center"
+        scroll={false}
       >
         프로필 수정
-      </button>
-      {isOpenModal && (
-        <ProfileEditModal handleClickCloseBtn={handleClickCloseBtn} />
-      )}
+      </Link>
     </>
   );
 }
