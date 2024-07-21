@@ -28,7 +28,7 @@ export default function useSigninMutate() {
     }) => await sigin(email, password, isDuplicationLogin),
     onSuccess: async (response) => {
       dispatch(authSlice.actions.saveAuth(response.data.user));
-      router.replace("/");
+      router.back();
     },
     onError: (error: unknown, variables) => {
       if (isAxiosError<SigninResponseData, any>(error)) {
