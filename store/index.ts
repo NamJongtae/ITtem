@@ -5,7 +5,10 @@ import reducer from "./reducers";
 export const makeStore = () =>
   configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) =>
+      process.env.NODE_ENV !== "production"
+        ? getDefaultMiddleware().concat(logger)
+        : getDefaultMiddleware(),
     devTools: process.env.NODE_ENV !== "production",
   });
 
