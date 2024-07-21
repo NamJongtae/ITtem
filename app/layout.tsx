@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.css";
-import "@/styles/toast.css";
-import "react-toastify/dist/ReactToastify.css";
-import "@/styles/swiperStyles.css";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
 import ReduxProvider from "@/store/ReduxProvider";
 import Layout from "@/components/commons/layout/layout";
@@ -44,8 +41,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  signin,
 }: Readonly<{
   children: React.ReactNode;
+  signin: React.ReactNode;
 }>) {
   return (
     <html lang="ko">
@@ -54,9 +53,11 @@ export default async function RootLayout({
           <ReactQueryProvider>
             <Suspense fallback={<Loading />}>
               <Layout>
+                {signin}
                 <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
                   {children}
                 </main>
+
                 <ToastContainer
                   position="top-center"
                   limit={1}

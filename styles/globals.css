@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import "react-toastify/dist/ReactToastify.min.css";
+@import "@/styles/toast.css";
+@import "@/styles/swiperStyles.css";
 
 @layer components {
   html {
@@ -20,7 +22,7 @@
     @apply w-full border rounded-md py-3 pl-4 pr-8 text-sm read-only:bg-gray-100 read-only:text-gray-300;
   }
   .input_error {
-    @apply text-xs ml-1 mt-1 text-red-400
+    @apply text-xs ml-1 mt-1 text-red-400;
   }
   .button_primary {
     @apply py-3 rounded-md transition-all duration-150 bg-rootColor text-white;
