@@ -5,7 +5,11 @@ import SigninFormContent from "./signin-form-content";
 import Loading from "@/app/loading";
 import useSigninForm from "@/hooks/signin/useSigninForm";
 
-export default function SigninForm() {
+interface IProps {
+  isModal?: boolean;
+}
+
+export default function SigninForm({ isModal }: IProps) {
   const { signinLoading, handleSingnin } = useSigninForm();
 
   if (signinLoading) {
@@ -22,11 +26,11 @@ export default function SigninForm() {
           password: "",
         },
       }}
-      className={
-        "center w-full px-4 max-w-96 fixed flex flex-col pt-[113px] md:pt-[127px]"
-      }
+      className={`${
+        isModal ? "py-10 bg-white rounded-md" : "pt-[113px] md:pt-[127px]"
+      } center w-full max-w-96 px-8 fixed flex flex-col z-10`}
     >
-      <SigninFormContent />
+      <SigninFormContent isModal={isModal} />
     </MyForm>
   );
 }
