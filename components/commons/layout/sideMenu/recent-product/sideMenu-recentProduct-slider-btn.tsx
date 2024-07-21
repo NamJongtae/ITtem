@@ -21,7 +21,7 @@ export default function SideMenuRecentProductSliderBtn({
         className="border p-1 disabled:bg-gray-50"
       >
         <Image
-          className="rotate-180"
+          className="rotate-180 w-[8px] h-[8px]"
           src={"/icons/arrow_icon.svg"}
           alt="prev"
           width={8}
@@ -37,7 +37,13 @@ export default function SideMenuRecentProductSliderBtn({
         className="border p-1 disabled:bg-gray-50"
         aria-disabled={page === max - 1}
       >
-        <Image src={"/icons/arrow_icon.svg"} alt="next" width={8} height={8} />
+        <Image
+          className=" w-[8px] h-[8px]"
+          src={"/icons/arrow_icon.svg"}
+          alt="next"
+          width={8}
+          height={8}
+        />
       </button>
     </div>
   );
