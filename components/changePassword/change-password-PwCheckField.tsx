@@ -1,9 +1,9 @@
-import CoreInputField from "../../commons/coreInputField/core-input-field";
+import CoreInputField from "../commons/coreInputField/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import usePasswordChkValidation from "@/hooks/changePasswordModal/usePasswordChkValidation";
 import { MutableRefObject, forwardRef } from "react";
 
-const ChangePasswordModalPwCheckField = forwardRef<HTMLInputElement | null>(
+const ChangePasswordPwCheckField = forwardRef<HTMLInputElement | null>(
   (props, ref) => {
     const { passwordValue } = usePasswordChkValidation();
 
@@ -37,5 +37,5 @@ const ChangePasswordModalPwCheckField = forwardRef<HTMLInputElement | null>(
   }
 );
 
-ChangePasswordModalPwCheckField.displayName = "ChangePasswordModalPwCheckField";
-export default ChangePasswordModalPwCheckField;
+ChangePasswordPwCheckField.displayName = "ChangePasswordModalPwCheckField";
+export default ChangePasswordPwCheckField;

@@ -2,7 +2,7 @@ import { MutableRefObject, forwardRef } from "react";
 import usePasswordValidation from "@/hooks/changePasswordModal/usePasswordValidation";
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
 
-const ChangePasswordModalPwField = forwardRef<HTMLInputElement | null>(
+const ChangePasswordPwField = forwardRef<HTMLInputElement | null>(
   (props, ref) => {
     const { validatePassword, PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } =
       usePasswordValidation();
@@ -34,5 +34,5 @@ const ChangePasswordModalPwField = forwardRef<HTMLInputElement | null>(
     );
   }
 );
-ChangePasswordModalPwField.displayName = "ChangePasswordModalPwField";
-export default ChangePasswordModalPwField;
+ChangePasswordPwField.displayName = "ChangePasswordModalPwField";
+export default ChangePasswordPwField;

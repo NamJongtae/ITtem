@@ -1,20 +1,21 @@
-import { MyForm } from "../../commons/myForm/MyForm";
+"use client";
+
+import { MyForm } from "../commons/myForm/MyForm";
 import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
-import ChangePasswordModalCurrentPwField from "./changePassword-modal-currentPwField";
-import ChangePasswordModalPwField from "./changePassword-modal-PwField";
-import ChangePasswordModalPwCheckField from "./changePassword-modal-PwCheckField";
+import ChangePasswordModalCurrentPwField from "./change-password-currentPwField";
+import ChangePasswordModalPwField from "./change-password-PwField";
+import ChangePasswordModalPwCheckField from "./change-password-PwCheckField";
 import Loading from "@/app/loading";
-import useChagePasswordModalForm from "@/hooks/profile/useChagePasswordModalForm";
-import ChangePasswordModalCloseBtn from "./changePassword-modal-close-btn";
-import ChangePasswordModalSubmitBtn from "./changePassword-modal-submit-btn";
+import useChagePasswordForm from "@/hooks/profile/useChagePasswordForm";
+import ChangePasswordModalCloseBtn from "./change-password-close-btn";
+import ChangePasswordModalSubmitBtn from "./change-password-submit-btn";
 
 interface IProps {
-  handleClickChangePwCloseBtn: () => void;
+  isModal?: boolean;
 }
-export default function ChangePasswordModalForm({
-  handleClickChangePwCloseBtn,
-}: IProps) {
+
+export default function ChangePasswordForm({ isModal }: IProps) {
   const {
     changePasswordLoading,
     changePasswordMutate,
@@ -23,8 +24,9 @@ export default function ChangePasswordModalForm({
     pwCheckRef,
     closeBtnRef,
     submitBtnRef,
-  } = useChagePasswordModalForm({
-    closeModal: handleClickChangePwCloseBtn,
+    handleClickClose,
+  } = useChagePasswordForm({
+    isModal,
   });
 
   if (changePasswordLoading) {
@@ -49,31 +51,34 @@ export default function ChangePasswordModalForm({
       }}
       className={`${
         isMobile ? "h-screen pt-20" : "max-w-[480px] justify-center"
-      } fixed center z-30 flex flex-col gap-5 w-full p-8 border bg-white`}
+      } fixed center z-30 flex flex-col gap-5 w-full p-8 bg-white`}
     >
       <h2 className="text-xl text-center font-semibold mb-5">비밀번호 변경</h2>
       <ChangePasswordModalCurrentPwField
+        isModal={isModal}
         ref={currentPwRef}
-        submitBtnRef={submitBtnRef}
         closeBtnRef={closeBtnRef}
       />
       <ChangePasswordModalPwField ref={pwRef} />
       <ChangePasswordModalPwCheckField ref={pwCheckRef} />
 
       <ChangePasswordModalSubmitBtn
+        isModal={isModal}
         ref={submitBtnRef}
         pwCheckRef={pwCheckRef}
         closeBtnRef={closeBtnRef}
-        handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
       />
 
-      <ChangePasswordModalCloseBtn
-        ref={closeBtnRef}
-        currentPwRef={currentPwRef}
-        pwCheckRef={pwCheckRef}
-        submitBtnRef={submitBtnRef}
-        handleClickChangePwCloseBtn={handleClickChangePwCloseBtn}
-      />
+      {isModal && (
+        <ChangePasswordModalCloseBtn
+          isModal={isModal}
+          ref={closeBtnRef}
+          currentPwRef={currentPwRef}
+          pwCheckRef={pwCheckRef}
+          submitBtnRef={submitBtnRef}
+          handleClickClose={handleClickClose}
+        />
+      )}
     </MyForm>
   );
 }
