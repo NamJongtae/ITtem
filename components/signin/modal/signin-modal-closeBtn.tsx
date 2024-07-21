@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import CloseIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x_icon.svg";
 import { MutableRefObject, forwardRef } from "react";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 
@@ -27,7 +27,7 @@ const SigninModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
           })
         }
       >
-        <CloseIcon className="w-3 h-3" />
+        <XIcon className="fill-black w-3 h-3" aria-label="닫기" />
       </button>
     );
   }
