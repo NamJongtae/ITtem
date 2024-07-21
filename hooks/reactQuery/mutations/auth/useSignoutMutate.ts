@@ -45,10 +45,10 @@ export default function useSignoutMutate() {
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
         router.replace(
-          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/signin`
+          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}`
         );
       } else {
-        router.replace("/signin");
+        router.replace("/");
       }
     },
     onError: (error: unknown) => {
