@@ -1,5 +1,6 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
+import XIcon from "@/public/icons/x_icon.svg";
 import { MutableRefObject } from "react";
 
 interface IProps {
@@ -62,7 +63,7 @@ export default function ProfileEditImgInputBtn({
             : undefined
         }
       >
-        <Image src={"/icons/x_icon.svg"} alt="초기화" width={10} height={10} />
+        <XIcon className="fill-white w-[10px] h-[10px]" aria-label="초기화" />
       </button>
     </div>
   );

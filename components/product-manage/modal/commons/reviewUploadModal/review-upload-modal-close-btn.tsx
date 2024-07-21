@@ -1,5 +1,5 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import Image from "next/image";
+import CloseIcon from "@/public/icons/x_icon.svg";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
@@ -27,7 +27,7 @@ const ReviewUploadModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
           });
         }}
       >
-        <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />
+        <CloseIcon className="fill-black w-3 h-3" aria-label="닫기" />
       </button>
     );
   }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import XIcon from "@/public/icons/x_icon.svg";
 
 interface IProps {
   handleClickImgInput: () => void;
@@ -31,7 +32,7 @@ export default function ProfileImgInputBtn({
         onClick={resetProfileImg}
         className="absolute top-1 -right-1 bg-gray-500 rounded-full p-2"
       >
-        <Image src={"/icons/x_icon.svg"} alt="초기화" width={10} height={10} />
+        <XIcon className="fill-white w-[10px] h-[10px]" aria-label="초기화" />
       </button>
     </div>
   );

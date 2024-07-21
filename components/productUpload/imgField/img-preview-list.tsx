@@ -1,4 +1,5 @@
-import { ProductImgData } from '@/types/productTypes';
+import { ProductImgData } from "@/types/productTypes";
+import XIcon from "@/public/icons/x_icon.svg";
 import Image from "next/legacy/image";
 import React from "react";
 
@@ -12,7 +13,7 @@ export default function ImgPreviewList({ imgData, handleRemoveImg }: IProps) {
       {imgData.map((data, index) => (
         <li
           key={data.url}
-          className="relative w-48 h-48 border border-gray-400 box-content rounded-sm"
+          className="relative w-48 h-48 border border-gray-400 box-content rounded-sm bg-opacity-50"
         >
           <Image
             className="w-full h-full object-cover object-center rounded-sm"
@@ -24,14 +25,9 @@ export default function ImgPreviewList({ imgData, handleRemoveImg }: IProps) {
           />
           <button
             onClick={() => handleRemoveImg(index)}
-            className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full w-6 h-6 inline-flex items-center justify-center"
+            className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full w-5 h-5 inline-flex items-center justify-center"
           >
-            <Image
-              src={"/icons/x_icon.svg"}
-              alt="닫기"
-              width={12}
-              height={12}
-            />
+            <XIcon className="fill-white w-2 h-2" aria-label="삭제" />
           </button>
         </li>
       ))}

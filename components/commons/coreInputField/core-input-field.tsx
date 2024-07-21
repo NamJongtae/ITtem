@@ -1,5 +1,5 @@
 import useCoreInputField from "@/hooks/commons/coreInputField/useCoreInputField";
-import Image from "next/image";
+import XIcon from "@/public/icons/x_icon.svg";
 import { MutableRefObject } from "react";
 import { FieldValues, Validate, ValidationRule } from "react-hook-form";
 
@@ -92,12 +92,9 @@ export default function CoreInputField({
             onClick={resetInput}
             className="absolute right-0 inline-flex justify-center items-center w-10 h-full"
           >
-            <Image
-              className="w-4 h-4 p-1 rounded-full object-center bg-gray-500"
-              src={"/icons/x_icon.svg"}
-              alt="초기화"
-              width={10}
-              height={10}
+            <XIcon
+              className="w-4 h-4 p-1 rounded-full object-center bg-gray-500 fill-white"
+              aria-label="초기화"
             />
           </button>
         )}

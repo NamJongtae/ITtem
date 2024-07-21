@@ -34,7 +34,7 @@ const ChangePasswordCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
             : undefined
         }
       >
-        <CloseIcon className="w-3 h-3" />
+        <CloseIcon className="fill-black w-3 h-3" aria-label="닫기" />
       </button>
     );
   }
