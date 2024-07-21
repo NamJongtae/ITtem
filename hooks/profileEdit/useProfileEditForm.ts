@@ -1,12 +1,13 @@
+import { useRouter } from 'next/navigation';
 import useMyProfileQuery from "../reactQuery/queries/profile/useMyProfileQuery";
 import useProfileEditSubmit from "./useProfileEditSubmit";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface IPrarms {
-  closeModal: () => void;
+  isModal?: boolean;
 }
 
-export default function useProfileEditModalForm({ closeModal }: IPrarms) {
+export default function useProfileEditForm({ isModal }: IPrarms) {
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const introduceRef = useRef<HTMLTextAreaElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -14,12 +15,27 @@ export default function useProfileEditModalForm({ closeModal }: IPrarms) {
   const profileImgBtnRef = useRef<HTMLButtonElement | null>(null);
   const profileImgResetBtnRef = useRef<HTMLButtonElement | null>(null);
 
-  const { myProfileData } = useMyProfileQuery();
+  const router = useRouter();
+  const handleClickClose = () => {
+    router.back();
+  }
+
+  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
   const { handleProfileEditSubmit, profileEditLoading } =
-    useProfileEditSubmit(closeModal);
+    useProfileEditSubmit(handleClickClose);
+
+  useEffect(() => {
+    if (isModal) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModal]);
 
   return {
     myProfileData,
+    loadMyProfileLoading,
     handleProfileEditSubmit,
     profileEditLoading,
     nicknameRef,
@@ -28,5 +44,6 @@ export default function useProfileEditModalForm({ closeModal }: IPrarms) {
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
+    handleClickClose
   };
 }

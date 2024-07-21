@@ -1,9 +1,10 @@
 import useProfileImg from "@/hooks/signup/useProfileImg";
 import ProfileImgInput from "@/components/signup/stepProfile/profileImg-input";
 import { MutableRefObject } from "react";
-import ProfileEditImgInputBtn from "./profileEdit-Img-input-btn";
+import ProfileEditImgInputBtn from "./profile-edit-Img-input-btn";
 
 interface IProps {
+  isModal?: boolean;
   profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
   profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
   nicknameRef: MutableRefObject<HTMLInputElement | null>;
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 export default function ProfileEditImgField({
+  isModal,
   profileImgBtnRef,
   profileImgResetBtnRef,
   nicknameRef,
@@ -27,6 +29,7 @@ export default function ProfileEditImgField({
   return (
     <div className="flex items-center justify-center">
       <ProfileEditImgInputBtn
+        isModal={isModal}
         handleClickImgInput={handleClickImgInput}
         resetProfileImg={resetProfileImg}
         preview={preview}

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import CloseIcon from "@/public/icons/x_icon.svg";
 
 interface IProps {
   closeModal: () => void;
@@ -11,13 +11,7 @@ export default function ProfileEditCloseBtn({ closeModal }: IProps) {
       onClick={closeModal}
       type="button"
     >
-      <Image
-        className="w-3 h-3"
-        src={"/icons/x_icon.svg"}
-        alt="닫기"
-        width={20}
-        height={20}
-      />
+      <CloseIcon className="fill-black w-3 h-3" />
     </button>
   );
 }

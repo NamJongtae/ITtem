@@ -3,11 +3,12 @@ import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
+  isModal?: boolean;
   introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
   closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
-  ({ introduceRef, closeBtnRef }, ref) => {
+  ({ isModal, introduceRef, closeBtnRef }, ref) => {
     const { isDisabled } = useProfileEditSubmitBtn();
 
     return (
@@ -16,12 +17,15 @@ const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
         disabled={isDisabled}
         className="mt-2 py-2 px-4 bg-[#66a2fb] text-white font-medium betterhover:hover:bg-[#3c87f8] disabled:opacity-50"
         ref={ref}
-        onKeyDown={(e) =>
-          optimizationTabFocus({
-            event: e,
-            previousTarget: introduceRef.current,
-            nextTarget: closeBtnRef.current,
-          })
+        onKeyDown={
+          isModal
+            ? (e) =>
+                optimizationTabFocus({
+                  event: e,
+                  previousTarget: introduceRef.current,
+                  nextTarget: closeBtnRef.current,
+                })
+            : undefined
         }
       >
         수정하기

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MutableRefObject } from "react";
 
 interface IProps {
+  isModal?: boolean;
   handleClickImgInput: () => void;
   resetProfileImg: () => void;
   preview: string;
@@ -13,6 +14,7 @@ interface IProps {
 }
 
 export default function ProfileEditImgInputBtn({
+  isModal,
   handleClickImgInput,
   resetProfileImg,
   preview,
@@ -49,12 +51,15 @@ export default function ProfileEditImgInputBtn({
         onClick={resetProfileImg}
         className="absolute top-1 -right-1 bg-gray-500 rounded-full p-2"
         ref={profileImgResetBtnRef}
-        onKeyDown={(e) =>
-          optimizationTabFocus({
-            event: e,
-            previousTarget: closeBtnRef.current,
-            nextTarget: profileImgBtnRef.current,
-          })
+        onKeyDown={
+          isModal
+            ? (e) =>
+                optimizationTabFocus({
+                  event: e,
+                  previousTarget: closeBtnRef.current,
+                  nextTarget: profileImgBtnRef.current,
+                })
+            : undefined
         }
       >
         <Image src={"/icons/x_icon.svg"} alt="초기화" width={10} height={10} />

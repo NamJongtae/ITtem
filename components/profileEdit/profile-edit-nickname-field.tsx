@@ -1,19 +1,18 @@
 import CoreInputField from "@/components/commons/coreInputField/core-input-field";
-import {
-  NICKNAME_REGEX,
-  NICKNAME_REGEX_ERRORMSG,
-} from "@/constants/constant";
+import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from "@/constants/constant";
 import { useFocusing } from "@/hooks/commons/useFocusing";
 import useProfileEditNicknameField from "@/hooks/profileEdit/useProfileEditNicknameField";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject } from "react";
 
 interface IProps {
+  isModal?: boolean;
   nicknameRef: MutableRefObject<HTMLInputElement | null>;
   profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
 }
 
 export default function NicknameField({
+  isModal,
   nicknameRef,
   profileImgBtnRef,
 }: IProps) {
@@ -37,11 +36,14 @@ export default function NicknameField({
           message: NICKNAME_REGEX_ERRORMSG,
         }}
         inputRef={nicknameRef}
-        inputKeydown={(e) =>
-          optimizationTabFocus({
-            event: e,
-            previousTarget: profileImgBtnRef.current,
-          })
+        inputKeydown={
+          isModal
+            ? (e) =>
+                optimizationTabFocus({
+                  event: e,
+                  previousTarget: profileImgBtnRef.current,
+                })
+            : undefined
         }
       />
     </div>

@@ -1,21 +1,23 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import Image from "next/image";
+import CloseIcon from "@/public/icons/x_icon.svg";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {
+  isModal?: boolean;
   introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
   profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
   submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  handleClickProfieEditCloseBtn: () => void;
+  handleClickClose: () => void;
 }
 
 const ProfileEditCloseBtn = forwardRef<HTMLButtonElement, IProps>(
   (
     {
+      isModal,
       introduceRef,
       profileImgResetBtnRef,
       submitBtnRef,
-      handleClickProfieEditCloseBtn,
+      handleClickClose,
     },
     ref
   ) => {
@@ -23,19 +25,22 @@ const ProfileEditCloseBtn = forwardRef<HTMLButtonElement, IProps>(
       <button
         ref={ref}
         type="button"
-        onClick={handleClickProfieEditCloseBtn}
-        className="absolute top-3 right-3 bg-gray-500 rounded-full p-[6px]"
-        onKeyDown={(e) =>
-          optimizationTabFocus({
-            event: e,
-            previousTarget: submitBtnRef.current?.disabled
-              ? introduceRef.current
-              : submitBtnRef.current,
-            nextTarget: profileImgResetBtnRef.current,
-          })
+        onClick={handleClickClose}
+        className="absolute top-5 right-5"
+        onKeyDown={
+          isModal
+            ? (e) =>
+                optimizationTabFocus({
+                  event: e,
+                  previousTarget: submitBtnRef.current?.disabled
+                    ? introduceRef.current
+                    : submitBtnRef.current,
+                  nextTarget: profileImgResetBtnRef.current,
+                })
+            : undefined
         }
       >
-        <Image src={"/icons/x_icon.svg"} alt="닫기" width={12} height={12} />
+        <CloseIcon className="w-3 h-3" />
       </button>
     );
   }
