@@ -16,7 +16,7 @@ export default function NavSearchBar() {
       </label>
       <input
         type="text"
-        id="keyword"
+        id="search"
         className="w-full pl-3 pr-10 py-2 border-2 border-gray-700 leading-5 bg-white text-gray-900 placeholder-gray-400 sm:text-sm"
         placeholder="상품명, 지역명 검색"
         {...register("keyword")}
