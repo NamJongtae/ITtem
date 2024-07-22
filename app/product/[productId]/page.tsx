@@ -21,9 +21,13 @@ export async function generateMetadata({
   const url = `${BASE_URL}/product/${params.productId}`;
   let title;
   if (params.productId) {
-    const response = await getProduct(params.productId);
-    const product = response.data.product;
-    title = `ITtem | ${product.name}`;
+    try {
+      const response = await getProduct(params.productId);
+      const product = response.data.product;
+      title = `ITtem | ${product.name}`;
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   return {
