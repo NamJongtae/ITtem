@@ -27,8 +27,8 @@ export default function SigninForm({ isModal }: IProps) {
         },
       }}
       className={`${
-        isModal ? "py-10 bg-white rounded-md" : "pt-[113px] md:pt-[127px]"
-      } center w-full max-w-96 px-8 fixed flex flex-col z-10`}
+        isModal ? "py-10 bg-white rounded-md center" : "pt-[113px] md:pt-[127px] left-1/2 -translate-x-1/2 "
+      } w-full max-w-96 px-8 fixed flex flex-col z-10`}
     >
       <SigninFormContent isModal={isModal} />
     </MyForm>
