@@ -1,10 +1,10 @@
 import { queryKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function useProfileQuery(uid?: string) {
-  const searchParams = useSearchParams();
-  const currentUid = uid || searchParams.get("uid") || "";
+  const params = useParams();
+  const currentUid = uid || params?.uid || "";
   const queryKeyConfig = queryKeys.profile.user(currentUid as string);
 
   const {
