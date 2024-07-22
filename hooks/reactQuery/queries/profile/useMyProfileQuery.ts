@@ -9,7 +9,11 @@ export default function useMyProfileQuery() {
   const user = useSelector((state: RootState) => state.auth.user);
   const queryKeyConfing = queryKeys.profile.my;
 
-  const { data, isPending, isError } = useQuery({
+  const {
+    data,
+    isPending: queryIsPending,
+    isError,
+  } = useQuery({
     queryFn: queryKeyConfing.queryFn,
     queryKey: queryKeyConfing.queryKey,
     enabled: !!user,
@@ -24,5 +28,7 @@ export default function useMyProfileQuery() {
     }
   }, [isError]);
 
-  return { myProfileData: data, loadMyProfileLoading: isPending };
+  const loadMyProfileLoading = !!user && queryIsPending;
+
+  return { myProfileData: data, loadMyProfileLoading };
 }
