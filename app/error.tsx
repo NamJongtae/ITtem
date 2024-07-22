@@ -4,7 +4,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Error({ error }: { error: Error }) {
+interface IProps {
+  error: Error;
+}
+
+export default function Error({ error }: IProps) {
   const router = useRouter();
   const handleClickBack = () => {
     router.back();
@@ -22,9 +26,15 @@ export default function Error({ error }: { error: Error }) {
           Error
         </p>
         <p className="text-gray-500 mt-4 pb-4 text-center leading-7">
-          죄송합니다. <br />
-          알 수 없는 에러가 발생하였습니다. <br />
-          잠시 후 다시 시도해주세요.
+          {error.message ? (
+            error.message
+          ) : (
+            <>
+              죄송합니다. <br />
+              알 수 없는 에러가 발생하였습니다. <br />
+              잠시 후 다시 시도해주세요.
+            </>
+          )}
         </p>
         <button
           className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 mt-4 rounded transition duration-150"
