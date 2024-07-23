@@ -32,6 +32,13 @@ export async function GET(
       );
     }
 
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
+
     await dbConnect();
 
     const purchaseTrading = await PurchaseTrading.findOne({
@@ -132,6 +139,13 @@ export async function POST(
       session.endSession();
       return NextResponse.json(
         { message: "상품 아이디가 없어요." },
+        { status: 422 }
+      );
+    }
+
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
         { status: 422 }
       );
     }

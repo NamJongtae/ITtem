@@ -16,7 +16,10 @@ import {
   TradingStatus,
 } from "@/types/productTypes";
 
-export async function PATCH(req: NextRequest,   { params }: { params: { productId: string | undefined } }) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { productId: string | undefined } }
+) {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -26,7 +29,10 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     if (!isValidAuth.isValid) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: isValidAuth.message }, { status: 401 });
+      return NextResponse.json(
+        { message: isValidAuth.message },
+        { status: 401 }
+      );
     }
 
     const myUid = isValidAuth?.auth?.uid;
@@ -44,7 +50,19 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     if (!productId) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "상품 ID가 존재하지 않아요." }, { status: 422 });
+      return NextResponse.json(
+        { message: "상품 ID가 존재하지 않아요." },
+        { status: 422 }
+      );
+    }
+
+    if (productId.length < 24) {
+      await session.abortTransaction();
+      session.endSession();
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
     }
 
     const product = await Product.findOne({
@@ -54,7 +72,10 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     if (!product) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "상품이 존재하지 않아요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "상품이 존재하지 않아요." },
+        { status: 404 }
+      );
     }
 
     const purchaseTrading = await PurchaseTrading.findOne(
@@ -74,31 +95,46 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     if (!purchaseTrading) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "거래중인 구매 상품 정보가 없어요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "거래중인 구매 상품 정보가 없어요." },
+        { status: 404 }
+      );
     }
 
     if (myUid !== purchaseTrading.buyerId) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "잘못된 요청입니다." }, { status: 401 });
+      return NextResponse.json(
+        { message: "잘못된 요청입니다." },
+        { status: 401 }
+      );
     }
 
     if (purchaseTrading.status === TradingStatus.CANCEL) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "취소 요청한 상품이에요." }, { status: 409 });
+      return NextResponse.json(
+        { message: "취소 요청한 상품이에요." },
+        { status: 409 }
+      );
     }
 
     if (purchaseTrading.status !== TradingStatus.RETURN) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "반품 요청한 상품이 아니에요." }, { status: 409 });
+      return NextResponse.json(
+        { message: "반품 요청한 상품이 아니에요." },
+        { status: 409 }
+      );
     }
 
     if (purchaseTrading.status === TradingStatus.TRADING_END) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "거래가 완료된 상품이에요." }, { status: 409 });
+      return NextResponse.json(
+        { message: "거래가 완료된 상품이에요." },
+        { status: 409 }
+      );
     }
 
     if (
@@ -107,7 +143,10 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     ) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "반품 철회가 가능한 단계가 아니에요." }, { status: 409 });
+      return NextResponse.json(
+        { message: "반품 철회가 가능한 단계가 아니에요." },
+        { status: 409 }
+      );
     }
 
     const saleTrading = await SaleTrading.findOne(
@@ -125,7 +164,10 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
     if (!saleTrading) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({ message: "거래중인 판매 상품 정보가 없어요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "거래중인 판매 상품 정보가 없어요." },
+        { status: 404 }
+      );
     }
 
     const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
@@ -192,13 +234,19 @@ export async function PATCH(req: NextRequest,   { params }: { params: { productI
       `${user.nickname}님이 ${saleTrading.productName} 상품에 구매 반품을 철회 하였습니다.`
     );
 
-    return NextResponse.json({ message: "상품 반품 철회에 성공했어요." }, { status: 200 });
+    return NextResponse.json(
+      { message: "상품 반품 철회에 성공했어요." },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     await session.abortTransaction();
     session.endSession();
-    return NextResponse.json({
-      message: "상품 반품 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "상품 반품 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+      },
+      { status: 500 }
+    );
   }
 }

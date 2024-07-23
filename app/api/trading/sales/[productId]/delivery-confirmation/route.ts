@@ -58,6 +58,15 @@ export async function PATCH(
       );
     }
 
+    if (productId.length < 24) {
+      await session.abortTransaction();
+      session.endSession();
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
+
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string),
     });

@@ -53,6 +53,13 @@ export async function POST(
       );
     }
 
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
+
     await dbConnect();
 
     const product = await Product.findOne({

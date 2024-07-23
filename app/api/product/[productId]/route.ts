@@ -27,6 +27,13 @@ export async function GET(
       );
     }
 
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
+
     await dbConnect();
 
     const product = await Product.findOne({
@@ -213,6 +220,13 @@ export async function PATCH(
       );
     }
 
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
+
     if (!productData) {
       return NextResponse.json(
         { message: "상품 수정 데이터가 없어요." },
@@ -325,6 +339,13 @@ export async function DELETE(
       await session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 없어요." },
+        { status: 422 }
+      );
+    }
+
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
         { status: 422 }
       );
     }
