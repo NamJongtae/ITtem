@@ -31,7 +31,7 @@ export default function ProductList({
   } = useProductList(productListType, productIds, profileProductCategory);
 
   if (error) {
-    return <ProductListError productListType={productListType} error={error} />;
+    return <ProductListError productListType={productListType} />;
   }
 
   if (data?.length === 0) {

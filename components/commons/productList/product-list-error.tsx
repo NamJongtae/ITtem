@@ -1,13 +1,11 @@
 import { ProductListType } from "@/types/productTypes";
 import Empty from "../Empty";
-import { AxiosError } from "axios";
 
 interface IProps {
   productListType: ProductListType;
-  error: AxiosError<unknown, any>;
 }
 
-export default function ProductListError({ productListType, error }: IProps) {
+export default function ProductListError({ productListType }: IProps) {
   return (
     <Empty
       message={`${
