@@ -20,6 +20,7 @@ export async function generateMetadata({
 }) {
   const url = `${BASE_URL}/product/${params.productId}`;
   let title;
+
   if (params.productId) {
     try {
       const response = await getProduct(params.productId);
@@ -40,14 +41,14 @@ export async function generateMetadata({
   };
 }
 
-async function fetchProductData(productId: string, queryClient: QueryClient) {
+async function fetchProductData({
+  productId,
+  queryClient,
+}: {
+  productId: string;
+  queryClient: QueryClient;
+}) {
   const productQueryKeyConfing = queryKeys.product.detail(productId);
-
-  try {
-    await incrementViewCount(productId);
-  } catch (error) {
-    console.error(error);
-  }
 
   await queryClient.prefetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
@@ -56,7 +57,7 @@ async function fetchProductData(productId: string, queryClient: QueryClient) {
 }
 
 async function fetchProfileData(queryClient: QueryClient) {
-  const myProfuileQueryKeyConfig = queryKeys.profile.my;
+  const myProfileQueryKeyConfig = queryKeys.profile.my;
 
   const session = await getIronSession<IronSessionData>(
     cookies(),
@@ -65,7 +66,7 @@ async function fetchProfileData(queryClient: QueryClient) {
 
   if (session.refreshToken) {
     await queryClient.prefetchQuery({
-      queryKey: myProfuileQueryKeyConfig.queryKey,
+      queryKey: myProfileQueryKeyConfig.queryKey,
       queryFn: async () => {
         try {
           const response = await customAxios("/api/profile", {
@@ -76,7 +77,7 @@ async function fetchProfileData(queryClient: QueryClient) {
           return response.data.profile;
         } catch (error) {
           queryClient.removeQueries({
-            queryKey: myProfuileQueryKeyConfig.queryKey,
+            queryKey: myProfileQueryKeyConfig.queryKey,
           });
           console.error(error);
         }
@@ -94,13 +95,14 @@ export default async function ProductDetail({
   const productId = params?.productId;
 
   if (productId) {
-    await fetchProductData(productId, queryClient);
+    await fetchProductData({ productId, queryClient });
+    await incrementViewCount(productId);
     await fetchProfileData(queryClient);
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductDetailPage />
+        <ProductDetailPage />
     </HydrationBoundary>
   );
 }
