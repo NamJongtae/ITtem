@@ -1,4 +1,4 @@
-import useProductQuery from "../reactQuery/mutations/product/useProductQuery";
+import useProductQuery from "../reactQuery/queries/product/useProductQuery";
 import useAddRecentProduct from "./useAddRecentProduct";
 
 export default function useProductDetailPage() {

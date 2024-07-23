@@ -1,4 +1,4 @@
-import useProductQuery from "@/hooks/reactQuery/mutations/product/useProductQuery";
+import useProductQuery from "@/hooks/reactQuery/queries/product/useProductQuery";
 import Image from "next/image";
 import Link from "next/link";
 

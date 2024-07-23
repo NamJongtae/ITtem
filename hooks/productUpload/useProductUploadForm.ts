@@ -1,5 +1,5 @@
 import useProductUploadSubmit from "./useProductUploadSubmit";
-import useProductQuery from "../reactQuery/mutations/product/useProductQuery";
+import useProductQuery from "../reactQuery/queries/product/useProductQuery";
 import useProductEditSubmit from "./useProductEditSubmit";
 
 interface IParams {
