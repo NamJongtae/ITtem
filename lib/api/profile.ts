@@ -1,7 +1,13 @@
-import { FollowersResponseData, FollowingsResponseData, ProfileResponseData, ReviewsResponseData, WishResponseData } from '@/types/apiTypes';
-import { AxiosResponse } from 'axios';
-import customAxios from '../customAxios';
-import { ProfileEditData } from '@/types/authTypes';
+import {
+  FollowersResponseData,
+  FollowingsResponseData,
+  ProfileResponseData,
+  ReviewsResponseData,
+  WishResponseData,
+} from "@/types/apiTypes";
+import { AxiosResponse } from "axios";
+import customAxios from "../customAxios";
+import { ProfileEditData } from "@/types/authTypes";
 
 export async function getUserProfile(
   uid: string
@@ -61,9 +67,9 @@ export async function getFollowers({
   limit = 10,
   userIds,
 }: {
-  cursor: unknown;
-  limit?: number;
   userIds: string[] | undefined;
+  cursor?: unknown;
+  limit?: number;
 }): Promise<AxiosResponse<FollowersResponseData>> {
   try {
     const response = await customAxios.post(
@@ -85,9 +91,9 @@ export async function getFollowings({
   limit = 10,
   userIds,
 }: {
-  cursor: unknown;
-  limit?: number;
   userIds: string[] | undefined;
+  cursor?: unknown;
+  limit?: number;
 }): Promise<AxiosResponse<FollowingsResponseData>> {
   try {
     const response = await customAxios.post(
@@ -110,7 +116,7 @@ export async function getProfileWish({
   limit = 10,
 }: {
   wishProductIds: string[];
-  cursor: unknown;
+  cursor?: unknown;
   limit?: number;
 }): Promise<AxiosResponse<WishResponseData>> {
   try {
@@ -145,7 +151,7 @@ export async function getProfileReviews({
   limit = 10,
 }: {
   uid: string;
-  cursor: unknown;
+  cursor?: unknown;
   limit?: number;
 }): Promise<AxiosResponse<ReviewsResponseData>> {
   try {

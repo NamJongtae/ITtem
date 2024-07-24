@@ -4,7 +4,6 @@ import {
   ProductCategory,
   ProductData,
   ProductUploadData,
-  TradingStatus,
 } from "@/types/productTypes";
 import {
   ProductDetailResponseData,
@@ -47,15 +46,15 @@ export async function getCategoryProductList({
   location,
 }: {
   category: ProductCategory;
-  cursor: unknown;
-  limit: number;
+  cursor?: unknown;
+  limit?: number;
   location?: string;
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
       `/api/product?category=${category}${
         cursor ? `&cursor=${cursor}` : ""
-      }&limit=${limit}&location=${location}`
+      }&limit=${limit}${location && `&location=${location}`}`
     );
     return response;
   } catch (error) {
@@ -69,10 +68,11 @@ export async function getSearchProductList({
   limit = 10,
   keyword,
 }: {
-  category: ProductCategory;
-  cursor: unknown;
-  limit: number;
+  category: ProductCategory;  
   keyword: string;
+  cursor?: unknown;
+  limit?: number;
+
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(
@@ -93,8 +93,8 @@ export async function getProfileProductList({
   productIds,
 }: {
   category: ProductCategory;
-  cursor: unknown;
-  limit: number;
+  cursor?: unknown;
+  limit?: number;
   productIds: string[];
 }) {
   try {
@@ -204,8 +204,6 @@ export async function deleteWish(
     throw error;
   }
 }
-
-
 
 export async function getReview(
   productId: string

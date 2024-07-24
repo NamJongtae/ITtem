@@ -212,7 +212,7 @@ export async function getSalesTrading({
   search,
 }: {
   status?: string;
-  cursor: unknown;
+  cursor?: unknown;
   search?: string;
   limit?: number;
 }): Promise<AxiosResponse<SalesTradingResponseData>> {
@@ -235,7 +235,7 @@ export async function getPurchaseTrading({
   search,
 }: {
   status?: string;
-  cursor: unknown;
+  cursor?: unknown;
   search?: string;
   limit?: number;
 }): Promise<AxiosResponse<PurchaseTradingResponseData>> {
