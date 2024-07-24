@@ -41,7 +41,7 @@ export const productQueryKey = createQueryKeys("product", {
     productListType?: ProductListType;
     produdctCategory?: ProductCategory;
     location?: string;
-    limit: number;
+    limit?: number;
   }) => ({
     queryKey: productListType
       ? [productListType]
@@ -65,12 +65,12 @@ export const productQueryKey = createQueryKeys("product", {
   }),
   search: ({
     keyword,
-    category,
+    category = ProductCategory.전체,
     limit = 10,
   }: {
     keyword?: string;
-    category: ProductCategory;
-    limit: number;
+    category?: ProductCategory;
+    limit?: number;
   }) => ({
     queryKey: [keyword, category],
     queryFn: async ({ pageParam }) => {
@@ -108,7 +108,7 @@ export const productQueryKey = createQueryKeys("product", {
     status: string;
     search: string | undefined;
     menu: ProductManageMenu;
-    limit: number;
+    limit?: number;
   }) => ({
     queryKey: [currentMenu, status, search],
     queryFn: async ({ pageParam }) => {
@@ -147,8 +147,8 @@ export const profileQueryKey = createQueryKeys("profile", {
         productIds,
       }: {
         category: ProductCategory;
-        limit: number;
         productIds: string[];
+        limit?: number;
       }) => ({
         queryKey: [category],
         queryFn: async ({ pageParam }) => {
@@ -166,7 +166,7 @@ export const profileQueryKey = createQueryKeys("profile", {
         limit = 10,
       }: {
         userIds: string[];
-        limit: number;
+        limit?: number;
       }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
@@ -183,7 +183,7 @@ export const profileQueryKey = createQueryKeys("profile", {
         limit = 10,
       }: {
         userIds: string[];
-        limit: number;
+        limit?: number;
       }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
@@ -200,7 +200,7 @@ export const profileQueryKey = createQueryKeys("profile", {
         limit = 10,
       }: {
         wishProductIds: string[];
-        limit: number;
+        limit?: number;
       }) => ({
         queryKey: ["wish"],
         queryFn: async ({ pageParam }) => {
@@ -234,8 +234,8 @@ export const profileQueryKey = createQueryKeys("profile", {
         productIds,
       }: {
         category: ProductCategory;
-        limit: number;
         productIds: string[];
+        limit?: number;
       }) => ({
         queryKey: [category],
         queryFn: async ({ pageParam }) => {
@@ -253,7 +253,7 @@ export const profileQueryKey = createQueryKeys("profile", {
         limit = 10,
       }: {
         userIds: string[];
-        limit: number;
+        limit?: number;
       }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
@@ -270,7 +270,7 @@ export const profileQueryKey = createQueryKeys("profile", {
         limit = 10,
       }: {
         userIds: string[];
-        limit: number;
+        limit?: number;
       }) => ({
         queryKey: [] as any,
         queryFn: async ({ pageParam }) => {
