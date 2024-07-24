@@ -1,4 +1,12 @@
 import HomePage from "@/components/home/home-page";
+import { queryKeys } from "@/queryKeys";
+import { ProductData } from '@/types/productTypes';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryFunction,
+  dehydrate,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +16,26 @@ export const metadata: Metadata = {
   },
 };
 
+async function prefetchProductListData({
+  queryClient,
+}: {
+  queryClient: QueryClient;
+}) {
+  const queryKeyConfig = queryKeys.product.list({ productListType: "TODAY" });
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], any, unknown>,
+    initialPageParam: null,
+  });
+}
+
 export default async function Home() {
-  return <HomePage />;
+  const queryClient = new QueryClient();
+  await prefetchProductListData({ queryClient });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <HomePage />
+    </HydrationBoundary>
+  );
 }
