@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const locationSlice = createSlice({
   name: "locationSlice",
   initialState: {
+    checkLoacation: false,
     location: "",
   },
   reducers: {
@@ -11,6 +12,9 @@ export const locationSlice = createSlice({
     },
     resetLocation: (state) => {
       state.location = "";
+    },
+    setCheckLocation: (state, action) => {
+      state.checkLoacation = action.payload;
     },
   },
 });
