@@ -12,6 +12,8 @@ import { queryKeys } from "@/queryKeys";
 import { IronSessionData } from "@/types/apiTypes";
 import ProductDetailPage from "@/components/productDetail/product-detail";
 import { BASE_URL } from "@/constants/constant";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
 export async function generateMetadata({
   params,
@@ -49,7 +51,7 @@ async function fetchProductData({
   queryClient: QueryClient;
 }) {
   const productQueryKeyConfing = queryKeys.product.detail(productId);
-  
+
   await queryClient.prefetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
     queryFn: productQueryKeyConfing.queryFn,
@@ -107,8 +109,10 @@ export default async function ProductDetail({
   }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductDetailPage />
-    </HydrationBoundary>
+    <Suspense fallback={<Loading />}>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ProductDetailPage />
+      </HydrationBoundary>
+    </Suspense>
   );
 }
