@@ -26,7 +26,7 @@ export async function generateMetadata({
       const response = await getProduct(params.productId);
       const product = response.data.product;
       title = `ITtem | ${product.name}`;
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
   }
@@ -49,7 +49,7 @@ async function fetchProductData({
   queryClient: QueryClient;
 }) {
   const productQueryKeyConfing = queryKeys.product.detail(productId);
-
+  
   await queryClient.prefetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
     queryFn: productQueryKeyConfing.queryFn,
@@ -79,7 +79,7 @@ async function fetchProfileData(queryClient: QueryClient) {
           queryClient.removeQueries({
             queryKey: myProfileQueryKeyConfig.queryKey,
           });
-          console.error(error);
+          throw error;
         }
       },
     });
@@ -95,14 +95,20 @@ export default async function ProductDetail({
   const productId = params?.productId;
 
   if (productId) {
-    await incrementViewCount(productId);
-    await fetchProductData({ productId, queryClient });
-    await fetchProfileData(queryClient);
+    try {
+      await incrementViewCount(productId);
+      await Promise.all([
+        fetchProductData({ productId, queryClient }),
+        fetchProfileData(queryClient),
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductDetailPage />
+      <ProductDetailPage />
     </HydrationBoundary>
   );
 }
