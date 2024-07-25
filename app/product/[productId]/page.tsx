@@ -95,8 +95,8 @@ export default async function ProductDetail({
   const productId = params?.productId;
 
   if (productId) {
-    await fetchProductData({ productId, queryClient });
     await incrementViewCount(productId);
+    await fetchProductData({ productId, queryClient });
     await fetchProfileData(queryClient);
   }
 
