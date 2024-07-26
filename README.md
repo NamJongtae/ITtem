@@ -35,6 +35,7 @@
   - [🧩 customhook 패턴 로직 분리](#-customhook-패턴-로직-분리)
   - [⌨ 모달 및 드롭 다운 메뉴 키보드 최적화](#-모달-및-드롭-다운-메뉴-키보드-최적화)
   - [📱 모달 모바일 뒤로가기 버튼적용](#-모달-모바일-뒤로가기-버튼-적용)
+  - [📤 App Router 마이그레이션](#-app-router-마이그레이션)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -1229,6 +1230,279 @@ export const useModalMobileBackBtn = ({ closeModal, isOpenModal }: IParams) => {
 
 <br>
 
+</details>
+
+<br>
+
+#### 📤 App Router 마이그레이션
+
+>**적용이유**
+- App Router 마이그레이션을 통해 `Server Component`를 사용하여 **bundle size 감소**및 **초기 로딩 속도 개선**을 위해 적용하였습니다.
+- `Streaming SSR`, `Suspense` 기능을 통해 UX을 향상시키고자 적용하였습니다.
+- **parallel routes & interceptor routes**를 이용하여 모달창을 구현하여 **UX 및 SEO 향상**을 위해 적용하였습니다.
+
+<br>
+
+>**적용으로 얻은 이점**
+- 전체적인 번들 사이즈가 감소하였으며, 공통 번들 사이즈가 **340MB에서 84.8MB로 약 76% 감소**하였습니다.
+- `Streaming SSR`, `Suspnse` 기능으로 SSR이 진행되는 동안 fallback UI를 표시할 수 있어 UX가 향상되었습니다.
+- **parallel routes & interceptor routes**를 이용하여 모달창을 구현하여 **UX 및 SEO 향상**되었으며, 별도로 모바일의 뒤로가기 구현이 필요없어졌습니다.
+
+<br>
+
+**1 ) 번들 사이즈 분석 결과**
+<details>
+<summary>분석 결과 보기</summary>
+  
+<br>
+  
+| Route                                                   | Size   | First Load JS |
+|---------------------------------------------------------|--------|---------------|
+| ○ /                                                     | 4.36 kB | 186 kB        |
+| ├ ○ /_not-found                                         | 0 B    | 0 B           |
+| ├ ○ /(.)signin                                          | 533 B  | 163 kB        |
+| ├ λ /api/auth/changePassword                            | 0 B    | 0 B           |
+| ├ λ /api/auth/checkEmail                                | 0 B    | 0 B           |
+| ├ λ /api/auth/deleteToken                               | 0 B    | 0 B           |
+| ├ λ /api/auth/duplication/email                         | 0 B    | 0 B           |
+| ├ λ /api/auth/duplication/nickname                      | 0 B    | 0 B           |
+| ├ λ /api/auth/refreshToken                              | 0 B    | 0 B           |
+| ├ λ /api/auth/sendVerifyEmail                           | 0 B    | 0 B           |
+| ├ λ /api/auth/session                                   | 0 B    | 0 B           |
+| ├ λ /api/auth/signin                                    | 0 B    | 0 B           |
+| ├ λ /api/auth/signin/google                             | 0 B    | 0 B           |
+| ├ λ /api/auth/signin/google/user                        | 0 B    | 0 B           |
+| ├ λ /api/auth/signin/kakao                              | 0 B    | 0 B           |
+| ├ λ /api/auth/signin/kakao/user                         | 0 B    | 0 B           |
+| ├ λ /api/auth/signout                                   | 0 B    | 0 B           |
+| ├ λ /api/auth/signup                                    | 0 B    | 0 B           |
+| ├ λ /api/auth/user                                      | 0 B    | 0 B           |
+| ├ λ /api/auth/verifyEmail                               | 0 B    | 0 B           |
+| ├ λ /api/chat                                           | 0 B    | 0 B           |
+| ├ λ /api/chat/[chatRoomId]                              | 0 B    | 0 B           |
+| ├ λ /api/chat/[chatRoomId]/exit                         | 0 B    | 0 B           |
+| ├ λ /api/chat/[chatRoomId]/join                         | 0 B    | 0 B           |
+| ├ λ /api/chat/[chatRoomId]/leave                        | 0 B    | 0 B           |
+| ├ λ /api/chat/[chatRoomId]/message                      | 0 B    | 0 B           |
+| ├ λ /api/notification                                   | 0 B    | 0 B           |
+| ├ λ /api/notification/[messageId]                       | 0 B    | 0 B           |
+| ├ λ /api/product                                        | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]                            | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]/purchase                   | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]/report                     | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]/review                     | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]/view                       | 0 B    | 0 B           |
+| ├ λ /api/product/[productId]/wish                       | 0 B    | 0 B           |
+| ├ λ /api/product/search                                 | 0 B    | 0 B           |
+| ├ λ /api/product/today                                  | 0 B    | 0 B           |
+| ├ λ /api/product/upload                                 | 0 B    | 0 B           |
+| ├ λ /api/profile                                        | 0 B    | 0 B           |
+| ├ λ /api/profile/[uid]                                  | 0 B    | 0 B           |
+| ├ λ /api/profile/[uid]/follow                           | 0 B    | 0 B           |
+| ├ λ /api/profile/[uid]/review                           | 0 B    | 0 B           |
+| ├ λ /api/profile/followers                              | 0 B    | 0 B           |
+| ├ λ /api/profile/followings                             | 0 B    | 0 B           |
+| ├ λ /api/profile/product                                | 0 B    | 0 B           |
+| ├ λ /api/profile/wish                                   | 0 B    | 0 B           |
+| ├ λ /api/trading/purchase                               | 0 B    | 0 B           |
+| ├ λ /api/trading/purchase/[productId]/cancel            | 0 B    | 0 B           |
+| ├ λ /api/trading/purchase/[productId]/cancel/withdrawal | 0 B    | 0 B           |
+| ├ λ /api/trading/purchase/[productId]/product-receipt-confirmation | 0 B | 0 B |
+| ├ λ /api/trading/purchase/[productId]/return            | 0 B    | 0 B           |
+| ├ λ /api/trading/purchase/[productId]/return/delivery-confirmation | 0 B | 0 B |
+| ├ λ /api/trading/purchase/[productId]/return/withdrawal | 0 B    | 0 B           |
+| ├ λ /api/trading/sales                                  | 0 B    | 0 B           |
+| ├ λ /api/trading/sales/[productId]/cancel-comfirmation  | 0 B    | 0 B           |
+| ├ λ /api/trading/sales/[productId]/cancel-reject        | 0 B    | 0 B           |
+| ├ λ /api/trading/sales/[productId]/delivery-confirmation| 0 B    | 0 B           |
+| ├ λ /api/trading/sales/[productId]/purchase-request-confirmation | 0 B | 0 B |
+| ├ λ /api/trading/sales/[productId]/purchase-request-reject | 0 B  | 0 B           |
+| ├ λ /api/trading/sales/[productId]/return-confirmation  | 0 B    | 0 B           |
+| ├ λ /api/trading/sales/[productId]/return-receipt-confirmation | 0 B | 0 B |
+| ├ λ /api/trading/sales/[productId]/return-reject        | 0 B    | 0 B           |
+| ├ ○ /chat                                               | 2.48 kB | 149 kB        |
+| ├ λ /chat/[chatRoomId]                                  | 25.9 kB| 184 kB        |
+| ├ ○ /findpassword                                       | 2.19 kB | 154 kB        |
+| ├ λ /product                                            | 4.46 kB | 198 kB        |
+| ├ λ /product/[productId]                                | 12 kB   | 199 kB        |
+| ├ λ /product/[productId]/edit                           | 178 B  | 210 kB        |
+| ├ λ /product/manage                                     | 12.4 kB| 173 kB        |
+| ├ ○ /product/upload                                     | 176 B  | 210 kB        |
+| ├ λ /profile                                            | 2.47 kB | 195 kB        |
+| ├ ○ /profile/(.)edit                                    | 1.07 kB | 166 kB        |
+| ├ ○ /profile/(.)passwordChange                          | 491 B  | 149 kB        |
+| ├ λ /profile/[uid]                                      | 226 B  | 193 kB        |
+| ├ λ /profile/edit                                       | 3.93 kB | 169 kB        |
+| ├ ○ /profile/passwordChange                             | 188 B  | 149 kB        |
+| ├ λ /search/product                                     | 3.34 kB | 189 kB        |
+| ├ ○ /signin                                             | 199 B  | 163 kB        |
+| ├ ○ /signin/google                                      | 3.09 kB | 138 kB        |
+| ├ ○ /signin/kakao                                       | 3.01 kB | 138 kB        |
+| └ ○ /signup                                             | 4.59 kB | 161 kB        |
+| **First Load JS shared by all**                         |        | 84.8 kB       |
+| ├ chunks/8069-edc8d10e59d09018.js                       | 29 kB  |               |
+| ├ chunks/fd9d1056-47f05366a5e29db8.js                   | 53.4 kB|               |
+| └ other shared chunks (total)                           |        | 2.33 kB        |
+| **Middleware**                                          |        | 99.1 kB       |
+| ○ (Static)                                               |        |               |
+| λ (Dynamic)                                              |        |               |
+
+<br>
+
+</details>
+
+<br>
+
+**2 ) Streaming SSR, Suspense 적용**
+
+상품 목록 첫 페이지를 SSR로 prefetching 하고, `Streaming SSR`과 `Suspense`를 통해 fallback Loading UI를 표시합니다.
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+```javascript
+// app/product/page.tsx
+
+import ProductPage from "@/components/product/product-page";
+import { queryKeys } from "@/queryKeys";
+import { ProductCategory } from "@/types/productTypes";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import Loading from '../loading';
+import { Suspense } from 'react';
+
+async function prefetchProductList({
+  category = ProductCategory.전체,
+  queryClient,
+}: {
+  category: ProductCategory;
+  queryClient: QueryClient;
+}) {
+  const queryKeyConfig = queryKeys.product.list({
+    produdctCategory: category || ProductCategory.전체,
+  });
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn,
+    initialPageParam: null,
+  });
+}
+
+export default async function Product({
+  searchParams,
+}: {
+  searchParams: { category: string | undefined };
+}) {
+  const queryClient = new QueryClient();
+  const category = searchParams.category || null;
+
+  await prefetchProductList({
+    category: category as ProductCategory,
+    queryClient,
+  });
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ProductPage />
+      </HydrationBoundary>
+    </Suspense>
+  );
+}
+```
+
+</details>
+
+<br>
+
+**3 ) parallel routes & interceptor routes 모달 적용**
+
+로그인 페이지를 **parallel routes & interceptor routes**를 통해 모달창으로 구현합니다.
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+**parallerl routes default.tsx** :  새로고침시 parallerl routes가 사용되지 않는 경우 unmatched route 오류 해결을 위해 사용합니다. 
+```javascript
+// /app/@sign/default.tsx
+
+export default function SigninModalDefault() {
+  return null;
+}
+```
+
+<br>
+
+**interceptor routes page.tsx** : signin 경로를 대신할 페이지 RootLayout에 레이아웃을 공유하여, 로그인 모달창이 나타나도록합니다.
+```javascript
+// /app/@sign/(.)signin/page.tsx
+
+import SigninModal from "@/components/signin/modal/signin-modal";
+
+export default function Modal() {
+  return <SigninModal />;
+}
+```
+
+<br>
+
+**RootLayout.tsx** : 루트 레이아웃에 signin 모달창을 공유합니다.
+```javascript
+// /app/layout.tsx
+//                             •
+//                             •
+//                           (생략)
+//                             •
+//                             •
+
+export default async function RootLayout({
+  children,
+  signin,
+}: Readonly<{
+  children: React.ReactNode;
+  signin: React.ReactNode;
+}>) {
+  return (
+    <html lang="ko">
+      <body className={inter.className}>
+        <ReduxProvider>
+          <ReactQueryProvider>
+            <Suspense fallback={<Loading />}>
+              <Layout>
+                {signin}
+                <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
+                  {children}
+                </main>
+
+                <ToastContainer
+                  position="top-center"
+                  limit={1}
+                  closeOnClick={true}
+                  closeButton={true}
+                  pauseOnHover={false}
+                  draggable={true}
+                  autoClose={2000}
+                  pauseOnFocusLoss={false}
+                  theme="light"
+                  hideProgressBar={true}
+                />
+              </Layout>
+            </Suspense>
+          </ReactQueryProvider>
+        </ReduxProvider>
+        <div id="portal-root"></div>
+      </body>
+    </html>
+  );
+}
+```
 </details>
 
 <br>
