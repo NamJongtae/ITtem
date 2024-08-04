@@ -1,8 +1,8 @@
 "use client";
 
 import Loading from "@/app/loading";
-import useGoogleSigninMutate from "@/hooks/reactQuery/mutations/auth/useGoogleSigninMutate";
-import useGoogleUserInfo from "@/hooks/reactQuery/mutations/auth/useGoogleUserInfoMutate";
+import useGoogleSigninMutate from "@/hooks/react-query/mutations/auth/useGoogleSigninMutate";
+import useGoogleUserInfo from "@/hooks/react-query/mutations/auth/useGoogleUserInfoMutate";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 

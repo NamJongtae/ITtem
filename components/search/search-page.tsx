@@ -1,10 +1,10 @@
-import ProductList from "../commons/productList/product-list";
-import SearchPageHeader from "./search-page-header";
+import SearchHeader from "./search-header";
+import ProductList from "../commons/product-list/product-list";
 
 export default function SearchPage() {
   return (
     <>
-      <SearchPageHeader />
+      <SearchHeader />
       <ProductList productListType="SEARCH" />
     </>
   );

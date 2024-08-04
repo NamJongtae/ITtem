@@ -1,4 +1,4 @@
-import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
+import useSignoutMutate from "@/hooks/react-query/mutations/auth/useSignoutMutate";
 
 export default function useLogoutBtn() {
   const { signoutMutate } = useSignoutMutate();

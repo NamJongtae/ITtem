@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import useDeleteProfileWishMutate from "../reactQuery/mutations/profile/useDeleteProfileWishMutate";
+import useDeleteProfileWishMutate from "../react-query/mutations/profile/useDeleteProfileWishMutate";
 
 interface IParams {
   selectedWish: string[];

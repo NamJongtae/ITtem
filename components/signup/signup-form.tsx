@@ -1,10 +1,10 @@
-import { MyForm } from "../commons/myForm/MyForm";
-import FormContent from "./form-content";
+import { MyForm } from "../commons/my-form/my-form";
+import SignupFormContent from "./signup-form-content";
 import Loading from "@/app/loading";
-import useSignup from "@/hooks/signup/useSignup";
+import useSignupHandler from "@/hooks/signup/useSignupHandler";
 
 export default function SignupForm() {
-  const { onSubmit, signupLoading } = useSignup();
+  const { onSubmit, signupLoading } = useSignupHandler();
 
   if (signupLoading) {
     return <Loading />;
@@ -27,7 +27,7 @@ export default function SignupForm() {
       }}
     >
       <h2 className="sr-only">회원가입</h2>
-      <FormContent />
+      <SignupFormContent />
     </MyForm>
   );
 }

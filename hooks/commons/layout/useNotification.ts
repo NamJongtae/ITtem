@@ -7,7 +7,7 @@ import { NotificationMessageData } from "@/types/notification";
 import { useQueryClient } from "@tanstack/react-query";
 import { isMobile } from "react-device-detect";
 import { getRealtimeDB } from "@/lib/firebaseSetting";
-import { notificationSlice } from "@/store/notification";
+import { notificationSlice } from '@/store/notification';
 import { queryKeys } from "@/queryKeys";
 
 export default function useNotification() {

@@ -1,5 +1,5 @@
-import AddressModal from "../addressModal/address-modal";
-import useProductUploadLocationField from "@/hooks/productUpload/useProductUploadLocationField";
+import AddressModal from "../address-modal/address-modal";
+import useProductUploadLocationField from "@/hooks/product-upload/useProductUploadLocationField";
 
 export default function ProductUploadLocationField() {
   const {
@@ -11,7 +11,7 @@ export default function ProductUploadLocationField() {
     selectNoPreferenceAddress,
     addAddress,
   } = useProductUploadLocationField();
-  
+
   return (
     <div className="border-b py-8">
       <label className="sr-only" htmlFor="location">

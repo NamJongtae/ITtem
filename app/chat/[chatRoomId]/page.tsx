@@ -1,4 +1,4 @@
-import ChatRoomPage from "@/components/chat/chatRoomPage/chat-room-page";
+import ChatRoomPage from "@/components/chat/room/chat-room-page";
 import { BASE_URL } from '@/constants/constant';
 
 export async function generateMetadata({

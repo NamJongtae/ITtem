@@ -1,7 +1,7 @@
-import useMyProfileFollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/useMyProfileUnfollowMutate";
-import useUserProfileFollowMutate from "@/hooks/reactQuery/mutations/profile/useUserProfileFollowMutate";
-import useUserProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/useUserProfileUnfollowMutate";
+import useMyProfileFollowMutate from "@/hooks/react-query/mutations/profile/useMyProfileFollowMutate";
+import useMyProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useMyProfileUnfollowMutate";
+import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileFollowMutate";
+import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { ProfileData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 export default function useProfileDetailFollowBtn({

@@ -1,6 +1,6 @@
-import HomePage from "@/components/home/home-page";
+import HomePage from "@/components/home/hom-page";
 import { queryKeys } from "@/queryKeys";
-import { ProductData } from '@/types/productTypes';
+import { ProductData } from "@/types/productTypes";
 import {
   HydrationBoundary,
   QueryClient,
@@ -24,7 +24,11 @@ async function prefetchProductListData({
   const queryKeyConfig = queryKeys.product.list({ productListType: "TODAY" });
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], any, unknown>,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      ProductData[],
+      any,
+      unknown
+    >,
     initialPageParam: null,
   });
 }

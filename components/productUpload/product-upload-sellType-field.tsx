@@ -1,4 +1,4 @@
-import useProductUploadSellTypeField from '@/hooks/productUpload/useProductUploadSellTypeField';
+import useProductUploadSellTypeField from "@/hooks/product-upload/useProductUploadSellTypeField";
 
 export default function ProductUploadSellTypeField() {
   const { register, sellType } = useProductUploadSellTypeField();
@@ -17,7 +17,7 @@ export default function ProductUploadSellTypeField() {
             defaultChecked={sellType === "중고거래"}
             value={"중고거래"}
             {...register("sellType", {
-              required: true
+              required: true,
             })}
           />
           중고거래
@@ -28,8 +28,8 @@ export default function ProductUploadSellTypeField() {
             type="radio"
             defaultChecked={sellType === "무료나눔"}
             value={"무료나눔"}
-            {...register("sellType",{
-              required: true
+            {...register("sellType", {
+              required: true,
             })}
           />
           무료나눔

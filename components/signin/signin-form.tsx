@@ -1,6 +1,6 @@
 "use client";
 
-import { MyForm } from "../commons/myForm/MyForm";
+import { MyForm } from "../commons/my-form/my-form";
 import SigninFormContent from "./signin-form-content";
 import Loading from "@/app/loading";
 import useSigninForm from "@/hooks/signin/useSigninForm";
@@ -27,7 +27,9 @@ export default function SigninForm({ isModal }: IProps) {
         },
       }}
       className={`${
-        isModal ? "py-10 bg-white rounded-md center" : "pt-[113px] md:pt-[127px] left-1/2 -translate-x-1/2 "
+        isModal
+          ? "py-10 bg-white rounded-md center"
+          : "pt-[113px] md:pt-[127px] left-1/2 -translate-x-1/2 "
       } w-full max-w-96 px-8 fixed flex flex-col z-10`}
     >
       <SigninFormContent isModal={isModal} />

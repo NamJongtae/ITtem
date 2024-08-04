@@ -1,5 +1,5 @@
 import { CATEGORY } from "@/constants/constant";
-import useProductUploadCategoryField from "@/hooks/productUpload/useProductUploadCategoryField";
+import useProductUploadCategoryField from "@/hooks/product-upload/useProductUploadCategoryField";
 import { ProductCategory } from "@/types/productTypes";
 
 export default function ProductUploadCategoryField() {

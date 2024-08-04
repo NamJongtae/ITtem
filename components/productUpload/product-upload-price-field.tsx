@@ -1,5 +1,5 @@
-import useProductUploadPrice from "@/hooks/productUpload/useProductUploadPrice";
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import useProductUploadPrice from "@/hooks/product-upload/useProductUploadPrice";
+import CoreInputField from "../commons/core-input-field/core-input-field";
 
 export default function ProductUploadPriceField() {
   const { onChangePrice } = useProductUploadPrice();

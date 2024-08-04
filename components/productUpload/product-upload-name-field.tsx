@@ -1,5 +1,5 @@
-import useProductName from "@/hooks/productUpload/useProductUploadName";
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import useProductName from "@/hooks/product-upload/useProductUploadName";
+import CoreInputField from "../commons/core-input-field/core-input-field";
 
 export default function ProductUploadNameField() {
   const { productName, handleChangeProductName } = useProductName();

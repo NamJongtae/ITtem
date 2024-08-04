@@ -13,7 +13,7 @@ import { Model } from "mongoose";
 import { cookies } from "next/headers";
 
 export const getSmtpTransport = async () => {
-  "use server"
+  "use server";
   const nodemailer = await import("nodemailer");
   return nodemailer.createTransport({
     service: "gmail",

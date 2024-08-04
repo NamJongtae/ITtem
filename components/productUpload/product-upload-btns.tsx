@@ -1,4 +1,4 @@
-import useProductUploadBtns from "@/hooks/productUpload/useProductUploadBtns";
+import useProductUploadBtns from "@/hooks/product-upload/useProductUploadBtns";
 
 interface IProps {
   isEdit?: boolean;

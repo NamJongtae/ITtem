@@ -1,4 +1,4 @@
-import ProfileEditForm from "@/components/profileEdit/profie-edit-form";
+import ProfileEditForm from "@/components/profile-edit/profile-edit-form";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { queryKeys } from "@/queryKeys";

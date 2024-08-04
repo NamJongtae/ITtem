@@ -12,7 +12,7 @@ import {
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { category: string | undefined};
+  searchParams: { category: string | undefined };
 }) {
   const category = searchParams?.category || "전체";
   const title = category ? `ITtem | 상품-${category}` : "ITtem | 상품-전체";

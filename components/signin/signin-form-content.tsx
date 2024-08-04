@@ -1,11 +1,10 @@
 import SigninEmailField from "./signin-email-field";
 import SigninPasswordField from "./signin-password-field";
 import SigninLinks from "./signin-links";
-import SiginLoginBtn from "./sigin-loginBtn";
-import SigninSocialLoginBtns from "./signin-social-loginBtns";
-import SigninModalCloseBtn from "./modal/signin-modal-closeBtn";
+import SigninLoginBtn from "./signin-login-btn";
+import SigninSocialLoginBtns from "./signin-social-login-Btns";
 import useSigninFormContent from "@/hooks/signin/useSigninFormContent";
-import { MutableRefObject } from "react";
+import SigninModalCloseBtn from "./modal/signin-modal-close-Btn";
 
 interface IProps {
   isModal?: boolean;
@@ -28,7 +27,7 @@ export default function SigninFormContent({ isModal }: IProps) {
 
       <SigninLinks />
 
-      <SiginLoginBtn />
+      <SigninLoginBtn />
 
       <SigninSocialLoginBtns
         isModal={isModal}

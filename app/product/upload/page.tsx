@@ -1,7 +1,6 @@
 import ProductUploadPage from "@/components/productUpload/product-upload-page";
 import { BASE_URL } from "@/constants/constant";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${BASE_URL}/product/upload`),

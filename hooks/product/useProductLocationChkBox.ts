@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useLocation from "../commons/useLocation";
 import { AppDispatch, RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import { locationSlice } from "@/store/locationSlice";
+import { locationSlice } from '@/store/locationSlice';
 
 export default function useProductLocationChkBox() {
   const { fetchCurrentLocation } = useLocation();
@@ -14,7 +14,7 @@ export default function useProductLocationChkBox() {
   );
 
   const handleClickCheck = () => {
-    dispatch(locationSlice.actions.setCheckLocation(!checked))
+    dispatch(locationSlice.actions.setCheckLocation(!checked));
   };
 
   useEffect(() => {

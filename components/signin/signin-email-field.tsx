@@ -1,5 +1,5 @@
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import CoreInputField from "../commons/core-input-field/core-input-field";
 import { MutableRefObject } from "react";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 

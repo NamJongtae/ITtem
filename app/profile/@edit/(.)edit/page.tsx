@@ -1,8 +1,5 @@
-import ProfileEditModal from '@/components/profileEdit/profile-edit-modal';
+import ProfileEditModal from "@/components/profile-edit/profile-edit-modal";
 
 export default function Modal() {
-
-  return (
-    <ProfileEditModal />
-  );
+  return <ProfileEditModal />;
 }

@@ -1,5 +1,5 @@
 import ProfilePage from "@/components/profile/profile-page";
-import { BASE_URL } from '@/constants/constant';
+import { BASE_URL } from "@/constants/constant";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { queryKeys } from "@/queryKeys";
@@ -25,7 +25,7 @@ export async function generateMetadata() {
     });
     const profile = response.data.profile;
     const title = `ITtem | "${profile.nickname}님"의 프로필`;
-    const url = `${BASE_URL}/profile`
+    const url = `${BASE_URL}/profile`;
     return {
       metadataBase: new URL(url),
       title,

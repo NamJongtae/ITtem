@@ -1,4 +1,4 @@
-import ChatRoomListPage from "@/components/chat/chatRoomListPage/chat-room-list-page";
+import ChatRoomListPage from "@/components/chat/room-list/chat-room-list-page";
 import { BASE_URL } from "@/constants/constant";
 import { Metadata } from "next";
 
@@ -11,6 +11,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ChatRooms() {
+export default function ChatRoomList() {
   return <ChatRoomListPage />;
 }

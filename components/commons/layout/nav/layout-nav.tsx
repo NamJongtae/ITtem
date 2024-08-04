@@ -1,10 +1,10 @@
 import Link from "next/link";
-import NavSearchBar from "./nav-searchbar";
-import SubNav from "./sub-nav";
+import LayoutNavSearchBar from "./layout-nav-search-bar";
+import SubNav from "../sub-nav/sub-nav";
 import Image from "next/image";
-import NavAuth from './nav-auth';
+import LayoutNavAuth from "./layout-nav-auth";
 
-export default function Nav() {
+export default function LayoutNav() {
   return (
     <>
       <nav className="max-w-[1024px] mx-auto pt-2 px-4 sm:px-8 text-sm">
@@ -16,9 +16,9 @@ export default function Nav() {
             </Link>
           </h1>
 
-          <NavSearchBar />
+          <LayoutNavSearchBar />
 
-          <NavAuth />
+          <LayoutNavAuth />
         </div>
       </nav>
       <SubNav />

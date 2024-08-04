@@ -1,10 +1,10 @@
-import ProductList from "../commons/productList/product-list";
-import ProductPageHeader from "./product-page-header";
+import ProductList from "../commons/product-list/product-list";
+import Header from "./product-header";
 
 export default function ProductPage() {
   return (
     <>
-      <ProductPageHeader />
+      <Header />
       <ProductList productListType="CATEGORY" />
     </>
   );

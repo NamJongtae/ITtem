@@ -1,8 +1,8 @@
-import Header from "./layout-header";
-import Footer from "./layout-footer";
-import MobileNav from "./nav/layout-mobile-nav";
+import LayoutHeader from "./layout-header";
+import LayoutFooter from "./layout-footer";
+import SubNavMobileMenu from "./sub-nav/sub-nav-mobile-menu";
 import dynamic from "next/dynamic";
-const SideMenu = dynamic(() => import("./sideMenu/layout-sideMenu"), {
+const LayoutSideMenu = dynamic(() => import("./side-menu/layout-side-menu"), {
   ssr: false,
 });
 
@@ -12,11 +12,11 @@ interface IProps {
 export default function Layout({ children }: IProps) {
   return (
     <>
-      <Header />
+      <LayoutHeader />
       {children}
-      <MobileNav />
-      <SideMenu />
-      <Footer />
+      <SubNavMobileMenu />
+      <LayoutSideMenu />
+      <LayoutFooter />
     </>
   );
 }

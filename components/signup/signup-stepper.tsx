@@ -1,4 +1,4 @@
-import useSignupStepper from "@/hooks/signup/useSignupStepper";
+import useSignupStepper from "@/hooks/signup/useSignuStepper";
 
 interface IProps {
   currentStep: "기본정보입력" | "프로필설정" | "소개글작성";

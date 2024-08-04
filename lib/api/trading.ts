@@ -1,7 +1,10 @@
-import { PurchaseTradingResponseData, SalesTradingResponseData } from '@/types/apiTypes';
-import { TradingStatus } from '@/types/productTypes';
-import { AxiosResponse } from 'axios';
-import customAxios from '../customAxios';
+import {
+  PurchaseTradingResponseData,
+  SalesTradingResponseData,
+} from "@/types/apiTypes";
+import { TradingStatus } from "@/types/productTypes";
+import { AxiosResponse } from "axios";
+import customAxios from "../customAxios";
 
 export async function purchaseRequestConfirmation(
   productId: string

@@ -1,4 +1,4 @@
-import useProductUploadTransactionField from "@/hooks/productUpload/useProductUploadTransactionField";
+import useProductUploadTransactionField from "@/hooks/product-upload/useProductUploadTransactionField";
 
 export default function ProductUploadTransactionField() {
   const { register, transaction } = useProductUploadTransactionField();

@@ -8,7 +8,7 @@ interface IParams {
   selectCategory: (category: ProductCategory) => void;
 }
 
-export default function useProfileDetailProductCategory({
+export default function useProfileDetailProductCategoryMenu({
   selectCategory,
 }: IParams) {
   const { isOpenMenu, closeMenu, toggleMenu, menuRef } = useDropdownMenu();

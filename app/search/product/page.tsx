@@ -49,7 +49,11 @@ async function prefetchProductListData({
   });
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], any, unknown>,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      ProductData[],
+      any,
+      unknown
+    >,
     initialPageParam: null,
   });
 }

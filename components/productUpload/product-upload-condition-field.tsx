@@ -1,4 +1,4 @@
-import useProductUploadConditionField from "@/hooks/productUpload/useProductUploadConditionField";
+import useProductUploadConditionField from "@/hooks/product-upload/useProductUploadConditionField";
 
 export default function ProductUploadConditionField() {
   const { register, currentCondition, getDescription } =

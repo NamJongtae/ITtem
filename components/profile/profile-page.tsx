@@ -1,9 +1,9 @@
 "use client";
 
-import ProfileUserInfo from "./profileUserInfo/profile-userInfo";
-import ProfileDetail from "./profile-detail";
+import UserInfo from "./user-info/user-info";
+import Detail from "./detail/profile-detail";
 import Loading from "@/app/loading";
-import Empty from "../commons/Empty";
+import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import useProfilePage from "@/hooks/profile/useProfilePage";
 
@@ -40,12 +40,12 @@ export default function ProfilePage({ my }: IProps) {
   }
   return (
     <>
-      <ProfileUserInfo
+      <UserInfo
         handleClickMenu={handleClickMenu}
         userProfileData={my ? myProfileData : profileData}
         myProfileData={myProfileData}
       />
-      <ProfileDetail
+      <Detail
         profileMenu={profileMenu}
         handleClickMenu={handleClickMenu}
         userProfileData={my ? myProfileData : profileData}

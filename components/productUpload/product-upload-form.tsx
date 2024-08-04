@@ -1,11 +1,11 @@
 "use client";
 
 import Loading from "@/app/loading";
-import { MyForm } from "../commons/myForm/MyForm";
-import Empty from "../commons/Empty";
+import { MyForm } from "../commons/my-form/my-form";
+import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./product-upload-form-content";
-import useProductUploadForm from "@/hooks/productUpload/useProductUploadForm";
+import useProductUploadForm from "@/hooks/product-upload/useProductUploadForm";
 
 interface IProps {
   isEdit?: boolean;

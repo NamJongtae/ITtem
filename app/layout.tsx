@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.css";
-import ReactQueryProvider from "@/store/ReactQueryProvider";
-import ReduxProvider from "@/store/ReduxProvider";
+import ReactQueryProvider from '@/store/ReactQueryProvider';
+import ReduxProvider from '@/store/ReduxProvider';
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";

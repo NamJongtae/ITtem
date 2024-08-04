@@ -1,5 +1,5 @@
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
-import CoreInputField from "../commons/coreInputField/core-input-field";
+import CoreInputField from "../commons/core-input-field/core-input-field";
 
 export default function SigninPasswordField() {
   return (

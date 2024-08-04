@@ -1,5 +1,5 @@
-import useUserProfileFollowMutate from "@/hooks/reactQuery/mutations/profile/useUserProfileFollowMutate";
-import useUserProfileUnfollowMutate from "@/hooks/reactQuery/mutations/profile/useUserProfileUnfollowMutate";
+import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileFollowMutate";
+import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { ProfileData } from "@/types/authTypes";
 import { toast } from "react-toastify";
 

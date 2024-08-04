@@ -1,4 +1,4 @@
-import useSignoutMutate from "@/hooks/reactQuery/mutations/auth/useSignoutMutate";
+import useSignoutMutate from "@/hooks/react-query/mutations/auth/useSignoutMutate";
 import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";

@@ -1,4 +1,4 @@
-import useProductUploadDescField from "@/hooks/productUpload/useProductUploadDescField";
+import useProductUploadDescField from "@/hooks/product-upload/useProductUploadDescField";
 
 export default function ProductUploadDescField() {
   const { register, productDesc, handleChangeProductDesc } =

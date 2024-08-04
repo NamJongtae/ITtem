@@ -1,7 +1,7 @@
 "use client";
 import useVisible from "@/hooks/commons/useVisible";
 
-export default function Footer() {
+export default function LayoutFooter() {
   const { isVisible } = useVisible({
     pathnames: ["signup", "signin", "findpassword"],
   });

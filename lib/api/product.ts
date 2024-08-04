@@ -68,11 +68,10 @@ export async function getSearchProductList({
   limit = 10,
   keyword,
 }: {
-  category: ProductCategory;  
+  category: ProductCategory;
   keyword: string;
   cursor?: unknown;
   limit?: number;
-
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios(

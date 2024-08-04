@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useFormContext } from "react-hook-form";
-import useSendToVerifyEmailMutate from "../reactQuery/mutations/auth/useSendToVerifyEmailMutate";
-import useEmailDuplicationMutate from "../reactQuery/mutations/auth/useEmailDuplicationMutate";
+import useSendToVerifyEmailMutate from "../react-query/mutations/auth/useSendToVerifyEmailMutate";
+import useEmailDuplicationMutate from "../react-query/mutations/auth/useEmailDuplicationMutate";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { signupSlice } from "@/store/signupSlice";
-import useCheckEmailMutate from "../reactQuery/mutations/auth/useCheckEmailMutate";
+import useCheckEmailMutate from "../react-query/mutations/auth/useCheckEmailMutate";
 
 export default function useSendToVerifyEmail(isFindPw?: boolean) {
   const { getValues } = useFormContext();

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import useChangePasswordMutate from "../reactQuery/mutations/auth/useChangePasswordMutate";
+import useChangePasswordMutate from "../react-query/mutations/auth/useChangePasswordMutate";
 import { useFocusing } from "../commons/useFocusing";
 import { useRouter } from "next/navigation";
 

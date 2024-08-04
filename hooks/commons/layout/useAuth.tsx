@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import useAuthQuery from "@/hooks/reactQuery/queries/auth/useAuthQuery";
+import useAuthQuery from "@/hooks/react-query/queries/auth/useAuthQuery";
 import { AppDispatch } from "@/store";
 import { useEffect } from "react";
-import { authSlice } from "@/store/authSlice";
+import { authSlice } from '@/store/authSlice';
 import { toast } from "react-toastify";
-import useSessionCookiesQuery from "@/hooks/reactQuery/queries/auth/useSessionCookiesQuery";
+import useSessionCookiesQuery from "@/hooks/react-query/queries/auth/useSessionCookiesQuery";
 
 export default function useAuth() {
   const { isExistSession } = useSessionCookiesQuery();

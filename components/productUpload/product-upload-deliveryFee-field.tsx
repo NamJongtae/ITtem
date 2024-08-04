@@ -1,4 +1,4 @@
-import useProductUploadDeliveryFeeField from "@/hooks/productUpload/useProductUploadDeliveryFeeField";
+import useProductUploadDeliveryFeeField from "@/hooks/product-upload/useProductUploadDeliveryFeeField";
 
 export default function ProductUploadDeliveryFeeField() {
   const { register, deliveryFee } = useProductUploadDeliveryFeeField();

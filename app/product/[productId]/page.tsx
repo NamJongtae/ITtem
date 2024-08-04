@@ -10,7 +10,7 @@ import { getProduct, incrementViewCount } from "@/lib/api/product";
 import customAxios from "@/lib/customAxios";
 import { queryKeys } from "@/queryKeys";
 import { IronSessionData } from "@/types/apiTypes";
-import ProductDetailPage from "@/components/productDetail/product-detail";
+import ProductDetailPage from "@/components/product-detail/product-detail-page";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
 import Loading from "@/app/loading";

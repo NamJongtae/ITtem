@@ -1,4 +1,4 @@
-import FindPasswordPage from "@/components/findPassword/findPassword-page";
+import FindPasswordPage from "@/components/find-password/find-password-page";
 import { BASE_URL } from "@/constants/constant";
 import { Metadata } from "next";
 
