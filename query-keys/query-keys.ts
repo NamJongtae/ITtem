@@ -18,7 +18,7 @@ import {
   getUserProfile,
 } from "@/lib/api/profile";
 import { getPurchaseTrading, getSalesTrading } from "@/lib/api/trading";
-import { ProductCategory, ProductListType } from "@/types/productTypes";
+import { ProductCategory, ProductListType } from "@/types/product-types";
 import {
   createQueryKeys,
   mergeQueryKeys,

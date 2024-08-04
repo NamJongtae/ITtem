@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     description:
       "중고거래 플랫폼, 잇템. 안전하고 쉬운 중고거래, 다양한 상품과 빠른 거래를 경험하세요.",
     images: {
-      url: "/images/og_img.png",
+      url: "/images/og-img.png",
     },
   },
 };

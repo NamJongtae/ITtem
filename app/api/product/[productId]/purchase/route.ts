@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import Product from "@/lib/db/models/Product";
 import mongoose from "mongoose";
 import { checkAuthorization } from "@/lib/server";
@@ -8,7 +8,7 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import { sendNotificationMessage } from "@/lib/api/firebase";

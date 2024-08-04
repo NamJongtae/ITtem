@@ -1,7 +1,7 @@
 "use client";
 
 import useRecentProductSlider from "@/hooks/commons/layout/useRecentProductSlider";
-import { RecentProductData } from "@/types/productTypes";
+import { RecentProductData } from "@/types/product-types";
 import RecentProductSliderBtn from "./recent-product-slider-btn";
 import RecentProductSliderItem from "./recent-product-slider-item";
 

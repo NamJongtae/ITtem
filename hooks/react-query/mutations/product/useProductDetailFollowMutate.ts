@@ -1,7 +1,7 @@
 import { follow } from "@/lib/api/profile";
-import { queryKeys } from "@/queryKeys";
-import { ProfileData } from "@/types/authTypes";
-import { ProductDetailData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProfileData } from "@/types/auth-types";
+import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useParams } from "next/navigation";

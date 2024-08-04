@@ -1,6 +1,6 @@
 import useChatRoomItem from "@/hooks/chat-room/useChatRoomItem";
 import { getChatRoomListDateFormat } from "@/lib/getDateFormate";
-import { ChatRoomData } from "@/types/chatTypes";
+import { ChatRoomData } from "@/types/chat-types";
 import Image from "next/image";
 import Link from "next/link";
 

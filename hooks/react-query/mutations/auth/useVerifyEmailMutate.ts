@@ -3,11 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { VerifyEmailResponseData } from "@/types/apiTypes";
+import { VerifyEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
-import { signupSlice } from '@/store/signupSlice';
+import { signupSlice } from "@/store/slice/signup-slice";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
+import { AppDispatch } from "@/store/store";
 
 export default function useVerifyEmailMutate() {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,9 +1,9 @@
 import { verifyPassword } from "@/lib/api/auth";
 import { getToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { createAndSaveToken, sessionOptions } from "@/lib/server";
-import { IronSessionType } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/api-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       },
       session,
     });
-    
+
     return NextResponse.json(
       {
         message: "로그인에 성공했습니다.",

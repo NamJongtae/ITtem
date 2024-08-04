@@ -25,7 +25,7 @@ export default function LayoutNavSearchBar() {
         type="submit"
         className="absolute inline-flex justify-center items-center right-0 w-10 h-10"
       >
-        <Image src="/icons/search_icon.svg" alt="검색" width={20} height={20} />
+        <Image src="/icons/search-icon.svg" alt="검색" width={20} height={20} />
       </button>
     </form>
   );

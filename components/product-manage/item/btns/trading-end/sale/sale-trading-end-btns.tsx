@@ -1,4 +1,4 @@
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import SaleTradineEndTradingDetailBtn from "./sale-trading-end-trading-detail-btn";
 import SaleTradineEndReviewBtn from "./sale-trading-end-review-btn";
 

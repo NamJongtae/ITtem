@@ -1,5 +1,5 @@
 import Spinner from "@/components/commons/spinner";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { MutableRefObject } from "react";
 import { useSelector } from "react-redux";
 

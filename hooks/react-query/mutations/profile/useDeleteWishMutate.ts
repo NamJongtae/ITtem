@@ -1,8 +1,8 @@
 import { deleteWish } from "@/lib/api/product";
-import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store";
-import { ProfileData } from "@/types/authTypes";
-import { ProductDetailData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { RootState } from "@/store/store";
+import { ProfileData } from "@/types/auth-types";
+import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useParams } from "next/navigation";

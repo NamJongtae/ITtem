@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import useDropdownMenu from "../commons/useDropDownMenu";
-import { ProductCategory } from "@/types/productTypes";
+import { ProductCategory } from "@/types/product-types";
 import { CATEGORY } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 

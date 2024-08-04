@@ -8,7 +8,7 @@ interface IProps extends ImageProps {
 }
 
 export default function FallbackImage({
-  fallbackSrc = "/images/no_image.png",
+  fallbackSrc = "/images/no-image.png",
   ...props
 }: IProps) {
   const [isImgError, setIsImgError] = useState<boolean>(false);

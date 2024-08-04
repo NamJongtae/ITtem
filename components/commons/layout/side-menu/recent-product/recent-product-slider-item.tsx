@@ -1,5 +1,5 @@
 import FallbackImage from "@/components/commons/fallback-Image";
-import { RecentProductData } from "@/types/productTypes";
+import { RecentProductData } from "@/types/product-types";
 import Link from "next/link";
 import React from "react";
 

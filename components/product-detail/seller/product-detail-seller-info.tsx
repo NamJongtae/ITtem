@@ -1,4 +1,4 @@
-import { ProductDetailAuthData } from "@/types/productTypes";
+import { ProductDetailAuthData } from "@/types/product-types";
 import Image from "next/image";
 import Link from "next/link";
 import ProductDetailSellerFollowBtn from "./product-detail-seller-follow-btn";
@@ -16,7 +16,7 @@ export default function ProductDetailSellerInfo({ auth }: IProps) {
       >
         <Image
           className="inline-block h-14 w-14 cursor-pointer rounded-full object-cover object-center mr-1 border-2"
-          src={auth?.profileImg || "/icons/user_icon.svg"}
+          src={auth?.profileImg || "/icons/user-icon.svg"}
           alt="판매자"
           width={56}
           height={56}

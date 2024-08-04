@@ -1,6 +1,6 @@
 import useProductDetailBuyBtn from "@/hooks/product-detail/useProductDetailBuyBtn";
-import BuyIcon from "@/public/icons/money_icon.svg";
-import { ProductStatus } from "@/types/productTypes";
+import BuyIcon from "@/public/icons/money-icon.svg";
+import { ProductStatus } from "@/types/product-types";
 
 interface IProps {
   productStatus: ProductStatus | undefined;

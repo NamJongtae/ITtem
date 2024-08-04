@@ -1,6 +1,6 @@
 import axios, { AxiosError, isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import { RegenerateAccessTokenResponseData } from "@/types/apiTypes";
+import { RegenerateAccessTokenResponseData } from "@/types/api-types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
 const customAxios = axios.create({
@@ -20,7 +20,7 @@ customAxios.interceptors.response.use(
       ) {
         try {
           const cookies = originalRequest?.headers["Cookie"];
-          const response = await axios(`${BASE_URL}/api/auth/refreshToken`, {
+          const response = await axios(`${BASE_URL}/api/auth/refresh-token`, {
             headers: {
               Cookie: cookies,
             },

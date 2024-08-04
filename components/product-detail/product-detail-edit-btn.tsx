@@ -1,5 +1,5 @@
 import useProductDetailEditBtn from "@/hooks/product-detail/useProductDetailEditBtn";
-import { ProductStatus } from "@/types/productTypes";
+import { ProductStatus } from "@/types/product-types";
 import Image from "next/image";
 
 interface IProps {
@@ -16,7 +16,7 @@ export default function ProductDetailEditBtn({ productStatus }: IProps) {
       className="px-4 py-2 flex gap-2 items-center bg-yellow-500 text-white text-sm font-medium rounded hover:betterhover:bg-yellow-400 focus:outline-none focus:bg-yellow-500 md:px-6"
     >
       <Image
-        src={"/icons/edit_icon.svg"}
+        src={"/icons/edit-icon.svg"}
         width={20}
         height={20}
         alt="수정하기"

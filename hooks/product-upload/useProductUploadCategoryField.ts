@@ -1,4 +1,4 @@
-import { ProductCategory } from "@/types/productTypes";
+import { ProductCategory } from "@/types/product-types";
 import { useFormContext } from "react-hook-form";
 
 export default function useProductUploadCategoryField() {

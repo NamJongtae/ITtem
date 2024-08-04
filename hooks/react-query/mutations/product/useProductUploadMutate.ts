@@ -1,7 +1,7 @@
 import { uploadProduct } from "@/lib/api/product";
-import { queryKeys } from "@/queryKeys";
-import { ProductResponseData } from "@/types/apiTypes";
-import { ProductUploadData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProductResponseData } from "@/types/api-types";
+import { ProductUploadData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";

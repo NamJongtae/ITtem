@@ -1,5 +1,5 @@
 import useNavProduct from "@/hooks/commons/layout/useNavProduct";
-import ProductIcon from "@/public/icons/product_icon.svg";
+import ProductIcon from "@/public/icons/product-icon.svg";
 
 export default function SubNavProductBtn() {
   const { pathname, handleClickProduct } = useNavProduct();

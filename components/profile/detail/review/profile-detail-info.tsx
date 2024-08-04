@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { ReivewInfoData } from "@/types/authTypes";
+import { ReivewInfoData } from "@/types/auth-types";
 import { REVIEW_TAGS } from "@/constants/constant";
 import useProfileDetailReviewInfo from "@/hooks/profile/useProfileDetailReviewInfo";
 const ReactStars = dynamic(() => import("react-stars"), {

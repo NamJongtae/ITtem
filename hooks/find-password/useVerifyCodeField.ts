@@ -1,6 +1,6 @@
 import useVerifyEmail from "../signup/useVerifyEmail";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { useFormContext } from "react-hook-form";
 
 export default function useVerifyCodeField() {

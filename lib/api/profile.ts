@@ -4,10 +4,10 @@ import {
   ProfileResponseData,
   ReviewsResponseData,
   WishResponseData,
-} from "@/types/apiTypes";
+} from "@/types/api-types";
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
-import { ProfileEditData } from "@/types/authTypes";
+import { ProfileEditData } from "@/types/auth-types";
 
 export async function getUserProfile(
   uid: string

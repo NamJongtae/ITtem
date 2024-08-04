@@ -1,5 +1,5 @@
 import useDeleteAllNotificationMessagesMutate from "@/hooks/react-query/mutations/notification/useDeleteAllNotificationMessagesMutate";
-import { NotificationMessageData } from "@/types/notification";
+import { NotificationMessageData } from "@/types/notification-types";
 import { toast } from "react-toastify";
 
 interface IProps {
@@ -7,7 +7,10 @@ interface IProps {
   endKey: string;
 }
 
-export default function NotificationModalDeleteAllBtn({ messageData, endKey }: IProps) {
+export default function NotificationModalDeleteAllBtn({
+  messageData,
+  endKey,
+}: IProps) {
   const { mutate } = useDeleteAllNotificationMessagesMutate();
 
   const onClickDeleteAll = () => {

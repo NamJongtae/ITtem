@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { checkAuthorization } from "@/lib/server";
 
@@ -12,7 +12,7 @@ export async function POST(
   session.startTransaction();
   try {
     const { uid } = params;
-    
+
     if (!uid) {
       return NextResponse.json(
         {

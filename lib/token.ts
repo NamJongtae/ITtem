@@ -1,4 +1,4 @@
-import { AuthData } from "@/types/authTypes";
+import { AuthData } from "@/types/auth-types";
 import { JwtPayload, SignOptions } from "jsonwebtoken";
 export const generateToken = async ({
   payload,

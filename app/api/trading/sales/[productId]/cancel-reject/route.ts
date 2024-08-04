@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { checkAuthorization } from "@/lib/server";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import {
   PurchaseCancelProcess,
@@ -10,7 +10,7 @@ import {
   SalesReturnProcess,
   SaleTradingProcess,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import User from "@/lib/db/models/User";
 import { sendNotificationMessage } from "@/lib/api/firebase";

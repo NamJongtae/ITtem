@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 export default function useProfileImg() {
-  const [preview, setPreview] = useState("/icons/user_icon.svg");
+  const [preview, setPreview] = useState("/icons/user-icon.svg");
   const imgInputRef = useRef<HTMLInputElement | null>(null);
 
   const { setValue, getValues } = useFormContext();
@@ -31,7 +31,7 @@ export default function useProfileImg() {
 
   const resetProfileImg = useCallback(() => {
     setValue("profileImg", "", { shouldDirty: true, shouldValidate: true });
-    setPreview("/icons/user_icon.svg");
+    setPreview("/icons/user-icon.svg");
   }, []);
 
   // 프로필 수정시 초기 이미지 설정

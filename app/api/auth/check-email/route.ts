@@ -1,4 +1,4 @@
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,10 +7,9 @@ export async function POST(req: NextRequest) {
     const { email } = await req.json();
 
     if (!email) {
-      return new NextResponse(
-        JSON.stringify({ message: "이메일이 없어요." }),
-        { status: 422 }
-      );
+      return new NextResponse(JSON.stringify({ message: "이메일이 없어요." }), {
+        status: 422,
+      });
     }
 
     await dbConnect();

@@ -1,4 +1,4 @@
-import { ProductDetailData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/product-types";
 import Image from "next/image";
 import useProductDetailReportBtn from "@/hooks/product-detail/useProductDetailReportBtn";
 
@@ -21,7 +21,7 @@ export default function ProductDetailReportBtn({ productDetailData }: IProps) {
         className="flex items-center gap-1"
       >
         <Image
-          src={"/icons/report_icon.svg"}
+          src={"/icons/report-icon.svg"}
           alt="신고하기"
           width={28}
           height={28}

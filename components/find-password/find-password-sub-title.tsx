@@ -1,4 +1,4 @@
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import React from "react";
 import { useSelector } from "react-redux";
 

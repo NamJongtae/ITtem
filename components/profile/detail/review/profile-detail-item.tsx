@@ -1,5 +1,5 @@
 import { REVIEW_TAGS } from "@/constants/constant";
-import { ProfileReviewData } from "@/types/authTypes";
+import { ProfileReviewData } from "@/types/auth-types";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,7 +41,7 @@ export default function ProfileDetailReviewItem({ review }: IProps) {
           {review.productName}
           <Image
             className="w-[9px] h-[11px]"
-            src={"/icons/arrow_icon.svg"}
+            src={"/icons/arrow-icon.svg"}
             alt=""
             width={15}
             height={19}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import Product from "@/lib/db/models/Product";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
@@ -14,7 +14,7 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 
 export async function PATCH(
   req: NextRequest,

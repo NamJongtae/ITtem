@@ -2,7 +2,7 @@ import ProfilePage from "@/components/profile/profile-page";
 import { BASE_URL } from "@/constants/constant";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
-import { IronSessionData } from "@/types/apiTypes";
+import { IronSessionData } from "@/types/api-types";
 import { cookies } from "next/headers";
 import React from "react";
 

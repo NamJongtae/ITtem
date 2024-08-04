@@ -1,6 +1,6 @@
 "use client";
 
-import SubNavCategoryMenuIcon from "@/public/icons/menu_icon.svg";
+import SubNavCategoryMenuIcon from "@/public/icons/menu-icon.svg";
 import SubNavCategoryMenu from "./sub-nav-category-menu";
 import useNavCategory from "@/hooks/commons/layout/useNavCategory";
 import { escKeyClose } from "@/lib/optimizationKeyboard";

@@ -1,6 +1,6 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
-import XIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x-icon.svg";
 import { MutableRefObject } from "react";
 
 interface IProps {
@@ -29,7 +29,7 @@ export default function ProfileEditImgInputBtn({
       <button
         onClick={handleClickImgInput}
         type="button"
-        className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img_upload_icon.svg')] before:rounded-full before:bg-center before:bg-cover"
+        className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img-upload_icon.svg')] before:rounded-full before:bg-center before:bg-cover"
         ref={profileImgBtnRef}
         onKeyDown={(e) =>
           optimizationTabFocus({

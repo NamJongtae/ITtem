@@ -1,4 +1,4 @@
-import { ProductListType } from "@/types/productTypes";
+import { ProductListType } from "@/types/product-types";
 import Empty from "../empty";
 
 interface IProps {

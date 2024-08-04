@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import {
   ProductStatus,
@@ -11,7 +11,7 @@ import {
   SalesReturnProcess,
   SaleTradingProcess,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import { checkAuthorization } from "@/lib/server";
 import Product from "@/lib/db/models/Product";

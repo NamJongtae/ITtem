@@ -1,4 +1,4 @@
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import Product from "@/lib/db/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
@@ -8,7 +8,7 @@ import {
   ProductImgData,
   ProductStatus,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import { getStorageInstance } from "@/lib/firebaseSetting";
 import { deleteObject, ref } from "firebase/storage";

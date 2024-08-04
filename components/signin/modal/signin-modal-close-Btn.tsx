@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import XIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x-icon.svg";
 import { MutableRefObject, forwardRef } from "react";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 

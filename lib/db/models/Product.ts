@@ -4,7 +4,7 @@ import {
   ProductSellType,
   ProductStatus,
   ProductTransaction,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import mongoose, { Model } from "mongoose";
 
 interface ProductDB {

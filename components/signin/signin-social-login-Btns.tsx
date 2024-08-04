@@ -23,7 +23,7 @@ export default function SigninSocialLoginBtns({
       >
         <Image
           className="absolute left-5 top-1/2 -translate-y-1/2"
-          src="/icons/kakao_icon.svg"
+          src="/icons/kakao-icon.svg"
           alt=""
           width={20}
           height={20}
@@ -44,7 +44,7 @@ export default function SigninSocialLoginBtns({
       >
         <Image
           className="absolute left-5 top-1/2 -translate-y-1/2"
-          src="/icons/google_icon.svg"
+          src="/icons/google-icon.svg"
           alt=""
           width={20}
           height={20}

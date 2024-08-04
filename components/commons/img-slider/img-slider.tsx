@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData } from "@/types/product-types";
 import FallbackImage from "../fallback-Image";
 
 interface IProps {

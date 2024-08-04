@@ -1,6 +1,6 @@
 import React from "react";
 import ImgSlider from "../img-slider/img-slider";
-import { ProductData, ProductStatus } from "@/types/productTypes";
+import { ProductData, ProductStatus } from "@/types/product-types";
 import FallbackImage from "../fallback-Image";
 
 interface IProps {

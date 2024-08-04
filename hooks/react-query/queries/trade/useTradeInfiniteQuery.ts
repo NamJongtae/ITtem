@@ -1,6 +1,6 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import { queryKeys } from "@/queryKeys";
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";

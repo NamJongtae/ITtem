@@ -1,6 +1,6 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject, forwardRef } from "react";
-import CloseIcon from "@/public/icons/x_icon.svg";
+import CloseIcon from "@/public/icons/x-icon.svg";
 
 interface IProps {
   isModal?: boolean;

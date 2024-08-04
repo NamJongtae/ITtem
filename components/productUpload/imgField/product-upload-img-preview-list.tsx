@@ -1,5 +1,5 @@
-import { ProductImgData } from "@/types/productTypes";
-import XIcon from "@/public/icons/x_icon.svg";
+import { ProductImgData } from "@/types/product-types";
+import XIcon from "@/public/icons/x-icon.svg";
 import Image from "next/legacy/image";
 import React from "react";
 

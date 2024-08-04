@@ -1,12 +1,12 @@
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Portal from "@/components/commons/portal/Portal";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData } from "@/types/product-types";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import FallbackImage from "@/components/commons/fallback-Image";
-import XIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x-icon.svg";
 interface IProps {
   imgData: ProductImgData[] | undefined;
   handleClickCloseBtn: () => void;

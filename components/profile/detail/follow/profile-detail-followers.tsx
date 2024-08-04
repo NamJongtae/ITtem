@@ -1,4 +1,4 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import ProfileDetailFollowList from "./profile-detail-follow-list";
 
 interface IProps {

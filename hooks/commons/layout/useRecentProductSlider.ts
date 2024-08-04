@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { RecentProductData } from "@/types/productTypes";
+import { RecentProductData } from "@/types/product-types";
 
 export default function useRecentProductSlider() {
   const [page, setPage] = useState(0);

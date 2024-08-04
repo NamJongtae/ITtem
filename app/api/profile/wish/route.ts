@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import Product from "@/lib/db/models/Product";
 import { checkAuthorization } from "@/lib/server";
 import User from "@/lib/db/models/User";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 
 export async function POST(req: NextRequest) {
   try {

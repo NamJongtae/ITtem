@@ -1,6 +1,6 @@
 import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileFollowMutate";
 import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import { toast } from "react-toastify";
 
 interface IParams {

@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
-import { locationSlice } from '@/store/locationSlice';
+import { AppDispatch } from "@/store/store";
+import { locationSlice } from "@/store/slice/location-slice";
 
 export default function useLocation(saveLocation?: (address: string) => void) {
   const dispatch = useDispatch<AppDispatch>();

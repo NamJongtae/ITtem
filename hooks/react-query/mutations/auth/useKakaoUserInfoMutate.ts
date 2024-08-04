@@ -1,5 +1,5 @@
 import { getKakaoUserInfo } from "@/lib/api/auth";
-import { KakaoAuthInfoResponseData } from "@/types/apiTypes";
+import { KakaoAuthInfoResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 

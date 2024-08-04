@@ -1,5 +1,5 @@
 import useProductUploadImgInput from "@/hooks/product-upload/useProductUploadImgInput";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData } from "@/types/product-types";
 import React, { ForwardedRef, forwardRef } from "react";
 
 interface IProps {

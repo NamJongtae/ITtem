@@ -1,8 +1,8 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { sigin } from "@/lib/api/auth";
-import { authSlice } from '@/store/authSlice';
-import { AppDispatch } from "@/store";
-import { SigninResponseData } from "@/types/apiTypes";
+import { authSlice } from "@/store/slice/auth-slice";
+import { AppDispatch } from "@/store/store";
+import { SigninResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";

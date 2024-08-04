@@ -1,8 +1,8 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import useAddWishMutate from "../react-query/mutations/profile/useAddWishMutate";
 import useDeleteWishMutate from "../react-query/mutations/profile/useDeleteWishMutate";
 import { toast } from "react-toastify";
-import { ProductDetailData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/product-types";
 
 interface IParams {
   productDetailData: ProductDetailData | undefined;

@@ -15,7 +15,7 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import React from "react";
 
 type ButtonComponent = ({

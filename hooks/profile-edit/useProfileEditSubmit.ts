@@ -1,12 +1,12 @@
 import { uploadImgToFireStore } from "@/lib/api/firebase";
-import { ProfileData, ProfileEditData } from "@/types/authTypes";
+import { ProfileData, ProfileEditData } from "@/types/auth-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import useProfileEditMutate from "../react-query/mutations/profile/useProfileEditMutate";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { queryKeys } from "@/queryKeys";
+import { queryKeys } from "@/query-keys/query-keys";
 
 export default function useProfileEditSubmit(closeModal: () => void) {
   const [profileEditLoading, setProfileEditLoading] = useState(false);
@@ -31,7 +31,7 @@ export default function useProfileEditSubmit(closeModal: () => void) {
           JSON.stringify(values.profileImg.name)
         ) {
           if (values.profileImg === "") {
-            profileEditData.profileImg = "/icons/user_icon.svg";
+            profileEditData.profileImg = "/icons/user-icon.svg";
             profileEditData.profileImgFilename = "";
             return;
           }

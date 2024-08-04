@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ProductCategory } from "@/types/productTypes";
+import { ProductCategory } from "@/types/product-types";
 
 export default function useProfileProductCategory() {
   const [category, setCategory] = useState<ProductCategory>(

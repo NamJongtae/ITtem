@@ -1,4 +1,4 @@
-import ChatSendIcon from "@/public/icons/chat_send_icon.svg";
+import ChatSendIcon from "@/public/icons/chat-send-icon.svg";
 import TextareaAutosize from "react-textarea-autosize";
 import { MutableRefObject } from "react";
 import useChatRoomForm from "@/hooks/chat-room/useChatRoomForm";

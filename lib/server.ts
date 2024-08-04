@@ -1,4 +1,4 @@
-import { IronSessionType } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/api-types";
 import { SessionOptions } from "iron-session";
 import { generateToken, verifyToken } from "./token";
 import { getToken, saveToken } from "./api/redis";

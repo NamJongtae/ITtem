@@ -25,7 +25,7 @@ export default function ChatRoomHeader({
           <button onClick={onClickBack}>
             <Image
               className="rotate-180"
-              src={"/icons/arrow_icon.svg"}
+              src={"/icons/arrow-icon.svg"}
               alt="뒤로가기"
               width={14}
               height={20}

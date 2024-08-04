@@ -1,5 +1,5 @@
 import { getDateFormat } from "@/lib/getDateFormate";
-import { ProductData } from "@/types/productTypes";
+import { ProductData } from "@/types/product-types";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,7 +35,7 @@ export default function ProfileDetailWishItem({
         </span>
         <div className="flex gap-1 items-center">
           <Image
-            src={"/icons/location_icon.svg"}
+            src={"/icons/location-icon.svg"}
             alt={wishProduct.location}
             width={12}
             height={12}

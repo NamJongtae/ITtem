@@ -19,7 +19,7 @@ export default function ChatRoomMenu({
   return (
     <div className="flex gap-3 items-center">
       <button onClick={toggleMenu}>
-        <Image src="/icons/dots_icon.svg" alt="나가기" width={20} height={20} />
+        <Image src="/icons/dots-icon.svg" alt="나가기" width={20} height={20} />
       </button>
 
       {isOpenMenu && (

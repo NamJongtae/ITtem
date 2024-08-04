@@ -3,10 +3,10 @@
 import { Fragment } from "react";
 import ProductListItem from "./product-list-item";
 import InfiniteScroll from "react-infinite-scroller";
-import { ProductCategory, ProductListType } from "@/types/productTypes";
+import { ProductCategory, ProductListType } from "@/types/product-types";
 import ProductListError from "./product-list-error";
 import useProductList from "@/hooks/commons/useProductList";
-import Empty from '../empty';
+import Empty from "../empty";
 import ProductListSkeletonUI from "./product-list-skeletonUI";
 
 interface IProps {
@@ -52,7 +52,10 @@ export default function ProductList({
           ) : (
             data?.map((item) => (
               <Fragment key={item._id}>
-                <ProductListItem data={item} category={profileProductCategory} />
+                <ProductListItem
+                  data={item}
+                  category={profileProductCategory}
+                />
               </Fragment>
             ))
           )}

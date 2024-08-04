@@ -1,5 +1,5 @@
 import { purchaseCancelReject } from "@/lib/api/trading";
-import { queryKeys } from "@/queryKeys";
+import { queryKeys } from "@/query-keys/query-keys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";

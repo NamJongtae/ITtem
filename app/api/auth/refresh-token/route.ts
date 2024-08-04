@@ -6,12 +6,12 @@ import {
 import { getToken, saveToken } from "@/lib/api/redis";
 import { sessionOptions } from "@/lib/server";
 import { generateToken, verifyToken } from "@/lib/token";
-import { IronSessionType } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/api-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

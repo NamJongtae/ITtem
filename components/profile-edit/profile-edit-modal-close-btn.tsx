@@ -1,5 +1,5 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import XIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x-icon.svg";
 import { MutableRefObject, forwardRef } from "react";
 
 interface IProps {

@@ -1,5 +1,5 @@
-import { RootState } from "@/store";
-import { ProfileData } from "@/types/authTypes";
+import { RootState } from "@/store/store";
+import { ProfileData } from "@/types/auth-types";
 import { useSelector } from "react-redux";
 import useProfileQuery from "../react-query/queries/profile/useProfileQuery";
 

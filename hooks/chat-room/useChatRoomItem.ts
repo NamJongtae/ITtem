@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import useProfileQuery from "@/hooks/react-query/queries/profile/useProfileQuery";
 
 interface IParams {

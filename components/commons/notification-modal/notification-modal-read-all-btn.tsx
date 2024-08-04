@@ -1,12 +1,15 @@
 import useReadAllNotificationMessagesMutate from "@/hooks/react-query/mutations/notification/useReadAllNotificationMessageMutate";
-import { NotificationMessageData } from "@/types/notification";
+import { NotificationMessageData } from "@/types/notification-types";
 import { toast } from "react-toastify";
 
 interface IProps {
   messageData: NotificationMessageData[] | undefined;
   endKey: string;
 }
-export default function NotificationModalReadAllBtn({ messageData, endKey }: IProps) {
+export default function NotificationModalReadAllBtn({
+  messageData,
+  endKey,
+}: IProps) {
   const { mutate } = useReadAllNotificationMessagesMutate();
 
   const onClickReadAll = () => {

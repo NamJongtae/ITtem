@@ -1,4 +1,4 @@
-import { ProductDetailData, ProductStatus } from "@/types/productTypes";
+import { ProductDetailData, ProductStatus } from "@/types/product-types";
 import useModal from "../commons/useModal";
 
 interface IParams {

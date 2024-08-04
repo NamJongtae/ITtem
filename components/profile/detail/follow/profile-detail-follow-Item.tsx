@@ -1,4 +1,4 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";

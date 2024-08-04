@@ -1,4 +1,4 @@
-import { ProductDetailData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/product-types";
 import ProductDetailContentInfo from "./product-detail-content-info";
 import ProductDetailContentImg from "./product-detail-content-img";
 import ProductDetailContentBtns from "./product-detail-content-btns";

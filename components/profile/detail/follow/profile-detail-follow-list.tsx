@@ -2,7 +2,7 @@ import Empty from "@/components/commons/empty";
 import InfiniteScroll from "react-infinite-scroller";
 import { isAxiosError } from "axios";
 import useFollowListInfiniteQuery from "@/hooks/react-query/queries/profile/useFollowListInfiniteQuery";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import ProfileDetailFollowItem from "./profile-detail-follow-Item";
 import ProfileDetailFollowSkeletonUI from "./profile-detail-follow-skeletonUI";
 

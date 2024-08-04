@@ -1,12 +1,12 @@
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import {
   createAndSaveToken,
   createUniqueNickname,
   sessionOptions,
 } from "@/lib/server";
-import { IronSessionType } from "@/types/apiTypes";
-import { LoginType } from "@/types/authTypes";
+import { IronSessionType } from "@/types/api-types";
+import { LoginType } from "@/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 로그인 로직
-    const { _id: uid, email, nickname, profileImg } = dbUserData;
+    const { _id: uid } = dbUserData;
 
     const refreshTokenData = await getToken(uid, "refreshToken");
 

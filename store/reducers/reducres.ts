@@ -1,9 +1,9 @@
 import { combineReducers, AnyAction } from "@reduxjs/toolkit";
-import { signupSlice } from "../signupSlice";
-import { authSlice } from "../authSlice";
-import { locationSlice } from "../locationSlice";
-import { chatSlice } from "../chatSlice";
-import { notificationSlice } from "../notification";
+import { signupSlice } from "../slice/signup-slice";
+import { authSlice } from "../slice/auth-slice";
+import { locationSlice } from "../slice/location-slice";
+import { chatSlice } from "../slice/chat-slice";
+import { notificationSlice } from "../slice/notification-slice";
 
 const combinedReducer = combineReducers({
   signup: signupSlice.reducer,

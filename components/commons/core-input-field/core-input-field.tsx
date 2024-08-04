@@ -1,5 +1,5 @@
 import useCoreInputField from "@/hooks/commons/core-Input-field/useCoreInputField";
-import XIcon from "@/public/icons/x_icon.svg";
+import XIcon from "@/public/icons/x-icon.svg";
 import { MutableRefObject } from "react";
 import { FieldValues, Validate, ValidationRule } from "react-hook-form";
 

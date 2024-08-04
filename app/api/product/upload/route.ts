@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import Product from "@/lib/db/models/Product";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import User from "@/lib/db/models/User";
@@ -16,13 +16,16 @@ export async function POST(req: NextRequest) {
     if (!isValidAuth.isValid) {
       await session.abortTransaction();
       session.endSession();
-      return NextResponse.json({
-        message: isValidAuth.message,
-      }, { status: 401 });
+      return NextResponse.json(
+        {
+          message: isValidAuth.message,
+        },
+        { status: 401 }
+      );
     }
 
     const { productData } = await req.json();
-    
+
     const myUid = isValidAuth?.auth?.uid;
 
     await dbConnect();
@@ -55,10 +58,13 @@ export async function POST(req: NextRequest) {
     await session.commitTransaction();
     session.endSession();
 
-    return NextResponse.json({
-      message: "상품 등록에 성공했어요.",
-      product: newProduct,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        message: "상품 등록에 성공했어요.",
+        product: newProduct,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -67,13 +73,19 @@ export async function POST(req: NextRequest) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message
       );
-      return NextResponse.json({
-        message: "유효하지 않은 값이 있어요.",
-        error: errorMessages,
-      }, { status: 422 });
+      return NextResponse.json(
+        {
+          message: "유효하지 않은 값이 있어요.",
+          error: errorMessages,
+        },
+        { status: 422 }
+      );
     }
-    return NextResponse.json({
-      message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요.",
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요.",
+      },
+      { status: 500 }
+    );
   }
 }

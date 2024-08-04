@@ -1,4 +1,4 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import ChatRoomFollowBtn from "./chat-room-follow-btn";
 import Image from "next/image";
 import useChatRoomMenuUser from "@/hooks/chat-room/useChatRoomMenuUser";
@@ -26,7 +26,7 @@ export default function ChatRoomMenuUser({
               src={
                 (isMe(id)
                   ? myProfileData?.profileImg
-                  : otherUserProfileData?.profileImg) || "/icons/user_icon.svg"
+                  : otherUserProfileData?.profileImg) || "/icons/user-icon.svg"
               }
               alt={
                 (isMe(id)

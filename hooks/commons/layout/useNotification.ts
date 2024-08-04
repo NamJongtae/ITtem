@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store";
+import { AppDispatch, RootState } from "../../../store/store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
-import { NotificationMessageData } from "@/types/notification";
+import { NotificationMessageData } from "@/types/notification-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { isMobile } from "react-device-detect";
 import { getRealtimeDB } from "@/lib/firebaseSetting";
-import { notificationSlice } from '@/store/notification';
-import { queryKeys } from "@/queryKeys";
+import { notificationSlice } from "@/store/slice/notification-slice";
+import { queryKeys } from "@/query-keys/query-keys";
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);

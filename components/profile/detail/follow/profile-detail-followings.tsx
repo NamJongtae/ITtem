@@ -1,5 +1,5 @@
 import ProfileDetailFollowList from "./profile-detail-follow-list";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
   userProfileData: ProfileData | undefined;

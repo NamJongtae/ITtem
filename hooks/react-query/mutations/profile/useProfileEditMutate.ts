@@ -1,7 +1,7 @@
 import { editProfile } from "@/lib/api/profile";
-import { queryKeys } from "@/queryKeys";
-import { ProfileResponseData } from "@/types/apiTypes";
-import { ProfileEditData } from "@/types/authTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProfileResponseData } from "@/types/api-types";
+import { ProfileEditData } from "@/types/auth-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";

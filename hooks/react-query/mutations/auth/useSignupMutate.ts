@@ -1,7 +1,7 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { createAccount } from "@/lib/api/auth";
-import { SignupResponseData } from "@/types/apiTypes";
-import { SignupData } from "@/types/authTypes";
+import { SignupResponseData } from "@/types/api-types";
+import { SignupData } from "@/types/auth-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";

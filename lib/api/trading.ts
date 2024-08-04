@@ -1,8 +1,8 @@
 import {
   PurchaseTradingResponseData,
   SalesTradingResponseData,
-} from "@/types/apiTypes";
-import { TradingStatus } from "@/types/productTypes";
+} from "@/types/api-types";
+import { TradingStatus } from "@/types/product-types";
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
 

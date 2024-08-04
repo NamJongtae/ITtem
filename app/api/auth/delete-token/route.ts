@@ -1,5 +1,5 @@
 import { deleteToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { NextRequest, NextResponse } from "next/server";
 

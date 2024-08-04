@@ -1,6 +1,6 @@
 import { editProduct } from "@/lib/api/product";
-import { ProductResponseData } from "@/types/apiTypes";
-import { ProductData } from "@/types/productTypes";
+import { ProductResponseData } from "@/types/api-types";
+import { ProductData } from "@/types/product-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useParams, useRouter } from "next/navigation";

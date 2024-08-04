@@ -1,7 +1,7 @@
 import { deleteProfileWish } from "@/lib/api/profile";
-import { queryKeys } from "@/queryKeys";
-import { ProfileData } from "@/types/authTypes";
-import { ProductData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProfileData } from "@/types/auth-types";
+import { ProductData } from "@/types/product-types";
 import {
   InfiniteData,
   useMutation,

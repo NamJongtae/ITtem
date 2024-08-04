@@ -1,4 +1,4 @@
-import { SaleTradingProcess, TradingStatus } from "@/types/productTypes";
+import { SaleTradingProcess, TradingStatus } from "@/types/product-types";
 import mongoose, { Model } from "mongoose";
 
 interface SaleTradingDB {

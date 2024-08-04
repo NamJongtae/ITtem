@@ -1,16 +1,16 @@
 import { REFRESH_TOKEN_KEY } from "@/constants/constant";
 import { deleteToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { sessionOptions } from "@/lib/server";
 import { verifyToken } from "@/lib/token";
-import { IronSessionType } from "@/types/apiTypes";
+import { IronSessionType } from "@/types/api-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ImgSlider from "../../commons/img-slider/img-slider";
-import { ProductDetailData, ProductStatus } from "@/types/productTypes";
+import { ProductDetailData, ProductStatus } from "@/types/product-types";
 import ProductImgEnlargeModal from "../../commons/product-img-enlarge-modal";
 import useProductDetailContentImg from "@/hooks/product-detail/useProductDetailContentImg";
 
@@ -32,7 +32,7 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
             onClick={openModal}
           >
             <Image
-              src="/icons/search_icon.svg"
+              src="/icons/search-icon.svg"
               alt="자세히"
               width={16}
               height={16}

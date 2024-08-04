@@ -1,6 +1,6 @@
 "use client";
 
-import NotificatonIcon from "@/public/icons/notification_icon.svg";
+import NotificatonIcon from "@/public/icons/notification-icon.svg";
 import NotificationModal from "../../notification-modal/notification-modal";
 import useNotification from "@/hooks/commons/layout/useNotification";
 import { escKeyClose } from "@/lib/optimizationKeyboard";

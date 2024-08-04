@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
-import { chatSlice } from '@/store/chatSlice';
+import { AppDispatch, RootState } from "@/store/store";
+import { chatSlice } from "@/store/slice/chat-slice";
 
 export default function useNotificationChat() {
   const user = useSelector((state: RootState) => state.auth.user);

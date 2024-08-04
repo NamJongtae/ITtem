@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
-import { StartChatResponseData } from "@/types/apiTypes";
+import { StartChatResponseData } from "@/types/api-types";
 
 export async function startChat({
   productId,

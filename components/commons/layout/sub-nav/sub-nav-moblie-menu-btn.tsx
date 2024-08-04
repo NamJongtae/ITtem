@@ -1,4 +1,4 @@
-import MenuIcon from "@/public/icons/menu_icon.svg";
+import MenuIcon from "@/public/icons/menu-icon.svg";
 
 interface IProps {
   isOpenMenu: boolean;

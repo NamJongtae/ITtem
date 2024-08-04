@@ -1,6 +1,6 @@
-import { queryKeys } from "@/queryKeys";
-import { authSlice } from '@/store/authSlice';
-import { AppDispatch } from "@/store";
+import { queryKeys } from "@/query-keys/query-keys";
+import { authSlice } from "@/store/slice/auth-slice";
+import { AppDispatch } from "@/store/store";
 import { useQuery } from "@tanstack/react-query";
 
 import { usePathname } from "next/navigation";

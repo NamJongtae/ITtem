@@ -1,7 +1,7 @@
 import SearchPage from "@/components/search/search-page";
 import { BASE_URL } from "@/constants/constant";
-import { queryKeys } from "@/queryKeys";
-import { ProductCategory, ProductData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProductCategory, ProductData } from "@/types/product-types";
 import {
   HydrationBoundary,
   QueryClient,

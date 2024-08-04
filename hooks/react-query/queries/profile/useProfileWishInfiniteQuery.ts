@@ -1,6 +1,6 @@
 import { getProfileWish } from "@/lib/api/profile";
-import { queryKeys } from "@/queryKeys";
-import { ProductData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProductData } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 

@@ -1,5 +1,5 @@
 import { startChat } from "@/lib/api/chat";
-import { StartChatResponseData } from "@/types/apiTypes";
+import { StartChatResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";

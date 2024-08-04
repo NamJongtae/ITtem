@@ -1,10 +1,10 @@
-import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store";
+import { queryKeys } from "@/query-keys/query-keys";
+import { RootState } from "@/store/store";
 import {
   ProductCategory,
   ProductData,
   ProductListType,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect } from "react";

@@ -1,11 +1,11 @@
 import Review from "@/lib/db/models/Review";
 import { checkAuthorization } from "@/lib/server";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import { TradingStatus } from "@/types/productTypes";
+import { TradingStatus } from "@/types/product-types";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import ReviewScore from "@/lib/db/models/ReviewScore";
 import mongoose from "mongoose";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(

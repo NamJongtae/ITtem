@@ -1,10 +1,10 @@
 import { deleteAllToken, kakaoSignin } from "@/lib/api/auth";
-import { authSlice } from '@/store/authSlice';
-import { AppDispatch } from "@/store";
+import { authSlice } from "@/store/slice/auth-slice";
+import { AppDispatch } from "@/store/store";
 import {
   KakaoAuthInfoResponseData,
   SigninResponseData,
-} from "@/types/apiTypes";
+} from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";

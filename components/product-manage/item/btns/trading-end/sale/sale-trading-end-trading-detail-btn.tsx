@@ -1,6 +1,6 @@
 import useModal from "@/hooks/commons/useModal";
 import TradeDetailModal from "../../../../modal/commons/trade-detail/trade-detail-modal";
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;

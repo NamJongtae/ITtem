@@ -1,5 +1,5 @@
-import { signupSlice } from '@/store/signupSlice'; 
-import { AppDispatch, RootState } from "@/store";
+import { signupSlice } from "@/store/slice/signup-slice";
+import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";

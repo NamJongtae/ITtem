@@ -1,5 +1,5 @@
 import { getDateFormat } from "@/lib/getDateFormate";
-import { ProductDetailData } from "@/types/productTypes";
+import { ProductDetailData } from "@/types/product-types";
 import Image from "next/image";
 import ProductDetailReportBtn from "../product-detail-report-btn";
 
@@ -26,7 +26,7 @@ export default function ProductDetailContentInfo({
         <div className="flex gap-3">
           <span className="flex gap-2">
             <Image
-              src={"/icons/heart_icon.svg"}
+              src={"/icons/heart-icon.svg"}
               alt="찜 횟수"
               width={14}
               height={28}
@@ -36,7 +36,7 @@ export default function ProductDetailContentInfo({
           <span className="flex gap-2 items-center">
             <Image
               className="w-[20px] h-[14px]"
-              src={"/icons/eye_icon.svg"}
+              src={"/icons/eye-icon.svg"}
               alt="조회수"
               width={20}
               height={14}
@@ -48,7 +48,7 @@ export default function ProductDetailContentInfo({
             className="flex gap-2 items-center"
           >
             <Image
-              src={"/icons/clock_icon.svg"}
+              src={"/icons/clock-icon.svg"}
               alt="게시일"
               width={16}
               height={16}
@@ -77,7 +77,7 @@ export default function ProductDetailContentInfo({
             <p className="min-w-[70px] text-gray-500">거래지역</p>
             <p className="flex gap-1">
               <Image
-                src={"/icons/location_icon.svg"}
+                src={"/icons/location-icon.svg"}
                 alt="지역"
                 width={12}
                 height={24}

@@ -25,7 +25,7 @@ export default function ChatRoomExitBtn({
       className="flex gap-2 py-2 px-4 text-sm"
     >
       <Image
-        src={"/icons/logout_icon.svg"}
+        src={"/icons/logout-icon.svg"}
         alt="나가기"
         width={20}
         height={20}

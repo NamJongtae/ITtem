@@ -1,6 +1,6 @@
 import HomePage from "@/components/home/hom-page";
-import { queryKeys } from "@/queryKeys";
-import { ProductData } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProductData } from "@/types/product-types";
 import {
   HydrationBoundary,
   QueryClient,

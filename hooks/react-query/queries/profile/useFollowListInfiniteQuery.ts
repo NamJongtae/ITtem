@@ -1,5 +1,5 @@
-import { queryKeys } from "@/queryKeys";
-import { ProfileData } from "@/types/authTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProfileData } from "@/types/auth-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 

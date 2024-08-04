@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
-import { UploadImgResponseData } from "@/types/apiTypes";
+import { UploadImgResponseData } from "@/types/api-types";
 
-import { NotificationMessageData } from "@/types/notification";
-import { ChatRoomData } from "@/types/chatTypes";
+import { NotificationMessageData } from "@/types/notification-types";
+import { ChatRoomData } from "@/types/chat-types";
 import {
   getFirestoreDB,
   getRealtimeDB,

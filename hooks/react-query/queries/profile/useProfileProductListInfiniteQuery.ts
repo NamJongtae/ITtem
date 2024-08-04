@@ -1,10 +1,10 @@
-import { profileQueryKey, queryKeys } from "@/queryKeys";
-import { ProfileData } from "@/types/authTypes";
+import { profileQueryKey, queryKeys } from "@/query-keys/query-keys";
+import { ProfileData } from "@/types/auth-types";
 import {
   ProductCategory,
   ProductData,
   ProductListType,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import {
   InfiniteData,
   useInfiniteQuery,

@@ -4,13 +4,13 @@ import {
   ProductCategory,
   ProductData,
   ProductUploadData,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import {
   ProductDetailResponseData,
   ProductListResponseData,
   ProductResponseData,
   ReviewResponseData,
-} from "@/types/apiTypes";
+} from "@/types/api-types";
 
 export async function purchaseProduct(
   productId: string

@@ -5,9 +5,9 @@ import {
   ProductReviewData,
   PurchaseTradingData,
   SaleTradingData,
-} from "./productTypes";
-import { AuthData, ProfileData, ProfileReviewData } from "./authTypes";
-import { NotificationMessageData } from "./notification";
+} from "./product-types";
+import { AuthData, ProfileData, ProfileReviewData } from "./auth-types";
+import { NotificationMessageData } from "./notification-types";
 
 export interface VerifyEmailResponseData {
   message: string;
@@ -161,4 +161,3 @@ export interface NotificationResponseData
 export interface StartChatResponseData extends ApiResponse<string> {
   chatRoomId: string;
 }
-

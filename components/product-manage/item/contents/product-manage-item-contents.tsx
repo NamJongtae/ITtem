@@ -1,4 +1,4 @@
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import { ProductManageDeatilMenu } from "../../product-manage-page";
 import ProductManageItemTradingContent from "./product-manage-item-trading-content";
 import ProductManageItemTradingEndContent from "./product-manage-item-trading-end-content";

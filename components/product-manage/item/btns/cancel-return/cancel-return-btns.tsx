@@ -1,6 +1,6 @@
 import useModal from "@/hooks/commons/useModal";
 import CancelAndReturnDetailModal from "../../../modal/commons/cancel-return-detail/cancel-return-detail-modal";
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;

@@ -1,6 +1,6 @@
 import { deleteNotificationMessage } from "@/lib/api/notification";
-import { queryKeys } from "@/queryKeys";
-import { NotificationMessageData } from "@/types/notification";
+import { queryKeys } from "@/query-keys/query-keys";
+import { NotificationMessageData } from "@/types/notification-types";
 import {
   InfiniteData,
   useMutation,

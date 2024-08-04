@@ -1,5 +1,5 @@
-import { queryKeys } from "@/queryKeys";
-import { ProductData, ProductListType } from "@/types/productTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { ProductData, ProductListType } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 

@@ -3,7 +3,7 @@ import ProductImgEnlargeModal from "../../commons/product-img-enlarge-modal";
 import ProductUploadImgEnlargeBtn from "./product-upload-img-enlarge-btn";
 import ImgInput from "./product-upload-img-input";
 import ProductUploadImgPreviewList from "./product-upload-img-preview-list";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData } from "@/types/product-types";
 import useProductUploadImgField from "@/hooks/product-upload/useProductUploadimgField";
 
 interface IProps {

@@ -1,4 +1,4 @@
-import { ProductReviewData } from "@/types/productTypes";
+import { ProductReviewData } from "@/types/product-types";
 import Image from "next/image";
 
 interface IProps {
@@ -13,7 +13,7 @@ export default function ReviewModalReviewer({ reviewer }: IProps) {
       <h3 className="sr-only">작성자</h3>
       <Image
         className="w-20 h-20 object-cover object-center rounded-full border"
-        src={reviewer?.profileImg || "/icons/user_icon.svg"}
+        src={reviewer?.profileImg || "/icons/user-icon.svg"}
         alt={reviewer?.nickname || ""}
         width={80}
         height={80}

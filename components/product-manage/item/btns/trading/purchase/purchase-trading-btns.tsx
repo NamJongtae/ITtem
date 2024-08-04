@@ -1,4 +1,4 @@
-import { PurchaseTradingData } from "@/types/productTypes";
+import { PurchaseTradingData } from "@/types/product-types";
 import usePurchaseTradingBtns from "@/hooks/product-manage/usePurchaseTradingBtns";
 
 interface IProps {

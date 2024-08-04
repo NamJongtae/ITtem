@@ -1,4 +1,4 @@
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import useNotificationChat from "@/hooks/chat-room/useNotificationChat";

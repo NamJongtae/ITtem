@@ -1,7 +1,7 @@
 import { ProfileMenu } from "../profile-page";
 import Introduce from "./user-info-introduce";
 import Card from "./card/user-info-card";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
   handleClickMenu: (menu: ProfileMenu) => void;

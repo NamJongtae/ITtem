@@ -19,7 +19,7 @@ export default function NotFound() {
           className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 mt-6 rounded transition duration-150"
         >
           <Image
-            src={"/icons/back_icon.svg"}
+            src={"/icons/back-icon.svg"}
             alt={"홈으로"}
             width={20}
             height={20}

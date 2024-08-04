@@ -1,4 +1,4 @@
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 import { useSelector } from "react-redux";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ProductListImg from "./product-list-img";
 import ProductListContent from "./product-list-content";
-import { ProductCategory, ProductData } from "@/types/productTypes";
+import { ProductCategory, ProductData } from "@/types/product-types";
 
 interface IProps {
   data: ProductData;

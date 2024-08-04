@@ -24,7 +24,7 @@ export default function ProductManageSearchBar() {
         className="absolute inline-flex items-center justify-center right-0 w-10 h-10"
       >
         <Image
-          src={"/icons/search_icon.svg"}
+          src={"/icons/search-icon.svg"}
           alt="검색"
           width={20}
           height={20}

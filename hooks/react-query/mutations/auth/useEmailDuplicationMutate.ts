@@ -1,6 +1,6 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { checkEmailDuplication } from "@/lib/api/auth";
-import { EmailDuplicationResponseData } from "@/types/apiTypes";
+import { EmailDuplicationResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useFormContext } from "react-hook-form";

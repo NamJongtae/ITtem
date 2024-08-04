@@ -1,7 +1,7 @@
 import Empty from "../../commons/empty";
 import ProductDetailSellerProductItem from "./product-detail-seller-product-item";
 import ProductDetailSellerProductMoreBtn from "./product-detail-seller-product-more-btn";
-import { ProductDetailAuthData } from "@/types/productTypes";
+import { ProductDetailAuthData } from "@/types/product-types";
 
 interface IProps {
   auth: ProductDetailAuthData;

@@ -1,5 +1,5 @@
 import { getDateFormat } from "@/lib/getDateFormate";
-import { NotificationMessageData } from "@/types/notification";
+import { NotificationMessageData } from "@/types/notification-types";
 import NotificationModalReadBtn from "./notification-modal-read-btn";
 import NotificationModalDeleteBtn from "./notification-modal-delete-btn";
 

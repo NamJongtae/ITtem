@@ -1,5 +1,5 @@
 import Portal from "@/components/commons/portal/Portal";
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import { isMobile } from "react-device-detect";
 import TradeDetailModalContent from "./trade-detail-modal-content";
 import TradeDetailModalCloseBtn from "./trade-detail-modal-close-btn";

@@ -1,6 +1,6 @@
-import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store";
-import { NotificationMessageData } from "@/types/notification";
+import { queryKeys } from "@/query-keys/query-keys";
+import { RootState } from "@/store/store";
+import { NotificationMessageData } from "@/types/notification-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 

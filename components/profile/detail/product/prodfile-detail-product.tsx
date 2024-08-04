@@ -1,7 +1,7 @@
 import ProductList from "@/components/commons/product-list/product-list";
 import ProfileDetailProductCategoryMenu from "./prodfile-detail-product-category-menu";
 import useProfileProductCategory from "@/hooks/profile/useProfileProductCategory";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import { Suspense } from "react";
 import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
 

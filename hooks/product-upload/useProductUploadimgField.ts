@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { toast } from "react-toastify";
 import { imgValidation } from "@/lib/imgValidation";
-import { ProductImgData } from "@/types/productTypes";
+import { ProductImgData } from "@/types/product-types";
 import { useFormContext } from "react-hook-form";
 import useModal from "../commons/useModal";
 

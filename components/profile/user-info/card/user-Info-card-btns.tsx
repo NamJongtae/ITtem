@@ -1,4 +1,4 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import FollowBtn from "../user-info-follow-btn";
 import UserInfoCardChangePasswordBtn from "./user-info-card-change-password-btn";
 import UserInfoCardEditProfileBtn from "./user-info-card-edit-profile-btn";

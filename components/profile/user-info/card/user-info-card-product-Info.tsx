@@ -1,4 +1,4 @@
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 import { ProfileMenu } from "../../profile-page";
 
 interface IProps {

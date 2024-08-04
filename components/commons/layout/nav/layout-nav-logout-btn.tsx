@@ -13,7 +13,7 @@ export default function LayoutNavLogoutBtn() {
     >
       <Image
         className="inline mr-1"
-        src={"/icons/logout_icon.svg"}
+        src={"/icons/logout-icon.svg"}
         alt="logout"
         width={20}
         height={20}

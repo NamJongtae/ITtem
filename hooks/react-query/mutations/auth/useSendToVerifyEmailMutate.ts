@@ -2,11 +2,11 @@ import { sendToVerifyEmail } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { VerifyEmailResponseData } from "@/types/apiTypes";
+import { VerifyEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
-import { signupSlice } from '@/store/signupSlice';
+import { AppDispatch } from "@/store/store";
+import { signupSlice } from "@/store/slice/signup-slice";
 import { useFormContext } from "react-hook-form";
 
 export default function useSendToVerifyEmailMutate() {

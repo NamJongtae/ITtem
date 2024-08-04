@@ -2,8 +2,8 @@ import ProfilePage from "@/components/profile/profile-page";
 import { BASE_URL } from "@/constants/constant";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
-import { queryKeys } from "@/queryKeys";
-import { IronSessionData } from "@/types/apiTypes";
+import { queryKeys } from "@/query-keys/query-keys";
+import { IronSessionData } from "@/types/api-types";
 import {
   HydrationBoundary,
   QueryClient,

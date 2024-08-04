@@ -1,5 +1,5 @@
 import useNavChat from "@/hooks/commons/layout/useNavChat";
-import ChatIcon from "@/public/icons/chat_icon.svg";
+import ChatIcon from "@/public/icons/chat-icon.svg";
 
 export default function SubNavMenuChatBtn() {
   const { pathname, totalMessageCount, handleClickChat } = useNavChat();

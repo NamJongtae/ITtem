@@ -1,5 +1,5 @@
 import useNavSell from "@/hooks/commons/layout/useNavSell";
-import SellIcon from "@/public/icons/money_icon.svg";
+import SellIcon from "@/public/icons/money-icon.svg";
 
 export default function SubNavSellBtn() {
   const { pathname, handleClickSell } = useNavSell();

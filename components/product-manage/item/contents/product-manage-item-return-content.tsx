@@ -1,5 +1,5 @@
 import { getTradingDateFormat } from "@/lib/getDateFormate";
-import { PurchaseTradingData, SaleTradingData } from "@/types/productTypes";
+import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;

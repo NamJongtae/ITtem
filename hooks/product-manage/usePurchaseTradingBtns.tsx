@@ -4,7 +4,7 @@ import {
   PurchaseTradingData,
   PurchaseTradingProcess,
   TradingStatus,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import { JSX } from "react";
 import PurchaseTradingChattingBtn from "@/components/product-manage/item/btns/trading/purchase/purchase-trading-chatting-btn";
 import PurchaseTradingCancelBtn from "@/components/product-manage/item/btns/trading/purchase/purchase-trading-cancel-btn";

@@ -1,4 +1,4 @@
-import { ReivewInfoData } from "@/types/authTypes";
+import { ReivewInfoData } from "@/types/auth-types";
 import ProfileDetailInfo from "./profile-detail-info";
 import ProfileDetailList from "./profile-detail-list";
 import Empty from "@/components/commons/empty";

@@ -1,5 +1,5 @@
 import { getGoogleUserInfo } from "@/lib/api/auth";
-import { GoogleAuthInfoResponseData } from "@/types/apiTypes";
+import { GoogleAuthInfoResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 

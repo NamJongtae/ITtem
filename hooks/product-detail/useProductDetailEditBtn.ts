@@ -1,5 +1,5 @@
-import { RootState } from "@/store";
-import { ProductStatus } from "@/types/productTypes";
+import { RootState } from "@/store/store";
+import { ProductStatus } from "@/types/product-types";
 import { useRouter, useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";

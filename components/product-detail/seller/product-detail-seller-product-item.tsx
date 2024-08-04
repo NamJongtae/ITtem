@@ -1,4 +1,4 @@
-import { ProductData } from "@/types/productTypes";
+import { ProductData } from "@/types/product-types";
 import Link from "next/link";
 import FallbackImage from "../../commons/fallback-Image";
 

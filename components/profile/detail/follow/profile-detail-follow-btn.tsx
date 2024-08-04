@@ -1,5 +1,5 @@
 import useProfileDetailFollowBtn from "@/hooks/profile/useProfileDetailFollowBtn";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
   myProfileData: ProfileData | undefined;

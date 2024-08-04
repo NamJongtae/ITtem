@@ -1,7 +1,7 @@
 import ProfileDetailMenu from "./profile-detail-menu";
 import ProfileDetailContent from "./profile-detail-content";
 import { ProfileMenu } from "../profile-page";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
   profileMenu: ProfileMenu;

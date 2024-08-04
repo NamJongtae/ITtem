@@ -1,4 +1,4 @@
-import { AuthData } from "@/types/authTypes";
+import { AuthData } from "@/types/auth-types";
 import { AnyAction, createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 

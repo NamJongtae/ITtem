@@ -1,5 +1,5 @@
 import { getChattingDateFormat } from "@/lib/getDateFormate";
-import { ChatMessageData } from "@/types/chatTypes";
+import { ChatMessageData } from "@/types/chat-types";
 
 interface IProps {
   message: ChatMessageData & { id: string };

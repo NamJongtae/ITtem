@@ -1,5 +1,5 @@
-import ChatIcon from "@/public/icons/chat_icon.svg";
-import { ProductStatus } from "@/types/productTypes";
+import ChatIcon from "@/public/icons/chat-icon.svg";
+import { ProductStatus } from "@/types/product-types";
 import useProductDetailChattingBtn from "@/hooks/product-detail/useProductDetailChattingBtn";
 
 interface IProps {

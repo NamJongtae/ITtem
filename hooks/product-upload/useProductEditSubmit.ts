@@ -1,17 +1,17 @@
 import { FieldValues } from "react-hook-form";
 import useProductEditMutate from "../react-query/mutations/product/useProductEditMutate";
-import { ProductData, ProductImgData } from "@/types/productTypes";
+import { ProductData, ProductImgData } from "@/types/product-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import {
   deleteImgToFirestore,
   uploadMultiImgToFirestore,
 } from "@/lib/api/firebase";
-import { UploadImgResponseData } from "@/types/apiTypes";
+import { UploadImgResponseData } from "@/types/api-types";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
-import { queryKeys } from "@/queryKeys";
+import { queryKeys } from "@/query-keys/query-keys";
 
 export default function useProductEditSubmit() {
   const [productEditLoading, setProductEditLoading] = useState(false);

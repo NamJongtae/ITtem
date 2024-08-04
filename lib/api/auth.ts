@@ -11,11 +11,11 @@ import {
   SignoutResposeData,
   SignupResponseData,
   VerifyEmailResponseData,
-} from "@/types/apiTypes";
+} from "@/types/api-types";
 import { AxiosResponse } from "axios";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import { AuthData, SignupData } from "@/types/authTypes";
+import { AuthData, SignupData } from "@/types/auth-types";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -75,7 +75,7 @@ export async function sendToVerifyEmail(
   isFindPw?: boolean
 ): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/sendVerifyEmail", {
+    const response = await customAxios.post("/api/auth/send-verify-email", {
       email,
       isFindPw,
     });
@@ -91,7 +91,7 @@ export async function verifyEmail(
   isFindPw?: boolean
 ): Promise<AxiosResponse<VerifyEmailResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/verifyEmail", {
+    const response = await customAxios.post("/api/auth/verify-email", {
       email,
       verifyCode,
       isFindPw,
@@ -132,7 +132,7 @@ export async function checkEmail(
   email: string
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = await customAxios.post("/api/auth/checkEmail", {
+    const response = await customAxios.post("/api/auth/check-email", {
       email,
     });
     return response;
@@ -191,7 +191,7 @@ export async function regenerateAccessToken(): Promise<
   AxiosResponse<RegenerateAccessTokenResponseData>
 > {
   try {
-    const respose = await customAxios("/api/auth/refreshToken");
+    const respose = await customAxios("/api/auth/refresh-token");
     return respose;
   } catch (error) {
     throw error;
@@ -202,7 +202,7 @@ export async function deleteAllToken(
   email: string
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = customAxios.delete("/api/auth/deleteToken", {
+    const response = customAxios.delete("/api/auth/delete-token", {
       data: { email },
     });
     return response;
@@ -348,7 +348,7 @@ export async function changePassword({
   isFindPw?: boolean;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
-    const response = await customAxios.patch("/api/auth/changePassword", {
+    const response = await customAxios.patch("/api/auth/change-password", {
       email,
       password,
       currentPassword,

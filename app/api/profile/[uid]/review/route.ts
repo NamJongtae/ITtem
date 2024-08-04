@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
+import dbConnect from "@/lib/db/db";
 import Review from "@/lib/db/models/Review";
 import { checkAuthorization } from "@/lib/server";
 

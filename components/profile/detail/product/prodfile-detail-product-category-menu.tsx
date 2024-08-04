@@ -1,6 +1,6 @@
 import { CATEGORY } from "@/constants/constant";
 import useProfileDetailProductCategoryMenu from "@/hooks/profile/useProfileDetailProductCategory";
-import { ProductCategory } from "@/types/productTypes";
+import { ProductCategory } from "@/types/product-types";
 
 interface IProps {
   currentCategory: ProductCategory;

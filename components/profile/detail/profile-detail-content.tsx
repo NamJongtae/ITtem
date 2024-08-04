@@ -4,7 +4,7 @@ import { ProfileMenu } from "../profile-page";
 import ProfileDetailWish from "./wish/profile-detail-wish";
 import ProfileDetailFollowings from "./follow/profile-detail-followings";
 import ProfileDetailFollowers from "./follow/profile-detail-followers";
-import { ProfileData } from "@/types/authTypes";
+import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
   profileMenu: ProfileMenu;

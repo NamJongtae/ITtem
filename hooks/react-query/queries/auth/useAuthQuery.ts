@@ -1,5 +1,5 @@
-import { queryKeys } from "@/queryKeys";
-import { RootState } from "@/store";
+import { queryKeys } from "@/query-keys/query-keys";
+import { RootState } from "@/store/store";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useParams } from "next/navigation";
 import { useEffect } from "react";

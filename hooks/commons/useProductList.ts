@@ -1,4 +1,4 @@
-import { ProductCategory, ProductListType } from "@/types/productTypes";
+import { ProductCategory, ProductListType } from "@/types/product-types";
 import useProductTodayListInfiniteQuery from "../react-query/queries/product/useProductTodayListInfiniteQuery";
 import useCategoryProductListInfiniteQuery from "../react-query/queries/product/useCategoryProductListInfiniteQuery";
 import useSearchProductListInfiniteQuery from "../react-query/queries/product/useSearchProductListInfiniteQuery";

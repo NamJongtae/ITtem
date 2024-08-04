@@ -1,4 +1,4 @@
-import { ProductDetailData, RecentProductData } from "@/types/productTypes";
+import { ProductDetailData, RecentProductData } from "@/types/product-types";
 import { useEffect } from "react";
 
 export default function useAddRecentProduct(

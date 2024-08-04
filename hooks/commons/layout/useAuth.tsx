@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
 import useAuthQuery from "@/hooks/react-query/queries/auth/useAuthQuery";
-import { AppDispatch } from "@/store";
+import { AppDispatch } from "@/store/store";
 import { useEffect } from "react";
-import { authSlice } from '@/store/authSlice';
+import { authSlice } from "@/store/slice/auth-slice";
 import { toast } from "react-toastify";
 import useSessionCookiesQuery from "@/hooks/react-query/queries/auth/useSessionCookiesQuery";
 

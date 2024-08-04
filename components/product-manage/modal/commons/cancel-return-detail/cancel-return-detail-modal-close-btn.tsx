@@ -1,6 +1,6 @@
 import { useFocusing } from "@/hooks/commons/useFocusing";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import CloseIcon from "@/public/icons/x_icon.svg";
+import CloseIcon from "@/public/icons/x-icon.svg";
 import { useRef } from "react";
 
 interface IProps {

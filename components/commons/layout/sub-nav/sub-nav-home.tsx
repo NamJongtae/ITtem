@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import HomeIcon from "@/public/icons/home_icon.svg";
+import HomeIcon from "@/public/icons/home-icon.svg";
 import { usePathname } from "next/navigation";
 
 export default function SubNavHome() {

@@ -1,5 +1,5 @@
-import { RootState } from "@/store";
-import { ChatMessageData } from "@/types/chatTypes";
+import { RootState } from "@/store/store";
+import { ChatMessageData } from "@/types/chat-types";
 import { useSelector } from "react-redux";
 import ChatRoomMyMessage from "./chat-room-my-message";
 import ChatRoomUserMessage from "./chat-room-user-message";

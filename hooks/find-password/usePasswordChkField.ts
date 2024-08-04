@@ -1,4 +1,4 @@
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useSelector } from "react-redux";

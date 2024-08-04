@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
-import { ChatMessageData, ChatRoomData } from "@/types/chatTypes";
+import { RootState } from "@/store/store";
+import { ChatMessageData, ChatRoomData } from "@/types/chat-types";
 
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";

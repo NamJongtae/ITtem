@@ -1,4 +1,4 @@
-import { ProductDetailAuthData } from "@/types/productTypes";
+import { ProductDetailAuthData } from "@/types/product-types";
 import Link from "next/link";
 
 interface IProps {

@@ -38,7 +38,7 @@ export default function AddressModal({ closeModal, addAddress }: IProps) {
             className="absolute top-1/2 -translate-y-1/2 right-3"
           >
             <Image
-              src={"/icons/search_icon.svg"}
+              src={"/icons/search-icon.svg"}
               alt="주소 검색"
               width={30}
               height={30}

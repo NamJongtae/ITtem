@@ -42,7 +42,7 @@ export default function Error({ error }: IProps) {
           onClick={handleClickBack}
         >
           <Image
-            src={"/icons/back_icon.svg"}
+            src={"/icons/back-icon.svg"}
             alt={"이전 페이지"}
             width={20}
             height={20}

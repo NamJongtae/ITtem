@@ -3,10 +3,10 @@ import {
   ProductImgData,
   ProductStatus,
   ProductUploadData,
-} from "@/types/productTypes";
+} from "@/types/product-types";
 import { FieldValues } from "react-hook-form";
 import useProductUploadMutate from "../react-query/mutations/product/useProductUploadMutate";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { isAxiosError } from "axios";

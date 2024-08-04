@@ -1,6 +1,6 @@
 import customAxios from "../customAxios";
 import { AxiosResponse } from "axios";
-import { NotificationResponseData } from "@/types/apiTypes";
+import { NotificationResponseData } from "@/types/api-types";
 
 export const getNotificationMessage = async ({
   lastKey,

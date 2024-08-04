@@ -1,7 +1,7 @@
 import ProductDetailBuyBtn from "../product-detail-buy-btn";
 import ProductDetailChattingBtn from "../product-detail-chatting-btn";
 import ProductDetailWishBtn from "../product-detail-wish-btn";
-import { ProductDetailData, ProductStatus } from "@/types/productTypes";
+import { ProductDetailData, ProductStatus } from "@/types/product-types";
 import ProductDetailDeleteBtn from "../product-detail-delete-btn";
 import ProductDetailEditBtn from "../product-detail-edit-btn";
 import useMyProfileQuery from "@/hooks/react-query/queries/profile/useMyProfileQuery";

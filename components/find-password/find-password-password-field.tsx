@@ -1,7 +1,7 @@
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import CoreInputField from "../commons/core-input-field/core-input-field";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 
 export default function FindPasswordPasswordField() {
   const isVerifyEmail = useSelector(

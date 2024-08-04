@@ -22,7 +22,7 @@ export default function RecentProductSliderBtn({
       >
         <Image
           className="rotate-180 w-[8px] h-[8px]"
-          src={"/icons/arrow_icon.svg"}
+          src={"/icons/arrow-icon.svg"}
           alt="prev"
           width={8}
           height={8}
@@ -39,7 +39,7 @@ export default function RecentProductSliderBtn({
       >
         <Image
           className=" w-[8px] h-[8px]"
-          src={"/icons/arrow_icon.svg"}
+          src={"/icons/arrow-icon.svg"}
           alt="next"
           width={8}
           height={8}

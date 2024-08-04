@@ -1,5 +1,5 @@
 import { getDateFormat } from "@/lib/getDateFormate";
-import { ProductData } from "@/types/productTypes";
+import { ProductData } from "@/types/product-types";
 
 interface IProps {
   data: Pick<ProductData, "name" | "createdAt" | "price" | "location">;
