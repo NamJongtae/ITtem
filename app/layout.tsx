@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.css";
-import ReactQueryProvider from '@/store/ReactQueryProvider';
-import ReduxProvider from '@/store/ReduxProvider';
+import ReactQueryProvider from "@/store/ReactQueryProvider";
+import ReduxProvider from "@/store/ReduxProvider";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
 import { BASE_URL } from "@/constants/constant";
-
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   subsets: ["latin"],
@@ -33,9 +32,6 @@ export const metadata: Metadata = {
     title: "ITtem",
     description:
       "중고거래 플랫폼, 잇템. 안전하고 쉬운 중고거래, 다양한 상품과 빠른 거래를 경험하세요.",
-    images: {
-      url: "/images/og-img.png",
-    },
   },
 };
 
