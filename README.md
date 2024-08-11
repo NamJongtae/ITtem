@@ -36,6 +36,7 @@
   - [⌨ 모달 및 드롭 다운 메뉴 키보드 최적화](#-모달-및-드롭-다운-메뉴-키보드-최적화)
   - [📱 모달 모바일 뒤로가기 버튼적용](#-모달-모바일-뒤로가기-버튼-적용)
   - [📤 App Router 마이그레이션](#-app-router-마이그레이션)
+  - [🗃 폴더명 및 파일명 일관된 규칙 적용](#-폴더명-및-파일명-일관된-규칙-적용)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -109,14 +110,14 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | 회원가입                | POST   | /api/auth/signup                                                                        |
 | 이메일 중복 확인        | POST   | /api/auth/dulication/email                                                              |
 | 닉네임 중복 확인        | POST   | /api/auth/dulication/nickname                                                           |
-| 이메일 확인             | POST   | /api/auth/checkEmail                                                                    |
-| 비밀번호 찾기/변경      | PATCH  | /api/auth/changePassword                                                                |
-| 이메일 인증 메일 전송   | POST   | /api/auth/sendVerifyEmail                                                               |
-| 이메일 인증             | POST   | /api/auth/verfiyEmail                                                                   |
+| 이메일 확인             | POST   | /api/auth/check-email                                                                    |
+| 비밀번호 찾기/변경      | PATCH  | /api/auth/change-password                                                                |
+| 이메일 인증 메일 전송   | POST   | /api/auth/send-verify-email                                                               |
+| 이메일 인증             | POST   | /api/auth/verify-email                                                                   |
 | 유저 인증               | GET    | /api/auth/user                                                                          |
 | 세션 쿠키 확인          | GET    | /api/auth/session                                                                       |
-| 토큰 재발급             | POST   | /api/auth/refreshToken                                                                  |
-| 토큰 삭제               | DELETE | /api/auth/deleteToken                                                                   |
+| 토큰 재발급             | POST   | /api/auth/refresh-token                                                                  |
+| 토큰 삭제               | DELETE | /api/auth/delete-token                                                                   |
 | 로그아웃                | GET    | /api/auth/signout                                                                       |
 | **프로필(profile)**     |
 | 나의 프로필 조회        | GET    | /api/profile                                                                            |
@@ -1506,6 +1507,26 @@ export default async function RootLayout({
 </details>
 
 <br>
+
+#### 🗃 폴더명 및 파일명 일관된 규칙 적용
+
+> **적용이유**
+
+- 폴더명 및 파일명이 일관성 없이 적용되지 않아, 유지 보수와 가독성이 저하되며 프로젝트 구조를 이해하는 데 어려움이 있습니다. 이를 개선하기 위해 일관된 명명 규칙을 적용했습니다.
+
+> **적용 방법**
+
+- 폴더명 및 파일명에 일정한 규칙을 정하여 이를 토대로 폴더명 및 파일명을 수정하였습니다.
+- 폴더명과 파일명 모두 케밥 케이스를 사용하여 명명합니다.
+- 폴더 하위의 파일의 이름의 경우 구분할 수 있도록 상위 폴더명을 prefix에 포함시켜 명명합니다.
+- 파일명 prefix는 상위 폴더가 여러개 일시 가장 가까운 폴더명을 prefix에 포함시키되 파일명이 중복되거나 중복될 여지가 있는 파일명의 경우 그 상위 폴더명의 prefix도 추가로 포함시키도록 명명합니다.
+- 폴더 안에 파일이 많은 경우 새로운 하위 폴더를 생성하여 분리합니다.
+- hook, DB model, 라이브러리 구현 함수, Provider의 경우 예외적으로 카멜 케이스를 사용하여 파일명을 명명합니다.
+
+> **적용으로 얻은 이점**
+
+- 폴더명 및 파일명을 일관된 규칙으로 관리하여 유지 보수 측면이 향상 되었으며, 폴더 구조 파악이 쉬워졌습니다.
+
 
 ### 🔫 트러블 슈팅
 
