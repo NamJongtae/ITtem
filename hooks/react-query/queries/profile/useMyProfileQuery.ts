@@ -1,12 +1,11 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from '@/store/auth-store';
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useMyProfileQuery() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const queryKeyConfing = queryKeys.profile.my;
 
   const {

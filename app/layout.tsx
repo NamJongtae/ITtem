@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.css";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
-import ReduxProvider from "@/store/ReduxProvider";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
@@ -45,7 +44,6 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <ReduxProvider>
           <ReactQueryProvider>
             <Suspense fallback={<Loading />}>
               <Layout>
@@ -69,7 +67,6 @@ export default async function RootLayout({
               </Layout>
             </Suspense>
           </ReactQueryProvider>
-        </ReduxProvider>
         <div id="portal-root"></div>
       </body>
     </html>

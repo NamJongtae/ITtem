@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 
 export default function LayoutNavAvata() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user  = useAuthStore(state => state.user);
 
   return (
     <Link className="relative inline-block" href="/profile">

@@ -1,12 +1,11 @@
 import { addWish } from "@/lib/api/product";
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { ProfileData } from "@/types/auth-types";
 import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useAddWishMutate() {
@@ -16,7 +15,7 @@ export default function useAddWishMutate() {
   const productQueryKey = queryKeys.product.detail(
     productId as string
   ).queryKey;
-  const myUid = useSelector((state: RootState) => state.auth.user?.uid);
+  const myUid = useAuthStore((state) => state.user?.uid);
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
   const { mutate: addWishMutate } = useMutation<
@@ -28,7 +27,7 @@ export default function useAddWishMutate() {
     mutationFn: () => addWish(productId as string),
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: productQueryKey,
+        queryKey: productQueryKey
       });
 
       await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
@@ -44,15 +43,15 @@ export default function useAddWishMutate() {
       const newProduct = {
         ...previousProduct,
         wishUserIds: [...previousProduct.wishUserIds, myUid],
-        wishCount: previousProduct.wishCount + 1,
+        wishCount: previousProduct.wishCount + 1
       };
 
       const newMyProfile = {
         ...previousMyProfile,
         wishProductIds: [
           ...previousMyProfile.wishProductIds,
-          previousProduct._id,
-        ],
+          previousProduct._id
+        ]
       };
 
       queryClient.setQueryData(productQueryKey, newProduct);
@@ -68,7 +67,7 @@ export default function useAddWishMutate() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: productQueryKey });
-    },
+    }
   });
 
   return { addWishMutate };

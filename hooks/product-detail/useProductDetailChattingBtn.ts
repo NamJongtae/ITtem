@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
 import useStartChatMutate from "../react-query/mutations/chat/useStartChatMutate";
-import { RootState } from "@/store/store";
 import { ProductStatus } from "@/types/product-types";
 import { toast } from "react-toastify";
+import useAuthStore from "@/store/auth-store";
 
 interface IParams {
   productStatus: ProductStatus | undefined;
@@ -13,10 +12,10 @@ interface IParams {
 export default function useProductDetailChattingBtn({
   productStatus,
   productId,
-  userId,
+  userId
 }: IParams) {
   const { mutate } = useStartChatMutate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
 
   const handleClickChatting = () => {
     if (productStatus === "trading") {

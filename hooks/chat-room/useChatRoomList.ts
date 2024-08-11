@@ -1,14 +1,11 @@
 import { getFirestoreDB } from "@/lib/firebaseSetting";
-import { RootState } from "@/store/store";
+import useChatStore from "@/store/chat-store";
 import { ChatRoomData } from "@/types/chat-types";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 export default function useChatRoomList() {
-  const chatRoomIds = useSelector((state: RootState) => state.chat.chatRoomIds);
-  const chatRoodIdsLoading = useSelector(
-    (state: RootState) => state.chat.chatRoomIdsLoading
-  );
+  const chatRoomIds = useChatStore((state) => state.chatRoomIds);
+  const chatRoodIdsLoading = useChatStore((state) => state.chatRoomIdsLoading);
   const [chatRoomData, setChatRoomData] = useState<{
     [key: string]: ChatRoomData;
   }>({});
@@ -34,8 +31,8 @@ export default function useChatRoomList() {
             setChatRoomData((prevData) => ({
               ...prevData,
               [snapshot.id]: {
-                ...data,
-              },
+                ...data
+              }
             }));
           }
 

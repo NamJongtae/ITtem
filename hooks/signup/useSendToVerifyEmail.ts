@@ -3,17 +3,15 @@ import { toast } from "react-toastify";
 import { useFormContext } from "react-hook-form";
 import useSendToVerifyEmailMutate from "../react-query/mutations/auth/useSendToVerifyEmailMutate";
 import useEmailDuplicationMutate from "../react-query/mutations/auth/useEmailDuplicationMutate";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { signupSlice } from "@/store/slice/signup-slice";
 import useCheckEmailMutate from "../react-query/mutations/auth/useCheckEmailMutate";
+import useSignupStore from "@/store/signup-store";
 
 export default function useSendToVerifyEmail(isFindPw?: boolean) {
   const { getValues } = useFormContext();
-  const isSendToVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isSendToVerifyEmail
+  const actions = useSignupStore((state) => state.actions);
+  const isSendToVerifyEmail = useSignupStore(
+    (state) => state.isSendToVerifyEmail
   );
-  const dispatch = useDispatch<AppDispatch>();
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
@@ -42,9 +40,9 @@ export default function useSendToVerifyEmail(isFindPw?: boolean) {
       }
     }
 
-    dispatch(signupSlice.actions.sendToVerifyEmail());
-    dispatch(signupSlice.actions.resetCounter());
-    dispatch(signupSlice.actions.setSendToVerifyEmailLoading(true));
+    actions.sendToVerifyEmail();
+    actions.resetTimer();
+    actions.setSendToVerifyEmailLoading(true);
     sendToVerifyEmailMutate({ email, isFindPw });
   }, []);
 
@@ -57,13 +55,13 @@ export default function useSendToVerifyEmail(isFindPw?: boolean) {
 
   useEffect(() => {
     return () => {
-      dispatch(signupSlice.actions.resetSendToVerifyEmail());
+      actions.resetIsSendToVerifyEmail();
     };
   }, []);
 
   return {
     isSendToVerifyEmail,
     handleClickSendToVerifyEmail,
-    emailRef,
+    emailRef
   };
 }

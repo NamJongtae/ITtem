@@ -1,20 +1,19 @@
 import { follow } from "@/lib/api/profile";
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { ProfileData } from "@/types/auth-types";
 import {
   InfiniteData,
   useMutation,
-  useQueryClient,
+  useQueryClient
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useUserProfileFollowMutate(uid: string) {
   const queryClient = useQueryClient();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const myUid = user?.uid || "";
   const searchParams = useSearchParams();
   const urlQueryUid = searchParams.get("uid") || "";
@@ -57,14 +56,14 @@ export default function useUserProfileFollowMutate(uid: string) {
 
       const newMyProfile = {
         ...previousMyProfile,
-        followings: [...(previousMyProfile?.followings || []), uid],
+        followings: [...(previousMyProfile?.followings || []), uid]
       };
 
       queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
       const newUserProfile = {
         ...previousUserProfile,
-        followers: [...(previousUserProfile?.followers || []), myUid],
+        followers: [...(previousUserProfile?.followers || []), myUid]
       };
       queryClient.setQueryData(userProfileQueryKey, newUserProfile);
 
@@ -75,7 +74,7 @@ export default function useUserProfileFollowMutate(uid: string) {
               if (profile.uid === uid) {
                 return {
                   ...profile,
-                  followers: [...(profile.followers || []), myUid],
+                  followers: [...(profile.followers || []), myUid]
                 };
               } else {
                 return profile;
@@ -85,7 +84,7 @@ export default function useUserProfileFollowMutate(uid: string) {
         );
         queryClient.setQueryData(userFollowingsQueryKey, {
           ...previousUserFollowings,
-          pages: newUserFollowings,
+          pages: newUserFollowings
         });
       }
 
@@ -96,7 +95,7 @@ export default function useUserProfileFollowMutate(uid: string) {
               if (profile.uid === uid) {
                 return {
                   ...profile,
-                  followers: [...(profile.followers || []), myUid],
+                  followers: [...(profile.followers || []), myUid]
                 };
               } else {
                 return profile;
@@ -106,7 +105,7 @@ export default function useUserProfileFollowMutate(uid: string) {
         );
         queryClient.setQueryData(userFollowersQueryKey, {
           ...previousUserFollowers,
-          pages: newUserFollowers,
+          pages: newUserFollowers
         });
       }
 
@@ -115,7 +114,7 @@ export default function useUserProfileFollowMutate(uid: string) {
         previousMyProfile,
         previousUserProfile,
         previousUserFollowings,
-        previousUserFollowers,
+        previousUserFollowers
       };
     },
     onError: (error, data, ctx) => {
@@ -147,13 +146,13 @@ export default function useUserProfileFollowMutate(uid: string) {
       queryClient.invalidateQueries({ queryKey: userProfileQueryKey });
 
       queryClient.invalidateQueries({
-        queryKey: userFollowingsQueryKey,
+        queryKey: userFollowingsQueryKey
       });
 
       queryClient.invalidateQueries({
-        queryKey: userFollowersQueryKey,
+        queryKey: userFollowersQueryKey
       });
-    },
+    }
   });
 
   return { userFollowMutate };

@@ -1,20 +1,18 @@
 import { uploadMultiImgToFirestore } from "@/lib/api/firebase";
 import {
   ProductImgData,
-  ProductStatus,
   ProductUploadData,
 } from "@/types/product-types";
 import { FieldValues } from "react-hook-form";
 import useProductUploadMutate from "../react-query/mutations/product/useProductUploadMutate";
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
+import useAuthStore from '@/store/auth-store';
 
 export default function useProductUploadSubmit() {
   const { productUploadMuate } = useProductUploadMutate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const [productUploadLoading, setProductUploadLoading] = useState(false);
 
   const handleClickProductUploadSubmit = async (values: FieldValues) => {

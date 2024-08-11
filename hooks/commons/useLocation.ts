@@ -1,11 +1,9 @@
+import useLocationStore from "@/store/location-store";
 import { useCallback } from "react";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { locationSlice } from "@/store/slice/location-slice";
 
 export default function useLocation(saveLocation?: (address: string) => void) {
-  const dispatch = useDispatch<AppDispatch>();
+  const actions = useLocationStore((state) => state.actions);
 
   const fetchAddressFromCoords = async (
     latitude: number,
@@ -16,8 +14,8 @@ export default function useLocation(saveLocation?: (address: string) => void) {
       const response = await fetch(apiUrl, {
         method: "GET",
         headers: {
-          Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
-        },
+          Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`
+        }
       });
       if (!response.ok) {
         throw new Error("주소 정보를 가져오는 데 실패했습니다.");
@@ -41,7 +39,7 @@ export default function useLocation(saveLocation?: (address: string) => void) {
           const { latitude, longitude } = position.coords;
           const address = await fetchAddressFromCoords(latitude, longitude);
           if (address) {
-            dispatch(locationSlice.actions.saveLocation(address.split(" ")[0]));
+            actions.setLocation(address.split(" ")[0]);
             if (!!saveLocation) {
               saveLocation(address);
             }
@@ -57,9 +55,9 @@ export default function useLocation(saveLocation?: (address: string) => void) {
     } else {
       toast.warn("현재 브라우저에서 위치 정보를 지원하지않아요.");
     }
-  }, [dispatch]);
+  }, [actions]);
 
   return {
-    fetchCurrentLocation,
+    fetchCurrentLocation
   };
 }

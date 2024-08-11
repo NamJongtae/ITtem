@@ -1,26 +1,24 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { authSlice } from "@/store/slice/auth-slice";
-import { AppDispatch } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 export default function useSessionCookiesQuery() {
-  const dispatch = useDispatch<AppDispatch>();
+  const actions  = useAuthStore(state=>state.actions);
   const pathname = usePathname();
   let queryKeyConfig = queryKeys.session.isExist;
   const { data, isSuccess, error, refetch } = useQuery({
     queryFn: queryKeyConfig.queryFn,
-    queryKey: queryKeyConfig.queryKey,
+    queryKey: queryKeyConfig.queryKey
   });
 
   useEffect(() => {
     if (isSuccess) {
-      if (!data.data.ok) dispatch(authSlice.actions.setIsLoading(false));
+      if (!data.data.ok) actions.setIsLoading(false);
     }
-  }, [isSuccess, data, dispatch]);
+  }, [isSuccess, data, actions]);
 
   useEffect(() => {
     refetch();
@@ -28,11 +26,11 @@ export default function useSessionCookiesQuery() {
 
   useEffect(() => {
     if (error) {
-      dispatch(authSlice.actions.setIsLoading(false));
+      actions.setIsLoading(false);
     }
-  }, [error, dispatch]);
+  }, [error, actions]);
 
   return {
-    isExistSession: !!data?.data.ok,
+    isExistSession: !!data?.data.ok
   };
 }

@@ -1,7 +1,6 @@
 import Spinner from "@/components/commons/spinner";
-import { RootState } from "@/store/store";
+import useSignupStore from "@/store/signup-store";
 import { MutableRefObject } from "react";
-import { useSelector } from "react-redux";
 
 interface IProps {
   requestSendToVerifyEmail: () => void;
@@ -12,14 +11,14 @@ interface IProps {
 export default function SignupVerifyCodeBtns({
   requestSendToVerifyEmail,
   resetSendToVerifyEmail,
-  verifyCodeRef,
+  verifyCodeRef
 }: IProps) {
-  const sendToVerifyEmailLoading = useSelector(
-    (state: RootState) => state.signup.sendToVerifyEmailLoading
+  const sendToVerifyEmailLoading = useSignupStore(
+    (state) => state.sendToVerifyEmailLoading
   );
 
   return (
-    <div className="text-sm text-center mt-2">
+    <div className='text-sm text-center mt-2'>
       <p>
         인증코드가 오지 않았나요?{" "}
         <button
@@ -31,11 +30,11 @@ export default function SignupVerifyCodeBtns({
           className={`${
             !sendToVerifyEmailLoading && "underline"
           } text-gray-400  underline-offset-2`}
-          type="button"
+          type='button'
         >
           {sendToVerifyEmailLoading ? (
-            <div className="flex items-center ml-1">
-              <Spinner className="w-[14px] h-[14px] mr-1" />
+            <div className='flex items-center ml-1'>
+              <Spinner className='w-[14px] h-[14px] mr-1' />
               전송중...
             </div>
           ) : (
@@ -47,8 +46,8 @@ export default function SignupVerifyCodeBtns({
         이메일을 잘못입력하셨나요?{" "}
         <button
           onClick={resetSendToVerifyEmail}
-          className="text-gray-400 underline underline-offset-2 mt-1"
-          type="button"
+          className='text-gray-400 underline underline-offset-2 mt-1'
+          type='button'
         >
           이메일 변경하기
         </button>

@@ -1,7 +1,6 @@
-import { RootState } from "@/store/store";
+import useSignupStore from "@/store/signup-store";
 import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 export default function useFindPasswordBtn() {
   const { formState } = useFormContext();
@@ -16,10 +15,8 @@ export default function useFindPasswordBtn() {
     formState.dirtyFields["password-check"] &&
     formState.dirtyFields["verifyCode"];
 
-  const isVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
-  );
-  const isDisabled = !!errors || !isDirty || !isVerifyEmail;
+  const isVerifiedEmail = useSignupStore((state) => state.isVerifiedEmail);
+  const isDisabled = !!errors || !isDirty || !isVerifiedEmail;
 
   const router = useRouter();
 

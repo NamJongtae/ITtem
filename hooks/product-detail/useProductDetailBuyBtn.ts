@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
 import usePurchaseProductMutate from "../react-query/mutations/product/usePurchaseProductMutate";
-import { RootState } from "@/store/store";
 import { ProductStatus } from "@/types/product-types";
 import { toast } from "react-toastify";
+import useAuthStore from "@/store/auth-store";
 
 interface IParams {
   productStatus: ProductStatus | undefined;
@@ -10,7 +9,7 @@ interface IParams {
 
 export default function useProductDetailBuyBtn({ productStatus }: IParams) {
   const { purchaseProductMutate } = usePurchaseProductMutate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
 
   const handleClickPurchase = () => {
     if (productStatus === "trading") {

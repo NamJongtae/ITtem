@@ -1,6 +1,5 @@
+import useSignupStore from "@/store/signup-store";
 import useVerifyEmail from "./useVerifyEmail";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { useFormContext } from "react-hook-form";
 
 export default function useVerifyCodeField() {
@@ -9,15 +8,13 @@ export default function useVerifyCodeField() {
     requestSendToVerifyEmail,
     resetSendToVerifyEmail,
     verifyCodeRef,
-    verfiyEmailLoading,
+    verfiyEmailLoading
   } = useVerifyEmail();
 
-  const isSendToVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isSendToVerifyEmail
+  const isSendToVerifyEmail = useSignupStore(
+    (state) => state.isSendToVerifyEmail
   );
-  const isVerifiedEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
-  );
+  const isVerifiedEmail = useSignupStore((state) => state.isVerifiedEmail);
 
   const { formState } = useFormContext();
 
@@ -31,6 +28,6 @@ export default function useVerifyCodeField() {
     verfiyEmailLoading,
     isSendToVerifyEmail,
     isVerifiedEmail,
-    error,
+    error
   };
 }

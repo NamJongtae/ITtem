@@ -1,14 +1,13 @@
 import useSignoutMutate from "@/hooks/react-query/mutations/auth/useSignoutMutate";
-import { RootState } from "@/store/store";
+import useAuthStore from '@/store/auth-store';
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 
 interface IParams {
   toggleMenu: () => void;
 }
 export default function useNavMobileMenu({ toggleMenu }: IParams) {
   const router = useRouter();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const { signoutMutate } = useSignoutMutate();
 
   const handleClicksignin = () => {

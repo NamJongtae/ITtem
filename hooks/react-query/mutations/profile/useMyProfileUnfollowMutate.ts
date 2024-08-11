@@ -1,6 +1,6 @@
 import { unfollow } from "@/lib/api/profile";
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from '@/store/auth-store';
 import { ProfileData } from "@/types/auth-types";
 import {
   InfiniteData,
@@ -8,12 +8,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useMyProfileUnfollowMutate(uid: string) {
   const queryClient = useQueryClient();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
   const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings._def;

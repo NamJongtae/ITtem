@@ -5,12 +5,10 @@ import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerifyEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
-import { signupSlice } from "@/store/slice/signup-slice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import useSignupStore from "@/store/signup-store";
 
 export default function useVerifyEmailMutate() {
-  const dispatch = useDispatch<AppDispatch>();
+  const actions = useSignupStore(state=>state.actions);
   const { setError, clearErrors, setValue } = useFormContext();
   const { mutate: verifyEmailMuate, isPending: verfiyEmailLoading } =
     useMutation<
@@ -22,7 +20,7 @@ export default function useVerifyEmailMutate() {
         verifyEmail(email, verifyCode, isFindPw),
       onSuccess: (result) => {
         toast.success(result.data?.message);
-        dispatch(signupSlice.actions.verifedEmail());
+        actions.verifedEmail();
         clearErrors("verifyCode");
       },
       onError: (error: unknown) => {
@@ -31,10 +29,10 @@ export default function useVerifyEmailMutate() {
             toast.warn(error.response?.data.message);
             setError("verifyCode", {
               type: "validate",
-              message: "인증코드가 일치하지 않아요.",
+              message: "인증코드가 일치하지 않아요."
             });
           } else if (error.response?.status === 403) {
-            dispatch(signupSlice.actions.resetSendToVerifyEmail());
+            actions.resetIsSendToVerifyEmail();
             toast.warn(error.response?.data.message);
             setValue("verifyCode", "");
             clearErrors("verifyCode");
@@ -42,7 +40,7 @@ export default function useVerifyEmailMutate() {
             toast.warn(ERROR_MESSAGE);
           }
         }
-      },
+      }
     });
 
   return { verifyEmailMuate, verfiyEmailLoading };

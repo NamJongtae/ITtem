@@ -1,15 +1,14 @@
-import { RootState } from "@/store/store";
+import useSignupStore from '@/store/signup-store';
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 export default function usePasswordChkField() {
   const { watch, clearErrors, setError } = useFormContext();
   const passwordValue = watch("password");
   const passwordCheckValue = watch("password-check");
 
-  const isVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isVerifedEmail
+  const isVerifiedEmail = useSignupStore(
+    (state) => state.isVerifiedEmail
   );
 
   useEffect(() => {
@@ -27,5 +26,5 @@ export default function usePasswordChkField() {
     }
   }, [passwordValue, passwordCheckValue, clearErrors, setError]);
 
-  return { isVerifyEmail, passwordValue, passwordCheckValue };
+  return { isVerifiedEmail, passwordValue, passwordCheckValue };
 }

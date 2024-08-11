@@ -9,11 +9,11 @@ export default function FindPasswordEmailField() {
     isSendToVerifyEmail,
     handleClickSendToVerifyEmail,
     emailRef,
-    isVerifyEmail,
+    isVerifiedEmail,
   } = useEmailField();
 
   return (
-    !isVerifyEmail && (
+    !isVerifiedEmail && (
       <div>
         <div className="flex gap-3 items-center">
           <CoreInputField

@@ -1,5 +1,5 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useLocationStore from '@/store/location-store';
 import {
   ProductCategory,
   ProductData,
@@ -7,8 +7,6 @@ import {
 } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 export default function useCategoryProductListInfiniteQuery({
   limit = 10,
@@ -19,7 +17,7 @@ export default function useCategoryProductListInfiniteQuery({
   category?: ProductCategory;
   productListType: ProductListType;
 }) {
-  const location = useSelector((state: RootState) => state.location.location);
+  const location = useLocationStore((state) => state.location);
   const querKeyConfing = queryKeys.product.list({
     produdctCategory: category,
     location,

@@ -1,7 +1,6 @@
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { ProductStatus } from "@/types/product-types";
 import { useRouter, useParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 interface IParams {
@@ -12,7 +11,7 @@ export default function useProductDetailEditBtn({ productStatus }: IParams) {
   const router = useRouter();
   const params = useParams();
   const productId = params?.productId;
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const handleClickEdit = () => {
     if (productStatus === "trading") {
       toast.warn("거래중인 상품은 수정할 수 없어요.");

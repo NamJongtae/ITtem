@@ -1,21 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import useVerifyEmailMutate from "../react-query/mutations/auth/useVerifyEmailMutate";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 import useEmailDuplicationMutate from "../react-query/mutations/auth/useEmailDuplicationMutate";
 import useSendToVerifyEmailMutate from "../react-query/mutations/auth/useSendToVerifyEmailMutate";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { signupSlice } from "@/store/slice/signup-slice";
 import useCheckEmailMutate from "../react-query/mutations/auth/useCheckEmailMutate";
+import useSignupStore from "@/store/signup-store";
 
 export default function useVerifyEmail(isFindPw?: boolean) {
   const { getValues, clearErrors } = useFormContext();
   const verifyCodeRef = useRef<HTMLInputElement | null>(null);
-  const isSendToVerifyEmail = useSelector(
-    (state: RootState) => state.signup.isSendToVerifyEmail
+  const actions = useSignupStore((state) => state.actions);
+  const isSendToVerifyEmail = useSignupStore(
+    (state) => state.isSendToVerifyEmail
   );
-  const dispatch = useDispatch<AppDispatch>();
 
   const { verifyEmailMuate, verfiyEmailLoading } = useVerifyEmailMutate();
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
@@ -56,14 +54,14 @@ export default function useVerifyEmail(isFindPw?: boolean) {
     }
 
     clearErrors("verifyCode");
-    dispatch(signupSlice.actions.resetVerifedEmail());
-    dispatch(signupSlice.actions.setSendToVerifyEmailLoading(true));
-    dispatch(signupSlice.actions.resetCounter());
+    actions.resetIsVerifedEmail();
+    actions.setSendToVerifyEmailLoading(true);
+    actions.resetTimer();
     sendToVerifyEmailMutate({ email, isFindPw });
   }, []);
 
   const resetSendToVerifyEmail = useCallback(() => {
-    dispatch(signupSlice.actions.resetSendToVerifyEmail());
+    actions.resetIsSendToVerifyEmail();
   }, []);
 
   useEffect(() => {
@@ -73,15 +71,15 @@ export default function useVerifyEmail(isFindPw?: boolean) {
 
   useEffect(() => {
     return () => {
-      dispatch(signupSlice.actions.resetVerifedEmail());
+      actions.resetIsVerifedEmail();
     };
-  }, [dispatch]);
+  }, [actions]);
 
   return {
     handleClickVerifyEmail,
     verifyCodeRef,
     requestSendToVerifyEmail,
     resetSendToVerifyEmail,
-    verfiyEmailLoading,
+    verfiyEmailLoading
   };
 }

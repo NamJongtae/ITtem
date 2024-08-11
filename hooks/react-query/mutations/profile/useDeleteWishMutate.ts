@@ -1,12 +1,11 @@
 import { deleteWish } from "@/lib/api/product";
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from '@/store/auth-store';
 import { ProfileData } from "@/types/auth-types";
 import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useDeleteWishMutate() {
@@ -17,7 +16,7 @@ export default function useDeleteWishMutate() {
   const productQueryKey = queryKeys.product.detail(
     productId as string
   ).queryKey;
-  const myUid = useSelector((state: RootState) => state.auth.user?.uid);
+  const myUid = useAuthStore((state) => state.user?.uid);
 
   const { mutate: deleteWishMutate } = useMutation<
     AxiosResponse<{ message: string }>,

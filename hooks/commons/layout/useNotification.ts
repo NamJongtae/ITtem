@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store/store";
 import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
 import { NotificationMessageData } from "@/types/notification-types";
 import { useQueryClient } from "@tanstack/react-query";
 import { isMobile } from "react-device-detect";
 import { getRealtimeDB } from "@/lib/firebaseSetting";
-import { notificationSlice } from "@/store/slice/notification-slice";
 import { queryKeys } from "@/query-keys/query-keys";
+import useNotificationStore from "@/store/notification-store";
+import useAuthStore from "@/store/auth-store";
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -24,15 +23,14 @@ export default function useNotification() {
     setIsOpenModal(false);
   };
 
-  const unreadCount = useSelector(
-    (state: RootState) => state.notification.unreadCount
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const unreadCount = useNotificationStore((state) => state.unreadCount);
+  const actions = useNotificationStore((state) => state.actions);
+  const user = useAuthStore((state) => state.user);
+
   const queryClient = useQueryClient();
 
   const notificationRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const user = useSelector((state: RootState) => state.auth.user);
 
   const debouncing = useDebouncing();
 
@@ -102,7 +100,7 @@ export default function useNotification() {
         orderByChild,
         query,
         ref,
-        update,
+        update
       } = await import("firebase/database");
       const database = await getRealtimeDB();
       const messageRef = ref(database, `notification/${user.uid}/messages`);
@@ -135,7 +133,7 @@ export default function useNotification() {
             }
           );
           queryClient.invalidateQueries({
-            queryKey: queryKeys.notification.messages().queryKey,
+            queryKey: queryKeys.notification.messages().queryKey
           });
         }
       });
@@ -143,7 +141,7 @@ export default function useNotification() {
       unsubscribeCounter = onValue(counterRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          dispatch(notificationSlice.actions.saveUnreadCount(data.unreadCount));
+          actions.setUnreadCount(data.unreadCount);
         }
       });
     };
@@ -158,12 +156,12 @@ export default function useNotification() {
         unsubscribeCounter();
       }
     };
-  }, [user]);
+  }, [user, actions]);
 
   return {
     isOpenModal,
     toggleNotification,
     notificationRef,
-    unreadCount,
+    unreadCount
   };
 }

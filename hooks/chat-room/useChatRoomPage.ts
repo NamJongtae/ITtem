@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { ChatMessageData, ChatRoomData } from "@/types/chat-types";
 
 import { toast } from "react-toastify";
@@ -9,9 +7,10 @@ import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../react-query/mutations/chat/useLeaveChatRoomMutate";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import useJoinChatRoomMutate from "../react-query/mutations/chat/useJoinChatRoomMutate";
+import useAuthStore from '@/store/auth-store';
 
 export default function useChatRoomPage() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
 
   const [isExit, setIsExit] = useState(false);

@@ -1,25 +1,24 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useParams } from "next/navigation";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 export default function useAuthQuery(isExistSession: boolean) {
   const pathname = usePathname();
   const params = useParams();
-  const myInfo = useSelector((state: RootState) => state.auth.user);
-  const loading = useSelector((state: RootState) => state.auth.isLoading);
+  const myInfo = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.isLoading);
 
   const {
     data: user,
     isLoading,
     error: authError,
-    refetch: refetchAuth,
+    refetch: refetchAuth
   } = useQuery({
     ...queryKeys.auth.info(myInfo?.uid),
     retry: 0,
-    enabled: isExistSession,
+    enabled: isExistSession
   });
 
   const authIsLoading = loading || isLoading;

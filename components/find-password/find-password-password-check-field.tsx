@@ -3,10 +3,10 @@ import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import usePasswordChkField from "@/hooks/find-password/usePasswordChkField";
 
 export default function FindPasswordPasswordCheckField() {
-  const { isVerifyEmail, passwordValue } = usePasswordChkField();
+  const { isVerifiedEmail, passwordValue } = usePasswordChkField();
 
   return (
-    isVerifyEmail && (
+    isVerifiedEmail && (
       <div>
         <CoreInputField
           label="비밀번호 확인"

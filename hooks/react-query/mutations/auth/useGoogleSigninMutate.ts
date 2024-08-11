@@ -1,19 +1,18 @@
 import { deleteAllToken, googleSignin } from "@/lib/api/auth";
-import { authSlice } from "@/store/slice/auth-slice";
-import { AppDispatch } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import {
   GoogleAuthInfoResponseData,
-  SigninResponseData,
+  SigninResponseData
 } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+
 import { toast } from "react-toastify";
 
 export default function useGoogleSigninMutate() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const actions = useAuthStore((state) => state.actions);
   const { mutate: googleSigninMutate } = useMutation<
     AxiosResponse<SigninResponseData>,
     AxiosError,
@@ -22,7 +21,7 @@ export default function useGoogleSigninMutate() {
     mutationFn: async (user: GoogleAuthInfoResponseData) =>
       await googleSignin(user),
     onSuccess: (response) => {
-      dispatch(authSlice.actions.saveAuth(response.data.user));
+      actions.setAuth(response.data.user);
       router.push("/");
     },
     onError: (error, variables) => {
@@ -47,7 +46,7 @@ export default function useGoogleSigninMutate() {
           router.replace("/signin");
         }
       }
-    },
+    }
   });
 
   return { googleSigninMutate };

@@ -1,11 +1,10 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { RootState } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
 import { NotificationMessageData } from "@/types/notification-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 
 export default function useNotificationInfiniteQuery(limit: number = 10) {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const queryKeyConfig = queryKeys.notification.messages(limit);
 
   const {
@@ -14,7 +13,7 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    error,
+    error
   } = useInfiniteQuery<
     { messages: NotificationMessageData[]; nextKey: string },
     Error,
@@ -24,7 +23,7 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     queryFn: queryKeyConfig.queryFn as any,
     enabled: !!user,
     initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage?.nextKey || undefined,
+    getNextPageParam: (lastPage) => lastPage?.nextKey || undefined
   });
 
   return {
@@ -33,6 +32,6 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    error,
+    error
   };
 }

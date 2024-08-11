@@ -38,7 +38,7 @@ export async function createAccount({
       email,
       password,
       nickname,
-      profileImgData: imgData || { url: "/icons/user_icon.svg", name: "" },
+      profileImgData: imgData || { url: "/icons/user-icon.svg", name: "" },
       introduce,
     });
     return response;

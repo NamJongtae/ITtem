@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { chatSlice } from "@/store/slice/chat-slice";
+import useAuthStore from "@/store/auth-store";
+import useChatStore from "@/store/chat-store";
 
 export default function useNotificationChat() {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
-  const dispatch = useDispatch<AppDispatch>();
+  const actions = useChatStore((state) => state.actions);
 
   useEffect(() => {
     if (!myUid) return;
@@ -19,7 +18,7 @@ export default function useNotificationChat() {
       const { doc, onSnapshot } = await import("firebase/firestore");
 
       const chatRoomIdsRef = doc(firestoreDB, `userChatInfo/${myUid}`);
-      dispatch(chatSlice.actions.setChatRoomIdsLoading(true));
+      actions.setChatRoomIdsLoading(true);
 
       unsubscribe = onSnapshot(chatRoomIdsRef, (snapshot) => {
         if (snapshot.exists()) {
@@ -27,10 +26,10 @@ export default function useNotificationChat() {
           const ids = data.chatRoomIds;
           const totalMessageCount = data.totalMessageCount;
 
-          dispatch(chatSlice.actions.saveChatRoomIds(ids));
-          dispatch(chatSlice.actions.saveTotalMessageCount(totalMessageCount));
+          actions.saveChatRoomIds(ids);
+          actions.setTotalMessageCount(totalMessageCount);
         }
-        dispatch(chatSlice.actions.setChatRoomIdsLoading(false));
+        actions.setChatRoomIdsLoading(false);
       });
     };
 
@@ -41,5 +40,5 @@ export default function useNotificationChat() {
         unsubscribe();
       }
     };
-  }, [myUid, dispatch]);
+  }, [myUid, actions]);
 }

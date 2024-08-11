@@ -1,21 +1,21 @@
 import { signout } from "@/lib/api/auth";
 import { queryKeys } from "@/query-keys/query-keys";
-import { authSlice } from "@/store/slice/auth-slice";
-import { chatSlice } from "@/store/slice/chat-slice";
-import { notificationSlice } from "@/store/slice/notification-slice";
-import { AppDispatch } from "@/store/store";
+import useAuthStore from "@/store/auth-store";
+import useChatStore from "@/store/chat-store";
+import useNotificationStore from "@/store/notification-store";
 import { SignoutResposeData } from "@/types/api-types";
 import { AuthData } from "@/types/auth-types";
 import { ProductData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function useSignoutMutate() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const authActions = useAuthStore((state) => state.actions);
+  const chatActions = useChatStore((state) => state.actions);
+  const notificationActions = useNotificationStore((state) => state.actions);
   const queryClient = useQueryClient();
   const authQueryKey = queryKeys.auth.info().queryKey;
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
@@ -37,10 +37,10 @@ export default function useSignoutMutate() {
 
       queryClient.removeQueries({ queryKey: queryKeys.session._def });
 
-      dispatch(authSlice.actions.resetAuth());
-      dispatch(chatSlice.actions.resetChatState());
+      authActions.resetAuth();
+      chatActions.resetChatState();
 
-      dispatch(notificationSlice.actions.resetUnreadCount());
+      notificationActions.resetUnreadCount();
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
       ) {
@@ -55,7 +55,7 @@ export default function useSignoutMutate() {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
-    },
+    }
   });
 
   return { signoutMutate };
