@@ -20,7 +20,7 @@ export default function useVerifyEmailMutate() {
         verifyEmail(email, verifyCode, isFindPw),
       onSuccess: (result) => {
         toast.success(result.data?.message);
-        actions.verifedEmail();
+        actions.verifyEmail();
         clearErrors("verifyCode");
       },
       onError: (error: unknown) => {

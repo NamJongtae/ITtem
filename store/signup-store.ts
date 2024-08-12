@@ -15,7 +15,7 @@ interface SignupState {
     inactiveTimer: () => void;
     sendToVerifyEmail: () => void;
     resetIsSendToVerifyEmail: () => void;
-    verifedEmail: () => void;
+    verifyEmail: () => void;
     resetIsVerifedEmail: () => void;
     setSendToVerifyEmailLoading: (isLoading: boolean) => void;
     setSendToVerifyEmailError: (isError: boolean) => void;
@@ -76,7 +76,7 @@ export const store = (set: any): SignupState => ({
         "signup/resetIsSendToVerifyEmail"
       );
     },
-    verifedEmail: () => {
+    verifyEmail: () => {
       set(
         (state: SignupState) => {
           state.isVerifiedEmail = true;
