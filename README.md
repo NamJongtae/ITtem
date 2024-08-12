@@ -37,6 +37,7 @@
   - [📱 모달 모바일 뒤로가기 버튼적용](#-모달-모바일-뒤로가기-버튼-적용)
   - [📤 App Router 마이그레이션](#-app-router-마이그레이션)
   - [🗃 폴더명 및 파일명 일관된 규칙 적용](#-폴더명-및-파일명-일관된-규칙-적용)
+  - [🔄 redux-toolkit zustand로 전환](#-redux-toolkit-zustand로-전환)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -110,14 +111,14 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | 회원가입                | POST   | /api/auth/signup                                                                        |
 | 이메일 중복 확인        | POST   | /api/auth/dulication/email                                                              |
 | 닉네임 중복 확인        | POST   | /api/auth/dulication/nickname                                                           |
-| 이메일 확인             | POST   | /api/auth/check-email                                                                    |
-| 비밀번호 찾기/변경      | PATCH  | /api/auth/change-password                                                                |
-| 이메일 인증 메일 전송   | POST   | /api/auth/send-verify-email                                                               |
-| 이메일 인증             | POST   | /api/auth/verify-email                                                                   |
+| 이메일 확인             | POST   | /api/auth/check-email                                                                   |
+| 비밀번호 찾기/변경      | PATCH  | /api/auth/change-password                                                               |
+| 이메일 인증 메일 전송   | POST   | /api/auth/send-verify-email                                                             |
+| 이메일 인증             | POST   | /api/auth/verify-email                                                                  |
 | 유저 인증               | GET    | /api/auth/user                                                                          |
 | 세션 쿠키 확인          | GET    | /api/auth/session                                                                       |
-| 토큰 재발급             | POST   | /api/auth/refresh-token                                                                  |
-| 토큰 삭제               | DELETE | /api/auth/delete-token                                                                   |
+| 토큰 재발급             | POST   | /api/auth/refresh-token                                                                 |
+| 토큰 삭제               | DELETE | /api/auth/delete-token                                                                  |
 | 로그아웃                | GET    | /api/auth/signout                                                                       |
 | **프로필(profile)**     |
 | 나의 프로필 조회        | GET    | /api/profile                                                                            |
@@ -165,7 +166,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | **채팅(chat)**          |
 | 채팅방 조회             | POST   | /api/chat                                                                               |
 | 채팅방 삭제             | DELETE | /api/chat/:chatRoomId                                                                   |
-| 채팅방 입장             | PATCH  | /api/chat/:chatRoomId/join                                                            |
+| 채팅방 입장             | PATCH  | /api/chat/:chatRoomId/join                                                              |
 | 채팅방 퇴장             | PATCH  | /api/chat/:chatRoomId/exit                                                              |
 | 채팅방 나가기           | PATCH  | /api/chat/:chatRoomId/leave                                                             |
 | 채팅방 메세지 전송      | POST   | /api/chat/:chatRoomId/message                                                           |
@@ -199,9 +200,9 @@ Serverless로 벡엔드 API를 구축하였습니다.
 - **자동 리페칭**: 데이터 변경 시 자동으로 리페칭하여 최신 상태 유지.
 - **배경 데이터 업데이트**: 사용자가 보는 동안 데이터 업데이트를 배경에서 처리.
 
-#### Redux Toolkit
+#### Zustand
 
-- **전역 상태 관리**: 전역 상태 관리를 위한 강력한 도구로, 일반 Redux보다 사용이 간편.
+- **전역 상태 관리**: 전역 상태 관리를 위한 강력한 도구로, 일반 Redux보다 사용이 간편하고 가벼움.
 - **코드 간소화**: 복잡한 설정 없이 간결하게 상태 관리 로직 구현 가능.
 
 #### MongoDB
@@ -1237,14 +1238,16 @@ export const useModalMobileBackBtn = ({ closeModal, isOpenModal }: IParams) => {
 
 #### 📤 App Router 마이그레이션
 
->**적용이유**
+> **적용이유**
+
 - App Router 마이그레이션을 통해 `Server Component`를 사용하여 **bundle size 감소**및 **초기 로딩 속도 개선**을 위해 적용하였습니다.
 - `Streaming SSR`, `Suspense` 기능을 통해 UX을 향상시키고자 적용하였습니다.
 - **parallel routes & interceptor routes**를 이용하여 모달창을 구현하여 **UX 및 SEO 향상**을 위해 적용하였습니다.
 
 <br>
 
->**적용으로 얻은 이점**
+> **적용으로 얻은 이점**
+
 - 전체적인 번들 사이즈가 감소하였으며, 공통 번들 사이즈가 **340MB에서 84.8MB로 약 76% 감소**하였습니다.
 - `Streaming SSR`, `Suspnse` 기능으로 SSR이 진행되는 동안 fallback UI를 표시할 수 있어 UX가 향상되었습니다.
 - **parallel routes & interceptor routes**를 이용하여 모달창을 구현하여 **UX 및 SEO 향상**되었으며, 별도로 모바일의 뒤로가기 구현이 필요없어졌습니다.
@@ -1252,6 +1255,7 @@ export const useModalMobileBackBtn = ({ closeModal, isOpenModal }: IParams) => {
 <br>
 
 **1 ) 번들 사이즈 분석 결과**
+
 <details>
 <summary>분석 결과 보기</summary>
   
@@ -1430,7 +1434,8 @@ export default async function Product({
 
 <br>
 
-**parallerl routes default.tsx** :  새로고침시 parallerl routes가 사용되지 않는 경우 unmatched route 오류 해결을 위해 사용합니다. 
+**parallerl routes default.tsx** : 새로고침시 parallerl routes가 사용되지 않는 경우 unmatched route 오류 해결을 위해 사용합니다.
+
 ```javascript
 // /app/@sign/default.tsx
 
@@ -1442,6 +1447,7 @@ export default function SigninModalDefault() {
 <br>
 
 **interceptor routes page.tsx** : signin 경로를 대신할 페이지 RootLayout에 레이아웃을 공유하여, 로그인 모달창이 나타나도록합니다.
+
 ```javascript
 // /app/@sign/(.)signin/page.tsx
 
@@ -1455,6 +1461,7 @@ export default function Modal() {
 <br>
 
 **RootLayout.tsx** : 루트 레이아웃에 signin 모달창을 공유합니다.
+
 ```javascript
 // /app/layout.tsx
 //                             •
@@ -1504,6 +1511,7 @@ export default async function RootLayout({
   );
 }
 ```
+
 </details>
 
 <br>
@@ -1527,6 +1535,89 @@ export default async function RootLayout({
 
 - 폴더명 및 파일명을 일관된 규칙으로 관리하여 유지 보수 측면이 향상 되었으며, 폴더 구조 파악이 쉬워졌습니다.
 
+<br>
+
+#### 🔄 redux-toolkit zustand로 전환
+
+> **적용이유**
+
+- 기존 전역 상태관리를 Redux-toolkit를 이용해 관리했습니다. Redux-toolkit의 복잡한 기능들을 활용할 필요없이 단순히 전역 상태관리만 하면 되기 때문에 Redux-toolkit 사용이 불필요하다고 생각하였습니다. 그래서 Redux-toolkit 보다 가볍고, 간결한 Zustand를 적용하게되었습니다.
+
+> **적용 방법**
+
+- 기존 Redux-toolkit slice 대신 각 Zustand store를 생성하여 전역상태를 관리하도록 하였습니다.
+- 기존 Redux-toolkit reducers은 Zustand store에 actions 객체에 넣어 생성하였습니다.
+
+> **적용으로 얻은 이점**
+
+- 기존 Redux-toolkit에 비해 적은 용량으로 번들 크기를 줄일 수 있었습니다.
+- 복잡하게 Provider, slice, reducer를 생성하지 않아도 되어 사용하기 쉽고 간편해졌습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+**auth-store.ts**
+
+```javascript
+import { AuthData } from "@/types/auth-types";
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
+interface AuthState {
+  user: AuthData | null;
+  isLoading: boolean;
+  actions: {
+    setAuth: (user: AuthData) => void;
+    resetAuth: () => void;
+    setIsLoading: (isLoading: boolean) => void;
+  };
+}
+
+const isClient = typeof window !== "undefined";
+
+export const store = (set: any): AuthState => ({
+  user: null,
+  isLoading: true,
+  actions: {
+    setAuth: (user: AuthData) => {
+      set((state: AuthState) => {
+        state.user = user;
+      }, false, "user/setAuth");
+      if (isClient) {
+        localStorage.setItem("uid", JSON.stringify(user.uid));
+      }
+    },
+    resetAuth: () => {
+      set((state: AuthState) => {
+        state.user = null;
+      }, false, "user/resetAuth");
+      if (isClient) {
+        localStorage.removeItem("uid");
+      }
+    },
+    setIsLoading: (isLoading: boolean) => {
+      set((state: AuthState) => {
+        state.isLoading = isLoading;
+      }, false, "user/setIsLoading");
+    },
+  },
+});
+
+const useAuthStore = create<AuthState>()(
+  immer(process.env.NODE_ENV !== "production" ? devtools(store) : store)
+);
+
+export default useAuthStore;
+```
+
+</details>
+
+<br>
 
 ### 🔫 트러블 슈팅
 
