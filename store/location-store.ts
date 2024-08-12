@@ -19,17 +19,17 @@ export const store = (set: any): LocationState => ({
     setLocation: (location: string) => {
       set((state: LocationState) => {
         state.location = location;
-      });
+      }, false, "location/setLocation");
     },
     resetLocation: () => {
       set((state: LocationState) => {
         state.location = "";
-      });
+      }, false, "location/resetLocation");
     },
     setCheckLocation: (isCheck: boolean) => {
       set((state: LocationState) => {
         state.checkedLoacation = isCheck;
-      });
+      }, false, "location/setCheckLocation");
     },
   },
 });

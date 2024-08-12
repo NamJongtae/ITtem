@@ -16,12 +16,12 @@ export const store = (set: any): NotificationState => ({
     setUnreadCount: (unreadCount: number) => {
       set((state: NotificationState) => {
         state.unreadCount = unreadCount;
-      });
+      }, false, "notification/setUnreadCount");
     },
     resetUnreadCount: () => {
       set((state: NotificationState) => {
         state.unreadCount = 0;
-      });
+      }, false, "notification/resetUnreadCount");
     },
   },
 });

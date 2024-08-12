@@ -22,38 +22,62 @@ export const store = (set: any): ChatState => ({
   totalMessageCount: 0,
   actions: {
     saveChatRoomIds: (chatRoomIds: string[]) => {
-      set((state: ChatState) => {
-        state.chatRoomIds = chatRoomIds;
-      });
+      set(
+        (state: ChatState) => {
+          state.chatRoomIds = chatRoomIds;
+        },
+        false,
+        "chat/saveChatRoomIds"
+      );
     },
     resetChatRoomId: () => {
-      set((state: ChatState) => {
-        state.chatRoomIds = [];
-      });
+      set(
+        (state: ChatState) => {
+          state.chatRoomIds = [];
+        },
+        false,
+        "chat/resetChatRoomId"
+      );
     },
     setTotalMessageCount: (totalMessageCount: number) => {
-      set((state: ChatState) => {
-        state.totalMessageCount = totalMessageCount;
-      });
+      set(
+        (state: ChatState) => {
+          state.totalMessageCount = totalMessageCount;
+        },
+        false,
+        "chat/setTotalMessageCount"
+      );
     },
     resetTotalMessageCount: () => {
-      set((state: ChatState) => {
-        state.totalMessageCount = 0;
-      });
+      set(
+        (state: ChatState) => {
+          state.totalMessageCount = 0;
+        },
+        false,
+        "chat/resetTotalMessageCount"
+      );
     },
     setChatRoomIdsLoading: (isLoading: boolean) => {
-      set((state: ChatState) => {
-        state.chatRoomIdsLoading = isLoading;
-      });
+      set(
+        (state: ChatState) => {
+          state.chatRoomIdsLoading = isLoading;
+        },
+        false,
+        "chat/setChatRoomIdsLoading"
+      );
     },
     resetChatState: () => {
-      set((state: ChatState)=>{
-        state.chatRoomIds = [];
-        state.totalMessageCount = 0;
-        state.chatRoomIdsLoading = true;
-      })
+      set(
+        (state: ChatState) => {
+          state.chatRoomIds = [];
+          state.totalMessageCount = 0;
+          state.chatRoomIdsLoading = true;
+        },
+        false,
+        "chat/resetChatState"
+      );
     }
-  },
+  }
 });
 
 const useChatStore = create<ChatState>()(

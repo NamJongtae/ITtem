@@ -30,53 +30,89 @@ export const store = (set: any): SignupState => ({
   sendToVerifyEmailError: false,
   actions: {
     decrementTimer: () => {
-      set((state: SignupState) => {
-        if (state.timer > 0) {
-          state.timer -= 1;
-        }
-      });
+      set(
+        (state: SignupState) => {
+          if (state.timer > 0) {
+            state.timer -= 1;
+          }
+        },
+        false,
+        "signup/decrementTimer"
+      );
     },
     resetTimer: () => {
-      set((state: SignupState) => {
-        state.timer = VERIFY_EMAIL_EXP;
-      });
+      set(
+        (state: SignupState) => {
+          state.timer = VERIFY_EMAIL_EXP;
+        },
+        false,
+        "signup/resetTimer"
+      );
     },
     inactiveTimer: () => {
-      set((state: SignupState) => {
-        state.timer = 0;
-      });
+      set(
+        (state: SignupState) => {
+          state.timer = 0;
+        },
+        false,
+        "signup/inactiveTimer"
+      );
     },
     sendToVerifyEmail: () => {
-      set((state: SignupState) => {
-        state.isSendToVerifyEmail = true;
-      });
+      set(
+        (state: SignupState) => {
+          state.isSendToVerifyEmail = true;
+        },
+        false,
+        "signup/sendToVerifyEmail"
+      );
     },
     resetIsSendToVerifyEmail: () => {
-      set((state: SignupState) => {
-        state.isSendToVerifyEmail = false;
-      });
+      set(
+        (state: SignupState) => {
+          state.isSendToVerifyEmail = false;
+        },
+        false,
+        "signup/resetIsSendToVerifyEmail"
+      );
     },
     verifedEmail: () => {
-      set((state: SignupState) => {
-        state.isVerifiedEmail = true;
-      });
+      set(
+        (state: SignupState) => {
+          state.isVerifiedEmail = true;
+        },
+        false,
+        "signup/verifiedEmail"
+      );
     },
     resetIsVerifedEmail: () => {
-      set((state: SignupState) => {
-        state.isVerifiedEmail = false;
-      });
+      set(
+        (state: SignupState) => {
+          state.isVerifiedEmail = false;
+        },
+        false,
+        "signup/resetIsVerifedEmail"
+      );
     },
     setSendToVerifyEmailLoading: (isLoading: boolean) => {
-      set((state: SignupState) => {
-        state.sendToVerifyEmailLoading = isLoading;
-      });
+      set(
+        (state: SignupState) => {
+          state.sendToVerifyEmailLoading = isLoading;
+        },
+        false,
+        "signup/setSendToVerifyEmailLoading"
+      );
     },
     setSendToVerifyEmailError: (isError: boolean) => {
-      set((state: SignupState) => {
-        state.sendToVerifyEmailError = isError;
-      });
-    },
-  },
+      set(
+        (state: SignupState) => {
+          state.sendToVerifyEmailError = isError;
+        },
+        false,
+        "signup/setSendToVerifyEmailError"
+      );
+    }
+  }
 });
 
 const useSignupStore = create<SignupState>()(

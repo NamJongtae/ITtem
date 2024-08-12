@@ -22,7 +22,7 @@ export const store = (set: any): AuthState => ({
     setAuth: (user: AuthData) => {
       set((state: AuthState) => {
         state.user = user;
-      });
+      }, false, "user/setAuth");
       if (isClient) {
         localStorage.setItem("uid", JSON.stringify(user.uid));
       }
@@ -30,7 +30,7 @@ export const store = (set: any): AuthState => ({
     resetAuth: () => {
       set((state: AuthState) => {
         state.user = null;
-      });
+      }, false, "user/resetAuth");
       if (isClient) {
         localStorage.removeItem("uid");
       }
@@ -38,7 +38,7 @@ export const store = (set: any): AuthState => ({
     setIsLoading: (isLoading: boolean) => {
       set((state: AuthState) => {
         state.isLoading = isLoading;
-      });
+      }, false, "user/setIsLoading");
     },
   },
 });
