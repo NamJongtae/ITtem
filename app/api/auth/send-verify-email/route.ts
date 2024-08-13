@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       subject: isFindPw
         ? "ITtem 비밀번호 찾기 인증 메일입니다."
         : "ITtem 회원가입 인증 메일입니다.",
-      html,
+      html
     };
 
     const data = await getEmailVerifyCode(email, isFindPw);
@@ -33,21 +33,26 @@ export async function POST(req: NextRequest) {
         {
           message:
             "인증메일 전송, 인증 일일 시도 횟수를 초과하여\n24시간 동안 요청이 제한되요.",
-          ok: false,
+          ok: false
         },
         { status: 403 }
       );
     }
 
-    await new Promise(async (resolve, reject) => {
-      const smtpTransport = await getSmtpTransport();
-      smtpTransport.sendMail(mailOptions, (err, response) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(response);
-        }
-      });
+    await new Promise((resolve, reject) => {
+      getSmtpTransport()
+        .then((smtpTransport) => {
+          smtpTransport.sendMail(mailOptions, (err, response) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
 
     if (data) {
@@ -71,7 +76,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "인증번호 전송에 실패했어요.\n잠시후 다시 시도해주세요.",
-        ok: false,
+        ok: false
       },
       { status: 500 }
     );

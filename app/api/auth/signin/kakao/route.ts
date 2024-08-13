@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
           return NextResponse.json(
             {
               message: "유효하지 않은 값이 있어요.",
+              error: errorMessages,
             },
             { status: 422 }
           );

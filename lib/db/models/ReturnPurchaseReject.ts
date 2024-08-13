@@ -10,8 +10,6 @@ interface returnPurchaseRejectDB {
   returnEndDate: Date;
 }
 
-interface returnPurchaseRejectDBModel extends Model<returnPurchaseRejectDB> {}
-
 export const returnPurchaseRejectSchema =
   new mongoose.Schema<returnPurchaseRejectDB>(
     {
@@ -34,7 +32,7 @@ export const returnPurchaseRejectSchema =
 
 const ReturnPurchaseReject =
   mongoose.models?.ReturnPurchaseReject ||
-  mongoose.model<returnPurchaseRejectDB, returnPurchaseRejectDBModel>(
+  mongoose.model<returnPurchaseRejectDB, Model<returnPurchaseRejectDB>>(
     "ReturnPurchaseReject",
     returnPurchaseRejectSchema
   );

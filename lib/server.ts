@@ -6,14 +6,14 @@ import {
   ACCESS_TOKEN_EXP,
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_EXP,
-  REFRESH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY
 } from "@/constants/constant";
 import { v4 as uuid } from "uuid";
-import { Model } from "mongoose";
 import { cookies } from "next/headers";
+import { Model } from "mongoose";
+import { UserDB } from "./db/models/User";
 
 export const getSmtpTransport = async () => {
-  "use server";
   const nodemailer = await import("nodemailer");
   return nodemailer.createTransport({
     service: "gmail",
@@ -23,13 +23,14 @@ export const getSmtpTransport = async () => {
     requireTLS: true,
     auth: {
       user: process.env.NEXT_SECRET_SMTP_USER,
-      pass: process.env.NEXT_SECRET_SMTP_PASSWORD,
+      pass: process.env.NEXT_SECRET_SMTP_PASSWORD
     },
     tls: {
-      rejectUnauthorized: false,
-    },
+      rejectUnauthorized: false
+    }
   });
 };
+
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
   cookieName: "session",
@@ -37,8 +38,8 @@ export const sessionOptions: SessionOptions = {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "strict",
-    path: "/",
-  },
+    path: "/"
+  }
 };
 
 export async function checkAuthorization() {
@@ -69,39 +70,39 @@ export async function checkAuthorization() {
     return {
       isValid: true,
       auth: decodeAccessToken.data?.user,
-      message: "유효한 토큰이에요.",
+      message: "유효한 토큰이에요."
     };
   }
 }
 
 export async function createAndSaveToken({
   user,
-  session,
+  session
 }: {
   user: { uid: string };
   session: IronSessionType;
 }) {
   const accessToken = await generateToken({
     payload: { user, exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP },
-    secret: ACCESS_TOKEN_KEY,
+    secret: ACCESS_TOKEN_KEY
   });
 
   const refreshToken = await generateToken({
     payload: { user, exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP },
-    secret: REFRESH_TOKEN_KEY as string,
+    secret: REFRESH_TOKEN_KEY as string
   });
 
   await saveToken({
     uid: user.uid,
     token: accessToken,
     type: "accessToken",
-    exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP,
+    exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP
   });
   await saveToken({
     uid: user.uid,
     token: refreshToken,
     type: "refreshToken",
-    exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP,
+    exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP
   });
 
   session.accessToken = accessToken;
@@ -110,9 +111,7 @@ export async function createAndSaveToken({
   await session.save();
 }
 
-export async function createUniqueNickname(
-  User: Model<any, {}, {}, {}, any, any>
-) {
+export async function createUniqueNickname(User: Model<UserDB>) {
   const randomString = uuid().substring(0, 8);
   let userNickname = randomString;
   let isDuplicationNickname = true;

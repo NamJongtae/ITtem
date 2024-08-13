@@ -10,9 +10,6 @@ interface CanceledPurchaseRejectDB {
   cancelEndDate: Date;
 }
 
-interface CanceledPurchaseRejectDBModel
-  extends Model<CanceledPurchaseRejectDB> {}
-
 export const canceledPurchaseRejectSchema =
   new mongoose.Schema<CanceledPurchaseRejectDB>(
     {
@@ -22,21 +19,21 @@ export const canceledPurchaseRejectSchema =
       productId: { type: String, required: [true, "상품 ID가 없어요."] },
       rejectReason: {
         type: String,
-        require: [true, "취소 거부 사유가 없어요."],
+        require: [true, "취소 거부 사유가 없어요."]
       },
       cancelStartDate: {
         type: Date,
-        required: [true, "취소 시작일이 없어요."],
+        required: [true, "취소 시작일이 없어요."]
       },
 
-      cancelEndDate: { type: Date, required: false, default: Date.now },
+      cancelEndDate: { type: Date, required: false, default: Date.now }
     },
     { collection: "canceledPurchaseReject" }
   );
 
 const CanceledPurchaseReject =
   mongoose.models?.CanceledPurchaseReject ||
-  mongoose.model<CanceledPurchaseRejectDB, CanceledPurchaseRejectDBModel>(
+  mongoose.model<CanceledPurchaseRejectDB, Model<CanceledPurchaseRejectDB>>(
     "CanceledPurchaseReject",
     canceledPurchaseRejectSchema
   );

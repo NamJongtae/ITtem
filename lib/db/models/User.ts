@@ -1,6 +1,6 @@
 import mongoose, { Model } from "mongoose";
 
-interface UserDB {
+export interface UserDB {
   loginType: string;
   email: string;
   password: string;
@@ -17,8 +17,6 @@ interface UserDB {
   followings: string[];
   createdAt: Date;
 }
-
-interface UserDBModel extends Model<UserDB> {}
 
 export const userSchema = new mongoose.Schema<UserDB>(
   {
@@ -58,6 +56,6 @@ export const userSchema = new mongoose.Schema<UserDB>(
 
 const User =
   mongoose.models?.User ||
-  mongoose.model<UserDB, UserDBModel>("User", userSchema);
+  mongoose.model<UserDB, Model<UserDB>>("User", userSchema);
 
 export default User;

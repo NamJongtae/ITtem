@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
+import Product, { ProductDB } from "@/lib/db/models/Product";
+import { FilterQuery } from 'mongoose';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
@@ -11,12 +12,15 @@ export async function GET(req: NextRequest) {
 
   try {
     await dbConnect();
-
+    
     const todayStart = new Date();
     const cursorDate = cursor ? new Date(cursor) : todayStart;
     const currentLimit = parseInt(limit || "10");
 
-    let query: any = { createdAt: { $lt: cursorDate }, block: false };
+    let query: FilterQuery<ProductDB> = {
+      createdAt: { $lt: cursorDate },
+      block: false
+    };
 
     if (category && category !== "전체") {
       query = { ...query, category };
@@ -28,8 +32,8 @@ export async function GET(req: NextRequest) {
         ...query,
         $or: [
           { name: { $in: keywords.map((kw) => new RegExp(kw, "i")) } }, // 대소문자 구분 없이 검색
-          { location: { $in: keywords.map((kw) => new RegExp(kw, "i")) } },
-        ],
+          { location: { $in: keywords.map((kw) => new RegExp(kw, "i")) } }
+        ]
       };
     } else {
       return NextResponse.json(

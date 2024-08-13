@@ -13,8 +13,6 @@ interface ReviewDB {
   createdAt: Date;
 }
 
-interface ReviewDBModel extends Model<ReviewDB> {}
-
 export const reviewSchema = new mongoose.Schema<ReviewDB>(
   {
     sellerId: { type: String, required: [true, "판매자 ID가 없어요."] },
@@ -39,6 +37,6 @@ export const reviewSchema = new mongoose.Schema<ReviewDB>(
 
 const Review =
   mongoose.models?.Review ||
-  mongoose.model<ReviewDB, ReviewDBModel>("Review", reviewSchema);
+  mongoose.model<ReviewDB, Model<ReviewDB>>("Review", reviewSchema);
 
 export default Review;

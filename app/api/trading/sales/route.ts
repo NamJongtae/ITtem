@@ -1,5 +1,6 @@
-import SaleTrading from "@/lib/db/models/SaleTrading";
+import SaleTrading, { SaleTradingDB } from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
+import { FilterQuery, PipelineStage } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -49,7 +50,7 @@ export async function GET(req: NextRequest) {
         : status === "CANCEL_REJECT/RETURN_REJECT"
         ? ["CANCEL_REJECT", "RETURN_REJECT"]
         : ["TRADING", "CANCEL", "RETURN"];
-    let matchStage: any = {
+    const matchStage: FilterQuery<SaleTradingDB> = {
       saleStartDate: { $lt: currentCursor },
       sellerId: myUid,
       status: { $in: currentStatus },
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest) {
       matchStage.productName = { $regex: search, $options: "i" };
     }
 
-    const aggregate: any[] = [
+    const aggregate: PipelineStage[] = [
       {
         $match: matchStage,
       },

@@ -19,7 +19,7 @@ export async function generateMetadata({
   if (session.refreshToken) {
     const response = await customAxios(`/api/profile/${params.uid}`, {
       headers: {
-        Cookie: cookies() as any,
+        Cookie: cookies().get("session")?.value,
       },
     });
     const profile = response.data.profile;

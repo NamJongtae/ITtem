@@ -6,8 +6,9 @@ import { ChatRoomData } from "@/types/chat-types";
 import {
   getFirestoreDB,
   getRealtimeDB,
-  getStorageInstance,
+  getStorageInstance
 } from "../firebaseSetting";
+import { DocumentData } from "firebase/firestore";
 
 export const uploadImgToFireStore = async (
   file: File | ""
@@ -27,6 +28,7 @@ export const uploadImgToFireStore = async (
       if (url) return { url, name: fileName };
     }
   } catch (error) {
+    console.error(error);
     throw new Error("이미지 업로드에 실패했어요\n잠시 후 다시 시도해주세요.");
   }
 };
@@ -54,6 +56,7 @@ export const uploadMultiImgToFirestore = async (
     const uploadResults = await Promise.all(uploadPromises);
     return uploadResults;
   } catch (error) {
+    console.error(error);
     throw new Error("이미지 업로드에 실패했어요\n잠시 후 다시 시도해주세요.");
   }
 };
@@ -74,6 +77,7 @@ export const deleteProfileImgToFirestore = async (
       );
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -110,7 +114,7 @@ export const sendNotificationMessage = async (
     content: message,
     isRead: false,
     isNotification: false,
-    timestamp: Date.now(),
+    timestamp: Date.now()
   };
 
   const messageRef = databaseRef(database, `notification/${userId}/messages`);
@@ -122,7 +126,7 @@ export const sendNotificationMessage = async (
 export const getNotificationMessage = async ({
   userId,
   lastKey,
-  limit = 10,
+  limit = 10
 }: {
   userId: string;
   lastKey?: unknown;
@@ -163,14 +167,14 @@ export const getNotificationMessage = async ({
 
     return { messages, nextKey };
   } catch (error) {
-    console.error("Error fetching notification messages: ", error);
+    console.error(error);
     throw error;
   }
 };
 
 export const readyNotificationMessage = async ({
   userId,
-  messageId,
+  messageId
 }: {
   userId: string;
   messageId: string;
@@ -195,13 +199,14 @@ export const readyNotificationMessage = async ({
     await update(messageRef, { isRead: true });
     await update(counterRef, { unreadCount: increment(-1) });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const deleteNotificationMessage = async ({
   userId,
-  messageId,
+  messageId
 }: {
   userId: string;
   messageId: string;
@@ -228,13 +233,14 @@ export const deleteNotificationMessage = async ({
 
     await remove(messageRef);
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const readAllNotificationMessage = async ({
   userId,
-  endKey,
+  endKey
 }: {
   userId: string;
   endKey: string;
@@ -257,7 +263,7 @@ export const readAllNotificationMessage = async ({
       throw new Error("잘못된 접근이에요.");
     }
 
-    const updates: { [key: string]: any } = {};
+    const updates: DocumentData = {};
     let unreadCountDecrease = 0;
     snapshot.forEach((childSnapshot) => {
       const key = childSnapshot.key;
@@ -269,16 +275,17 @@ export const readAllNotificationMessage = async ({
 
     await update(ref(database), updates);
     await update(counterRef, {
-      unreadCount: increment(-unreadCountDecrease),
+      unreadCount: increment(-unreadCountDecrease)
     });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const deleteAllNotificationMessage = async ({
   userId,
-  endKey,
+  endKey
 }: {
   userId: string;
   endKey: string;
@@ -301,7 +308,7 @@ export const deleteAllNotificationMessage = async ({
       throw new Error("잘못된 접근이에요.");
     }
 
-    const updates: { [key: string]: any } = {};
+    const updates: DocumentData = {};
     let unreadCountDecrease = 0;
 
     snapshot.forEach((childSnapshot) => {
@@ -324,15 +331,16 @@ export const deleteAllNotificationMessage = async ({
       const snapshot = await get(messagesRef);
       if (!snapshot.exists()) {
         await update(counterRef, {
-          unreadCount: 0,
+          unreadCount: 0
         });
       } else {
         await update(counterRef, {
-          unreadCount: increment(-unreadCountDecrease),
+          unreadCount: increment(-unreadCountDecrease)
         });
       }
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -340,7 +348,7 @@ export const deleteAllNotificationMessage = async ({
 export const startChat = async ({
   productId,
   myUid,
-  userId,
+  userId
 }: {
   productId: string;
   myUid: string;
@@ -357,7 +365,7 @@ export const startChat = async ({
       setDoc,
       arrayUnion,
       collection,
-      serverTimestamp,
+      serverTimestamp
     } = firestore;
     const firestoreDB = await getFirestoreDB();
     const chatRoomsRef = collection(firestoreDB, "chatRooms");
@@ -389,16 +397,16 @@ export const startChat = async ({
         lastMessage: null,
         newMessageCount: {
           [myUid]: 0,
-          [userId]: 0,
+          [userId]: 0
         },
         entered: {
           [myUid]: false,
-          [userId]: false,
+          [userId]: false
         },
         isAlarm: {
           [myUid]: true,
-          [userId]: true,
-        },
+          [userId]: true
+        }
       };
 
       const docRef = await addDoc(chatRoomsRef, newChatRoomData);
@@ -410,7 +418,7 @@ export const startChat = async ({
         userRef,
         {
           chatRoomIds: arrayUnion(chatRoomId),
-          totalMessageCount: 0,
+          totalMessageCount: 0
         },
         { merge: true }
       );
@@ -420,7 +428,7 @@ export const startChat = async ({
         myRef,
         {
           chatRoomIds: arrayUnion(chatRoomId),
-          totalMessageCount: 0,
+          totalMessageCount: 0
         },
         { merge: true }
       );
@@ -428,13 +436,14 @@ export const startChat = async ({
       return { chatRoomId, isExistRoom: false };
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const enterChatRoom = async ({
   myUid,
-  chatRoomId,
+  chatRoomId
 }: {
   myUid: string;
   chatRoomId: string;
@@ -447,7 +456,7 @@ export const enterChatRoom = async ({
       doc,
       getDoc,
       arrayUnion,
-      increment: firestoreIncrement,
+      increment: firestoreIncrement
     } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const myChatInfoRef = doc(firestoreDB, `userChatInfo/${myUid}`);
@@ -456,9 +465,9 @@ export const enterChatRoom = async ({
     if (!chatRoomDoc.exists()) {
       throw new Error("존재하지 않는 채팅방이에요.");
     }
-    if (myUid in data?.entered) {
+    if (data && myUid in data.entered) {
       await updateDoc(chatRoomRef, {
-        [`entered.${myUid}`]: true,
+        [`entered.${myUid}`]: true
       });
     } else {
       throw new Error("잘못된 접근이에요.");
@@ -467,29 +476,30 @@ export const enterChatRoom = async ({
     if (!data?.participantIDs.includes(myUid)) {
       await updateDoc(myChatInfoRef, { chatRoomIds: arrayUnion(chatRoomId) });
       await updateDoc(chatRoomRef, {
-        participantIDs: arrayUnion(myUid),
+        participantIDs: arrayUnion(myUid)
       });
     }
 
-    if (myUid in data?.newMessageCount) {
+    if (data && myUid in data.newMessageCount) {
       const messageCount = data?.newMessageCount[myUid];
       await updateDoc(myChatInfoRef, {
-        totalMessageCount: firestoreIncrement(-messageCount || 0),
+        totalMessageCount: firestoreIncrement(-messageCount || 0)
       });
       await updateDoc(chatRoomRef, {
-        [`newMessageCount.${myUid}`]: 0,
+        [`newMessageCount.${myUid}`]: 0
       });
     } else {
       throw new Error("잘못된 접근이에요.");
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const leaveChatRoom = async ({
   myUid,
-  chatRoomId,
+  chatRoomId
 }: {
   myUid: string;
   chatRoomId: string;
@@ -504,14 +514,15 @@ export const leaveChatRoom = async ({
       throw new Error("존재하지 않는 채팅방이에요.");
     }
     const data = chatRoomDoc.data();
-    if (myUid in data?.entered) {
+    if (data && myUid in data.entered) {
       await updateDoc(chatRoomRef, {
-        [`entered.${myUid}`]: false,
+        [`entered.${myUid}`]: false
       });
     } else {
       throw new Error("잘못된 접근이에요.");
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -519,7 +530,7 @@ export const leaveChatRoom = async ({
 export const sendToChatMessage = async ({
   myUid,
   chatRoomId,
-  message,
+  message
 }: {
   myUid: string;
   chatRoomId: string;
@@ -535,7 +546,7 @@ export const sendToChatMessage = async ({
       addDoc,
       collection,
       serverTimestamp,
-      increment: firestoreIncrement,
+      increment: firestoreIncrement
     } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const messagesCollectionRef = collection(chatRoomRef, "messages");
@@ -558,31 +569,32 @@ export const sendToChatMessage = async ({
       content: message,
       timestamp: serverTimestamp(),
       senderId: myUid,
-      isNotification: data.entered[userId] ? true : false,
+      isNotification: data.entered[userId] ? true : false
     };
 
     await addDoc(messagesCollectionRef, messageObj);
 
-    const updateData: any = {
-      lastMessage: messageObj,
+    const updateData: DocumentData = {
+      lastMessage: messageObj
     };
 
     if (!data.entered[userId] && data.participantIDs.includes(userId)) {
       updateData[`newMessageCount.${userId}`] = firestoreIncrement(1);
       await updateDoc(userChatInfoRef, {
-        totalMessageCount: firestoreIncrement(1),
+        totalMessageCount: firestoreIncrement(1)
       });
     }
 
     await updateDoc(chatRoomRef, updateData);
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 export const exitChatRoom = async ({
   myUid,
-  chatRoomId,
+  chatRoomId
 }: {
   myUid: string;
   chatRoomId: string;
@@ -611,12 +623,13 @@ export const exitChatRoom = async ({
       }
     }
     await updateDoc(chatRoomRef, {
-      participantIDs: arrayRemove(myUid),
+      participantIDs: arrayRemove(myUid)
     });
     await updateDoc(userChatInfoRef, {
-      chatRoomIds: arrayRemove(chatRoomId),
+      chatRoomIds: arrayRemove(chatRoomId)
     });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -651,6 +664,7 @@ export const deleteChatRoom = async (chatRoomId: string) => {
       throw new Error("채팅방 참여 인원이 있어 채팅방을 삭제할 수 없어요.");
     }
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };

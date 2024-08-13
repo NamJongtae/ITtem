@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       (id: string) => new mongoose.Types.ObjectId(id)
     );
 
-    let query = {
+    const query = {
       _id: cursor
         ? {
             $in: objectIdArray,

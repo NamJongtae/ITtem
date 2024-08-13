@@ -5,6 +5,7 @@ import {
   SubmitHandler,
   UseFormProps,
   FieldValues,
+  Control,
 } from "react-hook-form";
 const DevTool = dynamic(
   () =>
@@ -38,7 +39,7 @@ export const MyForm = <TFormData extends FieldValues>({
         >
           {children}
         </form>
-        <DevTool control={methods.control as any} />
+        <DevTool control={methods.control as Control<FieldValues>} />
       </FormProvider>
     </>
   );

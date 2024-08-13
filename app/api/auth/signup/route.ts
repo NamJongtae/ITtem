@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
         );
       }
     } catch (error) {
+      console.error(error);
       return NextResponse.json(
         { message: "인증되지 않은 이메일이에요." },
         { status: 401 }

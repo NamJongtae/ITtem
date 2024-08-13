@@ -17,6 +17,7 @@ export default function FallbackImage({
     <Image
       {...props}
       src={isImgError ? fallbackSrc : props.src}
+      alt={props.alt ? props.alt : ""}
       onError={() => {
         setIsImgError(true);
       }}

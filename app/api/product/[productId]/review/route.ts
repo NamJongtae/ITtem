@@ -219,7 +219,7 @@ export async function POST(
 
       await newReviewScore.save({ session });
     } else {
-      const updateTags = (prevTags: any) => {
+      const updateTags = (prevTags: number[]) => {
         reviewTags.forEach((tag: number, index: number) => {
           if (tag === 1) {
             prevTags[index] = prevTags[index] + 1;

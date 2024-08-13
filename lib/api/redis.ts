@@ -3,8 +3,9 @@ import {
   VERIFY_EMAIL_BLOCK_EXP,
   VERIFY_EMAIL_EXP,
 } from "@/constants/constant";
+import { Redis } from '@upstash/redis';
 
-let redis: any;
+let redis: Redis;
 
 const initializeRedisClient = async () => {
   if (!redis) {

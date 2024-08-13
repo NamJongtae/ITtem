@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "닉네임 확인에 실패하였습니다.", ok: false },
       { status: 500 }

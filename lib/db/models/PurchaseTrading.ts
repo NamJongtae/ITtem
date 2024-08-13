@@ -1,7 +1,7 @@
 import { PurchaseTradingProcess, TradingStatus } from "@/types/product-types";
 import mongoose, { Model } from "mongoose";
 
-interface PurchaseTradingDB {
+export interface PurchaseTradingDB {
   sellerId: string;
   buyerId: string;
   productId: string;
@@ -18,14 +18,13 @@ interface PurchaseTradingDB {
   returnReason: string;
   returnStartDate: Date;
   returnEndDate: Date;
-  isReviewed: Boolean;
+  isReviewed: boolean;
   cancelRejectDate: Date;
   returnRejectDate: Date;
   cancelRejectReason: string;
   returnRejectReason: string;
 }
 
-interface PurchaseTradingDBModel extends Model<PurchaseTradingDB> {}
 
 export const purchaseTradingSchema = new mongoose.Schema<PurchaseTradingDB>(
   {
@@ -60,7 +59,7 @@ export const purchaseTradingSchema = new mongoose.Schema<PurchaseTradingDB>(
 
 const PurchaseTrading =
   mongoose.models?.PurchaseTrading ||
-  mongoose.model<PurchaseTradingDB, PurchaseTradingDBModel>(
+  mongoose.model<PurchaseTradingDB, Model<PurchaseTradingDB>>(
     "PurchaseTrading",
     purchaseTradingSchema
   );

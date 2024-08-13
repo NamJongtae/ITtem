@@ -20,7 +20,7 @@ export default function ProductManageItemContents({
       <FallbackImage
         className="w-32 h-32 object-cover object-center"
         src={tradingData.productImg}
-        alt=""
+        alt={tradingData.productName}
         width={120}
         height={120}
       />

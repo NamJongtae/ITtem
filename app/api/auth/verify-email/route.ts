@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       );
     }
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       {
         message: "인증에 실패했어요.\n잠시 후 다시 시도해주세요.",

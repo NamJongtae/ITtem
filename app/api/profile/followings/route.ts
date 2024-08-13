@@ -114,6 +114,7 @@ export async function POST(req: NextRequest) {
       .limit(pageLimit)
       .sort({ _id: 1 });
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newFollowings = followings.map(({ _id, ...rest }) => rest);
 
     return NextResponse.json({

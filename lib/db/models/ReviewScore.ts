@@ -7,8 +7,6 @@ interface ReviewScoreDB {
   reviewTags: number[];
 }
 
-interface ReviewScoreModel extends Model<ReviewScoreDB> {}
-
 export const reviewScoreSchema = new mongoose.Schema<ReviewScoreDB>(
   {
     uid: { type: String, required: [true, "유저 ID가 없어요."] },
@@ -21,7 +19,7 @@ export const reviewScoreSchema = new mongoose.Schema<ReviewScoreDB>(
 
 const ReviewScore =
   mongoose.models?.ReviewScore ||
-  mongoose.model<ReviewScoreDB, ReviewScoreModel>(
+  mongoose.model<ReviewScoreDB, Model<ReviewScoreDB>>(
     "ReviewScore",
     reviewScoreSchema
   );

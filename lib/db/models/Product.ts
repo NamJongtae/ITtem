@@ -7,7 +7,7 @@ import {
 } from "@/types/product-types";
 import mongoose, { Model } from "mongoose";
 
-interface ProductDB {
+export interface ProductDB {
   name: string;
   description: string;
   uid: string;
@@ -29,8 +29,6 @@ interface ProductDB {
   transaction: ProductTransaction;
   deliveryFee: string;
 }
-
-interface ProductDBModel extends Model<ProductDB> {}
 
 export const productSchema = new mongoose.Schema<ProductDB>(
   {
@@ -84,6 +82,6 @@ export const productSchema = new mongoose.Schema<ProductDB>(
 
 const Product =
   mongoose.models?.Product ||
-  mongoose.model<ProductDB, ProductDBModel>("Product", productSchema);
+  mongoose.model<ProductDB, Model<ProductDB>>("Product", productSchema);
 
 export default Product;

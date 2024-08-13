@@ -6,7 +6,7 @@ import User from "@/lib/db/models/User";
 import { deleteProfileImgToFirestore } from "@/lib/api/firebase";
 import { ProfileData } from "@/types/auth-types";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const isValidAuth = await checkAuthorization();
 
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
     const aggregation = [
       {
-        $match: { _id: new mongoose.Types.ObjectId(myUid as string) },
+        $match: { _id: new mongoose.Types.ObjectId(myUid as string) }
       },
       {
         $lookup: {
@@ -31,8 +31,8 @@ export async function GET(req: NextRequest) {
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$uid", myUid as string] },
-              },
+                $expr: { $eq: ["$uid", myUid as string] }
+              }
             },
             {
               $addFields: {
@@ -41,39 +41,39 @@ export async function GET(req: NextRequest) {
                     {
                       $multiply: [
                         {
-                          $divide: ["$totalReviewScore", "$totalReviewCount"],
+                          $divide: ["$totalReviewScore", "$totalReviewCount"]
                         },
-                        20,
-                      ],
+                        20
+                      ]
                     },
-                    1,
-                  ],
-                },
-              },
+                    1
+                  ]
+                }
+              }
             },
             {
               $project: {
                 _id: 0,
-                uid: 0,
-              },
-            },
+                uid: 0
+              }
+            }
           ],
-          as: "reviewInfo",
-        },
+          as: "reviewInfo"
+        }
       },
       {
         $unwind: {
           path: "$reviewInfo",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $project: {
           password: 0,
           __v: 0,
-          loginType: 0,
-        },
-      },
+          loginType: 0
+        }
+      }
     ];
 
     const userWithReviews = await User.aggregate(aggregation);
@@ -125,18 +125,19 @@ export async function PATCH(req: NextRequest) {
 
     await dbConnect();
     let checkDuplicationNickname;
+
     if (profileEditData.nickname) {
-      if (/^[a-zA-Z]+$/.test(profileEditData.nicknam)) {
+      if (/^[a-zA-Z]+$/.test(profileEditData.nickname)) {
         // 영문으로만 구성된 닉네임인 경우
         checkDuplicationNickname = await User.findOne({
-          nickname: { $regex: new RegExp(profileEditData.nickname, "i") },
+          nickname: { $regex: new RegExp(profileEditData.nickname, "i") }
         });
       } else {
         // 한글로만 구성된 닉네임인 경우, 숫자 또는 한글, 영문, 숫자가 섞여있는 닉네임인 경우
         checkDuplicationNickname = await User.findOne({
           nickname: {
-            $regex: new RegExp(`^${profileEditData.nickname}$`, "i"),
-          },
+            $regex: new RegExp(`^${profileEditData.nickname}$`, "i")
+          }
         });
       }
       if (checkDuplicationNickname) {
@@ -148,7 +149,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const profile = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     });
 
     if (profileEditData.profileImgFilename && profile.profileImgFilename) {
@@ -164,7 +165,7 @@ export async function PATCH(req: NextRequest) {
 
     const profileUpdateResult = (await User.findOneAndUpdate(
       {
-        _id: new mongoose.Types.ObjectId(myUid),
+        _id: new mongoose.Types.ObjectId(myUid)
       },
       { $set: profileEditData },
       { returnNewDocument: true }
@@ -182,8 +183,8 @@ export async function PATCH(req: NextRequest) {
       profile: {
         profileImg: profileUpdateResult?.profileImg,
         nickname: profileUpdateResult?.nickname,
-        introduce: profileUpdateResult?.introduce,
-      },
+        introduce: profileUpdateResult?.introduce
+      }
     });
   } catch (error) {
     console.error(error);

@@ -1,5 +1,6 @@
-import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
+import PurchaseTrading, { PurchaseTradingDB } from "@/lib/db/models/PurchaseTrading";
 import { checkAuthorization } from "@/lib/server";
+import { FilterQuery, PipelineStage } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -55,7 +56,7 @@ export async function GET(req: NextRequest) {
         ? ["CANCEL_REJECT", "RETURN_REJECT"]
         : ["TRADING", "CANCEL", "RETURN"];
 
-    let matchStage: any = {
+    const matchStage: FilterQuery<PurchaseTradingDB> = {
       purchaseStartDate: { $lt: currentCursor },
       buyerId: myUid,
       status: { $in: currentStatus },
@@ -65,7 +66,7 @@ export async function GET(req: NextRequest) {
       matchStage.productName = { $regex: search, $options: "i" };
     }
 
-    const aggregate: any[] = [
+    const aggregate: PipelineStage[] = [
       {
         $match: matchStage,
       },

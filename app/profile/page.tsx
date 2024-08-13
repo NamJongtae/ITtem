@@ -7,7 +7,7 @@ import { IronSessionData } from "@/types/api-types";
 import {
   HydrationBoundary,
   QueryClient,
-  dehydrate,
+  dehydrate
 } from "@tanstack/react-query";
 import { cookies } from "next/headers";
 
@@ -17,11 +17,15 @@ export async function generateMetadata() {
     cookies(),
     sessionOptions
   );
+  const sessionCookie = cookies().get("session");
+  const cookieHeader = sessionCookie
+    ? `${sessionCookie.name}=${sessionCookie.value}`
+    : "";
   if (session.refreshToken) {
     const response = await customAxios("/api/profile", {
       headers: {
-        Cookie: cookies() as any,
-      },
+        Cookie: cookieHeader
+      }
     });
     const profile = response.data.profile;
     const title = `ITtem | "${profile.nickname}님"의 프로필`;
@@ -31,12 +35,12 @@ export async function generateMetadata() {
       title,
       openGraph: {
         url,
-        title,
-      },
+        title
+      }
     };
   }
   return {
-    title: "ITtem | 나의 프로필",
+    title: "ITtem | 나의 프로필"
   };
 }
 
@@ -54,14 +58,14 @@ async function prefetchMyProfile(queryClient: QueryClient) {
         try {
           const response = await customAxios("/api/profile", {
             headers: {
-              Cookie: cookies() as any,
-            },
+              Cookie: cookies() as any
+            }
           });
           return response.data.profile;
         } catch (error) {
           console.error(error);
         }
-      },
+      }
     });
   }
 }
