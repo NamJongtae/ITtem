@@ -3,40 +3,40 @@ import { ProfileData } from "@/types/auth-types";
 import {
   ProductCategory,
   ProductData,
-  ProductListType,
+  ProductListType
 } from "@/types/product-types";
 import {
   InfiniteData,
   useInfiniteQuery,
-  useQueryClient,
+  useQueryClient
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 export default function useProfileProductListInfiniteQuery({
   limit = 10,
   category = ProductCategory.전체,
   productListType,
-  productIds,
+  productIds
 }: {
   limit?: number;
   category?: ProductCategory;
   productListType: ProductListType;
   productIds: string[];
 }) {
-  const search = useSearchParams();
+  const params = useParams();
   const queryClient = useQueryClient();
   const myProfile = queryClient.getQueryData(queryKeys.profile.my.queryKey) as
     | ProfileData
     | undefined;
   const uid =
-    productListType === "MY_PROFILE" ? myProfile?.uid : search.get("uid") || "";
+    productListType === "MY_PROFILE" ? myProfile?.uid : params.uid || "";
 
   const queryKeyConfig =
     productListType === "MY_PROFILE"
       ? queryKeys.profile.my._ctx.products({
           category,
           limit,
-          productIds,
+          productIds
         })
       : profileQueryKey
           .user(uid as string)
@@ -48,7 +48,7 @@ export default function useProfileProductListInfiniteQuery({
     fetchNextPage: fetchNextPageProfileProductList,
     isFetchingNextPage: isFetchingNextPageProfileProductList,
     isLoading: isLoadingProfileProductList,
-    error: profileProductListError,
+    error: profileProductListError
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey:
       productListType === "MY_PROFILE"
@@ -66,7 +66,7 @@ export default function useProfileProductListInfiniteQuery({
         return undefined;
       }
       return nextCursor;
-    },
+    }
   });
 
   return {
@@ -75,6 +75,6 @@ export default function useProfileProductListInfiniteQuery({
     fetchNextPageProfileProductList,
     isFetchingNextPageProfileProductList,
     isLoadingProfileProductList,
-    profileProductListError,
+    profileProductListError
   };
 }
