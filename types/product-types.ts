@@ -170,7 +170,7 @@ export interface SaleTradingData {
   };
   productId: string;
   productName: string;
-  productPrice: Number;
+  productPrice: number;
   productImg: string;
   status: TradingStatus;
   process: SaleTradingProcess | SalesCancelProcess | SalesReturnProcess;
@@ -201,7 +201,7 @@ export interface PurchaseTradingData {
   };
   productId: string;
   productName: string;
-  productPrice: Number;
+  productPrice: number;
   productImg: string;
   status: TradingStatus;
   process:
