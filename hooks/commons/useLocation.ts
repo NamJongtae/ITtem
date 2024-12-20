@@ -40,7 +40,7 @@ export default function useLocation(saveLocation?: (address: string) => void) {
           const address = await fetchAddressFromCoords(latitude, longitude);
           if (address) {
             actions.setLocation(address.split(" ")[0]);
-            if (!!saveLocation) {
+            if (saveLocation) {
               saveLocation(address);
             }
           } else {
