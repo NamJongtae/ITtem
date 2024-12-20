@@ -2,7 +2,7 @@ import { queryKeys } from "@/query-keys/query-keys";
 import {
   ProductCategory,
   ProductData,
-  ProductListType,
+  ProductListType
 } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 export default function useSearchProductListInfiniteQuery({
   limit = 10,
   category = ProductCategory.전체,
-  productListType,
+  productListType
 }: {
   limit?: number;
   category?: ProductCategory;
@@ -22,16 +22,16 @@ export default function useSearchProductListInfiniteQuery({
   const queryKeyConfig = queryKeys.product.search({
     keyword: keyword as string,
     category,
-    limit,
+    limit
   });
 
   const {
-    data: searchProductListData,
-    hasNextPage: hasNextPageSearchProductList,
-    fetchNextPage: fetchNextPageSearchProductList,
-    isFetchingNextPage: isFetchingNextPageSearchProductList,
-    isLoading: isLoadingSearchProductList,
-    error: searchProductListError,
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as any,
@@ -44,15 +44,15 @@ export default function useSearchProductListInfiniteQuery({
         return undefined;
       }
       return nextCursor;
-    },
+    }
   });
 
   return {
-    searchProductListData: searchProductListData?.pages.flat(),
-    hasNextPageSearchProductList,
-    fetchNextPageSearchProductList,
-    isFetchingNextPageSearchProductList,
-    isLoadingSearchProductList,
-    searchProductListError,
+    data: data?.pages.flat(),
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   };
 }

@@ -1,9 +1,9 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import useLocationStore from '@/store/location-store';
+import useLocationStore from "@/store/location-store";
 import {
   ProductCategory,
   ProductData,
-  ProductListType,
+  ProductListType
 } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 export default function useCategoryProductListInfiniteQuery({
   limit = 10,
   category = ProductCategory.전체,
-  productListType,
+  productListType
 }: {
   limit?: number;
   category?: ProductCategory;
@@ -21,16 +21,16 @@ export default function useCategoryProductListInfiniteQuery({
   const querKeyConfing = queryKeys.product.list({
     produdctCategory: category,
     location,
-    limit,
+    limit
   });
 
   const {
-    data: categoryProductListData,
-    hasNextPage: hasNextPageCategoryProductList,
-    fetchNextPage: fetchNextPageCategoryProductList,
-    isFetchingNextPage: isFetchingNextPageCategoryProductList,
-    isLoading: isLoadingCategoryProductList,
-    error: categoryProductListError,
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   } = useInfiniteQuery<
     ProductData[],
     AxiosError,
@@ -48,15 +48,15 @@ export default function useCategoryProductListInfiniteQuery({
         return undefined;
       }
       return nextCursor;
-    },
+    }
   });
 
   return {
-    categoryProductListData: categoryProductListData?.pages.flat(),
-    hasNextPageCategoryProductList,
-    fetchNextPageCategoryProductList,
-    isFetchingNextPageCategoryProductList,
-    isLoadingCategoryProductList,
-    categoryProductListError,
+    data: data?.pages.flat(),
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   };
 }

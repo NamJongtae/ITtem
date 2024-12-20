@@ -43,12 +43,12 @@ export default function useProfileProductListInfiniteQuery({
           ._ctx.products({ category, limit, productIds });
 
   const {
-    data: profileProductListData,
-    hasNextPage: hasNextPageProfileProductList,
-    fetchNextPage: fetchNextPageProfileProductList,
-    isFetchingNextPage: isFetchingNextPageProfileProductList,
-    isLoading: isLoadingProfileProductList,
-    error: profileProductListError
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey:
       productListType === "MY_PROFILE"
@@ -70,11 +70,11 @@ export default function useProfileProductListInfiniteQuery({
   });
 
   return {
-    profileProductListData: profileProductListData?.pages.flat(),
-    hasNextPageProfileProductList,
-    fetchNextPageProfileProductList,
-    isFetchingNextPageProfileProductList,
-    isLoadingProfileProductList,
-    profileProductListError
+    data: data?.pages.flat(),
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
   };
 }
