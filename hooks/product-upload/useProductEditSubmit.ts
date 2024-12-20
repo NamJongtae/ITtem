@@ -20,7 +20,7 @@ export default function useProductEditSubmit() {
   const queryClient = useQueryClient();
   const params = useParams();
   const productId = params?.productId;
-  let productEditData = {} as Partial<ProductData>;
+  const productEditData = {} as Partial<ProductData>;
   const productDetailQuerykKey = queryKeys.product.detail(
     productId as string
   ).queryKey;

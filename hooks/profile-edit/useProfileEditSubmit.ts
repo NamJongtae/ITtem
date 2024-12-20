@@ -12,7 +12,7 @@ export default function useProfileEditSubmit(closeModal: () => void) {
   const [profileEditLoading, setProfileEditLoading] = useState(false);
 
   const { profileEditMutate } = useProfileEditMutate(closeModal);
-  let profileEditData = {} as ProfileEditData;
+  const profileEditData = {} as ProfileEditData;
   const queryClient = useQueryClient();
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
