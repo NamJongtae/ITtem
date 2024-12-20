@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/db";
 import Review from "@/lib/db/models/Review";
-import { checkAuthorization } from "@/lib/server";
 
 export async function GET(
   req: NextRequest,
@@ -12,14 +11,6 @@ export async function GET(
     const { searchParams } = req.nextUrl;
     const limit = searchParams.get("limit");
     const cursor = searchParams.get("cursor");
-
-    const isValidAuth = await checkAuthorization();
-    if (!isValidAuth.isValid) {
-      return NextResponse.json(
-        { message: isValidAuth.message },
-        { status: 401 }
-      );
-    }
 
     // Validate query parameters
     if (!uid) {
