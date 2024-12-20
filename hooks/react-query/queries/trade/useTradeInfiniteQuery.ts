@@ -3,13 +3,12 @@ import { queryKeys } from "@/query-keys/query-keys";
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function useTradeInfiniteQuery(
   menu: ProductManageMenu,
   limit: number = 10
 ) {
-  const router = useRouter();
   const currentMenu = menu === "판매" ? "sale" : "purchase";
   const searchParams = useSearchParams();
   let status = searchParams.get("status") as string | undefined;
