@@ -60,7 +60,7 @@ export default function useAddWishMutate() {
       toast.success("찜 목록에 상품을 추가했어요.");
       return { previousProduct, previousMyProfile };
     },
-    onError: (error, data, ctx) => {
+    onError: (error) => {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
