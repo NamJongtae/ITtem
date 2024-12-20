@@ -7,7 +7,7 @@ import { isAxiosError } from "axios";
 import useLeaveChatRoomMutate from "../react-query/mutations/chat/useLeaveChatRoomMutate";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import useJoinChatRoomMutate from "../react-query/mutations/chat/useJoinChatRoomMutate";
-import useAuthStore from '@/store/auth-store';
+import useAuthStore from "@/store/auth-store";
 
 export default function useChatRoomPage() {
   const user = useAuthStore((state) => state.user);
@@ -97,7 +97,7 @@ export default function useChatRoomPage() {
         try {
           await leaveChatRoomMutate(chatRoomId as string);
         } catch (error) {
-          // 오류 처리 필요 시 추가
+          console.error(error);
         }
       };
 
@@ -118,6 +118,6 @@ export default function useChatRoomPage() {
     isLoading,
     handleChatRoomExit,
     resetChatRoomExit,
-    chatListRef,
+    chatListRef
   };
 }

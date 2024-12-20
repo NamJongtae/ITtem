@@ -49,6 +49,7 @@ export default function useVerifyEmail(isFindPw?: boolean) {
       try {
         await emailDuplicationMuate(email);
       } catch (error) {
+        console.error(error);
         return;
       }
     }
