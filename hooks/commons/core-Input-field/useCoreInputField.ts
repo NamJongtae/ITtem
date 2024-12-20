@@ -10,7 +10,6 @@ interface IParams {
   inputRequired?: string | ValidationRule<boolean> | undefined;
   inputOnChange?: React.ChangeEventHandler<HTMLInputElement>;
   inputOnBlur?: React.FocusEventHandler<HTMLInputElement>;
-  inputOnFocus?: React.FocusEventHandler<HTMLInputElement>;
   inputPattern?: ValidationRule<RegExp> | undefined;
   inputValidate?:
     | Validate<any, FieldValues>
@@ -22,7 +21,6 @@ export default function useCoreInputField({
   inputName,
   inputRequired,
   inputOnChange,
-  inputOnFocus,
   inputOnBlur,
   inputPattern,
   inputValidate,
