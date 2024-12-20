@@ -1,16 +1,16 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 export default function useDebouncing() {
   const timer = useRef<NodeJS.Timeout | null>(null);
 
-  const debouncing = <T extends Function>(
+  const debouncing = <T extends (...args: any[]) => void>(
     callback: T,
     throttleTime: number
   ) => {
-    return (...args: any) => {
+    return (...args: Parameters<T>): void => {
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => {
-        callback.apply(null, args);
+        callback(...args);
       }, throttleTime);
     };
   };
