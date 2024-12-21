@@ -25,7 +25,7 @@ export default function SigninFormContent({ isModal }: IProps) {
       />
       <SigninPasswordField />
 
-      <SigninLinks />
+      <SigninLinks isModal={isModal} />
 
       <SigninLoginBtn />
 
