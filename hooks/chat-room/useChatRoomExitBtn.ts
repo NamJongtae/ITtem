@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import useExitChatRoomMutate from "../react-query/mutations/chat/useExitChatRoomMutate";
 import useDeleteChatRoomMutate from "../react-query/mutations/chat/useDeleteChatRoomMutate";
 import { isAxiosError } from "axios";
@@ -13,7 +13,7 @@ interface IParams {
 export default function useChatRoomExitBtn({
   participantIDs,
   handleChatRoomExit,
-  resetChatRoomExit,
+  resetChatRoomExit
 }: IParams) {
   const router = useRouter();
   const { exitChatRoomMutate } = useExitChatRoomMutate();

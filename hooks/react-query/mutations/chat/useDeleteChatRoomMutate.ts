@@ -1,11 +1,11 @@
 import { deleteChatRoom } from "@/lib/api/chat";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function useDeleteChatRoomMutate() {
-  const router = useRouter();
-  const chatRoomId = router.query?.chatRoomId || "";
+  const params = useParams();
+  const chatRoomId = params.chatRoomId || "";
   const { mutate: deleteChatRoomMutate } = useMutation({
     mutationFn: () => deleteChatRoom(chatRoomId as string),
     onSuccess: () => {
