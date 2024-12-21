@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import useDebouncing from "../useDebouncing";
 import { toast } from "react-toastify";
 import { NotificationMessageData } from "@/types/notification-types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -8,6 +7,7 @@ import { getRealtimeDB } from "@/lib/firebaseSetting";
 import { queryKeys } from "@/query-keys/query-keys";
 import useNotificationStore from "@/store/notification-store";
 import useAuthStore from "@/store/auth-store";
+import { useRouter } from "next/navigation";
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -32,17 +32,11 @@ export default function useNotification() {
   const notificationRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const debouncing = useDebouncing();
-
-  const handleClickLink = debouncing(() => {
-    if (!user) {
-      toast.warn("로그인 후 이용해주세요.");
-    }
-  }, 500);
+  const router = useRouter();
 
   const openNotification = () => {
     if (!user) {
-      handleClickLink();
+      router.push("/signin");
       return;
     }
     openModal();
