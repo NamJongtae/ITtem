@@ -49,6 +49,7 @@ export default function useSignoutMutate() {
         );
       } else {
         router.replace("/");
+        router.refresh(); // middleware 버그 해결을 위해 router refresh
       }
     },
     onError: (error: unknown) => {
