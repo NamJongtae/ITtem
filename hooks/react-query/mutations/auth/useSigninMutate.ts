@@ -4,11 +4,11 @@ import useAuthStore from '@/store/auth-store';
 import { SigninResponseData } from "@/types/api-types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function useSigninMutate() {
-  const router = useRouter();
+  // const router = useRouter();
   const actions = useAuthStore(state=>state.actions);
   const { mutate: signinMutate, isPending: signinLoading } = useMutation<
     AxiosResponse<SigninResponseData>,
@@ -26,7 +26,8 @@ export default function useSigninMutate() {
     }) => await sigin(email, password, isDuplicationLogin),
     onSuccess: async (response) => {
       actions.setAuth(response.data.user);
-      router.back();
+      // router.back(); middleware 버그로 middleware가 동작하지 않아 href 사용
+      window.location.href = "/"
     },
     onError: (error: unknown, variables) => {
       if (isAxiosError<SigninResponseData, any>(error)) {
