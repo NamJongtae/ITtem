@@ -23,7 +23,6 @@ export default function GoogleAuth() {
 
   useEffect(() => {
     if (code) {
-      console.log(code);
       googleUserInfoMutate(code as string);
     }
   }, [code, googleUserInfoMutate]);
