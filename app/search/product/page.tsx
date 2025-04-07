@@ -7,6 +7,7 @@ import {
   QueryClient,
   QueryFunction,
   dehydrate,
+  QueryKey,
 } from "@tanstack/react-query";
 
 interface IProps {
@@ -51,7 +52,7 @@ async function prefetchProductListData({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as QueryFunction<
       ProductData[],
-      any,
+      QueryKey,
       unknown
     >,
     initialPageParam: null,

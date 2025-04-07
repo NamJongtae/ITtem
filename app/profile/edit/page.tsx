@@ -16,6 +16,10 @@ async function prefetchMyProfile(queryClient: QueryClient) {
     cookies(),
     sessionOptions
   );
+  const sessionCookie = cookies().get("session");
+  const cookieHeader = sessionCookie
+    ? `${sessionCookie.name}=${sessionCookie.value}`
+    : "";
   const myProfileQueryKeyConfig = queryKeys.profile.my;
   if (session.refreshToken) {
     await queryClient.prefetchQuery({
@@ -24,7 +28,7 @@ async function prefetchMyProfile(queryClient: QueryClient) {
         try {
           const response = await customAxios("/api/profile", {
             headers: {
-              Cookie: cookies() as any,
+              Cookie: cookieHeader,
             },
           });
           return response.data.profile;

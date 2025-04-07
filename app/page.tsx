@@ -5,19 +5,20 @@ import {
   HydrationBoundary,
   QueryClient,
   QueryFunction,
-  dehydrate,
+  QueryKey,
+  dehydrate
 } from "@tanstack/react-query";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ITtem | 홈",
   openGraph: {
-    title: "ITtem | 홈",
-  },
+    title: "ITtem | 홈"
+  }
 };
 
 async function prefetchProductListData({
-  queryClient,
+  queryClient
 }: {
   queryClient: QueryClient;
 }) {
@@ -26,10 +27,10 @@ async function prefetchProductListData({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as QueryFunction<
       ProductData[],
-      any,
+      QueryKey,
       unknown
     >,
-    initialPageParam: null,
+    initialPageParam: null
   });
 }
 

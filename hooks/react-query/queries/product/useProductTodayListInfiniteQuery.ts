@@ -1,6 +1,6 @@
 import { queryKeys } from "@/query-keys/query-keys";
 import { ProductData, ProductListType } from "@/types/product-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, QueryFunction, QueryKey, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useProductTodayListInfiniteQuery({
@@ -21,7 +21,7 @@ export default function useProductTodayListInfiniteQuery({
     error
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: queryKeysConfig.queryKey,
-    queryFn: queryKeysConfig.queryFn as any,
+    queryFn: queryKeysConfig.queryFn as QueryFunction<ProductData[], QueryKey, unknown>,
     enabled: productListType === "TODAY",
     retry: 0,
     initialPageParam: null,

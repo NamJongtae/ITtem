@@ -5,7 +5,7 @@ import {
   ProductData,
   ProductListType
 } from "@/types/product-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, QueryFunction, QueryKey, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useCategoryProductListInfiniteQuery({
@@ -18,7 +18,7 @@ export default function useCategoryProductListInfiniteQuery({
   productListType: ProductListType;
 }) {
   const location = useLocationStore((state) => state.location);
-  const querKeyConfing = queryKeys.product.list({
+  const queryKeyConfig = queryKeys.product.list({
     produdctCategory: category,
     location,
     limit
@@ -34,11 +34,10 @@ export default function useCategoryProductListInfiniteQuery({
   } = useInfiniteQuery<
     ProductData[],
     AxiosError,
-    InfiniteData<ProductData>,
-    any
+    InfiniteData<ProductData>
   >({
-    queryKey: querKeyConfing.queryKey,
-    queryFn: querKeyConfing.queryFn as any,
+    queryKey: queryKeyConfig.queryKey,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], QueryKey, unknown>,
     enabled: productListType === "CATEGORY",
     retry: 0,
     initialPageParam: null,

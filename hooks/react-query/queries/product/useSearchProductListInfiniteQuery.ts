@@ -4,7 +4,7 @@ import {
   ProductData,
   ProductListType
 } from "@/types/product-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, QueryFunction, QueryKey, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 
@@ -34,7 +34,7 @@ export default function useSearchProductListInfiniteQuery({
     error
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as any,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], QueryKey, unknown>,
     enabled: productListType === "SEARCH" && !!keyword,
     retry: 0,
     initialPageParam: null,

@@ -7,6 +7,7 @@ import {
   QueryClient,
   QueryFunction,
   dehydrate,
+  QueryKey,
 } from "@tanstack/react-query";
 
 export async function generateMetadata({
@@ -40,7 +41,7 @@ async function prefetchProductList({
   });
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], any, null>,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], QueryKey, null>,
     initialPageParam: null,
   });
 }
