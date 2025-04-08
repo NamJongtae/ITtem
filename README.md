@@ -48,6 +48,7 @@
   - [🗜 middleware 토큰 인증 로직 구현 문제](#-middleware-토큰-인증-로직-구현-문제)
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
   - [💥 로그인 및 로그아웃 이후 middleware가 제대로 동작하지 않는 문제](#-로그인-및-로그아웃-이후-middleware가-제대로-동작하지-않는-문제)
+  - [❌ 배포 후 Hydrate 불일치 문제](#-배포-후-hydrate-불일치-문제)
 
 - [👀 구현 기능 미리보기](#-구현-기능-미리보기--제목-클릭-시-해당-기능-상세설명으로-이동됩니다-)
 
@@ -2158,7 +2159,39 @@ export default customAxios;
 
 <br>
 
+### ❌ 배포 후 Hydrate 불일치 문제
 
+> 문제 상황
+
+- 로컬 환경에서는 Hydrate 불일치 문제가 발생하지 않았는데 Vercel 배포 후 Hydrate 불일치 문제가 발생하였습니다.
+
+> 문제 원인
+
+- 상품 목록 날짜 형식에서 Hydreate 불일치가 발생하였습니다.
+- 날짜 형식을 포맷팅 하는 함수에서 Vercel 배포 서버에서는 UTC를 사용 중이지만 KST 시간 차이를 계산하지 않아 날짜 형식 불일치가 발생하였습니다.
+
+> 해결 방법
+
+- 날짜 형식 포맷팅 함수에 UTC -> KST 시간대로 변환하는 코드를 추가하여 해결하였습니다. 
+
+> 해결 코드
+
+<details>
+<summary>코드보기</summary>
+
+```javascript
+  export const getDateFormat = (time: string) => {
+  const now = new Date();
+  const dataTime = new Date(time);
+
+  // UTC → KST 변환 (밀리초 단위로 +9시간 추가)
+  const kstTime = new Date(dataTime.getTime() + 9 * 60 * 60 * 1000);
+  //...
+  }
+```
+</details>
+
+<br>
 
 ### 👀 구현 기능 미리보기 ( 제목 클릭 시 해당 기능 상세설명으로 이동됩니다. )
 
