@@ -7,6 +7,14 @@ import { checkWithAuthPathname, withAuth } from "./lib/withAuth";
 export async function middleware(req: NextRequest, res: NextResponse) {
   const { pathname } = req.nextUrl;
 
+  const response = NextResponse.next();
+  response.cookies.set("X-Requested-URL", pathname, {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "strict",
+    path: "/"
+  });
+
   const isWithOutAuth = checkWithOutAuthPathname(pathname);
 
   const isWithAuth = checkWithAuthPathname(pathname);
@@ -25,7 +33,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return withAuth(req);
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
@@ -36,7 +44,6 @@ export const config = {
     "/findpassword",
     "/chat:path*",
     "/profile:path*",
-    "/product/upload/:path*",
-    "/product/manage/:path*",
-  ],
+    "/product/:path*",
+  ]
 };
