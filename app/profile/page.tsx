@@ -4,79 +4,64 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { queryKeys } from "@/query-keys/query-keys";
 import { IronSessionData } from "@/types/api-types";
+import { ProfileData } from "@/types/auth-types";
 import {
+  dehydrate,
   HydrationBoundary,
-  QueryClient,
-  dehydrate
+  QueryClient
 } from "@tanstack/react-query";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata() {
-  const { getIronSession } = await import("iron-session");
-  const session = await getIronSession<IronSessionData>(
-    cookies(),
-    sessionOptions
-  );
-  const sessionCookie = cookies().get("session");
-  const cookieHeader = sessionCookie
-    ? `${sessionCookie.name}=${sessionCookie.value}`
-    : "";
-  if (session.refreshToken) {
-    const response = await customAxios("/api/profile", {
-      headers: {
-        Cookie: cookieHeader
-      }
-    });
-    const profile = response.data.profile;
-    const title = `ITtem | "${profile.nickname}님"의 프로필`;
-    const url = `${BASE_URL}/profile`;
-    return {
-      metadataBase: new URL(url),
-      title,
-      openGraph: {
-        url,
-        title
-      }
-    };
-  }
+  const title = `ITtem | 나의 프로필`;
+  const url = `${BASE_URL}/profile`;
   return {
-    title: "ITtem | 나의 프로필"
+    metadataBase: new URL(url),
+    title,
+    openGraph: {
+      url,
+      title
+    }
   };
 }
 
-async function prefetchMyProfile(queryClient: QueryClient) {
+async function prefetchProfile() {
   const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionData>(
     cookies(),
     sessionOptions
   );
-  const sessionCookie = cookies().get("session");
-  const cookieHeader = sessionCookie
-    ? `${sessionCookie.name}=${sessionCookie.value}`
-    : "";
-  const myProfileQueryKeyConfig = queryKeys.profile.my;
+  const allCookies = headers().get("cookie");
+
   if (session.refreshToken) {
-    await queryClient.prefetchQuery({
-      queryKey: myProfileQueryKeyConfig.queryKey,
-      queryFn: async () => {
-        try {
-          const response = await customAxios("/api/profile", {
-            headers: {
-              Cookie: cookieHeader
-            }
-          });
-          return response.data.profile;
-        } catch (error) {
-          console.error(error);
+    try {
+      const response = await customAxios("/api/profile", {
+        headers: {
+          Cookie: allCookies
+        }
+      });
+      return response.data.profile as ProfileData;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Expired AccessToken.") {
+          const { cookies } = await import("next/headers");
+          const cookie = cookies();
+          const currentURL = cookie.get("X-Requested-URL")?.value || "/";
+          redirect(`${BASE_URL}/refresh-token?next=${currentURL}`);
         }
       }
-    });
+    }
   }
 }
 
 export default async function MyProfile() {
   const queryClient = new QueryClient();
-  await prefetchMyProfile(queryClient);
+
+  await queryClient.fetchQuery({
+    queryKey: queryKeys.profile.my.queryKey,
+    queryFn: prefetchProfile
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
