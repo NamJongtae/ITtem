@@ -1,9 +1,8 @@
-import { AuthData } from "@/types/auth-types";
 import { JwtPayload, SignOptions } from "jsonwebtoken";
 export const generateToken = async ({
   payload,
   options,
-  secret,
+  secret
 }: {
   payload: JwtPayload;
   options?: SignOptions;
@@ -21,10 +20,10 @@ export const verifyToken = async (token: string, secret: string) => {
     return {
       isValid: true,
       message: "Valid Token.",
-      data: decode as { user: { uid: string }; lat: number; exp: number },
+      data: decode as { user: { uid: string }; lat: number; exp: number }
     };
   } catch (error) {
-    if (error instanceof (await import("jsonwebtoken")).JsonWebTokenError) {
+    if (error instanceof Error) {
       return { isValid: false, message: error.message };
     }
   }
@@ -33,13 +32,13 @@ export const verifyToken = async (token: string, secret: string) => {
 export async function verifyTokenByJose(token: string, secret: string) {
   try {
     const { jwtVerify } = await import("jose");
-    const { payload }: { payload: AuthData } = await jwtVerify(
-      token,
-      new TextEncoder().encode(secret)
-    );
+    const {
+      payload
+    }: { payload: { user: { uid: string }; lat: number; exp: number } } =
+      await jwtVerify(token, new TextEncoder().encode(secret));
     return { isValid: true, data: payload };
   } catch (error) {
-    if (error instanceof (await import("jsonwebtoken")).JsonWebTokenError) {
+    if (error instanceof Error) {
       return { isValid: false, message: error.message };
     }
   }
