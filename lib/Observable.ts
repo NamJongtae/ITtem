@@ -1,7 +1,8 @@
+type Callback = () => void;
 class Observable {
   private observers: Observer[] = [];
 
-  setObserver(callback: any) {
+  setObserver(callback: Callback) {
     const observer = new Observer(callback);
     this.observers.push(observer);
 
@@ -20,9 +21,9 @@ class Observable {
 }
 
 class Observer {
-  callback: any;
+  callback: Callback;
 
-  constructor(callback: any) {
+  constructor(callback: Callback) {
     this.callback = callback;
   }
 }
