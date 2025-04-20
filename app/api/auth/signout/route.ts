@@ -1,53 +1,56 @@
-import { REFRESH_TOKEN_KEY } from "@/constants/constant";
-import { deleteToken } from "@/lib/api/redis";
+import { deleteToken, getToken } from "@/lib/api/redis";
 import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
 import { sessionOptions } from "@/lib/server";
-import { verifyToken } from "@/lib/token";
 import { IronSessionType } from "@/types/api-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function POST(req: NextRequest) {
+  const { uid } = await req.json();
+
   try {
     const session = await getIronSession<IronSessionType>(
       cookies(),
       sessionOptions
     );
     const refreshToken = session.refreshToken;
-    const decodeRefreshToken = await verifyToken(
-      refreshToken,
-      REFRESH_TOKEN_KEY
-    );
-    await deleteToken(decodeRefreshToken?.data?.user.uid || "", "accessToken");
-    await deleteToken(decodeRefreshToken?.data?.user.uid || "", "refreshToken");
-
-    session.destroy();
 
     await dbConnect();
 
-    if (!decodeRefreshToken?.data?.user.uid) {
-      return NextResponse.json(
-        { message: "유효하지 않은 토큰입니다." },
+    const redisRefreshToken = await getToken(uid as string, "refreshToken");
+
+    if (redisRefreshToken && redisRefreshToken !== refreshToken) {
+      const response = NextResponse.json(
+        { message: "유효하지 않은 요청입니다." },
         { status: 403 }
       );
+
+      return response;
     }
 
+    // redis 토큰 삭제
+    await deleteToken(uid || "", "accessToken");
+    await deleteToken(uid || "", "refreshToken");
+
+    // 세션 쿠키 삭제
+    session.destroy();
+
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(
-        decodeRefreshToken?.data?.user.uid || ""
-      ),
+      _id: new mongoose.Types.ObjectId((uid as string) || "")
     });
+
     if (user?.loginType === "KAKAO") {
       return NextResponse.json(
         { message: "카카오 계정은 별도의 로그아웃이 필요해요." },
         { status: 202 }
       );
     }
+    
     return NextResponse.json(
       { message: "로그아웃에 성공했어요." },
       { status: 200 }
