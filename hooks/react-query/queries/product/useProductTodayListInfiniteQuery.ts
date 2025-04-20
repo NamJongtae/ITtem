@@ -10,7 +10,7 @@ export default function useProductTodayListInfiniteQuery({
   limit?: number;
   productListType: ProductListType;
 }) {
-  const queryKeysConfig = queryKeys.product.list({ productListType, limit });
+  const queryKeysConfig = queryKeys.product.today(limit);
 
   const {
     data,

@@ -18,8 +18,8 @@ export default function useCategoryProductListInfiniteQuery({
   productListType: ProductListType;
 }) {
   const location = useLocationStore((state) => state.location);
-  const queryKeyConfig = queryKeys.product.list({
-    produdctCategory: category,
+  const queryKeyConfig = queryKeys.product.category({
+    category,
     location,
     limit
   });
