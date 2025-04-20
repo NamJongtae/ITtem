@@ -10,7 +10,7 @@ import {
   SigninResponseData,
   SignoutResposeData,
   SignupResponseData,
-  VerifyEmailResponseData,
+  VerifyEmailResponseData
 } from "@/types/api-types";
 import { AxiosResponse } from "axios";
 import { uploadImgToFireStore } from "./firebase";
@@ -23,7 +23,7 @@ export async function createAccount({
   password,
   nickname,
   profileImgFile,
-  introduce,
+  introduce
 }: SignupData): Promise<AxiosResponse<SignupResponseData>> {
   let imgData;
   try {
@@ -39,7 +39,7 @@ export async function createAccount({
       password,
       nickname,
       profileImgData: imgData || { url: "/icons/user-icon.svg", name: "" },
-      introduce,
+      introduce
     });
     return response;
   } catch (error) {
@@ -77,7 +77,7 @@ export async function sendToVerifyEmail(
   try {
     const response = await customAxios.post("/api/auth/send-verify-email", {
       email,
-      isFindPw,
+      isFindPw
     });
     return response;
   } catch (error) {
@@ -94,7 +94,7 @@ export async function verifyEmail(
     const response = await customAxios.post("/api/auth/verify-email", {
       email,
       verifyCode,
-      isFindPw,
+      isFindPw
     });
     return response;
   } catch (error) {
@@ -107,7 +107,7 @@ export async function checkEmailDuplication(
 ): Promise<AxiosResponse<EmailDuplicationResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/duplication/email", {
-      email,
+      email
     });
     return response;
   } catch (error) {
@@ -120,7 +120,7 @@ export async function checkNicknameDuplication(
 ): Promise<AxiosResponse<NicknameDuplicationResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/duplication/nickname", {
-      nickname,
+      nickname
     });
     return response;
   } catch (error) {
@@ -133,7 +133,7 @@ export async function checkEmail(
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.post("/api/auth/check-email", {
-      email,
+      email
     });
     return response;
   } catch (error) {
@@ -150,7 +150,7 @@ export async function sigin(
     const response = await customAxios.post("/api/auth/signin", {
       email,
       password,
-      isDuplicateLogin,
+      isDuplicateLogin
     });
     return response;
   } catch (error) {
@@ -158,9 +158,13 @@ export async function sigin(
   }
 }
 
-export async function signout(): Promise<AxiosResponse<SignoutResposeData>> {
+export async function signout(
+  uid: string
+): Promise<AxiosResponse<SignoutResposeData>> {
   try {
-    const response = await customAxios("/api/auth/signout");
+    const response = await customAxios.post("/api/auth/signout", {
+      uid
+    });
     return response;
   } catch (error) {
     throw error;
@@ -203,7 +207,7 @@ export async function deleteAllToken(
 ): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = customAxios.delete("/api/auth/delete-token", {
-      data: { email },
+      data: { email }
     });
     return response;
   } catch (error) {
@@ -219,7 +223,7 @@ export async function getGoogleAuthAccessToken(
     client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
     client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET as string,
     redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI as string,
-    grant_type: "authorization_code",
+    grant_type: "authorization_code"
   });
 
   try {
@@ -228,8 +232,8 @@ export async function getGoogleAuthAccessToken(
       params.toString(),
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
       }
     );
     return response;
@@ -258,7 +262,7 @@ export async function getGoogleUserInfo(
 > {
   try {
     const response = await customAxios.post("/api/auth/signin/google/user", {
-      code,
+      code
     });
     return response;
   } catch (error) {
@@ -271,7 +275,7 @@ export async function googleSignin(
 ): Promise<AxiosResponse<SigninResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/signin/google", {
-      user,
+      user
     });
     return response;
   } catch (error) {
@@ -299,8 +303,8 @@ export async function getKaKaoAuthInfo(
     const userInfoUrl = "https://kapi.kakao.com/v2/user/me";
     const response = await customAxios(userInfoUrl, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+        Authorization: `Bearer ${accessToken}`
+      }
     });
     return response;
   } catch (error) {
@@ -315,7 +319,7 @@ export async function getKakaoUserInfo(
 > {
   try {
     const response = await customAxios.post("/api/auth/signin/kakao/user", {
-      code,
+      code
     });
     return response;
   } catch (error) {
@@ -328,7 +332,7 @@ export async function kakaoSignin(
 ): Promise<AxiosResponse<SigninResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/signin/kakao", {
-      user,
+      user
     });
     return response;
   } catch (error) {
@@ -340,7 +344,7 @@ export async function changePassword({
   email,
   password,
   currentPassword,
-  isFindPw,
+  isFindPw
 }: {
   email?: string;
   password: string;
@@ -352,7 +356,7 @@ export async function changePassword({
       email,
       password,
       currentPassword,
-      isFindPw,
+      isFindPw
     });
     return response;
   } catch (error) {
