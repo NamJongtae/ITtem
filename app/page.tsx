@@ -22,7 +22,7 @@ async function prefetchProductListData({
 }: {
   queryClient: QueryClient;
 }) {
-  const queryKeyConfig = queryKeys.product.list({ productListType: "TODAY" });
+  const queryKeyConfig = queryKeys.product.today();
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as QueryFunction<
