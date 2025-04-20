@@ -10,12 +10,12 @@ export default function LayoutNavAuth() {
 
   return (
     <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
-      {user?.uid ? (
+      {authIsLoading ? null : user?.uid ? (
         <div className="flex items-center gap-3 w-full justify-end">
           <LayoutNavAvata />
           <LayoutNavLogoutBtn />
         </div>
-      ) : authIsLoading ? null : (
+      ) : (
         <LayoutNavSigninBtn />
       )}
     </div>
