@@ -36,8 +36,8 @@ async function prefetchProductList({
   category: ProductCategory;
   queryClient: QueryClient;
 }) {
-  const queryKeyConfig = queryKeys.product.list({
-    produdctCategory: category || ProductCategory.전체,
+  const queryKeyConfig = queryKeys.product.category({
+    category: category || ProductCategory.전체,
   });
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
