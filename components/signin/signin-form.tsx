@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export default function SigninForm({ isModal }: IProps) {
-  const { signinLoading, handleSingnin } = useSigninForm();
+  const { signinLoading, handleSingnin } = useSigninForm({ isModal });
 
   if (signinLoading) {
     return <Loading />;
@@ -23,8 +23,8 @@ export default function SigninForm({ isModal }: IProps) {
         mode: "onChange",
         defaultValues: {
           email: "",
-          password: "",
-        },
+          password: ""
+        }
       }}
       className={`${
         isModal
