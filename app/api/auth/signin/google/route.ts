@@ -130,7 +130,10 @@ export async function POST(req: NextRequest) {
       {
         message: "로그인에 성공했어요.",
         user: {
-          uid
+          uid: dbUserData._id,
+          email: dbUserData.email,
+          nickname: dbUserData.nickname,
+          profileImg: dbUserData.profileImg
         }
       },
       { status: 200 }
