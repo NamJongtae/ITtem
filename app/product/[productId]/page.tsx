@@ -1,7 +1,7 @@
 import {
   HydrationBoundary,
   QueryClient,
-  dehydrate,
+  dehydrate
 } from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
@@ -14,9 +14,10 @@ import ProductDetailPage from "@/components/product-detail/product-detail-page";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: { productId: string | undefined };
 }) {
@@ -38,14 +39,14 @@ export async function generateMetadata({
     title,
     openGraph: {
       url,
-      title,
-    },
+      title
+    }
   };
 }
 
 async function fetchProductData({
   productId,
-  queryClient,
+  queryClient
 }: {
   productId: string;
   queryClient: QueryClient;
@@ -54,13 +55,11 @@ async function fetchProductData({
 
   await queryClient.prefetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
-    queryFn: productQueryKeyConfing.queryFn,
+    queryFn: productQueryKeyConfing.queryFn
   });
 }
 
-async function fetchProfileData(queryClient: QueryClient) {
-  const myProfileQueryKeyConfig = queryKeys.profile.my;
-
+async function fetchProfileData() {
   const session = await getIronSession<IronSessionData>(
     cookies(),
     sessionOptions
@@ -70,45 +69,44 @@ async function fetchProfileData(queryClient: QueryClient) {
     ? `${sessionCookie.name}=${sessionCookie.value}`
     : "";
   if (session.refreshToken) {
-    await queryClient.prefetchQuery({
-      queryKey: myProfileQueryKeyConfig.queryKey,
-      queryFn: async () => {
-        try {
-          const response = await customAxios("/api/profile", {
-            headers: {
-              Cookie: cookieHeader,
-            },
-          });
-          return response.data.profile;
-        } catch (error) {
-          queryClient.removeQueries({
-            queryKey: myProfileQueryKeyConfig.queryKey,
-          });
-          throw error;
+    try {
+      const response = await customAxios("/api/profile", {
+        headers: {
+          Cookie: cookieHeader
         }
-      },
-    });
+      });
+      return response.data.profile;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Expired AccessToken.") {
+          const { cookies } = await import("next/headers");
+          const cookie = cookies();
+          const currentURL = cookie.get("X-Requested-URL")?.value || "/";
+          redirect(`${BASE_URL}/refresh-token?next=${currentURL}`);
+        }
+      }
+    }
   }
 }
 
 export default async function ProductDetail({
-  params,
+  params
 }: {
   params: { productId: string | undefined };
 }) {
+  const myProfileQueryKeyConfig = queryKeys.profile.my;
   const queryClient = new QueryClient();
   const productId = params?.productId;
 
   if (productId) {
-    try {
-      await incrementViewCount(productId);
-      await Promise.all([
-        fetchProductData({ productId, queryClient }),
-        fetchProfileData(queryClient),
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
+    await incrementViewCount(productId);
+    await Promise.all([
+      fetchProductData({ productId, queryClient }),
+      queryClient.fetchQuery({
+        queryKey: myProfileQueryKeyConfig.queryKey,
+        queryFn: fetchProfileData
+      })
+    ]);
   }
 
   return (
