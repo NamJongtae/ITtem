@@ -16,6 +16,7 @@ const SigninModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
 
     return (
       <button
+        type="button"
         onClick={handleClickClose}
         className="absolute top-5 right-5"
         ref={ref}
@@ -23,7 +24,7 @@ const SigninModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
           optimizationTabFocus({
             event: e,
             previousTarget: googleLoginBtnRef.current,
-            nextTarget: emailRef.current,
+            nextTarget: emailRef.current
           })
         }
       >
