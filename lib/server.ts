@@ -1,6 +1,6 @@
 import { IronSessionType } from "@/types/api-types";
 import { SessionOptions } from "iron-session";
-import { generateToken, verifyToken } from "./token";
+import { generateToken, verifyToken, verifyTokenByJose } from "./token";
 import { getToken, saveToken } from "./api/redis";
 import {
   ACCESS_TOKEN_EXP,
@@ -48,12 +48,21 @@ export async function checkAuthorization() {
     cookies(),
     sessionOptions
   );
+
   const accessToken = session.accessToken;
 
-  const decodeAccessToken = await verifyToken(
-    accessToken as string,
-    process.env.NEXT_SECRET_ACCESS_TOKEN_KEY as string
-  );
+  let decodeAccessToken;
+  if (process.env.NEXT_RUNTIME === "edge") {
+    decodeAccessToken = await verifyTokenByJose(
+      accessToken as string,
+      process.env.NEXT_SECRET_ACCESS_TOKEN_KEY as string
+    );
+  } else {
+    decodeAccessToken = await verifyToken(
+      accessToken as string,
+      process.env.NEXT_SECRET_ACCESS_TOKEN_KEY as string
+    );
+  }
 
   if (!decodeAccessToken?.isValid) {
     return { isValid: false, message: "만료된 토큰이에요." };
