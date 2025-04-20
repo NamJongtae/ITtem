@@ -1,13 +1,8 @@
 import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname, useParams } from "next/navigation";
-import { useEffect } from "react";
 
-export default function useAuthQuery(isExistSession: boolean) {
-  const pathname = usePathname();
-  const params = useParams();
-  const myInfo = useAuthStore((state) => state.user);
+export default function useAuthQuery() {
   const loading = useAuthStore((state) => state.isLoading);
 
   const {
@@ -16,18 +11,14 @@ export default function useAuthQuery(isExistSession: boolean) {
     error: authError,
     refetch: refetchAuth
   } = useQuery({
-    ...queryKeys.auth.info(myInfo?.uid),
+    ...queryKeys.auth.info,
     retry: 0,
-    enabled: isExistSession
+    staleTime: Infinity,
+    enabled: false
   });
 
-  const authIsLoading = loading || isLoading;
 
-  useEffect(() => {
-    if (isExistSession) {
-      refetchAuth();
-    }
-  }, [pathname, params, refetchAuth, isExistSession]);
+  const authIsLoading = loading || isLoading;
 
   return { user, authIsLoading, authError, refetchAuth };
 }
