@@ -1,16 +1,18 @@
 import { deleteAllToken, googleSignin } from "@/lib/api/auth";
+import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 import {
   GoogleAuthInfoResponseData,
   SigninResponseData
 } from "@/types/api-types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 
 export default function useGoogleSigninMutate() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const actions = useAuthStore((state) => state.actions);
   const { mutate: googleSigninMutate } = useMutation<
@@ -22,7 +24,9 @@ export default function useGoogleSigninMutate() {
       await googleSignin(user),
     onSuccess: (response) => {
       actions.setAuth(response.data.user);
-      router.push("/");
+      queryClient.refetchQueries({ queryKey: queryKeys.session._def });
+
+      router.replace("/");
     },
     onError: (error, variables) => {
       if (isAxiosError<{ message: string; email: string }>(error)) {

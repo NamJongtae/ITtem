@@ -1,15 +1,17 @@
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { sigin } from "@/lib/api/auth";
-import useAuthStore from '@/store/auth-store';
+import { queryKeys } from "@/query-keys/query-keys";
+import useAuthStore from "@/store/auth-store";
 import { SigninResponseData } from "@/types/api-types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function useSigninMutate() {
+export default function useSigninMutate({ isModal }: { isModal?: boolean }) {
   const router = useRouter();
-  const actions = useAuthStore(state=>state.actions);
+  const queryClient = useQueryClient();
+  const actions = useAuthStore((state) => state.actions);
   const { mutate: signinMutate, isPending: signinLoading } = useMutation<
     AxiosResponse<SigninResponseData>,
     AxiosError,
@@ -18,7 +20,7 @@ export default function useSigninMutate() {
     mutationFn: async ({
       email,
       password,
-      isDuplicationLogin,
+      isDuplicationLogin
     }: {
       email: string;
       password: string;
@@ -26,13 +28,18 @@ export default function useSigninMutate() {
     }) => await sigin(email, password, isDuplicationLogin),
     onSuccess: async (response) => {
       actions.setAuth(response.data.user);
-      router.back(); // 로그인 모달 닫기
+      queryClient.refetchQueries({ queryKey: queryKeys.session._def });
+      if (isModal) {
+        router.back();
+      } else {
+        router.push("/");
+      }
       setTimeout(() => {
         router.refresh(); // middleware 버그 해결을 위해 router refresh
       }, 100);
     },
     onError: (error: unknown, variables) => {
-      if (isAxiosError<SigninResponseData, any>(error)) {
+      if (isAxiosError<SigninResponseData>(error)) {
         if (error.response?.status === 401) {
           toast.warn(error.response?.data.message);
         } else if (error.response?.status == 409) {
@@ -44,7 +51,7 @@ export default function useSigninMutate() {
             signinMutate({
               email,
               password,
-              isDuplicationLogin: true,
+              isDuplicationLogin: true
             });
           }
         } else {
@@ -52,6 +59,9 @@ export default function useSigninMutate() {
         }
       }
     },
+    onSettled: () => {
+      actions.setIsLoading(false);
+    }
   });
   return { signinMutate, signinLoading };
 }

@@ -1,15 +1,17 @@
 import { deleteAllToken, kakaoSignin } from "@/lib/api/auth";
+import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 import {
   KakaoAuthInfoResponseData,
   SigninResponseData
 } from "@/types/api-types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function useKakaoSigninMutate() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const actions = useAuthStore((state) => state.actions);
   const { mutate: kakaoSigninMutate } = useMutation<
@@ -21,6 +23,8 @@ export default function useKakaoSigninMutate() {
       await kakaoSignin(user),
     onSuccess: (response) => {
       actions.setAuth(response.data.user);
+      queryClient.refetchQueries({ queryKey: queryKeys.session._def });
+
       router.push("/");
     },
     onError: (error, variables) => {
