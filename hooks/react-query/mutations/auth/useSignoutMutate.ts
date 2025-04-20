@@ -1,5 +1,4 @@
 import { signout } from "@/lib/api/auth";
-import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 import useChatStore from "@/store/chat-store";
 import useNotificationStore from "@/store/notification-store";
@@ -13,33 +12,27 @@ import { toast } from "react-toastify";
 
 export default function useSignoutMutate() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const authActions = useAuthStore((state) => state.actions);
   const chatActions = useChatStore((state) => state.actions);
   const notificationActions = useNotificationStore((state) => state.actions);
   const queryClient = useQueryClient();
-  const authQueryKey = queryKeys.auth.info().queryKey;
-  const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
   const { mutate: signoutMutate } = useMutation<
     AxiosResponse<SignoutResposeData>,
     AxiosError,
-    undefined,
+    void,
     {
       previousAuth: AuthData | unknown;
       previousMyProfile: ProductData | unknown;
     }
   >({
-    mutationFn: signout,
+    mutationFn: () => signout(user?.uid || ""),
     onSuccess: (response) => {
-      queryClient.removeQueries({ queryKey: authQueryKey });
-
-      queryClient.removeQueries({ queryKey: myProfileQueryKey });
-
-      queryClient.removeQueries({ queryKey: queryKeys.session._def });
+      queryClient.clear();
 
       authActions.resetAuth();
       chatActions.resetChatState();
-
       notificationActions.resetUnreadCount();
       if (
         response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
@@ -53,6 +46,7 @@ export default function useSignoutMutate() {
       }
     },
     onError: (error: unknown) => {
+      authActions.setIsLoading(false);
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
