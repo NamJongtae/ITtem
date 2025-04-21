@@ -38,10 +38,13 @@
   - [📤 App Router 마이그레이션](#-app-router-마이그레이션)
   - [🗃 폴더명 및 파일명 일관된 규칙 적용](#-폴더명-및-파일명-일관된-규칙-적용)
   - [🔄 redux-toolkit zustand로 전환](#-redux-toolkit-zustand로-전환)
+  - [🚹 유저 정보 관리 로직 수정](#-유저-정보-관리-로직-수정)
+  - [🔑 QueryKey 관리 개선](#-querykey-관리-개선)
+  - [✨ Any 타입을 명확한 타입으로 전환](#-any-타입을-명확한-타입으로-전환)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
-  - [🍪 ssr 쿠키 전달 문제](#-ssr-쿠키-전달-문제)
+  - [🍪 Client to SSR cookie 전달 문제](#-client-to-ssr-cookie-전달-문제)
   - [💫 Hydrate Redux state 초기화 문제](#-hydrate-redux-state-초기화-문제)
   - [🌍 vercel 배포 문제](#-vercel-배포-문제)
   - [❗ 504 Gateway Timeout Error](#-504-gateway-timeout-error)
@@ -49,6 +52,8 @@
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
   - [💥 로그인 및 로그아웃 이후 middleware가 제대로 동작하지 않는 문제](#-로그인-및-로그아웃-이후-middleware가-제대로-동작하지-않는-문제)
   - [❌ 배포 후 Hydrate 불일치 문제](#-배포-후-hydrate-불일치-문제)
+  - [🍪 SSR to Client cookie 전달 문제](#-ssr-to-client-cookie-전달-문제)
+  - [🧨 CustomAxios acceessToken 재발급 중복 요청 문제](#-customaxios-accesstoken-재발급-중복-요청-문제) 
 
 - [👀 구현 기능 미리보기](#-구현-기능-미리보기--제목-클릭-시-해당-기능-상세설명으로-이동됩니다-)
 
@@ -69,7 +74,7 @@
 
 **개발 시작 : 2024. 04. 05**
 
-**개발 완료 : 2023. 06. 29**
+**개발 완료 : 2024. 06. 29**
 
 <br>
 
@@ -1621,9 +1626,272 @@ export default useAuthStore;
 
 <br>
 
+#### 🚹 유저 정보 관리 로직 수정
+
+> **적용이유**
+
+- layout 헤더에서 tanstack-query(서버 상태 관리)와 zustand(전역 상태 관리)를 사용하여 유저 정보를 관리하고 있었습니다. 기존 로직에서 페이지 전환시 마다 유저 정보를 갱신하여 너무 자주 유저 정보를 갱신하여 불필요한 요청이 발생하였습니다.
+
+> **적용 방법**
+
+- 로그인시 최초 한 번 유저 정보를 저장하고, 이후 부터 저장된 데이터를 사용하도록 변경하였습니다.
+- tanstack-query의 enable 옵션을 false로 설정하고, staleTime을 Infinity로 두고, 최초 로그인시 유저 데이터를 저장하도록 하였습니다.
+- 이를 통해 최초 로그인시에만 유저 데이터가 저장되도록 하였고, 이후 로그인이 된 상태에서만 유저 정보를 저장하도록 하기 위해 세션 쿠키를 불러와 세션 쿠키가 존재한다면 유저 정보를 refetch 하도록 하였습니다.
+  
+> **적용으로 얻은 이점**
+
+- 페이지 전환 마다 유저 정보를 갱신하지 않아 불필요한 요청이 발생하지 않게되었습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+#### useAuthQuery.tsx
+```javascript
+import { queryKeys } from "@/query-keys/query-keys";
+import useAuthStore from "@/store/auth-store";
+import { useQuery } from "@tanstack/react-query";
+
+export default function useAuthQuery() {
+  const loading = useAuthStore((state) => state.isLoading);
+
+  // 유저를 한 번만 저장하고 이후 캐싱 값 사용 => staleTime: Infinity, enabled: false
+  const {
+    data: user,
+    isLoading,
+    error: authError,
+    refetch: refetchAuth
+  } = useQuery({
+    ...queryKeys.auth.info,
+    retry: 0,
+    staleTime: Infinity,
+    enabled: false
+  });
+
+  const authIsLoading = loading || isLoading;
+
+  return { user, authIsLoading, authError, refetchAuth };
+}
+```
+
+#### useAuth.tsx
+```javascript
+//...
+  useEffect(() => {
+    if (
+      sessionQueryIsSuccess &&
+      pathname !== "/refresh-token" &&
+      pathname !== "/session-expired"
+    ) {
+      // 세션 쿠키가 존재할 때 유저 refetch
+      if (isExistSession) {
+        refetchAuth();
+      } else {
+        actions.resetAuth();
+      }
+      actions.setIsLoading(false);
+    }
+  }, [isExistSession, sessionQueryIsSuccess, pathname, actions, refetchAuth]);
+```
+//...
+</details>
+
+<br>
+
+#### 🔑 QueryKey 관리 개선
+
+> **적용이유**
+
+- 현재 queryKey 관리를 일관성 있지 않고 상품 목록 queryKey 설정에서 삼항 연산자를 이용하여 동적으로 쿼리키를 적용하도록 하여 가독성이 떨어졌습니다.
+- 라이브러리 타입을 제대로 파악하지 못하여 queryKey 중 다수에 any 타입을 사용하였습니다. 이는 타입 안전성을 해칠수 있어 수정이 필요했습니다.
+
+> **적용 방법**
+
+- 상품 목록 queryKey를 삼항연산자를 사용하여 동적으로 쿼리키를 지정하지 않고, 각 상품 목록 queryKey를 독립적으로 만들어서 관리하도록 수정하여 가독성을 향상시켰습니다.
+- 동적 queryKey와 정적 queryKey 타입에 차이가 존재하며, 동적 queryKey에는 쿼리키가 동적으로 계산되어 하위 키로 빈 배열이 사용될 수 있지만 정적 queryKey는 Tuple 타입을 가져 하나 이상의 배열 키값을 가져야한다는 것을 파악하였습니다. 이를 참고하여 빈 배열인 queryKey를 채우고 쿼리키 타입을 any 타입에서 읽기전용 타입인 const 타입으로 수정하였습니다.
+  
+> **적용으로 얻은 이점**
+
+- 상품 목록 queryKey 관리 부분의 가독성이 향상 되었으며, 타입 안정성이 향상 되었습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+#### query-keys.ts
+```javascript
+//...
+export const productQueryKey = createQueryKeys("product", {
+  today: (limit: number = 10) => ({
+    queryKey: ["list"] as const,
+    queryFn: async ({ pageParam }) => {
+      const response = await getTodayProductList(pageParam, limit);
+      return response.data.products;
+    }
+  }),
+  category: ({
+    category,
+    location,
+    limit = 10
+  }: {
+    category: ProductCategory;
+    location?: string;
+    limit?: number;
+  }) => ({
+    queryKey: (() => {
+      if (location) {
+        return [category, location, "list"] as const;
+      }
+      return [category, "list"] as const;
+    })(),
+    queryFn: async ({ pageParam }) => {
+      const response = await getCategoryProductList({
+        category,
+        location,
+        limit,
+        cursor: pageParam
+      });
+      return response.data.products;
+    }
+  }),
+  search: ({
+    keyword,
+    category = ProductCategory.전체,
+    limit = 10
+  }: {
+    keyword?: string;
+    category?: ProductCategory;
+    limit?: number;
+  }) => ({
+    queryKey: [keyword, category] as const,
+    queryFn: async ({ pageParam }) => {
+      const response = await getSearchProductList({
+        category,
+        cursor: pageParam,
+        limit,
+        keyword: (keyword as string) || ""
+      });
+      return response.data.products;
+    }
+  }),
+  detail: (productId: string) => ({
+    queryKey: [productId] as const,
+    queryFn: async () => {
+      const response = await getProduct(productId);
+      return response.data.product;
+    }
+  }),
+  review: (productId: string) => ({
+    queryKey: [productId] as const,
+    queryFn: async () => {
+      const response = await getReview(productId);
+      return response.data.review;
+    }
+  }),
+  manage: ({
+    currentMenu,
+    status,
+    search,
+    menu,
+    limit = 10
+  }: {
+    currentMenu: "sale" | "purchase";
+    status: string;
+    search: string | undefined;
+    menu: ProductManageMenu;
+    limit?: number;
+  }) => ({
+    queryKey: [currentMenu, status, search] as const,
+    queryFn: async ({ pageParam }) => {
+      if (menu === "판매") {
+        const response = await getSalesTrading({
+          status,
+          cursor: pageParam,
+          search,
+          limit
+        });
+        return response.data.saleTrading;
+      } else {
+        const response = await getPurchaseTrading({
+          status,
+          cursor: pageParam,
+          search,
+          limit
+        });
+        return response.data.purchaseTrading;
+      }
+    }
+  })
+});
+// ...
+```
+</details>
+
+<br>
+
+#### ✨ Any 타입을 명확한 타입으로 전환
+
+> **적용이유**
+
+- 라이브러리의 타입 정의를 명확히 파악하지 못한 채 any 타입을 사용한 코드가 포함되어 있었고, 이로 인해 타입 안정성과 예측 가능성이 떨어질 수 있었습니다.
+
+> **적용 방법**
+
+- 라이브러리에서 제공하는 공식 타입 정의를 참고하여, any를 제거하고 정확한 타입으로 대체하였습니다. 이를 통해 타입 안정성을 높였습니다.
+  
+> **적용으로 얻은 이점**
+
+- 타입 안정성이 향상 되었습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+#### zustand.d.ts
+immer + devtools 미들웨어 적용 유틸 타입을 정의합니다.
+
+```javascript
+import { StateCreator } from "zustand";
+
+declare module "zustand" {
+  type ImmerDevtoolsStateCreator<T> = StateCreator<
+    T,
+    [["zustand/immer", never], ["zustand/devtools", never]]
+  >;
+}
+```
+
+#### authStore.ts
+ImmerDevtoolsStateCreator 유틸 타입 적용, 유틸 타입 적용 따른 devtool 적용 방식을 수정합니다.
+
+```javascript
+//...
+export const store: ImmerDevtoolsStateCreator<AuthState> = (set) => ({
+  //...
+});
+
+const useAuthStore =
+  process.env.NODE_ENV !== "production"
+    ? create<AuthState>()(devtools(immer(store)))
+    : create<AuthState>()(immer(store));
+```
+
+</details>
+
+<br/>
+
 ### 🔫 트러블 슈팅
 
-#### 🍪 SSR 쿠키 전달 문제
+#### 🍪 Client to SSR cookie 전달 문제
 
 > 문제 상황
 
@@ -2189,6 +2457,155 @@ export default customAxios;
   //...
   }
 ```
+</details>
+
+<br>
+
+#### 🍪 SSR to Client cookie 전달 문제
+
+> 문제 상황
+
+- SSR 페이지에서 토큰 만료 에러가 발생하면, cookie에 저장된 refreshToken를 통해 accessToken를 재발급 받은 cookie가 client로 전달되지 않는 문제가 발생하였습니다.
+- 이로 인해 Client에서 인증이 필요한 API 요청시 토큰 재발급 로직을 중복 요청한다는 문제가 있었습니다.
+
+
+> 문제 원인
+
+- App Router에서는 SSR 페이지의 쿠키를 클라이언트로 전송할 수 없기 때문에 SSR 측에서 새로운 accessToken를 갱신하여도 클라이언트에는 갱신된 accessToken이 포함된 cookie가 전달되지 않습니다. 
+
+> 해결 방법
+
+- SSR 측에서 토큰 만료에러를 감지하면 토큰 재발급 페이지로 redirect시켜 토큰 재발급을 클라이언트가 처리하도록 위임하였습니다.
+- redirect 후 클라이언트 측에서 토큰 재발급을 처리하고 이전 페이지로 돌아가도록 하기 위해 middleware에 현재 페이지를 저장하는 X-Requested-URL cookie를 추가하도록 하였습니다.
+
+> 해결 코드
+
+<details>
+<summary>코드 보기</summary>
+
+#### profile page
+accessToken 만료 에러 감지 시 redirect를 통해 클라이언트 측으로 aceessToken 토큰 재발급을 위임합니다.
+```javascript
+//...
+async function prefetchProfile() {
+  const { getIronSession } = await import("iron-session");
+  const session = await getIronSession<IronSessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const allCookies = headers().get("cookie");
+
+  if (session.refreshToken) {
+    try {
+      const response = await customAxios("/api/profile", {
+        headers: {
+          Cookie: allCookies
+        }
+      });
+      return response.data.profile as ProfileData;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Expired AccessToken.") {
+          const { cookies } = await import("next/headers");
+          const cookie = cookies();
+          const currentURL = cookie.get("X-Requested-URL")?.value || "/"; // 현재 페이지 가져오기
+          redirect(`${BASE_URL}/refresh-token?next=${currentURL}`); // 클라이언트 측으로 aceessToken 토큰 재발급을 위임
+        }
+      }
+    }
+  }
+}
+//...
+```
+
+#### middleware.ts
+현재 페이지를 저장하는 X-Requested-URL cookie 설정 로직 추가합니다.
+```javascript
+//...
+ const { pathname } = req.nextUrl;
+
+  const response = NextResponse.next();
+  response.cookies.set("X-Requested-URL", pathname, {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "strict",
+    path: "/"
+  });
+//...
+```
+
+#### refresh-token page
+accessToken 재발급을 위임받아 처리합니다.
+```javascript
+"use client";
+
+import React, { useEffect } from "react";
+import Loading from "../loading";
+import { useRouter, useSearchParams } from "next/navigation";
+import axios, { isAxiosError } from "axios";
+import { BASE_URL } from "@/constants/constant";
+import { RegenerateAccessTokenResponseData } from "@/types/api-types";
+
+export default function RefreshToken() {
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") || "/";
+  const router = useRouter();
+
+  useEffect(() => {
+    const fechAccessToken = async () => {
+      try {
+        await axios.post(`${BASE_URL}/api/auth/refresh-token`, {
+          withCredentials: true
+        });
+        // SSR 재요청을 위한 서버 리다이렉트
+        window.location.href = next;
+      } catch (error) {
+        if (isAxiosError<RegenerateAccessTokenResponseData>(error)) {
+          if (error.response?.status === 401) {
+            router.replace("/session-expired");
+          } else {
+            throw error;
+          }
+        }
+      }
+    };
+
+    fechAccessToken();
+  }, []);
+
+  return <Loading />;
+}
+```
+
+</details>
+
+<br>
+
+#### 🧨 CustomAxios accessToken 재발급 중복 요청 문제
+
+> 문제 상황
+
+- SSR 페이지에서 토큰 만료 에러가 발생하면, cookie에 저장된 refreshToken를 통해 accessToken를 재발급 받은 cookie가 client로 전달되지 않는 문제가 발생하였습니다.
+- 이로 인해 Client에서 인증이 필요한 API 요청시 토큰 재발급 로직을 중복 요청한다는 문제가 있었습니다.
+
+
+> 문제 원인
+
+- App Router에서는 SSR 페이지의 쿠키를 클라이언트로 전송할 수 없기 때문에 SSR 측에서 새로운 accessToken를 갱신하여도 클라이언트에는 갱신된 accessToken이 포함된 cookie가 전달되지 않습니다. 
+
+> 해결 방법
+
+- SSR에서 **context.req.cookies** 를 통해 클라이언트의 쿠키를 직접 서버 사이드로 전달하여 문제를 해결하였습니다.
+
+> 해결 코드
+
+<details>
+<summary>코드 보기</summary>
+
+```javascript
+
+```
+
 </details>
 
 <br>
