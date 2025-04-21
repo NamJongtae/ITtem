@@ -13,12 +13,12 @@ export default function useAuth() {
 
   // session 쿠키를 통해 유저 로그인 유무 확인 => 유저 정보 패치
   useEffect(() => {
-    if (sessionQueryIsSuccess) {
-      if (
-        isExistSession &&
-        pathname !== "/refresh-token" &&
-        pathname !== "/session-expired"
-      ) {
+    if (
+      sessionQueryIsSuccess &&
+      pathname !== "/refresh-token" &&
+      pathname !== "/session-expired"
+    ) {
+      if (isExistSession) {
         refetchAuth();
       } else {
         actions.resetAuth();
