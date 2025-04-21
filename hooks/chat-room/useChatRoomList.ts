@@ -1,6 +1,7 @@
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import useChatStore from "@/store/chat-store";
 import { ChatRoomData } from "@/types/chat-types";
+import { Unsubscribe } from 'firebase/firestore';
 import { useEffect, useState } from "react";
 
 export default function useChatRoomList() {
@@ -17,7 +18,7 @@ export default function useChatRoomList() {
       return;
     }
 
-    let unsubscribes: any[] = [];
+    let unsubscribes: Unsubscribe[] = [];
 
     const loadFirebase = async () => {
       const firestoreDB = await getFirestoreDB();

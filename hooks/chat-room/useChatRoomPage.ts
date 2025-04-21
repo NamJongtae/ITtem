@@ -8,6 +8,7 @@ import useLeaveChatRoomMutate from "../react-query/mutations/chat/useLeaveChatRo
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import useJoinChatRoomMutate from "../react-query/mutations/chat/useJoinChatRoomMutate";
 import useAuthStore from "@/store/auth-store";
+import { Unsubscribe } from "firebase/firestore";
 
 export default function useChatRoomPage() {
   const user = useAuthStore((state) => state.user);
@@ -37,8 +38,8 @@ export default function useChatRoomPage() {
   useEffect(() => {
     if (!chatRoomId || !myUid || isExit) return;
 
-    let unsubscribeChatRoom: any;
-    let unsubscribeMessages: any;
+    let unsubscribeChatRoom: Unsubscribe | undefined;
+    let unsubscribeMessages: Unsubscribe | undefined;
 
     const loadFirebase = async () => {
       const firestoreDB = await getFirestoreDB();

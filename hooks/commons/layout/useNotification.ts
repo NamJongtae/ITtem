@@ -8,6 +8,7 @@ import { queryKeys } from "@/query-keys/query-keys";
 import useNotificationStore from "@/store/notification-store";
 import useAuthStore from "@/store/auth-store";
 import { useRouter } from "next/navigation";
+import { Unsubscribe } from 'firebase/firestore';
 
 export default function useNotification() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -82,8 +83,8 @@ export default function useNotification() {
   useEffect(() => {
     if (!user) return;
 
-    let unsubscribeMessage: any;
-    let unsubscribeCounter: any;
+    let unsubscribeMessage: Unsubscribe | undefined;
+    let unsubscribeCounter: Unsubscribe | undefined;
 
     const loadFirebase = async () => {
       const {

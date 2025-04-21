@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import useAuthStore from "@/store/auth-store";
 import useChatStore from "@/store/chat-store";
+import { Unsubscribe } from 'firebase/database';
 
 export default function useNotificationChat() {
   const user = useAuthStore((state) => state.user);
@@ -11,7 +12,7 @@ export default function useNotificationChat() {
   useEffect(() => {
     if (!myUid) return;
 
-    let unsubscribe: any;
+    let unsubscribe: Unsubscribe | undefined;
 
     const loadFirebase = async () => {
       const firestoreDB = await getFirestoreDB();
