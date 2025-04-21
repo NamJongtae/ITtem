@@ -1,7 +1,12 @@
 import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 import { NotificationMessageData } from "@/types/notification-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  QueryFunction,
+  QueryKey,
+  useInfiniteQuery
+} from "@tanstack/react-query";
 
 export default function useNotificationInfiniteQuery(limit: number = 10) {
   const user = useAuthStore((state) => state.user);
@@ -20,7 +25,11 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     InfiniteData<{ messages: NotificationMessageData; nextKey: string }>
   >({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as any,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      { messages: NotificationMessageData[]; nextKey: string },
+      QueryKey,
+      unknown
+    >,
     enabled: !!user,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage?.nextKey || undefined

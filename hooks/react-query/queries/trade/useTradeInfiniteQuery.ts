@@ -1,7 +1,12 @@
 import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
 import { queryKeys } from "@/query-keys/query-keys";
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  QueryFunction,
+  QueryKey,
+  useInfiniteQuery
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 
@@ -26,7 +31,7 @@ export default function useTradeInfiniteQuery(
     status,
     search,
     menu,
-    limit,
+    limit
   });
 
   const {
@@ -35,14 +40,18 @@ export default function useTradeInfiniteQuery(
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    error,
+    error
   } = useInfiniteQuery<
     SaleTradingData[] | PurchaseTradingData[],
     AxiosError,
     InfiniteData<SaleTradingData | PurchaseTradingData>
   >({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as any,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      SaleTradingData[] | PurchaseTradingData[],
+      QueryKey,
+      unknown
+    >,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       let nextCursor;
@@ -59,7 +68,7 @@ export default function useTradeInfiniteQuery(
       }
       return nextCursor;
     },
-    retry: 0,
+    retry: 0
   });
 
   return {
@@ -68,6 +77,6 @@ export default function useTradeInfiniteQuery(
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    error,
+    error
   };
 }

@@ -7,6 +7,8 @@ import {
 } from "@/types/product-types";
 import {
   InfiniteData,
+  QueryFunction,
+  QueryKey,
   useInfiniteQuery,
   useQueryClient
 } from "@tanstack/react-query";
@@ -54,7 +56,11 @@ export default function useProfileProductListInfiniteQuery({
       productListType === "MY_PROFILE"
         ? queryKeyConfig.queryKey
         : queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as any,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      ProductData[],
+      QueryKey,
+      unknown
+    >,
     enabled:
       (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
       !!uid,
