@@ -24,7 +24,7 @@ export default function useSendToVerifyEmailMutate() {
     onError: (error: unknown) => {
       actions.inactiveTimer();
       actions.setSendToVerifyEmailLoading(false);
-      if (isAxiosError<VerifyEmailResponseData, any>(error)) {
+      if (isAxiosError<VerifyEmailResponseData>(error)) {
         actions.setSendToVerifyEmailError(true);
         if (error.response?.status === 403) {
           actions.resetIsSendToVerifyEmail();

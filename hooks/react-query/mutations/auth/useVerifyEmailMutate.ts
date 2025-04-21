@@ -24,7 +24,7 @@ export default function useVerifyEmailMutate() {
         clearErrors("verifyCode");
       },
       onError: (error: unknown) => {
-        if (isAxiosError<VerifyEmailResponseData, any>(error)) {
+        if (isAxiosError<VerifyEmailResponseData>(error)) {
           if (error.response?.status === 401) {
             toast.warn(error.response?.data.message);
             setError("verifyCode", {
