@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, ImmerDevtoolsStateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
@@ -16,7 +16,7 @@ interface ChatState {
   };
 }
 
-export const store = (set: any): ChatState => ({
+export const store: ImmerDevtoolsStateCreator<ChatState> = (set) => ({
   chatRoomIds: [],
   chatRoomIdsLoading: true,
   totalMessageCount: 0,
@@ -80,8 +80,9 @@ export const store = (set: any): ChatState => ({
   }
 });
 
-const useChatStore = create<ChatState>()(
-  immer(process.env.NODE_ENV !== "production" ? devtools(store) : store)
-);
+const useChatStore =
+  process.env.NODE_ENV !== "production"
+    ? create<ChatState>()(immer(devtools(store)))
+    : create<ChatState>()(immer(store));
 
 export default useChatStore;

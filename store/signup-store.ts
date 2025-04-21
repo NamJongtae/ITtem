@@ -1,5 +1,5 @@
 import { VERIFY_EMAIL_EXP } from "@/constants/constant";
-import { create } from "zustand";
+import { create, ImmerDevtoolsStateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
@@ -22,7 +22,7 @@ interface SignupState {
   };
 }
 
-export const store = (set: any): SignupState => ({
+export const store: ImmerDevtoolsStateCreator<SignupState> = (set) => ({
   isSendToVerifyEmail: false,
   isVerifiedEmail: false,
   timer: VERIFY_EMAIL_EXP,
@@ -115,8 +115,9 @@ export const store = (set: any): SignupState => ({
   }
 });
 
-const useSignupStore = create<SignupState>()(
-  immer(process.env.NODE_ENV !== "production" ? devtools(store) : store)
-);
+const useSignupStore =
+  process.env.NODE_ENV !== "production"
+    ? create<SignupState>()(immer(devtools(store)))
+    : create<SignupState>()(immer(store));
 
 export default useSignupStore;

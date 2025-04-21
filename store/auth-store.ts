@@ -1,5 +1,5 @@
 import { AuthData } from "@/types/auth-types";
-import { create } from "zustand";
+import { create, ImmerDevtoolsStateCreator} from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
@@ -13,38 +13,44 @@ interface AuthState {
   };
 }
 
-const isClient = typeof window !== "undefined";
 
-export const store = (set: any): AuthState => ({
+export const store: ImmerDevtoolsStateCreator<AuthState> = (set) => ({
   user: null,
   isLoading: true,
   actions: {
     setAuth: (user: AuthData) => {
-      set((state: AuthState) => {
-        state.user = user;
-      }, false, "user/setAuth");
-      if (isClient) {
-        localStorage.setItem("uid", JSON.stringify(user.uid));
-      }
+      set(
+        (state) => {
+          state.user = user;
+        },
+        false,
+        "auth/setAuth"
+      );
     },
     resetAuth: () => {
-      set((state: AuthState) => {
-        state.user = null;
-      }, false, "user/resetAuth");
-      if (isClient) {
-        localStorage.removeItem("uid");
-      }
+      set(
+        (state: AuthState) => {
+          state.user = null;
+        },
+        false,
+        "auth/resetAuth"
+      );
     },
     setIsLoading: (isLoading: boolean) => {
-      set((state: AuthState) => {
-        state.isLoading = isLoading;
-      }, false, "user/setIsLoading");
-    },
-  },
+      set(
+        (state: AuthState) => {
+          state.isLoading = isLoading;
+        },
+        false,
+        "auth/setIsLoading"
+      );
+    }
+  }
 });
 
-const useAuthStore = create<AuthState>()(
-  immer(process.env.NODE_ENV !== "production" ? devtools(store) : store)
-);
+const useAuthStore =
+  process.env.NODE_ENV !== "production"
+    ? create<AuthState>()(devtools(immer(store)))
+    : create<AuthState>()(immer(store));
 
 export default useAuthStore;
