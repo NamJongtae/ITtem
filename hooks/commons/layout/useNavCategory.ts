@@ -26,12 +26,12 @@ export default function useNavCategory() {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         categoryRef.current &&
-        !categoryRef.current.contains(event.target) &&
+        !categoryRef.current.contains(event.target as Node) &&
         buttonRef.current &&
-        !buttonRef.current.contains(event.target)
+        !buttonRef.current.contains(event.target as Node)
       ) {
         closeCategory();
       }
