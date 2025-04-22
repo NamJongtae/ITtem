@@ -65,6 +65,7 @@ export default function useProfileProductListInfiniteQuery({
       (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
       !!uid,
     retry: 0,
+    staleTime: 60 * 1000,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
