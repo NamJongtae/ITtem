@@ -13,36 +13,36 @@ import {
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function MyProfileContainer() {
-  async function prefetchProfile() {
-    const { getIronSession } = await import("iron-session");
-    const session = await getIronSession<IronSessionData>(
-      cookies(),
-      sessionOptions
-    );
-    const allCookies = headers().get("cookie");
+async function prefetchProfile() {
+  const { getIronSession } = await import("iron-session");
+  const session = await getIronSession<IronSessionData>(
+    cookies(),
+    sessionOptions
+  );
+  const allCookies = headers().get("cookie");
 
-    if (session.refreshToken) {
-      try {
-        const response = await customAxios("/api/profile", {
-          headers: {
-            Cookie: allCookies
-          }
-        });
-        return response.data.profile as ProfileData;
-      } catch (error) {
-        if (error instanceof Error) {
-          if (error.message === "Expired AccessToken.") {
-            const { cookies } = await import("next/headers");
-            const cookie = cookies();
-            const currentURL = cookie.get("X-Requested-URL")?.value || "/";
-            redirect(`${BASE_URL}/refresh-token?next=${currentURL}`);
-          }
+  if (session.refreshToken) {
+    try {
+      const response = await customAxios("/api/profile", {
+        headers: {
+          Cookie: allCookies
+        }
+      });
+      return response.data.profile as ProfileData;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Expired AccessToken.") {
+          const { cookies } = await import("next/headers");
+          const cookie = cookies();
+          const currentURL = cookie.get("X-Requested-URL")?.value || "/";
+          redirect(`${BASE_URL}/refresh-token?next=${currentURL}`);
         }
       }
     }
   }
+}
 
+export default async function MyProfileContainer() {
   const queryClient = new QueryClient();
 
   await queryClient.fetchQuery({
