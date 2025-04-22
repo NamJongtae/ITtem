@@ -1,17 +1,11 @@
-import ProductPage from "@/components/product/product-page";
+import Spinner from "@/components/commons/spinner";
+import Header from "@/components/product/product-header";
 import { BASE_URL } from "@/constants/constant";
-import { queryKeys } from "@/query-keys/query-keys";
-import { ProductCategory, ProductData } from "@/types/product-types";
-import {
-  HydrationBoundary,
-  QueryClient,
-  QueryFunction,
-  dehydrate,
-  QueryKey,
-} from "@tanstack/react-query";
+import { Suspense } from "react";
+import ProductContainer from '@/components/product/product-container';
 
 export async function generateMetadata({
-  searchParams,
+  searchParams
 }: {
   searchParams: { category: string | undefined };
 }) {
@@ -24,44 +18,30 @@ export async function generateMetadata({
     title,
     openGraph: {
       url,
-      title,
-    },
+      title
+    }
   };
 }
 
-async function prefetchProductList({
-  category = ProductCategory.전체,
-  queryClient,
-}: {
-  category: ProductCategory;
-  queryClient: QueryClient;
-}) {
-  const queryKeyConfig = queryKeys.product.category({
-    category: category || ProductCategory.전체,
-  });
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], QueryKey, null>,
-    initialPageParam: null,
-  });
-}
-
 export default async function Product({
-  searchParams,
+  searchParams
 }: {
   searchParams: { category: string | undefined };
 }) {
-  const queryClient = new QueryClient();
-  const category = searchParams.category || null;
-
-  await prefetchProductList({
-    category: category as ProductCategory,
-    queryClient,
-  });
+  const category = searchParams.category || "";
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductPage />
-    </HydrationBoundary>
+    <>
+      <Header />
+      <Suspense
+        fallback={
+          <div className="flex max-w-[1024px] mx-auto pt-52 justify-center items-center">
+            <Spinner />
+          </div>
+        }
+      >
+        <ProductContainer category={category} />
+      </Suspense>
+    </>
   );
 }
