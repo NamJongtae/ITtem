@@ -27,7 +27,12 @@ export async function POST() {
       ACCESS_TOKEN_KEY as string
     );
 
-    if (decodeAccessToken?.isValid) {
+    const redisAccessToken = await getToken(
+      decodeAccessToken?.data?.user.uid || "",
+      "accessToken"
+    );
+
+    if (decodeAccessToken?.isValid && accessToken === redisAccessToken) {
       return NextResponse.json(
         { message: "유효한 토큰입니다.", accessToken },
         { status: 200 }
@@ -45,7 +50,7 @@ export async function POST() {
       decodeRefreshToken?.data?.user.uid || "",
       "refreshToken"
     );
-    
+
     if (
       !redisRefreshToken ||
       redisRefreshToken !== refreshToken ||
