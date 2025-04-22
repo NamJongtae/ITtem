@@ -1,20 +1,8 @@
 import SearchPage from "@/components/search/search-page";
 import { BASE_URL } from "@/constants/constant";
-import { queryKeys } from "@/query-keys/query-keys";
-import { ProductCategory, ProductData } from "@/types/product-types";
-import {
-  HydrationBoundary,
-  QueryClient,
-  QueryFunction,
-  dehydrate,
-  QueryKey,
-} from "@tanstack/react-query";
 
-interface IProps {
-  searchParams: { category: string | undefined; keyword: string | undefined };
-}
 export async function generateMetadata({
-  searchParams,
+  searchParams
 }: {
   searchParams: { category: string | undefined; keyword: string | undefined };
 }) {
@@ -30,48 +18,11 @@ export async function generateMetadata({
     title,
     openGraph: {
       url,
-      title,
-    },
+      title
+    }
   };
 }
 
-async function prefetchProductListData({
-  category,
-  keyword,
-  queryClient,
-}: {
-  category?: ProductCategory;
-  keyword?: string;
-  queryClient: QueryClient;
-}) {
-  const queryKeyConfig = queryKeys.product.search({
-    category,
-    keyword,
-  });
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<
-      ProductData[],
-      QueryKey,
-      unknown
-    >,
-    initialPageParam: null,
-  });
-}
-
-export default async function Search({ searchParams }: IProps) {
-  const queryClient = new QueryClient();
-  const { category, keyword } = searchParams;
-
-  await prefetchProductListData({
-    category: category as ProductCategory,
-    keyword: keyword,
-    queryClient,
-  });
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <SearchPage />
-    </HydrationBoundary>
-  );
+export default function Search() {
+  return <SearchPage />;
 }
