@@ -45,7 +45,7 @@ export async function getCategoryProductList({
   limit = 10,
   location,
 }: {
-  category: ProductCategory;
+  category?: ProductCategory;
   cursor?: unknown;
   limit?: number;
   location?: string;
@@ -54,7 +54,7 @@ export async function getCategoryProductList({
     const response = await customAxios(
       `/api/product?category=${category}${
         cursor ? `&cursor=${cursor}` : ""
-      }&limit=${limit}${location && `&location=${location}`}`
+      }&limit=${limit}${location ? `&location=${location}` : ""}`
     );
     return response;
   } catch (error) {
