@@ -3,7 +3,7 @@ import Image from "next/image";
 interface IProps {
   listCount?: number;
 }
-export default function ProfileDetailSkeletonUI({
+export default function ProfileDetailReviewSkeletonUI({
   listCount = 10,
 }: IProps) {
   return Array(listCount)

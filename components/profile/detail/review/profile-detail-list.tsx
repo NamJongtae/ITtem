@@ -3,7 +3,7 @@ import Empty from "@/components/commons/empty";
 import { isAxiosError } from "axios";
 import InfiniteScroll from "react-infinite-scroller";
 import ProfileDetailItem from "./profile-detail-item";
-import ProfileDetailSkeletonUI from "./profile-detail-skeletonUI";
+import ProfileDetailSkeletonUI from "./profile-detail-review-skeletonUI";
 
 interface IProps {
   uid: string | undefined;
