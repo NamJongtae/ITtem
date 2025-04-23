@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { useModalMobileBackBtn } from "./useModalMobileBackBtn";
 
-export default function useModal() {
+export default function useModal({
+  isImageModal
+}: { isImageModal?: boolean } = {}) {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const openModal = useCallback(() => {
@@ -13,14 +15,14 @@ export default function useModal() {
     setIsOpenModal(false);
   }, []);
 
-  useModalMobileBackBtn({ closeModal, isOpenModal });
+  useModalMobileBackBtn({ closeModal, isOpenModal, isImageModal });
 
   const handleClickCloseBtn = useCallback(() => {
-    if (isMobile) {
+    if (isMobile || isImageModal) {
       history.back();
     }
     setIsOpenModal(false);
-  }, []);
+  }, [isImageModal]);
 
   useEffect(() => {
     if (isOpenModal) {

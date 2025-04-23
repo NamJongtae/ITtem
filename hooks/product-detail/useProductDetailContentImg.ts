@@ -6,10 +6,11 @@ interface IParams {
 }
 
 export default function useProductDetailContentImg({
-  productDetailData,
+  productDetailData
 }: IParams) {
-  const { isOpenModal, openModal, closeModal, handleClickCloseBtn } =
-    useModal();
+  const { isOpenModal, openModal, closeModal, handleClickCloseBtn } = useModal({
+    isImageModal: true
+  });
   const imgBeforeStyle = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-3xl before:font-semibold before:flex before:justify-center before:items-center ${
     productDetailData?.status === ProductStatus.soldout
       ? "before:content-['판매완료']"
@@ -21,6 +22,6 @@ export default function useProductDetailContentImg({
     isOpenModal,
     openModal,
     closeModal,
-    handleClickCloseBtn,
+    handleClickCloseBtn
   };
 }
