@@ -3,3 +3,4 @@ node_modules
 postcss.config.js
 next-env.d.ts
 tailwind.config.ts
+next-sitemap.config.js
