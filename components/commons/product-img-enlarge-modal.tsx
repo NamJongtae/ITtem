@@ -18,7 +18,7 @@ export default function ProductImgEnlargeModal({
 }: IProps) {
   return (
     <Portal>
-      <div className="absolute bg-black  rounded-sm w-full h-full inset-0 z-50">
+      <div className="fixed bg-black  rounded-sm w-full h-full inset-0 z-50">
         <Swiper
           className="absolute top-1/2 -translate-y-1/2 w-full h-full max-w-7xl max-h-[400px] sm:max-h-[500px] md:max-h-[600px]"
           lazyPreloadPrevNext={1}
