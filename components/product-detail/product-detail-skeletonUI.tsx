@@ -6,7 +6,7 @@ interface IProps {
   userUid: string | undefined;
 }
 
-export default function ProductDetailSkeletionUI({ userUid }: IProps) {
+export default function ProductDetailSkeletonUI({ userUid }: IProps) {
   const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
 

@@ -2,7 +2,7 @@ import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
 import ProductDetailContainer from "@/components/product-detail/product-detail-container";
 import { getProduct } from "@/lib/api/product";
-import ProductDetailSkeletionUI from "@/components/product-detail/product-detail-skeletionUI";
+import ProductDetailSkeletonUI from '@/components/product-detail/product-detail-skeletonUI';
 
 export async function generateMetadata({
   params
@@ -40,7 +40,7 @@ export default async function ProductDetail({
   return (
     <>
       <Suspense
-        fallback={<ProductDetailSkeletionUI userUid={params.productId} />}
+        fallback={<ProductDetailSkeletonUI userUid={params.productId} />}
       >
         <ProductDetailContainer params={params} />
       </Suspense>
