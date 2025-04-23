@@ -28,7 +28,7 @@
 
 - [💡 프레임워크 및 라이브러리 사용 이유](#-프레임워크-및-라이브러리-사용-이유)
 
-- [🔨 리팩터링](#-리팩터링)
+- [🔨 리팩토링](#-리팩토링)
 
   - [🗜 bundle 사이즈 최적화](#-bundle-사이즈-최적화)
   - [🏭 query-key-factory 적용](#-query-key-factory-적용)
@@ -41,6 +41,7 @@
   - [🚹 유저 정보 관리 로직 수정](#-유저-정보-관리-로직-수정)
   - [🔑 QueryKey 관리 개선](#-querykey-관리-개선)
   - [✨ Any 타입을 명확한 타입으로 전환](#-any-타입을-명확한-타입으로-전환)
+  - [🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선](#-비동기-처리-컴포넌트-분리-및-suspense-fallback-ui-개선)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -98,7 +99,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 
 ### ⛓ 아키텍처
 
-![architecture](https://github.com/NamJongtae/ITtem/assets/113427991/2aac45da-4f19-40f4-a98f-466d6af1095e)
+![architecture](https://github.com/user-attachments/assets/72eb0d09-31de-416b-b931-42d743c5e684)
 
 ### 📜 API Router 명세
 
@@ -243,7 +244,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 
 <br>
 
-### 🔨 리팩터링
+### 🔨 리팩토링
 
 #### 🗜 bundle 사이즈 최적화
 
@@ -1888,6 +1889,95 @@ const useAuthStore =
 </details>
 
 <br/>
+
+###  🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선
+> **적용이유**
+
+- 현재 일부 페이지에서는 비동기 데이터를 최상위에서 처리하고 있어, 데이터가 로딩되기 전까지 전체 페이지가 로딩 상태로 표시됩니다.
+- 이를 개선하기 위해 비동기 데이터가 필요한 컴포넌트만 별도로 분리하고, 필요 없는 UI는 먼저 렌더링되도록 구성합니다.
+- 현재 일부 비동기 컴포넌트 로딩 시, 단순한 Loading 컴포넌트를 표시하고 있습니다. 이는 실제 콘텐츠의 형태를 예측하기 어렵습니다. 이를 Skeleton UI로 교체하여 로딩 중에도 레이아웃이 유지되고, 사용자가 콘텐츠를 더 빠르게 인식할 수 있습니다.
+
+> **적용 방법**
+
+- 비동기 컴포넌트를 분리합니다.
+- Suspense Fallback UI를 Skeleton UI로 교체합니다.
+  
+> **적용으로 얻은 이점**
+
+- SSR 페이지의 초기 렌더링 속도가 향상되었습니다.
+- UX가 향상되었습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br>
+
+#### ProductDetailContiner.tsx
+ProductDetailContainer 컴포넌트를 생성하여 비동기 처리를 분리하였습니다.
+
+```javascript
+//...
+export default async function ProductDetailContainer({
+  params
+}: {
+  params: { productId: string | undefined };
+}) {
+  const myProfileQueryKeyConfig = queryKeys.profile.my;
+  const queryClient = new QueryClient();
+  const productId = params?.productId;
+
+  if (productId) {
+    await incrementViewCount(productId);
+    await Promise.all([
+      fetchProductData({ productId, queryClient }),
+      queryClient.fetchQuery({
+        queryKey: myProfileQueryKeyConfig.queryKey,
+        queryFn: fetchProfileData
+      })
+    ]);
+  }
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProductDetailPage />
+    </HydrationBoundary>
+  );
+}
+//...
+```
+#### Prouct Detail page
+ProductDetailSkeletonUI 컴포넌트를 생성하고, ProductDetailContainer 비동기 컴포넌트 Suspense Fallback에 SkeletonUI 적용하였습니다.
+```javascript
+//...
+export default async function ProductDetail({
+  params
+}: {
+  params: { productId: string | undefined };
+}) {
+  return (
+    <>
+      <Suspense
+        fallback={<ProductDetailSkeletonUI userUid={params.productId} />}
+      >
+        <ProductDetailContainer params={params} />
+      </Suspense>
+    </>
+  );
+}
+```
+
+</details>
+
+> **적용 전 후 UI 비교**
+#### 적용 전
+![skeletonUI-before](https://github.com/user-attachments/assets/76b51059-3d05-4383-953b-b9215e339260)
+
+#### 적용 후
+![skeletonUI-after](https://github.com/user-attachments/assets/3542c5ef-0fb2-4ffb-87c8-9a9a5187f4d3)
+
+<br/>
+
 
 ### 🔫 트러블 슈팅
 
