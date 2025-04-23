@@ -55,6 +55,7 @@
   - [❌ 배포 후 Hydrate 불일치 문제](#-배포-후-hydrate-불일치-문제)
   - [🍪 SSR to Client cookie 전달 문제](#-ssr-to-client-cookie-전달-문제)
   - [🧨 CustomAxios acceessToken 재발급 중복 요청 문제](#-customaxios-accesstoken-재발급-중복-요청-문제) 
+  - [🔴 Layout 컴포넌트 Invalid hook call 에러](#-layout-컴포넌트-invalid-hook-call-에러)
 
 - [👀 구현 기능 미리보기](#-구현-기능-미리보기--제목-클릭-시-해당-기능-상세설명으로-이동됩니다-)
 
@@ -2675,17 +2676,173 @@ export default function RefreshToken() {
 
 > 문제 상황
 
-- SSR 페이지에서 토큰 만료 에러가 발생하면, cookie에 저장된 refreshToken를 통해 accessToken를 재발급 받은 cookie가 client로 전달되지 않는 문제가 발생하였습니다.
-- 이로 인해 Client에서 인증이 필요한 API 요청시 토큰 재발급 로직을 중복 요청한다는 문제가 있었습니다.
+- 일부 페이지에서 accessToken이 만료된 경우 accessToken 재발급 요청이 중복으로 발생하는 문제가 있었습니다.
 
 
 > 문제 원인
 
-- App Router에서는 SSR 페이지의 쿠키를 클라이언트로 전송할 수 없기 때문에 SSR 측에서 새로운 accessToken를 갱신하여도 클라이언트에는 갱신된 accessToken이 포함된 cookie가 전달되지 않습니다. 
+- 일부 페이지에서 인증이 필요한 API 요청이 여러 개 동시에 올 수 있어 accessToken이 만료된 경우 accessToken 재발급 요청이 중복으로 발생하는 문제였습니다.
 
 > 해결 방법
 
-- SSR에서 **context.req.cookies** 를 통해 클라이언트의 쿠키를 직접 서버 사이드로 전달하여 문제를 해결하였습니다.
+- Observer Pattern을 사용하여 accessToken 재발급 요청이 있다면 현재 요청을 실행하지않고 요청을 구독해 두었다가 accessToken이 재발급된 이후 구독한 요청들을 실행하도록 하여 중복 요청을 방지하였습니다.
+
+> 해결 코드
+
+<details>
+<summary>코드 보기</summary>
+
+#### Observable.tsx
+```javascript
+type Callback = () => void;
+class Observable {
+  private observers: Observer[] = [];
+
+  setObserver(callback: Callback) {
+    const observer = new Observer(callback);
+    this.observers.push(observer);
+
+    return observer;
+  }
+
+  notifyAll() {
+    this.observers.forEach((observer) => {
+      observer.callback();
+    });
+  }
+
+  removeAll() {
+    this.observers = [];
+  }
+}
+
+class Observer {
+  callback: Callback;
+
+  constructor(callback: Callback) {
+    this.callback = callback;
+  }
+}
+
+const tokenObservable = new Observable();
+export default tokenObservable;
+
+```
+
+#### customAxios.ts
+```javascript
+import axios, {
+  AxiosError,
+  InternalAxiosRequestConfig,
+  isAxiosError
+} from "axios";
+import { RegenerateAccessTokenResponseData } from "@/types/api-types";
+import tokenObservable from "./Observable";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
+
+const customAxios = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true
+});
+
+// accessToken 재발급 요청 확인 flag
+let isRefreshing = false;
+
+customAxios.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    if (typeof window === "undefined") {
+      throw new Error("Expired AccessToken.");
+    }
+
+    if (
+      isAxiosError<RegenerateAccessTokenResponseData>(error) &&
+      error.response?.status === 401 &&
+      error.response?.data.message === "만료된 토큰이에요." &&
+      originalRequest &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+
+      if (!isRefreshing) {
+        isRefreshing = true;
+
+        try {
+          const cookies = originalRequest.headers["Cookie"];
+
+          const response = await axios.post(
+            `${BASE_URL}/api/auth/refresh-token`,
+            {
+              headers: {
+                Cookie: cookies
+              },
+              withCredentials: true
+            }
+          );
+
+          const setCookies = response.headers["set-cookie"];
+          if (setCookies) {
+            originalRequest.headers["Cookie"] = setCookies.join("; ");
+          }
+
+          // 리프레시 성공 → 대기중인 요청들 실행
+          tokenObservable.notifyAll();
+          return customAxios(originalRequest);
+        } catch (refreshError) {
+          tokenObservable.removeAll(); // 에러 시 구독 제거
+          if (
+            isAxiosError<RegenerateAccessTokenResponseData>(refreshError) &&
+            refreshError.response?.status === 401
+          ) {
+            if (typeof window !== "undefined") {
+              window.location.replace("/session-expired");
+            }
+          }
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
+        }
+      }
+
+      // accessToken 재발급 중이면 받은 요청 구독
+      return new Promise((resolve) => {
+        tokenObservable.setObserver(() => {
+          resolve(customAxios(originalRequest));
+        });
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default customAxios;
+```
+
+</details>
+
+<br>
+
+#### 🔴 Layout 컴포넌트 Invalid hook call 에러
+> 문제 상황
+
+- layout.tsx에서 'Invalid hook call' 오류가 발생하였습니다.
+
+
+> 문제 원인
+
+- layout.tsx가 async 함수로 선언되어 SSR 처리로 서버에서 해당 훅이 실행되면서 'Invalid hook call' 오류가 발생하였습니다.
+- ReactQueryProvider에서 설정을 위한 useState(() => new QueryClient()) 사용하여 서버에서 해당 훅이 실행되면서 'Invalid hook call' 오류가 발생하였습니다.
+
+> 해결 방법
+
+- layout.tsx가 SSR 처리되지 않도록 async를 제거하여 동기 함수로 변경하여 해결하였습니다.
 
 > 해결 코드
 
@@ -2693,7 +2850,18 @@ export default function RefreshToken() {
 <summary>코드 보기</summary>
 
 ```javascript
-
+//...
+export default function RootLayout({
+  children,
+  signin
+}: Readonly<{
+  children: React.ReactNode;
+  signin: React.ReactNode;
+}>) {
+  return (
+  //...
+  );
+}
 ```
 
 </details>
