@@ -23,19 +23,19 @@ export async function GET() {
   const staicUrls = [
     {
       loc: "https://ittem.vercel.app",
-      lastmode: new Date().toISOString()
+      lastmod: new Date().toISOString()
     },
     {
       loc: "https://ittem.vercel.app/signin",
-      lastmode: new Date().toISOString()
+      lastmod: new Date().toISOString()
     },
     {
       loc: "https://ittem.vercel.app/signup",
-      lastmode: new Date().toISOString()
+      lastmod: new Date().toISOString()
     },
     {
       loc: "https://ittem.vercel.app/findpassword",
-      lastmode: new Date().toISOString()
+      lastmod: new Date().toISOString()
     },
     {
       loc: "https://ittem.vercel.app/product",
