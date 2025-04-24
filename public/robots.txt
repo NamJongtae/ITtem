@@ -1,0 +1,17 @@
+# *
+User-agent: *
+Disallow: /product/edit
+Disallow: /product/manage
+Disallow: /product/upload
+Disallow: /chat
+Disallow: /profile
+Disallow: /signin/kakao
+Disallow: /signin/google
+Disallow: /refresh-token
+Disallow: /session-expired
+
+# Host
+Host: https://ittem.vercel.app
+
+# Sitemaps
+Sitemap: https://ittem.vercel.app/sitemap.xml
