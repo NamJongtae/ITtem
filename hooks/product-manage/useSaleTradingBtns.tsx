@@ -16,7 +16,8 @@ import {
   SalesReturnProcess,
   TradingStatus,
 } from "@/types/product-types";
-import React from "react";
+import { JSX } from 'react';
+
 
 type ButtonComponent = ({
   productId,
