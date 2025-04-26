@@ -7,9 +7,19 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
-      use: ["@svgr/webpack"],
+      use: ["@svgr/webpack"]
     });
     return config;
+  },
+  experimental: {
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js"
+        }
+      }
+    },
   },
   images: {
     dangerouslyAllowSVG: true,
@@ -18,25 +28,25 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "images.unsplash.com"
       },
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
+        hostname: "lh3.googleusercontent.com"
       },
       {
         protocol: "http",
-        hostname: "k.kakaocdn.net",
+        hostname: "k.kakaocdn.net"
       },
       {
         protocol: "https",
-        hostname: "firebasestorage.googleapis.com",
-      },
-    ],
-  },
+        hostname: "firebasestorage.googleapis.com"
+      }
+    ]
+  }
 };
 const withBundleAnalyzerConfig = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
+  enabled: process.env.ANALYZE === "true"
 })(nextConfig);
 
 export default withBundleAnalyzerConfig;
