@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import 'react-toastify/dist/ReactToastify.min.css';
+import '@/styles/toast.css';
+import '@/styles/swiper-styles.css';
 import "@/styles/globals.css";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
