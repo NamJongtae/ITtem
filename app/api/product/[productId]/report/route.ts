@@ -7,7 +7,11 @@ import { ProductStatus } from "@/types/product-types";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string | undefined }>;
+  }
 ) {
   try {
     const isValidAuth = await checkAuthorization();
@@ -15,13 +19,13 @@ export async function PATCH(
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
     }
 
-    const { productId } = params;
+    const { productId } = await params;
 
     const myUid = isValidAuth?.auth?.uid;
 
@@ -42,7 +46,7 @@ export async function PATCH(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -79,8 +83,8 @@ export async function PATCH(
         $inc: { reportCount: 1 },
         $push: { reportUserIds: myUid },
         $set: {
-          block: product.reportCount >= 4,
-        },
+          block: product.reportCount >= 4
+        }
       },
       { new: true }
     );
@@ -88,7 +92,7 @@ export async function PATCH(
     if (!updatedProduct) {
       return NextResponse.json(
         {
-          message: "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          message: "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요."
         },
         { status: 500 }
       );
@@ -98,7 +102,7 @@ export async function PATCH(
       {
         message: updatedProduct.block
           ? "상품 신고가 누적되어 블라인드 처리되었어요."
-          : "해당 상품을 신고했어요.",
+          : "해당 상품을 신고했어요."
       },
       { status: 200 }
     );
@@ -106,7 +110,7 @@ export async function PATCH(
     console.error(error);
     return NextResponse.json(
       {
-        message: "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

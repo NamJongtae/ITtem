@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const dbUserData = await User.findOne({ email: googleUserData.email });
 
     const session = await getIronSession<IronSessionType>(
-      cookies(),
+      await cookies(),
       sessionOptions
     );
 

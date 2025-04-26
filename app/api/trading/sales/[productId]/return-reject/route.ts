@@ -13,14 +13,14 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -40,7 +40,7 @@ export const PATCH = async (
 
     const user = await User.findOne(
       {
-        _id: new mongoose.Types.ObjectId(myUid as string),
+        _id: new mongoose.Types.ObjectId(myUid as string)
       },
       null,
       { session }
@@ -48,7 +48,7 @@ export const PATCH = async (
 
     await dbConnect();
 
-    const { productId } = params;
+    const { productId } = await params;
     const { rejectReason } = await req.json();
 
     if (!productId) {
@@ -79,7 +79,7 @@ export const PATCH = async (
     }
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -97,9 +97,9 @@ export const PATCH = async (
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -154,9 +154,9 @@ export const PATCH = async (
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -179,7 +179,7 @@ export const PATCH = async (
       session.endSession();
       return NextResponse.json(
         {
-          message: "상품 확인 후 반품 거절이 가능해요.",
+          message: "상품 확인 후 반품 거절이 가능해요."
         },
         { status: 409 }
       );
@@ -187,7 +187,7 @@ export const PATCH = async (
 
     const productUpdateResult = await Product.updateOne(
       {
-        _id: new mongoose.Types.ObjectId(productId as string),
+        _id: new mongoose.Types.ObjectId(productId as string)
       },
       { status: ProductStatus.sold },
       { session }
@@ -206,9 +206,9 @@ export const PATCH = async (
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       {
         status:
@@ -219,7 +219,7 @@ export const PATCH = async (
           saleTrading.process === SalesReturnProcess.반품요청확인
             ? SaleTradingProcess.거래완료
             : SaleTradingProcess.상품전달확인,
-        $unset: { returnStartDate: "", returnReason: "" },
+        $unset: { returnStartDate: "", returnReason: "" }
       },
       { session }
     );
@@ -237,9 +237,9 @@ export const PATCH = async (
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
           { process: { $ne: PurchaseReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       {
         status:
@@ -250,7 +250,7 @@ export const PATCH = async (
           purchaseTrading.process === PurchaseReturnProcess.판매자확인중
             ? PurchaseTradingProcess.거래완료
             : PurchaseTradingProcess.판매자반품거절상품전달중,
-        $unset: { returnStartDate: "", returnReason: "" },
+        $unset: { returnStartDate: "", returnReason: "" }
       },
       { session }
     );
@@ -275,7 +275,7 @@ export const PATCH = async (
       returnRejectDate: currentDate,
       returnRejectReason: rejectReason,
       status: TradingStatus.RETURN_REJECT,
-      process: SalesReturnProcess.반품거절,
+      process: SalesReturnProcess.반품거절
     });
 
     const returnRejectPurchaseTrading = new PurchaseTrading({
@@ -290,7 +290,7 @@ export const PATCH = async (
       returnRejectDate: currentDate,
       returnRejectReason: rejectReason,
       status: TradingStatus.RETURN_REJECT,
-      process: PurchaseReturnProcess.반품거절,
+      process: PurchaseReturnProcess.반품거절
     });
 
     await returnRejectSaleTrading.save({ session });
@@ -311,7 +311,7 @@ export const PATCH = async (
     session.endSession();
     return NextResponse.json(
       {
-        message: "반품 요청 거절에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "반품 요청 거절에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

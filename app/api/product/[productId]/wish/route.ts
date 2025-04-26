@@ -7,7 +7,7 @@ import { checkAuthorization } from "@/lib/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -22,7 +22,7 @@ export async function PATCH(
       );
     }
 
-    const { productId } = params;
+    const { productId } = await params;
 
     const myUid = isValidAuth?.auth?.uid;
 
@@ -43,11 +43,11 @@ export async function PATCH(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     }).session(session);
 
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     }).session(session);
 
     if (!product) {
@@ -78,12 +78,12 @@ export async function PATCH(
     if (!user.wishProductIds.includes(product._id)) {
       const profileResult = await User.updateOne(
         {
-          _id: new mongoose.Types.ObjectId(myUid),
+          _id: new mongoose.Types.ObjectId(myUid)
         },
         {
           $push: {
-            wishProductIds: new mongoose.Types.ObjectId(product._id as string),
-          },
+            wishProductIds: new mongoose.Types.ObjectId(product._id as string)
+          }
         },
         { session }
       );
@@ -97,11 +97,11 @@ export async function PATCH(
     if (!product.wishUserIds.includes(myUid)) {
       const productResult = await Product.updateOne(
         {
-          _id: new mongoose.Types.ObjectId(product._id as string),
+          _id: new mongoose.Types.ObjectId(product._id as string)
         },
         {
           $push: { wishUserIds: myUid },
-          $inc: { wishCount: 1 },
+          $inc: { wishCount: 1 }
         },
         { session }
       );
@@ -128,7 +128,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   try {
     const isValidAuth = await checkAuthorization();
@@ -136,13 +136,13 @@ export async function DELETE(
     if (!isValidAuth?.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth?.message,
+          message: isValidAuth?.message
         },
         { status: 401 }
       );
     }
 
-    const { productId } = params;
+    const { productId } = await params;
 
     const myUid = isValidAuth?.auth?.uid;
 
@@ -156,11 +156,11 @@ export async function DELETE(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     });
 
     if (!user) {
@@ -190,7 +190,7 @@ export async function DELETE(
     if (user.wishProductIds.includes(product._id)) {
       const profileResult = await User.updateOne(
         {
-          _id: new mongoose.Types.ObjectId(myUid),
+          _id: new mongoose.Types.ObjectId(myUid)
         },
         { $pull: { wishProductIds: product._id } }
       );
@@ -204,7 +204,7 @@ export async function DELETE(
         { _id: new mongoose.Types.ObjectId(productId as string) },
         {
           $inc: { wishCount: -1 },
-          $pull: { wishUserIds: isValidAuth?.auth?.uid },
+          $pull: { wishUserIds: isValidAuth?.auth?.uid }
         }
       );
       if (!productResult.acknowledged || productResult.modifiedCount === 0) {
@@ -220,7 +220,7 @@ export async function DELETE(
     console.error(error);
     return NextResponse.json(
       {
-        message: "상품 찜 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 찜 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

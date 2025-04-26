@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-query";
 
 interface IProps {
-  category: string | null;
+  category: string | undefined;
 }
 
 async function prefetchProductList({

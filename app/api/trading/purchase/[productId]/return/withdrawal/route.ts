@@ -13,12 +13,12 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -45,7 +45,7 @@ export async function PATCH(
 
     await dbConnect();
 
-    const { productId } = params;
+    const { productId } = await params;
 
     if (!productId) {
       await session.abortTransaction();
@@ -66,7 +66,7 @@ export async function PATCH(
     }
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId),
+      _id: new mongoose.Types.ObjectId(productId)
     });
 
     if (!product) {
@@ -84,9 +84,9 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -153,9 +153,9 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -176,9 +176,9 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       {
         status: purchaseTrading.purchaseEndDate
@@ -187,7 +187,7 @@ export async function PATCH(
         process: purchaseTrading.purchaseEndDate
           ? PurchaseTradingProcess.거래완료
           : PurchaseTradingProcess.상품인수확인,
-        $unset: { returnStartDate: "", returnReason: "" },
+        $unset: { returnStartDate: "", returnReason: "" }
       },
       { session }
     );
@@ -203,9 +203,9 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       {
         status: saleTrading.saleEndDate
@@ -214,7 +214,7 @@ export async function PATCH(
         process: saleTrading.saleEndDate
           ? SaleTradingProcess.거래완료
           : SaleTradingProcess.구매자상품인수중,
-        $unset: { returnStartDate: "", returnReason: "" },
+        $unset: { returnStartDate: "", returnReason: "" }
       },
       { session }
     );
@@ -244,7 +244,7 @@ export async function PATCH(
     session.endSession();
     return NextResponse.json(
       {
-        message: "상품 반품 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 반품 철회에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

@@ -5,10 +5,10 @@ import mongoose from "mongoose";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   try {
-    const { productId } = params;
+    const { productId } = await params;
 
     await dbConnect();
 
@@ -28,10 +28,10 @@ export async function PATCH(
 
     const product = await Product.findOneAndUpdate(
       {
-        _id: new mongoose.Types.ObjectId(productId as string),
+        _id: new mongoose.Types.ObjectId(productId as string)
       },
       {
-        $inc: { viewCount: 1 },
+        $inc: { viewCount: 1 }
       },
       { returnNewDocument: true }
     );

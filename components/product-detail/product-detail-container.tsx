@@ -4,7 +4,11 @@ import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
 import { queryKeys } from "@/query-keys/query-keys";
 import { IronSessionData } from "@/types/api-types";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient
+} from "@tanstack/react-query";
 import { getIronSession } from "iron-session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -27,10 +31,10 @@ async function fetchProductData({
 
 async function fetchProfileData() {
   const session = await getIronSession<IronSessionData>(
-    cookies(),
+    await cookies(),
     sessionOptions
   );
-  const sessionCookie = cookies().get("session");
+  const sessionCookie = (await cookies()).get("session");
   const cookieHeader = sessionCookie
     ? `${sessionCookie.name}=${sessionCookie.value}`
     : "";
@@ -46,7 +50,7 @@ async function fetchProfileData() {
       if (error instanceof Error) {
         if (error.message === "Expired AccessToken.") {
           const { cookies } = await import("next/headers");
-          const cookie = cookies();
+          const cookie = await cookies();
           const currentURL = cookie.get("X-Requested-URL")?.value || "/";
           redirect(`${BASE_URL}/refresh-token?next=${currentURL}`);
         }
@@ -56,13 +60,12 @@ async function fetchProfileData() {
 }
 
 export default async function ProductDetailContainer({
-  params
+  productId
 }: {
-  params: { productId: string | undefined };
+  productId: string | undefined;
 }) {
   const myProfileQueryKeyConfig = queryKeys.profile.my;
   const queryClient = new QueryClient();
-  const productId = params?.productId;
 
   if (productId) {
     await incrementViewCount(productId);

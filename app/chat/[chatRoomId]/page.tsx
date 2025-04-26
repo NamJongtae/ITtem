@@ -1,12 +1,13 @@
 import ChatRoomPage from "@/components/chat/room/chat-room-page";
-import { BASE_URL } from '@/constants/constant';
+import { BASE_URL } from "@/constants/constant";
 
 export async function generateMetadata({
-  params,
+  params
 }: {
-  params: { chatRoomId: string | undefined };
+  params: Promise<{ chatRoomId: string | undefined }>;
 }) {
-  const url = `${BASE_URL}/chat/${params.chatRoomId}`;
+  const { chatRoomId } = await params;
+  const url = `${BASE_URL}/chat/${chatRoomId}`;
   const title = "ITtem | 채팅";
 
   return {
@@ -14,8 +15,8 @@ export async function generateMetadata({
     title,
     openGraph: {
       url,
-      title,
-    },
+      title
+    }
   };
 }
 

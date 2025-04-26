@@ -2,11 +2,12 @@ import ProductUploadPage from "@/components/productUpload/product-upload-page";
 import { BASE_URL } from "@/constants/constant";
 
 export async function generateMetadata({
-  params,
+  params
 }: {
-  params: { productId: string | undefined };
+  params: Promise<{ productId: string | undefined }>;
 }) {
-  const url = `${BASE_URL}/product/${params.productId}/edit`;
+  const { productId } = await params;
+  const url = `${BASE_URL}/product/${productId}/edit`;
   const title = "ITtem | 상품수정";
 
   return {
@@ -14,8 +15,8 @@ export async function generateMetadata({
     title,
     openGraph: {
       url,
-      title,
-    },
+      title
+    }
   };
 }
 

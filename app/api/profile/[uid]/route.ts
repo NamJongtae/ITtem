@@ -5,10 +5,10 @@ import mongoose from "mongoose";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { uid: string | undefined } }
+  { params }: { params: Promise<{ uid: string | undefined }> }
 ) {
   try {
-    const { uid } = params;
+    const { uid } = await params;
 
     await dbConnect();
 
@@ -29,7 +29,7 @@ export async function GET(
     // 사용자 정보와 리뷰 점수 정보를 조인합니다.
     const aggregation = [
       {
-        $match: { _id: new mongoose.Types.ObjectId(uid) },
+        $match: { _id: new mongoose.Types.ObjectId(uid) }
       },
       {
         $lookup: {
@@ -37,8 +37,8 @@ export async function GET(
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$uid", uid] },
-              },
+                $expr: { $eq: ["$uid", uid] }
+              }
             },
             {
               $addFields: {
@@ -47,31 +47,31 @@ export async function GET(
                     {
                       $multiply: [
                         {
-                          $divide: ["$totalReviewScore", "$totalReviewCount"],
+                          $divide: ["$totalReviewScore", "$totalReviewCount"]
                         },
-                        20,
-                      ],
+                        20
+                      ]
                     },
-                    1,
-                  ],
-                },
-              },
+                    1
+                  ]
+                }
+              }
             },
             {
               $project: {
                 _id: 0,
-                uid: 0,
-              },
-            },
+                uid: 0
+              }
+            }
           ],
-          as: "reviewInfo",
-        },
+          as: "reviewInfo"
+        }
       },
       {
         $unwind: {
           path: "$reviewInfo",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $project: {
@@ -83,9 +83,9 @@ export async function GET(
           chatRoomList: 0,
           profileImgFilename: 0,
           wishProductIds: 0,
-          "reviewInfo.__v": 0,
-        },
-      },
+          "reviewInfo.__v": 0
+        }
+      }
     ];
 
     const userWithReviews = await User.aggregate(aggregation);
@@ -102,7 +102,7 @@ export async function GET(
 
     return NextResponse.json({
       message: "유저 프로필 조회에 성공했어요.",
-      profile,
+      profile
     });
   } catch (error) {
     console.error("유저 프로필 조회 에러:", error);

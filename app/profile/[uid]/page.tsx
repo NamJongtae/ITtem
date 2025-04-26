@@ -1,11 +1,11 @@
-import ProfileDetailSkeletonUI from '@/components/profile/detail/profile-detail-skeletonUI';
+import ProfileDetailSkeletonUI from "@/components/profile/detail/profile-detail-skeletonUI";
 import ProfileUserInfoSkeletonUI from "@/components/profile/user-info/profile-user-info-skeletonUI";
 import UserProfileContainer from "@/components/profile/user-profile-container";
 import { BASE_URL } from "@/constants/constant";
 import React, { Suspense } from "react";
 
 interface IProps {
-  params: { uid: string };
+  params: Promise<{ uid: string }>;
 }
 
 export async function generateMetadata() {
@@ -21,7 +21,9 @@ export async function generateMetadata() {
   };
 }
 
-export default function UserProfile({ params }: IProps) {
+export default async function UserProfile({ params }: IProps) {
+  const { uid } = await params;
+
   return (
     <>
       <Suspense
@@ -32,7 +34,7 @@ export default function UserProfile({ params }: IProps) {
           </>
         }
       >
-        <UserProfileContainer params={params} />
+        <UserProfileContainer uid={uid} />
       </Suspense>
     </>
   );

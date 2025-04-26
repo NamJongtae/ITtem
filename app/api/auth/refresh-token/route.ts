@@ -11,12 +11,10 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-
 export async function POST() {
   try {
     const session = await getIronSession<IronSessionType>(
-      cookies(),
+      await cookies(),
       sessionOptions
     );
 

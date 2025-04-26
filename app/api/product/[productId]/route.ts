@@ -7,7 +7,7 @@ import { checkAuthorization } from "@/lib/server";
 import {
   ProductImgData,
   ProductStatus,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import SaleTrading from "@/lib/db/models/SaleTrading";
 import { getStorageInstance } from "@/lib/firebaseSetting";
@@ -15,11 +15,14 @@ import { deleteObject, ref } from "firebase/storage";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string }>;
+  }
 ) {
   try {
-    const { productId } = params;
-
+    const { productId } = await params;
     if (!productId) {
       return NextResponse.json(
         { message: "상품 ID가 없어요." },
@@ -37,7 +40,7 @@ export async function GET(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -57,7 +60,7 @@ export async function GET(
     // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
     const aggregation = [
       {
-        $match: { _id: new mongoose.Types.ObjectId(product.uid as string) },
+        $match: { _id: new mongoose.Types.ObjectId(product.uid as string) }
       },
       {
         $lookup: {
@@ -65,28 +68,25 @@ export async function GET(
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$uid", product.uid as string] },
-              },
-            },
+                $expr: { $eq: ["$uid", product.uid as string] }
+              }
+            }
           ],
-          as: "reviewInfo",
-        },
+          as: "reviewInfo"
+        }
       },
       {
         $unwind: {
           path: "$reviewInfo",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $addFields: {
           reviewPercentage: {
             $cond: {
               if: {
-                $eq: [
-                  { $ifNull: ["$reviewInfo.totalReviewScore", null] },
-                  null,
-                ],
+                $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null]
               },
               then: 0,
               else: {
@@ -96,18 +96,18 @@ export async function GET(
                       {
                         $divide: [
                           "$reviewInfo.totalReviewScore",
-                          "$reviewInfo.totalReviewCount",
-                        ],
+                          "$reviewInfo.totalReviewCount"
+                        ]
                       },
-                      20,
-                    ],
+                      20
+                    ]
                   },
-                  1,
-                ],
-              },
-            },
-          },
-        },
+                  1
+                ]
+              }
+            }
+          }
+        }
       },
       {
         $addFields: {
@@ -118,17 +118,17 @@ export async function GET(
               cond: {
                 $ne: [
                   { $toObjectId: "$$id" },
-                  new mongoose.Types.ObjectId(productId as string),
-                ],
-              },
-            },
-          },
-        },
+                  new mongoose.Types.ObjectId(productId as string)
+                ]
+              }
+            }
+          }
+        }
       },
       {
         $addFields: {
-          lastTenProductIds: { $slice: ["$filteredProductIds", -9] },
-        },
+          lastTenProductIds: { $slice: ["$filteredProductIds", -9] }
+        }
       },
       {
         $addFields: {
@@ -136,18 +136,18 @@ export async function GET(
             $map: {
               input: "$lastTenProductIds",
               as: "id",
-              in: { $toObjectId: "$$id" },
-            },
-          },
-        },
+              in: { $toObjectId: "$$id" }
+            }
+          }
+        }
       },
       {
         $lookup: {
           from: "products",
           localField: "convertedProductIds",
           foreignField: "_id",
-          as: "recentProductsInfo",
-        },
+          as: "recentProductsInfo"
+        }
       },
       {
         $addFields: {
@@ -155,10 +155,10 @@ export async function GET(
             $filter: {
               input: "$recentProductsInfo",
               as: "product",
-              cond: { $ne: ["$$product.block", true] },
-            },
-          },
-        },
+              cond: { $ne: ["$$product.block", true] }
+            }
+          }
+        }
       },
       {
         $project: {
@@ -166,9 +166,9 @@ export async function GET(
           profileImg: 1,
           recentProducts: 1,
           followers: 1,
-          reviewPercentage: 1,
-        },
-      },
+          reviewPercentage: 1
+        }
+      }
     ];
 
     const userWithReviews = await User.aggregate(aggregation);
@@ -180,8 +180,8 @@ export async function GET(
         message: "상품 조회에 성공했어요.",
         product: {
           ...product._doc,
-          auth: { ...userWithReviews[0] },
-        },
+          auth: { ...userWithReviews[0] }
+        }
       },
       { status: 200 }
     );
@@ -196,7 +196,11 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string }>;
+  }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -210,7 +214,7 @@ export async function PATCH(
     }
 
     const myUid = isValidAuth?.auth?.uid;
-    const { productId } = params;
+    const { productId } = await params;
     const { productData } = await req.json();
 
     if (!productId) {
@@ -237,7 +241,7 @@ export async function PATCH(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -286,12 +290,12 @@ export async function PATCH(
       await SaleTrading.updateOne(
         {
           productId: new mongoose.Types.ObjectId(productId as string),
-          status: TradingStatus.TRADING,
+          status: TradingStatus.TRADING
         },
         {
           productName: result.name,
           productPrice: result.price,
-          productImg: result.imgData[0].url,
+          productImg: result.imgData[0].url
         },
         { session }
       );
@@ -316,7 +320,11 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string }>;
+  }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -331,7 +339,7 @@ export async function DELETE(
       );
     }
 
-    const { productId } = params;
+    const { productId } = await params;
 
     const myUid = isValidAuth?.auth?.uid;
 
@@ -353,7 +361,7 @@ export async function DELETE(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     }).session(session);
 
     if (!product) {
@@ -406,15 +414,15 @@ export async function DELETE(
       { _id: new mongoose.Types.ObjectId(myUid) },
       {
         $pull: {
-          productIds: new mongoose.Types.ObjectId(product._id as string),
-        },
+          productIds: new mongoose.Types.ObjectId(product._id as string)
+        }
       },
       { session }
     );
 
     const productResult = await Product.deleteOne(
       {
-        _id: new mongoose.Types.ObjectId(productId as string),
+        _id: new mongoose.Types.ObjectId(productId as string)
       },
       { session }
     );
@@ -431,7 +439,7 @@ export async function DELETE(
     const saleTradingDeleteResult = await SaleTrading.deleteOne(
       {
         productId: new mongoose.Types.ObjectId(productId as string),
-        status: TradingStatus.TRADING,
+        status: TradingStatus.TRADING
       },
       { session }
     );

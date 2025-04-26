@@ -12,14 +12,14 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -42,7 +42,7 @@ export async function PATCH(
       null,
       { session }
     );
-    const { productId } = params;
+    const { productId } = await params;
     const { cancelReason } = await req.json();
 
     if (!cancelReason || !cancelReason.trim()) {
@@ -75,7 +75,7 @@ export async function PATCH(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -89,9 +89,9 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -148,9 +148,9 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -194,16 +194,16 @@ export async function PATCH(
         {
           $and: [
             { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: PurchaseReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         {
           status: TradingStatus.CANCEL_END,
           process: PurchaseCancelProcess.취소완료,
           cancelStartDate: currentDate,
           cancelEndDate: currentDate,
-          cancelReason,
+          cancelReason
         },
         { session }
       );
@@ -219,9 +219,9 @@ export async function PATCH(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         {
           status: TradingStatus.CANCEL_END,
@@ -230,7 +230,7 @@ export async function PATCH(
           cancelEndDate: currentDate,
           productName: product.name,
           price: product.price,
-          cancelReason,
+          cancelReason
         },
         { session }
       );
@@ -248,7 +248,7 @@ export async function PATCH(
         saleStartDate: saleTrading.saleStartDate,
         productName: saleTrading.productName,
         productPrice: saleTrading.productPrice,
-        productImg: saleTrading.productImg,
+        productImg: saleTrading.productImg
       });
 
       await newSaleTrading.save({ session });
@@ -269,15 +269,15 @@ export async function PATCH(
         {
           $and: [
             { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: PurchaseReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         {
           status: TradingStatus.CANCEL,
           process: PurchaseCancelProcess.판매자확인중,
           cancelStartDate: currentDate,
-          cancelReason,
+          cancelReason
         },
         { session }
       );
@@ -293,15 +293,15 @@ export async function PATCH(
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         {
           status: TradingStatus.CANCEL,
           process: SalesCancelProcess.취소요청확인,
           cancelStartDate: currentDate,
-          cancelReason,
+          cancelReason
         },
         { session }
       );
@@ -332,7 +332,7 @@ export async function PATCH(
     session.endSession();
     return NextResponse.json(
       {
-        message: "상품 구매 취소에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 구매 취소에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

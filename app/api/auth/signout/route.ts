@@ -8,14 +8,12 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export const dynamic = "force-dynamic";
-
 export async function POST(req: NextRequest) {
   const { uid } = await req.json();
 
   try {
     const session = await getIronSession<IronSessionType>(
-      cookies(),
+      await cookies(),
       sessionOptions
     );
     const refreshToken = session.refreshToken;

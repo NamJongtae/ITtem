@@ -45,7 +45,7 @@ export const sessionOptions: SessionOptions = {
 export async function checkAuthorization() {
   const { getIronSession } = await import("iron-session");
   const session = await getIronSession<IronSessionType>(
-    cookies(),
+    await cookies(),
     sessionOptions
   );
 

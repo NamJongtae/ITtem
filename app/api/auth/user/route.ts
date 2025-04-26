@@ -4,8 +4,6 @@ import { checkAuthorization } from "@/lib/server";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export const dynamic = "force-dynamic";
-
 export async function GET() {
   try {
     const isValidAuth = await checkAuthorization();

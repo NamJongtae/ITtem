@@ -7,7 +7,7 @@ import {
   ProductStatus,
   SalesCancelProcess,
   SalesReturnProcess,
-  SaleTradingProcess,
+  SaleTradingProcess
 } from "@/types/product-types";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import SaleTrading from "@/lib/db/models/SaleTrading";
@@ -16,7 +16,11 @@ import User from "@/lib/db/models/User";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string | undefined }>;
+  }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -36,13 +40,13 @@ export async function POST(
 
     const user = await User.findOne(
       {
-        _id: new mongoose.Types.ObjectId(myUid as string),
+        _id: new mongoose.Types.ObjectId(myUid as string)
       },
       null,
       { session }
     );
 
-    const { productId } = params;
+    const { productId } = await params;
 
     if (!productId) {
       await session.abortTransaction();
@@ -63,7 +67,7 @@ export async function POST(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -95,10 +99,10 @@ export async function POST(
 
     const productUpdateResult = await Product.findOneAndUpdate(
       {
-        _id: new mongoose.Types.ObjectId(productId as string),
+        _id: new mongoose.Types.ObjectId(productId as string)
       },
       {
-        status: ProductStatus.trading,
+        status: ProductStatus.trading
       },
       { session }
     );
@@ -108,7 +112,7 @@ export async function POST(
       session.endSession();
       return NextResponse.json(
         {
-          message: "상품 구매에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          message: "상품 구매에 실패했어요.\n잠시 후 다시 시도해주세요."
         },
         { status: 500 }
       );
@@ -118,9 +122,9 @@ export async function POST(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -139,9 +143,9 @@ export async function POST(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
+          { process: { $ne: SalesReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       { buyerId: myUid, process: SaleTradingProcess.구매요청확인 },
       { session }
@@ -160,7 +164,7 @@ export async function POST(
       productId,
       productName: product.name,
       productPrice: product.price,
-      productImg: product.imgData[0].url,
+      productImg: product.imgData[0].url
     });
 
     await purchaseTrading.save({ session });
@@ -188,14 +192,14 @@ export async function POST(
       return NextResponse.json(
         {
           message: "유효하지 않은 값이 있어요.",
-          error: errorMessages,
+          error: errorMessages
         },
         { status: 422 }
       );
     }
     return NextResponse.json(
       {
-        message: "상품 구매에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 구매에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

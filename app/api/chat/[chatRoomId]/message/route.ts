@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { chatRoomId: string | undefined } }
+  { params }: { params: Promise<{ chatRoomId: string | undefined }> }
 ) {
   try {
-    const { chatRoomId } = params;
+    const { chatRoomId } = await params;
 
     if (!chatRoomId) {
       return new NextResponse(
@@ -40,7 +40,7 @@ export async function POST(
     await sendToChatMessage({
       myUid: myUid as string,
       message,
-      chatRoomId: chatRoomId as string,
+      chatRoomId: chatRoomId as string
     });
 
     return new NextResponse(
@@ -52,18 +52,18 @@ export async function POST(
     if (error instanceof Error) {
       if (error.message === "존재하지 않는 채팅방이에요.") {
         return new NextResponse(JSON.stringify({ message: error.message }), {
-          status: 404,
+          status: 404
         });
       }
       if (error.message === "잘못된 접근이에요.") {
         return new NextResponse(JSON.stringify({ message: error.message }), {
-          status: 403,
+          status: 403
         });
       }
     }
     return new NextResponse(
       JSON.stringify({
-        message: "메세지 전송에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "메세지 전송에 실패했어요.\n잠시 후 다시 시도해주세요."
       }),
       { status: 500 }
     );

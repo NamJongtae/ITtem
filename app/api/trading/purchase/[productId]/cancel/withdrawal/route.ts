@@ -12,14 +12,14 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -44,7 +44,7 @@ export async function PATCH(
       { session }
     );
 
-    const { productId } = params;
+    const { productId } = await params;
 
     if (!productId) {
       await session.abortTransaction();
@@ -67,7 +67,7 @@ export async function PATCH(
     await dbConnect();
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId),
+      _id: new mongoose.Types.ObjectId(productId)
     });
 
     if (!product) {
@@ -81,9 +81,9 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -140,9 +140,9 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -161,14 +161,14 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       {
         status: TradingStatus.TRADING,
         process: PurchaseTradingProcess.판매자상품전달중,
-        $unset: { cancelStartDate: "", cancelReason: "" },
+        $unset: { cancelStartDate: "", cancelReason: "" }
       },
       { session }
     );
@@ -186,14 +186,14 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       {
         status: TradingStatus.TRADING,
         process: SaleTradingProcess.상품전달확인,
-        $unset: { cancelStartDate: "", cancelReason: "" },
+        $unset: { cancelStartDate: "", cancelReason: "" }
       },
       { session }
     );
@@ -223,8 +223,7 @@ export async function PATCH(
     session.endSession();
     return NextResponse.json(
       {
-        message:
-          "상품 구매 취소 철회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 구매 취소 철회에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

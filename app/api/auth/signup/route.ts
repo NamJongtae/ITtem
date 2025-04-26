@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     await newUser.save();
 
     const session = await getIronSession<IronSessionType>(
-      cookies(),
+      await cookies(),
       sessionOptions
     );
 

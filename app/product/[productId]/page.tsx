@@ -2,19 +2,20 @@ import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
 import ProductDetailContainer from "@/components/product-detail/product-detail-container";
 import { getProduct } from "@/lib/api/product";
-import ProductDetailSkeletonUI from '@/components/product-detail/product-detail-skeletonUI';
+import ProductDetailSkeletonUI from "@/components/product-detail/product-detail-skeletonUI";
 
 export async function generateMetadata({
   params
 }: {
-  params: { productId: string | undefined };
+  params: Promise<{ productId: string | undefined }>;
 }) {
-  const url = `${BASE_URL}/product/${params.productId}`;
+  const { productId } = await params;
+  const url = `${BASE_URL}/product/${productId}`;
   let title;
 
-  if (params.productId) {
+  if (productId) {
     try {
-      const response = await getProduct(params.productId);
+      const response = await getProduct(productId);
       const product = response.data.product;
       title = `ITtem | ${product.name}`;
     } catch (error) {
@@ -35,14 +36,14 @@ export async function generateMetadata({
 export default async function ProductDetail({
   params
 }: {
-  params: { productId: string | undefined };
+  params: Promise<{ productId: string | undefined }>;
 }) {
+  const { productId } = await params;
+  
   return (
     <>
-      <Suspense
-        fallback={<ProductDetailSkeletonUI userUid={params.productId} />}
-      >
-        <ProductDetailContainer params={params} />
+      <Suspense fallback={<ProductDetailSkeletonUI userUid={productId} />}>
+        <ProductDetailContainer productId={productId} />
       </Suspense>
     </>
   );

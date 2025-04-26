@@ -10,16 +10,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  {
+    params
+  }: {
+    params: Promise<{ productId: string | undefined }>;
+  }
 ) {
   try {
-    const { productId } = params;
+    const { productId } = await params;
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -43,7 +47,7 @@ export async function GET(
 
     const purchaseTrading = await PurchaseTrading.findOne({
       productId,
-      status: TradingStatus.TRADING_END,
+      status: TradingStatus.TRADING_END
     });
 
     if (!purchaseTrading) {
@@ -52,7 +56,7 @@ export async function GET(
 
     const saleTrading = await SaleTrading.findOne({
       productId,
-      status: TradingStatus.TRADING_END,
+      status: TradingStatus.TRADING_END
     });
 
     if (!saleTrading) {
@@ -63,24 +67,24 @@ export async function GET(
       {
         $match: {
           productId,
-          purchaseTradingId: purchaseTrading._id.toString(),
-        },
+          purchaseTradingId: purchaseTrading._id.toString()
+        }
       },
       {
         $addFields: {
-          buyerObjectId: { $toObjectId: "$buyerId" },
-        },
+          buyerObjectId: { $toObjectId: "$buyerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "buyerObjectId",
           foreignField: "_id",
-          as: "reviewer",
-        },
+          as: "reviewer"
+        }
       },
       {
-        $unwind: "$reviewer",
+        $unwind: "$reviewer"
       },
       {
         $project: {
@@ -88,9 +92,9 @@ export async function GET(
           reviewTags: 1,
           reviewContent: 1,
           "reviewer.nickname": 1,
-          "reviewer.profileImg": 1,
-        },
-      },
+          "reviewer.profileImg": 1
+        }
+      }
     ]);
 
     return NextResponse.json(
@@ -101,7 +105,7 @@ export async function GET(
     console.error(error);
     return NextResponse.json(
       {
-        message: "상품 리뷰 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 리뷰 조회에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
@@ -110,12 +114,12 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const { productId } = params;
+    const { productId } = await params;
     const body = await req.json();
     const { reviewContent, reviewTags, reviewScore } = body;
 
@@ -126,7 +130,7 @@ export async function POST(
       session.endSession();
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -155,7 +159,7 @@ export async function POST(
     const purchaseTrading = await PurchaseTrading.findOneAndUpdate(
       {
         productId,
-        status: TradingStatus.TRADING_END,
+        status: TradingStatus.TRADING_END
       },
       { isReviewed: true },
       { session }
@@ -177,7 +181,7 @@ export async function POST(
     const saleTrading = await SaleTrading.findOneAndUpdate(
       {
         productId,
-        status: TradingStatus.TRADING_END,
+        status: TradingStatus.TRADING_END
       },
       { isReviewed: true },
       { session, returnDocument: "after" }
@@ -196,14 +200,14 @@ export async function POST(
       productName: purchaseTrading.productName,
       reviewScore,
       reviewContent,
-      reviewTags,
+      reviewTags
     });
 
     await review.save({ session });
 
     const sellerReviewScore = await ReviewScore.findOne(
       {
-        uid: saleTrading.sellerId,
+        uid: saleTrading.sellerId
       },
       null,
       { session }
@@ -214,7 +218,7 @@ export async function POST(
         uid: saleTrading.sellerId,
         totalReviewCount: 1,
         totalReviewScore: reviewScore,
-        reviewTags,
+        reviewTags
       });
 
       await newReviewScore.save({ session });
@@ -232,14 +236,14 @@ export async function POST(
 
       const reviewScoreUpdateResult = await ReviewScore.updateOne(
         {
-          uid: saleTrading.sellerId,
+          uid: saleTrading.sellerId
         },
         {
           $inc: {
             totalReviewCount: 1,
-            totalReviewScore: reviewScore,
+            totalReviewScore: reviewScore
           },
-          reviewTags: newTags,
+          reviewTags: newTags
         },
         { session }
       );
@@ -269,14 +273,14 @@ export async function POST(
       return NextResponse.json(
         {
           message: "유효하지 않은 값이 있어요.",
-          error: errorMessages,
+          error: errorMessages
         },
         { status: 422 }
       );
     }
     return NextResponse.json(
       {
-        message: "상품 리뷰 작성에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 리뷰 작성에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

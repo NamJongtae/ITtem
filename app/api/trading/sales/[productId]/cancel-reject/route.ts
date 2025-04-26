@@ -9,7 +9,7 @@ import {
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
 import User from "@/lib/db/models/User";
@@ -19,7 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -39,7 +39,7 @@ export async function PATCH(
 
     const user = await User.findOne(
       {
-        _id: new mongoose.Types.ObjectId(myUid as string),
+        _id: new mongoose.Types.ObjectId(myUid as string)
       },
       null,
       { session }
@@ -47,7 +47,7 @@ export async function PATCH(
 
     await dbConnect();
 
-    const { productId } = params;
+    const { productId } = await params;
     const { rejectReason } = await req.json();
 
     if (!productId) {
@@ -69,7 +69,7 @@ export async function PATCH(
     }
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -85,9 +85,9 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -132,9 +132,9 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -170,7 +170,7 @@ export async function PATCH(
       cancelEndDate: currentDate,
       cancelRejectReason: rejectReason,
       status: TradingStatus.CANCEL_REJECT,
-      process: SalesCancelProcess.취소거절,
+      process: SalesCancelProcess.취소거절
     });
 
     const cancelRejectPurchaseTrading = new PurchaseTrading({
@@ -185,7 +185,7 @@ export async function PATCH(
       cancelRejectDate: currentDate,
       cancelRejectReason: rejectReason,
       status: TradingStatus.CANCEL_REJECT,
-      process: PurchaseCancelProcess.취소거절,
+      process: PurchaseCancelProcess.취소거절
     });
 
     await cancelRejectSaleTrading.save({ session });
@@ -197,14 +197,14 @@ export async function PATCH(
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       {
         status: TradingStatus.TRADING,
         process: SaleTradingProcess.상품전달확인,
-        $unset: { cancelStartDate: "", cancelReason: "" },
+        $unset: { cancelStartDate: "", cancelReason: "" }
       },
       { session }
     );
@@ -220,14 +220,14 @@ export async function PATCH(
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       {
         status: TradingStatus.TRADING,
         process: PurchaseTradingProcess.판매자상품전달중,
-        $unset: { cancelStartDate: "", cancelReason: "" },
+        $unset: { cancelStartDate: "", cancelReason: "" }
       },
       { session }
     );
@@ -248,7 +248,7 @@ export async function PATCH(
     );
 
     return NextResponse.json({
-      message: "취소요청 거부에 성공했어요.",
+      message: "취소요청 거부에 성공했어요."
     });
   } catch (error) {
     console.error(error);
@@ -256,7 +256,7 @@ export async function PATCH(
     session.endSession();
     return NextResponse.json(
       {
-        message: "취소 요청 거부에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "취소 요청 거부에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

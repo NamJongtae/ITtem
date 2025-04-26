@@ -6,17 +6,17 @@ import { checkAuthorization } from "@/lib/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { uid: string | undefined } }
+  { params }: { params: Promise<{ uid: string | undefined }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const { uid } = params;
+    const { uid } = await params;
 
     if (!uid) {
       return NextResponse.json(
         {
-          message: "팔로우할 유저 ID가 없어요.",
+          message: "팔로우할 유저 ID가 없어요."
         },
         { status: 422 }
       );
@@ -27,7 +27,7 @@ export async function POST(
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -40,24 +40,24 @@ export async function POST(
     if (myUid === uid) {
       return NextResponse.json(
         {
-          message: "자신을 팔로우 할 수 없어요.",
+          message: "자신을 팔로우 할 수 없어요."
         },
         { status: 409 }
       );
     }
 
     const my = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     });
 
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(uid as string),
+      _id: new mongoose.Types.ObjectId(uid as string)
     });
 
     if (!user) {
       return NextResponse.json(
         {
-          message: "유저가 존재하지 않아요.",
+          message: "유저가 존재하지 않아요."
         },
         { status: 404 }
       );
@@ -75,7 +75,7 @@ export async function POST(
       const myUpdateResult = await User.updateOne(
         { _id: new mongoose.Types.ObjectId(myUid) },
         {
-          $push: { followings: uid },
+          $push: { followings: uid }
         },
         { session }
       );
@@ -89,7 +89,7 @@ export async function POST(
       const userUpdateResult = await User.updateOne(
         { _id: new mongoose.Types.ObjectId(uid as string) },
         {
-          $push: { followers: myUid },
+          $push: { followers: myUid }
         },
         { session }
       );
@@ -113,7 +113,7 @@ export async function POST(
     console.error(error);
     return NextResponse.json(
       {
-        message: "유저 팔로우에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "유저 팔로우에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
@@ -122,8 +122,9 @@ export async function POST(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { uid: string | undefined } }
+  props: { params: Promise<{ uid: string | undefined }> }
 ) {
+  const params = await props.params;
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -133,7 +134,7 @@ export async function DELETE(
     if (!uid) {
       return NextResponse.json(
         {
-          message: "언팔로우할 유저 ID가 없어요.",
+          message: "언팔로우할 유저 ID가 없어요."
         },
         { status: 422 }
       );
@@ -144,7 +145,7 @@ export async function DELETE(
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -157,24 +158,24 @@ export async function DELETE(
     if (myUid === uid) {
       return NextResponse.json(
         {
-          message: "자신을 언팔로우 할 수 없어요.",
+          message: "자신을 언팔로우 할 수 없어요."
         },
         { status: 409 }
       );
     }
 
     const my = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     });
 
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(uid as string),
+      _id: new mongoose.Types.ObjectId(uid as string)
     });
 
     if (!user) {
       return NextResponse.json(
         {
-          message: "유저가 존재하지 않아요.",
+          message: "유저가 존재하지 않아요."
         },
         { status: 404 }
       );
@@ -192,7 +193,7 @@ export async function DELETE(
       const myUpdateResult = await User.updateOne(
         { _id: new mongoose.Types.ObjectId(myUid) },
         {
-          $pull: { followings: uid },
+          $pull: { followings: uid }
         },
         { session }
       );
@@ -206,7 +207,7 @@ export async function DELETE(
       const userUpdateResult = await User.updateOne(
         { _id: new mongoose.Types.ObjectId(uid as string) },
         {
-          $pull: { followers: myUid },
+          $pull: { followers: myUid }
         },
         { session }
       );
@@ -230,7 +231,7 @@ export async function DELETE(
     console.error(error);
     return NextResponse.json(
       {
-        message: "유저 언팔로우에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "유저 언팔로우에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

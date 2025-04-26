@@ -6,8 +6,6 @@ import {
 } from "@/lib/api/firebase";
 import { checkAuthorization } from "@/lib/server";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = req.nextUrl;

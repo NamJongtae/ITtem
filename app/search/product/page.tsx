@@ -4,14 +4,16 @@ import { BASE_URL } from "@/constants/constant";
 export async function generateMetadata({
   searchParams
 }: {
-  searchParams: { category: string | undefined; keyword: string | undefined };
+  searchParams: Promise<{
+    category: string | undefined;
+    keyword: string | undefined;
+  }>;
 }) {
-  const category = searchParams?.category || "전체";
-  const keyword = searchParams?.keyword;
+  const { category, keyword } = await searchParams;
   const url = `${BASE_URL}/search/product/?keyword=${keyword}`;
   const title = keyword
     ? `ITtem | 상품검색-${keyword}-${category}`
-    : `ITtem | 상품-${category}`;
+    : `ITtem | 상품-${category || "전체"}`;
 
   return {
     metadataBase: new URL(url),

@@ -1,16 +1,20 @@
 import {
   deleteNotificationMessage,
-  readyNotificationMessage,
+  readyNotificationMessage
 } from "@/lib/api/firebase";
 import { checkAuthorization } from "@/lib/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { messageId: string | undefined } }
+  {
+    params
+  }: {
+    params: Promise<{ messageId: string | undefined }>;
+  }
 ) {
   try {
-    const { messageId } = params;
+    const { messageId } = await params;
 
     const isValidAuth = await checkAuthorization();
 
@@ -25,7 +29,7 @@ export async function PATCH(
 
     await readyNotificationMessage({
       userId: myUid,
-      messageId: messageId || "",
+      messageId: messageId || ""
     });
 
     return new NextResponse(
@@ -36,13 +40,13 @@ export async function PATCH(
     console.error(error);
     if (error instanceof Error && error.message === "잘못된 접근이에요.") {
       return new NextResponse(JSON.stringify({ message: error.message }), {
-        status: 403,
+        status: 403
       });
     }
     return new NextResponse(
       JSON.stringify({
         message:
-          "알림 메세지 읽음 처리에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          "알림 메세지 읽음 처리에 실패했어요.\n잠시 후 다시 시도해주세요."
       }),
       { status: 500 }
     );
@@ -51,10 +55,14 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { messageId: string | undefined } }
+  {
+    params
+  }: {
+    params: Promise<{ messageId: string | undefined }>;
+  }
 ) {
   try {
-    const { messageId } = params;
+    const { messageId } = await params;
 
     const isValidAuth = await checkAuthorization();
 
@@ -76,7 +84,7 @@ export async function DELETE(
 
     await deleteNotificationMessage({
       userId: myUid,
-      messageId: messageId || "",
+      messageId: messageId || ""
     });
 
     return new NextResponse(
@@ -87,12 +95,12 @@ export async function DELETE(
     console.error(error);
     if (error instanceof Error && error.message === "잘못된 접근이에요.") {
       return new NextResponse(JSON.stringify({ message: error.message }), {
-        status: 403,
+        status: 403
       });
     }
     return new NextResponse(
       JSON.stringify({
-        message: "알림 메세지 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "알림 메세지 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
       }),
       { status: 500 }
     );

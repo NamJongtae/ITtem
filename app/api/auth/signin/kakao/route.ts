@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     });
 
     const session = await getIronSession<IronSessionType>(
-      cookies(),
+      await cookies(),
       sessionOptions
     );
 

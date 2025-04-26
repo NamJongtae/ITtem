@@ -4,10 +4,10 @@ import Review from "@/lib/db/models/Review";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { uid: string | undefined } }
+  { params }: { params: Promise<{ uid: string | undefined }> }
 ) {
   try {
-    const { uid } = params;
+    const { uid } = await params;
     const { searchParams } = req.nextUrl;
     const limit = searchParams.get("limit");
     const cursor = searchParams.get("cursor");
@@ -37,33 +37,33 @@ export async function GET(
       {
         $match: {
           sellerId: uid,
-          createdAt: { $lt: cursorDate },
-        },
+          createdAt: { $lt: cursorDate }
+        }
       },
       {
-        $limit: pageLimit,
+        $limit: pageLimit
       },
       {
-        $sort: { createdAt: -1, _id: -1 },
+        $sort: { createdAt: -1, _id: -1 }
       },
       {
         $addFields: {
-          convertedBuyerId: { $toObjectId: "$buyerId" },
-        },
+          convertedBuyerId: { $toObjectId: "$buyerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "convertedBuyerId",
           foreignField: "_id",
-          as: "reviewer",
-        },
+          as: "reviewer"
+        }
       },
       {
         $unwind: {
           path: "$reviewer",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $project: {
@@ -77,14 +77,14 @@ export async function GET(
           createdAt: 1,
           "reviewer.nickname": 1,
           "reviewer.profileImg": 1,
-          "reviewer.uid": "$reviewer._id",
-        },
-      },
+          "reviewer.uid": "$reviewer._id"
+        }
+      }
     ]);
 
     return NextResponse.json({
       message: "리뷰 목록 조회에 성공했어요.",
-      reviews: reviewsWithBuyerInfo,
+      reviews: reviewsWithBuyerInfo
     });
   } catch (error) {
     console.error("리뷰 목록 조회 에러:", error);

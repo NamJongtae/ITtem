@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const session = cookies().get("session");
+  const session = (await cookies()).get("session");
   if (session) {
     return NextResponse.json(
       { message: "세션 쿠기가 존재해요.", ok: true },

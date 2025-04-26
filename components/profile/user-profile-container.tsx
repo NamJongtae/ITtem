@@ -8,14 +8,15 @@ import React from "react";
 import ProfilePage from "./profile-page";
 
 interface IProps {
-  params: { uid: string };
+  uid: string;
 }
-export default async function UserProfileContainer({ params }: IProps) {
+
+export default async function UserProfileContainer({ uid }: IProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.profile.user(params.uid).queryKey,
-    queryFn: queryKeys.profile.user(params.uid).queryFn
+    queryKey: queryKeys.profile.user(uid).queryKey,
+    queryFn: queryKeys.profile.user(uid).queryFn
   });
 
   return (

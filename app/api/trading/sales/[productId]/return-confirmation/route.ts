@@ -10,14 +10,14 @@ import {
   PurchaseReturnProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: { productId: string | undefined } }
+  { params }: { params: Promise<{ productId: string | undefined }> }
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -37,7 +37,7 @@ export const PATCH = async (
 
     const user = await User.findOne(
       {
-        _id: new mongoose.Types.ObjectId(myUid as string),
+        _id: new mongoose.Types.ObjectId(myUid as string)
       },
       null,
       { session }
@@ -45,7 +45,7 @@ export const PATCH = async (
 
     await dbConnect();
 
-    const { productId } = params;
+    const { productId } = await params;
 
     if (!productId) {
       await session.abortTransaction();
@@ -66,7 +66,7 @@ export const PATCH = async (
     }
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string),
+      _id: new mongoose.Types.ObjectId(productId as string)
     });
 
     if (!product) {
@@ -84,9 +84,9 @@ export const PATCH = async (
           { process: { $ne: SalesCancelProcess.취소완료 } },
           { process: { $ne: SalesReturnProcess.반품완료 } },
           { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } },
+          { process: { $ne: SalesReturnProcess.반품거절 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -141,9 +141,9 @@ export const PATCH = async (
       {
         $and: [
           { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } },
+          { process: { $ne: PurchaseReturnProcess.반품완료 } }
         ],
-        productId,
+        productId
       },
       null,
       { session }
@@ -187,9 +187,9 @@ export const PATCH = async (
         {
           $and: [
             { process: { $ne: SalesCancelProcess.취소완료 } },
-            { process: { $ne: SalesReturnProcess.반품완료 } },
+            { process: { $ne: SalesReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         { process: SalesReturnProcess.구매자반품상품전달중 },
         { session }
@@ -208,12 +208,12 @@ export const PATCH = async (
         {
           $and: [
             { process: { $ne: PurchaseCancelProcess.취소완료 } },
-            { process: { $ne: PurchaseReturnProcess.반품완료 } },
+            { process: { $ne: PurchaseReturnProcess.반품완료 } }
           ],
-          productId,
+          productId
         },
         {
-          process: PurchaseReturnProcess.반품상품전달확인,
+          process: PurchaseReturnProcess.반품상품전달확인
         },
         { session }
       );
@@ -241,7 +241,7 @@ export const PATCH = async (
     session.endSession();
     return NextResponse.json(
       {
-        message: "반품 요청 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "반품 요청 확인에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

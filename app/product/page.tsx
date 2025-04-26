@@ -2,13 +2,12 @@ import Spinner from "@/components/commons/spinner";
 import Header from "@/components/product/product-header";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
-import ProductContainer from '@/components/product/product-container';
+import ProductContainer from "@/components/product/product-container";
 
-export async function generateMetadata({
-  searchParams
-}: {
-  searchParams: { category: string | undefined };
+export async function generateMetadata(props: {
+  searchParams: Promise<{ category: string | undefined }>;
 }) {
+  const searchParams = await props.searchParams;
   const category = searchParams?.category || "전체";
   const title = category ? `ITtem | 상품-${category}` : "ITtem | 상품-전체";
   const url = `${BASE_URL}/product?category=${category}`;
@@ -26,9 +25,9 @@ export async function generateMetadata({
 export default async function Product({
   searchParams
 }: {
-  searchParams: { category: string | undefined };
+  searchParams: Promise<{ category: string | undefined }>;
 }) {
-  const category = searchParams.category || "";
+  const { category } = await searchParams;
 
   return (
     <>
