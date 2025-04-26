@@ -4,3 +4,4 @@ postcss.config.js
 next-env.d.ts
 tailwind.config.ts
 next-sitemap.config.js
+next.config.mjs
