@@ -1,10 +1,12 @@
 import Empty from "@/components/commons/empty";
 import { isAxiosError } from "axios";
-import InfiniteScroll from "react-infinite-scroller";
 import ProfileDetailWishItem from "./profile-detail-wish-item";
 import ProfileDetailWishSkeletonUI from "./profile-detail-wish-skeletonUI";
 import ProfileDetailWishDelBtn from "./profile-detail-wish-del-btn";
 import useProfileDetailWishList from "@/hooks/profile/useProfileDetailWishList";
+import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
+import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
+import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMessage";
 
 interface IProps {
   wishProductIds: string[] | undefined;
@@ -20,8 +22,14 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
     error,
     selectedWish,
     handleSelectAll,
-    handleCheckWish,
+    handleCheckWish
   } = useProfileDetailWishList({ wishProductIds });
+
+  const { ref } = useInfiniteScrollObserver({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  });
 
   return (
     <>
@@ -39,32 +47,33 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
         />
       ) : null}
 
-      <InfiniteScroll
-        hasMore={hasNextPage && !error}
-        loadMore={() => {
-          if (!isFetchingNextPage) fetchNextPage();
-        }}
-      >
-        <ul className="grid grid-col-1 md:grid-cols-2 gap-3">
-          {isLoading ? (
-            <ProfileDetailWishSkeletonUI
-              listCount={
-                wishProductIds?.length || 0 < 10 ? wishProductIds?.length : 10
-              }
-            />
-          ) : (
-            data?.map((data) => (
+      <ul className="grid grid-col-1 md:grid-cols-2 gap-3">
+        {isLoading ? (
+          <ProfileDetailWishSkeletonUI
+            listCount={
+              wishProductIds?.length || 0 < 10 ? wishProductIds?.length : 10
+            }
+          />
+        ) : (
+          <>
+            {data?.map((data) => (
               <ProfileDetailWishItem
                 key={data._id}
                 wishProduct={data}
                 handleCheckWish={handleCheckWish}
                 selectedWish={selectedWish}
               />
-            ))
-          )}
-          {isFetchingNextPage && <ProfileDetailWishSkeletonUI />}
-        </ul>
-      </InfiniteScroll>
+            ))}
+            {isFetchingNextPage && <ProfileDetailWishSkeletonUI />}
+            <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
+          </>
+        )}
+      </ul>
+      <InfiniteScrollEndMessage
+        message="더 이상 찜한 상품이 없어요."
+        data={data}
+        hasNextPage={hasNextPage}
+      />
     </>
   );
 }

@@ -1,10 +1,12 @@
 import Empty from "@/components/commons/empty";
-import InfiniteScroll from "react-infinite-scroller";
 import { isAxiosError } from "axios";
 import useFollowListInfiniteQuery from "@/hooks/react-query/queries/profile/useFollowListInfiniteQuery";
 import { ProfileData } from "@/types/auth-types";
 import ProfileDetailFollowItem from "./profile-detail-follow-Item";
 import ProfileDetailFollowSkeletonUI from "./profile-detail-follow-skeletonUI";
+import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
+import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
+import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMessage";
 
 interface IProps {
   isFollowers: boolean;
@@ -15,7 +17,7 @@ interface IProps {
 export default function ProfileDetailFollowList({
   isFollowers,
   userProfileData,
-  myProfileData,
+  myProfileData
 }: IProps) {
   const userIds = isFollowers
     ? userProfileData?.followers
@@ -26,11 +28,17 @@ export default function ProfileDetailFollowList({
     hasNextPage,
     fetchNextPage,
     error,
-    isLoading,
+    isLoading
   } = useFollowListInfiniteQuery({
     isFollowers,
     userIds,
-    uid: userProfileData?.uid,
+    uid: userProfileData?.uid
+  });
+
+  const { ref } = useInfiniteScrollObserver({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
   });
 
   if (error && !data) {
@@ -50,28 +58,29 @@ export default function ProfileDetailFollowList({
 
   return (
     <>
-      <InfiniteScroll
-        hasMore={hasNextPage && !error}
-        loadMore={() => {
-          if (!isFetchingNextPage) fetchNextPage();
-        }}
-      >
-        <ul className="grid gap-8 grid-cols-autoFill_180">
-          {isLoading ? (
-            <ProfileDetailFollowSkeletonUI />
-          ) : (
-            data?.map((item) => (
+      <ul className="grid gap-8 grid-cols-autoFill_180">
+        {isLoading ? (
+          <ProfileDetailFollowSkeletonUI />
+        ) : (
+          <>
+            {data?.map((item) => (
               <ProfileDetailFollowItem
                 key={item.uid}
                 data={item}
                 userProfileData={userProfileData}
                 myProfileData={myProfileData}
               />
-            ))
-          )}
-          {isFetchingNextPage && <ProfileDetailFollowSkeletonUI />}
-        </ul>
-      </InfiniteScroll>
+            ))}
+            {isFetchingNextPage && <ProfileDetailFollowSkeletonUI />}
+            <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
+          </>
+        )}
+      </ul>
+      <InfiniteScrollEndMessage
+        message={`더 이상 ${isFollowers ? "팔로워" : "팔로잉"} 유저가 없어요.`}
+        data={data}
+        hasNextPage={hasNextPage}
+      />
     </>
   );
 }

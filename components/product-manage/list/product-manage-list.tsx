@@ -1,13 +1,15 @@
 import useTradeInfiniteQuery from "@/hooks/react-query/queries/trade/useTradeInfiniteQuery";
-import InfiniteScroll from "react-infinite-scroller";
 import Empty from "../../commons/empty";
 import { isAxiosError } from "axios";
 import Item from "../item/product-mange-item";
 import {
   ProductManageDeatilMenu,
-  ProductManageMenu,
+  ProductManageMenu
 } from "../product-manage-page";
 import ProductManageListSkeletonUI from "./product-manage-list-skeletonUI";
+import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
+import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
+import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMessage";
 
 interface IProps {
   menu: ProductManageMenu;
@@ -21,8 +23,14 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    error,
+    error
   } = useTradeInfiniteQuery(menu);
+
+  const { ref } = useInfiniteScrollObserver({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  });
 
   if (error || data?.length === 0) {
     return (
@@ -37,27 +45,31 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
   }
 
   return (
-    <InfiniteScroll
-      hasMore={hasNextPage && !error}
-      loadMore={() => {
-        if (!isFetchingNextPage) fetchNextPage();
-      }}
-    >
+    <>
       <ul>
         {isLoading ? (
           <ProductManageListSkeletonUI />
         ) : (
-          data?.map((tradingData) => (
-            <Item
-              key={tradingData._id}
-              tradingData={tradingData}
-              menu={menu}
-              detailMenu={detailMenu}
-            />
-          ))
+          <>
+            {data?.map((tradingData) => (
+              <Item
+                key={tradingData._id}
+                tradingData={tradingData}
+                menu={menu}
+                detailMenu={detailMenu}
+              />
+            ))}
+            {isFetchingNextPage && <ProductManageListSkeletonUI />}
+            <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
+          </>
         )}
-        {isFetchingNextPage && <ProductManageListSkeletonUI />}
       </ul>
-    </InfiniteScroll>
+
+      <InfiniteScrollEndMessage
+        message={`더 이상 ${detailMenu} 상품이 없어요.`}
+        data={data}
+        hasNextPage={hasNextPage}
+      />
+    </>
   );
 }

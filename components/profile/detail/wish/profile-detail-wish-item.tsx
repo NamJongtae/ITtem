@@ -31,7 +31,7 @@ export default function ProfileDetailWishItem({
           {wishProduct.name}
         </span>
         <span>
-          <span className="text-sm font-semibold">{wishProduct.price}</span>원
+          <span className="text-sm font-semibold">{wishProduct.price.toLocaleString()}</span>원
         </span>
         <div className="flex gap-1 items-center">
           <Image

@@ -1,9 +1,10 @@
 import useNotificationInfiniteQuery from "@/hooks/react-query/queries/notification/useNotificationInfiniteQuery";
-import InfiniteScroll from "react-infinite-scroller";
 import Spinner from "../spinner";
 import NotificationModalItem from "./notification-modal-item";
-import Empty from '../empty';
+import Empty from "../empty";
 import NotificationModalBtns from "./notification-modal-btns";
+import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
+import InfiniteScrollTarget from "../InfiniteScrollTarget";
 
 export default function NotificationModalList() {
   const {
@@ -12,8 +13,14 @@ export default function NotificationModalList() {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    error,
+    error
   } = useNotificationInfiniteQuery();
+
+  const { ref } = useInfiniteScrollObserver({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  });
 
   if (error) {
     return (
@@ -35,31 +42,32 @@ export default function NotificationModalList() {
 
   return (
     <div className="h-[380px] overflow-y-scroll">
-      {data && <NotificationModalBtns messageData={data} endKey={data[data.length - 1].id} />}
-      <InfiniteScroll
-        useWindow={false}
-        loadMore={() => {
-          if (!isFetchingNextPage && hasNextPage && !error && !isLoading) {
-            fetchNextPage();
-          }
-        }}
-        hasMore={hasNextPage && !error && !isLoading}
-      >
-        <ul className="flex flex-col w-full p-5 pt-2">
-          {isLoading ? (
-            <li className="absolute center">
-              <Spinner />
-            </li>
-          ) : (
-            data?.map((data) => <NotificationModalItem key={data.id} data={data} />)
-          )}
-          {isFetchingNextPage && (
-            <li className="flex justify-center w-full">
-              <Spinner />
-            </li>
-          )}
-        </ul>
-      </InfiniteScroll>
+      {data && (
+        <NotificationModalBtns
+          messageData={data}
+          endKey={data[data.length - 1].id}
+        />
+      )}
+
+      <ul className="flex flex-col w-full p-5 pt-2">
+        {isLoading ? (
+          <li className="absolute center">
+            <Spinner />
+          </li>
+        ) : (
+          <>
+            {data?.map((data) => (
+              <NotificationModalItem key={data.id} data={data} />
+            ))}
+            {isFetchingNextPage && (
+              <li className="flex justify-center w-full">
+                <Spinner />
+              </li>
+            )}
+            <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
+          </>
+        )}
+      </ul>
     </div>
   );
 }
