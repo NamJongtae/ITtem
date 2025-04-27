@@ -42,6 +42,8 @@
   - [🔑 QueryKey 관리 개선](#-querykey-관리-개선)
   - [✨ Any 타입을 명확한 타입으로 전환](#-any-타입을-명확한-타입으로-전환)
   - [🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선](#-비동기-처리-컴포넌트-분리-및-suspense-fallback-ui-개선)
+  - [🔨 Next.js v15 마이그레이션](#-nextjs-v15-마이그레이션)
+  - [🔧 react-infinite-scroller → react-intersection-observer로 대체](#-react-infinite-scroller--react-intersection-observer로-대체)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -1651,7 +1653,8 @@ export default useAuthStore;
 
 <br>
 
-#### useAuthQuery.tsx
+**useAuthQuery.tsx**
+
 ```javascript
 import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
@@ -1679,7 +1682,8 @@ export default function useAuthQuery() {
 }
 ```
 
-#### useAuth.tsx
+**useAuth.tsx**
+
 ```javascript
 //...
   useEffect(() => {
@@ -1726,7 +1730,8 @@ export default function useAuthQuery() {
 
 <br>
 
-#### query-keys.ts
+**query-keys.ts**
+
 ```javascript
 //...
 export const productQueryKey = createQueryKeys("product", {
@@ -1858,7 +1863,8 @@ export const productQueryKey = createQueryKeys("product", {
 
 <br>
 
-#### zustand.d.ts
+**zustand.d.ts**
+
 immer + devtools 미들웨어 적용 유틸 타입을 정의합니다.
 
 ```javascript
@@ -1872,7 +1878,8 @@ declare module "zustand" {
 }
 ```
 
-#### authStore.ts
+**authStore.ts**
+
 ImmerDevtoolsStateCreator 유틸 타입 적용, 유틸 타입 적용 따른 devtool 적용 방식을 수정합니다.
 
 ```javascript
@@ -1891,7 +1898,7 @@ const useAuthStore =
 
 <br/>
 
-###  🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선
+####  🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선
 > **적용이유**
 
 - 현재 일부 페이지에서는 비동기 데이터를 최상위에서 처리하고 있어, 데이터가 로딩되기 전까지 전체 페이지가 로딩 상태로 표시됩니다.
@@ -1915,7 +1922,8 @@ const useAuthStore =
 
 <br>
 
-#### ProductDetailContiner.tsx
+**ProductDetailContiner.tsx**
+
 ProductDetailContainer 컴포넌트를 생성하여 비동기 처리를 분리하였습니다.
 
 ```javascript
@@ -1947,7 +1955,9 @@ export default async function ProductDetailContainer({
 }
 //...
 ```
-#### Prouct Detail page
+
+**Prouct Detail page**
+
 ProductDetailSkeletonUI 컴포넌트를 생성하고, ProductDetailContainer 비동기 컴포넌트 Suspense Fallback에 SkeletonUI 적용하였습니다.
 ```javascript
 //...
@@ -1979,6 +1989,132 @@ export default async function ProductDetail({
 
 <br/>
 
+#### 🔨 Next.js v15 마이그레이션
+> **적용이유**
+
+- 개발 편의성 향상과 보안 취약점 해결을 위해 Next.js v15로 마이그레이션을 진행했습니다.
+
+> **적용 방법**
+
+- Next.js 공식 마이그레이션 가이드를 참고하여 주요 변경 사항을 반영하였습니다.
+- TurboPack 설정을 적용하고, React 19 및 기타 종속성 업데이트를 함께 진행하였습니다.
+  
+> **적용으로 얻은 이점**
+
+- 안정적인 TurboPack 사용으로 개발 서버 구동 속도가 향상되고, 번들링 시간이 대폭 단축되었습니다.
+- Hydration Error 메시지가 구체적으로 개선되어, 문제 발생 시 디버깅이 훨씬 수월해졌습니다.
+- 보안 취약점이 해결되었습니다.
+
+<br/>
+
+#### 🔧 `react-infinite-scroller` → `react-intersection-observer`로 대체
+> **적용이유**
+
+- React 19 버전 업데이트 이후 종속성 충돌 문제가 발생하여, React 19를 지원하지 않는 `react-infinite-scroller` 라이브러리를 `react-intersection-observer`로 대체합니다.
+
+> **적용 방법**
+
+- useInfiniteScrollObserver 훅을 생성하여 관찰 대상 감지합니다.
+- InfiniteScrollTarget 컴포넌트로 관찰 대상 설정합니다.
+- 관찰 대상이 뷰포트(Viewport) 내에 진입할 경우, 다음 페이지 데이터를 비동기로 가져옵니다.
+- InfiniteScrollEndMessage 컴포넌트로 마지막 데이터 도달 시 메시지 출력합니다.
+  
+> **적용으로 얻은 이점**
+
+- React 19 버전 업데이트 이후 종속성 충돌 문제가 해결되었습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br/>
+
+**useInfiniteScrollObserver.ts**
+
+```javascript
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+
+interface IParams {
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  threshold?: number;
+}
+
+export default function useInfiniteScrollObserver({
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  threshold = 0.8
+}: IParams) {
+  const { ref, inView } = useInView({
+    threshold,
+    triggerOnce: false
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
+
+  return { ref };
+}
+
+```
+
+**InfiniteScrollTarget.tsx**
+
+```tsx
+import React, { forwardRef } from "react";
+
+const InfiniteScrollTarget = forwardRef<
+  HTMLDivElement | null,
+  { hasNextPage: boolean }
+>(({ hasNextPage }, ref) => {
+  return hasNextPage ? (
+    <li>
+      <div ref={ref} className="h-10" />
+    </li>
+  ) : null;
+});
+
+InfiniteScrollTarget.displayName = "InfiniteScrollTarget";
+
+export default InfiniteScrollTarget;
+
+```
+
+**InfiniteScrollEndMessage.tsx**
+
+```tsx
+import React from "react";
+
+export default function InfiniteScrollEndMessage({
+  hasNextPage,
+  data,
+  message = "더 이상 데이터가 존재하지 않습니다."
+}: {
+  hasNextPage: boolean;
+  data: unknown[] | undefined;
+  message?: string;
+}) {
+  return data && data.length > 0 && !hasNextPage ? (
+    <div className="flex justify-center items-center my-8 border-b mx-8">
+      <p className="absolute text-center text-xs sm:text-sm text-gray-400 bg-white px-4 sm:px-8">
+        {message}
+      </p>
+    </div>
+  ) : null;
+}
+
+```
+
+</details>
+
+<br/>
 
 ### 🔫 트러블 슈팅
 
@@ -2518,7 +2654,7 @@ export default customAxios;
 
 <br>
 
-### ❌ 배포 후 Hydrate 불일치 문제
+#### ❌ 배포 후 Hydrate 불일치 문제
 
 > 문제 상황
 
@@ -2609,7 +2745,9 @@ async function prefetchProfile() {
 //...
 ```
 
-#### middleware.ts
+
+**middleware.ts**
+
 현재 페이지를 저장하는 X-Requested-URL cookie 설정 로직 추가합니다.
 ```javascript
 //...
@@ -2625,7 +2763,8 @@ async function prefetchProfile() {
 //...
 ```
 
-#### refresh-token page
+**refresh-token page**
+
 accessToken 재발급을 위임받아 처리합니다.
 ```javascript
 "use client";
@@ -2692,7 +2831,8 @@ export default function RefreshToken() {
 <details>
 <summary>코드 보기</summary>
 
-#### Observable.tsx
+**Observable.tsx**
+
 ```javascript
 type Callback = () => void;
 class Observable {
@@ -2729,7 +2869,8 @@ export default tokenObservable;
 
 ```
 
-#### customAxios.ts
+**customAxios.ts**
+
 ```javascript
 import axios, {
   AxiosError,
