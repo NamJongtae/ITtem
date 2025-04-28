@@ -4,10 +4,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import Loading from "../loading";
 import useAuthStore from '@/store/auth-store';
 import useChatStore from '@/store/chat-store';
 import useNotificationStore from '@/store/notification-store';
+import Loading from '@/components/commons/loading';
+
 
 export default function SessionExpired() {
   const router = useRouter();

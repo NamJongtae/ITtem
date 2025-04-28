@@ -6,10 +6,11 @@ import { FieldValues } from "react-hook-form";
 import ChangePasswordCurrentPasswordField from "./change-password-current-password-field";
 import ChangePasswordPasswordField from "./change-password-password-field";
 import ChangePasswordPasswordCheckField from "./change-password-check-field";
-import Loading from "@/app/loading";
 import useChagePasswordForm from "@/hooks/profile/useChagePasswordForm";
 import ChangePasswordCloseBtn from "./modal/change-password-modal-close-btn";
 import ChangePasswordSubmitBtn from "./chanage-password-submit-btn";
+import Loading from '../commons/loading';
+
 
 interface IProps {
   isModal?: boolean;
@@ -24,9 +25,9 @@ export default function ChangePasswordForm({ isModal }: IProps) {
     pwCheckRef,
     closeBtnRef,
     submitBtnRef,
-    handleClickClose,
+    handleClickClose
   } = useChagePasswordForm({
-    isModal,
+    isModal
   });
 
   if (changePasswordLoading) {
@@ -38,7 +39,7 @@ export default function ChangePasswordForm({ isModal }: IProps) {
       onSubmit={(values: FieldValues) => {
         changePasswordMutate({
           password: values.password,
-          currentPassword: values["current-password"],
+          currentPassword: values["current-password"]
         });
       }}
       formOptions={{
@@ -46,8 +47,8 @@ export default function ChangePasswordForm({ isModal }: IProps) {
         defaultValues: {
           "current-password": "",
           password: "",
-          "password-check": "",
-        },
+          "password-check": ""
+        }
       }}
       className={`${
         isMobile ? "h-screen pt-20" : "max-w-[480px] justify-center"

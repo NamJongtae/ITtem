@@ -1,9 +1,10 @@
-import Loading from "@/app/loading";
 import { MyForm } from "@/components/commons/my-form/my-form";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
 import useReviewUploadModal from "@/hooks/product-manage/useReviewUploadModal";
 import FormContents from "./review-upload-modal-form-contents";
+import Loading from '@/components/commons/loading';
+
 
 interface IProps {
   handleClickCloseBtn: () => void;

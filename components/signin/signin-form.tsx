@@ -1,8 +1,8 @@
 "use client";
 
 import { MyForm } from "../commons/my-form/my-form";
+import Loading from '../commons/loading';
 import SigninFormContent from "./signin-form-content";
-import Loading from "@/app/loading";
 import useSigninForm from "@/hooks/signin/useSigninForm";
 
 interface IProps {

@@ -2,10 +2,11 @@
 
 import UserInfo from "./user-info/user-info";
 import Detail from "./detail/profile-detail";
-import Loading from "@/app/loading";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import useProfilePage from "@/hooks/profile/useProfilePage";
+import Loading from '../commons/loading';
+
 
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 
@@ -20,7 +21,7 @@ export default function ProfilePage({ my }: IProps) {
     myProfileData,
     isLoading,
     error,
-    handleClickMenu,
+    handleClickMenu
   } = useProfilePage();
 
   if (isLoading) {

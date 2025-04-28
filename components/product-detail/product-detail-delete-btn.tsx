@@ -1,7 +1,8 @@
-import Loading from "@/app/loading";
 import Image from "next/image";
 import { ProductStatus } from "@/types/product-types";
 import useProductDetailDeleteBtn from "@/hooks/product-detail/useProductDetailDeleteBtn";
+import Loading from '../commons/loading';
+
 
 interface IProps {
   productStatus: ProductStatus | undefined;

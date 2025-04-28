@@ -1,4 +1,5 @@
-import Loading from "@/app/loading";
+
+import Loading from '@/components/commons/loading';
 import useTradingChattingBtn from "@/hooks/product-manage/useTradingChattingBtn";
 
 interface IProps {

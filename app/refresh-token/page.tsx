@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Loading from "../loading";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios, { isAxiosError } from "axios";
 import { BASE_URL } from "@/constants/constant";
 import { RegenerateAccessTokenResponseData } from "@/types/api-types";
+import Loading from '@/components/commons/loading';
+
 
 export default function RefreshToken() {
   const searchParams = useSearchParams();

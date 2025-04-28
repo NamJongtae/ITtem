@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/app/loading";
+import Loading from '@/components/commons/loading';
 import useGoogleSigninMutate from "@/hooks/react-query/mutations/auth/useGoogleSigninMutate";
 import useGoogleUserInfo from "@/hooks/react-query/mutations/auth/useGoogleUserInfoMutate";
 import { useRouter, useSearchParams } from "next/navigation";

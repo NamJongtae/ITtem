@@ -7,9 +7,10 @@ import "@/styles/globals.css";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
-import Loading from "@/app/loading";
 import { BASE_URL } from "@/constants/constant";
 import ReactQueryProvider from '@/store/ReactQueryProvider';
+import Loading from '@/components/commons/loading';
+
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   subsets: ["latin"]

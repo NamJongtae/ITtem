@@ -1,11 +1,12 @@
 "use client";
 
-import Loading from "@/app/loading";
+import Loading from '../commons/loading';
 import { MyForm } from "../commons/my-form/my-form";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./product-upload-form-content";
 import useProductUploadForm from "@/hooks/product-upload/useProductUploadForm";
+
 
 interface IProps {
   isEdit?: boolean;
@@ -17,7 +18,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     handleClickProductEditSubmit,
     productDetailData,
     isLoading,
-    isError,
+    isError
   } = useProductUploadForm({ isEdit });
 
   if (isLoading) {
@@ -49,8 +50,8 @@ export default function ProductUploadForm({ isEdit }: IProps) {
           transaction: isEdit ? productDetailData?.transaction : "",
           deliveryFee: isEdit ? productDetailData?.deliveryFee : "",
           price: isEdit ? productDetailData?.price : "",
-          description: isEdit ? productDetailData?.description : "",
-        },
+          description: isEdit ? productDetailData?.description : ""
+        }
       }}
     >
       <ProductUploadFormContent

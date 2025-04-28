@@ -1,6 +1,6 @@
 import { MyForm } from "../commons/my-form/my-form";
+import Loading from "../commons/loading";
 import SignupFormContent from "./signup-form-content";
-import Loading from "@/app/loading";
 import useSignupHandler from "@/hooks/signup/useSignupHandler";
 
 export default function SignupForm() {
@@ -22,8 +22,8 @@ export default function SignupForm() {
           password: "",
           nickname: "",
           profileImg: "",
-          introduce: "",
-        },
+          introduce: ""
+        }
       }}
     >
       <h2 className="sr-only">회원가입</h2>

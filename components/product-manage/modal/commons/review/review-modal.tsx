@@ -1,4 +1,3 @@
-import Loading from "@/app/loading";
 import Portal from "@/components/commons/portal/Portal";
 import useProductReviewQuery from "@/hooks/react-query/queries/product/useProductReviewQuery";
 import { isMobile } from "react-device-detect";
@@ -10,6 +9,8 @@ import ReviewModalCloseBtn from "./review-modal-close-btn";
 import ReviewModalHeader from "./review-modal-header";
 import ReviewModalBackDrop from "./review-modal-back-drop";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
+import Loading from '@/components/commons/loading';
+
 
 interface IProps {
   productId: string;

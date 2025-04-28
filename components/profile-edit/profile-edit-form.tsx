@@ -3,13 +3,14 @@
 import { MyForm } from "@/components/commons/my-form/my-form";
 import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
-import Loading from "@/app/loading";
 import ProfileEditModalCloseBtn from "./profile-edit-modal-close-btn";
 import ProfileEditSubmitBtn from "./profile-edit-submit-btn";
 import useProfileEditForm from "@/hooks/profile-edit/useProfileEditForm";
 import ProfileEditImgField from "./profile-edit-img-field";
 import ProfileEditNicknameField from "./profile-edit-nickname-field";
 import ProfileEditIntroduceField from "./profile-edit-introduce-field";
+import Loading from '../commons/loading';
+
 
 interface IProps {
   isModal?: boolean;
@@ -27,7 +28,7 @@ export default function ProfileEditForm({ isModal }: IProps) {
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
-    handleClickClose,
+    handleClickClose
   } = useProfileEditForm({ isModal });
 
   if (profileEditLoading || loadMyProfileLoading) {
@@ -44,8 +45,8 @@ export default function ProfileEditForm({ isModal }: IProps) {
         defaultValues: {
           nickname: myProfileData ? myProfileData.nickname : "",
           introduce: myProfileData ? myProfileData.introduce : "",
-          profileImg: myProfileData ? myProfileData.profileImg : "",
-        },
+          profileImg: myProfileData ? myProfileData.profileImg : ""
+        }
       }}
       className={`${
         isMobile ? "h-screen pt-20" : "max-w-[480px] justify-center"

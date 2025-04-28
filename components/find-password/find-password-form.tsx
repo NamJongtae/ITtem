@@ -1,8 +1,8 @@
 import useChangePasswordMutate from "@/hooks/react-query/mutations/auth/useChangePasswordMutate";
 import { FieldValues } from "react-hook-form";
-import Loading from "@/app/loading";
 import { MyForm } from "../commons/my-form/my-form";
 import FindPassswordFormConent from "./find-password-form-content";
+import Loading from "../commons/loading";
 
 export default function Form() {
   const { changePasswordMutate, changePasswordLoading } =
@@ -26,8 +26,8 @@ export default function Form() {
           password: "",
           nickname: "",
           profileImg: "",
-          introduce: "",
-        },
+          introduce: ""
+        }
       }}
     >
       <h2 className="py-5 font-semibold text-xl">비밀번호 찾기</h2>
