@@ -1,12 +1,11 @@
 "use client";
 
-import Loading from '../commons/loading';
 import { MyForm } from "../commons/my-form/my-form";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./product-upload-form-content";
 import useProductUploadForm from "@/hooks/product-upload/useProductUploadForm";
-
+import ProductUploadFieldSkeletonUI from "./product-upload-field-skeletonUI";
 
 interface IProps {
   isEdit?: boolean;
@@ -22,7 +21,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
   } = useProductUploadForm({ isEdit });
 
   if (isLoading) {
-    return <Loading />;
+    return <ProductUploadFieldSkeletonUI />;
   }
 
   if (isError) {
