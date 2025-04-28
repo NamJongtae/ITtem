@@ -7,14 +7,13 @@ import usePopularProductQuery from "@/hooks/react-query/queries/product/usePopul
 import Link from "next/link";
 import ProductListContent from "../commons/product-list/product-list-content";
 import FallbackImage from "../commons/fallback-Image";
+import PopularProductListSkeletonUI from "./popular-product-list-skeletonUI";
 
 export default function PopularProductSlider() {
   const { data, isLoading } = usePopularProductQuery();
 
   if (isLoading) {
-    return (
-      <div className="w-full h-[340px] mx-auto animate-pulse bg-gray-300 px-8" />
-    );
+    return <PopularProductListSkeletonUI />;
   }
 
   return (
