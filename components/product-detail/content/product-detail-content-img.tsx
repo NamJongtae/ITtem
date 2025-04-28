@@ -26,6 +26,8 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
             imgData={productDetailData?.imgData}
             imgWidth={512}
             imgHeight={384}
+            isNavigation={true}
+            isPagination={true}
           />
           <button
             className="absolute z-10 bottom-3 right-3 border bg-white p-1 text-xs rounded-md betterhover:hover:bg-gray-100 group:hover-block inline-flex gap-1 items-center"

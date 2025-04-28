@@ -16,8 +16,8 @@ export default function ProductListImg({ data }: IProps) {
         data.status === ProductStatus.soldout
           ? "판매완료"
           : data.status === ProductStatus.trading
-          ? "거래중"
-          : "판매중"
+            ? "거래중"
+            : "판매중"
       }
       className={`${
         data.status !== ProductStatus.sold ? soldoutStyles : ""
@@ -34,7 +34,13 @@ export default function ProductListImg({ data }: IProps) {
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
         />
       ) : (
-        <ImgSlider imgData={data.imgData} imgWidth={300} imgHeight={300} />
+        <ImgSlider
+          imgData={data.imgData}
+          imgWidth={300}
+          imgHeight={300}
+          isAutoPlay={true}
+          isLoop={true}
+        />
       )}
     </div>
   );
