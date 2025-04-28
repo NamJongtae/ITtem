@@ -5,8 +5,8 @@ import Detail from "./detail/profile-detail";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import useProfilePage from "@/hooks/profile/useProfilePage";
-import Loading from '../commons/loading';
-
+import ProfileUserInfoSkeletonUI from "./user-info/profile-user-info-skeletonUI";
+import ProfileDetailSkeletonUI from "./detail/profile-detail-skeletonUI";
 
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 
@@ -25,7 +25,12 @@ export default function ProfilePage({ my }: IProps) {
   } = useProfilePage();
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <>
+        <ProfileUserInfoSkeletonUI my={my} />
+        <ProfileDetailSkeletonUI my={my} />
+      </>
+    );
   }
 
   if (error) {
