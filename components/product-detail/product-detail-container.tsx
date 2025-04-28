@@ -56,6 +56,8 @@ async function fetchProfileData() {
         }
       }
     }
+  } else {
+    return null
   }
 }
 

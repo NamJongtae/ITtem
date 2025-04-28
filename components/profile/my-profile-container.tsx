@@ -39,6 +39,8 @@ async function prefetchProfile() {
         }
       }
     }
+  } else {
+    return null;
   }
 }
 
