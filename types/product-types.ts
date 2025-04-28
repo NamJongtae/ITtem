@@ -96,7 +96,7 @@ export type ProductUploadData = Omit<
 >;
 
 export type ProductListType =
-  | "TODAY"
+  | "RECOMMEND"
   | "CATEGORY"
   | "SEARCH"
   | "PROFILE"
