@@ -6,6 +6,7 @@ export default function UserInfoCardChangePasswordBtn() {
       href={"/profile/passwordChange"}
       className="border py-2 px-4 w-full betterhover:hover:bg-gray-100 text-center"
       scroll={false}
+      prefetch={false}
     >
       비밀번호 변경
     </Link>
