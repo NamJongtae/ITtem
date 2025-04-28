@@ -50,6 +50,20 @@ export async function getPopularProductList(): Promise<
   }
 }
 
+export async function getRecommendProductList(
+  cursor: unknown = null,
+  limit: number = 10
+): Promise<AxiosResponse<ProductListResponseData>> {
+  try {
+    const response = await customAxios(
+      `/api/product/recommend?${cursor ? `cursor=${cursor}` : ""}&limit=${limit}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getCategoryProductList({
   category = ProductCategory.전체,
   cursor = null,

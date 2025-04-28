@@ -6,6 +6,7 @@ import {
   getPopularProductList,
   getProduct,
   getProfileProductList,
+  getRecommendProductList,
   getReview,
   getSearchProductList,
   getTodayProductList
@@ -47,6 +48,13 @@ export const productQueryKey = createQueryKeys("product", {
       return response.data.products;
     }
   },
+  recommend: (limit: number = 10) => ({
+    queryKey: ["list"] as const,
+    queryFn: async ({ pageParam }) => {
+      const response = await getRecommendProductList(pageParam, limit);
+      return response.data.products;
+    }
+  }),
   category: ({
     category,
     location,
