@@ -4,26 +4,22 @@ import CategoryNav from "../commons/category/category-nav";
 import ProductDetailContent from "./content/product-detail-content";
 import ProductDetailDescription from "./product-detail-description";
 import ProductDetailSeller from "./seller/product-detail-seller";
-import Loading from "@/app/loading";
 import { isAxiosError } from "axios";
-import Empty from '../commons/empty';
+import Empty from "../commons/empty";
 import useProductDetailPage from "@/hooks/product-detail/useProductDetailPage";
+import ProductDetailLoading from '@/app/product/[productId]/loading';
 
 export default function ProductDetailPage() {
   const { productDetailData, loadProductLoading, loadProductError } =
     useProductDetailPage();
 
   if (loadProductLoading) {
-    return <Loading />;
+    return <ProductDetailLoading />;
   }
 
   if (loadProductError) {
     if (isAxiosError<{ message: string }>(loadProductError)) {
-      return (
-        <Empty
-          message={loadProductError.response?.data.message || ""}
-        />
-      );
+      return <Empty message={loadProductError.response?.data.message || ""} />;
     }
   }
   return (
