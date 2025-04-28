@@ -1,4 +1,5 @@
 import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+import PopularProductListSkeletonUI from "@/components/home/popular-product-list-skeletonUI";
 import Image from "next/image";
 
 export default function HomeLoading() {
@@ -16,11 +17,7 @@ export default function HomeLoading() {
         언제 팔릴 지 모르는 조회수가 가장 높은 <strong>인기상품</strong>
         이에요.
       </div>
-      <div className="flex gap-[30px] h-[340px] animate-pulse">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="flex-1 w-full h-full bg-gray-200" />
-        ))}
-      </div>
+      <PopularProductListSkeletonUI />
 
       {/* 추천 상품 */}
       <div className="flex justify-center items-center font-semibold text-xl sm:text-2xl mt-20 mb-5 gap-2">
