@@ -11,12 +11,12 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
   const myUid = user?.uid;
 
   return (
-    <div className="pt-8 pb-12 animate-pulse">
+    <div className="pt-8 pb-12">
       <div className="relative container mx-auto px-6 max-w-[1024px]">
         <div className={"w-36 h-5 max-w-7xl mb-5 bg-gray-200"} />
 
         {/* 상단 */}
-        <div className="md:flex block">
+        <div className="md:flex block animate-pulse">
           {/* 상품 이미지*/}
           <div className="w-full h-80 md:h-80 md:w-1/2 lg:h-96 bg-gray-200">
             <div className="relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded overflow-hidden" />
@@ -72,9 +72,9 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
         <div className="container mt-16 flex flex-col xl:flex-row border-t-2 border-solid border-black justify-between gap-10 xl:gap-5 pt-10 mx-auto max-w-7x">
           {/* 상품 설명 */}
           <div className="basis-2/3">
-            <div className="w-20 h-7 bg-gray-200" />
+            <div className="text-gray-600 text-xl font-medium">상품정보</div>
             <hr className="h-px border-0 bg-gray-200 my-3" />
-            <div className="w-full space-y-3">
+            <div className="w-full space-y-3 animate-pulse">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="h-4 bg-gray-200" />
               ))}
@@ -83,11 +83,11 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
 
           {/* 판매자 정보 */}
           <div className="basis-1/3">
-            <div className="w-20 h-7 bg-gray-200" />
+            <div className="text-gray-600 text-xl font-medium">판매자 정보</div>
             <hr className="h-px border-0 bg-gray-200 my-3" />
 
             {/* 프로필 정보 */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 animate-pulse">
               <div className="inline-flex items-center gap-4 p-3">
                 {/* 프로필 이미지 */}
                 <div className="inline-block h-14 w-14 rounded-full mr-1 bg-gray-200" />
@@ -106,9 +106,9 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
 
             {/* 판매자 다른 상품 목록 */}
             <div className="mt-2">
-              <div className="w-32 h-5 bg-gray-200" />
+              <div>판매자의 다른 상품</div>
               <hr className="h-px border-0 bg-gray-200 my-3" />
-              <div className="grid grid-cols-autoFill_140 lg:grid-cols-autoFill_180 xl:grid-cols-3 gap-3">
+              <div className="grid grid-cols-autoFill_140 lg:grid-cols-autoFill_180 xl:grid-cols-3 gap-3 animate-pulse">
                 <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
                 <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
                 <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
