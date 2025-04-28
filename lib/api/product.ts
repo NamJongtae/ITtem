@@ -25,20 +25,6 @@ export async function purchaseProduct(
   }
 }
 
-export async function getTodayProductList(
-  cursor: unknown = null,
-  limit: number = 10
-): Promise<AxiosResponse<ProductListResponseData>> {
-  try {
-    const response = await customAxios(
-      `/api/product/today?${cursor ? `cursor=${cursor}` : ""}&limit=${limit}`
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function getPopularProductList(): Promise<
   AxiosResponse<ProductListResponseData>
 > {

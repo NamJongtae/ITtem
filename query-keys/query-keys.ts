@@ -8,8 +8,7 @@ import {
   getProfileProductList,
   getRecommendProductList,
   getReview,
-  getSearchProductList,
-  getTodayProductList
+  getSearchProductList
 } from "@/lib/api/product";
 import {
   getFollowers,
@@ -34,13 +33,6 @@ export const authQueryKey = createQueryKeys("auth", {
 });
 
 export const productQueryKey = createQueryKeys("product", {
-  today: (limit: number = 10) => ({
-    queryKey: ["list"] as const,
-    queryFn: async ({ pageParam }) => {
-      const response = await getTodayProductList(pageParam, limit);
-      return response.data.products;
-    }
-  }),
   popular: {
     queryKey: ["list"] as const,
     queryFn: async () => {
