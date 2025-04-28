@@ -1,13 +1,9 @@
-import {
-  ProductCategory,
-  ProductListType
-} from "@/types/product-types";
-import useProductTodayListInfiniteQuery from "../react-query/queries/product/useProductTodayListInfiniteQuery";
+import { ProductCategory, ProductListType } from "@/types/product-types";
 import useCategoryProductListInfiniteQuery from "../react-query/queries/product/useCategoryProductListInfiniteQuery";
 import useSearchProductListInfiniteQuery from "../react-query/queries/product/useSearchProductListInfiniteQuery";
 import { useSearchParams } from "next/navigation";
 import useProfileProductListInfiniteQuery from "../react-query/queries/profile/useProfileProductListInfiniteQuery";
-
+import useRecommendProductInfiniteQuery from "../react-query/queries/product/useRecommendProductInfiniteQuery";
 
 export default function useProductList(
   productListType: ProductListType,
@@ -22,7 +18,7 @@ export default function useProductList(
     null;
 
   const emptyMessages: Record<ProductListType, string> = {
-    TODAY: "오늘의 상품이 존재하지 않아요.",
+    RECOMMEND: "오늘의 추천 상품이 존재하지 않아요.",
     CATEGORY: "상품이 존재하지 않아요.",
     PROFILE: "상품이 존재하지 않아요.",
     MY_PROFILE: "상품이 존재하지 않아요.",
@@ -34,7 +30,7 @@ export default function useProductList(
 
   // Query hooks
   const queries = {
-    TODAY: useProductTodayListInfiniteQuery({ productListType }),
+    RECOMMEND: useRecommendProductInfiniteQuery(),
     CATEGORY: useCategoryProductListInfiniteQuery({
       category: category || undefined,
       productListType
