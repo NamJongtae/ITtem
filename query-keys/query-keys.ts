@@ -3,6 +3,7 @@ import { getSessionCookies, getUser } from "@/lib/api/auth";
 import { getNotificationMessage } from "@/lib/api/notification";
 import {
   getCategoryProductList,
+  getPopularProductList,
   getProduct,
   getProfileProductList,
   getReview,
@@ -39,6 +40,13 @@ export const productQueryKey = createQueryKeys("product", {
       return response.data.products;
     }
   }),
+  popular: {
+    queryKey: ["list"] as const,
+    queryFn: async () => {
+      const response = await getPopularProductList();
+      return response.data.products;
+    }
+  },
   category: ({
     category,
     location,

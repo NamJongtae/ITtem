@@ -3,13 +3,13 @@ import customAxios from "../customAxios";
 import {
   ProductCategory,
   ProductData,
-  ProductUploadData,
+  ProductUploadData
 } from "@/types/product-types";
 import {
   ProductDetailResponseData,
   ProductListResponseData,
   ProductResponseData,
-  ReviewResponseData,
+  ReviewResponseData
 } from "@/types/api-types";
 
 export async function purchaseProduct(
@@ -39,11 +39,22 @@ export async function getTodayProductList(
   }
 }
 
+export async function getPopularProductList(): Promise<
+  AxiosResponse<ProductListResponseData>
+> {
+  try {
+    const response = await customAxios("/api/product/popular");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getCategoryProductList({
   category = ProductCategory.전체,
   cursor = null,
   limit = 10,
-  location,
+  location
 }: {
   category?: ProductCategory;
   cursor?: unknown;
@@ -66,7 +77,7 @@ export async function getSearchProductList({
   category = ProductCategory.전체,
   cursor = null,
   limit = 10,
-  keyword,
+  keyword
 }: {
   category: ProductCategory;
   keyword: string;
@@ -89,7 +100,7 @@ export async function getProfileProductList({
   cursor = null,
   limit = 10,
   category = ProductCategory.전체,
-  productIds,
+  productIds
 }: {
   category: ProductCategory;
   cursor?: unknown;
@@ -102,7 +113,7 @@ export async function getProfileProductList({
         cursor ? `cursor=${cursor}&` : ""
       }category=${category}&limit=${limit}`,
       {
-        productIds,
+        productIds
       }
     );
     return response;
@@ -116,7 +127,7 @@ export async function uploadProduct(
 ): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios.post("/api/product/upload", {
-      productData,
+      productData
     });
     return response;
   } catch (error) {
@@ -141,7 +152,7 @@ export async function editProduct(
 ): Promise<AxiosResponse<ProductResponseData>> {
   try {
     const response = await customAxios.patch(`/api/product/${id}`, {
-      productData,
+      productData
     });
     return response;
   } catch (error) {
@@ -219,7 +230,7 @@ export async function uploadReview({
   productId,
   reviewScore,
   reviewContent,
-  reviewTags,
+  reviewTags
 }: {
   productId: string;
   reviewScore: number;
@@ -232,7 +243,7 @@ export async function uploadReview({
       {
         reviewScore,
         reviewContent,
-        reviewTags,
+        reviewTags
       }
     );
     return response;
