@@ -1,5 +1,5 @@
 import MyProfileContainer from "@/components/profile/my-profile-container";
-import ProfileDetailSkeletonUI from '@/components/profile/detail/profile-detail-skeletonUI';
+import ProfileDetailSkeletonUI from "@/components/profile/detail/profile-detail-skeletonUI";
 import ProfileUserInfoSkeletonUI from "@/components/profile/user-info/profile-user-info-skeletonUI";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
@@ -19,17 +19,15 @@ export async function generateMetadata() {
 
 export default function MyProfile() {
   return (
-    <>
-      <Suspense
-        fallback={
-          <>
-            <ProfileUserInfoSkeletonUI my={true} />
-            <ProfileDetailSkeletonUI my={true} />
-          </>
-        }
-      >
-        <MyProfileContainer />
-      </Suspense>
-    </>
+    <Suspense
+      fallback={
+        <>
+          <ProfileUserInfoSkeletonUI my={true} />
+          <ProfileDetailSkeletonUI my={true} />
+        </>
+      }
+    >
+      <MyProfileContainer />
+    </Suspense>
   );
 }
