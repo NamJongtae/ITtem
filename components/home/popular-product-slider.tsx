@@ -26,7 +26,7 @@ export default function PopularProductSlider() {
           spaceBetween: 10,
           slidesPerGroup: 1
         },
-        480: {
+        540: {
           slidesPerView: 2,
           spaceBetween: 20,
           slidesPerGroup: 2
