@@ -1,5 +1,50 @@
+"use client";
+
+import useDebouncing from "@/hooks/commons/useDebouncing";
+import { useCallback, useEffect, useState } from "react";
+
 export default function PopularProductListSkeletonUI() {
+  const [slidesToShow, setSlidesToShow] = useState(4);
+  const [gap, setGap] = useState(30);
+  const debounce = useDebouncing();
+
+  const updateLayout = useCallback(() => {
+    const width = window.innerWidth;
+
+    if (width < 540) {
+      setSlidesToShow(1);
+      setGap(10);
+    } else if (width < 768) {
+      setSlidesToShow(2);
+      setGap(20);
+    } else if (width < 1024) {
+      setSlidesToShow(3);
+      setGap(30);
+    } else {
+      setSlidesToShow(4);
+      setGap(30);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateLayout();
+
+    const handleResize = () => {
+      debounce(updateLayout, 150);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [debounce, updateLayout]);
+
   return (
-    <div className="w-full h-[340px] bg-gray-200 animate-pulse" />
+    <div
+      className="flex w-full h-[340px] justify-center animate-pulse overflow-hidden"
+      style={{ gap: `${gap}px` }}
+    >
+      {[...Array(slidesToShow)].map((_, i) => (
+        <div key={i} className="w-full h-full max-w-xs bg-gray-200" />
+      ))}
+    </div>
   );
 }
