@@ -42,8 +42,8 @@ export const config = {
     "/signin",
     "/signup",
     "/findpassword",
-    "/chat:path*",
-    "/profile:path*",
+    "/chat/:path*",
+    "/profile/:path*",
     "/product/:path*",
   ]
 };
