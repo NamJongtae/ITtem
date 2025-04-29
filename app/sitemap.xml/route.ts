@@ -62,7 +62,7 @@ export async function GET() {
       lastmod: new Date().toISOString()
     },
     {
-      loc: "https://ittem.vercel.app/product?category=%EC%95%85%EA%B8%B0%2F%EC%9D%8C%EB%B0%98C",
+      loc: "https://ittem.vercel.app/product?category=%EC%95%85%EA%B8%B0%2F%EC%9D%8C%EB%B0%98",
       lastmod: new Date().toISOString()
     },
     {
