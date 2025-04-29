@@ -1,4 +1,3 @@
-import Loading from "@/components/commons/loading";
 import ProfileDetailSkeletonUI from "@/components/profile/detail/profile-detail-skeletonUI";
 import ProfileUserInfoSkeletonUI from "@/components/profile/user-info/profile-user-info-skeletonUI";
 import { Suspense } from "react";
@@ -11,9 +10,9 @@ interface IProps {
 
 export default function Layout({ children, edit, passwordChange }: IProps) {
   return (
-    <Suspense fallback={<Loading />}>
-      {edit}
-      {passwordChange}
+    <>
+      <Suspense fallback={<></>}>{edit}</Suspense>
+      <Suspense fallback={<></>}>{passwordChange}</Suspense>
       <Suspense
         fallback={
           <>
@@ -24,6 +23,6 @@ export default function Layout({ children, edit, passwordChange }: IProps) {
       >
         {children}
       </Suspense>
-    </Suspense>
+    </>
   );
 }
