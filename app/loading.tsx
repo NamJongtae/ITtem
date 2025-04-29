@@ -13,9 +13,8 @@ export default function HomeLoading() {
         <Image src={"/icons/fire.svg"} alt="" width={21} height={28} /> 인기
         상품
       </div>
-      <div className="text-center mb-5">
+      <div className="text-sm sm:text-base text-center mb-5">
         언제 팔릴 지 모르는 조회수가 가장 높은 <strong>인기상품</strong>
-        이에요.
       </div>
       <PopularProductListSkeletonUI />
 
@@ -25,10 +24,9 @@ export default function HomeLoading() {
         추천 상품
       </div>
 
-      <div className="text-center">
-        오늘의 <strong>추천 상품</strong>이에요.
+      <div className="text-sm sm:text-base text-center mb-5">
+        원하는 상품이 있는지 확인해보세요.
       </div>
-      <div className="text-center mb-5">원하는 상품이 있는지 확인해보세요.</div>
       <ul className="grid gap-5 grid-cols-autoFill mt-6">
         <ProductListSkeletonUI listCount={12} />
       </ul>

@@ -11,9 +11,8 @@ export default function PopularProduct() {
         상품
       </h2>
 
-      <p className="text-center mb-5">
+      <p className="text-sm sm:text-base text-center mb-5">
         언제 팔릴 지 모르는 조회수가 가장 높은 <strong>인기상품</strong>
-        이에요.
       </p>
 
       <Suspense
