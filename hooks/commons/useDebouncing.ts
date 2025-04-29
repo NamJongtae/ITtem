@@ -1,19 +1,14 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 export default function useDebouncing() {
-  const timer = useRef<NodeJS.Timeout | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const debouncing = <T extends (...args: any[]) => void>(
-    callback: T,
-    throttleTime: number
-  ) => {
-    return (...args: Parameters<T>): void => {
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
-        callback(...args);
-      }, throttleTime);
-    };
-  };
+  const debounce = useCallback((callback: () => void, delay: number) => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(callback, delay);
+  }, []);
 
-  return debouncing;
+  return debounce;
 }
