@@ -44,6 +44,7 @@
   - [🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선](#-비동기-처리-컴포넌트-분리-및-suspense-fallback-ui-개선)
   - [🔨 Next.js v15 마이그레이션](#-nextjs-v15-마이그레이션)
   - [🔧 react-infinite-scroller → react-intersection-observer로 대체](#-react-infinite-scroller--react-intersection-observer로-대체)
+  - [🎈 page별 SkeletonUI Loading 컴포넌트 적용](#-page별-skeletonui-loading-컴포넌트-적용)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -1981,11 +1982,18 @@ export default async function ProductDetail({
 </details>
 
 > **적용 전 후 UI 비교**
-#### 적용 전
-![skeletonUI-before](https://github.com/user-attachments/assets/76b51059-3d05-4383-953b-b9215e339260)
 
-#### 적용 후
-![skeletonUI-after](https://github.com/user-attachments/assets/3542c5ef-0fb2-4ffb-87c8-9a9a5187f4d3)
+**적용 전**
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/76b51059-3d05-4383-953b-b9215e339260"/>
+</div>
+
+**적용 후**
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/3542c5ef-0fb2-4ffb-87c8-9a9a5187f4d3"/>
+</div>
 
 <br/>
 
@@ -2113,6 +2121,45 @@ export default function InfiniteScrollEndMessage({
 ```
 
 </details>
+
+<br/>
+
+#### 🎈 page별 SkeletonUI Loading 컴포넌트 적용
+> **적용이유**
+
+- 현재 페이지별 Loading 컴포넌트가 동일하고, Loading 컴포넌트가 전체 페이지 UX가 일치하지 않아 사용자가 UI 형태를 미리 볼 수 없어 UX 개선이 필요하다고 생각되어 Loading 컴포넌트를 Skeleton UI로 생성하였습니다.
+
+> **적용 방법**
+
+아래 페이지들에 SkeletonUI Loading 컴포넌트를 생성하였습니다.
+  - home 페이지 Skeleton UI 생성
+  - Product 페이지 Skeleton UI 생성
+  - Product Serach 페이지 Skeleton UI 생성
+  - Product manage 페이지 Skeleton UI 생성
+  - Product Upload/Edit 페이지 Skeleton UI 생성
+  - Product Detail 페이지 Skeleton UI 생성
+  - Profile 페이지 Skeleton UI 생성
+  - Chat 페이지 Skeleton UI 생성
+  - Chat Detail 페이지 Skeleton UI 생성
+  
+> **적용으로 얻은 이점**
+
+- 사용자에게 페이지 UI 형태를 빠르게 보여 줄 수 있어 UX가 개선됩니다.
+- 사용자가 느끼는 로딩 시간이 단축됩니다.
+
+> **적용 전 후 UI 비교**
+
+**적용 전**
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/ddc5ccb1-5a3d-4ef2-80e2-77191a8e8380"/>
+</div>
+
+**적용 후**
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/ac5d96ba-acb3-4be3-984e-da4ae782f17a"/>
+</div>
 
 <br/>
 
