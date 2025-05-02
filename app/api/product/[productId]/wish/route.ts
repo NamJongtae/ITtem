@@ -81,7 +81,7 @@ export async function PATCH(
           _id: new mongoose.Types.ObjectId(myUid)
         },
         {
-          $push: {
+          $addToSet: {
             wishProductIds: new mongoose.Types.ObjectId(product._id as string)
           }
         },
@@ -100,7 +100,7 @@ export async function PATCH(
           _id: new mongoose.Types.ObjectId(product._id as string)
         },
         {
-          $push: { wishUserIds: myUid },
+          $addToSet: { wishUserIds: myUid },
           $inc: { wishCount: 1 }
         },
         { session }
