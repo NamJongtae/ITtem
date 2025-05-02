@@ -10,18 +10,20 @@ interface IProps {
 
 export default function ProductDetailWishBtn({
   productDetailData,
-  myProfileData,
+  myProfileData
 }: IProps) {
-  const { handleClickWish, isWish } = useProductDetailWishBtn({
-    productDetailData,
-    myProfileData,
-  });
+  const { handleClickWish, isWish, addWishPending, deleteWishPending } =
+    useProductDetailWishBtn({
+      productDetailData,
+      myProfileData
+    });
 
   return (
     <button
       type="button"
       onClick={handleClickWish}
       className="flex gap-2 items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded hover:betterhover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
+      disabled={addWishPending || deleteWishPending}
     >
       <Image
         src={isWish ? "/icons/heart-icon.svg" : "/icons/heart-unfill-icon.svg"}
