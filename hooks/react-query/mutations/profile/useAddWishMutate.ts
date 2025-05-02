@@ -4,9 +4,8 @@ import useAuthStore from "@/store/auth-store";
 import { ProfileData } from "@/types/auth-types";
 import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse, isAxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useParams } from "next/navigation";
-import { toast } from "react-toastify";
 
 export default function useAddWishMutate() {
   const params = useParams();
@@ -17,11 +16,10 @@ export default function useAddWishMutate() {
   ).queryKey;
   const myUid = useAuthStore((state) => state.user?.uid);
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
-
-  const { mutate: addWishMutate } = useMutation<
+  const { mutate: addWishMutate, isPending: addWishPending } = useMutation<
     AxiosResponse<{ message: string }>,
     AxiosError,
-    undefined,
+    void,
     { previousProduct: ProductDetailData; previousMyProfile: ProfileData }
   >({
     mutationFn: () => addWish(productId as string),
@@ -57,18 +55,16 @@ export default function useAddWishMutate() {
       queryClient.setQueryData(productQueryKey, newProduct);
       queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
-      toast.success("찜 목록에 상품을 추가했어요.");
       return { previousProduct, previousMyProfile };
     },
-    onError: (error) => {
-      if (isAxiosError<{ message: string }>(error)) {
-        toast.warn(error.response?.data.message);
-      }
+    onError: (error, data, ctx) => {
+      queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
+      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: productQueryKey });
     }
   });
 
-  return { addWishMutate };
+  return { addWishMutate, addWishPending };
 }

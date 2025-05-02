@@ -1,12 +1,11 @@
 import { deleteWish } from "@/lib/api/product";
 import { queryKeys } from "@/query-keys/query-keys";
-import useAuthStore from '@/store/auth-store';
+import useAuthStore from "@/store/auth-store";
 import { ProfileData } from "@/types/auth-types";
 import { ProductDetailData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse, isAxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useParams } from "next/navigation";
-import { toast } from "react-toastify";
 
 export default function useDeleteWishMutate() {
   const params = useParams();
@@ -18,16 +17,16 @@ export default function useDeleteWishMutate() {
   ).queryKey;
   const myUid = useAuthStore((state) => state.user?.uid);
 
-  const { mutate: deleteWishMutate } = useMutation<
+  const { mutate: deleteWishMutate, isPending: deleteWishPending } = useMutation<
     AxiosResponse<{ message: string }>,
     AxiosError,
-    undefined,
+    void,
     { previousProduct: ProductDetailData; previousMyProfile: ProfileData }
   >({
     mutationFn: () => deleteWish(productId as string),
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: productQueryKey,
+        queryKey: productQueryKey
       });
 
       const previousProduct = queryClient.getQueryData(
@@ -41,9 +40,9 @@ export default function useDeleteWishMutate() {
       const newProduct = {
         ...previousProduct,
         wishUserIds: [
-          ...previousProduct.wishUserIds.filter((id) => id !== (myUid || "")),
+          ...previousProduct.wishUserIds.filter((id) => id !== (myUid || ""))
         ],
-        wishCount: previousProduct.wishCount - 1,
+        wishCount: previousProduct.wishCount - 1
       };
 
       const newMyProfile = {
@@ -51,14 +50,12 @@ export default function useDeleteWishMutate() {
         wishProductIds: [
           ...previousMyProfile.wishProductIds.filter(
             (id) => id !== previousProduct._id
-          ),
-        ],
+          )
+        ]
       };
 
       queryClient.setQueryData(productQueryKey, newProduct);
       queryClient.setQueryData(myProfileQuerKey, newMyProfile);
-
-      toast.success("찜 목록에서 상품을 삭제했어요.");
 
       return { previousProduct, previousMyProfile };
     },
@@ -66,14 +63,11 @@ export default function useDeleteWishMutate() {
     onError: (error, data, ctx) => {
       queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
       queryClient.setQueryData(myProfileQuerKey, ctx?.previousMyProfile);
-      if (isAxiosError<{ message: string }>(error)) {
-        toast.warn(error.response?.data.message);
-      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: productQueryKey });
-    },
+    }
   });
 
-  return { deleteWishMutate };
+  return { deleteWishMutate, deleteWishPending };
 }
