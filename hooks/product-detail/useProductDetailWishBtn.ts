@@ -11,10 +11,10 @@ interface IParams {
 
 export default function useProductDetailWishBtn({
   productDetailData,
-  myProfileData,
+  myProfileData
 }: IParams) {
-  const { addWishMutate } = useAddWishMutate();
-  const { deleteWishMutate } = useDeleteWishMutate();
+  const { addWishMutate, addWishPending } = useAddWishMutate();
+  const { deleteWishMutate, deleteWishPending } = useDeleteWishMutate();
   const isWish =
     !!myProfileData?.wishProductIds.includes(productDetailData?._id || "") &&
     !!productDetailData?.wishUserIds.includes(myProfileData?.uid || "");
@@ -25,11 +25,11 @@ export default function useProductDetailWishBtn({
       return;
     }
     if (isWish) {
-      deleteWishMutate(undefined);
+      deleteWishMutate();
     } else {
-      addWishMutate(undefined);
+      addWishMutate();
     }
   };
 
-  return { handleClickWish, isWish };
+  return { handleClickWish, isWish, addWishPending, deleteWishPending };
 }
