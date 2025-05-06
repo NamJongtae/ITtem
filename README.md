@@ -131,7 +131,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | 세션 쿠키 확인          | GET    | /api/auth/session                                                                       |
 | 토큰 재발급             | POST   | /api/auth/refresh-token                                                                 |
 | 토큰 삭제               | DELETE | /api/auth/delete-token                                                                  |
-| 로그아웃                | GET    | /api/auth/signout                                                                       |
+| 로그아웃                | POST    | /api/auth/signout                                                                       |
 | **프로필(profile)**     |
 | 나의 프로필 조회        | GET    | /api/profile                                                                            |
 | 프로필 수정             | PATCH  | /api/profile                                                                            |
@@ -2944,7 +2944,11 @@ customAxios.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" && 
+        isAxiosError<RegenerateAccessTokenResponseData>(error) &&
+        error.response?.status === 401 &&
+        error.response?.data.message === "만료된 토큰이에요."
+      ) {
       throw new Error("Expired AccessToken.");
     }
 
