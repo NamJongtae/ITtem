@@ -24,6 +24,7 @@ export default function useProductEditMutate() {
         queryKey: queryKeys.product.detail(productId as string).queryKey
       });
       router.push(`/product/${response.data.product._id}`);
+      window.scrollTo(0, 0);
     }
   });
 

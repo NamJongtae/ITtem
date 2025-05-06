@@ -18,12 +18,13 @@ export default function useProductUploadMutate() {
       ProductUploadData
     >({
       mutationFn: async (productData) => await uploadProduct(productData),
-      onSuccess: async (response) => {
-        await router.push(`/product/${response.data.product._id}`);
+      onSuccess: (response) => {
         queryCliecnt.invalidateQueries({
-          queryKey: myProfileQueryKey,
+          queryKey: myProfileQueryKey
         });
-      },
+        router.push(`/product/${response.data.product._id}`);
+        window.scrollTo(0, 0);
+      }
     });
   return { productUploadMuate, productUploadLoading };
 }
