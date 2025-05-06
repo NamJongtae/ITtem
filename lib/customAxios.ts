@@ -23,7 +23,12 @@ customAxios.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (typeof window === "undefined") {
+    if (
+      typeof window === "undefined" &&
+      isAxiosError<RegenerateAccessTokenResponseData>(error) &&
+      error.response?.status === 401 &&
+      error.response?.data.message === "만료된 토큰이에요."
+    ) {
       throw new Error("Expired AccessToken.");
     }
 
@@ -35,7 +40,6 @@ customAxios.interceptors.response.use(
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
-
 
       if (!isRefreshing) {
         isRefreshing = true;
