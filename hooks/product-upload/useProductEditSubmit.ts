@@ -15,6 +15,7 @@ import { queryKeys } from "@/query-keys/query-keys";
 
 export default function useProductEditSubmit() {
   const [productEditLoading, setProductEditLoading] = useState(false);
+  const [productEditError, setProductEditError] = useState(false);
 
   const { productEditMutate } = useProductEditMutate();
   const queryClient = useQueryClient();
@@ -88,12 +89,14 @@ export default function useProductEditSubmit() {
   const handleClickProductEditSubmit = async (values: FieldValues) => {
     try {
       setProductEditLoading(true);
+      setProductEditError(false);
       await setProductEditData(values);
       await deleteImages(values);
       await productEditMutate(productEditData);
     } catch (error) {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
+        setProductEditError(true);
       } else if (error instanceof Error) {
         toast.warn(error.message);
       }
@@ -105,5 +108,6 @@ export default function useProductEditSubmit() {
   return {
     handleClickProductEditSubmit,
     productEditLoading,
+    productEditError,
   };
 }

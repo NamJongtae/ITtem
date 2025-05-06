@@ -20,10 +20,6 @@ export default function ProductUploadForm({ isEdit }: IProps) {
     isError
   } = useProductUploadForm({ isEdit });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   if (isError) {
     if (isAxiosError<{ message: string }>(isError)) {
       return <Empty message={isError.response?.data?.message || ""} />;
@@ -31,32 +27,39 @@ export default function ProductUploadForm({ isEdit }: IProps) {
   }
 
   return (
-    <MyForm
-      onSubmit={
-        isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
-      }
-      formOptions={{
-        mode: "onChange",
-        defaultValues: {
-          imgData: isEdit ? productDetailData?.imgData.map(() => ({})) : [],
-          prevImgData: isEdit ? productDetailData?.imgData : [],
-          name: isEdit ? productDetailData?.name : "",
-          sellType: isEdit ? productDetailData?.sellType : "",
-          category: isEdit ? productDetailData?.category : "",
-          location: isEdit ? productDetailData?.location : "",
-          condition: isEdit ? productDetailData?.condition : "",
-          returnPolicy: isEdit ? productDetailData?.returnPolicy : "",
-          transaction: isEdit ? productDetailData?.transaction : "",
-          deliveryFee: isEdit ? productDetailData?.deliveryFee : "",
-          price: isEdit ? productDetailData?.price : "",
-          description: isEdit ? productDetailData?.description : ""
+    <>
+      {isLoading && (
+        <div className="fixed inset-0 z-[99]">
+          <Loading />
+        </div>
+      )}
+      <MyForm
+        onSubmit={
+          isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
         }
-      }}
-    >
-      <ProductUploadFormContent
-        isEdit={isEdit}
-        imgData={productDetailData?.imgData}
-      />
-    </MyForm>
+        formOptions={{
+          mode: "onChange",
+          defaultValues: {
+            imgData: isEdit ? productDetailData?.imgData.map(() => ({})) : [],
+            prevImgData: isEdit ? productDetailData?.imgData : [],
+            name: isEdit ? productDetailData?.name : "",
+            sellType: isEdit ? productDetailData?.sellType : "",
+            category: isEdit ? productDetailData?.category : "",
+            location: isEdit ? productDetailData?.location : "",
+            condition: isEdit ? productDetailData?.condition : "",
+            returnPolicy: isEdit ? productDetailData?.returnPolicy : "",
+            transaction: isEdit ? productDetailData?.transaction : "",
+            deliveryFee: isEdit ? productDetailData?.deliveryFee : "",
+            price: isEdit ? productDetailData?.price : "",
+            description: isEdit ? productDetailData?.description : ""
+          }
+        }}
+      >
+        <ProductUploadFormContent
+          isEdit={isEdit}
+          imgData={productDetailData?.imgData}
+        />
+      </MyForm>
+    </>
   );
 }

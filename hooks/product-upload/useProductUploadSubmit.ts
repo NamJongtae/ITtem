@@ -14,6 +14,7 @@ export default function useProductUploadSubmit() {
   const { productUploadMuate } = useProductUploadMutate();
   const user = useAuthStore((state) => state.user);
   const [productUploadLoading, setProductUploadLoading] = useState(false);
+  const [productUploadError, setProductUploadError] = useState(false);
 
   const handleClickProductUploadSubmit = async (values: FieldValues) => {
     try {
@@ -41,6 +42,7 @@ export default function useProductUploadSubmit() {
     } catch (error) {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
+        setProductUploadError(true);
       } else if (error instanceof Error) {
         toast.warn(error.message);
       }
@@ -52,5 +54,6 @@ export default function useProductUploadSubmit() {
   return {
     handleClickProductUploadSubmit,
     productUploadLoading,
+    productUploadError,
   };
 }
