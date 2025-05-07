@@ -2,15 +2,19 @@ import CoreInputField from "../commons/core-input-field/core-input-field";
 import SendVerifyEmailBtn from "../signup/basic-info-step/signup-send-verify-email-btn";
 import EmailError from "../signup/basic-info-step/signup-email-error";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
-import useEmailField from "@/hooks/find-password/useEmailField";
+import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
+import { useEmailFocus } from "@/hooks/signup/basic-info/useEmailFocus";
+import { useVerificationEmailSendHandler } from "@/hooks/signup/basic-info/useVerificationEmailSendHandler";
+import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmailVerificationVaildator";
 
 export default function FindPasswordEmailField() {
-  const {
-    isSendToVerifyEmail,
-    handleClickSendToVerifyEmail,
-    emailRef,
-    isVerifiedEmail,
-  } = useEmailField();
+  const { validate } = useEmailVerificationValidator(true);
+  const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
+  const { emailRef } = useEmailFocus();
+  const { sendToEmailHandler } = useVerificationEmailSendHandler({
+    validate,
+    isFindPw: true
+  });
 
   return (
     !isVerifiedEmail && (
@@ -26,16 +30,14 @@ export default function FindPasswordEmailField() {
             inputReadOnly={isSendToVerifyEmail}
             inputPattern={{
               value: EMAIL_REGEX,
-              message: EMAIL_REGEX_ERRORMSG,
+              message: EMAIL_REGEX_ERRORMSG
             }}
             hideError={true}
             inputRef={emailRef}
           />
 
           {!isSendToVerifyEmail && (
-            <SendVerifyEmailBtn
-              handleClickSendToVerifyEmail={handleClickSendToVerifyEmail}
-            />
+            <SendVerifyEmailBtn sendToEmailHandler={sendToEmailHandler} />
           )}
         </div>
         <EmailError />

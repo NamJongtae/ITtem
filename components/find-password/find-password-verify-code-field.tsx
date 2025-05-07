@@ -1,19 +1,21 @@
 import VerifyCodeInput from "../signup/basic-info-step/signup-verify-code-input";
 import EmailVerifyBtn from "../signup/basic-info-step/signup-email-verify-Btn";
 import VerifyCodeBtns from "../signup/basic-info-step/signup-verify-code-btns";
-import useVerifyCodeField from "@/hooks/find-password/useVerifyCodeField";
+import useVerifyCodeStatus from "@/hooks/signup/basic-info/useVerifyCodeStatus";
+import useRequestSendToVerifyEmailHandler from "@/hooks/signup/basic-info/useRequestSendToVerifyEmailHandler";
+import useVerifyCodeInputFocus from "@/hooks/signup/basic-info/useVerifyCodeFocus";
+import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
+import useVerifyEmailHandler from "@/hooks/signup/basic-info/useVerifyEmailHandler";
+import useResetVerifyEmail from "@/hooks/signup/basic-info/useResetVerifyEmail";
 
 export default function FindPasswordVerifyCodeField() {
-  const {
-    handleClickVerifyEmail,
-    requestSendToVerifyEmail,
-    resetSendToVerifyEmail,
-    verifyCodeRef,
-    verfiyEmailLoading,
-    error,
-    isSendToVerifyEmail,
-    isVerifiedEmail,
-  } = useVerifyCodeField();
+  const { errors } = useVerifyCodeStatus();
+  const { handleClickVerifyEmail, verfiyEmailLoading } =
+    useVerifyEmailHandler(true);
+  const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
+  const { resetSendToVerifyEmail } = useResetVerifyEmail();
+  const { requestSendToVerifyEmail } = useRequestSendToVerifyEmailHandler(true);
+  const { verifyCodeRef } = useVerifyCodeInputFocus();
 
   return (
     isSendToVerifyEmail &&
@@ -32,9 +34,9 @@ export default function FindPasswordVerifyCodeField() {
           />
         </div>
 
-        {error && (
+        {errors && (
           <p className="input_error">
-            {typeof error.message === "string" && error.message}
+            {typeof errors.message === "string" && errors.message}
           </p>
         )}
 
