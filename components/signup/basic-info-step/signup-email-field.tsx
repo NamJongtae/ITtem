@@ -5,23 +5,16 @@ import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import { useVerificationEmailSendHandler } from "@/hooks/signup/basic-info/useVerificationEmailSendHandler";
 
 import { useResetEmailSendStatus } from "@/hooks/signup/basic-info/useResetEmailSendStatus";
-import { useCallback } from "react";
 import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
 import { useEmailFocus } from "@/hooks/signup/basic-info/useEmailFocus";
 import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmailVerificationVaildator";
 
 export default function SignupEmailField() {
   const { validate } = useEmailVerificationValidator(false);
-  const { sendToEmail } = useVerificationEmailSendHandler();
+  const { sendToEmailHandler } = useVerificationEmailSendHandler({ validate });
   const { isSendToVerifyEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
   useResetEmailSendStatus();
-
-  const handleClickSendToVerifyEmail = useCallback(async () => {
-    const isValid = await validate();
-    if (!isValid) return;
-    sendToEmail(false);
-  }, [validate, sendToEmail]);
 
   return (
     <div>
@@ -43,9 +36,7 @@ export default function SignupEmailField() {
         />
 
         {!isSendToVerifyEmail && (
-          <SignupSendVerifyEmailBtn
-            handleClickSendToVerifyEmail={handleClickSendToVerifyEmail}
-          />
+          <SignupSendVerifyEmailBtn sendToEmailHandler={sendToEmailHandler} />
         )}
       </div>
 
