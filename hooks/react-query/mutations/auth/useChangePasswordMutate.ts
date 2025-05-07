@@ -1,4 +1,5 @@
 import { changePassword } from "@/lib/api/auth";
+import useSignupStore from "@/store/signup-store";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -6,12 +7,13 @@ import { toast } from "react-toastify";
 
 export default function useChangePasswordMutate({
   isFindPw,
-  closeModal,
+  closeModal
 }: {
   isFindPw?: boolean;
   closeModal?: () => void;
 }) {
   const router = useRouter();
+  const { actions } = useSignupStore();
   const { mutate: changePasswordMutate, isPending: changePasswordLoading } =
     useMutation<
       AxiosResponse<{ message: string }>,
@@ -27,7 +29,10 @@ export default function useChangePasswordMutate({
         await changePassword({ email, password, currentPassword, isFindPw }),
       onSuccess: async (response) => {
         if (isFindPw) {
-          await router.push("/signin");
+          actions.resetIsSendToVerifyEmail();
+          actions.resetIsVerifedEmail();
+          actions.resetTimer();
+          router.push("/signin");
         }
         if (closeModal) closeModal();
         toast.success(response.data.message);
@@ -36,10 +41,10 @@ export default function useChangePasswordMutate({
         if (isAxiosError<{ message: string }>(error)) {
           toast.warn(error.response?.data.message);
         }
-      },
+      }
     });
   return {
     changePasswordMutate,
-    changePasswordLoading,
+    changePasswordLoading
   };
 }
