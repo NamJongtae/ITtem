@@ -3,15 +3,18 @@ import SigninPasswordField from "./signin-password-field";
 import SigninLinks from "./signin-links";
 import SigninLoginBtn from "./signin-login-btn";
 import SigninSocialLoginBtns from "./signin-social-login-Btns";
-import useSigninFormContent from "@/hooks/signin/useSigninFormContent";
+import useSigninFieldRef from "@/hooks/signin/useSigninFieldRef";
 import SigninModalCloseBtn from "./modal/signin-modal-close-Btn";
+import { useFocusing } from "@/hooks/commons/useFocusing";
 
 interface IProps {
   isModal?: boolean;
 }
 
 export default function SigninFormContent({ isModal }: IProps) {
-  const { emailRef, googleLoginBtnRef, closeBtnRef } = useSigninFormContent();
+  const { emailRef, googleLoginBtnRef, closeBtnRef } = useSigninFieldRef();
+  
+  useFocusing(emailRef);
 
   return (
     <>

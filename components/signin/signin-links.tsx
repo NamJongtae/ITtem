@@ -1,4 +1,4 @@
-import useSigninLinks from "@/hooks/signin/useSigninLinks";
+import useSigninLinkHandler from "@/hooks/signin/useSigninLinkHandler";
 import Link from "next/link";
 
 interface IProps {
@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export default function SigninLinks({ isModal }: IProps) {
-  const { handleBackClick } = useSigninLinks();
+  const { handleLinkClick } = useSigninLinkHandler();
 
   return (
     <div className="flex justify-end gap-3 items-center mb-5">
@@ -14,7 +14,7 @@ export default function SigninLinks({ isModal }: IProps) {
         <Link
           className="text-xs"
           href={"/signup"}
-          onClick={isModal ? (e) => handleBackClick(e, "/signup") : undefined}
+          onClick={isModal ? (e) => handleLinkClick(e, "/signup") : undefined}
         >
           회원가입
         </Link>
@@ -25,7 +25,7 @@ export default function SigninLinks({ isModal }: IProps) {
         className="text-xs"
         href={"/findpassword"}
         onClick={
-          isModal ? (e) => handleBackClick(e, "/findpassword") : undefined
+          isModal ? (e) => handleLinkClick(e, "/findpassword") : undefined
         }
       >
         비밀번호찾기

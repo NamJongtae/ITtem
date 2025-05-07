@@ -1,23 +1,22 @@
-import useSocialLoginBtns from "@/hooks/signin/useSocialLoginBtns";
+import useSocialLogin from "@/hooks/signin/useSocialLogin";
 import Image from "next/image";
-import { MutableRefObject } from "react";
 
 interface IProps {
   isModal?: boolean;
-  googleLoginBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  googleLoginBtnRef: React.MutableRefObject<HTMLButtonElement | null>;
 }
 
 export default function SigninSocialLoginBtns({
   isModal,
   googleLoginBtnRef,
 }: IProps) {
-  const { handleClickGoogleLogin, handleClickKaKaoLogin } =
-    useSocialLoginBtns();
+  const { googleLogin, kakaoLogin } =
+  useSocialLogin();
 
   return (
     <div className="relative flex flex-col gap-3">
       <button
-        onClick={handleClickKaKaoLogin}
+        onClick={kakaoLogin}
         type="button"
         className="relative mt-5 text-sm bg-[#FEE500] py-3 rounded-md"
       >
@@ -38,7 +37,7 @@ export default function SigninSocialLoginBtns({
       />
       <button
         type="button"
-        onClick={() => handleClickGoogleLogin()}
+        onClick={googleLogin}
         className="relative mb-5 text-sm bg-white shadow-[0px_0px_2px_rgba(0,0,0,0.2)] py-3 rounded-md"
         ref={googleLoginBtnRef}
       >

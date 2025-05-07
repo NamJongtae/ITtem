@@ -1,7 +1,7 @@
-import useSigninLoginBtn from "@/hooks/signin/useSigninLoginBtn";
+import useSigninBtnDisabled from "@/hooks/signin/useSigninBtnDisabled";
 
 export default function SigninLoginBtn() {
-  const { isDisabled } = useSigninLoginBtn();
+  const { isDisabled } = useSigninBtnDisabled();
 
   return (
     <button

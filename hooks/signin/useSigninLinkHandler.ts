@@ -1,8 +1,9 @@
 import { useRouter } from "next/navigation";
 
-export default function useSigninLinks() {
+export default function useSigninLinkHandler() {
   const router = useRouter();
-  const handleBackClick = (
+
+  const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     location: string
   ) => {
@@ -12,5 +13,6 @@ export default function useSigninLinks() {
       router.push(location);
     }, 100);
   };
-  return { handleBackClick };
+
+  return { handleLinkClick };
 }

@@ -3,14 +3,14 @@
 import { MyForm } from "../commons/my-form/my-form";
 import Loading from '../commons/loading';
 import SigninFormContent from "./signin-form-content";
-import useSigninForm from "@/hooks/signin/useSigninForm";
+import useSigninHandler from "@/hooks/signin/useSigninHandler";
 
 interface IProps {
   isModal?: boolean;
 }
 
 export default function SigninForm({ isModal }: IProps) {
-  const { signinLoading, handleSingnin } = useSigninForm({ isModal });
+  const { signinLoading, handleSignin } = useSigninHandler({ isModal });
 
   if (signinLoading) {
     return <Loading />;
@@ -18,7 +18,7 @@ export default function SigninForm({ isModal }: IProps) {
 
   return (
     <MyForm
-      onSubmit={handleSingnin}
+      onSubmit={handleSignin}
       formOptions={{
         mode: "onChange",
         defaultValues: {
