@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import useProfileProductListInfiniteQuery from "../react-query/queries/profile/useProfileProductListInfiniteQuery";
 import useRecommendProductInfiniteQuery from "../react-query/queries/product/useRecommendProductInfiniteQuery";
 
-export default function useProductList(
+export default function useInfiniteProductList(
   productListType: ProductListType,
   productIds?: string[],
   profileProductCategory?: ProductCategory

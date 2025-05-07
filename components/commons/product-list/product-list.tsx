@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import ProductListItem from "./product-list-item";
 import { ProductCategory, ProductListType } from "@/types/product-types";
 import ProductListError from "./product-list-error";
-import useProductList from "@/hooks/commons/useProductList";
+import useInfiniteProductList from "@/hooks/commons/useInfiniteProductList";
 import Empty from "../empty";
 import ProductListSkeletonUI from "./product-list-skeletonUI";
 import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
@@ -30,7 +30,7 @@ export default function ProductList({
     hasNextPage,
     error,
     emptyMessage
-  } = useProductList(productListType, productIds, profileProductCategory);
+  } = useInfiniteProductList(productListType, productIds, profileProductCategory);
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
