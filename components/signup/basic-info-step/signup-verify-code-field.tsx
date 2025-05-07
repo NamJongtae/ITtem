@@ -1,19 +1,21 @@
 import VerifyCodeInput from "./signup-verify-code-input";
 import VerifyCodeBtns from "./signup-verify-code-btns";
 import EmailVerifyBtn from "./signup-email-verify-Btn";
-import useVerifyCodeField from "@/hooks/signup/useVerifyCodeField";
+import useVerifyCodeStatus from "@/hooks/signup/basic-info/useVerifyCodeStatus";
+import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
+import useVerifyEmailHandler from "@/hooks/signup/basic-info/useVerifyEmailHandler";
+import useRequestSendToVerifyEmailHandler from "@/hooks/signup/basic-info/useRequestSendToVerifyEmailHandler";
+import useVerifyCodeInputFocus from "@/hooks/signup/basic-info/useVerifyCodeFocus";
 
 export default function SignupVerifyCodeField() {
-  const {
-    handleClickVerifyEmail,
-    requestSendToVerifyEmail,
-    resetSendToVerifyEmail,
-    verifyCodeRef,
-    verfiyEmailLoading,
-    isSendToVerifyEmail,
-    isVerifiedEmail,
-    error,
-  } = useVerifyCodeField();
+  const { verifyCodeRef } = useVerifyCodeInputFocus();
+  const { handleClickVerifyEmail, verfiyEmailLoading } =
+    useVerifyEmailHandler(false);
+  const { requestSendToVerifyEmail } =
+    useRequestSendToVerifyEmailHandler(false);
+  const { isSendToVerifyEmail, isVerifiedEmail, resetSendToVerifyEmail } =
+    useEmailStatus();
+  const { errors } = useVerifyCodeStatus();
 
   return (
     isSendToVerifyEmail &&
@@ -33,9 +35,9 @@ export default function SignupVerifyCodeField() {
             />
           </div>
 
-          {error && (
+          {errors && (
             <p className="input_error">
-              {typeof error.message === "string" && error.message}
+              {typeof errors.message === "string" && errors.message}
             </p>
           )}
 

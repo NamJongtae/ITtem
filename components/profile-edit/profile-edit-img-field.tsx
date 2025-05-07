@@ -1,4 +1,4 @@
-import useProfileImg from "@/hooks/signup/useProfileImg";
+import useProfileImg from "@/hooks/signup/profile/useProfileImg";
 import ProfileImgInput from "@/components/signup/profile-setting-step/sigup-profile-img-input";
 import { MutableRefObject } from "react";
 import ImgInputBtn from "./profile-edit-Img-input-btn";

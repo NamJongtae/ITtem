@@ -1,4 +1,4 @@
-import useVerifyEmail from "../signup/useVerifyEmail";
+import useVerifyEmail from "../signup/basic-info/useVerifyCodeInput";
 import { useFormContext } from "react-hook-form";
 import useSignupStore from "@/store/signup-store";
 

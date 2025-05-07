@@ -1,4 +1,4 @@
-import useSendVerifyEmailBtn from "@/hooks/signup/useSendVerifyEmailBtn";
+import useSendVerifyEmailBtnDisabled from '@/hooks/signup/basic-info/useSendVerifyEmailBtnDisabled';
 
 interface IProps {
   handleClickSendToVerifyEmail: () => void;
@@ -6,7 +6,7 @@ interface IProps {
 export default function SignupSendVerifyEmailBtn({
   handleClickSendToVerifyEmail,
 }: IProps) {
-  const { isDisabled } = useSendVerifyEmailBtn();
+  const { isDisabled } = useSendVerifyEmailBtnDisabled();
 
   return (
     <button

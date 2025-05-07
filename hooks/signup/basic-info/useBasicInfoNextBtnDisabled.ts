@@ -1,8 +1,7 @@
 import useSignupStore from '@/store/signup-store';
-import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
-export default function useBasicInfoStepBtns() {
+export default function useBasicInfoNextBtnDisabled() {
   const { formState } = useFormContext();
   const errors =
     formState.errors["email"] ||
@@ -16,13 +15,8 @@ export default function useBasicInfoStepBtns() {
   const isVerifiedEmail = useSignupStore(
     (state) => state.isVerifiedEmail
   );
+
   const isDisabled = !!errors || !isDirty || !isVerifiedEmail;
 
-  const router = useRouter();
-
-  const handleCilckToback = () => {
-    router.push("/");
-  };
-
-  return { isDisabled, handleCilckToback };
+  return { isDisabled };
 }

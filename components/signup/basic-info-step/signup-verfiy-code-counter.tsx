@@ -1,4 +1,4 @@
-import useVerifyEmailTimer from "@/hooks/signup/useVerifyEmailTimer";
+import useVerifyEmailTimer from '@/hooks/signup/basic-info/useVerifyEmailTimer';
 
 export default function SignupVerfiyCodeTimer() {
   const { timer } = useVerifyEmailTimer();

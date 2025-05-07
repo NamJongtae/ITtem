@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
 
-export default function useSendVerifyEmailBtn() {
+export default function useSendVerifyEmailBtnDisabled() {
   const { formState } = useFormContext();
-  const error = formState.errors["email"];
+  const errors = formState.errors["email"];
   const isDirty = formState.dirtyFields["email"];
-  const isDisabled = !!error || !isDirty;
+  const isDisabled = !!errors || !isDirty;
 
   return { isDisabled };
 }

@@ -3,16 +3,16 @@ import { MutableRefObject } from "react";
 import VerfiyCodeCounter from "./signup-verfiy-code-counter";
 import {
   VERIFYCODE_REGEX,
-  VERIFYCODE_REGEX_ERRORMSG,
+  VERIFYCODE_REGEX_ERRORMSG
 } from "@/constants/constant";
-import useVerifyCodeInput from "@/hooks/signup/useVerifyCodeInput";
+import useVerifyCodeFocusController from "@/hooks/signup/basic-info/useVerifyCodeFocusController";
 
 interface IProps {
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
-  const { isFocus, onFocus, onBlur } = useVerifyCodeInput();
+  const { isFocus, onFocus, onBlur } = useVerifyCodeFocusController();
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
         inputOnFocus={onFocus}
         inputPattern={{
           value: VERIFYCODE_REGEX,
-          message: VERIFYCODE_REGEX_ERRORMSG,
+          message: VERIFYCODE_REGEX_ERRORMSG
         }}
         inputOnBlur={onBlur}
         inputValidate={(value) => value.length === 6}

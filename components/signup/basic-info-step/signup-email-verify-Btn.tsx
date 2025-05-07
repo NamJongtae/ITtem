@@ -1,4 +1,4 @@
-import useEmailVerifyBtn from "@/hooks/signup/useEmailVerifyBtn";
+import useEmailVerifyBtn from "@/hooks/signup/basic-info/useEmailVerifyBtnDisabled";
 
 interface IProps {
   handleClickVerifyEmail: () => void;

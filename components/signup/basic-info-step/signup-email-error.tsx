@@ -1,12 +1,12 @@
-import useEmailError from "@/hooks/signup/useEmailError";
+import useEmailStatus from '@/hooks/signup/basic-info/useEmailStatus';
 
 export default function SignupEmailError() {
-  const { error } = useEmailError();
+  const { errors } = useEmailStatus();
 
   return (
-    error?.message && (
+    errors?.message && (
       <p className="input_error">
-        {typeof error.message === "string" ? error.message : ""}
+        {typeof errors.message === "string" ? errors.message : ""}
       </p>
     )
   );

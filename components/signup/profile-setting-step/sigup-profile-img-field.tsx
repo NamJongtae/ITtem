@@ -1,15 +1,11 @@
-import useProfileImg from "@/hooks/signup/useProfileImg";
 import SingupProfileImgInput from "./sigup-profile-img-input";
 import SingupProfileImgInputBtn from "./sigup-profile-img-input-btn";
+import { useProfileImgPreview } from "@/hooks/signup/profile/useProfileImgPreview";
+import { useImgInputTrigger } from '@/hooks/signup/profile/useImgInputTrigger';
 
 export default function SignupProfileImgField() {
-  const {
-    handleClickImgInput,
-    resetProfileImg,
-    preview,
-    handleChangeImg,
-    imgInputRef,
-  } = useProfileImg();
+  const { handleChangeImg, resetProfileImg, preview } = useProfileImgPreview();
+  const { handleClickImgInput, imgInputRef } = useImgInputTrigger();
 
   return (
     <div className="flex items-center justify-center">

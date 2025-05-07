@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useVerifyCodeInput() {
+export default function useVerifyCodeFocusController() {
   const [isFocus, setIsFocus] = useState(false);
   const onFocus = () => {
     setIsFocus(true);

@@ -11,7 +11,7 @@ interface IProps {
 export default function SigninEmailField({
   isModal,
   emailRef,
-  closeBtnRef,
+  closeBtnRef
 }: IProps) {
   return (
     <div className="mb-2">
@@ -22,7 +22,7 @@ export default function SigninEmailField({
         inputType="text"
         inputPattern={{
           value: EMAIL_REGEX,
-          message: EMAIL_REGEX_ERRORMSG,
+          message: EMAIL_REGEX_ERRORMSG
         }}
         inputRequired={"이메일을 입력해주세요."}
         inputPlaceholder={"이메일을 입력해주세요."}
@@ -32,7 +32,7 @@ export default function SigninEmailField({
             ? (e) =>
                 optimizationTabFocus({
                   event: e,
-                  previousTarget: closeBtnRef.current,
+                  previousTarget: closeBtnRef.current
                 })
             : undefined
         }
