@@ -16,7 +16,7 @@ export interface VerifyEmailResponseData {
 
 export interface SignupResponseData {
   message: string;
-  user: { nickname: string; profileImg: string };
+  user: AuthData;
 }
 
 export interface EmailDuplicationResponseData {

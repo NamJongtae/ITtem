@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       nickname,
       profileImg: profileImgData.url,
       profileImgFilename: profileImgData.name,
-      introduce,
+      introduce
     };
 
     const newUser = new User(userData);
@@ -56,9 +56,9 @@ export async function POST(req: NextRequest) {
 
     await createAndSaveToken({
       user: {
-        uid: newUser._id,
+        uid: newUser._id
       },
-      session,
+      session
     });
 
     await deleteEmailVerifyCode(email);
@@ -66,7 +66,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "회원가입에 성공했어요.",
-        user: { nickname, profileImg: profileImgData.url },
+        user: {
+          uid: newUser._id,
+          email,
+          nickname,
+          profileImg: profileImgData.url
+        }
       },
       { status: 201 }
     );
@@ -79,14 +84,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           message: "유효하지 않은 값이 있어요.",
-          error: errorMessages,
+          error: errorMessages
         },
         { status: 422 }
       );
     }
     return NextResponse.json(
       {
-        message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
