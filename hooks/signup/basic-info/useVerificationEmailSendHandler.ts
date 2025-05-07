@@ -5,28 +5,29 @@ import { useCallback } from "react";
 
 interface IParams {
   validate: () => Promise<boolean>;
+  isFindPw: boolean;
 }
 
-export function useVerificationEmailSendHandler({ validate }: IParams) {
+export function useVerificationEmailSendHandler({
+  validate,
+  isFindPw
+}: IParams) {
   const { getValues } = useFormContext();
   const actions = useSignupStore((state) => state.actions);
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
 
-  const sendToEmail = useCallback(
-    (isFindPw: boolean) => {
-      const email = getValues("email");
-      actions.sendToVerifyEmail();
-      actions.resetTimer();
-      actions.setSendToVerifyEmailLoading(true);
-      sendToVerifyEmailMutate({ email, isFindPw });
-    },
-    [actions, getValues, sendToVerifyEmailMutate]
-  );
+  const sendToEmail = useCallback(() => {
+    const email = getValues("email");
+    actions.sendToVerifyEmail();
+    actions.resetTimer();
+    actions.setSendToVerifyEmailLoading(true);
+    sendToVerifyEmailMutate({ email, isFindPw });
+  }, [actions, getValues, sendToVerifyEmailMutate, isFindPw]);
 
   const sendToEmailHandler = useCallback(async () => {
     const isValid = await validate();
     if (!isValid) return;
-    sendToEmail(false);
+    sendToEmail();
   }, [validate, sendToEmail]);
 
   return { sendToEmailHandler };

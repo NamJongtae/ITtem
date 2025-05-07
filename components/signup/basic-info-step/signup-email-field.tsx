@@ -11,7 +11,10 @@ import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmai
 
 export default function SignupEmailField() {
   const { validate } = useEmailVerificationValidator(false);
-  const { sendToEmailHandler } = useVerificationEmailSendHandler({ validate });
+  const { sendToEmailHandler } = useVerificationEmailSendHandler({
+    validate,
+    isFindPw: false
+  });
   const { isSendToVerifyEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
   useResetEmailSendStatus();
