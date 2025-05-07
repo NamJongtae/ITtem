@@ -6,6 +6,7 @@ import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
 import useVerifyEmailHandler from "@/hooks/signup/basic-info/useVerifyEmailHandler";
 import useRequestSendToVerifyEmailHandler from "@/hooks/signup/basic-info/useRequestSendToVerifyEmailHandler";
 import useVerifyCodeInputFocus from "@/hooks/signup/basic-info/useVerifyCodeFocus";
+import useResetVerifyEmail from "@/hooks/signup/basic-info/useResetVerifyEmail";
 
 export default function SignupVerifyCodeField() {
   const { verifyCodeRef } = useVerifyCodeInputFocus();
@@ -13,8 +14,8 @@ export default function SignupVerifyCodeField() {
     useVerifyEmailHandler(false);
   const { requestSendToVerifyEmail } =
     useRequestSendToVerifyEmailHandler(false);
-  const { isSendToVerifyEmail, isVerifiedEmail, resetSendToVerifyEmail } =
-    useEmailStatus();
+  const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
+  const { resetSendToVerifyEmail } = useResetVerifyEmail();
   const { errors } = useVerifyCodeStatus();
 
   return (
