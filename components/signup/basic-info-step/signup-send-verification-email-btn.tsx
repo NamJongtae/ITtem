@@ -3,7 +3,7 @@ import useVerificationEmailSendBtnDisabled from '@/hooks/signup/basic-info/useVe
 interface IProps {
   sendToEmailHandler: () => void;
 }
-export default function SignupSendVerifyEmailBtn({
+export default function SignupSendVerificationEmailBtn({
   sendToEmailHandler
 }: IProps) {
   const { isDisabled } = useVerificationEmailSendBtnDisabled();

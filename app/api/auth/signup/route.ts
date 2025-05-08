@@ -1,4 +1,4 @@
-import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
+import { deleteEmailVerificationCode, getVerifiedEmail } from "@/lib/api/redis";
 import { getHasdPassword } from "@/lib/api/auth";
 import dbConnect from "@/lib/db/db";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
       await req.json();
 
     try {
-      const isVerifyedEmail = await getVerifiedEmail(email);
-      if (!isVerifyedEmail) {
+      const isEmailVerified = await getVerifiedEmail(email);
+      if (!isEmailVerified) {
         return NextResponse.json(
           { message: "인증되지 않은 이메일이에요." },
           { status: 401 }
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       session
     });
 
-    await deleteEmailVerifyCode(email);
+    await deleteEmailVerificationCode(email);
 
     return NextResponse.json(
       {

@@ -1,33 +1,33 @@
-import { VERIFY_EMAIL_EXP } from "@/constants/constant";
+import { VERIFICATION_EMAIL_EXP } from "@/constants/constant";
 import { create, ImmerDevtoolsStateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 interface VerificationEmailState {
-  isSendToVerifyEmail: boolean;
+  isSendToVerificationEmail: boolean;
   isVerifiedEmail: boolean;
   timer: number;
-  sendToVerifyEmailLoading: boolean;
-  sendToVerifyEmailError: boolean;
+  sendToVerificationEmailLoading: boolean;
+  sendToVerificationEmailError: boolean;
   actions: {
     decrementTimer: () => void;
     resetTimer: () => void;
     inactiveTimer: () => void;
-    sendToVerifyEmail: () => void;
-    resetIsSendToVerifyEmail: () => void;
+    sendToVerificationEmail: () => void;
+    resetIsSendToVerificationEmail: () => void;
     verifyEmail: () => void;
     resetIsVerifedEmail: () => void;
-    setSendToVerifyEmailLoading: (isLoading: boolean) => void;
-    setSendToVerifyEmailError: (isError: boolean) => void;
+    setSendToVerificationEmailLoading: (isLoading: boolean) => void;
+    setSendToVerificationEmailError: (isError: boolean) => void;
   };
 }
 
 export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) => ({
-  isSendToVerifyEmail: false,
+  isSendToVerificationEmail: false,
   isVerifiedEmail: false,
-  timer: VERIFY_EMAIL_EXP,
-  sendToVerifyEmailLoading: false,
-  sendToVerifyEmailError: false,
+  timer: VERIFICATION_EMAIL_EXP,
+  sendToVerificationEmailLoading: false,
+  sendToVerificationEmailError: false,
   actions: {
     decrementTimer: () => {
       set(
@@ -43,7 +43,7 @@ export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) =>
     resetTimer: () => {
       set(
         (state: VerificationEmailState) => {
-          state.timer = VERIFY_EMAIL_EXP;
+          state.timer = VERIFICATION_EMAIL_EXP;
         },
         false,
         "verificationEmail/resetTimer"
@@ -58,22 +58,22 @@ export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) =>
         "verificationEmail/inactiveTimer"
       );
     },
-    sendToVerifyEmail: () => {
+    sendToVerificationEmail: () => {
       set(
         (state: VerificationEmailState) => {
-          state.isSendToVerifyEmail = true;
+          state.isSendToVerificationEmail = true;
         },
         false,
-        "verificationEmail/sendToVerifyEmail"
+        "verificationEmail/sendToVerificationEmail"
       );
     },
-    resetIsSendToVerifyEmail: () => {
+    resetIsSendToVerificationEmail: () => {
       set(
         (state: VerificationEmailState) => {
-          state.isSendToVerifyEmail = false;
+          state.isSendToVerificationEmail = false;
         },
         false,
-        "verificationEmail/resetIsSendToVerifyEmail"
+        "verificationEmail/resetIsSendToVerificationEmail"
       );
     },
     verifyEmail: () => {
@@ -82,7 +82,7 @@ export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) =>
           state.isVerifiedEmail = true;
         },
         false,
-        "verificationEmail/verifiedEmail"
+        "verificationEmail/verifiyEmail"
       );
     },
     resetIsVerifedEmail: () => {
@@ -94,22 +94,22 @@ export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) =>
         "verificationEmail/resetIsVerifedEmail"
       );
     },
-    setSendToVerifyEmailLoading: (isLoading: boolean) => {
+    setSendToVerificationEmailLoading: (isLoading: boolean) => {
       set(
         (state: VerificationEmailState) => {
-          state.sendToVerifyEmailLoading = isLoading;
+          state.sendToVerificationEmailLoading = isLoading;
         },
         false,
-        "verificationEmail/setSendToVerifyEmailLoading"
+        "verificationEmail/setSendToVerificationEmailLoading"
       );
     },
-    setSendToVerifyEmailError: (isError: boolean) => {
+    setSendToVerificationEmailError: (isError: boolean) => {
       set(
         (state: VerificationEmailState) => {
-          state.sendToVerifyEmailError = isError;
+          state.sendToVerificationEmailError = isError;
         },
         false,
-        "verificationEmail/setSendToVerifyEmailError"
+        "verificationEmail/setSendToVerificationEmailError"
       );
     }
   }

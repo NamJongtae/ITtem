@@ -3,15 +3,15 @@ import { useEffect, useRef } from "react";
 
 export function useEmailFocus() {
   const emailRef = useRef<HTMLInputElement | null>(null);
-  const isSendToVerifyEmail = useVerificationEmailStore(
-    (state) => state.isSendToVerifyEmail
+  const isSendToVerificationEmail = useVerificationEmailStore(
+    (state) => state.isSendToVerificationEmail
   );
 
   useEffect(() => {
-    if (!isSendToVerifyEmail && emailRef.current) {
+    if (!isSendToVerificationEmail && emailRef.current) {
       emailRef.current.focus();
     }
-  }, [isSendToVerifyEmail, emailRef]);
+  }, [isSendToVerificationEmail, emailRef]);
 
   return { emailRef };
 }

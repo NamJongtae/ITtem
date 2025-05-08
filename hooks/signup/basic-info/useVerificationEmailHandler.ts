@@ -1,23 +1,23 @@
 import { useFormContext } from "react-hook-form";
-import useVerifyEmailMutate from "../../react-query/mutations/auth/useVerifyEmailMutate";
+import useVerificationEmailMutate from "../../react-query/mutations/auth/useVerificationEmailMutate";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
 
 export default function useVerificationEmailHandler(isFindPw: boolean) {
   const { getValues } = useFormContext();
 
-  const { verifyEmailMuate, verfiyEmailLoading } = useVerifyEmailMutate();
+  const { verificationEmailMuate, verificationEmailLoading } = useVerificationEmailMutate();
 
-  const handleClickVerifyEmail = useCallback(async () => {
+  const handleClickVerificationEmail = useCallback(async () => {
     const email = getValues("email");
-    const verifyCode = getValues("verifyCode");
-    if (!verifyCode) {
+    const verificationCode = getValues("verificationCode");
+    if (!verificationCode) {
       toast.warn("인증번호를 입력해주세요.");
       return;
     }
 
-    verifyEmailMuate({ email, verifyCode, isFindPw });
-  }, [getValues, isFindPw, verifyEmailMuate]);
+    verificationEmailMuate({ email, verificationCode, isFindPw });
+  }, [getValues, isFindPw, verificationEmailMuate]);
 
-  return { verfiyEmailLoading, handleClickVerifyEmail };
+  return { verificationEmailLoading, handleClickVerificationEmail };
 }

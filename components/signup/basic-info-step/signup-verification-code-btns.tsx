@@ -3,18 +3,18 @@ import useVerificationEmailStore from '@/store/verification-email-store';
 import { MutableRefObject } from "react";
 
 interface IProps {
-  requestSendToVerifyEmail: () => void;
-  resetSendToVerifyEmail: () => void;
-  verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
+  requestSendToVerificationEmail: () => void;
+  resetSendToVerificationEmail: () => void;
+  verificationCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
-export default function SignupVerifyCodeBtns({
-  requestSendToVerifyEmail,
-  resetSendToVerifyEmail,
-  verifyCodeRef
+export default function SignupVerificationCodeBtns({
+  requestSendToVerificationEmail,
+  resetSendToVerificationEmail,
+  verificationCodeRef
 }: IProps) {
-  const sendToVerifyEmailLoading = useVerificationEmailStore(
-    (state) => state.sendToVerifyEmailLoading
+  const sendToVerificationEmailLoading = useVerificationEmailStore(
+    (state) => state.sendToVerificationEmailLoading
   );
 
   return (
@@ -23,16 +23,16 @@ export default function SignupVerifyCodeBtns({
         인증코드가 오지 않았나요?{" "}
         <button
           onClick={() => {
-            requestSendToVerifyEmail();
-            if (!verifyCodeRef.current) return;
-            verifyCodeRef.current.focus();
+            requestSendToVerificationEmail();
+            if (!verificationCodeRef.current) return;
+            verificationCodeRef.current.focus();
           }}
           className={`${
-            !sendToVerifyEmailLoading && "underline"
+            !sendToVerificationEmailLoading && "underline"
           } text-gray-400  underline-offset-2`}
           type='button'
         >
-          {sendToVerifyEmailLoading ? (
+          {sendToVerificationEmailLoading ? (
             <div className='flex items-center ml-1'>
               <Spinner className='w-[14px] h-[14px] mr-1' />
               전송중...
@@ -45,7 +45,7 @@ export default function SignupVerifyCodeBtns({
       <p>
         이메일을 잘못입력하셨나요?{" "}
         <button
-          onClick={resetSendToVerifyEmail}
+          onClick={resetSendToVerificationEmail}
           className='text-gray-400 underline underline-offset-2 mt-1'
           type='button'
         >

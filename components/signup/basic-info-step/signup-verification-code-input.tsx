@@ -1,18 +1,18 @@
 import CoreInputField from "@/components/commons/core-input-field/core-input-field";
 import { MutableRefObject } from "react";
-import VerfiyCodeCounter from "./signup-verfiy-code-counter";
+import VerfiyCodeCounter from "./signup-verification-code-counter";
 import {
-  VERIFYCODE_REGEX,
-  VERIFYCODE_REGEX_ERRORMSG
+  VERIFICATION_CODE_REGEX,
+  VERIFICATION_CODE_REGEX_ERRORMSG
 } from "@/constants/constant";
 import useVerificationCodeFocusController from "@/hooks/signup/basic-info/useVerificationCodeFocusController";
 import useResetInputOnTimerEnd from "@/hooks/signup/basic-info/useResetInputOnTimerEnd";
 
 interface IProps {
-  verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
+  verificationCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
-export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
+export default function SignupVerificationCodeInput({ verificationCodeRef }: IProps) {
   const { isFocus, onFocus, onBlur } = useVerificationCodeFocusController();
   const { timer } = useResetInputOnTimerEnd();
 
@@ -25,8 +25,8 @@ export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
       <CoreInputField
         inputClassName="border-hidden focus:outline-none group root_input"
         label="인증코드"
-        inputId="verifyCode"
-        inputName="verifyCode"
+        inputId="verificationCode"
+        inputName="verificationCode"
         inputType="text"
         inputMinLength={6}
         inputMaxLength={6}
@@ -34,12 +34,12 @@ export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
         hideError={true}
         inputOnFocus={onFocus}
         inputPattern={{
-          value: VERIFYCODE_REGEX,
-          message: VERIFYCODE_REGEX_ERRORMSG
+          value: VERIFICATION_CODE_REGEX,
+          message: VERIFICATION_CODE_REGEX_ERRORMSG
         }}
         inputOnBlur={onBlur}
         inputValidate={(value) => value.length === 6}
-        inputRef={verifyCodeRef}
+        inputRef={verificationCodeRef}
         disabled={timer <= 0}
       />
       <VerfiyCodeCounter />

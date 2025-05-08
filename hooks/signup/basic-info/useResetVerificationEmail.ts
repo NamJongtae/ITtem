@@ -4,8 +4,8 @@ import { useCallback, useEffect } from "react";
 export default function useResetVerificationEmail() {
   const actions = useVerificationEmailStore((state) => state.actions);
 
-  const resetSendToVerifyEmail = useCallback(() => {
-    actions.resetIsSendToVerifyEmail();
+  const resetSendToVerificationEmail = useCallback(() => {
+    actions.resetIsSendToVerificationEmail();
   }, [actions]);
 
   useEffect(() => {
@@ -15,5 +15,5 @@ export default function useResetVerificationEmail() {
     };
   }, [actions]);
 
-  return { resetSendToVerifyEmail };
+  return { resetSendToVerificationEmail };
 }

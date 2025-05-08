@@ -1,8 +1,8 @@
 import { emailHTML } from "@/lib/emailHTML";
-import { getEmailVerifyCode, saveEmailVerifyCode } from "@/lib/api/redis";
+import { getEmailVerificationCode, saveEmailVerificationCode } from "@/lib/api/redis";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
-import { VERIFY_EMAIL_BLOCK_EXP, VERIFY_EMAIL_EXP } from "@/constants/constant";
+import { VERIFICATION_EMAIL_BLOCK_EXP, VERIFICATION_EMAIL_EXP } from "@/constants/constant";
 import { getSmtpTransport } from "@/lib/server";
 
 export async function POST(req: NextRequest) {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       html
     };
 
-    const data = await getEmailVerifyCode(email, isFindPw);
+    const data = await getEmailVerificationCode(email, isFindPw);
     if (data && parseInt(data.count) >= 10) {
       return NextResponse.json(
         {
@@ -56,15 +56,15 @@ export async function POST(req: NextRequest) {
     });
 
     if (data) {
-      await saveEmailVerifyCode(
+      await saveEmailVerificationCode(
         email,
         verfiyCode,
         isFindPw,
         parseInt(data.count) + 1,
-        parseInt(data.count) >= 9 ? VERIFY_EMAIL_BLOCK_EXP : VERIFY_EMAIL_EXP
+        parseInt(data.count) >= 9 ? VERIFICATION_EMAIL_BLOCK_EXP : VERIFICATION_EMAIL_EXP
       );
     } else {
-      await saveEmailVerifyCode(email, verfiyCode, isFindPw);
+      await saveEmailVerificationCode(email, verfiyCode, isFindPw);
     }
 
     return NextResponse.json(

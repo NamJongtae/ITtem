@@ -1,7 +1,7 @@
 import {
   VERIFIED_EMAIL_EXP,
-  VERIFY_EMAIL_BLOCK_EXP,
-  VERIFY_EMAIL_EXP,
+  VERIFICATION_EMAIL_BLOCK_EXP,
+  VERIFICATION_EMAIL_EXP,
 } from "@/constants/constant";
 import { Redis } from '@upstash/redis';
 
@@ -35,7 +35,7 @@ export const saveVerifiedEmail = async (email: string, isFindPw?: boolean) => {
   try {
     const redis = await client();
     const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
-    await redis.hset(key, { isVerify: true });
+    await redis.hset(key, { isVerification: true });
     await redis.expire(key, VERIFIED_EMAIL_EXP);
   } catch (error) {
     console.error("saveVerifiedEmail error:", error);
@@ -46,16 +46,16 @@ export const getVerifiedEmail = async (email: string, isFindPw?: boolean) => {
   try {
     const redis = await client();
     const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
-    const isVerify = await redis.hget(key, "isVerify");
+    const isVerification = await redis.hget(key, "isVerification");
 
-    return isVerify;
+    return isVerification;
   } catch (error) {
     console.error("getVerifiedEmail error:", error);
     return false;
   }
 };
 
-export const incrementVerifyEmailCounter = async (
+export const incrementVerificationEmailCounter = async (
   email: string,
   count: string | undefined,
   isFindPw?: boolean
@@ -67,44 +67,44 @@ export const incrementVerifyEmailCounter = async (
     const newCount = parseInt(count, 10) + 1;
     await redis.hset(key, { count: newCount });
     if (newCount >= 9) {
-      await redis.expire(key, VERIFY_EMAIL_BLOCK_EXP);
+      await redis.expire(key, VERIFICATION_EMAIL_BLOCK_EXP);
     }
   } catch (error) {
-    console.error("incrementVerifyEmailCounter error:", error);
+    console.error("increment tVerification Email Counter Error:", error);
   }
 };
 
-export const saveEmailVerifyCode = async (
+export const saveEmailVerificationCode = async (
   email: string,
-  verifyCode: string,
+  verificationCode: string,
   isFindPw?: boolean,
   count = 1,
-  exp = VERIFY_EMAIL_EXP
+  exp = VERIFICATION_EMAIL_EXP
 ) => {
   try {
     const redis = await client();
     const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
-    await redis.hset(key, { isVerify: false, verifyCode, count });
+    await redis.hset(key, { isVerification: false, verificationCode, count });
     await redis.expire(key, exp);
   } catch (error) {
-    console.error("saveEmailVerifyCode error:", error);
+    console.error("Save Email Verification Code Error:", error);
   }
 };
 
-export const getEmailVerifyCode = async (email: string, isFindPw?: boolean) => {
+export const getEmailVerificationCode = async (email: string, isFindPw?: boolean) => {
   try {
     const redis = await client();
     const key = isFindPw ? `findPw:${email}` : `signup:${email}`;
-    const result: { verifyCode: string; count: string } | null =
+    const result: { verificationCode: string; count: string } | null =
       await redis.hgetall(key);
     return result;
   } catch (error) {
-    console.error("getEmailVerifyCode error:", error);
+    console.error("Get Email Verification Code Error:", error);
     return null;
   }
 };
 
-export const deleteEmailVerifyCode = async (
+export const deleteEmailVerificationCode = async (
   email: string,
   isFindPw?: boolean
 ) => {
@@ -114,7 +114,7 @@ export const deleteEmailVerifyCode = async (
     const result = await redis.del(key);
     return result;
   } catch (error) {
-    console.error("deleteEmailVerifyCode error:", error);
+    console.error("Delete Email Verification Code Error:", error);
   }
 };
 

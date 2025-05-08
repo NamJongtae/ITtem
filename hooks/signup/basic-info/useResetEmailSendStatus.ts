@@ -5,7 +5,7 @@ export function useResetEmailSendStatus() {
   const actions = useVerificationEmailStore((state) => state.actions);
   useEffect(() => {
     return () => {
-      actions.resetIsSendToVerifyEmail();
+      actions.resetIsSendToVerificationEmail();
     };
   }, []);
 }

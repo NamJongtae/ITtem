@@ -6,17 +6,17 @@ import { toast } from "react-toastify";
 export default function useVerificationEmailTimer() {
   const { setError } = useFormContext();
   const timer = useVerificationEmailStore((state) => state.timer);
-  const isSendToVerifyEmail = useVerificationEmailStore(
-    (state) => state.isSendToVerifyEmail
+  const isSendToVerificationEmail = useVerificationEmailStore(
+    (state) => state.isSendToVerificationEmail
   );
   const isVerifiedEmail = useVerificationEmailStore(
     (state) => state.isVerifiedEmail
   );
-  const sendToVerifyEmailLoading = useVerificationEmailStore(
-    (state) => state.sendToVerifyEmailLoading
+  const sendToVerificationEmailLoading = useVerificationEmailStore(
+    (state) => state.sendToVerificationEmailLoading
   );
-  const sendToVerifyEmailError = useVerificationEmailStore(
-    (state) => state.sendToVerifyEmailError
+  const sendToVerificationEmailError = useVerificationEmailStore(
+    (state) => state.sendToVerificationEmailError
   );
   const actions = useVerificationEmailStore((state) => state.actions);
   const counterRef = useRef(timer);
@@ -27,14 +27,14 @@ export default function useVerificationEmailTimer() {
   }, [timer]);
 
   useEffect(() => {
-    if (isSendToVerifyEmail) {
+    if (isSendToVerificationEmail) {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      
+
       intervalRef.current = setInterval(() => {
         if (counterRef.current <= 0) {
-          if (!sendToVerifyEmailError) {
+          if (!sendToVerificationEmailError) {
             toast.warn("인증 시간이 만료되었어요.");
-            setError("verifyCode", {
+            setError("verificationCode", {
               type: "validate",
               message: "인증 시간이 만료되었어요. 인증 재요청을 해주세요."
             });
@@ -48,7 +48,7 @@ export default function useVerificationEmailTimer() {
       }, 1000);
     }
 
-    if (isVerifiedEmail || sendToVerifyEmailError) {
+    if (isVerifiedEmail || isSendToVerificationEmail) {
       clearInterval(counterRef.current);
     }
 
@@ -57,10 +57,10 @@ export default function useVerificationEmailTimer() {
     };
   }, [
     actions,
-    isSendToVerifyEmail,
+    isSendToVerificationEmail,
     isVerifiedEmail,
-    sendToVerifyEmailError,
-    sendToVerifyEmailLoading,
+    sendToVerificationEmailError,
+    sendToVerificationEmailLoading,
     setError
   ]);
 

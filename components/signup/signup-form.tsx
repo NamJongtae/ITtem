@@ -13,7 +13,7 @@ export default function SignupForm({ onSubmit }: IProps) {
         mode: "onChange",
         defaultValues: {
           email: "",
-          verifyCode: "",
+          verificationCode: "",
           password: "",
           nickname: "",
           profileImg: "",

@@ -1,7 +1,7 @@
 import SignupEmailField from "./signup-email-field";
 import SignupPasswordField from "./signup-password-field";
 import SignupBasicInfoStepBtns from "./basic-info-step-btns";
-import SignupVerifyCodeField from "./signup-verify-code-field";
+import SignupVerificationCodeField from "./signup-verification-code-field";
 
 interface IProps {
   nextStepHandler: () => void;
@@ -13,7 +13,7 @@ export default function SignupBasicInfoStep({ nextStepHandler }: IProps) {
       <div className="flex flex-col gap-3">
         <SignupEmailField />
 
-        <SignupVerifyCodeField />
+        <SignupVerificationCodeField />
 
         <SignupPasswordField />
       </div>

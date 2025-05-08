@@ -29,7 +29,7 @@ export default function useChangePasswordMutate({
         await changePassword({ email, password, currentPassword, isFindPw }),
       onSuccess: async (response) => {
         if (isFindPw) {
-          actions.resetIsSendToVerifyEmail();
+          actions.resetIsSendToVerificationEmail();
           actions.resetIsVerifedEmail();
           actions.resetTimer();
           router.push("/signin");

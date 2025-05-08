@@ -10,7 +10,7 @@ import {
   SigninResponseData,
   SignoutResposeData,
   SignupResponseData,
-  VerifyEmailResponseData
+  VerificationEmailResponseData
 } from "@/types/api-types";
 import { AxiosResponse } from "axios";
 import { uploadImgToFireStore } from "./firebase";
@@ -59,23 +59,23 @@ export async function getHasdPassword(password: string) {
   }
 }
 
-export async function verifyPassword(password: string, hashedPassword: string) {
+export async function verificationPassword(password: string, hashedPassword: string) {
   try {
     const { compare } = await import("bcryptjs");
 
-    const isVerify = await compare(password, hashedPassword);
-    return isVerify;
+    const isVerification = await compare(password, hashedPassword);
+    return isVerification;
   } catch (error) {
     throw error;
   }
 }
 
-export async function sendToVerifyEmail(
+export async function sendToVerificationEmail(
   email: string,
   isFindPw?: boolean
-): Promise<AxiosResponse<VerifyEmailResponseData>> {
+): Promise<AxiosResponse<VerificationEmailResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/send-verify-email", {
+    const response = await customAxios.post("/api/auth/send-verification-email", {
       email,
       isFindPw
     });
@@ -85,15 +85,15 @@ export async function sendToVerifyEmail(
   }
 }
 
-export async function verifyEmail(
+export async function verificationEmail(
   email: string,
-  verifyCode: string,
+  verificationCode: string,
   isFindPw?: boolean
-): Promise<AxiosResponse<VerifyEmailResponseData>> {
+): Promise<AxiosResponse<VerificationEmailResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/verify-email", {
+    const response = await customAxios.post("/api/auth/verification-email", {
       email,
-      verifyCode,
+      verificationCode,
       isFindPw
     });
     return response;

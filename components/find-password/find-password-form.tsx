@@ -22,7 +22,7 @@ export default function Form() {
         mode: "onChange",
         defaultValues: {
           email: "",
-          verifyCode: "",
+          verificationCode: "",
           password: "",
           nickname: "",
           profileImg: "",

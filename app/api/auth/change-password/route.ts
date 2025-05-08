@@ -1,5 +1,5 @@
-import { getHasdPassword, verifyPassword } from "@/lib/api/auth";
-import { deleteEmailVerifyCode, getVerifiedEmail } from "@/lib/api/redis";
+import { getHasdPassword, verificationPassword } from "@/lib/api/auth";
+import { deleteEmailVerificationCode, getVerifiedEmail } from "@/lib/api/redis";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
@@ -33,8 +33,8 @@ export async function PATCH(req: NextRequest) {
         );
       }
 
-      const isVerifyEmail = await getVerifiedEmail(email, isFindPw);
-      if (!isVerifyEmail) {
+      const isEmailVerification = await getVerifiedEmail(email, isFindPw);
+      if (!isEmailVerification) {
         return new NextResponse(
           JSON.stringify({ message: "인증되지 않은 이메일입니다." }),
           { status: 401 }
@@ -89,12 +89,12 @@ export async function PATCH(req: NextRequest) {
         );
       }
 
-      const isVerifyPassword = await verifyPassword(
+      const isPasswordVerification = await verificationPassword(
         currentPassword,
         user?.password || ""
       );
 
-      if (!isVerifyPassword) {
+      if (!isPasswordVerification) {
         return new NextResponse(
           JSON.stringify({ message: "기존 비밀번호가 일치하지 않아요." }),
           { status: 401 }
@@ -118,7 +118,7 @@ export async function PATCH(req: NextRequest) {
       }
     }
 
-    await deleteEmailVerifyCode(email, isFindPw);
+    await deleteEmailVerificationCode(email, isFindPw);
 
     return new NextResponse(
       JSON.stringify({ message: "비밀번호가 변경되었어요." }),

@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import useSendToVerifyEmailMutate from "@/hooks/react-query/mutations/auth/useSendToVerifyEmailMutate";
+import useSendToVerificationEmailMutate from '@/hooks/react-query/mutations/auth/useSendToVerificationEmailMutate';
 import useVerificationEmailStore from "@/store/verification-email-store";
 import { useCallback } from "react";
 
@@ -14,15 +14,15 @@ export function useVerificationEmailSendHandler({
 }: IParams) {
   const { getValues } = useFormContext();
   const actions = useVerificationEmailStore((state) => state.actions);
-  const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
+  const { sendToVerificationEmailMutate } = useSendToVerificationEmailMutate();
 
   const sendToEmail = useCallback(() => {
     const email = getValues("email");
-    actions.sendToVerifyEmail();
+    actions.sendToVerificationEmail();
     actions.resetTimer();
-    actions.setSendToVerifyEmailLoading(true);
-    sendToVerifyEmailMutate({ email, isFindPw });
-  }, [actions, getValues, sendToVerifyEmailMutate, isFindPw]);
+    actions.setSendToVerificationEmailLoading(true);
+    sendToVerificationEmailMutate({ email, isFindPw });
+  }, [actions, getValues, sendToVerificationEmailMutate, isFindPw]);
 
   const sendToEmailHandler = useCallback(async () => {
     const isValid = await validate();

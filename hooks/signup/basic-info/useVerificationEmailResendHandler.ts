@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 import useEmailDuplicationMutate from "../../react-query/mutations/auth/useEmailDuplicationMutate";
-import useSendToVerifyEmailMutate from "../../react-query/mutations/auth/useSendToVerifyEmailMutate";
+import useSendToVerificationEmailMutate from "../../react-query/mutations/auth/useSendToVerificationEmailMutate";
 import useCheckEmailMutate from "../../react-query/mutations/auth/useCheckEmailMutate";
 import useVerificationEmailStore from "@/store/verification-email-store";
 
@@ -11,10 +11,10 @@ export default function useVerificationEmailResendHandler(isFindPw: boolean) {
   const actions = useVerificationEmailStore((state) => state.actions);
 
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
-  const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
+  const { sendToVerificationEmailMutate } = useSendToVerificationEmailMutate();
   const { checkEmailMutate } = useCheckEmailMutate();
 
-  const requestSendToVerifyEmail = useCallback(async () => {
+  const requestSendToVerificationEmail = useCallback(async () => {
     const email = getValues("email");
 
     if (!email) {
@@ -37,11 +37,11 @@ export default function useVerificationEmailResendHandler(isFindPw: boolean) {
       }
     }
 
-    clearErrors("verifyCode");
+    clearErrors("verificationCode");
     actions.resetIsVerifedEmail();
-    actions.setSendToVerifyEmailLoading(true);
+    actions.setSendToVerificationEmailLoading(true);
     actions.resetTimer();
-    sendToVerifyEmailMutate({ email, isFindPw });
+    sendToVerificationEmailMutate({ email, isFindPw });
   }, [
     actions,
     checkEmailMutate,
@@ -49,8 +49,8 @@ export default function useVerificationEmailResendHandler(isFindPw: boolean) {
     emailDuplicationMuate,
     getValues,
     isFindPw,
-    sendToVerifyEmailMutate
+    sendToVerificationEmailMutate
   ]);
 
-  return { requestSendToVerifyEmail };
+  return { requestSendToVerificationEmail };
 }

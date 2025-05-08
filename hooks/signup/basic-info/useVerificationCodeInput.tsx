@@ -4,8 +4,8 @@ import useVerificationEmailStore from "@/store/verification-email-store";
 export default function useVerificationCodeInput() {
   const actions = useVerificationEmailStore((state) => state.actions);
 
-  const resetSendToVerifyEmail = useCallback(() => {
-    actions.resetIsSendToVerifyEmail();
+  const resetSendToVerificationEmail = useCallback(() => {
+    actions.resetIsSendToVerificationEmail();
   }, [actions]);
 
   useEffect(() => {
@@ -15,6 +15,6 @@ export default function useVerificationCodeInput() {
   }, [actions]);
 
   return {
-    resetSendToVerifyEmail
+    resetSendToVerificationEmail
   };
 }

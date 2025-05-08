@@ -1,4 +1,4 @@
-import { verifyPassword } from "@/lib/api/auth";
+import { verificationPassword } from "@/lib/api/auth";
 import { getToken } from "@/lib/api/redis";
 import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
@@ -38,9 +38,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isVerifyPassword = await verifyPassword(password, userData.password);
+    const isPasswordVerification = await verificationPassword(password, userData.password);
 
-    if (!isVerifyPassword) {
+    if (!isPasswordVerification) {
       return NextResponse.json(
         { message: "이메일 혹은 비밀번호가 일치하지 않아요." },
         { status: 401 }

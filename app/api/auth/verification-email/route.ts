@@ -1,13 +1,13 @@
 import {
-  getEmailVerifyCode,
-  incrementVerifyEmailCounter,
+  getEmailVerificationCode,
+  incrementVerificationEmailCounter,
   saveVerifiedEmail,
 } from "@/lib/api/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { email, verifyCode, isFindPw } = await req.json();
-  const data = await getEmailVerifyCode(email, isFindPw);
+  const { email, verificationCode, isFindPw } = await req.json();
+  const data = await getEmailVerificationCode(email, isFindPw);
 
   if (data && parseInt(data.count, 10) >= 10) {
     return NextResponse.json(
@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     );
   }
   try {
-    await incrementVerifyEmailCounter(email, data?.count, isFindPw);
-    if (verifyCode.toUpperCase() === data?.verifyCode) {
+    await incrementVerificationEmailCounter(email, data?.count, isFindPw);
+    if (verificationCode.toUpperCase() === data?.verificationCode) {
       await saveVerifiedEmail(email, isFindPw);
       return NextResponse.json({ message: "인증이 완료됬어요.", ok: true });
     } else {

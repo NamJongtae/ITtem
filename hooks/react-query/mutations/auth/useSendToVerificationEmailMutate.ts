@@ -1,35 +1,35 @@
-import { sendToVerifyEmail } from "@/lib/api/auth";
+import { sendToVerificationEmail } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { VerifyEmailResponseData } from "@/types/api-types";
+import { VerificationEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { useFormContext } from "react-hook-form";
 import useVerificationEmailStore from "@/store/verification-email-store";
 
-export default function useSendToVerifyEmailMutate() {
+export default function useSendToVerificationEmailMutate() {
   const actions = useVerificationEmailStore((state) => state.actions);
   const { setError } = useFormContext();
-  const { mutate: sendToVerifyEmailMutate } = useMutation<
-    AxiosResponse<VerifyEmailResponseData>,
+  const { mutate: sendToVerificationEmailMutate } = useMutation<
+    AxiosResponse<VerificationEmailResponseData>,
     AxiosError,
     { email: string; isFindPw?: boolean }
   >({
-    mutationFn: ({ email, isFindPw }) => sendToVerifyEmail(email, isFindPw),
+    mutationFn: ({ email, isFindPw }) => sendToVerificationEmail(email, isFindPw),
     onSuccess: (result) => {
       toast.success(result.data?.message);
-      actions.setSendToVerifyEmailLoading(false);
-      actions.setSendToVerifyEmailError(false);
+      actions.setSendToVerificationEmailLoading(false);
+      actions.setSendToVerificationEmailError(false);
     },
     onError: (error: unknown) => {
       actions.inactiveTimer();
-      actions.setSendToVerifyEmailLoading(false);
-      if (isAxiosError<VerifyEmailResponseData>(error)) {
-        actions.setSendToVerifyEmailError(true);
+      actions.setSendToVerificationEmailLoading(false);
+      if (isAxiosError<VerificationEmailResponseData>(error)) {
+        actions.setSendToVerificationEmailError(true);
         if (error.response?.status === 403) {
-          actions.resetIsSendToVerifyEmail();
+          actions.resetIsSendToVerificationEmail();
           toast.warn(error.response?.data.message);
-          setError("verifyCode", {
+          setError("verificationCode", {
             type: "validate",
             message: "일일 시도 횟수를 초과했어요."
           });
@@ -41,6 +41,6 @@ export default function useSendToVerifyEmailMutate() {
   });
 
   return {
-    sendToVerifyEmailMutate
+    sendToVerificationEmailMutate
   };
 }

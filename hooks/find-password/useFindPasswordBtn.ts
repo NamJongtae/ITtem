@@ -8,12 +8,12 @@ export default function useFindPasswordBtn() {
     formState.errors["email"] ||
     formState.errors["password"] ||
     formState.errors["password-check"] ||
-    formState.errors["verifyCode"];
+    formState.errors["verificationCode"];
   const isDirty =
     formState.dirtyFields["email"] &&
     formState.dirtyFields["password"] &&
     formState.dirtyFields["password-check"] &&
-    formState.dirtyFields["verifyCode"];
+    formState.dirtyFields["verificationCode"];
 
   const isVerifiedEmail = useVerificationEmailStore((state) => state.isVerifiedEmail);
   const isDisabled = !!errors || !isDirty || !isVerifiedEmail;

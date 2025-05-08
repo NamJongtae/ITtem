@@ -1,5 +1,5 @@
 import SignupEmailError from "./signup-email-error";
-import SignupSendVerifyEmailBtn from "./signup-send-verify-email-btn";
+import SignupSendVerificationEmailBtn from "./signup-send-verification-email-btn";
 import CoreInputField from "@/components/commons/core-input-field/core-input-field";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import { useVerificationEmailSendHandler } from "@/hooks/signup/basic-info/useVerificationEmailSendHandler";
@@ -15,7 +15,7 @@ export default function SignupEmailField() {
     validate,
     isFindPw: false
   });
-  const { isSendToVerifyEmail } = useEmailStatus();
+  const { isSendToVerificationEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
   useResetEmailSendStatus();
 
@@ -29,7 +29,7 @@ export default function SignupEmailField() {
           inputType="email"
           inputPlaceholder="이메일을 입력해주세요."
           inputRequired="이메일을 입력해주세요."
-          inputReadOnly={isSendToVerifyEmail}
+          inputReadOnly={isSendToVerificationEmail}
           inputPattern={{
             value: EMAIL_REGEX,
             message: EMAIL_REGEX_ERRORMSG
@@ -38,8 +38,8 @@ export default function SignupEmailField() {
           inputRef={emailRef}
         />
 
-        {!isSendToVerifyEmail && (
-          <SignupSendVerifyEmailBtn sendToEmailHandler={sendToEmailHandler} />
+        {!isSendToVerificationEmail && (
+          <SignupSendVerificationEmailBtn sendToEmailHandler={sendToEmailHandler} />
         )}
       </div>
 

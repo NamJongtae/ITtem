@@ -8,7 +8,7 @@ export default function useResetInputOnTimerEnd() {
 
   useEffect(() => {
     if (timer <= 0) {
-      setValue("verifyCode", "");
+      setValue("verificationCode", "");
     }
   }, [timer, setValue]);
 

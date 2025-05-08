@@ -9,7 +9,7 @@ import {
 import { AuthData, ProfileData, ProfileReviewData } from "./auth-types";
 import { NotificationMessageData } from "./notification-types";
 
-export interface VerifyEmailResponseData {
+export interface VerificationEmailResponseData {
   message: string;
   ok: boolean;
 }

@@ -6,11 +6,11 @@ export default function useBasicInfoNextBtnDisabled() {
   const errors =
     formState.errors["email"] ||
     formState.errors["password"] ||
-    formState.errors["verifyCode"];
+    formState.errors["verificationCode"];
   const isDirty =
     formState.dirtyFields["email"] &&
     formState.dirtyFields["password"] &&
-    formState.dirtyFields["verifyCode"];
+    formState.dirtyFields["verificationCode"];
 
   const isVerifiedEmail = useVerificationEmailStore(
     (state) => state.isVerifiedEmail

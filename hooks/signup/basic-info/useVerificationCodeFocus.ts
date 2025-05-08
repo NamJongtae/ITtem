@@ -2,15 +2,15 @@ import useVerificationEmailStore from '@/store/verification-email-store';
 import { useEffect, useRef } from "react";
 
 export default function useVerificationCodeFocus() {
-  const verifyCodeRef = useRef<HTMLInputElement | null>(null);
-  const isSendToVerifyEmail = useVerificationEmailStore(
-    (state) => state.isSendToVerifyEmail
+  const verificationCodeRef = useRef<HTMLInputElement | null>(null);
+  const isSendToVerificationEmail = useVerificationEmailStore(
+    (state) => state.isSendToVerificationEmail
   );
 
   useEffect(() => {
-    if (!verifyCodeRef.current) return;
-    verifyCodeRef.current.focus();
-  }, [isSendToVerifyEmail, verifyCodeRef]);
+    if (!verificationCodeRef.current) return;
+    verificationCodeRef.current.focus();
+  }, [isSendToVerificationEmail, verificationCodeRef]);
 
-  return { verifyCodeRef };
+  return { verificationCodeRef };
 }

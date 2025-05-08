@@ -1,5 +1,5 @@
 import CoreInputField from "../commons/core-input-field/core-input-field";
-import SendVerifyEmailBtn from "../signup/basic-info-step/signup-send-verify-email-btn";
+import SendVerificationEmailBtn from "../signup/basic-info-step/signup-send-verification-email-btn";
 import EmailError from "../signup/basic-info-step/signup-email-error";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
@@ -9,7 +9,7 @@ import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmai
 
 export default function FindPasswordEmailField() {
   const { validate } = useEmailVerificationValidator(true);
-  const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
+  const { isSendToVerificationEmail, isVerifiedEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
   const { sendToEmailHandler } = useVerificationEmailSendHandler({
     validate,
@@ -27,7 +27,7 @@ export default function FindPasswordEmailField() {
             inputType="email"
             inputPlaceholder="이메일을 입력해주세요."
             inputRequired="이메일을 입력해주세요."
-            inputReadOnly={isSendToVerifyEmail}
+            inputReadOnly={isSendToVerificationEmail}
             inputPattern={{
               value: EMAIL_REGEX,
               message: EMAIL_REGEX_ERRORMSG
@@ -36,8 +36,8 @@ export default function FindPasswordEmailField() {
             inputRef={emailRef}
           />
 
-          {!isSendToVerifyEmail && (
-            <SendVerifyEmailBtn sendToEmailHandler={sendToEmailHandler} />
+          {!isSendToVerificationEmail && (
+            <SendVerificationEmailBtn sendToEmailHandler={sendToEmailHandler} />
           )}
         </div>
         <EmailError />

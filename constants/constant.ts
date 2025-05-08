@@ -40,12 +40,12 @@ export const NICKNAME_REGEX = /^(?![0-9]+$)([a-zA-Z0-9가-힣]{4,8})$/;
 export const NICKNAME_REGEX_ERRORMSG =
   "4-8자 닉네임(영문, 한글, 숫자조합)을 입력해주세요.";
 
-export const VERIFYCODE_REGEX = /^[A-Za-z0-9]{6}$/;
-export const VERIFYCODE_REGEX_ERRORMSG =
+export const VERIFICATION_CODE_REGEX = /^[A-Za-z0-9]{6}$/;
+export const VERIFICATION_CODE_REGEX_ERRORMSG =
   "인증코드는 영문, 숫자, 영문+숫자 6자리이에요.";
 
-export const VERIFY_EMAIL_BLOCK_EXP = 60 * 60 * 24;
-export const VERIFY_EMAIL_EXP = 60 * 5;
+export const VERIFICATION_EMAIL_BLOCK_EXP = 60 * 60 * 24;
+export const VERIFICATION_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
 export const ACCESS_TOKEN_KEY = process.env
