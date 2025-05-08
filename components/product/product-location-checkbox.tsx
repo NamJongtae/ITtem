@@ -1,10 +1,14 @@
 "use client";
 
-import useProductLocationChkBox from "@/hooks/product/useProductLocationChkBox";
+import useFetchLocation from "@/hooks/commons/useFetchLocation";
+import useLocationChkBoxHandler from "@/hooks/commons/useLocationChkBoxHandler";
+import useLocationStore from "@/store/location-store";
 import React from "react";
 
 const ProductLocationCheckbox = () => {
-  const { checked, handleClickCheck } = useProductLocationChkBox();
+  const { handleClickCheck } = useLocationChkBoxHandler();
+  const { checkedLoacation } = useLocationStore();
+  useFetchLocation();
 
   return (
     <div className="inline-flex items-center">
@@ -17,7 +21,7 @@ const ProductLocationCheckbox = () => {
           className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-[4px] border border-blue-gray-200 transition-all checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
           id="location-checkbox"
           name="location-checkbox"
-          checked={checked}
+          checked={checkedLoacation}
           onChange={handleClickCheck}
           aria-label="내 지역 검색"
         />

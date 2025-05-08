@@ -1,19 +1,13 @@
-import { useEffect } from "react";
-import useLocation from "../commons/useLocation";
 import useLocationStore from "@/store/location-store";
+import useLocation from "../commons/useLocation";
+import { useEffect } from "react";
 
-export default function useProductLocationChkBox() {
+export default function useFetchLocation() {
   const { fetchCurrentLocation } = useLocation();
-
   const checkedLoacation = useLocationStore((state) => state.checkedLoacation);
   const actions = useLocationStore((state) => state.actions);
-
   const checked = checkedLoacation;
-
-  const handleClickCheck = () => {
-    actions.setCheckLocation(!checked);
-  };
-
+  
   useEffect(() => {
     if (checked) {
       fetchCurrentLocation();
@@ -21,6 +15,4 @@ export default function useProductLocationChkBox() {
       actions.resetLocation();
     }
   }, [checked, fetchCurrentLocation, actions]);
-
-  return { checked, handleClickCheck };
 }
