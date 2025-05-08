@@ -1,22 +1,22 @@
 import VerifyCodeInput from "./signup-verify-code-input";
 import VerifyCodeBtns from "./signup-verify-code-btns";
 import EmailVerifyBtn from "./signup-email-verify-Btn";
-import useVerifyCodeStatus from "@/hooks/signup/basic-info/useVerifyCodeStatus";
+import useVerificationCodeFocus from "@/hooks/signup/basic-info/useVerificationCodeFocus";
+import useVerificationEmailHandler from "@/hooks/signup/basic-info/useVerificationEmailHandler";
+import useVerificationnEmailResendHandler from "@/hooks/signup/basic-info/useVerificationnEmailResendHandler";
 import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
-import useVerifyEmailHandler from "@/hooks/signup/basic-info/useVerifyEmailHandler";
-import useRequestSendToVerifyEmailHandler from "@/hooks/signup/basic-info/useRequestSendToVerifyEmailHandler";
-import useVerifyCodeInputFocus from "@/hooks/signup/basic-info/useVerifyCodeFocus";
-import useResetVerifyEmail from "@/hooks/signup/basic-info/useResetVerifyEmail";
+import useResetVerificationEmail from "@/hooks/signup/basic-info/useResetVerificationEmail";
+import useVerificationCodeStatus from "@/hooks/signup/basic-info/useVerificationCodeStatus";
 
 export default function SignupVerifyCodeField() {
-  const { verifyCodeRef } = useVerifyCodeInputFocus();
+  const { verifyCodeRef } = useVerificationCodeFocus();
   const { handleClickVerifyEmail, verfiyEmailLoading } =
-    useVerifyEmailHandler(false);
+    useVerificationEmailHandler(false);
   const { requestSendToVerifyEmail } =
-    useRequestSendToVerifyEmailHandler(false);
+    useVerificationnEmailResendHandler(false);
   const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
-  const { resetSendToVerifyEmail } = useResetVerifyEmail();
-  const { errors } = useVerifyCodeStatus();
+  const { resetSendToVerifyEmail } = useResetVerificationEmail();
+  const { errors } = useVerificationCodeStatus();
 
   return (
     isSendToVerifyEmail &&

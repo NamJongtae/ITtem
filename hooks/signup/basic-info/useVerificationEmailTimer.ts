@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 
-export default function useVerifyEmailTimer() {
+export default function useVerificationEmailTimer() {
   const { setError } = useFormContext();
   const timer = useSignupStore((state) => state.timer);
   const isSendToVerifyEmail = useSignupStore(

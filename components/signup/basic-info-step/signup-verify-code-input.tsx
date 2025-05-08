@@ -5,14 +5,14 @@ import {
   VERIFYCODE_REGEX,
   VERIFYCODE_REGEX_ERRORMSG
 } from "@/constants/constant";
-import useVerifyCodeFocusController from "@/hooks/signup/basic-info/useVerifyCodeFocusController";
+import useVerificationCodeFocusController from "@/hooks/signup/basic-info/useVerificationCodeFocusController";
 
 interface IProps {
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
-  const { isFocus, onFocus, onBlur } = useVerifyCodeFocusController();
+  const { isFocus, onFocus, onBlur } = useVerificationCodeFocusController();
 
   return (
     <div

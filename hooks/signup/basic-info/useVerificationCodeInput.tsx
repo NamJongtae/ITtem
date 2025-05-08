@@ -1,7 +1,7 @@
-import useSignupStore from "@/store/signup-store";
 import { useCallback, useEffect } from "react";
+import useSignupStore from "@/store/signup-store";
 
-export default function useResetVerifyEmail() {
+export default function useVerificationCodeInput() {
   const actions = useSignupStore((state) => state.actions);
 
   const resetSendToVerifyEmail = useCallback(() => {
@@ -9,11 +9,12 @@ export default function useResetVerifyEmail() {
   }, [actions]);
 
   useEffect(() => {
-    // 언마운트 시 초기화 로직
     return () => {
       actions.resetIsVerifedEmail();
     };
   }, [actions]);
 
-  return { resetSendToVerifyEmail };
+  return {
+    resetSendToVerifyEmail
+  };
 }

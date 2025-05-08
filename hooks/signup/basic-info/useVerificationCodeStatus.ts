@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 
-export default function useVerifyCodeStatus() {
+export default function useVerificationCodeStatus() {
   const { formState } = useFormContext();
 
   const errors = formState.errors["verifyCode"];

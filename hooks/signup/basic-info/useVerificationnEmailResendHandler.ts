@@ -6,7 +6,7 @@ import useSendToVerifyEmailMutate from '../../react-query/mutations/auth/useSend
 import useCheckEmailMutate from '../../react-query/mutations/auth/useCheckEmailMutate';
 import useSignupStore from '@/store/signup-store';
 
-export default function useRequestSendToVerifyEmailHandler(isFindPw: boolean) {
+export default function useVerificationnEmailResendHandler(isFindPw: boolean) {
   const { getValues, clearErrors } = useFormContext();
   const actions = useSignupStore((state) => state.actions);
 

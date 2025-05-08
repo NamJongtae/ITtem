@@ -1,7 +1,7 @@
-import useVerifyEmailTimer from '@/hooks/signup/basic-info/useVerifyEmailTimer';
+import useVerificationEmailTimer from '@/hooks/signup/basic-info/useVerificationEmailTimer';
 
 export default function SignupVerfiyCodeTimer() {
-  const { timer } = useVerifyEmailTimer();
+  const { timer } = useVerificationEmailTimer();
   return (
     <span
       className={`${

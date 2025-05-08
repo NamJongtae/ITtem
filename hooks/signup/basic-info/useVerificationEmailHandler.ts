@@ -3,7 +3,7 @@ import useVerifyEmailMutate from "../../react-query/mutations/auth/useVerifyEmai
 import { toast } from "react-toastify";
 import { useCallback } from "react";
 
-export default function useVerifyEmailHandler(isFindPw: boolean) {
+export default function useVerificationEmailHandler(isFindPw: boolean) {
   const { getValues } = useFormContext();
 
   const { verifyEmailMuate, verfiyEmailLoading } = useVerifyEmailMutate();
