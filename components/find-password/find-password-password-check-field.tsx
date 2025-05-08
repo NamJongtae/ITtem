@@ -1,9 +1,11 @@
 import CoreInputField from "../commons/core-input-field/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
-import usePasswordChkField from "@/hooks/find-password/usePasswordChkField";
+import usePasswordChkField from "@/hooks/find-password/usePasswordChkFieldValidator";
+import useVerificationEmailStore from "@/store/verification-email-store";
 
 export default function FindPasswordPasswordCheckField() {
-  const { isVerifiedEmail, passwordValue } = usePasswordChkField();
+  const { isVerifiedEmail } = useVerificationEmailStore();
+  const { passwordValue } = usePasswordChkField();
 
   return (
     isVerifiedEmail && (
@@ -22,7 +24,7 @@ export default function FindPasswordPasswordCheckField() {
           }}
           inputPattern={{
             value: PASSWORD_REGEX,
-            message: PASSWORD_REGEX_ERRORMSG,
+            message: PASSWORD_REGEX_ERRORMSG
           }}
         />
       </div>

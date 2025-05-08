@@ -1,8 +1,7 @@
-import useVerificationEmailStore from '@/store/verification-email-store';
-import { useRouter } from "next/navigation";
+import useVerificationEmailStore from "@/store/verification-email-store";
 import { useFormContext } from "react-hook-form";
 
-export default function useFindPasswordBtn() {
+export default function useFindPasswordDisabled() {
   const { formState } = useFormContext();
   const errors =
     formState.errors["email"] ||
@@ -15,14 +14,10 @@ export default function useFindPasswordBtn() {
     formState.dirtyFields["password-check"] &&
     formState.dirtyFields["verificationCode"];
 
-  const isVerifiedEmail = useVerificationEmailStore((state) => state.isVerifiedEmail);
+  const isVerifiedEmail = useVerificationEmailStore(
+    (state) => state.isVerifiedEmail
+  );
   const isDisabled = !!errors || !isDirty || !isVerifiedEmail;
 
-  const router = useRouter();
-
-  const handleCilckToback = () => {
-    router.push("/signin");
-  };
-
-  return { isDisabled, handleCilckToback };
+  return { isDisabled };
 }

@@ -1,15 +1,10 @@
-import useVerificationEmailStore from "@/store/verification-email-store";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-export default function usePasswordChkField() {
+export default function usePasswordChkFieldValidator() {
   const { watch, clearErrors, setError } = useFormContext();
   const passwordValue = watch("password");
   const passwordCheckValue = watch("password-check");
-
-  const isVerifiedEmail = useVerificationEmailStore(
-    (state) => state.isVerifiedEmail
-  );
 
   useEffect(() => {
     if (
@@ -26,5 +21,5 @@ export default function usePasswordChkField() {
     }
   }, [passwordValue, passwordCheckValue, clearErrors, setError]);
 
-  return { isVerifiedEmail, passwordValue, passwordCheckValue };
+  return { passwordValue, passwordCheckValue };
 }

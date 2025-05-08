@@ -1,7 +1,9 @@
-import useFindPasswordBtn from "@/hooks/find-password/useFindPasswordBtn";
+import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
+import useFindPasswordDisabled from "@/hooks/find-password/useFindPasswordBtn";
 
 export default function FindPassswordBtns() {
-  const { isDisabled, handleCilckToback } = useFindPasswordBtn();
+  const { isDisabled } = useFindPasswordDisabled();
+  const { closeModalHandler } = useRouterBackToCloseModal();
 
   return (
     <div className="w-full flex flex-col gap-3">
@@ -14,7 +16,7 @@ export default function FindPassswordBtns() {
       </button>
       <button
         type="button"
-        onClick={handleCilckToback}
+        onClick={closeModalHandler}
         className="button_secondary w-full"
       >
         취소
