@@ -7,7 +7,7 @@ interface IParams {
   productStatus: ProductStatus | undefined;
 }
 
-export default function useProductDetailDeleteBtn({ productStatus }: IParams) {
+export default function useProductDetailDeleteHandler({ productStatus }: IParams) {
   const { productDeleteMutate, productDeleteLoading } =
     useProductDeleteMutate();
   const user = useAuthStore((state) => state.user);

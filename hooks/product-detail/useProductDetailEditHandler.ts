@@ -7,7 +7,9 @@ interface IParams {
   productStatus: ProductStatus | undefined;
 }
 
-export default function useProductDetailEditBtn({ productStatus }: IParams) {
+export default function useProductDetailEditHandler({
+  productStatus
+}: IParams) {
   const router = useRouter();
   const params = useParams();
   const productId = params?.productId;

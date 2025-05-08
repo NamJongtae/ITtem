@@ -1,4 +1,4 @@
-import useProductDetailWishBtn from "@/hooks/product-detail/useProductDetailWishBtn";
+import useProductWishHandler from "@/hooks/product-detail/useProductWishHandler";
 import { ProfileData } from "@/types/auth-types";
 import { ProductDetailData } from "@/types/product-types";
 import Image from "next/image";
@@ -13,7 +13,7 @@ export default function ProductDetailWishBtn({
   myProfileData
 }: IProps) {
   const { handleClickWish, isWish, addWishPending, deleteWishPending } =
-    useProductDetailWishBtn({
+    useProductWishHandler({
       productDetailData,
       myProfileData
     });

@@ -1,19 +1,25 @@
-import usePurchaseProductMutate from "../react-query/mutations/product/usePurchaseProductMutate";
+import useStartChatMutate from "../react-query/mutations/chat/useStartChatMutate";
 import { ProductStatus } from "@/types/product-types";
 import { toast } from "react-toastify";
 import useAuthStore from "@/store/auth-store";
 
 interface IParams {
   productStatus: ProductStatus | undefined;
+  productId: string | undefined;
+  userId: string | undefined;
 }
 
-export default function useProductDetailBuyBtn({ productStatus }: IParams) {
-  const { purchaseProductMutate } = usePurchaseProductMutate();
+export default function useProductDetailChattingHandler({
+  productStatus,
+  productId,
+  userId
+}: IParams) {
+  const { mutate } = useStartChatMutate();
   const user = useAuthStore((state) => state.user);
 
-  const handleClickPurchase = () => {
+  const handleClickChatting = () => {
     if (productStatus === "trading") {
-      toast.warn("이미 거래중인 상품이에요.");
+      toast.warn("현재 거래중인 상품이에요.");
       return;
     }
     if (productStatus === "soldout") {
@@ -24,11 +30,10 @@ export default function useProductDetailBuyBtn({ productStatus }: IParams) {
       toast.warn("로그인 후 이용해주세요.");
       return;
     }
-    const isPurchase = confirm("정말 구매하시겠어요?");
-    if (isPurchase) {
-      purchaseProductMutate();
-    }
+    if (!productId || !userId) return;
+
+    mutate({ productId, userId });
   };
 
-  return { handleClickPurchase };
+  return { handleClickChatting };
 }

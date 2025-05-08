@@ -6,12 +6,16 @@ import ProductDetailDescription from "./product-detail-description";
 import ProductDetailSeller from "./seller/product-detail-seller";
 import { isAxiosError } from "axios";
 import Empty from "../commons/empty";
-import useProductDetailPage from "@/hooks/product-detail/useProductDetailPage";
-import ProductDetailLoading from '@/app/product/[productId]/loading';
+
+import ProductDetailLoading from "@/app/product/[productId]/loading";
+import useProductQuery from "@/hooks/react-query/queries/product/useProductQuery";
+import useAddRecentProduct from "@/hooks/product-detail/useAddRecentProduct";
 
 export default function ProductDetailPage() {
   const { productDetailData, loadProductLoading, loadProductError } =
-    useProductDetailPage();
+    useProductQuery();
+
+  useAddRecentProduct(productDetailData);
 
   if (loadProductLoading) {
     return <ProductDetailLoading />;

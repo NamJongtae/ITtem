@@ -1,6 +1,6 @@
 import ChatIcon from "@/public/icons/chat-icon.svg";
 import { ProductStatus } from "@/types/product-types";
-import useProductDetailChattingBtn from "@/hooks/product-detail/useProductDetailChattingBtn";
+import useProductDetailChattingHandler from '@/hooks/product-detail/useProductDetailChattingHandler';
 
 interface IProps {
   productStatus: ProductStatus | undefined;
@@ -13,7 +13,7 @@ export default function ProductDetailChattingBtn({
   productId,
   userId,
 }: IProps) {
-  const { handleClickChatting } = useProductDetailChattingBtn({
+  const { handleClickChatting } = useProductDetailChattingHandler({
     productStatus,
     productId,
     userId,

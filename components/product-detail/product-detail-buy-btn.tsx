@@ -1,4 +1,4 @@
-import useProductDetailBuyBtn from "@/hooks/product-detail/useProductDetailBuyBtn";
+import useProductDetailBuyBtn from "@/hooks/product-detail/useProductPurchaseHandler";
 import BuyIcon from "@/public/icons/money-icon.svg";
 import { ProductStatus } from "@/types/product-types";
 

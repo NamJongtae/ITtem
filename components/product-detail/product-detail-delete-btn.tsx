@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ProductStatus } from "@/types/product-types";
-import useProductDetailDeleteBtn from "@/hooks/product-detail/useProductDetailDeleteBtn";
+import useProductDetailDeleteHandler from '@/hooks/product-detail/useProductDetailDeleteHandler';
 import Loading from '../commons/loading';
 
 
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default function ProductDetailDeleteBtn({ productStatus }: IProps) {
-  const { productDeleteLoading, handleClickDelete } = useProductDetailDeleteBtn(
+  const { productDeleteLoading, handleClickDelete } = useProductDetailDeleteHandler(
     { productStatus }
   );
 

@@ -6,7 +6,7 @@ interface IParams {
   reportUserIds: string[] | undefined;
 }
 
-export default function useProductDetailReportBtn({ reportUserIds }: IParams) {
+export default function useProductReportHandler({ reportUserIds }: IParams) {
   const { productReportMutate } = useProductReportMutate();
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
   const isReport = reportUserIds?.includes(myProfileData?.uid || "");

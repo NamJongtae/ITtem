@@ -9,7 +9,7 @@ interface IParams {
   myProfileData: ProfileData | undefined;
 }
 
-export default function useProductDetailWishBtn({
+export default function useProductWishHandler({
   productDetailData,
   myProfileData
 }: IParams) {

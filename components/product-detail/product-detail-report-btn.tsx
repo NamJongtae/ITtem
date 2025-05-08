@@ -1,6 +1,6 @@
 import { ProductDetailData } from "@/types/product-types";
 import Image from "next/image";
-import useProductDetailReportBtn from "@/hooks/product-detail/useProductDetailReportBtn";
+import useProductReportHandler from "@/hooks/product-detail/useProductReportHandler";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
@@ -8,8 +8,8 @@ interface IProps {
 
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   const { loadMyProfileLoading, myProfileData, handleClickReport } =
-    useProductDetailReportBtn({
-      reportUserIds: productDetailData?.reportUserIds,
+  useProductReportHandler({
+      reportUserIds: productDetailData?.reportUserIds
     });
 
   return (

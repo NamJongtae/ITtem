@@ -1,4 +1,4 @@
-import useProductDetailEditBtn from "@/hooks/product-detail/useProductDetailEditBtn";
+import useProductDetailEditHandler from '@/hooks/product-detail/useProductDetailEditHandler';
 import { ProductStatus } from "@/types/product-types";
 import Image from "next/image";
 
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export default function ProductDetailEditBtn({ productStatus }: IProps) {
-  const { handleClickEdit } = useProductDetailEditBtn({ productStatus });
+  const { handleClickEdit } = useProductDetailEditHandler({ productStatus });
 
   return (
     <button
