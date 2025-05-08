@@ -6,6 +6,7 @@ import {
   VERIFYCODE_REGEX_ERRORMSG
 } from "@/constants/constant";
 import useVerificationCodeFocusController from "@/hooks/signup/basic-info/useVerificationCodeFocusController";
+import useResetInputOnTimerEnd from "@/hooks/signup/basic-info/useResetInputOnTimerEnd";
 
 interface IProps {
   verifyCodeRef: MutableRefObject<HTMLInputElement | null>;
@@ -13,12 +14,13 @@ interface IProps {
 
 export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
   const { isFocus, onFocus, onBlur } = useVerificationCodeFocusController();
+  const { timer } = useResetInputOnTimerEnd();
 
   return (
     <div
       className={`${
         isFocus && "outline outline-2"
-      } relative flex items-center w-full border rounded-md`}
+      } ${timer <= 0 && "bg-gray-100 cursor-default"} relative flex items-center w-full border rounded-md`}
     >
       <CoreInputField
         inputClassName="border-hidden focus:outline-none group root_input"
@@ -38,6 +40,7 @@ export default function SignupVerifyCodeInput({ verifyCodeRef }: IProps) {
         inputOnBlur={onBlur}
         inputValidate={(value) => value.length === 6}
         inputRef={verifyCodeRef}
+        disabled={timer <= 0}
       />
       <VerfiyCodeCounter />
     </div>

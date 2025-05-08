@@ -27,6 +27,7 @@ interface IProps {
   labelHidden?: boolean;
   labelClassName?: string;
   inputKeydown?: React.KeyboardEventHandler<HTMLInputElement>;
+  disabled?: boolean;
 }
 
 export default function CoreInputField({
@@ -49,6 +50,7 @@ export default function CoreInputField({
   labelHidden = true,
   labelClassName,
   inputKeydown,
+  disabled = false
 }: IProps) {
   const { ref, rest, error, value, resetInput } = useCoreInputField({
     inputName,
@@ -56,7 +58,7 @@ export default function CoreInputField({
     inputOnChange,
     inputOnBlur,
     inputPattern,
-    inputValidate,
+    inputValidate
   });
 
   return (
@@ -78,6 +80,7 @@ export default function CoreInputField({
           onKeyDown={inputKeydown}
           minLength={inputMinLength}
           maxLength={inputMaxLength}
+          disabled={disabled}
           {...rest}
           ref={(e) => {
             ref(e);
