@@ -3,7 +3,7 @@ import EmailVerifyBtn from "../signup/basic-info-step/signup-email-verify-Btn";
 import VerifyCodeBtns from "../signup/basic-info-step/signup-verify-code-btns";
 import useVerifyEmailHandler from "@/hooks/signup/basic-info/useVerificationEmailHandler";
 import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
-import useVerifciationEmailResendHandler from "@/hooks/signup/basic-info/useVerificationnEmailResendHandler";
+import useVerificationEmailResendHandler from "@/hooks/signup/basic-info/useVerificationEmailResendHandler";
 import useVerificationCodeStatus from "@/hooks/signup/basic-info/useVerificationCodeStatus";
 import useResetVerificationEmail from "@/hooks/signup/basic-info/useResetVerificationEmail";
 import useVerificationCodeFocus from "@/hooks/signup/basic-info/useVerificationCodeFocus";
@@ -14,7 +14,7 @@ export default function FindPasswordVerifyCodeField() {
     useVerifyEmailHandler(true);
   const { isSendToVerifyEmail, isVerifiedEmail } = useEmailStatus();
   const { resetSendToVerifyEmail } = useResetVerificationEmail();
-  const { requestSendToVerifyEmail } = useVerifciationEmailResendHandler(true);
+  const { requestSendToVerifyEmail } = useVerificationEmailResendHandler(true);
   const { verifyCodeRef } = useVerificationCodeFocus();
 
   return (

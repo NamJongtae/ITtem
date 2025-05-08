@@ -3,7 +3,7 @@ import { create, ImmerDevtoolsStateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-interface SignupState {
+interface VerificationEmailState {
   isSendToVerifyEmail: boolean;
   isVerifiedEmail: boolean;
   timer: number;
@@ -22,7 +22,7 @@ interface SignupState {
   };
 }
 
-export const store: ImmerDevtoolsStateCreator<SignupState> = (set) => ({
+export const store: ImmerDevtoolsStateCreator<VerificationEmailState> = (set) => ({
   isSendToVerifyEmail: false,
   isVerifiedEmail: false,
   timer: VERIFY_EMAIL_EXP,
@@ -31,93 +31,93 @@ export const store: ImmerDevtoolsStateCreator<SignupState> = (set) => ({
   actions: {
     decrementTimer: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           if (state.timer > 0) {
             state.timer -= 1;
           }
         },
         false,
-        "signup/decrementTimer"
+        "verificationEmail/decrementTimer"
       );
     },
     resetTimer: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.timer = VERIFY_EMAIL_EXP;
         },
         false,
-        "signup/resetTimer"
+        "verificationEmail/resetTimer"
       );
     },
     inactiveTimer: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.timer = 0;
         },
         false,
-        "signup/inactiveTimer"
+        "verificationEmail/inactiveTimer"
       );
     },
     sendToVerifyEmail: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.isSendToVerifyEmail = true;
         },
         false,
-        "signup/sendToVerifyEmail"
+        "verificationEmail/sendToVerifyEmail"
       );
     },
     resetIsSendToVerifyEmail: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.isSendToVerifyEmail = false;
         },
         false,
-        "signup/resetIsSendToVerifyEmail"
+        "verificationEmail/resetIsSendToVerifyEmail"
       );
     },
     verifyEmail: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.isVerifiedEmail = true;
         },
         false,
-        "signup/verifiedEmail"
+        "verificationEmail/verifiedEmail"
       );
     },
     resetIsVerifedEmail: () => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.isVerifiedEmail = false;
         },
         false,
-        "signup/resetIsVerifedEmail"
+        "verificationEmail/resetIsVerifedEmail"
       );
     },
     setSendToVerifyEmailLoading: (isLoading: boolean) => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.sendToVerifyEmailLoading = isLoading;
         },
         false,
-        "signup/setSendToVerifyEmailLoading"
+        "verificationEmail/setSendToVerifyEmailLoading"
       );
     },
     setSendToVerifyEmailError: (isError: boolean) => {
       set(
-        (state: SignupState) => {
+        (state: VerificationEmailState) => {
           state.sendToVerifyEmailError = isError;
         },
         false,
-        "signup/setSendToVerifyEmailError"
+        "verificationEmail/setSendToVerifyEmailError"
       );
     }
   }
 });
 
-const useSignupStore =
+const useVerificationEmailStore =
   process.env.NODE_ENV !== "production"
-    ? create<SignupState>()(immer(devtools(store)))
-    : create<SignupState>()(immer(store));
+    ? create<VerificationEmailState>()(immer(devtools(store)))
+    : create<VerificationEmailState>()(immer(store));
 
-export default useSignupStore;
+export default useVerificationEmailStore;

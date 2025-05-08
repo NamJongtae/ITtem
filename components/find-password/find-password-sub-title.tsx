@@ -1,7 +1,7 @@
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 
 export default function FindPasswordSubTitle() {
-  const { isVerifiedEmail } = useSignupStore();
+  const { isVerifiedEmail } = useVerificationEmailStore();
 
   const subTitleStyles = "font-semibold";
 

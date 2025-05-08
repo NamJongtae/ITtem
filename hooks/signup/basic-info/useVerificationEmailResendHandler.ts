@@ -1,14 +1,14 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
-import { toast } from 'react-toastify';
-import useEmailDuplicationMutate from '../../react-query/mutations/auth/useEmailDuplicationMutate';
-import useSendToVerifyEmailMutate from '../../react-query/mutations/auth/useSendToVerifyEmailMutate';
-import useCheckEmailMutate from '../../react-query/mutations/auth/useCheckEmailMutate';
-import useSignupStore from '@/store/signup-store';
+import { toast } from "react-toastify";
+import useEmailDuplicationMutate from "../../react-query/mutations/auth/useEmailDuplicationMutate";
+import useSendToVerifyEmailMutate from "../../react-query/mutations/auth/useSendToVerifyEmailMutate";
+import useCheckEmailMutate from "../../react-query/mutations/auth/useCheckEmailMutate";
+import useVerificationEmailStore from "@/store/verification-email-store";
 
-export default function useVerificationnEmailResendHandler(isFindPw: boolean) {
+export default function useVerificationEmailResendHandler(isFindPw: boolean) {
   const { getValues, clearErrors } = useFormContext();
-  const actions = useSignupStore((state) => state.actions);
+  const actions = useVerificationEmailStore((state) => state.actions);
 
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
@@ -42,7 +42,15 @@ export default function useVerificationnEmailResendHandler(isFindPw: boolean) {
     actions.setSendToVerifyEmailLoading(true);
     actions.resetTimer();
     sendToVerifyEmailMutate({ email, isFindPw });
-  }, [actions, checkEmailMutate, clearErrors, emailDuplicationMuate, getValues, isFindPw, sendToVerifyEmailMutate]);
+  }, [
+    actions,
+    checkEmailMutate,
+    clearErrors,
+    emailDuplicationMuate,
+    getValues,
+    isFindPw,
+    sendToVerifyEmailMutate
+  ]);
 
   return { requestSendToVerifyEmail };
 }

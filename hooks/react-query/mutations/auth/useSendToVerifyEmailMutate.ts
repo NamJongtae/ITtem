@@ -5,10 +5,10 @@ import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerifyEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { useFormContext } from "react-hook-form";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 
 export default function useSendToVerifyEmailMutate() {
-  const actions = useSignupStore(state=>state.actions);
+  const actions = useVerificationEmailStore((state) => state.actions);
   const { setError } = useFormContext();
   const { mutate: sendToVerifyEmailMutate } = useMutation<
     AxiosResponse<VerifyEmailResponseData>,

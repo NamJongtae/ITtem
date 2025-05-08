@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import useSendToVerifyEmailMutate from "@/hooks/react-query/mutations/auth/useSendToVerifyEmailMutate";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 import { useCallback } from "react";
 
 interface IParams {
@@ -13,7 +13,7 @@ export function useVerificationEmailSendHandler({
   isFindPw
 }: IParams) {
   const { getValues } = useFormContext();
-  const actions = useSignupStore((state) => state.actions);
+  const actions = useVerificationEmailStore((state) => state.actions);
   const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
 
   const sendToEmail = useCallback(() => {

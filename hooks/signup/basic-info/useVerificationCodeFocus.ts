@@ -1,9 +1,9 @@
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from '@/store/verification-email-store';
 import { useEffect, useRef } from "react";
 
 export default function useVerificationCodeFocus() {
   const verifyCodeRef = useRef<HTMLInputElement | null>(null);
-  const isSendToVerifyEmail = useSignupStore(
+  const isSendToVerifyEmail = useVerificationEmailStore(
     (state) => state.isSendToVerifyEmail
   );
 

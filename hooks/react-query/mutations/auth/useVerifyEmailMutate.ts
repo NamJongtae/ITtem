@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerifyEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from '@/store/verification-email-store';
 
 export default function useVerifyEmailMutate() {
-  const actions = useSignupStore(state=>state.actions);
+  const actions = useVerificationEmailStore(state=>state.actions);
   const { setError, clearErrors, setValue } = useFormContext();
   const { mutate: verifyEmailMuate, isPending: verfiyEmailLoading } =
     useMutation<

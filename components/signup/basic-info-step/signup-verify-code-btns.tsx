@@ -1,5 +1,5 @@
 import Spinner from "@/components/commons/spinner";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from '@/store/verification-email-store';
 import { MutableRefObject } from "react";
 
 interface IProps {
@@ -13,7 +13,7 @@ export default function SignupVerifyCodeBtns({
   resetSendToVerifyEmail,
   verifyCodeRef
 }: IProps) {
-  const sendToVerifyEmailLoading = useSignupStore(
+  const sendToVerifyEmailLoading = useVerificationEmailStore(
     (state) => state.sendToVerifyEmailLoading
   );
 

@@ -1,22 +1,24 @@
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export default function useVerificationEmailTimer() {
   const { setError } = useFormContext();
-  const timer = useSignupStore((state) => state.timer);
-  const isSendToVerifyEmail = useSignupStore(
+  const timer = useVerificationEmailStore((state) => state.timer);
+  const isSendToVerifyEmail = useVerificationEmailStore(
     (state) => state.isSendToVerifyEmail
   );
-  const isVerifiedEmail = useSignupStore((state) => state.isVerifiedEmail);
-  const sendToVerifyEmailLoading = useSignupStore(
+  const isVerifiedEmail = useVerificationEmailStore(
+    (state) => state.isVerifiedEmail
+  );
+  const sendToVerifyEmailLoading = useVerificationEmailStore(
     (state) => state.sendToVerifyEmailLoading
   );
-  const sendToVerifyEmailError = useSignupStore(
+  const sendToVerifyEmailError = useVerificationEmailStore(
     (state) => state.sendToVerifyEmailError
   );
-  const actions = useSignupStore((state) => state.actions);
+  const actions = useVerificationEmailStore((state) => state.actions);
   const counterRef = useRef(timer);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -26,6 +28,8 @@ export default function useVerificationEmailTimer() {
 
   useEffect(() => {
     if (isSendToVerifyEmail) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      
       intervalRef.current = setInterval(() => {
         if (counterRef.current <= 0) {
           if (!sendToVerifyEmailError) {
@@ -52,10 +56,12 @@ export default function useVerificationEmailTimer() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [
+    actions,
     isSendToVerifyEmail,
     isVerifiedEmail,
     sendToVerifyEmailError,
-    sendToVerifyEmailLoading
+    sendToVerifyEmailLoading,
+    setError
   ]);
 
   return { timer };

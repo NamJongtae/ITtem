@@ -1,5 +1,5 @@
 import { changePassword } from "@/lib/api/auth";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ export default function useChangePasswordMutate({
   closeModal?: () => void;
 }) {
   const router = useRouter();
-  const { actions } = useSignupStore();
+  const { actions } = useVerificationEmailStore();
   const { mutate: changePasswordMutate, isPending: changePasswordLoading } =
     useMutation<
       AxiosResponse<{ message: string }>,

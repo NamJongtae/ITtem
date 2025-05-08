@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from "react";
-import useSignupStore from "@/store/signup-store";
+import useVerificationEmailStore from "@/store/verification-email-store";
 
 export default function useVerificationCodeInput() {
-  const actions = useSignupStore((state) => state.actions);
+  const actions = useVerificationEmailStore((state) => state.actions);
 
   const resetSendToVerifyEmail = useCallback(() => {
     actions.resetIsSendToVerifyEmail();
