@@ -6,29 +6,25 @@ import { FieldValues } from "react-hook-form";
 import ChangePasswordCurrentPasswordField from "./change-password-current-password-field";
 import ChangePasswordPasswordField from "./change-password-password-field";
 import ChangePasswordPasswordCheckField from "./change-password-check-field";
-import useChagePasswordForm from "@/hooks/profile/useChagePasswordForm";
 import ChangePasswordCloseBtn from "./modal/change-password-modal-close-btn";
 import ChangePasswordSubmitBtn from "./chanage-password-submit-btn";
-import Loading from '../commons/loading';
-
+import Loading from "../commons/loading";
+import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
+import useChangePasswordRef from "@/hooks/profile/useChangePasswordRef";
+import useModalBodyOverflow from "@/hooks/commons/useModalBodyOverflow";
+import useChangePasswordMutate from "@/hooks/react-query/mutations/auth/useChangePasswordMutate";
 
 interface IProps {
   isModal?: boolean;
 }
 
 export default function ChangePasswordForm({ isModal }: IProps) {
-  const {
-    changePasswordLoading,
-    changePasswordMutate,
-    currentPwRef,
-    pwRef,
-    pwCheckRef,
-    closeBtnRef,
-    submitBtnRef,
-    handleClickClose
-  } = useChagePasswordForm({
-    isModal
-  });
+  const { currentPwRef, pwRef, pwCheckRef, closeBtnRef, submitBtnRef } =
+    useChangePasswordRef();
+  const { closeModalHandler } = useRouterBackToCloseModal();
+  useModalBodyOverflow({ isModal });
+  const { changePasswordLoading, changePasswordMutate } =
+    useChangePasswordMutate({ closeModal: closeModalHandler });
 
   if (changePasswordLoading) {
     return <Loading />;
@@ -77,7 +73,7 @@ export default function ChangePasswordForm({ isModal }: IProps) {
           currentPwRef={currentPwRef}
           pwCheckRef={pwCheckRef}
           submitBtnRef={submitBtnRef}
-          handleClickClose={handleClickClose}
+          handleClickClose={closeModalHandler}
         />
       )}
     </MyForm>
