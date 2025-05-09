@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-export default function useProductUploadPrice() {
+export default function useProductUploadPriceField() {
   const { setValue, watch, getValues } = useFormContext();
   const price = watch("price");
 

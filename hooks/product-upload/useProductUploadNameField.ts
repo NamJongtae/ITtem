@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 
-export default function useProductUploadName() {
+export default function useProductUploadNameField() {
   const { watch, setValue } = useFormContext();
   const productName = watch("name");
 

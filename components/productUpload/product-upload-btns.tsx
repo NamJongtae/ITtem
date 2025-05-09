@@ -1,11 +1,11 @@
-import useProductUploadBtns from "@/hooks/product-upload/useProductUploadBtns";
+import useProductUploadBtnDisabled from '@/hooks/product-upload/useProductUploadBtnDisabled';
 
 interface IProps {
   isEdit?: boolean;
 }
 
 export default function ProductUploadBtns({ isEdit }: IProps) {
-  const { handleClickCancle, isDisabled } = useProductUploadBtns(isEdit);
+  const { handleClickCancle, isDisabled } = useProductUploadBtnDisabled(isEdit);
 
   return (
     <div className="flex gap-3 justify-end w-full mt-5">

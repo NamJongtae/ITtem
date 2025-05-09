@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
-export default function useProductUploadBtns(isEdit?: boolean) {
+export default function useProductUploadBtnDisabled(isEdit?: boolean) {
   const router = useRouter();
 
   const { formState } = useFormContext();

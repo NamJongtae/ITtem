@@ -1,8 +1,8 @@
-import useProductName from "@/hooks/product-upload/useProductUploadName";
+import useProductUploadNameField from '@/hooks/product-upload/useProductUploadNameField';
 import CoreInputField from "../commons/core-input-field/core-input-field";
 
 export default function ProductUploadNameField() {
-  const { productName, handleChangeProductName } = useProductName();
+  const { productName, handleChangeProductName } = useProductUploadNameField();
 
   return (
     <div className="border-b py-8">

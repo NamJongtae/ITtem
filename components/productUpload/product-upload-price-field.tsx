@@ -1,8 +1,8 @@
-import useProductUploadPrice from "@/hooks/product-upload/useProductUploadPrice";
+import useProductUploadPriceField from '@/hooks/product-upload/useProductUploadPriceField';
 import CoreInputField from "../commons/core-input-field/core-input-field";
 
 export default function ProductUploadPriceField() {
-  const { onChangePrice } = useProductUploadPrice();
+  const { onChangePrice } = useProductUploadPriceField();
 
   return (
     <div className="border-b py-8">
