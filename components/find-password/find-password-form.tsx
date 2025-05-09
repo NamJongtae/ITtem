@@ -1,14 +1,13 @@
-import useChangePasswordMutate from "@/hooks/react-query/mutations/auth/useChangePasswordMutate";
 import { FieldValues } from "react-hook-form";
 import { MyForm } from "../commons/my-form/my-form";
 import FindPassswordFormConent from "./find-password-form-content";
 import Loading from "../commons/loading";
+import useResetPasswordMutate from "@/hooks/react-query/mutations/auth/useResetPasswordMutate";
 
 export default function Form() {
-  const { changePasswordMutate, changePasswordLoading } =
-    useChangePasswordMutate({ isFindPw: true });
+  const { resetPasswordMutate, resetPasswordLoading } = useResetPasswordMutate();
 
-  if (changePasswordLoading) {
+  if (resetPasswordLoading) {
     return <Loading />;
   }
 
@@ -16,7 +15,7 @@ export default function Form() {
     <MyForm
       className="max-w-[400px] w-full h-[calc(100%-28px)] mx-auto"
       onSubmit={(values: FieldValues) =>
-        changePasswordMutate({ email: values.email, password: values.password })
+        resetPasswordMutate({ email: values.email, password: values.password })
       }
       formOptions={{
         mode: "onChange",

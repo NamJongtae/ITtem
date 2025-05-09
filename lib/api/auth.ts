@@ -359,22 +359,34 @@ export async function kakaoSignin(
 }
 
 export async function changePassword({
-  email,
   password,
-  currentPassword,
-  isFindPw
+  currentPassword
 }: {
-  email?: string;
   password: string;
-  currentPassword?: string;
-  isFindPw?: boolean;
+  currentPassword: string;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.patch("/api/auth/change-password", {
-      email,
       password,
-      currentPassword,
-      isFindPw
+      currentPassword
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function resetPassword({
+  email,
+  password
+}: {
+  email?: string;
+  password: string;
+}): Promise<AxiosResponse<{ message: string }>> {
+  try {
+    const response = await customAxios.patch("/api/auth/reset-password", {
+      email,
+      password
     });
     return response;
   } catch (error) {

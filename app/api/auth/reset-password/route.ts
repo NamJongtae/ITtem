@@ -1,38 +1,24 @@
-import { getHasdPassword, verificationPassword } from "@/lib/api/auth";
-import mongoose from "mongoose";
+import { getHasdPassword } from "@/lib/api/auth";
+import { deleteEmailVerificationCode, getVerifiedEmail } from "@/lib/api/redis";
 import dbConnect from "@/lib/db/db";
 import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
 import { LoginType } from "@/types/auth-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest) {
   try {
-    const { password, currentPassword } = await req.json();
+    const { email, password } = await req.json();
 
     await dbConnect();
 
-    if (!currentPassword || !password) {
+    if (!email || !password) {
       return new NextResponse(
         JSON.stringify({ message: "유효하지 않은 값이 있어요." }),
         { status: 422 }
       );
     }
 
-    const isValidAuth = await checkAuthorization();
-
-    if (!isValidAuth.isValid) {
-      return new NextResponse(
-        JSON.stringify({ message: isValidAuth.message }),
-        { status: 401 }
-      );
-    }
-
-    const myUid = isValidAuth?.auth?.uid as string;
-
-    const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid)
-    });
+    const user = await User.findOne({ email });
 
     if (user.loginType !== LoginType.EMAIL) {
       return new NextResponse(
@@ -44,14 +30,10 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const isPasswordVerification = await verificationPassword(
-      currentPassword,
-      user?.password || ""
-    );
-
-    if (!isPasswordVerification) {
+    const isEmailVerification = await getVerifiedEmail(email, "resetPw");
+    if (!isEmailVerification) {
       return new NextResponse(
-        JSON.stringify({ message: "기존 비밀번호가 일치하지 않아요." }),
+        JSON.stringify({ message: "인증되지 않은 이메일입니다." }),
         { status: 401 }
       );
     }
@@ -59,7 +41,7 @@ export async function PATCH(req: NextRequest) {
     const hashedPassword = await getHasdPassword(password);
 
     const result = await User.updateOne(
-      { _id: new mongoose.Types.ObjectId(myUid) },
+      { email },
       { $set: { password: hashedPassword } }
     );
 
@@ -71,6 +53,8 @@ export async function PATCH(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    await deleteEmailVerificationCode(email, "resetPw");
 
     return new NextResponse(
       JSON.stringify({ message: "비밀번호가 변경되었어요." }),

@@ -1,39 +1,25 @@
 import { changePassword } from "@/lib/api/auth";
-import useVerificationEmailStore from "@/store/verification-email-store";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function useChangePasswordMutate({
-  isFindPw,
   closeModal
 }: {
-  isFindPw?: boolean;
   closeModal?: () => void;
-}) {
-  const router = useRouter();
-  const { actions } = useVerificationEmailStore();
+} = {}) {
   const { mutate: changePasswordMutate, isPending: changePasswordLoading } =
     useMutation<
       AxiosResponse<{ message: string }>,
       AxiosError,
       {
-        email?: string;
         password: string;
-        currentPassword?: string;
-        isFindPw?: boolean;
+        currentPassword: string;
       }
     >({
-      mutationFn: async ({ email, password, currentPassword }) =>
-        await changePassword({ email, password, currentPassword, isFindPw }),
+      mutationFn: async ({ password, currentPassword }) =>
+        await changePassword({ password, currentPassword }),
       onSuccess: async (response) => {
-        if (isFindPw) {
-          actions.resetIsSendToVerificationEmail();
-          actions.resetIsVerifedEmail();
-          actions.resetTimer();
-          router.push("/signin");
-        }
         if (closeModal) closeModal();
         toast.success(response.data.message);
       },
