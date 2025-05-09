@@ -1,4 +1,4 @@
-import useImgDragAndDrop from "@/hooks/product-upload/useImgDragAndDrop";
+import useImgDragAndDrop from "@/hooks/product-upload/img-field/useImgDragAndDrop";
 
 interface IProps {
   handleClickImgInput: () => void;
