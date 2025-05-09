@@ -11,7 +11,7 @@ import ChangePasswordSubmitBtn from "./chanage-password-submit-btn";
 import Loading from "../commons/loading";
 import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
 import useChangePasswordRef from "@/hooks/profile/useChangePasswordRef";
-import useModalBodyOverflow from "@/hooks/commons/useModalBodyOverflow";
+import useBodyOverflow from "@/hooks/commons/useBodyOverflow";
 import useChangePasswordMutate from "@/hooks/react-query/mutations/auth/useChangePasswordMutate";
 
 interface IProps {
@@ -22,7 +22,7 @@ export default function ChangePasswordForm({ isModal }: IProps) {
   const { currentPwRef, pwRef, pwCheckRef, closeBtnRef, submitBtnRef } =
     useChangePasswordRef();
   const { closeModalHandler } = useRouterBackToCloseModal();
-  useModalBodyOverflow({ isModal });
+  useBodyOverflow({ isLocked: isModal });
   const { changePasswordLoading, changePasswordMutate } =
     useChangePasswordMutate({ closeModal: closeModalHandler });
 

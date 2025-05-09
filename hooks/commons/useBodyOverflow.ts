@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 
-export default function useModalBodyOverflow({
-  isModal
+export default function useBodyOverflow({
+  isLocked
 }: {
-  isModal?: boolean;
+  isLocked?: boolean;
 }) {
   useEffect(() => {
-    if (isModal) {
+    if (isLocked) {
       document.body.style.overflow = "hidden";
     }
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isModal]);
+  }, [isLocked]);
 }
