@@ -7,7 +7,7 @@ export default function useProductUploadImgInput({ onChangeImg }: IParams) {
   const { register } = useFormContext();
   const { ...rest } = register("imgData", {
     onChange: onChangeImg,
-    validate: (values) => values.length || "이미지를 선택해주세요.",
+    validate: (values) => values?.length || "이미지를 선택해주세요.",
   });
 
   return { register, rest };
