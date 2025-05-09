@@ -5,8 +5,11 @@ import useEmailDuplicationMutate from "../../react-query/mutations/auth/useEmail
 import useSendToVerificationEmailMutate from "../../react-query/mutations/auth/useSendToVerificationEmailMutate";
 import useCheckEmailMutate from "../../react-query/mutations/auth/useCheckEmailMutate";
 import useVerificationEmailStore from "@/store/verification-email-store";
+import { VerificationEmailType } from '@/types/auth-types';
 
-export default function useVerificationEmailResendHandler(isFindPw: boolean) {
+export default function useVerificationEmailResendHandler(
+  type: VerificationEmailType
+) {
   const { getValues, clearErrors } = useFormContext();
   const actions = useVerificationEmailStore((state) => state.actions);
 
@@ -22,7 +25,7 @@ export default function useVerificationEmailResendHandler(isFindPw: boolean) {
       return;
     }
 
-    if (isFindPw) {
+    if (type==="resetPw") {
       try {
         await checkEmailMutate(email);
       } catch {
@@ -41,14 +44,14 @@ export default function useVerificationEmailResendHandler(isFindPw: boolean) {
     actions.resetIsVerifedEmail();
     actions.setSendToVerificationEmailLoading(true);
     actions.resetTimer();
-    sendToVerificationEmailMutate({ email, isFindPw });
+    sendToVerificationEmailMutate({ email, type });
   }, [
     actions,
     checkEmailMutate,
     clearErrors,
     emailDuplicationMuate,
     getValues,
-    isFindPw,
+    type,
     sendToVerificationEmailMutate
   ]);
 

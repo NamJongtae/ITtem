@@ -10,10 +10,10 @@ import { useEmailFocus } from "@/hooks/signup/basic-info/useEmailFocus";
 import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmailVerificationVaildator";
 
 export default function SignupEmailField() {
-  const { validate } = useEmailVerificationValidator(false);
+  const { validate } = useEmailVerificationValidator("signup");
   const { sendToEmailHandler } = useVerificationEmailSendHandler({
     validate,
-    isFindPw: false
+    type: "signup"
   });
   const { isSendToVerificationEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
@@ -39,7 +39,9 @@ export default function SignupEmailField() {
         />
 
         {!isSendToVerificationEmail && (
-          <SignupSendVerificationEmailBtn sendToEmailHandler={sendToEmailHandler} />
+          <SignupSendVerificationEmailBtn
+            sendToEmailHandler={sendToEmailHandler}
+          />
         )}
       </div>
 

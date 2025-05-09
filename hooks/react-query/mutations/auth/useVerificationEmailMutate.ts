@@ -6,6 +6,7 @@ import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerificationEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import useVerificationEmailStore from "@/store/verification-email-store";
+import { VerificationEmailType } from '@/types/auth-types';
 
 export default function useVerificationEmailMutate() {
   const actions = useVerificationEmailStore((state) => state.actions);
@@ -14,10 +15,10 @@ export default function useVerificationEmailMutate() {
     useMutation<
       AxiosResponse<VerificationEmailResponseData>,
       AxiosError,
-      { email: string; verificationCode: string; isFindPw?: boolean }
+      { email: string; verificationCode: string; type: VerificationEmailType }
     >({
-      mutationFn: ({ email, verificationCode, isFindPw }) =>
-        verificationEmail(email, verificationCode, isFindPw),
+      mutationFn: ({ email, verificationCode, type }) =>
+        verificationEmail(email, verificationCode, type),
       onSuccess: (result) => {
         toast.success(result.data?.message);
         actions.verifyEmail();

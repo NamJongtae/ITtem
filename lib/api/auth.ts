@@ -15,7 +15,11 @@ import {
 import { AxiosResponse } from "axios";
 import { uploadImgToFireStore } from "./firebase";
 import customAxios from "../customAxios";
-import { AuthData, SignupData } from "@/types/auth-types";
+import {
+  AuthData,
+  SignupData,
+  VerificationEmailType
+} from "@/types/auth-types";
 import { toast } from "react-toastify";
 
 export async function createAccount({
@@ -59,7 +63,10 @@ export async function getHasdPassword(password: string) {
   }
 }
 
-export async function verificationPassword(password: string, hashedPassword: string) {
+export async function verificationPassword(
+  password: string,
+  hashedPassword: string
+) {
   try {
     const { compare } = await import("bcryptjs");
 
@@ -70,14 +77,25 @@ export async function verificationPassword(password: string, hashedPassword: str
   }
 }
 
-export async function sendToVerificationEmail(
-  email: string,
-  isFindPw?: boolean
+export async function sendToSignupVerificationEmail(
+  email: string
 ): Promise<AxiosResponse<VerificationEmailResponseData>> {
   try {
-    const response = await customAxios.post("/api/auth/send-verification-email", {
-      email,
-      isFindPw
+    const response = await customAxios.post("/api/auth/send-signup-code", {
+      email
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function sendToResetPwVerificationEmail(
+  email: string
+): Promise<AxiosResponse<VerificationEmailResponseData>> {
+  try {
+    const response = await customAxios.post("/api/auth/send-resetpw-code", {
+      email
     });
     return response;
   } catch (error) {
@@ -88,13 +106,13 @@ export async function sendToVerificationEmail(
 export async function verificationEmail(
   email: string,
   verificationCode: string,
-  isFindPw?: boolean
+  type: VerificationEmailType
 ): Promise<AxiosResponse<VerificationEmailResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/verification-email", {
       email,
       verificationCode,
-      isFindPw
+      type
     });
     return response;
   } catch (error) {

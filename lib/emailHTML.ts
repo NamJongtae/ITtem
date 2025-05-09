@@ -1,4 +1,6 @@
-export const emailHTML = (verfiyCode: string, isFindPw?: boolean) => {
+import { VerificationEmailType } from '@/types/auth-types';
+
+export const emailHTML = (verfiyCode: string, type: VerificationEmailType) => {
   return `
 <body>
   <h1
@@ -15,7 +17,9 @@ export const emailHTML = (verfiyCode: string, isFindPw?: boolean) => {
 </h1>
 
 <p style="white-space:pre-line; margin: 20px 0; font-size:16px; font-weight:700; color:black">${
-    isFindPw ? "ITtem 비밀번호 찾기 인증코드입니다." : "ITtem 가입을 환영합니다 :)"
+    type === "resetPw"
+      ? "ITtem 비밀번호 찾기 인증코드입니다."
+      : "ITtem 가입을 환영합니다 :)"
   }\n아래 인증코드를 입력해주세요.</p>
 <h2 style="font-size: 14px; margin: 0; padding: 0; margin-bottom: 10px; color:black;">
 메일 인증코드

@@ -11,10 +11,10 @@ import useVerificationCodeFocus from "@/hooks/signup/basic-info/useVerificationC
 export default function FindPasswordVerificationCodeField() {
   const { errors } = useVerificationCodeStatus();
   const { handleClickVerificationEmail, verificationEmailLoading } =
-  useVerificationEmailHandler(true);
+  useVerificationEmailHandler("resetPw");
   const { isSendToVerificationEmail, isVerifiedEmail } = useEmailStatus();
   const { resetSendToVerificationEmail } = useResetVerificationEmail();
-  const { requestSendToVerificationEmail } = useVerificationEmailResendHandler(true);
+  const { requestSendToVerificationEmail } = useVerificationEmailResendHandler("resetPw");
   const { verificationCodeRef } = useVerificationCodeFocus();
 
   return (

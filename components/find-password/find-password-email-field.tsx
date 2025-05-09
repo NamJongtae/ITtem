@@ -8,12 +8,12 @@ import { useVerificationEmailSendHandler } from "@/hooks/signup/basic-info/useVe
 import { useEmailVerificationValidator } from "@/hooks/signup/basic-info/useEmailVerificationVaildator";
 
 export default function FindPasswordEmailField() {
-  const { validate } = useEmailVerificationValidator(true);
+  const { validate } = useEmailVerificationValidator("resetPw");
   const { isSendToVerificationEmail, isVerifiedEmail } = useEmailStatus();
   const { emailRef } = useEmailFocus();
   const { sendToEmailHandler } = useVerificationEmailSendHandler({
     validate,
-    isFindPw: true
+    type: "resetPw"
   });
 
   return (

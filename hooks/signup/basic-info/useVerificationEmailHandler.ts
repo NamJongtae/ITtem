@@ -2,11 +2,15 @@ import { useFormContext } from "react-hook-form";
 import useVerificationEmailMutate from "../../react-query/mutations/auth/useVerificationEmailMutate";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
+import { VerificationEmailType } from "@/types/auth-types";
 
-export default function useVerificationEmailHandler(isFindPw: boolean) {
+export default function useVerificationEmailHandler(
+  type: VerificationEmailType
+) {
   const { getValues } = useFormContext();
 
-  const { verificationEmailMuate, verificationEmailLoading } = useVerificationEmailMutate();
+  const { verificationEmailMuate, verificationEmailLoading } =
+    useVerificationEmailMutate();
 
   const handleClickVerificationEmail = useCallback(async () => {
     const email = getValues("email");
@@ -16,8 +20,8 @@ export default function useVerificationEmailHandler(isFindPw: boolean) {
       return;
     }
 
-    verificationEmailMuate({ email, verificationCode, isFindPw });
-  }, [getValues, isFindPw, verificationEmailMuate]);
+    verificationEmailMuate({ email, verificationCode, type });
+  }, [getValues, type, verificationEmailMuate]);
 
   return { verificationEmailLoading, handleClickVerificationEmail };
 }

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       await req.json();
 
     try {
-      const isEmailVerified = await getVerifiedEmail(email);
+      const isEmailVerified = await getVerifiedEmail(email, "signup");
       if (!isEmailVerified) {
         return NextResponse.json(
           { message: "인증되지 않은 이메일이에요." },
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       session
     });
 
-    await deleteEmailVerificationCode(email);
+    await deleteEmailVerificationCode(email, "signup");
 
     return NextResponse.json(
       {

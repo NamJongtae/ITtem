@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 export const enum LoginType {
   EMAIL = "EMAIL",
   GOOGLE = "GOOGLE",
-  KAKAO = "KAKAO",
+  KAKAO = "KAKAO"
 }
 
 export interface UserData {
@@ -91,3 +91,5 @@ export interface ProfileReviewData {
     uid: string;
   };
 }
+
+export type VerificationEmailType = "signup" | "resetPw";

@@ -11,8 +11,8 @@ import useVerificationCodeStatus from "@/hooks/signup/basic-info/useVerification
 export default function SignupVerificationCodeField() {
   const { verificationCodeRef } = useVerificationCodeFocus();
   const { handleClickVerificationEmail, verificationEmailLoading } =
-    useVerificationEmailHandler(false);
-  const { requestSendToVerificationEmail } = useVerificationEmailResendHandler(false);
+    useVerificationEmailHandler("signup");
+  const { requestSendToVerificationEmail } = useVerificationEmailResendHandler("signup");
   const { isSendToVerificationEmail, isVerifiedEmail } = useEmailStatus();
   const { resetSendToVerificationEmail } = useResetVerificationEmail();
   const { errors } = useVerificationCodeStatus();

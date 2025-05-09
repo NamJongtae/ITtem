@@ -6,8 +6,8 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { email, verificationCode, isFindPw } = await req.json();
-  const data = await getEmailVerificationCode(email, isFindPw);
+  const { email, verificationCode, type } = await req.json();
+  const data = await getEmailVerificationCode(email, type);
 
   if (data && parseInt(data.count, 10) >= 10) {
     return NextResponse.json(
@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
     );
   }
   try {
-    await incrementVerificationEmailCounter(email, data?.count, isFindPw);
+    await incrementVerificationEmailCounter(email, data?.count, type);
     if (verificationCode.toUpperCase() === data?.verificationCode) {
-      await saveVerifiedEmail(email, isFindPw);
+      await saveVerifiedEmail(email, type);
       return NextResponse.json({ message: "인증이 완료됬어요.", ok: true });
     } else {
       return NextResponse.json(
