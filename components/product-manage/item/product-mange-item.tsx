@@ -1,7 +1,7 @@
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 
 import {
-  ProductManageDeatilMenu,
+  ProductManageStaus,
   ProductManageMenu,
 } from "../product-manage-page";
 import ProductManageItemContents from "./contents/product-manage-item-contents";
@@ -10,7 +10,7 @@ import ProductManageItemBtns from "./btns/product-manage-item-btns";
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
   menu: ProductManageMenu;
-  detailMenu: ProductManageDeatilMenu;
+  detailMenu: ProductManageStaus;
 }
 
 export default function ProductManageItem({

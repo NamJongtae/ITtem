@@ -1,5 +1,5 @@
 import Portal from "@/components/commons/portal/Portal";
-import useReasonModal from "@/hooks/product-manage/useReasonModal";
+import useReasonModalRefs from "@/hooks/product-manage/useReasonModalRefs";
 import { FieldValues } from "react-hook-form";
 import { MyForm } from "@/components/commons/my-form/my-form";
 import ReasonModalFormContents from "./reason-modal-form-contents";
@@ -18,10 +18,10 @@ export default function ReasonModal({
   options,
   name,
   submitBtnText,
-  onSubmit,
+  onSubmit
 }: IProps) {
   const { selectorRef, textareaRef, closeBtnRef, submitBtnRef } =
-    useReasonModal();
+    useReasonModalRefs();
 
   return (
     <Portal>

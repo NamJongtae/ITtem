@@ -1,5 +1,5 @@
 import ReasonModal from "../commons/reason/reason-modal";
-import usePurchaseCancelModal from "@/hooks/product-manage/usePurchaseCancelModal";
+import usePurchaseCancelSubmit from "@/hooks/product-manage/usePurchaseCancelSubmit";
 
 interface IProps {
   productId: string;
@@ -8,11 +8,11 @@ interface IProps {
 
 export default function PurchaseCancelModal({
   productId,
-  handleClickCloseBtn,
+  handleClickCloseBtn
 }: IProps) {
-  const { onSubmit } = usePurchaseCancelModal({
+  const { onSubmit } = usePurchaseCancelSubmit({
     closeModal: handleClickCloseBtn,
-    productId,
+    productId
   });
 
   return (

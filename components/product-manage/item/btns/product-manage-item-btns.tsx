@@ -1,7 +1,7 @@
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import {
-  ProductManageDeatilMenu,
-  ProductManageMenu,
+  ProductManageStaus,
+  ProductManageMenu
 } from "../../product-manage-page";
 import ProductMangeItemTradingBtns from "./trading/trading-btns";
 import ProductMangeItemTradingEndBtns from "./trading-end/trading-end-btns";
@@ -10,12 +10,12 @@ import ProductMangeItemCancelReturnBtns from "./cancel-return/cancel-return-btns
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
   menu: ProductManageMenu;
-  detailMenu: ProductManageDeatilMenu;
+  detailMenu: ProductManageStaus;
 }
 export default function ProductMangeItemBtns({
   tradingData,
   menu,
-  detailMenu,
+  detailMenu
 }: IProps) {
   return (
     <div className="shrink-0">

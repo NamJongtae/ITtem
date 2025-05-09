@@ -85,7 +85,7 @@ interface IParams {
   tradingData: SaleTradingData;
 }
 
-export default function useSaleTradingBtns({ tradingData }: IParams) {
+export default function useSaleActionBtns({ tradingData }: IParams) {
   const { status, process, productId, sellerId } = tradingData;
 
   const Button = buttonComponents[status]?.[process];

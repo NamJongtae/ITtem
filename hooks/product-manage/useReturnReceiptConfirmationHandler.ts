@@ -4,13 +4,13 @@ interface IParams {
   productId: string;
 }
 
-export default function useSaleTradingReturnReceiptConfirmationBtn({
+export default function useReturnReceiptConfirmationHandler({
   productId,
 }: IParams) {
   const { productReturnReceiptConfirmationMutate } =
     useReturnReceiptComfirmationMutate();
 
-  const handleClickReturnReceiptConfirmation = () => {
+  const onClickReturnReceiptConfirmation = () => {
     const isReturnReceiptConfirmation = confirm(
       "정말 환불상품인수 확인을 하겠어요?"
     );
@@ -19,5 +19,5 @@ export default function useSaleTradingReturnReceiptConfirmationBtn({
     }
   };
 
-  return { handleClickReturnReceiptConfirmation };
+  return { onClickReturnReceiptConfirmation };
 }

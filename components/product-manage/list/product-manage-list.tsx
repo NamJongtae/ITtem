@@ -3,7 +3,7 @@ import Empty from "../../commons/empty";
 import { isAxiosError } from "axios";
 import Item from "../item/product-mange-item";
 import {
-  ProductManageDeatilMenu,
+  ProductManageStaus,
   ProductManageMenu
 } from "../product-manage-page";
 import ProductManageListSkeletonUI from "./product-manage-list-skeletonUI";
@@ -13,7 +13,7 @@ import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMess
 
 interface IProps {
   menu: ProductManageMenu;
-  detailMenu: ProductManageDeatilMenu;
+  detailMenu: ProductManageStaus;
 }
 
 export default function ProductManageList({ menu, detailMenu }: IProps) {

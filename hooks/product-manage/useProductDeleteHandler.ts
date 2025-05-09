@@ -4,15 +4,15 @@ interface IParams {
   productId: string;
 }
 
-export default function useSaleTradingDeleteBtn({ productId }: IParams) {
+export default function useProductDeleteHandler({ productId }: IParams) {
   const { productDeleteMutate } = useProductDeleteMutate(productId);
 
-  const handleClickProductDelete = () => {
+  const onClickProductDelete = () => {
     const isDelete = confirm("정말 삭제 하겠어요?");
     if (isDelete) {
       productDeleteMutate();
     }
   };
 
-  return { handleClickProductDelete };
+  return { onClickProductDelete };
 }

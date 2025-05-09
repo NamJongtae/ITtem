@@ -1,6 +1,5 @@
-
-import Loading from '@/components/commons/loading';
-import useTradingChattingBtn from "@/hooks/product-manage/useTradingChattingBtn";
+import Loading from "@/components/commons/loading";
+import useStartChatting from "@/hooks/product-manage/useStartChatting";
 
 interface IProps {
   productId: string | undefined;
@@ -9,11 +8,11 @@ interface IProps {
 
 export default function PurchaseTradingChattingBtn({
   productId,
-  userId,
+  userId
 }: IProps) {
-  const { isPending, handleClickchatting } = useTradingChattingBtn({
+  const { isPending, startChatting } = useStartChatting({
     productId,
-    userId,
+    userId
   });
 
   if (isPending) {
@@ -23,7 +22,7 @@ export default function PurchaseTradingChattingBtn({
   return (
     <button
       type="button"
-      onClick={handleClickchatting}
+      onClick={startChatting}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       채팅하기

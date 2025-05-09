@@ -6,7 +6,7 @@ interface IParams {
   productId: string;
 }
 
-export default function useReviewUploadModal({
+export default function useReviewUploadSubmit({
   closeModal,
   productId,
 }: IParams) {

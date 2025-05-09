@@ -5,13 +5,14 @@ interface IParams {
   userId: string | undefined;
 }
 
-export default function useTradingChattingBtn({ productId, userId }: IParams) {
+export default function useStartChatting({ productId, userId }: IParams) {
   const { mutate, isPending } = useStartChatMutate();
-  const handleClickchatting = () => {
+
+  const startChatting = () => {
     if (!productId || !userId) return;
 
     mutate({ productId, userId });
   };
 
-  return { isPending, handleClickchatting };
+  return { isPending, startChatting };
 }

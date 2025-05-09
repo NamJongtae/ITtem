@@ -1,15 +1,15 @@
-import useSaleTradingDeleteBtn from "@/hooks/product-manage/useSaleTradingDeleteBtn";
+import useProductDeleteHandler from "@/hooks/product-manage/useProductDeleteHandler";
 
 interface IProps {
   productId: string;
 }
 
 export default function SaleTradingDeleteBtn({ productId }: IProps) {
-  const { handleClickProductDelete } = useSaleTradingDeleteBtn({ productId });
+  const { onClickProductDelete } = useProductDeleteHandler({ productId });
   return (
     <button
       type="button"
-      onClick={handleClickProductDelete}
+      onClick={onClickProductDelete}
       className="text-sm sm:text-base px-4 py-2 bg-gray-500 text-white font-semibold betterhover:hover:bg-gray-600"
     >
       삭제하기

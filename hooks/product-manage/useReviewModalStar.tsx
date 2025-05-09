@@ -6,7 +6,7 @@ interface IParams {
   starRef: MutableRefObject<HTMLDivElement | null>;
 }
 
-export default function useReviewUploadModalReviewStar({ starRef }: IParams) {
+export default function useReviewModalStar({ starRef }: IParams) {
   const { control, watch } = useFormContext();
   const score = watch("score");
 

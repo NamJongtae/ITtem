@@ -6,7 +6,7 @@ interface IParams {
   productId: string;
 }
 
-export default function useProductReturnModal({
+export default function useProductReturnSubmit({
   closeModal,
   productId,
 }: IParams) {

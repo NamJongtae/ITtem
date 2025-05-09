@@ -1,4 +1,4 @@
-import useReasonModalSubmitBtn from "@/hooks/product-manage/useReasonModalSubmitBtn";
+import useReasonSubmitDisabled from '@/hooks/product-manage/useReasonSubmitDisabled';
 import { forwardRef } from "react";
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
 }
 const ReasonModalSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
   ({ name, submitBtnText }, ref) => {
-    const { isDisabled } = useReasonModalSubmitBtn({ name });
+    const { isDisabled } = useReasonSubmitDisabled({ name });
 
     return (
       <button

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-export default function useReviewUploadModalReviewTags() {
+export default function useReviewModalTags() {
   const { register, unregister, setValue, watch } = useFormContext();
   const tags = watch("tags");
 

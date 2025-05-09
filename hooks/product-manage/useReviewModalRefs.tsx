@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-export default function useReviewUploadModalFomContents() {
+export default function useReviewModalRefs() {
   const starRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const submitBtnRef = useRef<HTMLButtonElement | null>(null);

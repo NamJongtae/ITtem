@@ -6,7 +6,7 @@ interface IParams {
   productId: string;
 }
 
-export default function usePurchaseCancelModal({
+export default function usePurchaseCancelSubmit({
   closeModal,
   productId,
 }: IParams) {

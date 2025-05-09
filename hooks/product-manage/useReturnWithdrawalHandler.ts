@@ -4,18 +4,16 @@ interface IParams {
   productId: string;
 }
 
-export default function usePurchaseTradingReturnWithdrawalBtn({
-  productId,
-}: IParams) {
+export default function useReturnWithdrawalHandler({ productId }: IParams) {
   const { productReturnRequestWithdrawalMutate } =
     useProductReturnRequestWithdrawalMutate();
 
-  const handleClickReturnWithdrawal = () => {
+  const onClickReturnWithdrawal = () => {
     const isReturnWithdrawal = confirm("정말 반품요청을 철회 하겠어요?");
     if (isReturnWithdrawal) {
       productReturnRequestWithdrawalMutate(productId);
     }
   };
 
-  return { handleClickReturnWithdrawal };
+  return { onClickReturnWithdrawal };
 }

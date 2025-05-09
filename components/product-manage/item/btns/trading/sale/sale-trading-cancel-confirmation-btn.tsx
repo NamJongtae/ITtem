@@ -1,4 +1,4 @@
-import useTradingCancelConfirmationBtn from "@/hooks/product-manage/useTradingCancelConfirmationBtn";
+import useCancelConfirmationHandler from "@/hooks/product-manage/useCancelConfirmationHandler";
 
 interface IProps {
   productId: string;
@@ -7,14 +7,14 @@ interface IProps {
 export default function SaleTradingCancelConfirmationBtn({
   productId,
 }: IProps) {
-  const { handleClickCancelConfirmation } = useTradingCancelConfirmationBtn({
+  const { onClickCancelConfirmation } = useCancelConfirmationHandler({
     productId,
   });
 
   return (
     <button
       type="button"
-      onClick={handleClickCancelConfirmation}
+      onClick={onClickCancelConfirmation}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       취소요청 확인

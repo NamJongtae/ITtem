@@ -1,15 +1,15 @@
-import { ProductManageDeatilMenu } from "./product-manage-page";
+import { ProductManageStaus } from "./product-manage-page";
 
 interface IPros {
-  detailMenu: ProductManageDeatilMenu;
-  handleClickDeatilMenu: (detailMenu: ProductManageDeatilMenu) => void;
+  manageStatus: ProductManageStaus;
+  handleClickDeatilMenu: (manageStatus: ProductManageStaus) => void;
 }
 
 export default function ProductManageDetailMenu({
-  detailMenu,
+  manageStatus,
   handleClickDeatilMenu,
 }: IPros) {
-  const menuList: ProductManageDeatilMenu[] = [
+  const menuList: ProductManageStaus[] = [
     "거래중",
     "거래완료 내역",
     "취소/반품 내역",
@@ -18,12 +18,12 @@ export default function ProductManageDetailMenu({
 
   return (
     <ul className="flex gap-3 text-sm mt-3 flex-wrap">
-      {menuList.map((menu: ProductManageDeatilMenu) => (
+      {menuList.map((menu: ProductManageStaus) => (
         <li key={menu}>
           <button
             onClick={() => handleClickDeatilMenu(menu)}
-            className={`${detailMenu === menu && "text-white bg-gray-700"} ${
-              detailMenu !== menu && "betterhover:hover:bg-gray-100"
+            className={`${manageStatus === menu && "text-white bg-gray-700"} ${
+              manageStatus !== menu && "betterhover:hover:bg-gray-100"
             } border border-gray-400 rounded-md py-2 px-4`}
           >
             {menu}

@@ -1,8 +1,8 @@
-import useReviewUploadModalTextarea from "@/hooks/product-manage/useReviewUploadModalTextarea";
+import useReviewModalTextarea from "@/hooks/product-manage/useReviewModalTextarea";
 import { forwardRef } from "react";
 
 const ReviewUploadModalReviewTextarea = forwardRef((props, ref) => {
-  const { registerRef, rest } = useReviewUploadModalTextarea();
+  const { registerRef, rest } = useReviewModalTextarea();
 
   return (
     <>

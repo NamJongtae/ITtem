@@ -1,7 +1,7 @@
 import { MyForm } from "@/components/commons/my-form/my-form";
 import Portal from "@/components/commons/portal/Portal";
 import { REVIEW_TAGS } from "@/constants/constant";
-import useReviewUploadModal from "@/hooks/product-manage/useReviewUploadModal";
+import useReviewUploadModal from "@/hooks/product-manage/useReviewUploadSubmit";
 import FormContents from "./review-upload-modal-form-contents";
 import Loading from '@/components/commons/loading';
 

@@ -1,16 +1,16 @@
-import useTradingChattingBtn from "@/hooks/product-manage/useTradingChattingBtn";
+import useStartChatting from "@/hooks/product-manage/useStartChatting";
 
 interface IProps {
   productId: string | undefined;
   userId: string | undefined;
 }
 export default function SaleTradingChattingBtn({ productId, userId }: IProps) {
-  const { handleClickchatting } = useTradingChattingBtn({ productId, userId });
+  const { startChatting } = useStartChatting({ productId, userId });
 
   return (
     <button
       type="button"
-      onClick={handleClickchatting}
+      onClick={startChatting}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       채팅하기

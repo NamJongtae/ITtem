@@ -1,4 +1,4 @@
-import useSaleTradingReturnConfirmationBtn from "@/hooks/product-manage/useSaleTradingReturnConfirmationBtn";
+import useReturnConfirmationHandler from "@/hooks/product-manage/useReturnConfirmationHandler";
 
 interface IProps {
   productId: string;
@@ -7,14 +7,14 @@ interface IProps {
 export default function SaleTradingReturnConfirmationBtn({
   productId,
 }: IProps) {
-  const { handleClickReturnConfirmation } = useSaleTradingReturnConfirmationBtn(
+  const { onClickReturnConfirmation } = useReturnConfirmationHandler(
     { productId }
   );
 
   return (
     <button
       type="button"
-      onClick={handleClickReturnConfirmation}
+      onClick={onClickReturnConfirmation}
       className="text-sm sm:text-base px-4 py-2 bg-red-500 text-white font-semibold betterhover:hover:bg-red-600"
     >
       반품요청 확인

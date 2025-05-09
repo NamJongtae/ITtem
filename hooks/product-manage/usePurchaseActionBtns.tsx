@@ -3,7 +3,7 @@ import {
   PurchaseReturnProcess,
   PurchaseTradingData,
   PurchaseTradingProcess,
-  TradingStatus,
+  TradingStatus
 } from "@/types/product-types";
 import { JSX } from "react";
 import PurchaseTradingChattingBtn from "@/components/product-manage/item/btns/trading/purchase/purchase-trading-chatting-btn";
@@ -41,7 +41,7 @@ const buttonComponents: ButtonComponents = {
     ),
     [PurchaseTradingProcess.판매자반품거절상품전달중]: ({
       productId,
-      userId,
+      userId
     }) => (
       <>
         <PurchaseTradingChattingBtn productId={productId} userId={userId!} />
@@ -52,12 +52,12 @@ const buttonComponents: ButtonComponents = {
         <PurchaseTradingReceiptConfirmationBtn productId={productId} />
         <PurchaseTradingReturnBtn productId={productId} />
       </>
-    ),
+    )
   },
   [TradingStatus.CANCEL]: {
     [PurchaseCancelProcess.판매자확인중]: ({ productId }) => (
       <PurchaseTradingCancelWithdrawalBtn productId={productId} />
-    ),
+    )
   },
   [TradingStatus.RETURN]: {
     [PurchaseReturnProcess.판매자확인중]: ({ productId }) => (
@@ -71,16 +71,16 @@ const buttonComponents: ButtonComponents = {
     ),
     [PurchaseReturnProcess.판매자반품상품인수확인중]: ({
       productId,
-      userId,
-    }) => <PurchaseTradingChattingBtn productId={productId} userId={userId!} />,
-  },
+      userId
+    }) => <PurchaseTradingChattingBtn productId={productId} userId={userId!} />
+  }
 };
 
 interface IParams {
   tradingData: PurchaseTradingData;
 }
 
-export default function usePurchaseTradingBtns({ tradingData }: IParams) {
+export default function usePurchaseActionBtns({ tradingData }: IParams) {
   const { status, process, productId, sellerId } = tradingData;
 
   const Button = buttonComponents[status]?.[process];

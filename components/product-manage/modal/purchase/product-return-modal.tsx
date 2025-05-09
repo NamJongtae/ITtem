@@ -1,5 +1,5 @@
 import ReasonModal from "../commons/reason/reason-modal";
-import useProductReturnModal from "@/hooks/product-manage/useProductReturnModal";
+import useProductReturnSubmit from "@/hooks/product-manage/useProductReturnSubmit";
 
 interface IProps {
   productId: string;
@@ -8,11 +8,11 @@ interface IProps {
 
 export default function ProductReturnModal({
   productId,
-  handleClickCloseBtn,
+  handleClickCloseBtn
 }: IProps) {
-  const { onSubmit } = useProductReturnModal({
+  const { onSubmit } = useProductReturnSubmit({
     closeModal: handleClickCloseBtn,
-    productId,
+    productId
   });
 
   return (
@@ -25,7 +25,7 @@ export default function ProductReturnModal({
         "파손된 상품",
         "제품 하자 발생",
         "설명과 다른 제품",
-        "직접입력",
+        "직접입력"
       ]}
       name={"returnReason"}
       submitBtnText={"반품요청"}

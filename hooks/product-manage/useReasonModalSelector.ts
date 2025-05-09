@@ -7,7 +7,7 @@ interface IParams {
   selectorRef: MutableRefObject<HTMLSelectElement | null>;
 }
 
-export default function useReasonModalSeletor({ name, selectorRef }: IParams) {
+export default function useReasonModalSelector ({ name, selectorRef }: IParams) {
   const { register } = useFormContext();
   const { ref, ...rest } = register(name);
   useFocusing(selectorRef);

@@ -1,8 +1,10 @@
 import { REVIEW_TAGS } from "@/constants/constant";
-import useReviewUploadModalReviewTags from "@/hooks/product-manage/useReviewUploadModalReviewTags";
+import useReviewRegisterTags from "@/hooks/product-manage/useReviewRegisterTags";
+import useReviewTagToggle from "@/hooks/product-manage/useReviewTagToggle";
 
 export default function ReviewUploadModalReviewTags() {
-  const { tags, handleCheckboxChange } = useReviewUploadModalReviewTags();
+  const { tags, onChangeCheckbox } = useReviewTagToggle();
+  useReviewRegisterTags();
 
   return (
     <>
@@ -20,7 +22,7 @@ export default function ReviewUploadModalReviewTags() {
             type="checkbox"
             value={tag}
             checked={tags[index] === 1}
-            onChange={() => handleCheckboxChange(index)}
+            onChange={() => onChangeCheckbox(index)}
           />
           {tag}
         </label>

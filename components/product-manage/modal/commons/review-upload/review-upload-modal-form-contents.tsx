@@ -4,7 +4,7 @@ import ReviewUploadModalReviewTags from "./review-upload-modal-review-tags";
 import ReviewUploadModalReviewTextarea from "./review-upload-modal-review-textarea";
 import ReviewUploadModalSubmitBtn from "./review-upload-modal-submit-btn";
 import ReviewUploadModalCloseBtn from "./review-upload-modal-close-btn";
-import useReviewUploadModalFomContents from "@/hooks/product-manage/useReviewUploadModalFomContents";
+import useReviewModalRefs from "@/hooks/product-manage/useReviewModalRefs";
 import ReviewUploadModalHeader from "./review-upload-modal-header";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
 
@@ -13,10 +13,10 @@ interface IProps {
 }
 
 export default function ReviewUploadModalFormContents({
-  handleClickCloseBtn,
+  handleClickCloseBtn
 }: IProps) {
   const { starRef, textareaRef, submitBtnRef, closeBtnRef } =
-    useReviewUploadModalFomContents();
+    useReviewModalRefs();
 
   return (
     <div

@@ -1,14 +1,14 @@
-import usePurchaseTradingCancelWithdrawalBtn from "@/hooks/product-manage/usePurchaseTradingCancelWithdrawalBtn";
+import useCancelWithdrawalHandler from "@/hooks/product-manage/useCancelWithdrawalHandler";
 
 interface IProps {
   productId: string;
 }
 
 export default function PurchaseTradingCancelWithdrawalBtn({
-  productId,
+  productId
 }: IProps) {
-  const { onClickCancelWithdrawal } = usePurchaseTradingCancelWithdrawalBtn({
-    productId,
+  const { onClickCancelWithdrawal } = useCancelWithdrawalHandler({
+    productId
   });
 
   return (

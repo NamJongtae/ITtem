@@ -1,4 +1,4 @@
-import useReasonModalSeletor from "@/hooks/product-manage/useReasonModalSeletor";
+import useReasonModalSeletor from "@/hooks/product-manage/useReasonModalSelector";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import { MutableRefObject } from "react";
 

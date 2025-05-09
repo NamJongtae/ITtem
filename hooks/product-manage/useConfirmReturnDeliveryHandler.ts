@@ -4,7 +4,7 @@ interface IParams {
   productId: string;
 }
 
-export default function usePurchaseTradingReturnDeliveryComfirmationBtn({
+export default function useConfirmReturnDeliveryHandler({
   productId,
 }: IParams) {
   const { productReturnDeliveryConfirmationMutate } =

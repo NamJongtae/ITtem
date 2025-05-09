@@ -4,7 +4,7 @@ interface IParams {
   name: string;
 }
 
-export default function useReasonModalSubmitBtn({ name }: IParams) {
+export default function useReasonSubmitDisabled({ name }: IParams) {
   const { formState, watch } = useFormContext();
   const selectValue = watch(name);
 

@@ -4,7 +4,7 @@ interface IParams {
   productId: string;
 }
 
-export default function usePurchaseTradingCancelWithdrawalBtn({
+export default function useCancelWithdrawalHandler({
   productId,
 }: IParams) {
   const { purchaseCancelRequestWithdrawalMutate } =

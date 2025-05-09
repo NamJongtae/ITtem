@@ -1,9 +1,9 @@
-import useReviewUploadModalSubmitBtn from "@/hooks/product-manage/useReviewUploadModalSubmitBtn";
+import useReviewSubmitDisabled from '@/hooks/product-manage/useReviewSubmitDisabled';
 import { forwardRef } from "react";
 
 const ReviewUploadModalSubmitBtn = forwardRef<HTMLButtonElement | null>(
   (props, ref) => {
-    const { isDisabled } = useReviewUploadModalSubmitBtn();
+    const { isDisabled } = useReviewSubmitDisabled();
 
     return (
       <button

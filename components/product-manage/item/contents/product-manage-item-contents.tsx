@@ -1,14 +1,15 @@
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
-import { ProductManageDeatilMenu } from "../../product-manage-page";
+import { ProductManageStaus } from '../../product-manage-page';
 import ProductManageItemTradingContent from "./product-manage-item-trading-content";
 import ProductManageItemTradingEndContent from "./product-manage-item-trading-end-content";
 import ProductManageItemCancelReturnContent from "./product-manage-item-return-content";
 import ProductManageItemCancelReturnRejectContent from "./product-manage-item-return-reject-content";
 import FallbackImage from "@/components/commons/fallback-Image";
 
+
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
-  detailMenu: ProductManageDeatilMenu;
+  detailMenu: ProductManageStaus;
 }
 
 export default function ProductManageItemContents({

@@ -1,11 +1,11 @@
-import useReviewUploadModalReviewStar from "@/hooks/product-manage/useReviewUploadModalReviewStar";
+import useReviewModalStar from "@/hooks/product-manage/useReviewModalStar";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import dynamic from "next/dynamic";
 import { MutableRefObject, forwardRef } from "react";
 import { Controller } from "react-hook-form";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>,
+  loading: () => <p>loading...</p>
 });
 
 interface IProps {
@@ -14,8 +14,8 @@ interface IProps {
 
 const ReviewUploadModalReviewStar = forwardRef<HTMLDivElement | null, IProps>(
   ({ closeBtnRef }, ref) => {
-    const { control, score } = useReviewUploadModalReviewStar({
-      starRef: ref as MutableRefObject<HTMLDivElement | null>,
+    const { control, score } = useReviewModalStar({
+      starRef: ref as MutableRefObject<HTMLDivElement | null>
     });
 
     return (
@@ -26,7 +26,7 @@ const ReviewUploadModalReviewStar = forwardRef<HTMLDivElement | null, IProps>(
         onKeyDown={(e) =>
           optimizationTabFocus({
             event: e,
-            previousTarget: closeBtnRef.current,
+            previousTarget: closeBtnRef.current
           })
         }
       >

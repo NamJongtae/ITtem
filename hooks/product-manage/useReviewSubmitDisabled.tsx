@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 
-export default function useReviewUploadModalSubmitBtn() {
+export default function useReviewSubmitDisabled() {
   const { formState } = useFormContext();
   const isDisabled =
     !formState.dirtyFields["score"] || !formState.dirtyFields["content"];

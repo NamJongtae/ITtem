@@ -1,4 +1,4 @@
-import usePurchaseTradingReturnDeliveryComfirmationBtn from "@/hooks/product-manage/usePurchaseTradingReturnDeliveryComfirmationBtn";
+import usePurchaseTradingReturnDeliveryComfirmationBtn from "@/hooks/product-manage/useConfirmReturnDeliveryHandler";
 
 interface IProps {
   productId: string;
