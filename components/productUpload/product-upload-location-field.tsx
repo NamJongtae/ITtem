@@ -1,16 +1,13 @@
+import useModal from "@/hooks/commons/useModal";
 import AddressModal from "../address-modal/address-modal";
-import useProductUploadLocationField from "@/hooks/product-upload/useProductUploadLocationField";
+import useProductUploadLocationField from "@/hooks/product-upload/location-field/useProductUploadLocationField";
+import useLocationSelector from "@/hooks/product-upload/location-field/useLocationSelector";
 
 export default function ProductUploadLocationField() {
-  const {
-    register,
-    isOpenModal,
-    openModal,
-    closeModal,
-    fetchCurrentLocation,
-    selectNoPreferenceAddress,
-    addAddress,
-  } = useProductUploadLocationField();
+  const { isOpenModal, openModal, closeModal } = useModal();
+  const { register, setLocationValue } = useProductUploadLocationField();
+  const { fetchCurrentLocation, selectNoPreferenceAddress, addAddress } =
+    useLocationSelector({ setLocationValue, closeModal });
 
   return (
     <div className="border-b py-8">
@@ -49,7 +46,7 @@ export default function ProductUploadLocationField() {
         readOnly
         placeholder="지역 선택"
         {...register("location", {
-          required: true,
+          required: true
         })}
       />
       {isOpenModal && (
