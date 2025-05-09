@@ -4,8 +4,9 @@ import { MyForm } from "../commons/my-form/my-form";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./product-upload-form-content";
-import useProductUploadForm from "@/hooks/product-upload/useProductUploadForm";
+import useProductUploadFormLogic from "@/hooks/product-upload/useProductUploadFormLogic";
 import Loading from "../commons/loading";
+import useBodyOverflow from "@/hooks/commons/useBodyOverflow";
 
 interface IProps {
   isEdit?: boolean;
@@ -13,17 +14,23 @@ interface IProps {
 
 export default function ProductUploadForm({ isEdit }: IProps) {
   const {
-    handleClickProductUploadSubmit,
-    handleClickProductEditSubmit,
+    onSubmit,
     productDetailData,
     isLoading,
+    loadProductLoading,
     isError
-  } = useProductUploadForm({ isEdit });
+  } = useProductUploadFormLogic({ isEdit });
+
+  useBodyOverflow({ isLocked: isLoading });
 
   if (isError) {
     if (isAxiosError<{ message: string }>(isError)) {
       return <Empty message={isError.response?.data?.message || ""} />;
     }
+  }
+
+  if (loadProductLoading) {
+    return <Loading />;
   }
 
   return (
@@ -34,9 +41,7 @@ export default function ProductUploadForm({ isEdit }: IProps) {
         </div>
       )}
       <MyForm
-        onSubmit={
-          isEdit ? handleClickProductEditSubmit : handleClickProductUploadSubmit
-        }
+        onSubmit={onSubmit}
         formOptions={{
           mode: "onChange",
           defaultValues: {

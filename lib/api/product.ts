@@ -4,14 +4,18 @@ import {
   KakaoAddressDocument,
   ProductCategory,
   ProductData,
+  ProductImgData,
   ProductUploadData
 } from "@/types/product-types";
 import {
   ProductDetailResponseData,
   ProductListResponseData,
   ProductResponseData,
-  ReviewResponseData
+  ReviewResponseData,
+  UploadImgResponseData
 } from "@/types/api-types";
+import { FieldValues } from "react-hook-form";
+import { deleteImgToFirestore, uploadMultiImgToFirestore } from "./firebase";
 
 export async function purchaseProduct(
   productId: string
@@ -275,3 +279,69 @@ export async function searchAddress(address: string) {
     throw error;
   }
 }
+
+export const setProductEditData = async ({
+  values,
+  productData,
+  productEditData
+}: {
+  values: FieldValues;
+  productData: ProductData;
+  productEditData: Partial<ProductData>;
+}) => {
+  for (const key of Object.keys(values)) {
+    if (key === "price") {
+      if (productData[key] !== parseInt(values.price.replace(",", ""), 10)) {
+        productEditData.price = parseInt(values.price.replace(",", ""), 10);
+      }
+    } else if (key === "prevImgData") {
+      if (
+        JSON.stringify(productData?.imgData) !==
+        JSON.stringify(values.prevImgData)
+      ) {
+        productEditData.imgData = values.prevImgData;
+      }
+      if (values.imgData) {
+        const imgFiles = values.imgData.filter(
+          (data: object) => data instanceof File
+        );
+        const imgData = await uploadMultiImgToFirestore(imgFiles);
+        productEditData.imgData = [
+          ...values.prevImgData,
+          ...(imgData as UploadImgResponseData[])
+        ];
+      }
+    } else if (
+      key === "description" ||
+      key === "transaction" ||
+      key === "deliveryFee" ||
+      key === "returnPolicy" ||
+      key === "condition" ||
+      key === "location" ||
+      key === "category" ||
+      key === "name"
+    ) {
+      if (productData[key] !== values[key]) {
+        productEditData[key] = values[key];
+      }
+    }
+  }
+};
+
+export const deleteProductImages = async ({
+  values,
+  productData,
+  productEditData
+}: {
+  values: FieldValues;
+  productData: ProductData;
+  productEditData: Partial<ProductData>;
+}) => {
+  if (productEditData.imgData && values.prevImgData) {
+    const productDataImgName = productData.imgData.map((data) => data.name);
+    const prevImgDataImgName = values.prevImgData.map(
+      (data: ProductImgData) => data.name
+    );
+    await deleteImgToFirestore(productDataImgName, prevImgDataImgName);
+  }
+};

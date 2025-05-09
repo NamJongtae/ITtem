@@ -11,20 +11,23 @@ export default function useProductUploadMutate() {
   const queryCliecnt = useQueryClient();
   const myProfileQueryKey = queryKeys.profile.my._ctx.products._def;
 
-  const { mutateAsync: productUploadMuate, isPending: productUploadLoading } =
-    useMutation<
-      AxiosResponse<ProductResponseData>,
-      AxiosError,
-      ProductUploadData
-    >({
-      mutationFn: async (productData) => await uploadProduct(productData),
-      onSuccess: (response) => {
-        queryCliecnt.invalidateQueries({
-          queryKey: myProfileQueryKey
-        });
-        router.push(`/product/${response.data.product._id}`);
-        window.scrollTo(0, 0);
-      }
-    });
-  return { productUploadMuate, productUploadLoading };
+  const {
+    mutateAsync: productUploadMuate,
+    isPending: productUploadLoading,
+    isError: productUploadError
+  } = useMutation<
+    AxiosResponse<ProductResponseData>,
+    AxiosError,
+    ProductUploadData
+  >({
+    mutationFn: async (productData) => await uploadProduct(productData),
+    onSuccess: (response) => {
+      queryCliecnt.invalidateQueries({
+        queryKey: myProfileQueryKey
+      });
+      router.push(`/product/${response.data.product._id}`);
+      window.scrollTo(0, 0);
+    }
+  });
+  return { productUploadMuate, productUploadLoading, productUploadError };
 }

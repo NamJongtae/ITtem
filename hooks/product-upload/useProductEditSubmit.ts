@@ -1,27 +1,23 @@
 import { FieldValues } from "react-hook-form";
 import useProductEditMutate from "../react-query/mutations/product/useProductEditMutate";
-import { ProductData, ProductImgData } from "@/types/product-types";
+import { ProductData } from "@/types/product-types";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import {
-  deleteImgToFirestore,
-  uploadMultiImgToFirestore,
-} from "@/lib/api/firebase";
-import { UploadImgResponseData } from "@/types/api-types";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
 import { queryKeys } from "@/query-keys/query-keys";
+import { deleteProductImages, setProductEditData } from "@/lib/api/product";
+import { useParams } from "next/navigation";
 
 export default function useProductEditSubmit() {
   const [productEditLoading, setProductEditLoading] = useState(false);
   const [productEditError, setProductEditError] = useState(false);
+  const params = useParams();
+  const productId = params.productId;
+  const productEditData = {} as Partial<ProductData>;
 
   const { productEditMutate } = useProductEditMutate();
   const queryClient = useQueryClient();
-  const params = useParams();
-  const productId = params?.productId;
-  const productEditData = {} as Partial<ProductData>;
   const productDetailQuerykKey = queryKeys.product.detail(
     productId as string
   ).queryKey;
@@ -30,68 +26,12 @@ export default function useProductEditSubmit() {
     (queryClient.getQueryData(productDetailQuerykKey) as ProductData) ||
     undefined;
 
-  /**
-   * 상품 수정시 수정된 데이터만 설정하는 함수
-   */
-  const setProductEditData = async (values: FieldValues) => {
-    for (const key of Object.keys(values)) {
-      if (key === "price") {
-        if (productData[key] !== parseInt(values.price.replace(",", ""), 10)) {
-          productEditData.price = parseInt(values.price.replace(",", ""), 10);
-        }
-      } else if (key === "prevImgData") {
-        if (
-          JSON.stringify(productData?.imgData) !==
-          JSON.stringify(values.prevImgData)
-        ) {
-          productEditData.imgData = values.prevImgData;
-        }
-        if (values.imgData) {
-          const imgFiles = values.imgData.filter(
-            (data: object) => data instanceof File
-          );
-          const imgData = await uploadMultiImgToFirestore(imgFiles);
-          productEditData.imgData = [
-            ...values.prevImgData,
-            ...(imgData as UploadImgResponseData[]),
-          ];
-        }
-      } else if (
-        key === "description" ||
-        key === "transaction" ||
-        key === "deliveryFee" ||
-        key === "returnPolicy" ||
-        key === "condition" ||
-        key === "location" ||
-        key === "category" ||
-        key === "name"
-      ) {
-        if (productData[key] !== values[key]) {
-          productEditData[key] = values[key];
-        }
-      }
-    }
-  };
-
-  /**
-   * 상품 수정시 삭제된 이미지 삭제 함수
-   */
-  const deleteImages = async (values: FieldValues) => {
-    if (productEditData.imgData && values.prevImgData) {
-      const productDataImgName = productData.imgData.map((data) => data.name);
-      const prevImgDataImgName = values.prevImgData.map(
-        (data: ProductImgData) => data.name
-      );
-      await deleteImgToFirestore(productDataImgName, prevImgDataImgName);
-    }
-  };
-
-  const handleClickProductEditSubmit = async (values: FieldValues) => {
+  const onSubmit = async (values: FieldValues) => {
     try {
       setProductEditLoading(true);
       setProductEditError(false);
-      await setProductEditData(values);
-      await deleteImages(values);
+      await setProductEditData({ values, productData, productEditData });
+      await deleteProductImages({ values, productData, productEditData });
       await productEditMutate(productEditData);
     } catch (error) {
       if (isAxiosError<{ message: string }>(error)) {
@@ -99,6 +39,7 @@ export default function useProductEditSubmit() {
         setProductEditError(true);
       } else if (error instanceof Error) {
         toast.warn(error.message);
+        console.log(error);
       }
     } finally {
       setProductEditLoading(false);
@@ -106,8 +47,8 @@ export default function useProductEditSubmit() {
   };
 
   return {
-    handleClickProductEditSubmit,
+    onSubmit,
     productEditLoading,
-    productEditError,
+    productEditError
   };
 }
