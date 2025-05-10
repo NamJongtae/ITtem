@@ -1,7 +1,7 @@
 import useVerificationEmailStore from "@/store/verification-email-store";
 import { useFormContext } from "react-hook-form";
 
-export default function useFindPasswordDisabled() {
+export default function useFindPasswordBtnDisabled() {
   const { formState } = useFormContext();
   const errors =
     formState.errors["email"] ||

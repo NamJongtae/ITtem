@@ -1,8 +1,8 @@
 import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
-import useFindPasswordDisabled from "@/hooks/find-password/useFindPasswordBtn";
+import useFindPasswordBtnDisabled from "@/hooks/find-password/useFindPasswordBtnDisabled";
 
 export default function FindPassswordBtns() {
-  const { isDisabled } = useFindPasswordDisabled();
+  const { isDisabled } = useFindPasswordBtnDisabled();
   const { closeModalHandler } = useRouterBackToCloseModal();
 
   return (
