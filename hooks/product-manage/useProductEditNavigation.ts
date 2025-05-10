@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import { useCustomRouter } from "../commons/useCustomRouter";
 
 interface IParams {
