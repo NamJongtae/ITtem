@@ -1,4 +1,4 @@
-import useProductDetailFollowBtnLogic from "@/hooks/product-detail/useProductDetailFollowBtnLogic";
+import useFollowUserInProduct from "@/hooks/product-detail/useFollowUserInProduct";
 import useMyProfileQuery from "@/hooks/react-query/queries/profile/useMyProfileQuery";
 
 interface IProps {
@@ -12,12 +12,11 @@ export default function ProductDetailSellerFollowBtn({
 }: IProps) {
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
 
-  const { isFollowing, followHandler, isMyProfile } =
-    useProductDetailFollowBtnLogic({
-      uid,
-      authFollowers,
-      myProfileData
-    });
+  const { isFollowing, followHandler, isMyProfile } = useFollowUserInProduct({
+    uid,
+    authFollowers,
+    myProfileData
+  });
 
   if (loadMyProfileLoading || isMyProfile) return null;
 
