@@ -4,10 +4,11 @@ import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/us
 import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { ProfileData } from "@/types/auth-types";
 import { toast } from "react-toastify";
-export default function useProfileDetailFollowBtn({
+
+export default function useFollowUserInList({
   myProfileData,
   userProfileData,
-  followProfileData,
+  followProfileData
 }: {
   myProfileData: ProfileData | undefined;
   userProfileData: ProfileData | undefined;
@@ -31,19 +32,23 @@ export default function useProfileDetailFollowBtn({
     !!myProfileData?.followings?.includes(followProfileData?.uid || "") &&
     !!followProfileData?.followers?.includes(myProfileData?.uid);
 
-  const handleClickfollow = () => {
+  const isMyProfilePage = userProfileData?.uid === myProfileData?.uid;
+
+  const isNotMyProfile = myProfileData?.uid !== followProfileData?.uid;
+
+  const onClickFollow = () => {
     if (!myProfileData) {
       toast.warn("로그인이 필요해요.");
       return;
     }
     if (isFollow) {
-      if (userProfileData?.uid === myProfileData?.uid) {
+      if (isMyProfilePage) {
         myProfileUnfollowMutate();
       } else {
         userUnfollowMutate();
       }
     } else {
-      if (userProfileData?.uid === myProfileData?.uid) {
+      if (isMyProfilePage) {
         myProfilefollowMutate();
       } else {
         userFollowMutate();
@@ -51,5 +56,5 @@ export default function useProfileDetailFollowBtn({
     }
   };
 
-  return { isFollow, handleClickfollow };
+  return { isFollow, isNotMyProfile, onClickFollow };
 }

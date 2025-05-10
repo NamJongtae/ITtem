@@ -1,17 +1,16 @@
-import React, { useRef } from "react";
 import useDropdownMenu from "../commons/useDropDownMenu";
 import { ProductCategory } from "@/types/product-types";
 import { CATEGORY } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
+import { useRef } from "react";
 
 interface IParams {
   selectCategory: (category: ProductCategory) => void;
 }
 
-export default function useProfileDetailProductCategoryMenu({
-  selectCategory,
-}: IParams) {
+export default function useProductCategoryMenu({ selectCategory }: IParams) {
   const { isOpenMenu, closeMenu, toggleMenu, menuRef } = useDropdownMenu();
+
   const firstCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLButtonElement | null>(null);
@@ -20,10 +19,10 @@ export default function useProfileDetailProductCategoryMenu({
     return index === 0
       ? firstCategoryRef
       : index === CATEGORY.length - 1
-      ? lastCategoryRef
-      : index === CATEGORY.length - 2
-      ? lastCategoryPreviousRef
-      : null;
+        ? lastCategoryRef
+        : index === CATEGORY.length - 2
+          ? lastCategoryPreviousRef
+          : null;
   };
 
   const categoryOnKeyDown = (
@@ -34,17 +33,17 @@ export default function useProfileDetailProductCategoryMenu({
       optimizationTabFocus({
         event: e,
         previousTarget: lastCategoryPreviousRef.current,
-        nextTarget: firstCategoryRef.current,
+        nextTarget: firstCategoryRef.current
       });
     } else if (index === 0) {
       optimizationTabFocus({
         event: e,
-        previousTarget: lastCategoryRef.current,
+        previousTarget: lastCategoryRef.current
       });
     }
   };
 
-  const handleClickCategory = (category: ProductCategory) => {
+  const onClickCategory = (category: ProductCategory) => {
     selectCategory(category);
     closeMenu();
   };
@@ -54,8 +53,8 @@ export default function useProfileDetailProductCategoryMenu({
     closeMenu,
     toggleMenu,
     menuRef,
-    handleClickCategory,
+    onClickCategory,
     setCategoryBtnRef,
-    categoryOnKeyDown,
+    categoryOnKeyDown
   };
 }

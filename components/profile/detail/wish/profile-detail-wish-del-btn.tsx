@@ -1,15 +1,15 @@
-import useProfileDetailWishDelBtn from "@/hooks/profile/useProfileDetailWishDelBtn";
+import useWishDeleteHandler from "@/hooks/profile/useWishDeleteHandler";
 
 interface IProps {
   selectedWish: string[];
-  handleSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function ProfileDetailWishDelBtn({
   selectedWish,
-  handleSelectAll,
+  onClickSelectAll
 }: IProps) {
-  const { handleClickDelete } = useProfileDetailWishDelBtn({ selectedWish });
+  const { onClickDelete } = useWishDeleteHandler({ selectedWish });
 
   return (
     <div className="flex items-center w-full gap-2 mb-5">
@@ -20,7 +20,7 @@ export default function ProfileDetailWishDelBtn({
         >
           <input
             type="checkbox"
-            onChange={handleSelectAll}
+            onChange={onClickSelectAll}
             className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all  checked:border-red-400 checked:bg-red-400"
             id="selectAll"
           />
@@ -45,7 +45,7 @@ export default function ProfileDetailWishDelBtn({
       </div>
       <button
         type="button"
-        onClick={handleClickDelete}
+        onClick={onClickDelete}
         className="font-medium betterhover:hover:text-red-500"
       >
         선택 삭제

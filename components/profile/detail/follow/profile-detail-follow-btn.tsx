@@ -1,4 +1,4 @@
-import useProfileDetailFollowBtn from "@/hooks/profile/useProfileDetailFollowBtn";
+import useProfileDetailFollowBtnLogic from '@/hooks/profile/useFollowUserInList';
 import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
@@ -10,19 +10,21 @@ interface IProps {
 export default function ProfileDetailFollowBtn({
   myProfileData,
   userProfileData,
-  followProfileData,
+  followProfileData
 }: IProps) {
-  const { isFollow, handleClickfollow } = useProfileDetailFollowBtn({
-    myProfileData,
-    userProfileData,
-    followProfileData,
-  });
+  const { isFollow, isNotMyProfile, onClickfollow } = useProfileDetailFollowBtnLogic(
+    {
+      myProfileData,
+      userProfileData,
+      followProfileData
+    }
+  );
 
   return (
-    myProfileData?.uid !== followProfileData?.uid && (
+    isNotMyProfile && (
       <button
         type="button"
-        onClick={handleClickfollow}
+        onClick={onClickfollow}
         className="w-full max-w-[180px] border mt-3 py-2 px-4 betterhover:hover:bg-gray-100"
       >
         {isFollow ? "- 언팔로우" : "+ 팔로우"}

@@ -1,23 +1,23 @@
 import { CATEGORY } from "@/constants/constant";
-import useProfileDetailProductCategoryMenu from "@/hooks/profile/useProfileDetailProductCategory";
+import useProductCategoryMenu from "@/hooks/profile/useProductCategoryMenu";
 import { ProductCategory } from "@/types/product-types";
 
 interface IProps {
   currentCategory: ProductCategory;
   selectCategory: (category: ProductCategory) => void;
 }
-export default function ProfileDetailProductCategoryMenu({
+export default function useProductCategoryDropdown({
   currentCategory,
-  selectCategory,
+  selectCategory
 }: IProps) {
   const {
     isOpenMenu,
     toggleMenu,
     menuRef,
-    handleClickCategory,
+    onClickCategory,
     setCategoryBtnRef,
-    categoryOnKeyDown,
-  } = useProfileDetailProductCategoryMenu({ selectCategory });
+    categoryOnKeyDown
+  } = useProductCategoryMenu({ selectCategory });
 
   return (
     <div className="relative">
@@ -58,7 +58,7 @@ export default function ProfileDetailProductCategoryMenu({
             <li key={category} className="">
               <button
                 type="button"
-                onClick={() => handleClickCategory(category as ProductCategory)}
+                onClick={() => onClickCategory(category as ProductCategory)}
                 className={`${
                   currentCategory === category &&
                   "bg-gray-700 text-white betterhover:hover:text-black betterhover:hover:bg-gray-200"

@@ -1,6 +1,6 @@
-import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileFollowMutate";
-import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { ProfileData } from "@/types/auth-types";
+import useUserProfileFollowMutate from "../react-query/mutations/profile/useUserProfileFollowMutate";
+import useUserProfileUnfollowMutate from "../react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { toast } from "react-toastify";
 
 interface IParams {
@@ -8,21 +8,25 @@ interface IParams {
   userProfileData: ProfileData | undefined;
 }
 
-export default function useUserInfoFollowBtn({
+export default function useFollowUserInProfile({
   myProfileData,
-  userProfileData,
+  userProfileData
 }: IParams) {
   const { userFollowMutate } = useUserProfileFollowMutate(
     userProfileData?.uid || ""
   );
+
   const { userUnfollowMutate } = useUserProfileUnfollowMutate(
     userProfileData?.uid || ""
   );
+
   const isFollow =
     !!myProfileData?.followings?.includes(userProfileData?.uid || "") &&
     !!userProfileData?.followers?.includes(myProfileData?.uid);
 
-  const handleClickfollow = () => {
+  const isNotMyProfile = myProfileData?.uid !== userProfileData?.uid;
+
+  const followHandler = () => {
     if (!myProfileData) {
       toast.warn("로그인이 필요해요.");
       return;
@@ -34,5 +38,5 @@ export default function useUserInfoFollowBtn({
     }
   };
 
-  return { isFollow, handleClickfollow };
+  return { isFollow, isNotMyProfile, followHandler };
 }

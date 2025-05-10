@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
 import { ReivewInfoData } from "@/types/auth-types";
 import { REVIEW_TAGS } from "@/constants/constant";
-import useProfileDetailReviewInfo from "@/hooks/profile/useProfileDetailReviewInfo";
+import { calculateReviewStar } from "@/lib/product";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>,
+  loading: () => <p>loading...</p>
 });
 
 interface IProps {
@@ -12,9 +12,9 @@ interface IProps {
 }
 
 export default function ProfileDetailReviewInfo({ reviewInfo }: IProps) {
-  const { reviewStar } = useProfileDetailReviewInfo({
-    totalReviewCount: reviewInfo?.totalReviewCount,
-    totalReviewScore: reviewInfo?.totalReviewScore,
+  const reviewStar = calculateReviewStar({
+    totalReviewCount: reviewInfo?.totalReviewCount || 0,
+    totalReviewScore: reviewInfo?.totalReviewScore || 0
   });
 
   return (

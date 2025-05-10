@@ -1,5 +1,5 @@
-import useFollowHandler from "./useFollowHandler";
-import useUnFollowHandler from "./useUnfollowHandler";
+import useFollowHandler from "./useProductDetailFollowHandler";
+import useUnFollowHandler from "./useProductDetailUnfollowHandler";
 import { ProfileData } from "@/types/auth-types";
 import useCheckFollowing from "./useCheckFollowing";
 
@@ -9,17 +9,17 @@ interface IParams {
   myProfileData: ProfileData | undefined;
 }
 
-export default function useFollowBtnLogic({
+export default function useProductDetailFollowBtnLogic({
   uid,
   authFollowers,
   myProfileData
 }: IParams) {
-  const { handleClickfollow } = useFollowHandler({
+  const { onClickFollow } = useFollowHandler({
     uid,
     myProfileData
   });
 
-  const { handleClickUnfollow } = useUnFollowHandler({
+  const { onClickUnfollow } = useUnFollowHandler({
     uid,
     myProfileData
   });
@@ -30,11 +30,9 @@ export default function useFollowBtnLogic({
     myProfileData
   });
 
-  const handleClickFollow = isFollowing
-    ? handleClickUnfollow
-    : handleClickfollow;
+  const followHandler = isFollowing ? onClickUnfollow : onClickFollow;
 
   const isMyProfile = uid === myProfileData?.uid;
 
-  return { isMyProfile, isFollowing, handleClickFollow };
+  return { isMyProfile, isFollowing, followHandler };
 }

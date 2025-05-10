@@ -5,13 +5,13 @@ import Link from "next/link";
 
 interface IProps {
   wishProduct: ProductData;
-  handleCheckWish: (id: string) => void;
+  onClickCheckBox: (id: string) => void;
   selectedWish: string[];
 }
 
 export default function ProfileDetailWishItem({
   wishProduct,
-  handleCheckWish,
+  onClickCheckBox,
   selectedWish,
 }: IProps) {
   return (
@@ -57,7 +57,7 @@ export default function ProfileDetailWishItem({
             type="checkbox"
             className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all checked:border-red-400 checked:bg-red-400"
             id="wish"
-            onChange={() => handleCheckWish(wishProduct._id)}
+            onChange={() => onClickCheckBox(wishProduct._id)}
             checked={selectedWish.includes(wishProduct._id)}
           />
           <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">

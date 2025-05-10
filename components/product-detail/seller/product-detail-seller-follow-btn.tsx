@@ -1,4 +1,4 @@
-import useFollowBtnLogic from "@/hooks/commons/useFollowBtnLogic";
+import useProductDetailFollowBtnLogic from "@/hooks/product-detail/useProductDetailFollowBtnLogic";
 import useMyProfileQuery from "@/hooks/react-query/queries/profile/useMyProfileQuery";
 
 interface IProps {
@@ -12,18 +12,19 @@ export default function ProductDetailSellerFollowBtn({
 }: IProps) {
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
 
-  const { isFollowing, handleClickFollow, isMyProfile } = useFollowBtnLogic({
-    uid,
-    authFollowers,
-    myProfileData
-  });
+  const { isFollowing, followHandler, isMyProfile } =
+    useProductDetailFollowBtnLogic({
+      uid,
+      authFollowers,
+      myProfileData
+    });
 
   if (loadMyProfileLoading || isMyProfile) return null;
 
   return (
     <button
       type="button"
-      onClick={handleClickFollow}
+      onClick={followHandler}
       className="border py-2 px-4 text-md betterhover:hover:bg-gray-100"
     >
       {isFollowing ? "- 언팔로우" : "+ 팔로우"}

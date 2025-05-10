@@ -3,10 +3,11 @@ import { isAxiosError } from "axios";
 import ProfileDetailWishItem from "./profile-detail-wish-item";
 import ProfileDetailWishSkeletonUI from "./profile-detail-wish-skeletonUI";
 import ProfileDetailWishDelBtn from "./profile-detail-wish-del-btn";
-import useProfileDetailWishList from "@/hooks/profile/useProfileDetailWishList";
 import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
 import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMessage";
+import useProfileWishInfiniteQuery from "@/hooks/react-query/queries/profile/useProfileWishInfiniteQuery";
+import useWishDeleteSelector from "@/hooks/profile/useWishDeleteSelector";
 
 interface IProps {
   wishProductIds: string[] | undefined;
@@ -19,11 +20,15 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-    error,
-    selectedWish,
-    handleSelectAll,
-    handleCheckWish
-  } = useProfileDetailWishList({ wishProductIds });
+    error
+  } = useProfileWishInfiniteQuery({
+    wishProductIds: wishProductIds || []
+  });
+
+  const { selectedWish, onClickSelectAll, onClickCheckBox } =
+    useWishDeleteSelector({
+      data
+    });
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
@@ -35,7 +40,7 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
     <>
       <ProfileDetailWishDelBtn
         selectedWish={selectedWish}
-        handleSelectAll={handleSelectAll}
+        onClickSelectAll={onClickSelectAll}
       />
       {(error && !data) || data?.length === 0 ? (
         <Empty
@@ -60,7 +65,7 @@ export default function ProfileDetailWishList({ wishProductIds }: IProps) {
               <ProfileDetailWishItem
                 key={data._id}
                 wishProduct={data}
-                handleCheckWish={handleCheckWish}
+                onClickCheckBox={onClickCheckBox}
                 selectedWish={selectedWish}
               />
             ))}

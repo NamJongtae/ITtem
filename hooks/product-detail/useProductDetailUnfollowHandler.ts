@@ -7,13 +7,13 @@ interface IParams {
   myProfileData: ProfileData | undefined;
 }
 
-export default function useUnFollowHandler({
+export default function useProductDetailUnfollowHandler({
   uid,
   myProfileData
 }: IParams) {
   const { productDetailUnfollowMutate } = useProductDetailUnfollowMutate(uid);
 
-  const handleClickUnfollow = () => {
+  const onClickUnfollow = () => {
     if (!myProfileData) {
       toast.warn("로그인이 필요해요.");
       return;
@@ -22,5 +22,5 @@ export default function useUnFollowHandler({
     productDetailUnfollowMutate();
   };
 
-  return { myProfileData, handleClickUnfollow };
+  return { myProfileData, onClickUnfollow };
 }

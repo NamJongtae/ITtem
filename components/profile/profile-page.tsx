@@ -4,9 +4,10 @@ import UserInfo from "./user-info/user-info";
 import Detail from "./detail/profile-detail";
 import Empty from "../commons/empty";
 import { isAxiosError } from "axios";
-import useProfilePage from "@/hooks/profile/useProfilePage";
 import ProfileUserInfoSkeletonUI from "./user-info/profile-user-info-skeletonUI";
 import ProfileDetailSkeletonUI from "./detail/profile-detail-skeletonUI";
+import useProfileMenu from "@/hooks/profile/useProfileMenu";
+import useProfilePageData from "@/hooks/profile/useProfilePageData";
 
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 
@@ -15,14 +16,9 @@ interface IProps {
 }
 
 export default function ProfilePage({ my }: IProps) {
-  const {
-    profileMenu,
-    profileData,
-    myProfileData,
-    isLoading,
-    error,
-    handleClickMenu
-  } = useProfilePage();
+  const { profileData, myProfileData, isLoading, isError } =
+    useProfilePageData();
+  const { profileMenu, onClickMenu } = useProfileMenu();
 
   if (isLoading) {
     return (
@@ -33,12 +29,12 @@ export default function ProfilePage({ my }: IProps) {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <Empty
         message={
-          (isAxiosError<{ message: string }>(error) &&
-            error.response?.data.message) ||
+          (isAxiosError<{ message: string }>(isError) &&
+            isError.response?.data.message) ||
           ""
         }
       />
@@ -47,13 +43,13 @@ export default function ProfilePage({ my }: IProps) {
   return (
     <>
       <UserInfo
-        handleClickMenu={handleClickMenu}
+        handleClickMenu={onClickMenu}
         userProfileData={my ? myProfileData : profileData}
         myProfileData={myProfileData}
       />
       <Detail
         profileMenu={profileMenu}
-        handleClickMenu={handleClickMenu}
+        handleClickMenu={onClickMenu}
         userProfileData={my ? myProfileData : profileData}
         myProfileData={myProfileData}
         my={my}

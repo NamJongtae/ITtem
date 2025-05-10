@@ -5,10 +5,10 @@ interface IParams {
   selectedWish: string[];
 }
 
-export default function useProfileDetailWishDelBtn({ selectedWish }: IParams) {
+export default function useWishDeleteHandler({ selectedWish }: IParams) {
   const { deleteWishMutate } = useDeleteProfileWishMutate();
 
-  const handleClickDelete = () => {
+  const onClickDelete = () => {
     if (!selectedWish.length) {
       toast.warn("삭제 할 목록이 없어요.");
       return;
@@ -19,5 +19,5 @@ export default function useProfileDetailWishDelBtn({ selectedWish }: IParams) {
     }
   };
 
-  return { handleClickDelete };
+  return { onClickDelete };
 }

@@ -9,22 +9,24 @@ import ChangePasswordPasswordCheckField from "./change-password-check-field";
 import ChangePasswordCloseBtn from "./modal/change-password-modal-close-btn";
 import ChangePasswordSubmitBtn from "./chanage-password-submit-btn";
 import Loading from "../commons/loading";
-import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
-import useChangePasswordRef from "@/hooks/profile/useChangePasswordRef";
-import useBodyOverflow from "@/hooks/commons/useBodyOverflow";
-import useChangePasswordMutate from "@/hooks/react-query/mutations/auth/useChangePasswordMutate";
+import useChangePwFormLogic from "@/hooks/profile/useChangePwFormLogic";
+
 
 interface IProps {
   isModal?: boolean;
 }
 
 export default function ChangePasswordForm({ isModal }: IProps) {
-  const { currentPwRef, pwRef, pwCheckRef, closeBtnRef, submitBtnRef } =
-    useChangePasswordRef();
-  const { closeModalHandler } = useRouterBackToCloseModal();
-  useBodyOverflow({ isLocked: isModal });
-  const { changePasswordLoading, changePasswordMutate } =
-    useChangePasswordMutate({ closeModal: closeModalHandler });
+  const {
+    currentPwRef,
+    pwRef,
+    pwCheckRef,
+    closeBtnRef,
+    submitBtnRef,
+    closeModalHandler,
+    changePasswordLoading,
+    changePasswordMutate
+  } = useChangePwFormLogic({ isModal });
 
   if (changePasswordLoading) {
     return <Loading />;

@@ -7,10 +7,10 @@ interface IParams {
   myProfileData: ProfileData | undefined;
 }
 
-export default function useFollowHandler({ uid, myProfileData }: IParams) {
+export default function useProductDetailFollowHandler({ uid, myProfileData }: IParams) {
   const { productDetailfollowMutate } = useProductDetailFollowMutate(uid);
 
-  const handleClickfollow = () => {
+  const onClickFollow = () => {
     if (!myProfileData) {
       toast.warn("로그인이 필요해요.");
       return;
@@ -19,5 +19,5 @@ export default function useFollowHandler({ uid, myProfileData }: IParams) {
     productDetailfollowMutate();
   };
 
-  return { myProfileData, handleClickfollow };
+  return { myProfileData, onClickFollow };
 }
