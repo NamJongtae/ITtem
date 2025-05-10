@@ -3,7 +3,6 @@ import ImgSlider from "../../commons/img-slider/img-slider";
 import { ProductDetailData, ProductStatus } from "@/types/product-types";
 import ProductImgEnlargeModal from "../../commons/product-img-enlarge-modal";
 import useModal from "@/hooks/commons/useModal";
-import useProductDetailImgStyle from "@/hooks/product-detail/useProductDetailImgStyles";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
@@ -14,9 +13,11 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
     isImageModal: true
   });
 
-  const { imgStyle } = useProductDetailImgStyle({
-    status: productDetailData?.status
-  });
+  const imgStyle = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-3xl before:font-semibold before:flex before:justify-center before:items-center ${
+    status === ProductStatus.soldout
+      ? "before:content-['판매완료']"
+      : "before:content-['거래중']"
+  }`;
 
   return (
     <>
