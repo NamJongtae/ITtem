@@ -1,4 +1,3 @@
-import { useAddressInput } from "@/hooks/product-upload/address-modal/useAddressInput";
 import useSearchAddressSubmit from "@/hooks/product-upload/address-modal/useSearchAddressSubmit";
 import Image from "next/image";
 import React from "react";
@@ -9,9 +8,7 @@ interface IProps {
 }
 
 export default function AddressModalForm({ setAddressList }: IProps) {
-  const { addressRef } = useAddressInput();
-  const { onSubmit } = useSearchAddressSubmit({
-    addressRef,
+  const { addressRef, onSubmit } = useSearchAddressSubmit({
     setAddressList
   });
 

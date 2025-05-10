@@ -1,15 +1,15 @@
 import { toast } from "react-toastify";
 import { searchAddress } from "@/lib/api/product";
+import { useRef } from 'react';
 
 interface IParams {
-  addressRef: React.RefObject<HTMLInputElement | null>;
   setAddressList: (addressList: string[]) => void;
 }
 
 export default function useSearchAddressSubmit({
-  addressRef,
   setAddressList
 }: IParams) {
+  const addressRef = useRef<HTMLInputElement>(null);
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -27,5 +27,5 @@ export default function useSearchAddressSubmit({
     }
   };
 
-  return { onSubmit };
+  return { addressRef, onSubmit };
 }
