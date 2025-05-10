@@ -1,15 +1,15 @@
 import ChatSendIcon from "@/public/icons/chat-send-icon.svg";
 import TextareaAutosize from "react-textarea-autosize";
-import { MutableRefObject } from "react";
-import useChatRoomForm from "@/hooks/chat-room/useChatRoomForm";
+import { RefObject } from "react";
+import useChatRoomFormLogic from "@/hooks/chat-room/useChatRoomFormLogic";
 
 interface IProps {
-  chatListRef: MutableRefObject<HTMLUListElement | null>;
+  chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 export default function ChatRoomForm({ chatListRef }: IProps) {
   const { handleSubmit, register, isDisable, onSumbitMessage } =
-    useChatRoomForm({ chatListRef });
+    useChatRoomFormLogic({ chatListRef });
 
   return (
     <form
@@ -23,7 +23,7 @@ export default function ChatRoomForm({ chatListRef }: IProps) {
         minRows={1}
         maxLength={300}
         {...register("message", {
-          required: true,
+          required: true
         })}
       />
       <button type="submit" disabled={isDisable} aria-label="전송">

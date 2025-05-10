@@ -1,5 +1,5 @@
 import { usePathname, useRouter } from "next/navigation";
-import useNotificationChat from "@/hooks/chat-room/useNotificationChat";
+import useUserChatInfoSubscription from "./useUserChatInfoSubscription";
 import useChatStore from "@/store/chat-store";
 
 export default function useNavChat() {
@@ -11,7 +11,7 @@ export default function useNavChat() {
     router.push("/chat");
   };
 
-  useNotificationChat();
+  useUserChatInfoSubscription();
 
   return { pathname, totalMessageCount, handleClickChat };
 }

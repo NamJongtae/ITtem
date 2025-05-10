@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ChatRoomMenu from "./chat-room-menu";
 import ChatRoomHeaderProduct from "./chat-room-header-product";
-import useChatRoomHeader from "@/hooks/chat-room/useChatRoomHeader";
+import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
 
 interface IProps {
   productId: string;
@@ -14,15 +14,15 @@ export default function ChatRoomHeader({
   productId,
   participantIDs,
   handleChatRoomExit,
-  resetChatRoomExit,
+  resetChatRoomExit
 }: IProps) {
-  const { onClickBack } = useChatRoomHeader();
+  const { closeModalHandler } = useRouterBackToCloseModal();
 
   return (
     <div className="flex items-center justify-between border-b px-5 py-3 min-h-[65px]">
       <h2 className="text-lg flex gap-3 items-center">
         {
-          <button onClick={onClickBack}>
+          <button onClick={closeModalHandler}>
             <Image
               className="rotate-180"
               src={"/icons/arrow-icon.svg"}

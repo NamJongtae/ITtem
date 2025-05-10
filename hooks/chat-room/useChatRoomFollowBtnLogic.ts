@@ -6,7 +6,7 @@ interface IParams {
   myFollowings: string[] | undefined;
 }
 
-export default function useChatRoomFollowBtn({
+export default function useChatRoomFollowBtnLogic({
   otherUserId,
   myFollowings,
 }: IParams) {
@@ -21,16 +21,11 @@ export default function useChatRoomFollowBtn({
     myProfileUnfollowMutate();
   };
 
-  const followBtnStyle =
-    "bg-rootColor betterhover:hover:bg-[#5588D9] text-white";
-  const unfollowBtnStyle = "bg-gray-200  betterhover:hover:bg-gray-300";
   const isFollow = myFollowings?.includes(otherUserId);
 
   return {
     onClickFollow,
     onClickUnfollow,
-    followBtnStyle,
-    unfollowBtnStyle,
     isFollow,
   };
 }

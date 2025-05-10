@@ -1,4 +1,4 @@
-import useChatRoomFollowBtn from "@/hooks/chat-room/useChatRoomFollowBtn";
+import useChatRoomFollowBtnLogic from "@/hooks/chat-room/useChatRoomFollowBtnLogic";
 
 interface IProps {
   otherUserId: string;
@@ -6,15 +6,14 @@ interface IProps {
 }
 export default function ChatRoomFollowBtn({
   otherUserId,
-  myFollowings,
+  myFollowings
 }: IProps) {
-  const {
-    onClickFollow,
-    onClickUnfollow,
-    followBtnStyle,
-    unfollowBtnStyle,
-    isFollow,
-  } = useChatRoomFollowBtn({ otherUserId, myFollowings });
+  const { onClickFollow, onClickUnfollow, isFollow } =
+    useChatRoomFollowBtnLogic({ otherUserId, myFollowings });
+
+  const followBtnStyle =
+    "bg-rootColor betterhover:hover:bg-[#5588D9] text-white";
+  const unfollowBtnStyle = "bg-gray-200  betterhover:hover:bg-gray-300";
 
   return (
     <button

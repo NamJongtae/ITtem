@@ -1,4 +1,4 @@
-import useChatRoomExitBtn from "@/hooks/chat-room/useChatRoomExitBtn";
+import useChatRoomExit from "@/hooks/chat-room/useChatRoomExit";
 import Image from "next/image";
 
 interface IProps {
@@ -10,12 +10,12 @@ interface IProps {
 export default function ChatRoomExitBtn({
   participantIDs,
   handleChatRoomExit,
-  resetChatRoomExit,
+  resetChatRoomExit
 }: IProps) {
-  const { exitChatRoom } = useChatRoomExitBtn({
+  const { exitChatRoom } = useChatRoomExit({
     participantIDs,
     handleChatRoomExit,
-    resetChatRoomExit,
+    resetChatRoomExit
   });
 
   return (

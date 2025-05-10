@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/auth-types";
 import ChatRoomFollowBtn from "./chat-room-follow-btn";
 import Image from "next/image";
-import useChatRoomMenuUser from "@/hooks/chat-room/useChatRoomMenuUser";
+import useChatOpponentProfile from "@/hooks/chat-room/useChatOpponentProfile";
 
 interface IProps {
   participantIDs: string[];
@@ -9,11 +9,11 @@ interface IProps {
 }
 export default function ChatRoomMenuUser({
   participantIDs,
-  myProfileData,
+  myProfileData
 }: IProps) {
-  const { isMe, otherUserId, otherUserProfileData } = useChatRoomMenuUser({
+  const { isMe, otherUserId, otherUserProfileData } = useChatOpponentProfile({
     participantIDs,
-    myProfileData,
+    myProfileData
   });
 
   return (

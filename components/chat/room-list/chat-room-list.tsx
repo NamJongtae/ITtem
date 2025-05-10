@@ -1,12 +1,12 @@
 "use client";
 
-import useChatRoomList from "@/hooks/chat-room/useChatRoomList";
+import useChatRoomListLogic from "@/hooks/chat-room/useChatRoomListLogic";
 import ChatRoomListItem from "./chat-room-list-item";
 import Empty from "@/components/commons/empty";
 import ChatRoomListSkeletonUI from "./chat-room-list-SkeletonUI";
 
 export default function ChatRoomList() {
-  const { chatRoomData, isLoading } = useChatRoomList();
+  const { chatRoomData, isLoading } = useChatRoomListLogic();
 
   if (isLoading) {
     return <ChatRoomListSkeletonUI />;

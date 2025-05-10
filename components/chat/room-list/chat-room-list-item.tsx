@@ -1,5 +1,6 @@
-import useChatRoomItem from "@/hooks/chat-room/useChatRoomItem";
+import useProfileQuery from "@/hooks/react-query/queries/profile/useProfileQuery";
 import { getChatRoomListDateFormat } from "@/lib/getDateFormate";
+import useAuthStore from "@/store/auth-store";
 import { ChatRoomData } from "@/types/chat-types";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,9 +10,9 @@ interface IProps {
 }
 
 export default function ChatRoomListItem({ data }: IProps) {
-  const { myUid, profileData } = useChatRoomItem({
-    senderId: data.lastMessage?.senderId,
-  });
+  const user = useAuthStore((state) => state.user);
+  const myUid = user?.uid || "";
+  const { profileData } = useProfileQuery(data.lastMessage?.senderId);
 
   return (
     <li>

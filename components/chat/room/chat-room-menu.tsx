@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ChatRoomExitBtn from "./chat-room-exit-btn";
-import useChatRoomMenu from "@/hooks/chat-room/useChatRoomMenu";
+import useChatRoomSlideMenuLogic from "@/hooks/chat-room/useChatRoomSlideMenuLogic";
 import ChatRoomMenuUser from "./chat-room-menu-user";
 
 interface IProps {
@@ -12,9 +12,10 @@ interface IProps {
 export default function ChatRoomMenu({
   participantIDs,
   handleChatRoomExit,
-  resetChatRoomExit,
+  resetChatRoomExit
 }: IProps) {
-  const { isOpenMenu, toggleMenu, menuRef, myProfileData } = useChatRoomMenu();
+  const { isOpenMenu, toggleMenu, menuRef, myProfileData } =
+    useChatRoomSlideMenuLogic();
 
   return (
     <div className="flex gap-3 items-center">

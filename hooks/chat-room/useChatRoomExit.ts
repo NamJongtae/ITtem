@@ -10,7 +10,7 @@ interface IParams {
   resetChatRoomExit: () => void;
 }
 
-export default function useChatRoomExitBtn({
+export default function useChatRoomExit({
   participantIDs,
   handleChatRoomExit,
   resetChatRoomExit

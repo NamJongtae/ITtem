@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import useMyProfileQuery from "../react-query/queries/profile/useMyProfileQuery";
 
-export default function useChatRoomMenu() {
+export default function useChatRoomSlideMenuLogic() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);

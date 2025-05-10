@@ -7,7 +7,7 @@ interface IParams {
   myProfileData: ProfileData | undefined;
 }
 
-export default function useChatRoomMenuUser({
+export default function useChatOpponentProfile({
   participantIDs,
   myProfileData,
 }: IParams) {

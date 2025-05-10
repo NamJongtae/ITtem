@@ -1,14 +1,14 @@
 import { useParams } from "next/navigation";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import useSendToChatMessageMutate from "@/hooks/react-query/mutations/chat/useSendToChatMessageMutate";
 import { toast } from "react-toastify";
 
 interface IParams {
-  chatListRef: MutableRefObject<HTMLUListElement | null>;
+  chatListRef: RefObject<HTMLUListElement | null>;
 }
 
-export default function useChatRoomForm({ chatListRef }: IParams) {
+export default function useChatRoomFormLogic({ chatListRef }: IParams) {
   const params = useParams();
   const { chatRoomId } = params;
 
@@ -24,8 +24,6 @@ export default function useChatRoomForm({ chatListRef }: IParams) {
     mode: "onSubmit",
   });
 
-  const isDisable = !formState.isDirty || !!formState.errors["message"];
-
   const onSumbitMessage = (values: FieldValues) => {
     const message = values.message;
     if (!message || !values.message.trim()) {
@@ -35,6 +33,8 @@ export default function useChatRoomForm({ chatListRef }: IParams) {
     mutate({ chatRoomId: chatRoomId as string, message });
     resetField("message");
   };
+
+  const isDisable = !formState.isDirty || !!formState.errors["message"];
 
   return { handleSubmit, register, formState, isDisable, onSumbitMessage };
 }

@@ -3,10 +3,8 @@
 import ChatRoomHeader from "./chat-room-header";
 import ChatRoomMessage from "./chat-room-message-list";
 import ChatRoomForm from "./chat-room-form";
-import useChatRoomPage from "@/hooks/chat-room/useChatRoomPage";
-import ChatRoomLoading from '@/app/chat/[chatRoomId]/loading';
-
-
+import useChatRoomLogic from "@/hooks/chat-room/useChatRoomLogic";
+import ChatRoomLoading from "@/app/chat/[chatRoomId]/loading";
 
 export default function ChatRoomPage() {
   const {
@@ -15,8 +13,8 @@ export default function ChatRoomPage() {
     isLoading,
     handleChatRoomExit,
     resetChatRoomExit,
-    chatListRef,
-  } = useChatRoomPage();
+    chatListRef
+  } = useChatRoomLogic();
 
   if (isLoading) {
     return <ChatRoomLoading />;
