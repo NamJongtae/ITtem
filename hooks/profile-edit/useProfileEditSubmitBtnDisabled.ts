@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 
-export default function useProfileEditSubmitBtn() {
+export default function useProfileEditSubmitBtnDisabled() {
   const { formState } = useFormContext();
 
   const isDirty = formState.isDirty;

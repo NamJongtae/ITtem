@@ -7,7 +7,7 @@ export default function useProfileEditNicknameField() {
   const { setError, formState } = useFormContext();
   const { nicknameDuplicationMutate } = useNicknameDuplicationMutate();
 
-  const handleBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const validateNicknameOnBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (formState.defaultValues?.nickname === e.target.value) return;
       await nicknameDuplicationMutate(e.target.value);
@@ -23,5 +23,5 @@ export default function useProfileEditNicknameField() {
     }
   };
 
-  return { handleBlur };
+  return { validateNicknameOnBlur };
 }

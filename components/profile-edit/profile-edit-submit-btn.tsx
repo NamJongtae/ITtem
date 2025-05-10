@@ -1,15 +1,15 @@
-import useProfileEditSubmitBtn from "@/hooks/profile-edit/useProfileEditSubmitBtn";
+import useProfileEditSubmitBtnDisabled from "@/hooks/profile-edit/useProfileEditSubmitBtnDisabled";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 
 interface IProps {
   isModal?: boolean;
-  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  introduceRef: RefObject<HTMLTextAreaElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
   ({ isModal, introduceRef, closeBtnRef }, ref) => {
-    const { isDisabled } = useProfileEditSubmitBtn();
+    const { isDisabled } = useProfileEditSubmitBtnDisabled();
 
     return (
       <button
@@ -23,7 +23,7 @@ const ProfileEditSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
                 optimizationTabFocus({
                   event: e,
                   previousTarget: introduceRef.current,
-                  nextTarget: closeBtnRef.current,
+                  nextTarget: closeBtnRef.current
                 })
             : undefined
         }

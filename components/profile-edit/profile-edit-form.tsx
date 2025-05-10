@@ -5,12 +5,11 @@ import { isMobile } from "react-device-detect";
 import { FieldValues } from "react-hook-form";
 import ProfileEditModalCloseBtn from "./profile-edit-modal-close-btn";
 import ProfileEditSubmitBtn from "./profile-edit-submit-btn";
-import useProfileEditForm from "@/hooks/profile-edit/useProfileEditForm";
+import useProfileEditFormLogic from "@/hooks/profile-edit/useProfileEditFormLogic";
 import ProfileEditImgField from "./profile-edit-img-field";
 import ProfileEditNicknameField from "./profile-edit-nickname-field";
 import ProfileEditIntroduceField from "./profile-edit-introduce-field";
-import Loading from '../commons/loading';
-
+import Loading from "../commons/loading";
 
 interface IProps {
   isModal?: boolean;
@@ -20,7 +19,7 @@ export default function ProfileEditForm({ isModal }: IProps) {
   const {
     myProfileData,
     loadMyProfileLoading,
-    handleProfileEditSubmit,
+    onSubmit,
     profileEditLoading,
     nicknameRef,
     introduceRef,
@@ -28,8 +27,8 @@ export default function ProfileEditForm({ isModal }: IProps) {
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
-    handleClickClose
-  } = useProfileEditForm({ isModal });
+    closeModalHandler
+  } = useProfileEditFormLogic({ isModal });
 
   if (profileEditLoading || loadMyProfileLoading) {
     return <Loading />;
@@ -38,7 +37,7 @@ export default function ProfileEditForm({ isModal }: IProps) {
   return (
     <MyForm
       onSubmit={(values: FieldValues) => {
-        handleProfileEditSubmit(values);
+        onSubmit(values);
       }}
       formOptions={{
         mode: "onChange",
@@ -79,7 +78,7 @@ export default function ProfileEditForm({ isModal }: IProps) {
           introduceRef={introduceRef}
           profileImgResetBtnRef={profileImgResetBtnRef}
           submitBtnRef={submitBtnRef}
-          handleClickClose={handleClickClose}
+          handleClickClose={closeModalHandler}
         />
       )}
     </MyForm>

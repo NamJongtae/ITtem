@@ -1,12 +1,12 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import XIcon from "@/public/icons/x-icon.svg";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 
 interface IProps {
   isModal?: boolean;
-  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
-  profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  introduceRef: RefObject<HTMLTextAreaElement | null>;
+  profileImgResetBtnRef: RefObject<HTMLButtonElement | null>;
+  submitBtnRef: RefObject<HTMLButtonElement | null>;
   handleClickClose: () => void;
 }
 

@@ -1,14 +1,14 @@
 import useProfileImg from "@/hooks/signup/profile/useProfileImg";
 import ProfileImgInput from "@/components/signup/profile-setting-step/sigup-profile-img-input";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import ImgInputBtn from "./profile-edit-Img-input-btn";
 
 interface IProps {
   isModal?: boolean;
-  profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  profileImgBtnRef: RefObject<HTMLButtonElement | null>;
+  profileImgResetBtnRef: RefObject<HTMLButtonElement | null>;
+  nicknameRef: RefObject<HTMLInputElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 export default function ProfileEditImgField({

@@ -3,11 +3,13 @@ import {
   FollowingsResponseData,
   ProfileResponseData,
   ReviewsResponseData,
-  WishResponseData,
+  WishResponseData
 } from "@/types/api-types";
 import { AxiosResponse } from "axios";
 import customAxios from "../customAxios";
-import { ProfileEditData } from "@/types/auth-types";
+import { ProfileData, ProfileEditData } from "@/types/auth-types";
+import { FieldValues } from "react-hook-form";
+import { uploadImgToFireStore } from "./firebase";
 
 export async function getUserProfile(
   uid: string
@@ -54,7 +56,7 @@ export async function editProfile(
 ): Promise<AxiosResponse<ProfileResponseData>> {
   try {
     const response = await customAxios.patch("/api/profile", {
-      profileEditData,
+      profileEditData
     });
     return response;
   } catch (error) {
@@ -65,7 +67,7 @@ export async function editProfile(
 export async function getFollowers({
   cursor,
   limit = 10,
-  userIds,
+  userIds
 }: {
   userIds: string[] | undefined;
   cursor?: unknown;
@@ -77,7 +79,7 @@ export async function getFollowers({
         cursor ? `&cursor=${cursor}` : ""
       }`,
       {
-        userIds,
+        userIds
       }
     );
     return response;
@@ -89,7 +91,7 @@ export async function getFollowers({
 export async function getFollowings({
   cursor,
   limit = 10,
-  userIds,
+  userIds
 }: {
   userIds: string[] | undefined;
   cursor?: unknown;
@@ -101,7 +103,7 @@ export async function getFollowings({
         cursor ? `&cursor=${cursor}` : ""
       }`,
       {
-        userIds,
+        userIds
       }
     );
     return response;
@@ -113,7 +115,7 @@ export async function getFollowings({
 export async function getProfileWish({
   wishProductIds,
   cursor,
-  limit = 10,
+  limit = 10
 }: {
   wishProductIds: string[];
   cursor?: unknown;
@@ -123,7 +125,7 @@ export async function getProfileWish({
     const response = await customAxios.post(
       `/api/profile/wish?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
       {
-        wishProductIds,
+        wishProductIds
       }
     );
     return response;
@@ -137,7 +139,7 @@ export async function deleteProfileWish(
 ): Promise<AxiosResponse<WishResponseData>> {
   try {
     const response = await customAxios.delete("/api/profile/wish", {
-      data: { wishProductIds },
+      data: { wishProductIds }
     });
     return response;
   } catch (error) {
@@ -148,7 +150,7 @@ export async function deleteProfileWish(
 export async function getProfileReviews({
   uid,
   cursor,
-  limit = 10,
+  limit = 10
 }: {
   uid: string;
   cursor?: unknown;
@@ -165,3 +167,38 @@ export async function getProfileReviews({
     throw error;
   }
 }
+
+export const setProfileEditData = async ({
+  values,
+  profileData,
+  profileEditData
+}: {
+  values: FieldValues;
+  profileData: ProfileData | undefined;
+  profileEditData: ProfileEditData;
+}) => {
+  for (const key of Object.keys(values)) {
+    if (key === "profileImg") {
+      if (
+        JSON.stringify(profileData?.profileImgFilename) !==
+        JSON.stringify(values.profileImg.name)
+      ) {
+        if (values.profileImg === "") {
+          profileEditData.profileImg = "/icons/user-icon.svg";
+          profileEditData.profileImgFilename = "";
+          return;
+        }
+        if (!(values.profileImg instanceof File)) return;
+        const imgFiles = values.profileImg;
+        const imgData = await uploadImgToFireStore(imgFiles);
+        if (!imgData) return;
+        profileEditData.profileImg = imgData.url;
+        profileEditData.profileImgFilename = imgData.name;
+      }
+    } else if (key === "nickname" || key === "introduce") {
+      if (profileData && profileData[key] !== values[key]) {
+        profileEditData[key] = values[key];
+      }
+    }
+  }
+};

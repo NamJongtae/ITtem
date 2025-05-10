@@ -1,17 +1,17 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import Image from "next/image";
 import XIcon from "@/public/icons/x-icon.svg";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 interface IProps {
   isModal?: boolean;
   handleClickImgInput: () => void;
   resetProfileImg: () => void;
   preview: string;
-  profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  profileImgResetBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  profileImgBtnRef: RefObject<HTMLButtonElement | null>;
+  profileImgResetBtnRef: RefObject<HTMLButtonElement | null>;
+  nicknameRef: RefObject<HTMLInputElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 export default function ProfileEditImgInputBtn({

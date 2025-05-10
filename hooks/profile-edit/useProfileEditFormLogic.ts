@@ -1,13 +1,14 @@
-import { useRouter } from "next/navigation";
 import useMyProfileQuery from "../react-query/queries/profile/useMyProfileQuery";
 import useProfileEditSubmit from "./useProfileEditSubmit";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import useBodyOverflow from "../commons/useBodyOverflow";
+import useRouterBackToCloseModal from "../commons/useRouterBackToCloseModal";
 
 interface IPrarms {
   isModal?: boolean;
 }
 
-export default function useProfileEditForm({ isModal }: IPrarms) {
+export default function useProfileEditFormLogic({ isModal }: IPrarms) {
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const introduceRef = useRef<HTMLTextAreaElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -15,28 +16,18 @@ export default function useProfileEditForm({ isModal }: IPrarms) {
   const profileImgBtnRef = useRef<HTMLButtonElement | null>(null);
   const profileImgResetBtnRef = useRef<HTMLButtonElement | null>(null);
 
-  const router = useRouter();
-  const handleClickClose = () => {
-    router.back();
-  };
+  const { closeModalHandler } = useRouterBackToCloseModal();
 
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
-  const { handleProfileEditSubmit, profileEditLoading } =
-    useProfileEditSubmit(handleClickClose);
+  const { onSubmit, profileEditLoading } =
+    useProfileEditSubmit(closeModalHandler);
 
-  useEffect(() => {
-    if (isModal) {
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isModal]);
+  useBodyOverflow({ isLocked: isModal });
 
   return {
     myProfileData,
     loadMyProfileLoading,
-    handleProfileEditSubmit,
+    onSubmit,
     profileEditLoading,
     nicknameRef,
     introduceRef,
@@ -44,6 +35,6 @@ export default function useProfileEditForm({ isModal }: IPrarms) {
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
-    handleClickClose,
+    closeModalHandler
   };
 }

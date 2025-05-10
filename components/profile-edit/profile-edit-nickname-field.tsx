@@ -17,7 +17,7 @@ export default function ProfileEditNicknameField({
   profileImgBtnRef,
 }: IProps) {
   useFocusing(nicknameRef);
-  const { handleBlur } = useProfileEditNicknameField();
+  const { validateNicknameOnBlur } = useProfileEditNicknameField();
 
   return (
     <div>
@@ -30,7 +30,7 @@ export default function ProfileEditNicknameField({
         inputMaxLength={8}
         inputPlaceholder="닉네임을 입력해주세요."
         inputRequired="닉네임을 입력해주세요."
-        inputOnBlur={handleBlur}
+        inputOnBlur={validateNicknameOnBlur}
         inputPattern={{
           value: NICKNAME_REGEX,
           message: NICKNAME_REGEX_ERRORMSG,
