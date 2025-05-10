@@ -6,7 +6,7 @@ import ProductManageSearchBar from "./product-manage-search-bar";
 import ProductManageList from "./list/product-manage-list";
 import useProductManageStatus from "@/hooks/product-manage/useProductManageStatus";
 import useProductMenu from "@/hooks/product-manage/useProductMenu";
-import useGetInitialManageStatus from "@/hooks/product-manage/useGetInitialManageStatus";
+import useInitialProductManageStatus from "@/hooks/product-manage/useInitialProductManageStatus";
 
 export type ProductManageMenu = "판매" | "구매";
 export type ProductManageStaus =
@@ -17,9 +17,9 @@ export type ProductManageStaus =
 
 export default function ProductManagePage() {
   const { menu, handleChangeMenu } = useProductMenu();
-  const { initialManageStatus } = useGetInitialManageStatus();
+  const { initialProductManageStatus } = useInitialProductManageStatus();
   const { manageStatus, handleChangeManageStatus } = useProductManageStatus({
-    initialManageStatus
+    initialProductManageStatus
   });
 
   return (

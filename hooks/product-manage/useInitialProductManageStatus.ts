@@ -1,7 +1,7 @@
 import { ProductManageStaus } from "@/components/product-manage/product-manage-page";
 import { useGetQuerys } from "../commons/useGetQuerys";
 
-export default function useGetInitialManageStatus() {
+export default function useInitialProductManageStatus() {
   const { status } = useGetQuerys("status");
   const toManageStatus = (): ProductManageStaus => {
     switch (status) {
@@ -15,7 +15,7 @@ export default function useGetInitialManageStatus() {
         return "거래중";
     }
   };
-  const initialManageStatus = toManageStatus();
+  const initialProductManageStatus = toManageStatus();
 
-  return { initialManageStatus };
+  return { initialProductManageStatus };
 }
