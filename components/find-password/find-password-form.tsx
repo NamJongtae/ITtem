@@ -1,15 +1,11 @@
 import { FieldValues } from "react-hook-form";
 import { MyForm } from "../commons/my-form/my-form";
 import FindPassswordFormConent from "./find-password-form-content";
-import Loading from "../commons/loading";
 import useResetPasswordMutate from "@/hooks/react-query/mutations/auth/useResetPasswordMutate";
+import { EmailVerificationContextProvider } from "@/store/EmailVerificationProvider";
 
 export default function Form() {
-  const { resetPasswordMutate, resetPasswordLoading } = useResetPasswordMutate();
-
-  if (resetPasswordLoading) {
-    return <Loading />;
-  }
+  const { resetPasswordMutate } = useResetPasswordMutate();
 
   return (
     <MyForm
@@ -30,7 +26,9 @@ export default function Form() {
       }}
     >
       <h2 className="py-5 font-semibold text-xl">비밀번호 찾기</h2>
-      <FindPassswordFormConent />
+      <EmailVerificationContextProvider>
+        <FindPassswordFormConent />
+      </EmailVerificationContextProvider>
     </MyForm>
   );
 }
