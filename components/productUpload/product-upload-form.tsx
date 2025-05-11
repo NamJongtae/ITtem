@@ -6,7 +6,6 @@ import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./product-upload-form-content";
 import useProductUploadFormLogic from "@/hooks/product-upload/useProductUploadFormLogic";
 import Loading from "../commons/loading";
-import useBodyOverflow from "@/hooks/commons/useBodyOverflow";
 
 interface IProps {
   isEdit?: boolean;
@@ -16,12 +15,10 @@ export default function ProductUploadForm({ isEdit }: IProps) {
   const {
     onSubmit,
     productDetailData,
-    isLoading,
     loadProductLoading,
     isError
   } = useProductUploadFormLogic({ isEdit });
 
-  useBodyOverflow({ isLocked: isLoading });
 
   if (isError) {
     if (isAxiosError<{ message: string }>(isError)) {
@@ -35,11 +32,6 @@ export default function ProductUploadForm({ isEdit }: IProps) {
 
   return (
     <>
-      {isLoading && (
-        <div className="fixed inset-0 z-[99]">
-          <Loading />
-        </div>
-      )}
       <MyForm
         onSubmit={onSubmit}
         formOptions={{

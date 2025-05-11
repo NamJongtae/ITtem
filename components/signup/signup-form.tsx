@@ -1,10 +1,10 @@
+import useSignupHandler from "@/hooks/signup/useSignupHandler";
 import { MyForm } from "../commons/my-form/my-form";
 import SignupFormContent from "./signup-form-content";
-import { FieldValues } from "react-hook-form";
-interface IProps {
-  onSubmit: (data: FieldValues) => Promise<void>;
-}
-export default function SignupForm({ onSubmit }: IProps) {
+
+export default function SignupForm() {
+  const { onSubmit } = useSignupHandler();
+  
   return (
     <MyForm
       className="relative max-w-[400px] w-full h-full mx-auto"

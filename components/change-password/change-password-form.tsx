@@ -8,7 +8,6 @@ import ChangePasswordPasswordField from "./change-password-password-field";
 import ChangePasswordPasswordCheckField from "./change-password-check-field";
 import ChangePasswordCloseBtn from "./modal/change-password-modal-close-btn";
 import ChangePasswordSubmitBtn from "./chanage-password-submit-btn";
-import Loading from "../commons/loading";
 import useChangePwFormLogic from "@/hooks/profile/useChangePwFormLogic";
 
 
@@ -24,13 +23,8 @@ export default function ChangePasswordForm({ isModal }: IProps) {
     closeBtnRef,
     submitBtnRef,
     closeModalHandler,
-    changePasswordLoading,
     changePasswordMutate
   } = useChangePwFormLogic({ isModal });
-
-  if (changePasswordLoading) {
-    return <Loading />;
-  }
 
   return (
     <MyForm

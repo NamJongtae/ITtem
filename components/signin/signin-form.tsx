@@ -1,7 +1,6 @@
 "use client";
 
 import { MyForm } from "../commons/my-form/my-form";
-import Loading from '../commons/loading';
 import SigninFormContent from "./signin-form-content";
 import useSigninHandler from "@/hooks/signin/useSigninHandler";
 
@@ -10,11 +9,7 @@ interface IProps {
 }
 
 export default function SigninForm({ isModal }: IProps) {
-  const { signinLoading, handleSignin } = useSigninHandler({ isModal });
-
-  if (signinLoading) {
-    return <Loading />;
-  }
+  const { handleSignin } = useSigninHandler({ isModal });
 
   return (
     <MyForm

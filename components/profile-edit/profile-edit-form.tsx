@@ -18,19 +18,18 @@ interface IProps {
 export default function ProfileEditForm({ isModal }: IProps) {
   const {
     myProfileData,
-    loadMyProfileLoading,
     onSubmit,
-    profileEditLoading,
     nicknameRef,
     introduceRef,
     closeBtnRef,
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
+    loadMyProfileLoading,
     closeModalHandler
   } = useProfileEditFormLogic({ isModal });
 
-  if (profileEditLoading || loadMyProfileLoading) {
+  if (loadMyProfileLoading) {
     return <Loading />;
   }
 

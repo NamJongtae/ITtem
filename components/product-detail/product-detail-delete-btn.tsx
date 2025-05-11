@@ -1,21 +1,14 @@
 import Image from "next/image";
 import { ProductStatus } from "@/types/product-types";
-import useProductDetailDeleteHandler from '@/hooks/product-detail/useProductDetailDeleteHandler';
-import Loading from '../commons/loading';
-
+import useProductDetailDeleteHandler from "@/hooks/product-detail/useProductDetailDeleteHandler";
 
 interface IProps {
   productStatus: ProductStatus | undefined;
 }
 
 export default function ProductDetailDeleteBtn({ productStatus }: IProps) {
-  const { productDeleteLoading, handleClickDelete } = useProductDetailDeleteHandler(
-    { productStatus }
-  );
-
-  if (productDeleteLoading) {
-    return <Loading />;
-  }
+  const { handleClickDelete } =
+    useProductDetailDeleteHandler({ productStatus });
 
   return (
     <button
