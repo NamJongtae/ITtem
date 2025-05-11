@@ -1,17 +1,17 @@
-import useVerificationEmailStore from '@/store/verification-email-store';
-import { useEffect, useRef } from "react";
+import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { useContext, useEffect, useRef } from "react";
 
 export function useEmailFocus() {
   const emailRef = useRef<HTMLInputElement | null>(null);
-  const isSendToVerificationEmail = useVerificationEmailStore(
-    (state) => state.isSendToVerificationEmail
-  );
+
+
+  const { emailStatus } = useContext(EmailVerificationContext);
 
   useEffect(() => {
-    if (!isSendToVerificationEmail && emailRef.current) {
+    if (emailStatus === "INITIAL" && emailRef.current) {
       emailRef.current.focus();
     }
-  }, [isSendToVerificationEmail, emailRef]);
+  }, [emailRef, emailStatus]);
 
   return { emailRef };
 }

@@ -1,11 +1,11 @@
-import useVerificationEmailStore from '@/store/verification-email-store';
-import { useEffect } from 'react';
+import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { useContext, useEffect } from "react";
 
 export function useResetEmailSendStatus() {
-  const actions = useVerificationEmailStore((state) => state.actions);
+  const { setEmailStatus } = useContext(EmailVerificationContext);
   useEffect(() => {
     return () => {
-      actions.resetIsSendToVerificationEmail();
+      setEmailStatus("INITIAL");
     };
-  }, []);
+  }, [setEmailStatus]);
 }

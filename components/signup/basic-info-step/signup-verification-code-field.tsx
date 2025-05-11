@@ -12,42 +12,42 @@ export default function SignupVerificationCodeField() {
   const { verificationCodeRef } = useVerificationCodeFocus();
   const { handleClickVerificationEmail, verificationEmailLoading } =
     useVerificationEmailHandler("signup");
-  const { requestSendToVerificationEmail } = useVerificationEmailResendHandler("signup");
-  const { isSendToVerificationEmail, isVerifiedEmail } = useEmailStatus();
+  const { requestSendToVerificationEmail } =
+    useVerificationEmailResendHandler("signup");
+  const { isSendToVerificationEmail } = useEmailStatus();
   const { resetSendToVerificationEmail } = useResetVerificationEmail();
   const { errors } = useVerificationCodeStatus();
 
+  if (!isSendToVerificationEmail) return null;
+
   return (
-    isSendToVerificationEmail &&
-    !isVerifiedEmail && (
-      <>
-        <div>
-          <div className="flex gap-2 items-center mt-3">
-            <label className="sr-only" htmlFor="verificationCode">
-              인증코드
-            </label>
+    <>
+      <div>
+        <div className="flex gap-2 items-center mt-3">
+          <label className="sr-only" htmlFor="verificationCode">
+            인증코드
+          </label>
 
-            <VerificationCodeInput verificationCodeRef={verificationCodeRef} />
+          <VerificationCodeInput verificationCodeRef={verificationCodeRef} />
 
-            <EmailVerificationBtn
-              handleClickVerificationEmail={handleClickVerificationEmail}
-              verificationEmailLoading={verificationEmailLoading}
-            />
-          </div>
-
-          {errors && (
-            <p className="input_error">
-              {typeof errors.message === "string" && errors.message}
-            </p>
-          )}
-
-          <VerificationCodeBtns
-            requestSendToVerificationEmail={requestSendToVerificationEmail}
-            resetSendToVerificationEmail={resetSendToVerificationEmail}
-            verificationCodeRef={verificationCodeRef}
+          <EmailVerificationBtn
+            handleClickVerificationEmail={handleClickVerificationEmail}
+            verificationEmailLoading={verificationEmailLoading}
           />
         </div>
-      </>
-    )
+
+        {errors && (
+          <p className="input_error">
+            {typeof errors.message === "string" && errors.message}
+          </p>
+        )}
+
+        <VerificationCodeBtns
+          requestSendToVerificationEmail={requestSendToVerificationEmail}
+          resetSendToVerificationEmail={resetSendToVerificationEmail}
+          verificationCodeRef={verificationCodeRef}
+        />
+      </div>
+    </>
   );
 }

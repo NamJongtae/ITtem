@@ -1,17 +1,17 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
 import useEmailDuplicationMutate from "../../react-query/mutations/auth/useEmailDuplicationMutate";
 import useSendToVerificationEmailMutate from "../../react-query/mutations/auth/useSendToVerificationEmailMutate";
 import useCheckEmailMutate from "../../react-query/mutations/auth/useCheckEmailMutate";
-import useVerificationEmailStore from "@/store/verification-email-store";
-import { VerificationEmailType } from '@/types/auth-types';
+import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 
 export default function useVerificationEmailResendHandler(
   type: VerificationEmailType
 ) {
   const { getValues, clearErrors } = useFormContext();
-  const actions = useVerificationEmailStore((state) => state.actions);
+  const { send } = useContext(EmailVerificationContext);
 
   const { emailDuplicationMuate } = useEmailDuplicationMutate();
   const { sendToVerificationEmailMutate } = useSendToVerificationEmailMutate();
@@ -25,7 +25,7 @@ export default function useVerificationEmailResendHandler(
       return;
     }
 
-    if (type==="resetPw") {
+    if (type === "resetPw") {
       try {
         await checkEmailMutate(email);
       } catch {
@@ -41,18 +41,16 @@ export default function useVerificationEmailResendHandler(
     }
 
     clearErrors("verificationCode");
-    actions.resetIsVerifedEmail();
-    actions.setSendToVerificationEmailLoading(true);
-    actions.resetTimer();
+    send();
     sendToVerificationEmailMutate({ email, type });
   }, [
-    actions,
-    checkEmailMutate,
-    clearErrors,
-    emailDuplicationMuate,
     getValues,
     type,
-    sendToVerificationEmailMutate
+    clearErrors,
+    send,
+    sendToVerificationEmailMutate,
+    checkEmailMutate,
+    emailDuplicationMuate
   ]);
 
   return { requestSendToVerificationEmail };

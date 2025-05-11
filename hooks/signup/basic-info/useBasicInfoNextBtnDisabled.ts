@@ -1,5 +1,5 @@
-import useVerificationEmailStore from '@/store/verification-email-store';
 import { useFormContext } from "react-hook-form";
+import useEmailStatus from "./useEmailStatus";
 
 export default function useBasicInfoNextBtnDisabled() {
   const { formState } = useFormContext();
@@ -12,9 +12,7 @@ export default function useBasicInfoNextBtnDisabled() {
     formState.dirtyFields["password"] &&
     formState.dirtyFields["verificationCode"];
 
-  const isVerifiedEmail = useVerificationEmailStore(
-    (state) => state.isVerifiedEmail
-  );
+  const { isVerifiedEmail } = useEmailStatus();
 
   const isDisabled = !!errors || !isDirty || !isVerifiedEmail;
 

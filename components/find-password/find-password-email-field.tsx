@@ -16,32 +16,32 @@ export default function FindPasswordEmailField() {
     type: "resetPw"
   });
 
-  return (
-    !isVerifiedEmail && (
-      <div>
-        <div className="flex gap-3 items-center">
-          <CoreInputField
-            label="이메일"
-            inputId="email"
-            inputName="email"
-            inputType="email"
-            inputPlaceholder="이메일을 입력해주세요."
-            inputRequired="이메일을 입력해주세요."
-            inputReadOnly={isSendToVerificationEmail}
-            inputPattern={{
-              value: EMAIL_REGEX,
-              message: EMAIL_REGEX_ERRORMSG
-            }}
-            hideError={true}
-            inputRef={emailRef}
-          />
+  if (isVerifiedEmail) return null;
 
-          {!isSendToVerificationEmail && (
-            <SendVerificationEmailBtn sendToEmailHandler={sendToEmailHandler} />
-          )}
-        </div>
-        <EmailError />
+  return (
+    <div>
+      <div className="flex gap-3 items-center">
+        <CoreInputField
+          label="이메일"
+          inputId="email"
+          inputName="email"
+          inputType="email"
+          inputPlaceholder="이메일을 입력해주세요."
+          inputRequired="이메일을 입력해주세요."
+          inputReadOnly={isSendToVerificationEmail}
+          inputPattern={{
+            value: EMAIL_REGEX,
+            message: EMAIL_REGEX_ERRORMSG
+          }}
+          hideError={true}
+          inputRef={emailRef}
+        />
+
+        {!isSendToVerificationEmail && (
+          <SendVerificationEmailBtn sendToEmailHandler={sendToEmailHandler} />
+        )}
       </div>
-    )
+      <EmailError />
+    </div>
   );
 }

@@ -1,11 +1,11 @@
 import Spinner from "@/components/commons/spinner";
-import useVerificationEmailStore from '@/store/verification-email-store';
-import { MutableRefObject } from "react";
+import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { RefObject, useContext } from "react";
 
 interface IProps {
   requestSendToVerificationEmail: () => void;
   resetSendToVerificationEmail: () => void;
-  verificationCodeRef: MutableRefObject<HTMLInputElement | null>;
+  verificationCodeRef: RefObject<HTMLInputElement | null>;
 }
 
 export default function SignupVerificationCodeBtns({
@@ -13,12 +13,10 @@ export default function SignupVerificationCodeBtns({
   resetSendToVerificationEmail,
   verificationCodeRef
 }: IProps) {
-  const sendToVerificationEmailLoading = useVerificationEmailStore(
-    (state) => state.sendToVerificationEmailLoading
-  );
+  const { isLoading } = useContext(EmailVerificationContext);
 
   return (
-    <div className='text-sm text-center mt-2'>
+    <div className="text-sm text-center mt-2">
       <p>
         인증코드가 오지 않았나요?{" "}
         <button
@@ -28,13 +26,13 @@ export default function SignupVerificationCodeBtns({
             verificationCodeRef.current.focus();
           }}
           className={`${
-            !sendToVerificationEmailLoading && "underline"
+            !isLoading && "underline"
           } text-gray-400  underline-offset-2`}
-          type='button'
+          type="button"
         >
-          {sendToVerificationEmailLoading ? (
-            <div className='flex items-center ml-1'>
-              <Spinner className='w-[14px] h-[14px] mr-1' />
+          {isLoading ? (
+            <div className="flex items-center ml-1">
+              <Spinner className="w-[14px] h-[14px] mr-1" />
               전송중...
             </div>
           ) : (
@@ -46,8 +44,8 @@ export default function SignupVerificationCodeBtns({
         이메일을 잘못입력하셨나요?{" "}
         <button
           onClick={resetSendToVerificationEmail}
-          className='text-gray-400 underline underline-offset-2 mt-1'
-          type='button'
+          className="text-gray-400 underline underline-offset-2 mt-1"
+          type="button"
         >
           이메일 변경하기
         </button>

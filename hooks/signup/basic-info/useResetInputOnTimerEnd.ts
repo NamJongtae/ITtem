@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import useVerificationEmailStore from "@/store/verification-email-store";
+import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
 
 export default function useResetInputOnTimerEnd() {
-  const { timer } = useVerificationEmailStore();
+  const { timer } = useContext(EmailVerificationContext);
   const { setValue } = useFormContext();
 
   useEffect(() => {
