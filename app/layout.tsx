@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
-import 'react-toastify/dist/ReactToastify.min.css';
-import '@/styles/toast.css';
-import '@/styles/swiper-styles.css';
+import "react-toastify/dist/ReactToastify.min.css";
+import "@/styles/toast.css";
+import "@/styles/swiper-styles.css";
 import "@/styles/globals.css";
 import Layout from "@/components/commons/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 import { BASE_URL } from "@/constants/constant";
-import ReactQueryProvider from '@/store/ReactQueryProvider';
-import Loading from '@/components/commons/loading';
+import ReactQueryProvider from "@/store/ReactQueryProvider";
+import Loading from "@/components/commons/loading";
+import GlobalLoading from '@/components/commons/global-loading';
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryProvider>
           <Suspense fallback={<Loading />}>
+            <GlobalLoading />
             <Layout>
               {signin}
               <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
