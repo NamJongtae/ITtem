@@ -2,6 +2,7 @@ import { ERROR_MESSAGE } from "@/constants/constant";
 import { sigin } from "@/lib/api/auth";
 import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
+import useGlobalLoadingStore from "@/store/global-loging-store";
 import { SigninResponseData } from "@/types/api-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
@@ -11,7 +12,8 @@ import { toast } from "react-toastify";
 export default function useSigninMutate({ isModal }: { isModal?: boolean }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const actions = useAuthStore((state) => state.actions);
+  const { actions: authActions } = useAuthStore();
+  const { actions: globalLoadingActions } = useGlobalLoadingStore();
   const { mutate: signinMutate, isPending: signinLoading } = useMutation<
     AxiosResponse<SigninResponseData>,
     AxiosError,
@@ -26,8 +28,11 @@ export default function useSigninMutate({ isModal }: { isModal?: boolean }) {
       password: string;
       isDuplicationLogin?: boolean;
     }) => await sigin(email, password, isDuplicationLogin),
+    onMutate: () => {
+      globalLoadingActions.startLoading();
+    },
     onSuccess: async (response) => {
-      actions.setAuth(response.data.user);
+      authActions.setAuth(response.data.user);
       queryClient.refetchQueries({ queryKey: queryKeys.session._def });
       if (isModal) {
         router.back();
@@ -60,8 +65,10 @@ export default function useSigninMutate({ isModal }: { isModal?: boolean }) {
       }
     },
     onSettled: () => {
-      actions.setIsLoading(false);
+      authActions.setIsLoading(false);
+      globalLoadingActions.stopLoading();
     }
   });
+
   return { signinMutate, signinLoading };
 }

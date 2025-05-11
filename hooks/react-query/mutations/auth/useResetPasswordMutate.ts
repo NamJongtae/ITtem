@@ -1,4 +1,5 @@
 import { resetPassword } from "@/lib/api/auth";
+import useGlobalLoadingStore from "@/store/global-loging-store";
 import useVerificationEmailStore from "@/store/verification-email-store";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
@@ -7,7 +8,8 @@ import { toast } from "react-toastify";
 
 export default function useResetPasswordMutate() {
   const router = useRouter();
-  const { actions } = useVerificationEmailStore();
+  const { actions: verificationEmailActions } = useVerificationEmailStore();
+  const { actions: globalLoadingActions } = useGlobalLoadingStore();
   const { mutate: resetPasswordMutate, isPending: resetPasswordLoading } =
     useMutation<
       AxiosResponse<{ message: string }>,
@@ -19,10 +21,13 @@ export default function useResetPasswordMutate() {
     >({
       mutationFn: async ({ email, password }) =>
         await resetPassword({ email, password }),
+      onMutate: () => {
+        globalLoadingActions.startLoading();
+      },
       onSuccess: async (response) => {
-        actions.resetIsSendToVerificationEmail();
-        actions.resetIsVerifedEmail();
-        actions.resetTimer();
+        verificationEmailActions.resetIsSendToVerificationEmail();
+        verificationEmailActions.resetIsVerifedEmail();
+        verificationEmailActions.resetTimer();
         router.push("/signin");
 
         toast.success(response.data.message);
@@ -31,8 +36,12 @@ export default function useResetPasswordMutate() {
         if (isAxiosError<{ message: string }>(error)) {
           toast.warn(error.response?.data.message);
         }
+      },
+      onSettled: () => {
+        globalLoadingActions.stopLoading();
       }
     });
+
   return {
     resetPasswordMutate,
     resetPasswordLoading

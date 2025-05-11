@@ -1,4 +1,5 @@
 import { purchaseProduct } from "@/lib/api/product";
+import useGlobalLoadingStore from "@/store/global-loging-store";
 import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useParams, useRouter } from "next/navigation";
@@ -8,11 +9,15 @@ export default function usePurchaseProductMutate() {
   const router = useRouter();
   const params = useParams();
   const productId = params?.productId || "";
+  const { actions } = useGlobalLoadingStore();
 
   const { mutate: purchaseProductMutate } = useMutation({
     mutationFn: () => purchaseProduct(productId as string),
-    onSuccess: async (response) => {
-      await router.push(`/product/manage`);
+    onMutate: () => {
+      actions.startLoading();
+    },
+    onSuccess: (response) => {
+      router.push(`/product/manage`);
       toast.success(response.data.message);
     },
     onError: (error) => {
@@ -20,6 +25,9 @@ export default function usePurchaseProductMutate() {
         toast.warn(error.response?.data.message);
       }
     },
+    onSettled: () => {
+      actions.stopLoading();
+    }
   });
 
   return { purchaseProductMutate };

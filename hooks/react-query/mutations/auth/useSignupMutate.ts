@@ -2,6 +2,7 @@ import { ERROR_MESSAGE } from "@/constants/constant";
 import { createAccount } from "@/lib/api/auth";
 import { queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
+import useGlobalLoadingStore from "@/store/global-loging-store";
 import { SignupResponseData } from "@/types/api-types";
 import { SignupData } from "@/types/auth-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,7 +12,8 @@ import { toast } from "react-toastify";
 
 export default function useSignupMutate() {
   const router = useRouter();
-  const { actions } = useAuthStore();
+  const { actions: authActions } = useAuthStore();
+  const { actions: globalLoadingActions } = useGlobalLoadingStore();
   const queryClient = useQueryClient();
   const {
     mutate: signupMutate,
@@ -26,9 +28,12 @@ export default function useSignupMutate() {
         nickname,
         introduce
       }),
+    onMutate: () => {
+      globalLoadingActions.startLoading();
+    },
     onSuccess: (result) => {
       toast.success(result.data?.message);
-      actions.setAuth(result.data.user);
+      authActions.setAuth(result.data.user);
       queryClient.refetchQueries({ queryKey: queryKeys.session._def });
       router.push("/");
     },
@@ -40,6 +45,9 @@ export default function useSignupMutate() {
           toast.warn(ERROR_MESSAGE);
         }
       }
+    },
+    onSettled: () => {
+      globalLoadingActions.stopLoading();
     }
   });
 

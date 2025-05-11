@@ -3,9 +3,8 @@ import useAuthStore from "@/store/auth-store";
 import useChatStore from "@/store/chat-store";
 import useNotificationStore from "@/store/notification-store";
 import { SignoutResposeData } from "@/types/api-types";
-import { AuthData } from "@/types/auth-types";
-import { ProductData } from "@/types/product-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useGlobalLoadingStore from "@/store/global-loging-store";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -13,6 +12,7 @@ import { toast } from "react-toastify";
 export default function useSignoutMutate() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const globalLoadingActions = useGlobalLoadingStore((state) => state.actions);
   const authActions = useAuthStore((state) => state.actions);
   const chatActions = useChatStore((state) => state.actions);
   const notificationActions = useNotificationStore((state) => state.actions);
@@ -21,13 +21,12 @@ export default function useSignoutMutate() {
   const { mutate: signoutMutate } = useMutation<
     AxiosResponse<SignoutResposeData>,
     AxiosError,
-    void,
-    {
-      previousAuth: AuthData | unknown;
-      previousMyProfile: ProductData | unknown;
-    }
+    void
   >({
     mutationFn: () => signout(user?.uid || ""),
+    onMutate: () => {
+      globalLoadingActions.startLoading();
+    },
     onSuccess: (response) => {
       queryClient.clear();
 
@@ -50,6 +49,9 @@ export default function useSignoutMutate() {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
+    },
+    onSettled: () => {
+      globalLoadingActions.stopLoading();
     }
   });
 
