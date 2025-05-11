@@ -28,10 +28,10 @@ export default function useChatRoomExit({
       handleChatRoomExit();
       try {
         await exitChatRoomMutate();
-        router.push("/chat");
         if (participantIDs.length === 1) {
-          deleteChatRoomMutate();
+          await deleteChatRoomMutate();
         }
+        router.push("/chat");
       } catch (error) {
         if (isAxiosError<{ message: string }>(error)) {
           toast.warn(error.response?.data.message);
