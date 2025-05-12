@@ -1,4 +1,4 @@
-import ProductUploadPage from "@/components/productUpload/product-upload-page";
+import ProductUploadPage from '@/components/product-upload/product-upload-page';
 import { BASE_URL } from "@/constants/constant";
 import { Metadata } from "next";
 
