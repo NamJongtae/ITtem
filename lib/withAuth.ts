@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const checkWithAuthPathname = (pathname: string) => {
   return (
-    pathname.startsWith("/profile")||
+    pathname === "/profile" ||
+    pathname === "/profile/edit" ||
+    pathname === "/profile/change-password" ||
     pathname.startsWith("/chat") ||
     pathname.startsWith("/product/manage") ||
     pathname.startsWith("/product/upload")
