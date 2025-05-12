@@ -4,7 +4,7 @@ export const checkWithOutAuthPathname = (pathname: string) => {
   return (
     pathname.startsWith("/signup") ||
     pathname.startsWith("/signin") ||
-    pathname.startsWith("/findpassword")
+    pathname.startsWith("/find-password")
   );
 };
 

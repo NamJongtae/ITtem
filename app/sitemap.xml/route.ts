@@ -34,7 +34,7 @@ export async function GET() {
       lastmod: new Date().toISOString()
     },
     {
-      loc: "https://ittem.vercel.app/findpassword",
+      loc: "https://ittem.vercel.app/find-password",
       lastmod: new Date().toISOString()
     },
     {

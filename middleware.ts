@@ -41,7 +41,7 @@ export const config = {
     "/",
     "/signin",
     "/signup",
-    "/findpassword",
+    "/find-password",
     "/chat/:path*",
     "/profile/:path*",
     "/product/:path*",
