@@ -23,9 +23,9 @@ export default function SigninLinks({ isModal }: IProps) {
 
       <Link
         className="text-xs"
-        href={"/findpassword"}
+        href={"/find-password"}
         onClick={
-          isModal ? (e) => handleLinkClick(e, "/findpassword") : undefined
+          isModal ? (e) => handleLinkClick(e, "/find-password") : undefined
         }
       >
         비밀번호찾기
