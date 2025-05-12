@@ -45,6 +45,9 @@
   - [🔨 Next.js v15 마이그레이션](#-nextjs-v15-마이그레이션)
   - [🔧 react-infinite-scroller → react-intersection-observer로 대체](#-react-infinite-scroller--react-intersection-observer로-대체)
   - [🎈 page별 SkeletonUI Loading 컴포넌트 적용](#-page별-skeletonui-loading-컴포넌트-적용)
+  - [💫 전역 로딩 컴포넌트 및 로딩 상태 추가](#-전역-로딩-컴포넌트-및-로딩-상태-추가)
+  - [🎯 SRP 원칙에 따라 custom hook 코드 분리 및 hook명 수정](#-srp-원칙에-따라-custom-hook-코드-분리-및-hook명-수정)
+  - [🔁 Zustand 이메일 인증 상태 Context API로 전환](#-zustand-이메일-인증-상태-context-api로-전환)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -54,11 +57,11 @@
   - [❗ 504 Gateway Timeout Error](#-504-gateway-timeout-error)
   - [🗜 middleware 토큰 인증 로직 구현 문제](#-middleware-토큰-인증-로직-구현-문제)
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
-  - [💥 로그인 및 로그아웃 이후 middleware가 제대로 동작하지 않는 문제](#-로그인-및-로그아웃-이후-middleware가-제대로-동작하지-않는-문제)
   - [❌ 배포 후 Hydrate 불일치 문제](#-배포-후-hydrate-불일치-문제)
   - [🍪 SSR to Client cookie 전달 문제](#-ssr-to-client-cookie-전달-문제)
   - [🧨 CustomAxios acceessToken 재발급 중복 요청 문제](#-customaxios-accesstoken-재발급-중복-요청-문제) 
   - [🔴 Layout 컴포넌트 Invalid hook call 에러](#-layout-컴포넌트-invalid-hook-call-에러)
+  - [🕳 로그아웃 시 빈 유저 정보가 페이지에 노출되는 문제](#-로그아웃-시-빈-유저-정보가-페이지에-노출되는-문제)
 
 - [👀 구현 기능 미리보기](#-구현-기능-미리보기--제목-클릭-시-해당-기능-상세설명으로-이동됩니다-)
 
@@ -2163,6 +2166,441 @@ export default function InfiniteScrollEndMessage({
 
 <br/>
 
+
+#### 💫 전역 로딩 컴포넌트 및 로딩 상태 추가
+> **적용이유**
+
+- 기존 비동기 작업 중 Loading 컴포넌트는 페이지 하위에서 렌더링되기 때문에 레이아웃 컴포넌트를 포함하지 않아, 로딩 중에도 레이아웃이 노출되는 문제가 있었습니다.
+- 이로 인해 사용자가 로딩 중에 레이아웃과 상호작용하거나 다른 페이지로 이동할 수 있어 예기치 않은 문제 발생 가능성이 존재했습니다.
+
+> **적용 방법**
+- 전역 로딩 컴포넌트를 생성하여 root layout 컴포넌트에 추가하였습니다.
+- 로딩 상태 관리는 Zustand를 사용하여 전역에서 일관성 있게 제어합니다.
+- 전역 로딩 상태가 필요한 경우 useMutation 내부에서 전역 로딩 상태를 제어합니다.
+
+**❓ Zustand를 사용하는 이유**
+
+로딩 상태는 여러 곳에서 빈번하게 발생하므로, Context API를 사용할 경우 많은 컴포넌트가 구독하고 있어 전체 리렌더링이 발생할 수 있습니다.
+Zustand는 상태를 사용하는 컴포넌트만 리렌더링되므로 성능 최적화에 유리합니다.
+설정이 간단하며, 전역 상태를 빠르게 도입할 수 있다는 장점이 있습니다.
+
+**🏁 Race Condition 문제 해결하기**
+
+useMutation 내부에서 전역 로딩상태를 관리하게 되면 한 페이지 내에서 useMutation이 동시에 여러개 실행되면 race Condition 문제가 발생할 수 있습니다.
+아래와 같은 상황에서 문제가 발생합니다:
+
+- mutation A 실행 → loading = true
+- mutation B 실행 → loading = true
+- mutation A 완료 → loading = false ❌ ← 이 시점엔 B가 아직 안 끝났는데 로딩이 꺼져버림
+- mutation B 완료 → 원래 이때 loading = false가 되어야 정상
+
+이를 해결하기 위해 loading count를 도입하여 count가 1 이상이면 loading 상태를 유지 하도록합니다.
+
+- mutation A 실행 → loading = true ← count = 1
+- mutation B 실행 → loading = true ← count = 2
+- mutation A 완료 → loading = false ← count = 1
+- mutation B 완료 → count = 0 → loading = false
+
+> **적용으로 얻은 이점**
+
+- 비동기 작업 중 레이아웃 노출을 방지하여 사용자 혼란을 줄이고, 예기치 않은 행동을 예방할 수 있습니다.
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br/>
+
+**global-loading-store.ts**
+
+```javascript
+import { create, ImmerDevtoolsStateCreator } from "zustand";
+import { devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
+interface LoadingState {
+  isLoading: boolean;
+  loadingCount: number;
+  actions: {
+    startLoading: () => void;
+    stopLoading: () => void;
+  };
+}
+
+export const store: ImmerDevtoolsStateCreator<LoadingState> = (set) => ({
+  isLoading: false,
+  loadingCount: 0,
+  actions: {
+    startLoading: () => {
+      set(
+        (state: LoadingState) => {
+          state.loadingCount++;
+          state.isLoading = true;
+        },
+        false,
+        "loading/startLoading"
+      );
+    },
+    stopLoading: () => {
+      set(
+        (state: LoadingState) => {
+          state.loadingCount = Math.max(0, state.loadingCount - 1);
+          state.isLoading = state.loadingCount > 0;
+        },
+        false,
+        "loading/stopLoading"
+      );
+    }
+  }
+});
+
+const useGlobalLoadingStore =
+  process.env.NODE_ENV !== "production"
+    ? create<LoadingState>()(immer(devtools(store)))
+    : create<LoadingState>()(immer(store));
+
+export default useGlobalLoadingStore;
+```
+
+**GlobalLoading.tsx**
+
+```javascript
+"use client";
+
+import useGlobalLoadingStore from "@/store/global-loging-store";
+import Loading from "./loading";
+import useBodyOverflow from "@/hooks/commons/useBodyOverflow";
+
+export default function GlobalLoading() {
+  const { isLoading } = useGlobalLoadingStore();
+  useBodyOverflow({ isLocked: isLoading });
+  return isLoading ? <Loading /> : null;
+}
+```
+
+</details>
+
+<br/>
+
+#### 🎯 SRP 원칙에 따라 custom hook 코드 분리 및 hook명 수정
+> **적용이유**
+
+- 현재 각 컴포넌트 별로 custom hook를 통해 로직이 분리되어있습니다.
+- 하지만 SRP 원칙에 부합하도록 하나의 책임을 지도록 custom hook이 분리되어있지 않습니다.
+- 또한, custom hook의 명명이 use+컴포넌트명으로 되어 있어 어떤 역할을 하는 훅인지 정확히 인지하기 어렵습니다.
+- 따라서 각 hook을 하나의 책임을 지도록 분리하고, hook의 이름을 수행할 역할에 맞도록 변경합니다.
+
+> **적용 방법**
+아래 규칙에 따라 custom hook를 분리하였습니다.
+
+- 현재의 custom hook 로직이 복잡한 경우 별도의 custom hook으로 분리합니다.
+- 재사용의 여지가 있는 경우 별도의 custom hook으로 분리합니다.
+- 내부 로직이 복잡하지 않거나 변경 가능성이 낮고 재사용 하지 않는 로직은 별도로 분리하지 않습니다.
+  
+> **적용으로 얻은 이점**
+- 유지보수성 증가: 로직이 책임 단위로 분리되어 각 기능을 빠르게 파악하고 수정할 수 있습니다.
+- 재사용성 향상: 하나의 책임을 갖는 hook은 다양한 컴포넌트에서 쉽게 재사용할 수 있습니다.
+- 파일명을 통해 역할 파악 가능: 명확한 네이밍으로 hook의 기능을 직관적으로 이해할 수 있습니다.
+
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br/>
+
+**useSendToVerifyEmail.ts**
+
+기존 코드에서는 여러 가지 책을 수행하고 있습니다.
+- 인증 메일 전송 로직
+- 인증 메일 전송 로직 내부 이메일 유효성 검사
+- 이메일 input focus
+- 언마운트 시 인증 메일 전송 초기화
+
+```javascript
+import { useCallback, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
+import { useFormContext } from "react-hook-form";
+import useSendToVerifyEmailMutate from "../react-query/mutations/auth/useSendToVerifyEmailMutate";
+import useEmailDuplicationMutate from "../react-query/mutations/auth/useEmailDuplicationMutate";
+import useCheckEmailMutate from "../react-query/mutations/auth/useCheckEmailMutate";
+import useSignupStore from "@/store/signup-store";
+
+export default function useSendToVerifyEmail(isFindPw?: boolean) {
+  const { getValues } = useFormContext();
+  const actions = useSignupStore((state) => state.actions);
+  const isSendToVerifyEmail = useSignupStore(
+    (state) => state.isSendToVerifyEmail
+  );
+  const emailRef = useRef<HTMLInputElement | null>(null);
+
+  const { sendToVerifyEmailMutate } = useSendToVerifyEmailMutate();
+  const { emailDuplicationMuate } = useEmailDuplicationMutate();
+  const { checkEmailMutate } = useCheckEmailMutate();
+
+  const handleClickSendToVerifyEmail = useCallback(async () => {
+    const email = getValues("email");
+
+    if (!email) {
+      toast.warn("이메일을 입력해주세요.");
+      return;
+    }
+
+    if (isFindPw) {
+      try {
+        await checkEmailMutate(email);
+      } catch {
+        return;
+      }
+    } else {
+      try {
+        await emailDuplicationMuate(email);
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+    }
+
+    actions.sendToVerifyEmail();
+    actions.resetTimer();
+    actions.setSendToVerifyEmailLoading(true);
+    sendToVerifyEmailMutate({ email, isFindPw });
+  }, []);
+
+  useEffect(() => {
+    if (!isSendToVerifyEmail) {
+      if (!emailRef.current) return;
+      emailRef.current.focus();
+    }
+  }, [isSendToVerifyEmail]);
+
+  useEffect(() => {
+    return () => {
+      actions.resetIsSendToVerifyEmail();
+    };
+  }, []);
+
+  return {
+    isSendToVerifyEmail,
+    handleClickSendToVerifyEmail,
+    emailRef
+  };
+}
+```
+
+위의 책임들을 책임별로 custom hook으로 분리합니다.
+
+**useEmailVerificationHandler.ts**
+
+```javascript
+import { useFormContext } from "react-hook-form";
+import useVerificationEmailMutate from "../../react-query/mutations/auth/useVerificationEmailMutate";
+import { toast } from "react-toastify";
+import { useCallback } from "react";
+import { EmailVerificationType } from "@/types/auth-types";
+
+export default function useEmailVerificationHandler(
+  type: EmailVerificationType
+) {
+  const { getValues } = useFormContext();
+
+  const { verificationEmailMuate, verificationEmailLoading } =
+    useVerificationEmailMutate();
+
+  const handleClickVerificationEmail = useCallback(async () => {
+    const email = getValues("email");
+    const verificationCode = getValues("verificationCode");
+    if (!verificationCode) {
+      toast.warn("인증번호를 입력해주세요.");
+      return;
+    }
+
+    verificationEmailMuate({ email, verificationCode, type });
+  }, [getValues, type, verificationEmailMuate]);
+
+  return { verificationEmailLoading, handleClickVerificationEmail };
+}
+```
+
+**useEmailVerificationValidator**
+
+```javascript
+import { useFormContext } from 'react-hook-form';
+import useCheckEmailMutate from '@/hooks/react-query/mutations/auth/useCheckEmailMutate';
+import useEmailDuplicationMutate from '@/hooks/react-query/mutations/auth/useEmailDuplicationMutate';
+import { toast } from 'react-toastify';
+import { EmailVerificationType } from '@/types/auth-types';
+
+export function useEmailVerificationValidator(type: EmailVerificationType) {
+  const { getValues } = useFormContext();
+  const { checkEmailMutate } = useCheckEmailMutate();
+  const { emailDuplicationMuate } = useEmailDuplicationMutate();
+
+  const validate = async () => {
+    const email = getValues("email");
+    if (!email) {
+      toast.warn("이메일을 입력해주세요.");
+      return false;
+    }
+
+    try {
+      if (type==="resetPw") {
+        await checkEmailMutate(email);
+      } else {
+        await emailDuplicationMuate(email);
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return { validate };
+}
+
+```
+
+**useFocusEmailVerificationInput.ts**
+
+```javascript
+export function useFocusEmailVerificationInput() {
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const { emailStatus } = useContext(EmailVerificationContext);
+
+  useEffect(() => {
+    if (emailStatus === "INITIAL" && emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, [emailRef, emailStatus]);
+
+  return { emailRef };
+}
+```
+
+**useResetVerificationEmail**
+
+```javascript
+import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { useContext } from "react";
+
+export default function useResetVerificationEmail() {
+  const { setEmailStatus } = useContext(EmailVerificationContext);
+
+  const resetSendToVerificationEmail = () => {
+    setEmailStatus("INITIAL");
+  };
+
+  return { resetSendToVerificationEmail };
+}
+
+```
+
+</details>
+
+<br/>
+
+#### 🔁 Zustand 이메일 인증 상태 Context API로 전환
+> **적용이유**
+
+- 이메일 인증 상태는 회원가입과 비밀번호 찾기 과정에서만 사용되며, 애플리케이션 전체에서 공유할 필요가 없는 상태입니다.
+- Zustand는 전역 상태를 유지하기 때문에, 페이지 전환 시 상태가 의도치 않게 유지되거나 직접 초기화해야 하는 번거로움이 있었습니다.
+- 반면 Context API는 컴포넌트 트리 기반으로 상태 범위를 제한할 수 있어, 특정 흐름(회원가입/비밀번호 찾기)에 필요한 상태를 안전하게 캡슐화할 수 있습니다.
+
+> **적용 방법**
+- 이메일 인증 전용 Context API를 생성하여 회원가입, 비밀번호 찾기 페이지에서 공유 상태를 사용할 상위 컴포넌트를 Provider로 감쌈니다.
+-  기존 Zustand 기반 커스텀 훅 및 상태 로직 제거 및 Context API 상태 로직 적용합니다.
+  
+> **적용으로 얻은 이점**
+- 페이지 전환 시 상태 초기화 코드 제거
+- 인증 관련 상태의 책임 범위가 명확해지고 응집력 향상
+- 메모리 사용 최적화 (필요할 때만 Context가 생성되고 해제됨)
+
+> **적용 코드**
+
+<details>
+<summary>코드보기</summary>
+
+<br/>
+
+**EmailVerificationContext**
+
+```javascript
+// ...
+export const EmailVerificationContext =
+  createContext<EmailVerificationContextType>({
+    emailStatus: "INITIAL",
+    isLoading: false,
+    isError: false,
+    timer: VERIFICATION_EMAIL_EXP,
+    setEmailStatus: () => {},
+    setIsLoading: () => {},
+    setIsError: () => {},
+    countDown: () => {},
+    resetTimer: () => {},
+    reset: () => {},
+    send: () => {}
+  });
+
+export function EmailVerificationContextProvider({
+  children
+}: {
+  children: ReactNode;
+}) {
+  const [emailStatus, setEmailStatus] =
+    useState<EmailVerificationStatus>("INITIAL");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [timer, setTimer] = useState(VERIFICATION_EMAIL_EXP);
+
+  const countDown = () => {
+    setTimer((prev) => prev - 1);
+  };
+  const resetTimer = () => {
+    setTimer(VERIFICATION_EMAIL_EXP);
+  };
+
+  const reset = () => {
+    setEmailStatus("INITIAL");
+    setTimer(VERIFICATION_EMAIL_EXP);
+    setIsLoading(false);
+    setIsError(false);
+  };
+
+  const send = () => {
+    resetTimer();
+    setEmailStatus("SEND");
+    setIsLoading(true);
+    setIsError(false);
+  };
+
+  return (
+    <EmailVerificationContext.Provider
+      value={{
+        emailStatus,
+        isLoading,
+        isError,
+        timer,
+        setEmailStatus,
+        setIsLoading,
+        setIsError,
+        countDown,
+        resetTimer,
+        reset,
+        send
+      }}
+    >
+      {children}
+    </EmailVerificationContext.Provider>
+  );
+}
+```
+
+</details>
+
+<br/>
+
 ### 🔫 트러블 슈팅
 
 #### 🍪 Client to SSR cookie 전달 문제
@@ -2655,51 +3093,7 @@ export default customAxios;
 
 </details>
 
-<br>
-
-#### 💥 로그인 및 로그아웃 이후 middleware가 제대로 동작하지 않는 문제
-
-> 문제 상황
-
-- 로그인 및 로그아웃 이후 middleware가 제대로 동작하지 않는 문제가 발생하였습니다.
-- 로그인 이후 로그인이 필요한 페이지 접근 시 /signin 페이지로 이동되는 문제가 발생하였습니다.
-- 로그아웃 이후 로그인이 필요한 페이지 접근 시 접근을 제한하지 않는 문제가 발생하였습니다.
-
-> 문제 원인
-
-- nextjs의 미들웨어 버그로 확인되었습니다. 해당 사항은 아래 링크를 통해 확인하였습니다.
-- https://github.com/vercel/next.js/issues/58025
-
-> 해결 방법
-
-- router.refresh()를 사용하여 현재 페이지 데이터를 새로고침, 상태가 즉시 반영되도록 처리하여 해결하였습니다.
-
-> 해결 코드
-
-<details>
-<summary>코드보기</summary>
-
-```javascript
-  // 로그인 성공 시
-  //...
-  router.back(); // 로그인 모달 닫기
-  setTimeout(() => {
-    router.refresh(); // middleware 버그 해결을 위해 router refresh
-  }, 100);
-  //...
-```
-
-```javascript
-  // 로그아웃 성공 시
-  //...
-  router.replace("/");
-  router.refresh(); // middleware 버그 해결을 위해 router refresh
-  //...
-```
-
-</details>
-
-<br>
+<br/>
 
 #### ❌ 배포 후 Hydrate 불일치 문제
 
@@ -3058,7 +3452,98 @@ export default function RootLayout({
 
 </details>
 
-<br>
+<br/>
+
+#### 🕳 로그아웃 시 빈 유저 정보가 페이지에 노출되는 문제
+> 문제 상황
+
+- 기존 로그아웃은 클라이언트 유저 정보 데이터를 삭제한 후 페이지를 전환하는 방식이었습니다.
+- 하지만 유저 정보가 표시되는 페이지에서 로그아웃 시 빈 유저 정보가 일시적으로 노출되는 문제가 있었습니다.
+
+> 문제 원인
+
+- 데이터 삭제와 페이지 전환 사이에 딜레이가 발생하여 빈 유저 정보가 일시적으로 노출되었습니다.
+
+> 해결 방법
+
+- 로그아웃 성공 시 /logout 전용 페이지로 리디렉션하고, 해당 페이지에서 클라이언트 데이터 삭제 로직을 처리하도록 개선합니다.
+
+> 해결 코드
+
+<details>
+<summary>코드 보기</summary>
+
+<br/>
+
+**useSignoutMutate.ts**
+
+```javascript
+//...
+export default function useSignoutMutate() {
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  const globalLoadingActions = useGlobalLoadingStore((state) => state.actions);
+
+  const { mutate: signoutMutate } = useMutation<
+    AxiosResponse<SignoutResposeData>,
+    AxiosError,
+    void
+  >({
+    mutationFn: () => signout(user?.uid || ""),
+    onMutate: () => {
+      globalLoadingActions.startLoading();
+    },
+    onSuccess: (response) => {
+      if (
+        response.data.message === "카카오 계정은 별도의 로그아웃이 필요해요."
+      ) {
+        router.replace(
+          `https://kauth.kakao.com/oauth/logout?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&logout_redirect_uri=${process.env.NEXT_PUBLIC_BASE_URL}/logout`
+        );
+      } else {
+        router.replace("/logout");
+      }
+    }
+    //...
+  });
+//...
+}
+```
+
+**logout.tsx**
+
+```javascript
+//...
+export default function Logout() {
+ //...
+  useEffect(() => {
+    if (!user) return navigate({ type: "replace", url: "/" });
+
+    queryClient.clear();
+    authActions.resetAuth();
+    chatActions.resetChatState();
+    notificationActions.resetUnreadCount();
+    navigate({ type: "replace", url: "/" });
+  }, [
+    authActions,
+    chatActions,
+    navigate,
+    notificationActions,
+    queryClient,
+    user
+  ]);
+
+  return (
+    <div className="fixed inset-0 bg-white z-[99]">
+      <Loading />
+    </div>
+  );
+}
+```
+
+</details>
+
+<br/>
 
 ### 👀 구현 기능 미리보기 ( 제목 클릭 시 해당 기능 상세설명으로 이동됩니다. )
 
