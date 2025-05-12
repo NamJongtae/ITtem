@@ -16,7 +16,8 @@ export default function useAuth() {
     if (
       sessionQueryIsSuccess &&
       pathname !== "/refresh-token" &&
-      pathname !== "/session-expired"
+      pathname !== "/session-expired" &&
+      pathname !== "/logout"
     ) {
       if (isExistSession) {
         refetchAuth();
