@@ -39,9 +39,6 @@ export default function useSigninMutate({ isModal }: { isModal?: boolean }) {
       } else {
         router.push("/");
       }
-      setTimeout(() => {
-        router.refresh(); // middleware 버그 해결을 위해 router refresh
-      }, 100);
     },
     onError: (error: unknown, variables) => {
       if (isAxiosError<SigninResponseData>(error)) {
