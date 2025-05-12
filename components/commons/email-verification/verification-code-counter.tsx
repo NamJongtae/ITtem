@@ -1,6 +1,6 @@
-import useVerificationTimer from "@/hooks/commons/useVerificationTimer";
+import useVerificationTimer from '@/hooks/commons/email-verification/useVerificationTimer';
 
-export default function SignupVerificationCodeTimer() {
+export default function VerificationCodeTimer() {
   const { timer } = useVerificationTimer();
   return (
     <span

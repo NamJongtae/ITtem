@@ -1,10 +1,10 @@
 import CoreInputField from "../commons/core-input-field/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import usePasswordChkField from "@/hooks/find-password/usePasswordChkFieldValidator";
-import useEmailStatus from '@/hooks/signup/basic-info/useEmailStatus';
+import useEmailVerificationStatus from "@/hooks/commons/email-verification/useEmailVerificationStatus";
 
 export default function FindPasswordPasswordCheckField() {
-  const { isVerifiedEmail } = useEmailStatus();
+  const { isVerifiedEmail } = useEmailVerificationStatus();
   const { passwordValue } = usePasswordChkField();
 
   return (

@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import useEmailStatus from "./useEmailStatus";
+import useEmailStatus from "../../commons/email-verification/useEmailVerificationStatus";
 
 export default function useBasicInfoNextBtnDisabled() {
   const { formState } = useFormContext();

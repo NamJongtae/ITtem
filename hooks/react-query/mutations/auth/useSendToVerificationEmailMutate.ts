@@ -8,7 +8,7 @@ import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerificationEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
 import { useFormContext } from "react-hook-form";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 import { useContext } from "react";
 import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 
@@ -20,7 +20,7 @@ export default function useSendToVerificationEmailMutate() {
   const { mutate: sendToVerificationEmailMutate } = useMutation<
     AxiosResponse<VerificationEmailResponseData>,
     AxiosError,
-    { email: string; type: VerificationEmailType }
+    { email: string; type: EmailVerificationType }
   >({
     mutationFn: ({ email, type }) =>
       type === "resetPw"

@@ -1,10 +1,8 @@
 import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
 import { useContext, useEffect, useRef } from "react";
 
-export function useEmailFocus() {
+export function useFocusEmailVerificationInput() {
   const emailRef = useRef<HTMLInputElement | null>(null);
-
-
   const { emailStatus } = useContext(EmailVerificationContext);
 
   useEffect(() => {

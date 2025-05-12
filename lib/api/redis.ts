@@ -3,7 +3,7 @@ import {
   VERIFICATION_EMAIL_BLOCK_EXP,
   VERIFICATION_EMAIL_EXP
 } from "@/constants/constant";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 import { Redis } from "@upstash/redis";
 
 let redis: Redis;
@@ -34,7 +34,7 @@ const client = async () => {
 
 export const saveVerifiedEmail = async (
   email: string,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ) => {
   try {
     const redis = await client();
@@ -48,7 +48,7 @@ export const saveVerifiedEmail = async (
 
 export const getVerifiedEmail = async (
   email: string,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ) => {
   try {
     const redis = await client();
@@ -65,7 +65,7 @@ export const getVerifiedEmail = async (
 export const incrementVerificationEmailCounter = async (
   email: string,
   count: string | undefined,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ) => {
   try {
     if (!count) return;
@@ -84,7 +84,7 @@ export const incrementVerificationEmailCounter = async (
 export const saveEmailVerificationCode = async (
   email: string,
   verificationCode: string,
-  type: VerificationEmailType,
+  type: EmailVerificationType,
   count = 1,
   exp = VERIFICATION_EMAIL_EXP
 ) => {
@@ -116,7 +116,7 @@ export const getEmailVerificationCode = async (
 
 export const deleteEmailVerificationCode = async (
   email: string,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ) => {
   try {
     const redis = await client();

@@ -1,7 +1,7 @@
-import useEmailStatus from "@/hooks/signup/basic-info/useEmailStatus";
+import useEmailVerificationStatus from "@/hooks/commons/email-verification/useEmailVerificationStatus";
 
 export default function FindPasswordSubTitle() {
-  const { isVerifiedEmail } = useEmailStatus();
+  const { isVerifiedEmail } = useEmailVerificationStatus();
 
   const subTitleStyles = "font-semibold";
 

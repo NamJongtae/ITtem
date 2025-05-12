@@ -1,12 +1,12 @@
 import { useFormContext } from "react-hook-form";
 import useSendToVerificationEmailMutate from "@/hooks/react-query/mutations/auth/useSendToVerificationEmailMutate";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 import { useContext } from "react";
 import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 
 interface IParams {
   validate: () => Promise<boolean>;
-  type: VerificationEmailType;
+  type: EmailVerificationType;
 }
 
 export function useVerificationEmailSendHandler({ validate, type }: IParams) {

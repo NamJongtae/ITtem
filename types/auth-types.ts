@@ -92,5 +92,5 @@ export interface ProfileReviewData {
   };
 }
 
-export type VerificationEmailType = "signup" | "resetPw";
+export type EmailVerificationType = "signup" | "resetPw";
 export type EmailVerificationStatus = "INITIAL" | "SEND" | "VERFICATION";

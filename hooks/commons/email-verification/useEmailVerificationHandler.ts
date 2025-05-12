@@ -2,10 +2,10 @@ import { useFormContext } from "react-hook-form";
 import useVerificationEmailMutate from "../../react-query/mutations/auth/useVerificationEmailMutate";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 
-export default function useVerificationEmailHandler(
-  type: VerificationEmailType
+export default function useEmailVerificationHandler(
+  type: EmailVerificationType
 ) {
   const { getValues } = useFormContext();
 

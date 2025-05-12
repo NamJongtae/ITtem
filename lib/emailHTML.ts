@@ -1,6 +1,6 @@
-import { VerificationEmailType } from '@/types/auth-types';
+import { EmailVerificationType } from '@/types/auth-types';
 
-export const emailHTML = (verfiyCode: string, type: VerificationEmailType) => {
+export const emailHTML = (verfiyCode: string, type: EmailVerificationType) => {
   return `
 <body>
   <h1

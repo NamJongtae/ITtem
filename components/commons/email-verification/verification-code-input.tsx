@@ -1,20 +1,20 @@
 import CoreInputField from "@/components/commons/core-input-field/core-input-field";
-import { MutableRefObject } from "react";
-import VerfiyCodeCounter from "./signup-verification-code-counter";
+import { RefObject, useContext } from "react";
+import VerfiyCodeCounter from "./verification-code-counter";
 import {
   VERIFICATION_CODE_REGEX,
   VERIFICATION_CODE_REGEX_ERRORMSG
 } from "@/constants/constant";
-import useVerificationCodeFocusController from "@/hooks/signup/basic-info/useVerificationCodeFocusController";
-import useResetInputOnTimerEnd from "@/hooks/signup/basic-info/useResetInputOnTimerEnd";
+import useVerificationCodeFocusController from "@/hooks/commons/email-verification/useVerificationCodeFocusController";
+import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 
 interface IProps {
-  verificationCodeRef: MutableRefObject<HTMLInputElement | null>;
+  verificationCodeRef: RefObject<HTMLInputElement | null>;
 }
 
-export default function SignupVerificationCodeInput({ verificationCodeRef }: IProps) {
+export default function VerificationCodeInput({ verificationCodeRef }: IProps) {
   const { isFocus, onFocus, onBlur } = useVerificationCodeFocusController();
-  const { timer } = useResetInputOnTimerEnd();
+  const { timer } = useContext(EmailVerificationContext);
 
   return (
     <div

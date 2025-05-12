@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { VerificationEmailResponseData } from "@/types/api-types";
 import { ERROR_MESSAGE } from "@/constants/constant";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 import { useContext } from "react";
 import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
 
@@ -18,7 +18,7 @@ export default function useVerificationEmailMutate() {
   } = useMutation<
     AxiosResponse<VerificationEmailResponseData>,
     AxiosError,
-    { email: string; verificationCode: string; type: VerificationEmailType }
+    { email: string; verificationCode: string; type: EmailVerificationType }
   >({
     mutationFn: ({ email, verificationCode, type }) =>
       verificationEmail(email, verificationCode, type),

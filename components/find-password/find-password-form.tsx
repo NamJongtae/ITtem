@@ -4,7 +4,7 @@ import FindPassswordFormConent from "./find-password-form-content";
 import useResetPasswordMutate from "@/hooks/react-query/mutations/auth/useResetPasswordMutate";
 import { EmailVerificationContextProvider } from "@/store/EmailVerificationProvider";
 
-export default function Form() {
+export default function FindPasswordForm() {
   const { resetPasswordMutate } = useResetPasswordMutate();
 
   return (

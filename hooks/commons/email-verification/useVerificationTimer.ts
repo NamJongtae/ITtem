@@ -1,4 +1,4 @@
-import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 import { useContext, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ export default function useVerificationTimer() {
   const { timer, countDown } = useContext(EmailVerificationContext);
   const { setError } = useFormContext();
   const { emailStatus, isError } = useContext(EmailVerificationContext);
+  const { setValue } = useFormContext();
 
   useEffect(() => {
     if (timer <= 0 && emailStatus === "SEND") {
@@ -31,6 +32,12 @@ export default function useVerificationTimer() {
 
     return () => clearTimeout(timeout);
   }, [timer, emailStatus, countDown]);
+
+  useEffect(() => {
+    if (timer <= 0) {
+      setValue("verificationCode", "");
+    }
+  }, [timer, setValue]);
 
   return { timer };
 }

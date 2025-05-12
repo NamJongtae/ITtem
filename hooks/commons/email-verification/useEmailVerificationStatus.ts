@@ -2,7 +2,7 @@ import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
 import { useContext } from "react";
 import { useFormContext } from "react-hook-form";
 
-export default function useEmailStatus() {
+export default function useEmailVerificationStatus() {
   const { formState } = useFormContext();
 
   const { emailStatus } = useContext(EmailVerificationContext);

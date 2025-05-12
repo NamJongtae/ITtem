@@ -1,7 +1,7 @@
-import useEmailStatus from '@/hooks/signup/basic-info/useEmailStatus';
+import useEmailVerificationStatus from "@/hooks/commons/email-verification/useEmailVerificationStatus";
 
 export default function SignupEmailError() {
-  const { errors } = useEmailStatus();
+  const { errors } = useEmailVerificationStatus();
 
   return (
     errors?.message && (

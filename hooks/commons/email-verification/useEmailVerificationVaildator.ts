@@ -2,9 +2,9 @@ import { useFormContext } from 'react-hook-form';
 import useCheckEmailMutate from '@/hooks/react-query/mutations/auth/useCheckEmailMutate';
 import useEmailDuplicationMutate from '@/hooks/react-query/mutations/auth/useEmailDuplicationMutate';
 import { toast } from 'react-toastify';
-import { VerificationEmailType } from '@/types/auth-types';
+import { EmailVerificationType } from '@/types/auth-types';
 
-export function useEmailVerificationValidator(type: VerificationEmailType) {
+export function useEmailVerificationValidator(type: EmailVerificationType) {
   const { getValues } = useFormContext();
   const { checkEmailMutate } = useCheckEmailMutate();
   const { emailDuplicationMuate } = useEmailDuplicationMutate();

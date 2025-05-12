@@ -4,11 +4,11 @@ import { toast } from "react-toastify";
 import useEmailDuplicationMutate from "../../react-query/mutations/auth/useEmailDuplicationMutate";
 import useSendToVerificationEmailMutate from "../../react-query/mutations/auth/useSendToVerificationEmailMutate";
 import useCheckEmailMutate from "../../react-query/mutations/auth/useCheckEmailMutate";
-import { VerificationEmailType } from "@/types/auth-types";
+import { EmailVerificationType } from "@/types/auth-types";
 import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 
-export default function useVerificationEmailResendHandler(
-  type: VerificationEmailType
+export default function useResendEmailVerificationHandler(
+  type: EmailVerificationType
 ) {
   const { getValues, clearErrors } = useFormContext();
   const { send } = useContext(EmailVerificationContext);

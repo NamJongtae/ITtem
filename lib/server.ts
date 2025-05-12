@@ -19,7 +19,7 @@ import {
   getEmailVerificationCode,
   saveEmailVerificationCode
 } from "@/lib/api/redis";
-import { VerificationEmailType } from '@/types/auth-types';
+import { EmailVerificationType } from '@/types/auth-types';
 
 export const getSmtpTransport = async () => {
   const nodemailer = await import("nodemailer");
@@ -147,7 +147,7 @@ export async function createUniqueNickname(User: Model<UserDB>) {
 
 export async function sendVerificationCode(
   email: string,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ) {
   const verifyCode = uuid().substring(0, 6).toUpperCase();
 

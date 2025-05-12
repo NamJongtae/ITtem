@@ -18,7 +18,7 @@ import customAxios from "../customAxios";
 import {
   AuthData,
   SignupData,
-  VerificationEmailType
+  EmailVerificationType
 } from "@/types/auth-types";
 import { toast } from "react-toastify";
 
@@ -106,7 +106,7 @@ export async function sendToResetPwVerificationEmail(
 export async function verificationEmail(
   email: string,
   verificationCode: string,
-  type: VerificationEmailType
+  type: EmailVerificationType
 ): Promise<AxiosResponse<VerificationEmailResponseData>> {
   try {
     const response = await customAxios.post("/api/auth/verification-email", {
