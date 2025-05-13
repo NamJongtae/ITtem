@@ -1,6 +1,6 @@
 import { useFunnel } from "@/hooks/commons/useFunnel";
 import SignupSubTitle from "./signup-subTitle";
-import SignupStepper from "./signup-stepper";
+import SignupStepper from "./stepper/signup-stepper";
 import SignupBasicInfoStep from "./basic-info-step/signup-basic-info-step";
 import SignupProfileSettingStep from "./profile-setting-step/sigup-profile-setting-step";
 import SignupIntroduceStep from "./introduce-step/signup-introduce-step";
