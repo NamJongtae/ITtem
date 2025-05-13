@@ -5,8 +5,30 @@ interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
+function ReasonRow({ label, content }: { label: string; content?: string }) {
+  if (!content) return null;
+
+  return (
+    <div className="flex mr-5">
+      <span className="inline-block w-16 font-medium shrink-0">{label}</span>
+      <p className="whitespace-pre-wrap break-keep">{content}</p>
+    </div>
+  );
+}
+
+function DateRow({ label, content }: { label: string; content?: string }) {
+  if (!content) return null;
+
+  return (
+    <div>
+      <span className="inline-block w-16 font-medium">{label}</span>
+      <time dateTime={content}>{getTradingDateFormat(content)}</time>
+    </div>
+  );
+}
+
 export default function ProductManageItemTradingContent({
-  tradingData,
+  tradingData
 }: IProps) {
   return (
     <>
@@ -14,57 +36,25 @@ export default function ProductManageItemTradingContent({
         <span className="inline-block w-16 font-medium">진행 상태</span>
         <span>{tradingData.process} </span>
       </div>
-      {tradingData.cancelReason && (
-        <div className="flex mr-5">
-          <span className="inline-block w-16 font-medium">취소 사유</span>
-          <p className="whitespace-pre-wrap break-keep">
-            {tradingData.cancelReason}
-          </p>
-        </div>
-      )}
-      {tradingData.returnReason && (
-        <div className="flex mr-5">
-          <span className="inline-block w-16 font-medium shrink-0">
-            반품 사유
-          </span>
-          <p className="whitespace-pre-wrap break-keep">
-            {tradingData.returnReason}
-          </p>
-        </div>
-      )}
+      <ReasonRow label="취소 사유" content={tradingData.cancelReason} />
+      <ReasonRow label="반품 사유" content={tradingData.returnReason} />
 
-      {"saleStartDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16 font-medium">등록일</span>
-          <time dateTime={tradingData.saleStartDate}>
-            {getTradingDateFormat(tradingData.saleStartDate)}
-          </time>
-        </div>
-      )}
-      {"saleEndDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16 font-medium">판매 완료</span>
-          <time dateTime={tradingData.saleEndDate}>
-            {getTradingDateFormat(tradingData.saleEndDate!)}
-          </time>
-        </div>
-      )}
-      {"purchaseStartDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16 font-medium">구매일</span>
-          <time dateTime={tradingData.purchaseStartDate}>
-            {getTradingDateFormat(tradingData.purchaseStartDate)}
-          </time>
-        </div>
-      )}
-      {"purchaseEndDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16 font-medium">구매 완료</span>
-          <time dateTime={tradingData.purchaseEndDate}>
-            {getTradingDateFormat(tradingData.purchaseEndDate!)}
-          </time>
-        </div>
-      )}
+      <DateRow
+        label="등록일"
+        content={(tradingData as SaleTradingData).saleStartDate}
+      />
+      <DateRow
+        label="판매 완료"
+        content={(tradingData as SaleTradingData).saleEndDate}
+      />
+      <DateRow
+        label="구매일"
+        content={(tradingData as PurchaseTradingData).purchaseStartDate}
+      />
+      <DateRow
+        label="구매 완료"
+        content={(tradingData as PurchaseTradingData).purchaseEndDate}
+      />
     </>
   );
 }

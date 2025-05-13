@@ -4,41 +4,30 @@ interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
-export default function CancleReturnDetailModalReason({ tradingData }: IProps) {
+function ReasonRow({ label, content }: { label: string; content?: string }) {
+  if (!content) return null;
+  return (
+    <div className="border-b border-gray-300 pb-2 flex items-center">
+      <span className="font-medium w-20 inline-block shrink-0">{label}</span>
+      <p className="inline-block whitespace-pre-wrap max-h-[300px] overflow-y-auto">
+        {content}
+      </p>
+    </div>
+  );
+}
+
+export default function CancelReturnDetailModalReason({ tradingData }: IProps) {
+  const { cancelReason, returnReason, cancelRejectReason, returnRejectReason } =
+    tradingData;
+
   return (
     <>
-      {tradingData.cancelReason && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">취소 사유</span>
-          <p className="inline-block whitespace-pre-wrap max-h-[300px] overflow-y-auto">
-            {tradingData.cancelReason}
-          </p>
-        </div>
-      )}
-
-      {tradingData.returnReason && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">반품 사유</span>
-          {tradingData.returnReason && (
-            <p className="inline-block whitespace-pre-wrap max-h-[300px] overflow-y-auto">
-              {tradingData.returnReason}
-            </p>
-          )}
-        </div>
-      )}
-
-      {(tradingData.cancelRejectReason || tradingData.returnRejectReason) && (
-        <div className="border-b border-gray-300 pb-2 flex items-center">
-          <span className="font-medium w-20 inline-block shrink-0">
-            거절 사유
-          </span>
-          <p className="inline-block whitespace-pre-wrap max-h-[300px] overflow-y-auto">
-            {tradingData.cancelRejectReason
-              ? tradingData.cancelRejectReason
-              : tradingData.returnRejectReason}
-          </p>
-        </div>
-      )}
+      <ReasonRow label="취소 사유" content={cancelReason} />
+      <ReasonRow label="반품 사유" content={returnReason} />
+      <ReasonRow
+        label="거절 사유"
+        content={cancelRejectReason || returnRejectReason}
+      />
     </>
   );
 }

@@ -5,59 +5,56 @@ interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
+function ContentRow({
+  label,
+  content,
+  isDate = false
+}: {
+  label: string;
+  content?: string;
+  isDate?: boolean;
+}) {
+  if (!content) return null;
+
+  return (
+    <div className={`flex items-start mb-1 ${!isDate ? "mr-5" : ""}`}>
+      <span className="inline-block w-16 shrink-0 font-medium">{label}</span>
+      {isDate ? (
+        <time dateTime={content}>{getTradingDateFormat(content)}</time>
+      ) : (
+        <p className="whitespace-pre-wrap">{content}</p>
+      )}
+    </div>
+  );
+}
+
 export default function ProductManageItemCancelReturnRejectContent({
-  tradingData,
+  tradingData
 }: IProps) {
   return (
     <>
-      {tradingData.cancelRejectReason && (
-        <div className="flex mr-5">
-          <span className="inline-block w-16"> 거절 사유</span>
-          <p className="whitespace-pre-wrap">
-            {tradingData.cancelRejectReason}
-          </p>
-        </div>
-      )}
-      {tradingData.returnRejectReason && (
-        <div className="flex mr-5">
-          <span className="inline-block w-16"> 거절 사유</span>
-          <p className="whitespace-pre-wrap">
-            {tradingData.returnRejectReason}
-          </p>
-        </div>
-      )}
-      {tradingData.cancelStartDate && (
-        <div>
-          <span className="inline-block w-16">취소 요청</span>
-          <time dateTime={tradingData.cancelStartDate}>
-            {getTradingDateFormat(tradingData.cancelStartDate)}
-          </time>
-        </div>
-      )}
-      {tradingData.returnStartDate && (
-        <div>
-          <span className="inline-block w-16">반품 요청</span>
-          <time dateTime={tradingData.returnStartDate}>
-            {getTradingDateFormat(tradingData.returnStartDate)}
-          </time>
-        </div>
-      )}
-      {tradingData.returnRejectDate && (
-        <div>
-          <span className="inline-block w-16">반품 거절</span>
-          <time dateTime={tradingData.returnRejectDate}>
-            {getTradingDateFormat(tradingData.returnRejectDate)}
-          </time>
-        </div>
-      )}
-      {tradingData.cancelRejectDate && (
-        <div>
-          <span className="inline-block w-16">취소 거절</span>
-          <time dateTime={tradingData.cancelRejectDate}>
-            {getTradingDateFormat(tradingData.cancelRejectDate)}
-          </time>
-        </div>
-      )}
+      <ContentRow label="거절 사유" content={tradingData.cancelRejectReason} />
+      <ContentRow label="거절 사유" content={tradingData.returnRejectReason} />
+      <ContentRow
+        label="취소 요청"
+        content={tradingData.cancelStartDate}
+        isDate
+      />
+      <ContentRow
+        label="반품 요청"
+        content={tradingData.returnStartDate}
+        isDate
+      />
+      <ContentRow
+        label="반품 거절"
+        content={tradingData.returnRejectDate}
+        isDate
+      />
+      <ContentRow
+        label="취소 거절"
+        content={tradingData.cancelRejectDate}
+        isDate
+      />
     </>
   );
 }

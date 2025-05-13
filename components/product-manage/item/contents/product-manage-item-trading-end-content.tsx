@@ -5,43 +5,38 @@ interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
+function DateRow({ label, date }: { label: string; date?: string }) {
+  if (!date) return null;
+
+  return (
+    <div>
+      <span className="inline-block w-16">{label}</span>
+      <time dateTime={date}>{getTradingDateFormat(date)}</time>
+    </div>
+  );
+}
+
 export default function ProductManageItemTradingEndContent({
-  tradingData,
+  tradingData
 }: IProps) {
   return (
     <>
-      {"saleStartDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16">판매일</span>
-          <time dateTime={tradingData.saleStartDate}>
-            {getTradingDateFormat(tradingData.saleStartDate)}
-          </time>
-        </div>
-      )}
-      {"saleEndDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16">판매 완료</span>
-          <time dateTime={tradingData.saleEndDate}>
-            {getTradingDateFormat(tradingData.saleEndDate!)}
-          </time>
-        </div>
-      )}
-      {"purchaseStartDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16">구매일</span>
-          <time dateTime={tradingData.purchaseStartDate}>
-            {getTradingDateFormat(tradingData.purchaseStartDate)}
-          </time>
-        </div>
-      )}
-      {"purchaseEndDate" in tradingData && (
-        <div>
-          <span className="inline-block w-16">구매 완료</span>
-          <time dateTime={tradingData.purchaseEndDate}>
-            {getTradingDateFormat(tradingData.purchaseEndDate!)}
-          </time>
-        </div>
-      )}
+      <DateRow
+        label="판매일"
+        date={(tradingData as SaleTradingData).saleStartDate}
+      />
+      <DateRow
+        label="판매 완료"
+        date={(tradingData as SaleTradingData).saleEndDate}
+      />
+      <DateRow
+        label="구매일"
+        date={(tradingData as PurchaseTradingData).purchaseStartDate}
+      />
+      <DateRow
+        label="구매 완료"
+        date={(tradingData as PurchaseTradingData).purchaseEndDate}
+      />
     </>
   );
 }

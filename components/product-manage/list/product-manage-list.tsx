@@ -2,21 +2,24 @@ import useTradeInfiniteQuery from "@/hooks/react-query/queries/trade/useTradeInf
 import Empty from "../../commons/empty";
 import { isAxiosError } from "axios";
 import Item from "../item/product-mange-item";
-import {
-  ProductManageStaus,
-  ProductManageMenu
-} from "../product-manage-page";
 import ProductManageListSkeletonUI from "./product-manage-list-skeletonUI";
 import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
 import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMessage";
+import {
+  ProductManageMenuType,
+  ProductManageStatusType
+} from "@/types/product-types";
 
 interface IProps {
-  menu: ProductManageMenu;
-  detailMenu: ProductManageStaus;
+  menu: ProductManageMenuType;
+  productManageStatus: ProductManageStatusType;
 }
 
-export default function ProductManageList({ menu, detailMenu }: IProps) {
+export default function ProductManageList({
+  menu,
+  productManageStatus
+}: IProps) {
   const {
     data,
     isLoading,
@@ -24,7 +27,7 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
     hasNextPage,
     fetchNextPage,
     error
-  } = useTradeInfiniteQuery(menu);
+  } = useTradeInfiniteQuery();
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
@@ -38,7 +41,7 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
         message={
           isAxiosError<{ message: string }>(error)
             ? error.response?.data.message || ""
-            : `${detailMenu} 목록이 없어요.`
+            : `${productManageStatus} 목록이 없어요.`
         }
       />
     );
@@ -56,7 +59,7 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
                 key={tradingData._id}
                 tradingData={tradingData}
                 menu={menu}
-                detailMenu={detailMenu}
+                productManageStatus={productManageStatus}
               />
             ))}
             {isFetchingNextPage && <ProductManageListSkeletonUI />}
@@ -66,7 +69,7 @@ export default function ProductManageList({ menu, detailMenu }: IProps) {
       </ul>
 
       <InfiniteScrollEndMessage
-        message={`더 이상 ${detailMenu} 상품이 없어요.`}
+        message={`더 이상 ${productManageStatus} 상품이 없어요.`}
         data={data}
         hasNextPage={hasNextPage}
       />

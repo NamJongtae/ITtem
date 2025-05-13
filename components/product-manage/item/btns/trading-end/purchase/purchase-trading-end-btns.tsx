@@ -9,21 +9,18 @@ interface IProps {
 }
 
 export default function PurchaseTradingEndBtns({ tradingData }: IProps) {
-  if (tradingData.isReviewed) {
-    return (
-      <div className="flex flex-row justify-end sm:flex-col gap-3">
-        <TradingDetailBtn tradingData={tradingData} />
-        <PurchaseTradingEndReviewBtn productId={tradingData.productId} />
-        <PurchaseTradingEndReturnBtn productId={tradingData.productId} />
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-row justify-end sm:flex-col gap-3">
-        <TradingDetailBtn tradingData={tradingData} />
-        <PurchaseTradingEndReviewUploadBtn productId={tradingData.productId} />
-        <PurchaseTradingEndReturnBtn productId={tradingData.productId} />
-      </div>
-    );
-  }
+  const isReviewed = tradingData.isReviewed;
+  const ReviewBtn = isReviewed ? (
+    <PurchaseTradingEndReviewBtn productId={tradingData.productId} />
+  ) : (
+    <PurchaseTradingEndReviewUploadBtn productId={tradingData.productId} />
+  );
+
+  return (
+    <div className="flex flex-row justify-end sm:flex-col gap-3">
+      <TradingDetailBtn tradingData={tradingData} />
+      {ReviewBtn}
+      <PurchaseTradingEndReturnBtn productId={tradingData.productId} />
+    </div>
+  );
 }

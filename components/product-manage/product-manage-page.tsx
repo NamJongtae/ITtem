@@ -1,26 +1,16 @@
 "use client";
 
 import ProductManageMenu from "./product-manage-menu";
-import ProductManageDetailMenu from "./product-manage-detail-menu";
 import ProductManageSearchBar from "./product-manage-search-bar";
 import ProductManageList from "./list/product-manage-list";
 import useProductManageStatus from "@/hooks/product-manage/useProductManageStatus";
 import useProductMenu from "@/hooks/product-manage/useProductMenu";
-import useInitialProductManageStatus from "@/hooks/product-manage/useInitialProductManageStatus";
-
-export type ProductManageMenu = "판매" | "구매";
-export type ProductManageStaus =
-  | "거래중"
-  | "거래완료 내역"
-  | "취소/반품 내역"
-  | "취소/반품 거절 내역";
+import ProductManageStatusMenu from "./product-manage-status-menu";
 
 export default function ProductManagePage() {
   const { menu, handleChangeMenu } = useProductMenu();
-  const { initialProductManageStatus } = useInitialProductManageStatus();
-  const { manageStatus, handleChangeManageStatus } = useProductManageStatus({
-    initialProductManageStatus
-  });
+  const { productManageStatus, handleChangeManageStatus } =
+    useProductManageStatus();
 
   return (
     <div className="max-w-[1024px] mx-auto mt-8 px-4 md:px-8">
@@ -30,12 +20,15 @@ export default function ProductManagePage() {
         <ProductManageMenu menu={menu} handleClickMenu={handleChangeMenu} />
       </div>
 
-      <ProductManageDetailMenu
-        manageStatus={manageStatus}
-        handleClickDeatilMenu={handleChangeManageStatus}
+      <ProductManageStatusMenu
+        productManageStatus={productManageStatus}
+        handleChangeManageStatus={handleChangeManageStatus}
       />
 
-      <ProductManageList menu={menu} detailMenu={manageStatus} />
+      <ProductManageList
+        menu={menu}
+        productManageStatus={productManageStatus}
+      />
     </div>
   );
 }

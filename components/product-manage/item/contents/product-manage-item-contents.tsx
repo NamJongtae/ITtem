@@ -1,20 +1,43 @@
-import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
-import { ProductManageStaus } from '../../product-manage-page';
+import {
+  ProductManageStatusType,
+  PurchaseTradingData,
+  SaleTradingData
+} from "@/types/product-types";
 import ProductManageItemTradingContent from "./product-manage-item-trading-content";
 import ProductManageItemTradingEndContent from "./product-manage-item-trading-end-content";
 import ProductManageItemCancelReturnContent from "./product-manage-item-return-content";
 import ProductManageItemCancelReturnRejectContent from "./product-manage-item-return-reject-content";
 import FallbackImage from "@/components/commons/fallback-Image";
 
-
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
-  detailMenu: ProductManageStaus;
+  productManageStatus: ProductManageStatusType;
+}
+
+function ContentByStatus({
+  productManageStatus,
+  tradingData
+}: {
+  productManageStatus: ProductManageStatusType;
+  tradingData: SaleTradingData | PurchaseTradingData;
+}) {
+  switch (productManageStatus) {
+    case "거래중":
+      return <ProductManageItemTradingContent tradingData={tradingData} />;
+    case "거래완료 내역":
+      return <ProductManageItemTradingEndContent tradingData={tradingData} />;
+    case "취소/반품 내역":
+      return <ProductManageItemCancelReturnContent tradingData={tradingData} />;
+    case "취소/반품 거절 내역":
+      return (
+        <ProductManageItemCancelReturnRejectContent tradingData={tradingData} />
+      );
+  }
 }
 
 export default function ProductManageItemContents({
   tradingData,
-  detailMenu,
+  productManageStatus
 }: IProps) {
   return (
     <div className="flex gap-3 items-center">
@@ -34,20 +57,10 @@ export default function ProductManageItemContents({
           <span className="inline-block w-16">가격</span>
           <span>{tradingData.productPrice.toLocaleString()}</span>원
         </div>
-        {detailMenu === "거래중" && (
-          <ProductManageItemTradingContent tradingData={tradingData} />
-        )}
-        {detailMenu === "거래완료 내역" && (
-          <ProductManageItemTradingEndContent tradingData={tradingData} />
-        )}
-        {detailMenu === "취소/반품 내역" && (
-          <ProductManageItemCancelReturnContent tradingData={tradingData} />
-        )}
-        {detailMenu === "취소/반품 거절 내역" && (
-          <ProductManageItemCancelReturnRejectContent
-            tradingData={tradingData}
-          />
-        )}
+        <ContentByStatus
+          productManageStatus={productManageStatus}
+          tradingData={tradingData}
+        />
       </div>
     </div>
   );

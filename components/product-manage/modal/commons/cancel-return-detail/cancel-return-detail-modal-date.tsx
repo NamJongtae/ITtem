@@ -5,34 +5,30 @@ interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
-export default function CancleReturnDetailModalDate({ tradingData }: IProps) {
+function DateRow({ label, date }: { label: string; date?: string }) {
+  if (!date) return null;
+  return (
+    <div className="border-b border-gray-300 pb-2 flex items-center">
+      <span className="font-medium w-20 inline-block shrink-0">{label}</span>
+      <span>{getTradingDateFormat(date)}</span>
+    </div>
+  );
+}
+
+export default function CancelReturnDetailModalDate({ tradingData }: IProps) {
+  const {
+    cancelStartDate,
+    cancelRejectDate,
+    returnStartDate,
+    returnRejectDate
+  } = tradingData;
+  
   return (
     <>
-      {tradingData.cancelStartDate && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">취소 요청</span>
-          <span>{getTradingDateFormat(tradingData.cancelStartDate)}</span>
-        </div>
-      )}
-      {tradingData.cancelRejectDate && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">취소 거절</span>
-          <span>{getTradingDateFormat(tradingData.cancelRejectDate)}</span>
-        </div>
-      )}
-
-      {tradingData.returnStartDate && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">반품 요청</span>
-          <span>{getTradingDateFormat(tradingData.returnStartDate)}</span>
-        </div>
-      )}
-      {tradingData.returnRejectDate && (
-        <div className="border-b border-gray-300 pb-2">
-          <span className="font-medium w-20 inline-block">반품 거절</span>
-          <span>{getTradingDateFormat(tradingData.returnRejectDate)}</span>
-        </div>
-      )}
+      <DateRow label="취소 요청" date={cancelStartDate} />
+      <DateRow label="취소 거절" date={cancelRejectDate} />
+      <DateRow label="반품 요청" date={returnStartDate} />
+      <DateRow label="반품 거절" date={returnRejectDate} />
     </>
   );
 }

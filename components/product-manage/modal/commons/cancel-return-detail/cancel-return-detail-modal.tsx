@@ -12,7 +12,7 @@ interface IProps {
   handleClickCloseBtn: () => void;
 }
 
-export default function CancleReturnDetailModal({
+export default function CancelReturnDetailModal({
   tradingData,
   handleClickCloseBtn,
 }: IProps) {
@@ -46,7 +46,7 @@ export default function CancleReturnDetailModal({
 
         <CancelReturnDetailModalContent
           name="상품가격"
-          value={tradingData.productPrice + " 원"}
+          value={tradingData.productPrice.toLocaleString() + " 원"}
         />
 
         <CancelReturnDetailModalContent

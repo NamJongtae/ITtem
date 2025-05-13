@@ -1,8 +1,8 @@
-import type { ProductManageMenu } from "./product-manage-page";
+import { ProductManageMenuType } from "@/types/product-types";
 
 interface IProps {
-  menu: ProductManageMenu;
-  handleClickMenu: (menu: ProductManageMenu) => void;
+  menu: ProductManageMenuType;
+  handleClickMenu: (menu: ProductManageMenuType) => void;
 }
 
 export default function ProductManageMenu({ menu, handleClickMenu }: IProps) {

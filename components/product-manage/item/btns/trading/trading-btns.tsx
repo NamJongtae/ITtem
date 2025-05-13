@@ -1,22 +1,16 @@
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
-import { ProductManageMenu } from "../../../product-manage-page";
 import SaleTradingBtns from "./sale/sale-trading-btns";
 import PurchaseTradingBtns from "./purchase/purchase-trading-btns";
 
 interface IProps {
-  menu: ProductManageMenu;
+  isSoldMenu: boolean;
   tradingData: SaleTradingData | PurchaseTradingData;
 }
 
-export default function TradingBtns({ menu, tradingData }: IProps) {
-  return (
-    <>
-      {menu === "판매" && "saleStartDate" in tradingData && (
-        <SaleTradingBtns tradingData={tradingData} />
-      )}
-      {menu === "구매" && "purchaseStartDate" in tradingData && (
-        <PurchaseTradingBtns tradingData={tradingData} />
-      )}
-    </>
+export default function TradingBtns({ isSoldMenu, tradingData }: IProps) {
+  return isSoldMenu ? (
+    <SaleTradingBtns tradingData={tradingData as SaleTradingData} />
+  ) : (
+    <PurchaseTradingBtns tradingData={tradingData as PurchaseTradingData} />
   );
 }
