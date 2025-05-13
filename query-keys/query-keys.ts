@@ -1,4 +1,3 @@
-import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
 import { getSessionCookies, getUser } from "@/lib/api/auth";
 import { getNotificationMessage } from "@/lib/api/notification";
 import {
@@ -19,7 +18,7 @@ import {
   getUserProfile
 } from "@/lib/api/profile";
 import { getPurchaseTrading, getSalesTrading } from "@/lib/api/trading";
-import { ProductCategory } from "@/types/product-types";
+import { ProductCategory, ProductManageMenuType } from "@/types/product-types";
 import {
   createQueryKeys,
   mergeQueryKeys
@@ -107,19 +106,17 @@ export const productQueryKey = createQueryKeys("product", {
     }
   }),
   manage: ({
-    currentMenu,
     status,
     search,
     menu,
     limit = 10
   }: {
-    currentMenu: "sale" | "purchase";
     status: string;
     search: string | undefined;
-    menu: ProductManageMenu;
+    menu: ProductManageMenuType;
     limit?: number;
   }) => ({
-    queryKey: [currentMenu, status, search] as const,
+    queryKey: [menu === "판매" ? "sale" : "purchase", status, search] as const,
     queryFn: async ({ pageParam }) => {
       if (menu === "판매") {
         const response = await getSalesTrading({

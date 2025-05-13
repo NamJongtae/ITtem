@@ -1,4 +1,4 @@
-import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
+import useProductManageUrlQuerys from "@/hooks/product-manage/useProductManageUrlQuerys";
 import { queryKeys } from "@/query-keys/query-keys";
 import { PurchaseTradingData, SaleTradingData } from "@/types/product-types";
 import {
@@ -8,26 +8,11 @@ import {
   useInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
 
-export default function useTradeInfiniteQuery(
-  menu: ProductManageMenu,
-  limit: number = 10
-) {
-  const currentMenu = menu === "판매" ? "sale" : "purchase";
-  const searchParams = useSearchParams();
-  let status = searchParams.get("status") as string | undefined;
-  status =
-    status !== "TRADING" &&
-    status !== "TRADING_END" &&
-    status !== "CANCEL_END/RETURN_END" &&
-    status !== "CANCEL_REJECT/RETURN_REJECT"
-      ? "TRADING"
-      : status;
-  const search = searchParams.get("search") as string | undefined;
+export default function useTradeInfiniteQuery(limit: number = 10) {
+  const { menu, search, status } = useProductManageUrlQuerys();
 
   const queryKeyConfig = queryKeys.product.manage({
-    currentMenu,
     status,
     search,
     menu,
@@ -55,7 +40,7 @@ export default function useTradeInfiniteQuery(
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       let nextCursor;
-      if (currentMenu === "sale") {
+      if (menu === "판매") {
         nextCursor = (lastPage[lastPage.length - 1] as SaleTradingData)
           ?.saleStartDate;
       } else {
