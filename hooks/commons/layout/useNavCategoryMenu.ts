@@ -1,6 +1,5 @@
 import { CATEGORY } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { usePathname } from "next/navigation";
 import React, { useRef } from "react";
 
 interface IParams {
@@ -8,30 +7,28 @@ interface IParams {
 }
 
 export default function useNavCategoryMenu({ currentCategory }: IParams) {
-  const pathname = usePathname();
+  const isActiveCategory = (category: string) =>
+    currentCategory === category ||
+    (currentCategory === null && category === "전체");
 
   const activeCategoryClassName = (category: string) =>
-    `${
-      (pathname.includes("product") &&
-        currentCategory === null &&
-        category === "전체") ||
-      currentCategory === category
-        ? "bg-red-400 text-white"
-        : ""
-    }`;
+    `${isActiveCategory(category) ? "bg-red-400 text-white" : ""}`;
 
   const firstCategoryRef = useRef<HTMLAnchorElement | null>(null);
   const lastCategoryRef = useRef<HTMLAnchorElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLAnchorElement | null>(null);
 
   const setCategoryLinkRef = (index: number) => {
-    return index === 0
-      ? firstCategoryRef
-      : index === CATEGORY.length - 1
-      ? lastCategoryRef
-      : index === CATEGORY.length - 2
-      ? lastCategoryPreviousRef
-      : null;
+    if (index === 0) {
+      return firstCategoryRef;
+    }
+    if (index === CATEGORY.length - 1) {
+      return lastCategoryRef;
+    }
+    if (index === CATEGORY.length - 2) {
+      return lastCategoryPreviousRef;
+    }
+    return null;
   };
 
   const categoryOnKeyDown = (
@@ -42,12 +39,12 @@ export default function useNavCategoryMenu({ currentCategory }: IParams) {
       optimizationTabFocus({
         event: e,
         previousTarget: lastCategoryPreviousRef.current,
-        nextTarget: firstCategoryRef.current,
+        nextTarget: firstCategoryRef.current
       });
     } else if (index === 0) {
       optimizationTabFocus({
         event: e,
-        previousTarget: lastCategoryRef.current,
+        previousTarget: lastCategoryRef.current
       });
     }
   };
