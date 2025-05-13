@@ -7,18 +7,19 @@ interface IProps {
   data: Pick<ProductData, "imgData" | "status" | "name">;
 }
 
+const status = {
+  soldout: "판매완료",
+  trading: "거래중",
+  sold: "판매중"
+} as const;
+
 export default function ProductListImg({ data }: IProps) {
   const soldoutStyles = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-xl before:font-semibold before:content-[attr(data-status)] before:flex before:justify-center before:items-center`;
+  const dataStatus = status[data.status];
 
   return (
     <div
-      data-status={
-        data.status === ProductStatus.soldout
-          ? "판매완료"
-          : data.status === ProductStatus.trading
-            ? "거래중"
-            : "판매중"
-      }
+      data-status={dataStatus}
       className={`${
         data.status !== ProductStatus.sold ? soldoutStyles : ""
       } relative flex h-full w-full`}
