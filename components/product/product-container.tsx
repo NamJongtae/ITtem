@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-query";
 
 interface IProps {
-  category: string | undefined;
+  category?: string;
 }
 
 async function prefetchProductList({
@@ -45,7 +45,10 @@ export default async function ProductContainer({ category }: IProps) {
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductList productListType="CATEGORY" />
+        <ProductList
+          productListType="CATEGORY"
+          productCategory={category as ProductCategory}
+        />
       </HydrationBoundary>
     </>
   );
