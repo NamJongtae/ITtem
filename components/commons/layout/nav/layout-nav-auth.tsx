@@ -7,10 +7,13 @@ import LayoutNavSigninBtn from "./layout-nav-signin-btn";
 
 export default function LayoutNavAuth() {
   const { user, authIsLoading } = useAuth();
+  const isLoginUser = user?.uid;
+
+  if (authIsLoading) return null;
 
   return (
     <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
-      {authIsLoading ? null : user?.uid ? (
+      {isLoginUser ? (
         <div className="flex items-center gap-3 w-full justify-end">
           <LayoutNavAvata />
           <LayoutNavLogoutBtn />

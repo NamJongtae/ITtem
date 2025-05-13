@@ -4,12 +4,17 @@ import ChatBtn from "./sub-nav-menu-chat-btn";
 import SellBtn from "./sub-nav-menu-sell-btn";
 import ProductBtn from "./sub-nav-menu-product-btn";
 import HomeBtn from "./sub-nav-home";
-import MobileMenu from "../nav/layout-nav-mobile-menu";
-import useMoblieNavMenu from "@/hooks/commons/layout/useMoblieNavMenu";
-import MoblieMenuBtn from "./sub-nav-moblie-menu-btn";
+import useVisible from "@/hooks/commons/useVisible";
+import useAuthStore from "@/store/auth-store";
+import SubNavMobileMenuLogoutBtn from './sub-nav-mobile-menu-loginout-btn';
+import SubNavMoblieMenuLoginBtn from './sub-nav-moblie-menu-login-btn';
 
 export default function SubNavMobileMenu() {
-  const { isOpenMenu, toggleMenu, menuRef, isVisible } = useMoblieNavMenu();
+  const { user } = useAuthStore();
+  const isLogin = user?.uid;
+  const { isVisible } = useVisible({
+    pathnames: ["signup", "signin", "findpassword"]
+  });
 
   if (!isVisible) {
     return null;
@@ -32,12 +37,14 @@ export default function SubNavMobileMenu() {
             <ProductBtn />
           </li>
           <li>
-            <MoblieMenuBtn isOpenMenu={isOpenMenu} toggleMenu={toggleMenu} />
+            {isLogin ? (
+              <SubNavMobileMenuLogoutBtn />
+            ) : (
+              <SubNavMoblieMenuLoginBtn />
+            )}
           </li>
         </ul>
       </nav>
-
-      {isOpenMenu && <MobileMenu toggleMenu={toggleMenu} ref={menuRef} />}
     </>
   );
 }
