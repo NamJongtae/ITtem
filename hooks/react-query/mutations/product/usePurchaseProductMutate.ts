@@ -17,7 +17,7 @@ export default function usePurchaseProductMutate() {
       actions.startLoading();
     },
     onSuccess: (response) => {
-      router.push(`/product/manage`);
+      router.push("/product/manage?menu=구매");
       toast.success(response.data.message);
     },
     onError: (error) => {
