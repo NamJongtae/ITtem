@@ -8,12 +8,12 @@ import useRecommendProductInfiniteQuery from "../react-query/queries/product/use
 export default function useInfiniteProductList(
   productListType: ProductListType,
   productIds?: string[],
-  profileProductCategory?: ProductCategory
+  ProductCategory?: ProductCategory
 ) {
   const search = useSearchParams();
   const keyword = search.get("keyword");
   const category =
-    profileProductCategory ||
+  ProductCategory ||
     (search.get("category") as ProductCategory) ||
     null;
 

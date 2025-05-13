@@ -14,13 +14,13 @@ import InfiniteScrollEndMessage from "../InfiniteScrollEndMessage";
 interface IProps {
   productListType: ProductListType;
   productIds?: string[];
-  profileProductCategory?: ProductCategory;
+  productCategory?: ProductCategory;
 }
 
 export default function ProductList({
   productListType,
   productIds,
-  profileProductCategory
+  productCategory
 }: IProps) {
   const {
     isLoading,
@@ -30,7 +30,7 @@ export default function ProductList({
     hasNextPage,
     error,
     emptyMessage
-  } = useInfiniteProductList(productListType, productIds, profileProductCategory);
+  } = useInfiniteProductList(productListType, productIds, productCategory);
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
@@ -57,7 +57,7 @@ export default function ProductList({
               <Fragment key={item._id}>
                 <ProductListItem
                   data={item}
-                  category={profileProductCategory}
+                  category={productCategory}
                 />
               </Fragment>
             ))}
