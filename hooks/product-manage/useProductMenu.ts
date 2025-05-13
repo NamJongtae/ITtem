@@ -1,11 +1,19 @@
-import { ProductManageMenu } from "@/components/product-manage/product-manage-page";
-import { useState } from "react";
+import { ProductManageMenuType } from "@/types/product-types";
+import { useCustomRouter } from "../commons/useCustomRouter";
+import useProductManageUrlQuerys from "./useProductManageUrlQuerys";
 
 export default function useProductMenu() {
-  const [menu, setMenu] = useState<ProductManageMenu>("판매");
+  const { menu, search, status } = useProductManageUrlQuerys();
 
-  const handleChangeMenu = (menu: ProductManageMenu) => {
-    setMenu(menu);
+  const { navigate } = useCustomRouter();
+  const handleChangeMenu = (menu: ProductManageMenuType) => {
+    const newUrl = `/product/manage${
+      search
+        ? `?menu=${menu}&search=${search}&status=${status}`
+        : `?menu=${menu}&status=${status}`
+    }`;
+
+    navigate({ type: "push", url: newUrl });
   };
 
   return { menu, handleChangeMenu };
