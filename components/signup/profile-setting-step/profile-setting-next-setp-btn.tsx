@@ -4,7 +4,7 @@ interface IProps {
   nextStepHandler: () => void;
 }
 
-export default function SignupProfileSettingSetpBtns({
+export default function ProfileSettingNextStepBtn({
   nextStepHandler
 }: IProps) {
   const { checkNicknameDuplication } = useCheckNicknameDuplication({nextStepHandler});

@@ -1,14 +1,12 @@
-import SignupNicknameField from './sigup-nickname-field';
+import SignupNicknameField from "./sigup-nickname-field";
 import SignupProfileImgField from "./sigup-profile-img-field";
-import SignupProfileSettingSetpBtns from "./sigup-profile-setting-setp-btns";
+import ProfileSettingNextStepBtn from "./profile-setting-next-setp-btn";
 
 interface IProps {
   nextStepHandler: () => void;
 }
 
-export default function SignupProfileSettingStep({
-  nextStepHandler,
-}: IProps) {
+export default function SignupProfileSettingStep({ nextStepHandler }: IProps) {
   return (
     <div className="flex flex-col gap-5">
       <p className="font-medium text-center text-gray-400">
@@ -16,9 +14,7 @@ export default function SignupProfileSettingStep({
       </p>
       <SignupProfileImgField />
       <SignupNicknameField />
-      <SignupProfileSettingSetpBtns
-        nextStepHandler={nextStepHandler}
-      />
+      <ProfileSettingNextStepBtn nextStepHandler={nextStepHandler} />
     </div>
   );
 }
