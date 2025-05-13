@@ -11,7 +11,7 @@ export enum ProductCategory {
   공구 = "공구",
   생활용품 = "생활용품",
   식품 = "식품",
-  전자기기 = "전자기기",
+  전자기기 = "전자기기"
 }
 
 export enum ProductCondition {
@@ -19,18 +19,18 @@ export enum ProductCondition {
   A = "A",
   B = "B",
   C = "C",
-  D = "D",
+  D = "D"
 }
 
 export enum ProductTransaction {
   직거래 = "직거래",
   택배 = "택배",
-  모두 = "모두",
+  모두 = "모두"
 }
 
 export enum ProductSellType {
   중고거래 = "중고거래",
-  무료나눔 = "무료나눔",
+  무료나눔 = "무료나눔"
 }
 
 export type ProductReturnPolicy = "가능" | "불가능";
@@ -40,7 +40,7 @@ export type ProductDeliveryFee = "포함" | "비포함";
 export enum ProductStatus {
   soldout = "soldout",
   trading = "trading",
-  sold = "sold",
+  sold = "sold"
 }
 
 export type ProductImgData = { url: string; name: string };
@@ -110,7 +110,7 @@ export const enum TradingStatus {
   CANCEL_END = "CANCEL_END",
   RETURN_END = "RETURN_END",
   CANCEL_REJECT = "CANCEL_REJECT",
-  RETURN_REJECT = "RETURN_REJECT",
+  RETURN_REJECT = "RETURN_REJECT"
 }
 
 export const enum SaleTradingProcess {
@@ -118,7 +118,7 @@ export const enum SaleTradingProcess {
   구매요청확인 = "구매 요청 확인",
   상품전달확인 = "상품 전달 확인",
   구매자상품인수중 = "구매자 상품 인수 중",
-  거래완료 = "거래 완료",
+  거래완료 = "거래 완료"
 }
 
 export const enum PurchaseTradingProcess {
@@ -127,19 +127,19 @@ export const enum PurchaseTradingProcess {
   판매자상품전달중 = "판매자 상품 전달중",
   판매자반품거절상품전달중 = "판매자 반품 거절 상품 전달중",
   상품인수확인 = "상품 인수 확인",
-  거래완료 = "거래 완료",
+  거래완료 = "거래 완료"
 }
 
 export const enum PurchaseCancelProcess {
   판매자확인중 = "판매자 확인 중",
   취소완료 = "취소 완료",
-  취소거절 = "취소 거절",
+  취소거절 = "취소 거절"
 }
 
 export const enum SalesCancelProcess {
   취소요청확인 = "취소 요청 확인",
   취소완료 = "취소 완료",
-  취소거절 = "취소 거절",
+  취소거절 = "취소 거절"
 }
 
 export const enum PurchaseReturnProcess {
@@ -147,7 +147,7 @@ export const enum PurchaseReturnProcess {
   반품상품전달확인 = "반품 상품 전달 확인",
   판매자반품상품인수확인중 = "판매자 반품 상품 인수 확인 중",
   반품완료 = "반품 완료",
-  반품거절 = "반품 거절",
+  반품거절 = "반품 거절"
 }
 
 export const enum SalesReturnProcess {
@@ -155,7 +155,7 @@ export const enum SalesReturnProcess {
   구매자반품상품전달중 = "구매자 반품 상품 전달 중",
   반품상품인수확인 = "반품 상품 인수 확인",
   반품완료 = "반품 완료",
-  반품거절 = "반품 거절",
+  반품거절 = "반품 거절"
 }
 
 export interface SaleTradingData {
@@ -266,3 +266,17 @@ export interface KakaoAddressDocument {
   x: string;
   y: string;
 }
+
+export type ProductManageMenuType = "판매" | "구매";
+
+export type ProductManageStatusType =
+  | "거래중"
+  | "거래완료 내역"
+  | "취소/반품 내역"
+  | "취소/반품 거절 내역";
+
+export type ProductManageQueryStatusType =
+  | "TRADING"
+  | "TRADING_END"
+  | "CANCEL_END/RETURN_END"
+  | "CANCEL_REJECT/RETURN_REJECT";
