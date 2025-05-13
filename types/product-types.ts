@@ -267,7 +267,7 @@ export interface KakaoAddressDocument {
   y: string;
 }
 
-export type ProductManageMenuType = "판매" | "구매";
+export type ProductManageMenuType = "sale" | "purchase";
 
 export type ProductManageStatusType =
   | "거래중"

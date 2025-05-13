@@ -40,7 +40,7 @@ export default function useTradeInfiniteQuery(limit: number = 10) {
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       let nextCursor;
-      if (menu === "판매") {
+      if (menu === "sale") {
         nextCursor = (lastPage[lastPage.length - 1] as SaleTradingData)
           ?.saleStartDate;
       } else {

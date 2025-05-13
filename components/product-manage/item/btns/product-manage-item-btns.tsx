@@ -14,19 +14,23 @@ interface IProps {
   productManageStatus: ProductManageStatusType;
 }
 
-const ProductManageBtnsByStatus = ({ productManageStatus, tradingData, menu }: IProps) => {
+const ProductManageBtnsByStatus = ({
+  productManageStatus,
+  tradingData,
+  menu
+}: IProps) => {
   switch (productManageStatus) {
     case "거래중":
       return (
         <ProductMangeItemTradingBtns
-          isSoldMenu={menu === "판매"}
+          isSaleMenu={menu === "sale"}
           tradingData={tradingData}
         />
       );
     case "거래완료 내역":
       return (
         <ProductMangeItemTradingEndBtns
-          isSoldMenu={menu === "판매"}
+          isSaleMenu={menu === "sale"}
           tradingData={tradingData}
         />
       );

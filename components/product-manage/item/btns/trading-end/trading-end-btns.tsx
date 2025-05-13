@@ -4,10 +4,10 @@ import PurchaseTradingEndBtns from "./purchase/purchase-trading-end-btns";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
-  isSoldMenu: boolean;
+  isSaleMenu: boolean;
 }
-export default function TradingEndBtns({ tradingData, isSoldMenu }: IProps) {
-  return isSoldMenu ? (
+export default function TradingEndBtns({ tradingData, isSaleMenu }: IProps) {
+  return isSaleMenu ? (
     <SaleTradingEndBtns tradingData={tradingData} />
   ) : (
     <PurchaseTradingEndBtns tradingData={tradingData} />

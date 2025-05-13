@@ -116,9 +116,9 @@ export const productQueryKey = createQueryKeys("product", {
     menu: ProductManageMenuType;
     limit?: number;
   }) => ({
-    queryKey: [menu === "판매" ? "sale" : "purchase", status, search] as const,
+    queryKey: [menu, status, search] as const,
     queryFn: async ({ pageParam }) => {
-      if (menu === "판매") {
+      if (menu === "sale") {
         const response = await getSalesTrading({
           status,
           cursor: pageParam,
