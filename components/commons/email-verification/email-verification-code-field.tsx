@@ -1,5 +1,5 @@
 import VerificationCodeInput from "./verification-code-input";
-import EmailVerificationBtn from "../../signup/basic-info-step/signup-email-verification-Btn";
+import EmailVerificationBtn from "./email-verification-Btn";
 import useVerificationCodeFocus from "@/hooks/commons/email-verification/useFocusVerificationCode";
 import useEmailVerificationStatus from "@/hooks/commons/email-verification/useEmailVerificationStatus";
 import EmailVerificationError from "./email-verification-error";
@@ -28,17 +28,17 @@ export default function EmailVerificationCodeField({
 
         <VerificationCodeInput verificationCodeRef={verificationCodeRef} />
 
-        <EmailVerificationBtn />
+        <EmailVerificationBtn emailVerificationType={emailVerificationType} />
       </div>
 
       <EmailVerificationError />
 
       <div className="text-sm text-center mt-2">
-        <ChangeVerificationEmailBtn />
         <ResendVerificationCodeBtn
           emailVerificationType={emailVerificationType}
           verificationCodeRef={verificationCodeRef}
         />
+        <ChangeVerificationEmailBtn />
       </div>
     </div>
   );

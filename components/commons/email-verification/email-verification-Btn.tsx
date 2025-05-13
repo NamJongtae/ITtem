@@ -1,10 +1,17 @@
 import useEmailVerificationBtnDisabled from "@/hooks/commons/email-verification/useEmailVerificationBtnDisabled";
 import useEmailVerificationHandler from "@/hooks/commons/email-verification/useEmailVerificationHandler";
+import { EmailVerificationType } from "@/types/auth-types";
 
-export default function SignupEmailVerificationBtn() {
+interface IProps {
+  emailVerificationType: EmailVerificationType;
+}
+
+export default function EmailVerificationBtn({
+  emailVerificationType
+}: IProps) {
   const { isDisabled } = useEmailVerificationBtnDisabled();
   const { handleClickVerificationEmail, verificationEmailLoading } =
-    useEmailVerificationHandler("resetPw");
+    useEmailVerificationHandler(emailVerificationType);
 
   return (
     <button

@@ -1,5 +1,5 @@
 import SignupEmailError from "../../signup/basic-info-step/signup-email-error";
-import SignupSendVerificationEmailBtn from "./email-verification-send-btn";
+import EmailVerificationSendBtn from "./email-verification-send-btn";
 import CoreInputField from "@/components/commons/core-input-field/core-input-field";
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import useEmailVerificationStatus from "@/hooks/commons/email-verification/useEmailVerificationStatus";
@@ -36,7 +36,7 @@ export default function EmailVerificationField({
         />
 
         {!isSendToVerificationEmail && (
-          <SignupSendVerificationEmailBtn
+          <EmailVerificationSendBtn
             emailVerificationType={emailVerificationType}
           />
         )}
