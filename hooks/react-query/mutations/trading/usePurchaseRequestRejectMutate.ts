@@ -30,7 +30,7 @@ export default function usePurchaseRequestRejectMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

@@ -24,7 +24,7 @@ export default function usePurchaseRequestConfirmationMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

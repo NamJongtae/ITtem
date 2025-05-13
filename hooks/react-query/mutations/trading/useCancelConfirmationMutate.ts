@@ -26,7 +26,7 @@ export default function useCancelConfirmationMutate() {
         toast.warn(error.response?.data.message);
       }
     }, onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

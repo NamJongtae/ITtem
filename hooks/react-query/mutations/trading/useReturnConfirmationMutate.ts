@@ -24,7 +24,7 @@ export default function useReturnConfirmationMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

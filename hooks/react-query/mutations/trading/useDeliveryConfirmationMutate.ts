@@ -27,7 +27,7 @@ export default function useDeliveryConfirmationMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

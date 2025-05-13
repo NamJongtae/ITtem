@@ -33,7 +33,7 @@ export default function useCancelRejectMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

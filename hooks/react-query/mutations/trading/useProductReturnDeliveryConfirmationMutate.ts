@@ -28,7 +28,7 @@ export default function useProductReturnDeliveryConfirmationMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

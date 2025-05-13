@@ -25,7 +25,7 @@ export default function useProductReturnRequestWithdrawalMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

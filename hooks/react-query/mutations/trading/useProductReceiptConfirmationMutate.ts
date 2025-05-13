@@ -27,7 +27,7 @@ export default function useProductReceiptConfirmationMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

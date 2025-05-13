@@ -30,7 +30,7 @@ export default function useReturnRejectMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

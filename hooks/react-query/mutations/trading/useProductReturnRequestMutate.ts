@@ -33,7 +33,7 @@ export default function useProductReturnRequestMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 

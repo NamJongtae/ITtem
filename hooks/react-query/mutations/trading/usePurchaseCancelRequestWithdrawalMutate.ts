@@ -25,7 +25,7 @@ export default function usePurchaseCancelRequestWithdrawalMutate() {
       }
     },
     onSettled: () => {
-      actions.startLoading();
+      actions.stopLoading();
     }
   });
 
