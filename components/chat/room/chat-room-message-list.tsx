@@ -1,12 +1,12 @@
 import { ChatMessageData } from "@/types/chat-types";
 import ChatRoomMyMessage from "./chat-room-my-message";
 import ChatRoomUserMessage from "./chat-room-user-message";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import useAuthStore from "@/store/auth-store";
 
 interface IProps {
   messages: ChatMessageData[];
-  chatListRef: MutableRefObject<HTMLUListElement | null>;
+  chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 export default function ChatRoomMessageList({ messages, chatListRef }: IProps) {
@@ -15,7 +15,7 @@ export default function ChatRoomMessageList({ messages, chatListRef }: IProps) {
 
   return (
     <ul
-      className='flex flex-col gap-5 overflow-y-auto w-full max-h-[calc(100vh-288px)] p-5'
+      className="flex flex-col gap-5 overflow-y-auto w-full max-h-[calc(100vh-288px)] p-5"
       ref={chatListRef}
     >
       {Object.entries(messages).map(([id, message]) =>

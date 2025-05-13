@@ -1,12 +1,12 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import CloseIcon from "@/public/icons/x-icon.svg";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 
 interface IProps {
   handleClickCloseBtn: () => void;
-  starRef: MutableRefObject<HTMLDivElement | null>;
-  textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  starRef: RefObject<HTMLDivElement | null>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>;
+  submitBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 const ReviewUploadModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
@@ -23,7 +23,7 @@ const ReviewUploadModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
             previousTarget: submitBtnRef.current?.disabled
               ? textareaRef.current
               : submitBtnRef.current,
-            nextTarget: starRef.current,
+            nextTarget: starRef.current
           });
         }}
       >

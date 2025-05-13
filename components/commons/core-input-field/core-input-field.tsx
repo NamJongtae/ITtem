@@ -1,6 +1,6 @@
 import useCoreInputField from "@/hooks/commons/core-Input-field/useCoreInputField";
 import XIcon from "@/public/icons/x-icon.svg";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { FieldValues, Validate, ValidationRule } from "react-hook-form";
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
   inputOnChange?: React.ChangeEventHandler<HTMLInputElement>;
   inputOnFocus?: React.FocusEventHandler<HTMLInputElement>;
   inputOnBlur?: React.FocusEventHandler<HTMLInputElement>;
-  inputRef?: MutableRefObject<HTMLInputElement | null>;
+  inputRef?: RefObject<HTMLInputElement | null>;
   inputRequired?: string | ValidationRule<boolean> | undefined;
   inputPattern?: ValidationRule<RegExp> | undefined;
   inputValidate?:

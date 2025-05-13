@@ -1,4 +1,4 @@
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 import usePasswordValidation from "@/hooks/change-password-modal/usePasswordValidation";
 import CoreInputField from "@/components/commons/core-input-field/core-input-field";
 
@@ -20,7 +20,7 @@ const ChangePasswordPasswordField = forwardRef<HTMLInputElement | null>(
           inputRequired={"비밀번호를 입력하세요."}
           inputPattern={{
             value: PASSWORD_REGEX,
-            message: PASSWORD_REGEX_ERRORMSG,
+            message: PASSWORD_REGEX_ERRORMSG
           }}
           inputValidate={validatePassword}
           labelHidden={false}
@@ -28,7 +28,7 @@ const ChangePasswordPasswordField = forwardRef<HTMLInputElement | null>(
           inputClassName={
             "border-b pb-3 w-full text-sm mt-4 focus:outline-none"
           }
-          inputRef={ref as MutableRefObject<HTMLInputElement | null>}
+          inputRef={ref as RefObject<HTMLInputElement | null>}
         />
       </div>
     );

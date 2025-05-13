@@ -3,15 +3,14 @@ import Image from "next/image";
 
 interface IProps {
   isModal?: boolean;
-  googleLoginBtnRef: React.MutableRefObject<HTMLButtonElement | null>;
+  googleLoginBtnRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 export default function SigninSocialLoginBtns({
   isModal,
-  googleLoginBtnRef,
+  googleLoginBtnRef
 }: IProps) {
-  const { googleLogin, kakaoLogin } =
-  useSocialLogin();
+  const { googleLogin, kakaoLogin } = useSocialLogin();
 
   return (
     <div className="relative flex flex-col gap-3">

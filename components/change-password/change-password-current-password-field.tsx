@@ -1,4 +1,4 @@
-import { forwardRef, MutableRefObject } from "react";
+import { forwardRef, RefObject } from "react";
 import CoreInputField from "../commons/core-input-field/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
@@ -6,7 +6,7 @@ import useCurrentPwValidation from "@/hooks/change-password-modal/useCurrentPwVa
 
 interface IProps {
   isModal?: boolean;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 const ChagePasswordCurrentPasswordField = forwardRef<
   HTMLInputElement | null,
@@ -27,19 +27,19 @@ const ChagePasswordCurrentPasswordField = forwardRef<
         inputRequired={"현재 비밀번호를 입력하세요."}
         inputPattern={{
           value: PASSWORD_REGEX,
-          message: PASSWORD_REGEX_ERRORMSG,
+          message: PASSWORD_REGEX_ERRORMSG
         }}
         inputValidate={(value) => validatePassword(value)}
         labelHidden={false}
         labelClassName="font-semibold"
         inputClassName={"border-b pb-3 w-full text-sm mt-4 focus:outline-none"}
-        inputRef={ref as MutableRefObject<HTMLInputElement | null>}
+        inputRef={ref as RefObject<HTMLInputElement | null>}
         inputKeydown={
           isModal
             ? (e) =>
                 optimizationTabFocus({
                   event: e,
-                  previousTarget: closeBtnRef.current,
+                  previousTarget: closeBtnRef.current
                 })
             : undefined
         }

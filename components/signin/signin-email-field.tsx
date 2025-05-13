@@ -1,12 +1,12 @@
 import { EMAIL_REGEX, EMAIL_REGEX_ERRORMSG } from "@/constants/constant";
 import CoreInputField from "../commons/core-input-field/core-input-field";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 
 interface IProps {
   isModal?: boolean;
-  emailRef: MutableRefObject<HTMLInputElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  emailRef: RefObject<HTMLInputElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 export default function SigninEmailField({
   isModal,

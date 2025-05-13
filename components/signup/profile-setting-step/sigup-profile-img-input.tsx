@@ -1,13 +1,13 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface IProps {
   handleChangeImg: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  imgInputRef: MutableRefObject<HTMLInputElement | null>;
+  imgInputRef: RefObject<HTMLInputElement | null>;
 }
 export default function SignupProfileImgInput({
   handleChangeImg,
-  imgInputRef,
+  imgInputRef
 }: IProps) {
   const { register } = useFormContext();
 
@@ -20,7 +20,7 @@ export default function SignupProfileImgInput({
         id="profileImg"
         {...(register("profileImg"),
         {
-          onChange: handleChangeImg,
+          onChange: handleChangeImg
         })}
         ref={(e) => {
           imgInputRef.current = e;

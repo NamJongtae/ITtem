@@ -3,18 +3,18 @@ import { NICKNAME_REGEX, NICKNAME_REGEX_ERRORMSG } from "@/constants/constant";
 import { useFocusing } from "@/hooks/commons/useFocusing";
 import useProfileEditNicknameField from "@/hooks/profile-edit/useProfileEditNicknameField";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 interface IProps {
   isModal?: boolean;
-  nicknameRef: MutableRefObject<HTMLInputElement | null>;
-  profileImgBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  nicknameRef: RefObject<HTMLInputElement | null>;
+  profileImgBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 export default function ProfileEditNicknameField({
   isModal,
   nicknameRef,
-  profileImgBtnRef,
+  profileImgBtnRef
 }: IProps) {
   useFocusing(nicknameRef);
   const { validateNicknameOnBlur } = useProfileEditNicknameField();
@@ -33,7 +33,7 @@ export default function ProfileEditNicknameField({
         inputOnBlur={validateNicknameOnBlur}
         inputPattern={{
           value: NICKNAME_REGEX,
-          message: NICKNAME_REGEX_ERRORMSG,
+          message: NICKNAME_REGEX_ERRORMSG
         }}
         inputRef={nicknameRef}
         inputKeydown={
@@ -41,7 +41,7 @@ export default function ProfileEditNicknameField({
             ? (e) =>
                 optimizationTabFocus({
                   event: e,
-                  previousTarget: profileImgBtnRef.current,
+                  previousTarget: profileImgBtnRef.current
                 })
             : undefined
         }

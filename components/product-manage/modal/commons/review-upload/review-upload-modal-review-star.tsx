@@ -1,7 +1,7 @@
 import useReviewModalStar from "@/hooks/product-manage/useReviewModalStar";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
 import dynamic from "next/dynamic";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 import { Controller } from "react-hook-form";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
@@ -9,13 +9,13 @@ const ReactStars = dynamic(() => import("react-stars"), {
 });
 
 interface IProps {
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 const ReviewUploadModalReviewStar = forwardRef<HTMLDivElement | null, IProps>(
   ({ closeBtnRef }, ref) => {
     const { control, score } = useReviewModalStar({
-      starRef: ref as MutableRefObject<HTMLDivElement | null>
+      starRef: ref as RefObject<HTMLDivElement | null>
     });
 
     return (

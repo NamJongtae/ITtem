@@ -1,23 +1,20 @@
-import { useRouter } from "next/navigation";
 import XIcon from "@/public/icons/x-icon.svg";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
+import useRouterBackToCloseModal from "@/hooks/commons/useRouterBackToCloseModal";
 
 interface IProps {
-  emailRef: MutableRefObject<HTMLInputElement | null>;
-  googleLoginBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  emailRef: RefObject<HTMLInputElement | null>;
+  googleLoginBtnRef: RefObject<HTMLButtonElement | null>;
 }
 const SigninModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
   ({ emailRef, googleLoginBtnRef }, ref) => {
-    const router = useRouter();
-    const handleClickClose = () => {
-      router.back();
-    };
+    const { closeModalHandler } = useRouterBackToCloseModal();
 
     return (
       <button
         type="button"
-        onClick={handleClickClose}
+        onClick={closeModalHandler}
         className="absolute top-5 right-5"
         ref={ref}
         onKeyDown={(e) =>

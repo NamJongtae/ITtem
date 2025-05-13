@@ -1,9 +1,9 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { useFocusing } from "../commons/useFocusing";
 import { useFormContext } from "react-hook-form";
 
 interface IParams {
-  starRef: MutableRefObject<HTMLDivElement | null>;
+  starRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function useReviewModalStar({ starRef }: IParams) {

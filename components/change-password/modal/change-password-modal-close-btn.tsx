@@ -1,16 +1,19 @@
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 import CloseIcon from "@/public/icons/x-icon.svg";
 
 interface IProps {
   isModal?: boolean;
   handleClickClose: () => void;
-  currentPwRef: MutableRefObject<HTMLInputElement | null>;
-  pwCheckRef: MutableRefObject<HTMLInputElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  currentPwRef: RefObject<HTMLInputElement | null>;
+  pwCheckRef: RefObject<HTMLInputElement | null>;
+  submitBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
-const ChangePasswordModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>(
+const ChangePasswordModalCloseBtn = forwardRef<
+  HTMLButtonElement | null,
+  IProps
+>(
   (
     { isModal, handleClickClose, currentPwRef, pwCheckRef, submitBtnRef },
     ref
@@ -29,7 +32,7 @@ const ChangePasswordModalCloseBtn = forwardRef<HTMLButtonElement | null, IProps>
                   previousTarget: submitBtnRef.current?.disabled
                     ? pwCheckRef.current
                     : submitBtnRef.current,
-                  nextTarget: currentPwRef.current,
+                  nextTarget: currentPwRef.current
                 })
             : undefined
         }

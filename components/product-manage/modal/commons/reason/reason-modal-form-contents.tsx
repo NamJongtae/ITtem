@@ -1,4 +1,4 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { isMobile } from "react-device-detect";
 import ReasonModalReasonSeletor from "./reason-modal-reason-seletor";
 import ReasonModalReasonTextarea from "./reason-modal-reason-textarea";
@@ -9,10 +9,10 @@ import { escKeyClose } from "@/lib/optimizationKeyboard";
 interface IProps {
   name: string;
   title: string;
-  selectorRef: MutableRefObject<HTMLSelectElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  selectorRef: RefObject<HTMLSelectElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>;
+  submitBtnRef: RefObject<HTMLButtonElement | null>;
   submitBtnText: string;
   options: string[];
   handleClickCloseBtn: () => void;
@@ -27,7 +27,7 @@ export default function ReasonModalFormContents({
   submitBtnRef,
   submitBtnText,
   options,
-  handleClickCloseBtn,
+  handleClickCloseBtn
 }: IProps) {
   return (
     <div
@@ -55,7 +55,11 @@ export default function ReasonModalFormContents({
 
       <ReasonModalReasonTextarea name={name} title={title} />
 
-      <ReasonModalSubmitBtn name={name} submitBtnText={submitBtnText} ref={submitBtnRef} />
+      <ReasonModalSubmitBtn
+        name={name}
+        submitBtnText={submitBtnText}
+        ref={submitBtnRef}
+      />
 
       <ReasonModalCloseBtn
         handleClickCloseBtn={handleClickCloseBtn}

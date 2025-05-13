@@ -1,11 +1,11 @@
 import useCheckDisabledBtn from "@/hooks/change-password-modal/useCheckDisabledBtn";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 
 interface IProps {
   isModal?: boolean;
-  pwCheckRef: MutableRefObject<HTMLInputElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  pwCheckRef: RefObject<HTMLInputElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
 }
 
 const ChangePasswordSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
@@ -24,7 +24,7 @@ const ChangePasswordSubmitBtn = forwardRef<HTMLButtonElement | null, IProps>(
                 optimizationTabFocus({
                   event: e,
                   previousTarget: pwCheckRef.current,
-                  nextTarget: closeBtnRef.current,
+                  nextTarget: closeBtnRef.current
                 })
             : undefined
         }

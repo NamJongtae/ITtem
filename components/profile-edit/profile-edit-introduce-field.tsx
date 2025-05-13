@@ -1,8 +1,8 @@
 import useIntroduceField from "@/hooks/change-profile-modal/useIntroduceField";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 interface IProps {
-  introduceRef: MutableRefObject<HTMLTextAreaElement | null>;
+  introduceRef: RefObject<HTMLTextAreaElement | null>;
 }
 
 export default function ProfileEditIntroductField({ introduceRef }: IProps) {

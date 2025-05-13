@@ -1,7 +1,7 @@
 import CoreInputField from "../commons/core-input-field/core-input-field";
 import { PASSWORD_REGEX, PASSWORD_REGEX_ERRORMSG } from "@/constants/constant";
 import usePasswordChkValidation from "@/hooks/change-password-modal/usePasswordChkValidation";
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 
 const ChangePasswordPasswordCheckField = forwardRef<HTMLInputElement | null>(
   (props, ref) => {
@@ -20,7 +20,7 @@ const ChangePasswordPasswordCheckField = forwardRef<HTMLInputElement | null>(
           inputRequired={"비밀번호 확인을 입력하세요."}
           inputPattern={{
             value: PASSWORD_REGEX,
-            message: PASSWORD_REGEX_ERRORMSG,
+            message: PASSWORD_REGEX_ERRORMSG
           }}
           inputValidate={(value) =>
             value === passwordValue ? true : "비밀번호가 일치하지 않습니다."
@@ -30,7 +30,7 @@ const ChangePasswordPasswordCheckField = forwardRef<HTMLInputElement | null>(
           inputClassName={
             "border-b pb-3 w-full text-sm mt-4 focus:outline-none"
           }
-          inputRef={ref as MutableRefObject<HTMLInputElement | null>}
+          inputRef={ref as RefObject<HTMLInputElement | null>}
         />
       </div>
     );

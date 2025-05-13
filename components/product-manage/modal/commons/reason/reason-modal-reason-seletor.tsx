@@ -1,13 +1,13 @@
 import useReasonModalSeletor from "@/hooks/product-manage/useReasonModalSelector";
 import { optimizationTabFocus } from "@/lib/optimizationKeyboard";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 interface IProps {
   name: string;
-  selectorRef: MutableRefObject<HTMLSelectElement | null>;
-  textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
-  closeBtnRef: MutableRefObject<HTMLButtonElement | null>;
-  submitBtnRef: MutableRefObject<HTMLButtonElement | null>;
+  selectorRef: RefObject<HTMLSelectElement | null>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>;
+  closeBtnRef: RefObject<HTMLButtonElement | null>;
+  submitBtnRef: RefObject<HTMLButtonElement | null>;
   options: string[];
 }
 
@@ -17,7 +17,7 @@ export default function ReasonModalReasonSeletor({
   closeBtnRef,
   textareaRef,
   submitBtnRef,
-  options,
+  options
 }: IProps) {
   const { ref, rest } = useReasonModalSeletor({ name, selectorRef });
 
@@ -37,7 +37,7 @@ export default function ReasonModalReasonSeletor({
             ? submitBtnRef.current?.disabled
               ? closeBtnRef.current
               : submitBtnRef.current
-            : textareaRef.current,
+            : textareaRef.current
         })
       }
     >

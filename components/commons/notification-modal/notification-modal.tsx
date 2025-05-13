@@ -1,4 +1,4 @@
-import { MutableRefObject, forwardRef } from "react";
+import { RefObject, forwardRef } from "react";
 import NotificationModalList from "./notification-modal-list";
 import NotificationModalHeader from "./notification-modal-header";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
@@ -14,7 +14,7 @@ const NotificationModal = forwardRef<HTMLDivElement, IProps>(
     useNotificaitonModal({
       isOpenModal,
       toggleNotification,
-      notificationModalRef: ref as MutableRefObject<HTMLDivElement | null>,
+      notificationModalRef: ref as RefObject<HTMLDivElement | null>
     });
 
     return (

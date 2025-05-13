@@ -1,9 +1,9 @@
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 import { useFocusing } from "../useFocusing";
 import { useModalMobileBackBtn } from "../useModalMobileBackBtn";
 
 interface IParams {
-  notificationModalRef: MutableRefObject<HTMLDivElement | null>;
+  notificationModalRef: RefObject<HTMLDivElement | null>;
   isOpenModal: boolean;
   toggleNotification: () => void;
 }
@@ -11,7 +11,7 @@ interface IParams {
 export default function useNotificaitonModal({
   notificationModalRef,
   isOpenModal,
-  toggleNotification,
+  toggleNotification
 }: IParams) {
   useFocusing(notificationModalRef);
   useModalMobileBackBtn({ isOpenModal, closeModal: toggleNotification });
