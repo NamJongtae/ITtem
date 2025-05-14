@@ -45,7 +45,7 @@ export default function NotificationModalList() {
       {data && (
         <NotificationModalBtns
           messageData={data}
-          endKey={data[data.length - 1].id}
+          lastMessageKey={data[data.length - 1].id}
         />
       )}
 

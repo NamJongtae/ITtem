@@ -4,16 +4,16 @@ import { NotificationMessageData } from "@/types/notification-types";
 
 interface IProps {
   messageData: NotificationMessageData[];
-  endKey: string;
+  lastMessageKey: string;
 }
 
-export default function NotificationModalBtns({ messageData, endKey }: IProps) {
+export default function NotificationModalBtns({ messageData, lastMessageKey }: IProps) {
   return (
     <div className="flex gap-2 justify-end mt-2 mr-2">
-      <NotificationModalReadAllBtn messageData={messageData} endKey={endKey} />
+      <NotificationModalReadAllBtn messageData={messageData} lastMessageKey={lastMessageKey} />
       <NotificationModalDeleteAllBtn
         messageData={messageData}
-        endKey={endKey}
+        lastMessageKey={lastMessageKey}
       />
     </div>
   );

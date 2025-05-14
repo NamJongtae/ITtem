@@ -1,28 +1,19 @@
-import useDeleteAllNotificationMessagesMutate from "@/hooks/react-query/mutations/notification/useDeleteAllNotificationMessagesMutate";
+import useDeleteAllNotificationMessage from "@/hooks/commons/notification-modal/useDeleteAllNotificationMessage";
 import { NotificationMessageData } from "@/types/notification-types";
-import { toast } from "react-toastify";
 
 interface IProps {
   messageData: NotificationMessageData[] | undefined;
-  endKey: string;
+  lastMessageKey: string;
 }
 
 export default function NotificationModalDeleteAllBtn({
   messageData,
-  endKey,
+  lastMessageKey
 }: IProps) {
-  const { mutate } = useDeleteAllNotificationMessagesMutate();
-
-  const onClickDeleteAll = () => {
-    if (!messageData || messageData.length === 0) {
-      toast.warn("삭제할 알림 메세지가 없어요.");
-      return;
-    }
-    const isDelete = confirm("정말 모든 메세지를 삭제하겠어요?");
-    if (isDelete) {
-      mutate(endKey);
-    }
-  };
+  const { onClickDeleteAll } = useDeleteAllNotificationMessage({
+    messageData,
+    lastMessageKey
+  });
 
   return (
     <button

@@ -1,16 +1,15 @@
-import useReadNotificationMessageMutate from "@/hooks/react-query/mutations/notification/useReadNotificationMessageMutate";
+import useReadNotificationMessage from "@/hooks/commons/notification-modal/useReadNotificationMessage";
 
 interface IProps {
   messageId: string;
   isRead: boolean;
 }
 
-export default function NotificationModalReadBtn({ messageId, isRead }: IProps) {
-  const { mutate } = useReadNotificationMessageMutate();
-
-  const onClickRead = () => {
-    mutate(messageId);
-  };
+export default function NotificationModalReadBtn({
+  messageId,
+  isRead
+}: IProps) {
+  const { onClickRead } = useReadNotificationMessage({ messageId });
 
   return (
     !isRead && (
