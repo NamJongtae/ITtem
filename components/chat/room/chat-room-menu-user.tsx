@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/auth-types";
-import ChatRoomFollowBtn from "./chat-room-follow-btn";
-import Image from "next/image";
 import useChatOpponentProfile from "@/hooks/chat-room/useChatOpponentProfile";
+import ChatRoomMenuMyProfile from "./chat-room-menu-my-profile";
+import ChatRoomMenuOtherUserProfile from "./chat-room-menu-other-user-profile";
 
 interface IProps {
   participantIDs: string[];
@@ -20,33 +20,14 @@ export default function ChatRoomMenuUser({
     <ul className="flex flex-col p-3 gap-3 text-sm">
       {participantIDs.map((id) => (
         <li key={id} className="flex gap-3 items-center justify-between w-full">
-          <div className="flex gap-3 items-center">
-            <Image
-              className="rounded-xl w-[30px] h-[30px]"
-              src={
-                (isMe(id)
-                  ? myProfileData?.profileImg
-                  : otherUserProfileData?.profileImg) || "/icons/user-icon.svg"
-              }
-              alt={
-                (isMe(id)
-                  ? myProfileData?.nickname
-                  : otherUserProfileData?.nickname) || ""
-              }
-              width={30}
-              height={30}
-            />
-            <span className="font-medium">
-              {isMe(id)
-                ? myProfileData?.nickname
-                : otherUserProfileData?.nickname}
-            </span>
-          </div>
-
-          {!isMe(id) && (
-            <ChatRoomFollowBtn
+          {isMe(id) ? (
+            <ChatRoomMenuMyProfile
+              myProfileData={myProfileData}
               otherUserId={otherUserId}
-              myFollowings={myProfileData?.followings}
+            />
+          ) : (
+            <ChatRoomMenuOtherUserProfile
+              otherUserProfileData={otherUserProfileData}
             />
           )}
         </li>
