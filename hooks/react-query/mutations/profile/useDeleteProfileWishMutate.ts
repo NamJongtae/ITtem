@@ -5,7 +5,7 @@ import { ProductData } from "@/types/product-types";
 import {
   InfiniteData,
   useMutation,
-  useQueryClient,
+  useQueryClient
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -14,6 +14,7 @@ export default function useDeleteProfileWishMutate() {
   const queryClient = useQueryClient();
   const wishQueryKey = queryKeys.profile.my._ctx.wish._def;
   const myProfileQuerKey = queryKeys.profile.my.queryKey;
+  const productDetailQueryKey = queryKeys.product.detail._def;
 
   const { mutate: deleteWishMutate } = useMutation({
     mutationFn: (wishProductIds: string[]) => deleteProfileWish(wishProductIds),
@@ -35,8 +36,8 @@ export default function useDeleteProfileWishMutate() {
         wishProductIds: [
           ...(previousMyProfile?.wishProductIds.filter(
             (productId: string) => !wishProductIds.includes(productId)
-          ) || []),
-        ],
+          ) || [])
+        ]
       };
 
       const newWish = previousWish?.pages.map(
@@ -51,11 +52,16 @@ export default function useDeleteProfileWishMutate() {
       queryClient.setQueryData(myProfileQuerKey, newMyProfile);
       queryClient.setQueryData(wishQueryKey, {
         ...previousWish,
-        pages: newWish,
+        pages: newWish
       });
 
       toast.success("찜 목록 삭제에 성공했어요.");
       return { previousMyProfile, previousWish };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: productDetailQueryKey
+      });
     },
     onError: (error, data, ctx) => {
       queryClient.setQueryData(myProfileQuerKey, ctx?.previousMyProfile);
@@ -63,7 +69,7 @@ export default function useDeleteProfileWishMutate() {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
       }
-    },
+    }
   });
 
   return { deleteWishMutate };
