@@ -54,12 +54,11 @@ export default function ProductList({
         ) : (
           <>
             {data?.map((item) => (
-              <Fragment key={item._id}>
-                <ProductListItem
-                  data={item}
-                  category={productCategory}
-                />
-              </Fragment>
+              <ProductListItem
+                key={item._id}
+                data={item}
+                category={productCategory}
+              />
             ))}
             {isFetchingNextPage && <ProductListSkeletonUI listCount={12} />}
             {<InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />}
