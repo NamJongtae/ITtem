@@ -12,13 +12,14 @@ interface IProps {
 export default function ChatRoomMessageList({ messages, chatListRef }: IProps) {
   const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
+  const messageData = Object.entries(messages);
 
   return (
     <ul
       className="flex flex-col gap-5 overflow-y-auto w-full max-h-[calc(100vh-288px)] p-5"
       ref={chatListRef}
     >
-      {Object.entries(messages).map(([id, message]) =>
+      {messageData.map(([id, message]) =>
         message.senderId === myUid ? (
           <ChatRoomMyMessage key={id} message={{ ...message, id }} />
         ) : (

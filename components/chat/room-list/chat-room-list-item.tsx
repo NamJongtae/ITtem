@@ -13,20 +13,17 @@ export default function ChatRoomListItem({ data }: IProps) {
   const user = useAuthStore((state) => state.user);
   const myUid = user?.uid || "";
   const { profileData } = useProfileQuery(data.lastMessage?.senderId);
+  const messageCount = data.newMessageCount[myUid];
+  const messageCountStyle =
+    "before:absolute before:rounded-full before:bg-red-400 before:right-0 before:bottom-0 before:px-1 before:text-[11px] before:inline-flex before:items-center before:justify-center before:content-[attr(data-count)] before:text-white";
 
   return (
     <li>
       <Link
         href={`/chat/${data.id}`}
-        data-count={
-          data.newMessageCount[myUid] >= 999
-            ? "999+"
-            : data.newMessageCount[myUid]
-        }
+        data-count={messageCount >= 999 ? "999+" : messageCount}
         className={`relative w-full text-left flex items-center gap-3 ${
-          data.newMessageCount[myUid] > 0
-            ? "before:absolute before:rounded-full before:bg-red-400 before:right-0 before:bottom-0 before:px-1 before:text-[11px] before:inline-flex before:items-center before:justify-center before:content-[attr(data-count)] before:text-white"
-            : ""
+          messageCount > 0 ? messageCountStyle : ""
         }`}
       >
         {profileData ? (
