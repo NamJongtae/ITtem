@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -49,12 +49,12 @@ export async function POST(req: NextRequest) {
       _id: cursor
         ? {
             $in: objectIdArray,
-            $gt: new mongoose.Types.ObjectId(cursor as string),
+            $gt: new mongoose.Types.ObjectId(cursor as string)
           }
         : {
-            $in: objectIdArray,
+            $in: objectIdArray
           },
-      block: false,
+      block: false
     };
 
     const products = await Product.find(query)
@@ -64,13 +64,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       message: "찜 목록 조회에 성공했어요.",
-      products,
+      products
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       {
-        message: "찜 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "찜 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
@@ -86,7 +86,7 @@ export async function DELETE(req: NextRequest) {
     if (!isValidAuth.isValid) {
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -105,20 +105,28 @@ export async function DELETE(req: NextRequest) {
       (id: string) => new mongoose.Types.ObjectId(id)
     );
 
-    const deleteResult = await User.findOneAndUpdate(
+    const profileUpadteResult = await User.findOneAndUpdate(
       {
-        _id: new mongoose.Types.ObjectId(myUid),
+        _id: new mongoose.Types.ObjectId(myUid)
       },
       {
-        $pull: { wishProductIds: { $in: objectIdArray } },
+        $pull: { wishProductIds: { $in: objectIdArray } }
       },
       { returnDocument: "after" }
     );
 
-    if (!deleteResult) {
+    const productUpdateResults = await Product.updateMany(
+      { _id: { $in: objectIdArray } },
+      {
+        $inc: { wishCount: -1 },
+        $pull: { wishUserIds: myUid }
+      }
+    );
+
+    if (!profileUpadteResult || productUpdateResults.modifiedCount === 0) {
       return NextResponse.json(
         {
-          message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
         },
         { status: 500 }
       );
@@ -126,13 +134,13 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({
       message: "찜 목록 삭제에 성공했어요.",
-      wishProductIds: deleteResult,
+      wishProductIds: profileUpadteResult.wishProductIds
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       {
-        message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
