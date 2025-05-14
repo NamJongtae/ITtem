@@ -54,13 +54,13 @@ export default function ProfileDetailWishItem({
       <div className="absolute top-0 right-0 inline-flex items-center">
         <label
           className="relative flex cursor-pointer items-center rounded-full p-3"
-          htmlFor="wish"
+          htmlFor="wish-delete-checkbox"
           data-wishproduct-ripple-dark="true"
         >
           <input
             type="checkbox"
             className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all checked:border-red-400 checked:bg-red-400"
-            id="wish"
+            id="wish-delete-checkbox"
             onChange={() => onClickCheckBox(wishProduct._id)}
             checked={selectedWish.includes(wishProduct._id)}
           />
