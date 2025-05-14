@@ -1,7 +1,7 @@
 import useProfileReviewsInfiniteQuery from "@/hooks/react-query/queries/profile/useProfileReviewsInfiniteQuery";
 import Empty from "@/components/commons/empty";
 import { isAxiosError } from "axios";
-import ProfileDetailItem from "./profile-detail-item";
+import ProfileDetailReviewItem from "./profile-detail-review-item";
 import ProfileDetailSkeletonUI from "./profile-detail-review-skeletonUI";
 import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/components/commons/InfiniteScrollTarget";
@@ -38,6 +38,7 @@ export default function ProfileDetailReviewList({ uid }: IProps) {
       />
     );
   }
+
   return (
     <>
       <ul className="flex flex-col gap-5 mt-12">
@@ -48,7 +49,7 @@ export default function ProfileDetailReviewList({ uid }: IProps) {
         ) : (
           <>
             {data?.map((review) => (
-              <ProfileDetailItem key={review._id} review={review} />
+              <ProfileDetailReviewItem key={review._id} review={review} />
             ))}
             {isFetchingNextPage && <ProfileDetailSkeletonUI />}
             <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />

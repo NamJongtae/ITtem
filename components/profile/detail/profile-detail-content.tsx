@@ -10,18 +10,18 @@ interface IProps {
   profileMenu: ProfileMenu;
   userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
-  my?: boolean;
+  isMyProfile?: boolean;
 }
 
 export default function ProfileDetailContent({
   profileMenu,
   userProfileData,
   myProfileData,
-  my,
+  isMyProfile,
 }: IProps) {
   switch (profileMenu) {
     case "판매상품": {
-      return <ProfileDetailProduct userProfileData={userProfileData} my={my} />;
+      return <ProfileDetailProduct userProfileData={userProfileData} isMyProfile={isMyProfile} />;
     }
     case "거래후기": {
       return (

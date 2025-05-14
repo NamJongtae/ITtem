@@ -54,7 +54,7 @@ export default async function MyProfileContainer() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfilePage my={true} />
+      <ProfilePage isMyProfile={true} />
     </HydrationBoundary>
   );
 }

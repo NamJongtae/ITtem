@@ -12,10 +12,10 @@ import useProfilePageData from "@/hooks/profile/useProfilePageData";
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 
 interface IProps {
-  my?: boolean;
+  isMyProfile?: boolean;
 }
 
-export default function ProfilePage({ my }: IProps) {
+export default function ProfilePage({ isMyProfile }: IProps) {
   const { profileData, myProfileData, isLoading, isError } =
     useProfilePageData();
   const { profileMenu, onClickMenu } = useProfileMenu();
@@ -23,8 +23,8 @@ export default function ProfilePage({ my }: IProps) {
   if (isLoading) {
     return (
       <>
-        <ProfileUserInfoSkeletonUI my={my} />
-        <ProfileDetailSkeletonUI my={my} />
+        <ProfileUserInfoSkeletonUI isMyProfile={isMyProfile} />
+        <ProfileDetailSkeletonUI isMyProfile={isMyProfile} />
       </>
     );
   }
@@ -44,15 +44,15 @@ export default function ProfilePage({ my }: IProps) {
     <>
       <UserInfo
         handleClickMenu={onClickMenu}
-        userProfileData={my ? myProfileData : profileData}
+        userProfileData={isMyProfile ? myProfileData : profileData}
         myProfileData={myProfileData}
       />
       <Detail
         profileMenu={profileMenu}
         handleClickMenu={onClickMenu}
-        userProfileData={my ? myProfileData : profileData}
+        userProfileData={isMyProfile ? myProfileData : profileData}
         myProfileData={myProfileData}
-        my={my}
+        isMyProfile={isMyProfile}
       />
     </>
   );

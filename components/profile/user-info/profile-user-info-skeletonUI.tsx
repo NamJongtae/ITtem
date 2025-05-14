@@ -1,8 +1,8 @@
 interface IProps {
-  my?: boolean;
+  isMyProfile?: boolean;
 }
 
-export default function ProfileUserInfoSkeletonUI({ my }: IProps) {
+export default function ProfileUserInfoSkeletonUI({ isMyProfile }: IProps) {
   return (
     <div className="mt-5 max-w-[1024px] px-4 md:px-8 mx-auto">
       <div className="flex flex-col gap-5 md:flex-row border py-5 px-4 animate-pulse">
@@ -32,7 +32,7 @@ export default function ProfileUserInfoSkeletonUI({ my }: IProps) {
 
             {/* 버튼 */}
             <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />
-            {my && <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />}
+            {isMyProfile && <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />}
           </div>
         </div>
 

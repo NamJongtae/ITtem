@@ -2,10 +2,10 @@ import { ProfileData } from "@/types/auth-types";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import Btn from "./profile-detail-follow-btn";
+import ProfileDetailFollowBtn from "./profile-detail-follow-btn";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>,
+  loading: () => <p>loading...</p>
 });
 
 interface IProps {
@@ -17,7 +17,7 @@ interface IProps {
 export default function ProfileDetailFollowItem({
   data,
   userProfileData,
-  myProfileData,
+  myProfileData
 }: IProps) {
   return (
     <li className="mx-auto">
@@ -57,7 +57,7 @@ export default function ProfileDetailFollowItem({
           </span>
         </div>
       </div>
-      <Btn
+      <ProfileDetailFollowBtn
         myProfileData={myProfileData}
         userProfileData={userProfileData}
         followProfileData={data}

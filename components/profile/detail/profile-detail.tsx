@@ -8,7 +8,7 @@ interface IProps {
   handleClickMenu: (menu: ProfileMenu) => void;
   userProfileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
-  my?: boolean;
+  isMyProfile?: boolean;
 }
 
 export default function ProfileDetail({
@@ -16,20 +16,20 @@ export default function ProfileDetail({
   handleClickMenu,
   userProfileData,
   myProfileData,
-  my,
+  isMyProfile
 }: IProps) {
   return (
     <section className="mt-5 max-w-[1024px] mx-auto px-4 md:px-8">
       <ProfileDetailMenu
         profileMenu={profileMenu}
         handleClickMenu={handleClickMenu}
-        my={my}
+        isMyProfile={isMyProfile}
       />
       <ProfileDetailContent
         profileMenu={profileMenu}
         userProfileData={userProfileData}
         myProfileData={myProfileData}
-        my={my}
+        isMyProfile={isMyProfile}
       />
     </section>
   );
