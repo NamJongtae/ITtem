@@ -2,7 +2,8 @@
 
 import { CATEGORY } from "@/constants/constant";
 import useCurrentCategory from "@/hooks/commons/category/useCurrentCategory";
-import CategoryIcon from "./category-icon";
+import Image from "next/image";
+import HomeIcon from "@/public/icons/home-icon.svg";
 
 interface IPorops {
   className?: string;
@@ -14,11 +15,20 @@ export default function CategoryNav({ className }: IPorops) {
   return (
     <nav className={`flex self-start ${className}`}>
       <ol className="inline-flex items-center">
-        <li className="inline-flex items-center">중고거래</li>
+        <li className="inline-flex items-center">
+          <HomeIcon className="w-4 h-4 stroke-black fill-black mr-1" />
+          중고거래
+        </li>
         <li>
           <div className="flex items-center">
-            <CategoryIcon />
-            <span className="ms-1 text-gray-700dark:text-gray-400">
+            <Image
+              className="mx-2 object-contain w-[10px] h-[12px]"
+              src={"/icons/arrow-icon.svg"}
+              alt=""
+              width={15}
+              height={19}
+            />
+            <span className="text-gray-700dark:text-gray-400">
               {CATEGORY.includes(currentCategory || "")
                 ? currentCategory
                 : "전체"}

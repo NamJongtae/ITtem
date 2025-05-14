@@ -1,6 +1,6 @@
 import { escKeyClose } from "@/lib/optimizationKeyboard";
 import React from "react";
-import CategoryMobileBtnArrowIcon from "./category-mobile-btn-arrow-icon";
+import Image from "next/image";
 
 interface IProps {
   currentCategory: string;
@@ -24,7 +24,15 @@ export default function CategoryMobileBtn({
       onKeyDown={(e) => escKeyClose({ event: e, closeCb: toggleCategory })}
     >
       {currentCategory}
-      <CategoryMobileBtnArrowIcon isOpenCategory={isOpenCategory} />
+      <Image
+        src="/icons/drop-down-arrow-icon.svg"
+        alt="화살표"
+        className={`-mr-1 text-gray-400 transition-transform duration-200 ${
+          isOpenCategory ? "rotate-180" : ""
+        }`}
+        width={20}
+        height={20}
+      />
     </button>
   );
 }
