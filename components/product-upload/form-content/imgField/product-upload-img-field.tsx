@@ -1,10 +1,10 @@
 import ProductUploadImgUploadBtn from "./product-upload-img-upload-Btn";
-import ProductImgEnlargeModal from "../../commons/product-img-enlarge-modal";
+import ProductImgEnlargeModal from "@/components/commons/product-img-enlarge-modal";
 import ProductUploadImgEnlargeBtn from "./product-upload-img-enlarge-btn";
-import ProductUploadHiddenImgInput from "./product-upload-hidden-img-input";
+import ImgInput from "./product-upload-img-input";
 import ProductUploadImgPreviewList from "./product-upload-img-preview-list";
 import { ProductImgData } from "@/types/product-types";
-import useProductUploadImgField from '@/hooks/product-upload/img-field/useProductUploadimgField';
+import useProductUploadImgField from "@/hooks/product-upload/img-field/useProductUploadimgField";
 interface IProps {
   imgData?: ProductImgData[];
 }
@@ -19,13 +19,13 @@ export default function ProductUploadImgField({ imgData }: IProps) {
     handleOpenModal,
     handleClickImgInput,
     handleClickCloseBtn,
-    imgInputRef,
+    imgInputRef
   } = useProductUploadImgField(imgData);
 
   return (
     <div className="border-b py-8">
       <div className="flex items-center gap-3">
-        <ProductUploadHiddenImgInput
+        <ImgInput
           preview={preview}
           onChangeImg={handleOnChangeImg}
           ref={imgInputRef}

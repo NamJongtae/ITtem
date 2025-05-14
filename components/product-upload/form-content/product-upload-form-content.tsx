@@ -9,7 +9,7 @@ import ProductUploadTransactionField from "./product-upload-transaction-field";
 import ProductUploadPriceField from "./product-upload-price-field";
 import ProductUploadDescField from "./product-upload-desc-field";
 import ProductUploadDeliveryFeeField from "./product-upload-deliveryFee-field";
-import ProductUploadBtns from './form-content/btns/product-upload-btns';
+import ProductUploadBtns from "./btns/product-upload-btns";
 import ProductUploadImgField from "./imgField/product-upload-img-field";
 
 interface IProps {
