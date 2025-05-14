@@ -12,49 +12,58 @@ export default function useChatRoomListLogic() {
   }>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(
-    function SubscribeToChatRoomList() {
-      if (!chatRoomIdsLoading && chatRoomIds.length === 0) {
-        setIsLoading(false);
-        return;
-      }
+  useEffect(() => {
+    if (chatRoomIdsLoading) return;
 
-      let unsubscribes: Unsubscribe[] = [];
+    if (chatRoomIds.length === 0) {
+      setIsLoading(false);
+      return;
+    }
 
-      const loadFirebase = async () => {
+    const unsubscribeList: Unsubscribe[] = [];
+
+    const subscribeToChatRooms = async () => {
+      try {
         const firestoreDB = await getFirestoreDB();
         const { doc, onSnapshot } = await import("firebase/firestore");
 
-        unsubscribes = chatRoomIds.map((chatRoomId) => {
-          const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
-          return onSnapshot(chatRoomRef, (snapshot) => {
-            const data = snapshot.data() as ChatRoomData;
-            if (data.lastMessage) {
-              setChatRoomData((prevData) => ({
-                ...prevData,
-                [snapshot.id]: {
-                  ...data
-                }
-              }));
+        await Promise.all(
+          chatRoomIds.map((chatRoomId) => {
+            const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+
+            const unsubscribe = onSnapshot(chatRoomRef, (snapshot) => {
+              const data = snapshot.data() as ChatRoomData;
+              if (data?.lastMessage) {
+                setChatRoomData((prev) => ({
+                  ...prev,
+                  [snapshot.id]: { ...data }
+                }));
+              }
+            });
+
+            if (typeof unsubscribe === "function") {
+              unsubscribeList.push(unsubscribe);
             }
+          })
+        );
 
-            setIsLoading(false);
-          });
-        });
-      };
+        setIsLoading(false);
+      } catch (error) {
+        console.error("채팅방 구독 중 오류 발생:", error);
+        setIsLoading(false);
+      }
+    };
 
-      loadFirebase();
+    subscribeToChatRooms();
 
-      return () => {
-        unsubscribes.forEach((unsubscribe) => {
-          if (unsubscribe) {
-            unsubscribe();
-          }
-        });
-      };
-    },
-    [chatRoomIdsLoading, chatRoomIds]
-  );
+    return () => {
+      unsubscribeList.forEach((unsubscribe) => {
+        if (typeof unsubscribe === "function") {
+          unsubscribe();
+        }
+      });
+    };
+  }, [chatRoomIdsLoading, chatRoomIds]);
 
   return { chatRoomData, isLoading };
 }
