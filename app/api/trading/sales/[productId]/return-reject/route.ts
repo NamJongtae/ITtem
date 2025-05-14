@@ -200,6 +200,24 @@ export const PATCH = async (
       throw new Error("상품 status 업데이트에 실패했어요.");
     }
 
+    const updateDate = new Date();
+
+    const updateSaleTradingData: any = {
+      status:
+        saleTrading.process === SalesReturnProcess.반품요청확인
+          ? TradingStatus.TRADING_END
+          : TradingStatus.TRADING,
+      process:
+        saleTrading.process === SalesReturnProcess.반품요청확인
+          ? SaleTradingProcess.거래완료
+          : SaleTradingProcess.상품전달확인,
+      $unset: { returnStartDate: "", returnReason: "" }
+    };
+
+    if (saleTrading.process === SalesReturnProcess.반품요청확인) {
+      updateSaleTradingData.saleEndDate = updateDate;
+    }
+
     const saleTradingUpdateResult = await SaleTrading.updateOne(
       {
         $and: [
@@ -210,17 +228,7 @@ export const PATCH = async (
         ],
         productId
       },
-      {
-        status:
-          saleTrading.process === SalesReturnProcess.반품요청확인
-            ? TradingStatus.TRADING_END
-            : TradingStatus.TRADING,
-        process:
-          saleTrading.process === SalesReturnProcess.반품요청확인
-            ? SaleTradingProcess.거래완료
-            : SaleTradingProcess.상품전달확인,
-        $unset: { returnStartDate: "", returnReason: "" }
-      },
+      updateSaleTradingData,
       { session }
     );
 
@@ -229,6 +237,25 @@ export const PATCH = async (
       saleTradingUpdateResult.modifiedCount === 0
     ) {
       throw new Error("거래 상품 판매 정보 업데이트에 실패했어요.");
+    }
+
+    const updatePurchaseTradingData: any = {
+      status:
+        purchaseTrading.process === PurchaseReturnProcess.판매자확인중
+          ? TradingStatus.TRADING_END
+          : TradingStatus.TRADING,
+      process:
+        purchaseTrading.process === PurchaseReturnProcess.판매자확인중
+          ? PurchaseTradingProcess.거래완료
+          : PurchaseTradingProcess.판매자반품거절상품전달중,
+      purchaseEndDate:
+        purchaseTrading.process === PurchaseReturnProcess.판매자확인중 &&
+        new Date(),
+      $unset: { returnStartDate: "", returnReason: "" }
+    };
+
+    if (purchaseTrading.process === PurchaseReturnProcess.판매자확인중) {
+      updateSaleTradingData.purchaseEndDate = updateDate;
     }
 
     const purchaseTradingUpdateResult = await PurchaseTrading.updateOne(
@@ -241,17 +268,7 @@ export const PATCH = async (
         ],
         productId
       },
-      {
-        status:
-          purchaseTrading.process === PurchaseReturnProcess.판매자확인중
-            ? TradingStatus.TRADING_END
-            : TradingStatus.TRADING,
-        process:
-          purchaseTrading.process === PurchaseReturnProcess.판매자확인중
-            ? PurchaseTradingProcess.거래완료
-            : PurchaseTradingProcess.판매자반품거절상품전달중,
-        $unset: { returnStartDate: "", returnReason: "" }
-      },
+      updatePurchaseTradingData,
       { session }
     );
 
