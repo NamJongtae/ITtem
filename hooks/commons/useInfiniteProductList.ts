@@ -8,14 +8,12 @@ import useRecommendProductInfiniteQuery from "../react-query/queries/product/use
 export default function useInfiniteProductList(
   productListType: ProductListType,
   productIds?: string[],
-  ProductCategory?: ProductCategory
+  productCategory?: ProductCategory
 ) {
   const search = useSearchParams();
   const keyword = search.get("keyword");
   const category =
-  ProductCategory ||
-    (search.get("category") as ProductCategory) ||
-    null;
+    productCategory || (search.get("category") as ProductCategory) || null;
 
   const emptyMessages: Record<ProductListType, string> = {
     RECOMMEND: "오늘의 추천 상품이 존재하지 않아요.",
