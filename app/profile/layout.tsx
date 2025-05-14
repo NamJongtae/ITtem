@@ -16,8 +16,8 @@ export default function Layout({ children, edit, changePassword }: IProps) {
       <Suspense
         fallback={
           <>
-            <ProfileUserInfoSkeletonUI my={true} />
-            <ProfileDetailSkeletonUI my={true} />
+            <ProfileUserInfoSkeletonUI isMyProfile={true} />
+            <ProfileDetailSkeletonUI isMyProfile={true} />
           </>
         }
       >
