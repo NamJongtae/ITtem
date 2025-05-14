@@ -5,18 +5,18 @@ import useProductDetailChattingHandler from '@/hooks/product-detail/useProductDe
 interface IProps {
   productStatus: ProductStatus | undefined;
   productId: string | undefined;
-  userId: string | undefined;
+  productUserId: string | undefined;
 }
 
 export default function ProductDetailChattingBtn({
   productStatus,
   productId,
-  userId,
+  productUserId,
 }: IProps) {
   const { handleClickChatting } = useProductDetailChattingHandler({
     productStatus,
     productId,
-    userId,
+    productUserId,
   });
 
   return (

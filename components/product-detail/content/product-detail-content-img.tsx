@@ -12,11 +12,11 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
   const { isOpenModal, openModal, handleClickCloseBtn } = useModal({
     isImageModal: true
   });
+  const isSoldout = productDetailData?.status === ProductStatus.soldout;
+  const isTrading = productDetailData?.status === ProductStatus.trading;
 
-  const imgStyle = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-3xl before:font-semibold before:flex before:justify-center before:items-center ${
-    productDetailData?.status === ProductStatus.soldout
-      ? "before:content-['판매완료']"
-      : "before:content-['거래중']"
+  const overlayImgStyle = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-3xl before:font-semibold before:flex before:justify-center before:items-center ${
+    isSoldout ? "before:content-['판매완료']" : "before:content-['거래중']"
   }`;
 
   return (
@@ -24,7 +24,7 @@ export default function ProductDetailContentImg({ productDetailData }: IProps) {
       <div className="w-full h-80 md:h-80 md:w-1/2 lg:h-96">
         <div
           className={`relative w-full h-full h-70 max-w-[512px] max-h-[384px] mx-auto rounded-md overflow-hidden ${
-            productDetailData?.status !== ProductStatus.sold ? imgStyle : ""
+            isSoldout || isTrading ? overlayImgStyle : ""
           }`}
         >
           <ImgSlider

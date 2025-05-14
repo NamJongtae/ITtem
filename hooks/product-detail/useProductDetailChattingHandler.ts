@@ -6,13 +6,13 @@ import useAuthStore from "@/store/auth-store";
 interface IParams {
   productStatus: ProductStatus | undefined;
   productId: string | undefined;
-  userId: string | undefined;
+  productUserId: string | undefined;
 }
 
 export default function useProductDetailChattingHandler({
   productStatus,
   productId,
-  userId
+  productUserId
 }: IParams) {
   const { mutate } = useStartChatMutate();
   const user = useAuthStore((state) => state.user);
@@ -30,9 +30,9 @@ export default function useProductDetailChattingHandler({
       toast.warn("로그인 후 이용해주세요.");
       return;
     }
-    if (!productId || !userId) return;
+    if (!productId || !productUserId) return;
 
-    mutate({ productId, userId });
+    mutate({ productId, productUserId });
   };
 
   return { handleClickChatting };

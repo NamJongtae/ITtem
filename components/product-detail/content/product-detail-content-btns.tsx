@@ -1,44 +1,31 @@
-import ProductDetailBuyBtn from "../product-detail-buy-btn";
-import ProductDetailChattingBtn from "../product-detail-chatting-btn";
-import ProductDetailWishBtn from "../product-detail-wish-btn";
 import { ProductDetailData, ProductStatus } from "@/types/product-types";
-import ProductDetailDeleteBtn from "../product-detail-delete-btn";
-import ProductDetailEditBtn from "../product-detail-edit-btn";
 import useMyProfileQuery from "@/hooks/react-query/queries/profile/useMyProfileQuery";
+import MyProductBtns from "./my-product-btns";
+import OtherUserProductBtns from "./other-user-product-btns";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
 export default function ProductDetailContentBtns({
-  productDetailData,
+  productDetailData
 }: IProps) {
   const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const isSoldout = productDetailData?.status === ProductStatus.soldout;
+  const isMyProduct = productDetailData?.uid === myProfileData?.uid;
+
+  if (loadMyProfileLoading || isSoldout) return null;
 
   return (
-    !loadMyProfileLoading &&
-    productDetailData?.status === ProductStatus.sold && (
-      <div className="flex items-center mt-6 gap-3 flex-wrap">
-        {productDetailData?.uid === myProfileData?.uid ? (
-          <>
-            <ProductDetailEditBtn productStatus={productDetailData?.status} />
-            <ProductDetailDeleteBtn productStatus={productDetailData?.status} />
-          </>
-        ) : (
-          <>
-            <ProductDetailWishBtn
-              productDetailData={productDetailData}
-              myProfileData={myProfileData}
-            />
-            <ProductDetailChattingBtn
-              productStatus={productDetailData?.status}
-              userId={productDetailData?.uid}
-              productId={productDetailData?._id}
-            />
-            <ProductDetailBuyBtn productStatus={productDetailData?.status} />
-          </>
-        )}
-      </div>
-    )
+    <div className="flex items-center mt-6 gap-3 flex-wrap">
+      {isMyProduct ? (
+        <MyProductBtns productStatus={productDetailData?.status} />
+      ) : (
+        <OtherUserProductBtns
+          productDetailData={productDetailData}
+          myProfileData={myProfileData}
+        />
+      )}
+    </div>
   );
 }

@@ -11,9 +11,9 @@ export default function useStartChatMutate() {
   const { mutate, isPending } = useMutation<
     AxiosResponse<StartChatResponseData>,
     AxiosError,
-    { productId: string; userId: string }
+    { productId: string; productUserId: string }
   >({
-    mutationFn: ({ productId, userId }) => startChat({ productId, userId }),
+    mutationFn: ({ productId, productUserId }) => startChat({ productId, productUserId }),
     onSuccess: (response) => {
       router.push(`/chat/${response.data.chatRoomId}`);
     },

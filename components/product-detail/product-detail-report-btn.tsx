@@ -8,26 +8,27 @@ interface IProps {
 
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
   const { loadMyProfileLoading, myProfileData, handleClickReport } =
-  useProductReportHandler({
+    useProductReportHandler({
       reportUserIds: productDetailData?.reportUserIds
     });
 
+  const isMyProduct = productDetailData?.uid !== myProfileData?.uid;
+
+  if (loadMyProfileLoading || isMyProduct) return null;
+
   return (
-    !loadMyProfileLoading &&
-    productDetailData?.uid !== myProfileData?.uid && (
-      <button
-        type="button"
-        onClick={handleClickReport}
-        className="flex items-center gap-1"
-      >
-        <Image
-          src={"/icons/report-icon.svg"}
-          alt="신고하기"
-          width={28}
-          height={28}
-        />{" "}
-        신고하기
-      </button>
-    )
+    <button
+      type="button"
+      onClick={handleClickReport}
+      className="flex items-center gap-1"
+    >
+      <Image
+        src={"/icons/report-icon.svg"}
+        alt="신고하기"
+        width={28}
+        height={28}
+      />{" "}
+      신고하기
+    </button>
   );
 }

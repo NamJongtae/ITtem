@@ -27,21 +27,17 @@ export default function ProductDetailPage() {
     }
   }
   return (
-    productDetailData && (
-      <>
-        <div className="pt-8 pb-12">
-          <div className="relative container mx-auto px-6 max-w-[1024px]">
-            <CategoryNav className={"max-w-7xl mx-auto mb-5"} />
-            <ProductDetailContent productDetailData={productDetailData} />
-            <div className="container mt-16 flex flex-col xl:flex-row border-t-2 border-solid border-black justify-between gap-10 xl:gap-5 pt-10 mx-auto max-w-7xl">
-              <ProductDetailDescription
-                description={productDetailData?.description}
-              />
-              <ProductDetailSeller auth={productDetailData?.auth} />
-            </div>
-          </div>
+    <div className="pt-8 pb-12">
+      <div className="relative container mx-auto px-6 max-w-[1024px]">
+        <CategoryNav className={"max-w-7xl mx-auto mb-5"} />
+        <ProductDetailContent productDetailData={productDetailData} />
+        <div className="container mt-16 flex flex-col xl:flex-row border-t-2 border-solid border-black justify-between gap-10 xl:gap-5 pt-10 mx-auto max-w-7xl">
+          <ProductDetailDescription
+            description={productDetailData?.description}
+          />
+          <ProductDetailSeller auth={productDetailData?.auth} />
         </div>
-      </>
-    )
+      </div>
+    </div>
   );
 }
