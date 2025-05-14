@@ -16,6 +16,9 @@ const status = {
 export default function ProductListImg({ data }: IProps) {
   const soldoutStyles = `before:absolute before:inset-0 before:bg-gray-700 before:bg-opacity-50 before:z-10 before:text-white before:text-xl before:font-semibold before:content-[attr(data-status)] before:flex before:justify-center before:items-center`;
   const dataStatus = status[data.status];
+  const isSoldout = data.status !== ProductStatus.soldout;
+  const isTrading = data.status === ProductStatus.trading;
+  const isOneImg = data.imgData.length === 1;
 
   return (
     <div
@@ -24,7 +27,7 @@ export default function ProductListImg({ data }: IProps) {
         data.status !== ProductStatus.sold ? soldoutStyles : ""
       } relative flex h-full w-full`}
     >
-      {data.imgData.length === 1 || data.status !== ProductStatus.sold ? (
+      {isOneImg || isSoldout || isTrading ? (
         <FallbackImage
           className="w-full h-full object-cover object-center aspect-square"
           src={data.imgData[0].url}
