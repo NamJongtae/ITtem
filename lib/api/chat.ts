@@ -4,15 +4,15 @@ import { StartChatResponseData } from "@/types/api-types";
 
 export async function startChat({
   productId,
-  productUserId,
+  userId
 }: {
   productId: string;
-  productUserId: string;
+  userId: string;
 }): Promise<AxiosResponse<StartChatResponseData>> {
   try {
     const response = await customAxios.post(`/api/chat`, {
       productId,
-      productUserId,
+      userId
     });
     return response;
   } catch (error) {
@@ -44,14 +44,14 @@ export async function leaveChatRoom(
 
 export async function sendToChatMessage({
   chatRoomId,
-  message,
+  message
 }: {
   chatRoomId: string;
   message: string;
 }): Promise<AxiosResponse<{ message: string }>> {
   try {
     const response = await customAxios.post(`/api/chat/${chatRoomId}/message`, {
-      message,
+      message
     });
     return response;
   } catch (error) {

@@ -32,7 +32,7 @@ export default function useProductDetailChattingHandler({
     }
     if (!productId || !productUserId) return;
 
-    mutate({ productId, productUserId });
+    mutate({ productId, userId: productUserId });
   };
 
   return { handleClickChatting };
