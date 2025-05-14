@@ -1,5 +1,6 @@
 import { profileQueryKey, queryKeys } from "@/query-keys/query-keys";
-import { ProfileData } from "@/types/auth-types";
+import useAuthStore from "@/store/auth-store";
+
 import {
   ProductCategory,
   ProductData,
@@ -9,8 +10,7 @@ import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery,
-  useQueryClient
+  useInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
@@ -26,12 +26,8 @@ export default function useProfileProductListInfiniteQuery({
   productIds: string[];
 }) {
   const params = useParams();
-  const queryClient = useQueryClient();
-  const myProfile = queryClient.getQueryData(queryKeys.profile.my.queryKey) as
-    | ProfileData
-    | undefined;
-  const uid =
-    productListType === "MY_PROFILE" ? myProfile?.uid : params.uid || "";
+  const { user } = useAuthStore();
+  const uid = productListType === "MY_PROFILE" ? user?.uid : params.uid || "";
 
   const queryKeyConfig =
     productListType === "MY_PROFILE"
@@ -65,7 +61,6 @@ export default function useProfileProductListInfiniteQuery({
       (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
       !!uid,
     retry: 0,
-    staleTime: 60 * 1000,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
