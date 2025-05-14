@@ -1,6 +1,6 @@
 import { getFirestoreDB } from "@/lib/firebaseSetting";
 import { Unsubscribe } from "firebase/database";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import useJoinChatRoomMutate from "../react-query/mutations/chat/useJoinChatRoomMutate";
 import useLeaveChatRoomMutate from "../react-query/mutations/chat/useLeaveChatRoomMutate";
 import { useRouter, useParams } from "next/navigation";
@@ -22,6 +22,8 @@ export default function useChatRoomSubscription({
   setMessages,
   setIsLoading
 }: IParams) {
+  const [isJoin, setIsJoin] = useState(false);
+
   const user = useAuthStore((state) => state.user);
   const myUid = user?.uid;
 
@@ -32,84 +34,98 @@ export default function useChatRoomSubscription({
   const { joinChatRoomMutate } = useJoinChatRoomMutate();
   const { leaveChatRoomMutate } = useLeaveChatRoomMutate();
 
-  useEffect(
-    function subscribeToChatRoom() {
-      if (!chatRoomId || !myUid || isExit) return;
+  useEffect(() => {
+    if (!chatRoomId || !myUid || isExit) return;
 
-      let unsubscribeChatRoom: Unsubscribe | undefined;
-      let unsubscribeMessages: Unsubscribe | undefined;
+    const joinRoom = async () => {
+      try {
+        await joinChatRoomMutate(chatRoomId as string);
+        setIsJoin(true);
+      } catch (error) {
+        if (isAxiosError(error)) {
+          toast.warn(error.response?.data.message);
+          router.push("/chat");
+        }
+        setIsJoin(false);
+      }
+    };
 
-      const loadFirebase = async () => {
-        const firestoreDB = await getFirestoreDB();
-        const { collection, doc, onSnapshot, orderBy, query } = await import(
-          "firebase/firestore"
-        );
-        const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+    joinRoom();
 
-        const joinChatRoom = async () => {
-          try {
-            await joinChatRoomMutate(chatRoomId as string);
-          } catch (error) {
-            if (isAxiosError(error)) {
-              toast.warn(error.response?.data.message);
-              router.push("/chat");
-              return;
-            }
-          }
-        };
+    return () => {
+      leaveChatRoomMutate(chatRoomId as string);
+    };
+  }, [
+    chatRoomId,
+    myUid,
+    isExit,
+    joinChatRoomMutate,
+    router,
+    leaveChatRoomMutate
+  ]);
 
-        await joinChatRoom();
+  useEffect(() => {
+    if (!isJoin) return;
 
-        unsubscribeChatRoom = onSnapshot(chatRoomRef, (doc) => {
-          const data = doc.data() as ChatRoomData | null;
-          if (data) {
-            if (!(myUid in data.entered)) {
-              router.push("/chat");
-              return;
-            }
-            setChatData(data);
-            setIsLoading(false);
+    let unsubscribeChatRoom: Unsubscribe | undefined;
+
+    const subscribeChatRoom = async () => {
+      const firestoreDB = await getFirestoreDB();
+      const { doc, onSnapshot } = await import("firebase/firestore");
+
+      const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+
+      unsubscribeChatRoom = onSnapshot(chatRoomRef, (docSnapshot) => {
+        const data = docSnapshot.data() as ChatRoomData | null;
+        if (!data || !(myUid || "" in data.entered)) {
+          router.push("/chat");
+          return;
+        }
+        setChatData(data);
+        setIsLoading(false);
+      });
+    };
+
+    subscribeChatRoom();
+
+    return () => {
+      unsubscribeChatRoom?.();
+    };
+  }, [isJoin, chatRoomId, myUid, router, setChatData, setIsLoading]);
+
+  useEffect(() => {
+    if (!isJoin) return;
+
+    let unsubscribeMessages: Unsubscribe | undefined;
+
+    const subscribeMessages = async () => {
+      const firestoreDB = await getFirestoreDB();
+      const { collection, onSnapshot, orderBy, query, doc } = await import(
+        "firebase/firestore"
+      );
+
+      const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
+      const messagesRef = collection(chatRoomRef, "messages");
+      const messagesQuery = query(
+        messagesRef,
+        orderBy("timestamp", "asc"),
+        orderBy("__name__", "asc")
+      );
+
+      unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const messageData = change.doc.data() as ChatMessageData;
+            setMessages((prev) => [...prev, messageData]);
           }
         });
+      });
+    };
 
-        const messagesCollectionRef = collection(chatRoomRef, "messages");
-        const messagesQuery = query(
-          messagesCollectionRef,
-          orderBy("timestamp", "asc"),
-          orderBy("__name__", "asc")
-        );
+    subscribeMessages();
 
-        unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const messageData = change.doc.data() as ChatMessageData;
-              setMessages((prevData) => [...prevData, messageData]);
-            }
-          });
-        });
-      };
-
-      loadFirebase();
-
-      return () => {
-        const leaveChatRoom = async () => {
-          try {
-            await leaveChatRoomMutate(chatRoomId as string);
-          } catch (error) {
-            console.error(error);
-          }
-        };
-
-        leaveChatRoom();
-
-        if (unsubscribeChatRoom) {
-          unsubscribeChatRoom();
-        }
-        if (unsubscribeMessages) {
-          unsubscribeMessages();
-        }
-      };
-    },
-    [chatRoomId, myUid, isExit]
-  );
+    return () => {
+      unsubscribeMessages?.();
+    };
+  }, [isJoin, chatRoomId, setMessages]);
 }
