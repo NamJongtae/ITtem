@@ -10,7 +10,8 @@ export default function ProfileDetailWishDelBtn({
   selectedWish,
   onClickSelectAll
 }: IProps) {
-  const { onClickDelete } = useWishDeleteHandler({ selectedWish });
+  const { allCheckBoxInputRef, onClickDelete } =
+    useWishDeleteHandler(selectedWish);
 
   return (
     <div className="flex items-center w-full gap-2 mb-5">
@@ -24,6 +25,7 @@ export default function ProfileDetailWishDelBtn({
             onChange={onClickSelectAll}
             className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all  checked:border-red-400 checked:bg-red-400"
             id="selectAll"
+            ref={allCheckBoxInputRef}
           />
           <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
             <CheckIcon className="fill-white" />

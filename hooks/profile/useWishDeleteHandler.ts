@@ -1,11 +1,9 @@
 import { toast } from "react-toastify";
 import useDeleteProfileWishMutate from "../react-query/mutations/profile/useDeleteProfileWishMutate";
+import { useRef } from "react";
 
-interface IParams {
-  selectedWish: string[];
-}
-
-export default function useWishDeleteHandler({ selectedWish }: IParams) {
+export default function useWishDeleteHandler(selectedWish: string[]) {
+  const allCheckBoxInputRef = useRef<HTMLInputElement | null>(null);
   const { deleteWishMutate } = useDeleteProfileWishMutate();
 
   const onClickDelete = () => {
@@ -16,8 +14,11 @@ export default function useWishDeleteHandler({ selectedWish }: IParams) {
     const isDelete = confirm("정말 삭제하시겠어요?");
     if (isDelete) {
       deleteWishMutate(selectedWish);
+      if (allCheckBoxInputRef.current) {
+        allCheckBoxInputRef.current.checked = false;
+      }
     }
   };
 
-  return { onClickDelete };
+  return { allCheckBoxInputRef, onClickDelete };
 }
