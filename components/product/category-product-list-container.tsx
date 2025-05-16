@@ -1,4 +1,3 @@
-import ProductList from "../commons/product-list/product-list";
 import { queryKeys } from "@/query-keys/query-keys";
 import { ProductCategory, ProductData } from "@/types/product-types";
 import {
@@ -8,6 +7,9 @@ import {
   dehydrate,
   QueryKey
 } from "@tanstack/react-query";
+import { ErrorBoundary } from "../commons/ErrorBoundary";
+import ProductListError from "../commons/product-list/product-list-error";
+import CategoryProductList from "./category-product-list";
 
 interface IProps {
   category?: string;
@@ -34,7 +36,9 @@ async function prefetchProductList({
   });
 }
 
-export default async function ProductContainer({ category }: IProps) {
+export default async function CategoryProductListContainer({
+  category
+}: IProps) {
   const queryClient = new QueryClient();
 
   await prefetchProductList({
@@ -45,10 +49,11 @@ export default async function ProductContainer({ category }: IProps) {
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductList
-          productListType="CATEGORY"
-          productCategory={category as ProductCategory}
-        />
+        <ErrorBoundary
+          fallback={<ProductListError productListType={"CATEGORY"} />}
+        >
+          <CategoryProductList />
+        </ErrorBoundary>
       </HydrationBoundary>
     </>
   );

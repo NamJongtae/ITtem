@@ -1,8 +1,10 @@
-import Spinner from "@/components/commons/spinner";
 import Header from "@/components/product/product-header";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
-import ProductContainer from "@/components/product/product-container";
+import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+import CategoryProductListContainer from "@/components/product/category-product-list-container";
+import { ErrorBoundary } from "@/components/commons/ErrorBoundary";
+import ProductListError from "@/components/commons/product-list/product-list-error";
 
 export async function generateMetadata(props: {
   searchParams: Promise<{ category: string | undefined }>;
@@ -34,12 +36,16 @@ export default async function Product({
       <Header />
       <Suspense
         fallback={
-          <div className="flex max-w-[1024px] mx-auto pt-52 justify-center items-center">
-            <Spinner />
-          </div>
+          <ul className="max-w-[1024px] mx-auto grid gap-5 grid-cols-autoFill mt-6 px-8">
+            <ProductListSkeletonUI listCount={8} />
+          </ul>
         }
       >
-        <ProductContainer category={category} />
+        <ErrorBoundary
+          fallback={<ProductListError productListType="CATEGORY" />}
+        >
+          <CategoryProductListContainer category={category} />
+        </ErrorBoundary>
       </Suspense>
     </>
   );
