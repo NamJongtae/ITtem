@@ -3,24 +3,21 @@ import useLocationStore from "@/store/location-store";
 import {
   ProductCategory,
   ProductData,
-  ProductListType
 } from "@/types/product-types";
 import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useCategoryProductListInfiniteQuery({
   limit = 10,
   category = ProductCategory.전체,
-  productListType
 }: {
   limit?: number;
   category?: ProductCategory;
-  productListType: ProductListType;
 }) {
   const location = useLocationStore((state) => state.location);
   const queryKeyConfig = queryKeys.product.category({
@@ -36,14 +33,17 @@ export default function useCategoryProductListInfiniteQuery({
     isFetchingNextPage,
     isLoading,
     error
-  } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
+  } = useSuspenseInfiniteQuery<
+    ProductData[],
+    AxiosError,
+    InfiniteData<ProductData>
+  >({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as QueryFunction<
       ProductData[],
       QueryKey,
       unknown
     >,
-    enabled: productListType === "CATEGORY",
     retry: 0,
     initialPageParam: null,
     staleTime: 60 * 1000,
