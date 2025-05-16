@@ -4,7 +4,7 @@ import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -21,7 +21,7 @@ export default function useRecommendProductInfiniteQuery(props?: {
     isFetchingNextPage,
     isLoading,
     error
-  } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
+  } = useSuspenseInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn as QueryFunction<
       ProductData[],
