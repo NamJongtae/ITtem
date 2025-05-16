@@ -1,35 +1,19 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-  QueryFunction,
-  QueryKey
-} from "@tanstack/react-query";
-import { queryKeys } from "@/query-keys/query-keys";
-import { ProductData } from "@/types/product-types";
-import ProductList from "../commons/product-list/product-list";
+"use client";
 
-async function prefetchProductListData(queryClient: QueryClient) {
-  const queryKeyConfig = queryKeys.product.recommend();
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<
-      ProductData[],
-      QueryKey,
-      unknown
-    >,
-    initialPageParam: null
-  });
-}
+import useRecommendProductInfiniteQuery from "@/hooks/react-query/queries/product/useRecommendProductInfiniteQuery";
+import ProductListUI from "../commons/product-list/product-list-ui";
 
-export default async function RecommendProductList() {
-  const queryClient = new QueryClient();
-
-  await prefetchProductListData(queryClient);
+export default function RecommendProductList() {
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useRecommendProductInfiniteQuery();
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductList productListType="RECOMMEND" />
-    </HydrationBoundary>
+    <ProductListUI
+      data={data}
+      fetchNextPage={fetchNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={hasNextPage}
+      emptyMessage={"오늘의 추천 상품이 없어요."}
+    />
   );
 }

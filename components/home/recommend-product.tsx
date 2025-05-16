@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { Suspense } from "react";
-import Spinner from "../commons/spinner";
-import RecommendProductList from "./recommend-product-list";
+import ProductListSkeletonUI from "../commons/product-list/product-list-skeletonUI";
+import RecommendProductListContainer from "./recommend-product-list-container";
+import { ErrorBoundary } from "../commons/ErrorBoundary";
+import ProductListError from "../commons/product-list/product-list-error";
 
 export default function RecommendProduct() {
   return (
@@ -17,12 +19,16 @@ export default function RecommendProduct() {
 
       <Suspense
         fallback={
-          <div className="flex max-w-[1024px] mx-auto pt-32 justify-center items-center">
-            <Spinner />
-          </div>
+          <ul className="max-w-[1024px] mx-auto grid gap-5 grid-cols-autoFill mt-6 px-8">
+            <ProductListSkeletonUI listCount={8} />
+          </ul>
         }
       >
-        <RecommendProductList />
+        <ErrorBoundary
+          fallback={<ProductListError productListType="RECOMMEND" />}
+        >
+          <RecommendProductListContainer />
+        </ErrorBoundary>
       </Suspense>
     </section>
   );
