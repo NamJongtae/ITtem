@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Suspense } from "react";
-import Spinner from "../commons/spinner";
-import PopularProductList from "./popular-product-list";
+import PopularProductListSkeletonUI from "./popular-product-list-skeletonUI";
+import PopularProductSliderContainer from './popular-product-slider-container';
 
 export default function PopularProduct() {
   return (
@@ -15,14 +15,8 @@ export default function PopularProduct() {
         언제 팔릴 지 모르는 조회수가 가장 높은 <strong>인기상품</strong>
       </p>
 
-      <Suspense
-        fallback={
-          <div className="flex w-full h-[340px] justify-center items-center">
-            <Spinner />
-          </div>
-        }
-      >
-        <PopularProductList />
+      <Suspense fallback={<PopularProductListSkeletonUI />}>
+        <PopularProductSliderContainer />
       </Suspense>
     </section>
   );

@@ -4,11 +4,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import usePopularProductQuery from "@/hooks/react-query/queries/product/usePopularProductQuery";
-import PopularProductListSkeletonUI from "./popular-product-list-skeletonUI";
 import PopularProductSliderItem from "./popular-product-slider-item";
 
 export default function PopularProductSlider() {
-  const { data, isLoading } = usePopularProductQuery();
+  const { data } = usePopularProductQuery();
   const swiperBreakPoints = {
     320: {
       slidesPerView: 1,
@@ -31,10 +30,6 @@ export default function PopularProductSlider() {
       slidesPerGroup: 4
     }
   };
-
-  if (isLoading) {
-    return <PopularProductListSkeletonUI />;
-  }
 
   return (
     <Swiper

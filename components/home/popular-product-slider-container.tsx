@@ -1,4 +1,8 @@
-import { QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient
+} from "@tanstack/react-query";
 import { queryKeys } from "@/query-keys/query-keys";
 import PopularProductSlider from "./popular-product-slider";
 
@@ -10,9 +14,13 @@ async function prefetchPopularProduct(queryClient: QueryClient) {
   });
 }
 
-export default async function PopularProductList() {
+export default async function PopularProductSliderContainer() {
   const queryClinet = new QueryClient();
   await prefetchPopularProduct(queryClinet);
 
-  return <PopularProductSlider />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClinet)}>
+      <PopularProductSlider />
+    </HydrationBoundary>
+  );
 }
