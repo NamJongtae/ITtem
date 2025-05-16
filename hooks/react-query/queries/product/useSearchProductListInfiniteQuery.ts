@@ -1,32 +1,30 @@
+import { useGetQuerys } from "@/hooks/commons/useGetQuerys";
 import { queryKeys } from "@/query-keys/query-keys";
+import { ProductCategory, ProductData } from "@/types/product-types";
 import {
-  ProductCategory,
-  ProductData,
-  ProductListType
-} from "@/types/product-types";
-import { InfiniteData, QueryFunction, QueryKey, useInfiniteQuery } from "@tanstack/react-query";
+  InfiniteData,
+  QueryFunction,
+  QueryKey,
+  useInfiniteQuery
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
 
 export default function useSearchProductListInfiniteQuery({
-  limit = 10,
-  category = ProductCategory.전체,
-  productListType
+  limit = 10
 }: {
   limit?: number;
-  category?: ProductCategory;
-  productListType: ProductListType;
-}) {
-  const search = useSearchParams();
-  const keyword = search.get("keyword");
+} = {}) {
+  const { category, keyword } = useGetQuerys(["category", "keyword"]);
+
   const queryKeyConfig = queryKeys.product.search({
     keyword: keyword as string,
-    category,
+    category: category ? (category as ProductCategory) : ProductCategory.전체,
     limit
   });
 
   const {
     data,
+    isFetching,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
@@ -34,8 +32,12 @@ export default function useSearchProductListInfiniteQuery({
     error
   } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: queryKeyConfig.queryFn as QueryFunction<ProductData[], QueryKey, unknown>,
-    enabled: productListType === "SEARCH" && !!keyword,
+    queryFn: queryKeyConfig.queryFn as QueryFunction<
+      ProductData[],
+      QueryKey,
+      unknown
+    >,
+    enabled: !!keyword,
     retry: 0,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
@@ -49,6 +51,7 @@ export default function useSearchProductListInfiniteQuery({
 
   return {
     data: data?.pages.flat(),
+    isFetching,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
