@@ -12,7 +12,7 @@ export async function generateMetadata({
   const { category, keyword } = await searchParams;
   const url = `${BASE_URL}/search/product/?keyword=${keyword}`;
   const title = keyword
-    ? `ITtem | 상품검색-${keyword}-${category}`
+    ? `ITtem | 상품검색-${keyword}-${category || "전체"}`
     : `ITtem | 상품-${category || "전체"}`;
 
   return {
