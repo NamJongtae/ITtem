@@ -1,3 +1,4 @@
+import { useGetQuerys } from "@/hooks/commons/useGetQuerys";
 import { profileQueryKey, queryKeys } from "@/query-keys/query-keys";
 import useAuthStore from "@/store/auth-store";
 
@@ -10,44 +11,50 @@ import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 export default function useProfileProductListInfiniteQuery({
   limit = 10,
-  category = ProductCategory.전체,
   productListType,
   productIds
 }: {
   limit?: number;
-  category?: ProductCategory;
   productListType: ProductListType;
   productIds: string[];
 }) {
   const params = useParams();
+  const { category } = useGetQuerys("category");
   const { user } = useAuthStore();
   const uid = productListType === "MY_PROFILE" ? user?.uid : params.uid || "";
 
   const queryKeyConfig =
     productListType === "MY_PROFILE"
       ? queryKeys.profile.my._ctx.products({
-          category,
+          category: category as ProductCategory,
           limit,
           productIds
         })
-      : profileQueryKey
-          .user(uid as string)
-          ._ctx.products({ category, limit, productIds });
+      : profileQueryKey.user(uid as string)._ctx.products({
+          category: category as ProductCategory,
+          limit,
+          productIds
+        });
 
   const {
     data,
+    isFetching,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
     error
-  } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
+  } = useSuspenseInfiniteQuery<
+    ProductData[],
+    AxiosError,
+    InfiniteData<ProductData>
+  >({
     queryKey:
       productListType === "MY_PROFILE"
         ? queryKeyConfig.queryKey
@@ -57,10 +64,9 @@ export default function useProfileProductListInfiniteQuery({
       QueryKey,
       unknown
     >,
-    enabled:
-      (productListType === "PROFILE" || productListType === "MY_PROFILE") &&
-      !!uid,
     retry: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
@@ -73,6 +79,7 @@ export default function useProfileProductListInfiniteQuery({
 
   return {
     data: data?.pages.flat(),
+    isFetching,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
