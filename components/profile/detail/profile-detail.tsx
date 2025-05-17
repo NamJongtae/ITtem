@@ -1,21 +1,19 @@
 import ProfileDetailMenu from "./profile-detail-menu";
 import ProfileDetailContent from "./profile-detail-content";
-import { ProfileMenu } from "../profile-page";
-import { ProfileData } from "@/types/auth-types";
+
+import { ProfileData, ProfileMenu } from "@/types/auth-types";
 
 interface IProps {
   profileMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
-  userProfileData: ProfileData | undefined;
-  myProfileData: ProfileData | undefined;
-  isMyProfile?: boolean;
+  profileData: ProfileData | undefined;
+  isMyProfile: boolean;
 }
 
 export default function ProfileDetail({
   profileMenu,
   handleClickMenu,
-  userProfileData,
-  myProfileData,
+  profileData,
   isMyProfile
 }: IProps) {
   return (
@@ -27,8 +25,7 @@ export default function ProfileDetail({
       />
       <ProfileDetailContent
         profileMenu={profileMenu}
-        userProfileData={userProfileData}
-        myProfileData={myProfileData}
+        profileData={profileData}
         isMyProfile={isMyProfile}
       />
     </section>

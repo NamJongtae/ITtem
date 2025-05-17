@@ -1,13 +1,12 @@
-import { ProfileData } from "@/types/auth-types";
-import { ProfileMenu } from "../../profile-page";
+import { ProfileData, ProfileMenu } from "@/types/auth-types";
 
 interface IProps {
-  userProfileData: ProfileData | undefined;
+  profileData: ProfileData | undefined;
   handleClickMenu: (menu: ProfileMenu) => void;
 }
 
 export default function UserInfoCardFollowInfo({
-  userProfileData,
+  profileData,
   handleClickMenu,
 }: IProps) {
   return (
@@ -18,7 +17,7 @@ export default function UserInfoCardFollowInfo({
       >
         <span>팔로잉</span>
         <span className="block w-full text-center">
-          {userProfileData?.followings.length || 0}
+          {profileData?.followings.length || 0}
         </span>
       </button>
       <button
@@ -27,7 +26,7 @@ export default function UserInfoCardFollowInfo({
       >
         <span>팔로워</span>
         <span className="block w-full text-center">
-          {userProfileData?.followers.length || 0}
+          {profileData?.followers.length || 0}
         </span>
       </button>
     </div>

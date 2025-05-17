@@ -1,3 +1,5 @@
+"use client";
+
 import ProfileProductCategoryMenu from "./profile-product-category-menu";
 import useProfileProductCategory from "@/hooks/profile/useProfileProductCategory";
 import { ProfileData } from "@/types/auth-types";
@@ -7,12 +9,12 @@ import SuspenseErrorBoundary from "@/components/commons/suspense-error-boundary"
 import ProductListError from "@/components/commons/product-list/product-list-error";
 
 interface IProps {
-  userProfileData: ProfileData | undefined;
+  profileData: ProfileData | undefined;
   isMyProfile?: boolean;
 }
 
 export default function ProfileDetailProduct({
-  userProfileData,
+  profileData,
   isMyProfile
 }: IProps) {
   const { category, selectCategory } = useProfileProductCategory();
@@ -33,7 +35,7 @@ export default function ProfileDetailProduct({
       >
         <ProfileDetailProductList
           isMyProfile={isMyProfile}
-          productIds={userProfileData?.productIds}
+          productIds={profileData?.productIds}
         />
       </SuspenseErrorBoundary>
     </div>

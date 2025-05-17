@@ -10,18 +10,16 @@ import InfiniteScrollEndMessage from "@/components/commons/InfiniteScrollEndMess
 
 interface IProps {
   isFollowers: boolean;
-  userProfileData: ProfileData | undefined;
-  myProfileData: ProfileData | undefined;
+  profileData: ProfileData | undefined;
 }
 
 export default function ProfileDetailFollowList({
   isFollowers,
-  userProfileData,
-  myProfileData
+  profileData
 }: IProps) {
   const userIds = isFollowers
-    ? userProfileData?.followers
-    : userProfileData?.followings;
+    ? profileData?.followers
+    : profileData?.followings;
   const {
     data,
     isFetchingNextPage,
@@ -32,7 +30,7 @@ export default function ProfileDetailFollowList({
   } = useFollowListInfiniteQuery({
     isFollowers,
     userIds,
-    uid: userProfileData?.uid
+    uid: profileData?.uid
   });
 
   const { ref } = useInfiniteScrollObserver({
@@ -64,12 +62,7 @@ export default function ProfileDetailFollowList({
         ) : (
           <>
             {data?.map((item) => (
-              <ProfileDetailFollowItem
-                key={item.uid}
-                data={item}
-                userProfileData={userProfileData}
-                myProfileData={myProfileData}
-              />
+              <ProfileDetailFollowItem key={item.uid} data={item} />
             ))}
             {isFetchingNextPage && <ProfileDetailFollowSkeletonUI />}
             <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />

@@ -1,4 +1,3 @@
-import ProfilePage from "@/components/profile/profile-page";
 import { BASE_URL } from "@/constants/constant";
 import customAxios from "@/lib/customAxios";
 import { sessionOptions } from "@/lib/server";
@@ -12,6 +11,10 @@ import {
 } from "@tanstack/react-query";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import MyProfilePage from "./my-profile-page";
+import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
+import ProfileDetailSkeletonUI from "./detail/profile-detail-skeletonUI";
+import ProductListError from "../commons/product-list/product-list-error";
 
 async function prefetchProfile() {
   const { getIronSession } = await import("iron-session");
@@ -54,7 +57,12 @@ export default async function MyProfileContainer() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfilePage isMyProfile={true} />
+      <SuspenseErrorBoundary
+        suspenseFallback={<ProfileDetailSkeletonUI />}
+        errorFallback={<ProductListError productListType="PROFILE" />}
+      >
+        <MyProfilePage />
+      </SuspenseErrorBoundary>
     </HydrationBoundary>
   );
 }

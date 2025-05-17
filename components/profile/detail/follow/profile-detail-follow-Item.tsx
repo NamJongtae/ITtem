@@ -10,15 +10,9 @@ const ReactStars = dynamic(() => import("react-stars"), {
 
 interface IProps {
   data: ProfileData;
-  userProfileData: ProfileData | undefined;
-  myProfileData: ProfileData | undefined;
 }
 
-export default function ProfileDetailFollowItem({
-  data,
-  userProfileData,
-  myProfileData
-}: IProps) {
+export default function ProfileDetailFollowItem({ data }: IProps) {
   return (
     <li className="mx-auto">
       <div className="flex gap-3">
@@ -57,11 +51,7 @@ export default function ProfileDetailFollowItem({
           </span>
         </div>
       </div>
-      <ProfileDetailFollowBtn
-        myProfileData={myProfileData}
-        userProfileData={userProfileData}
-        followProfileData={data}
-      />
+      <ProfileDetailFollowBtn followProfileData={data} />
     </li>
   );
 }

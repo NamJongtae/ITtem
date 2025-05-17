@@ -2,19 +2,11 @@ import useFollowUserInList from "@/hooks/profile/useFollowUserInList";
 import { ProfileData } from "@/types/auth-types";
 
 interface IProps {
-  myProfileData: ProfileData | undefined;
-  userProfileData: ProfileData | undefined;
   followProfileData: ProfileData | undefined;
 }
 
-export default function ProfileDetailFollowBtn({
-  myProfileData,
-  userProfileData,
-  followProfileData
-}: IProps) {
+export default function ProfileDetailFollowBtn({ followProfileData }: IProps) {
   const { isFollow, isNotMyProfile, onClickFollow } = useFollowUserInList({
-    myProfileData,
-    userProfileData,
     followProfileData
   });
 

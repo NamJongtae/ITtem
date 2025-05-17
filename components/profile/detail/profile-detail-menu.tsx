@@ -1,9 +1,9 @@
-import { ProfileMenu } from "../profile-page";
+import { ProfileMenu } from "@/types/auth-types";
 
 interface IProps {
   profileMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
-  isMyProfile?: boolean;
+  isMyProfile: boolean;
 }
 
 function MenuItem({
