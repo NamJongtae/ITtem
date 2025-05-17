@@ -9,6 +9,8 @@ const getMessage = (productListType: ProductListType) => {
   switch (productListType) {
     case "RECOMMEND":
       return "오늘의 추천 상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요.";
+    case "POPULAR":
+      return "인기 상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요.";
     case "CATEGORY":
     case "PROFILE":
       return "상품을 불러올 수 없어요.\n잠시 후 다시 시도해주세요.";
