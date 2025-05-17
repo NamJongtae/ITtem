@@ -4,19 +4,19 @@ import React, { Suspense } from "react";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 interface IProps {
-  susnpenseFallback: React.ReactNode;
+  suspenseFallback: React.ReactNode;
   errorFallback: React.ReactNode;
   children: React.ReactNode;
 }
 
 export default function SuspenseErrorBoundary({
-  susnpenseFallback,
+  suspenseFallback,
   errorFallback,
   children
 }: IProps) {
   return (
     <ErrorBoundary fallback={errorFallback}>
-      <Suspense fallback={susnpenseFallback}>{children}</Suspense>
+      <Suspense fallback={suspenseFallback}>{children}</Suspense>
     </ErrorBoundary>
   );
 }
