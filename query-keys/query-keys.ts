@@ -148,9 +148,9 @@ export const profileQueryKey = createQueryKeys("profile", {
     },
     contextQueries: {
       products: ({
-        category,
-        limit = 10,
-        productIds
+        category = ProductCategory.전체,
+        productIds,
+        limit = 10
       }: {
         category: ProductCategory;
         productIds: string[];
@@ -235,7 +235,7 @@ export const profileQueryKey = createQueryKeys("profile", {
     },
     contextQueries: {
       products: ({
-        category,
+        category = ProductCategory.전체,
         limit = 10,
         productIds
       }: {
