@@ -5,6 +5,9 @@ import {
 } from "@tanstack/react-query";
 import { queryKeys } from "@/query-keys/query-keys";
 import PopularProductSlider from "./popular-product-slider";
+import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
+import PopularProductListSkeletonUI from "./popular-product-list-skeletonUI";
+import ProductListError from "../commons/product-list/product-list-error";
 
 async function prefetchPopularProduct(queryClient: QueryClient) {
   const queryKeyConfig = queryKeys.product.popular;
@@ -20,7 +23,12 @@ export default async function PopularProductSliderContainer() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClinet)}>
-      <PopularProductSlider />
+      <SuspenseErrorBoundary
+        suspenseFallback={<PopularProductListSkeletonUI />}
+        errorFallback={<ProductListError productListType="POPULAR" />}
+      >
+        <PopularProductSlider />
+      </SuspenseErrorBoundary>
     </HydrationBoundary>
   );
 }

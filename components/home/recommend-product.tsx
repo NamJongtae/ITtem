@@ -2,8 +2,6 @@ import Image from "next/image";
 import { Suspense } from "react";
 import ProductListSkeletonUI from "../commons/product-list/product-list-skeletonUI";
 import RecommendProductListContainer from "./recommend-product-list-container";
-import { ErrorBoundary } from "../commons/ErrorBoundary";
-import ProductListError from "../commons/product-list/product-list-error";
 
 export default function RecommendProduct() {
   return (
@@ -17,18 +15,8 @@ export default function RecommendProduct() {
         원하는 상품이 있는지 확인해보세요.
       </p>
 
-      <Suspense
-        fallback={
-          <ul className="max-w-[1024px] mx-auto grid gap-5 grid-cols-autoFill mt-6 px-8">
-            <ProductListSkeletonUI listCount={8} />
-          </ul>
-        }
-      >
-        <ErrorBoundary
-          fallback={<ProductListError productListType="RECOMMEND" />}
-        >
-          <RecommendProductListContainer />
-        </ErrorBoundary>
+      <Suspense fallback={<ProductListSkeletonUI listCount={8} />}>
+        <RecommendProductListContainer />
       </Suspense>
     </section>
   );

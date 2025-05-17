@@ -8,6 +8,9 @@ import {
 import { queryKeys } from "@/query-keys/query-keys";
 import { ProductData } from "@/types/product-types";
 import RecommendProductList from "./recommend-product-list";
+import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
+import ProductListSkeletonUI from "../commons/product-list/product-list-skeletonUI";
+import ProductListError from "../commons/product-list/product-list-error";
 
 async function prefetchProductListData(queryClient: QueryClient) {
   const queryKeyConfig = queryKeys.product.recommend();
@@ -29,7 +32,12 @@ export default async function RecommendProductListContainer() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <RecommendProductList />
+      <SuspenseErrorBoundary
+        suspenseFallback={<ProductListSkeletonUI listCount={8} />}
+        errorFallback={<ProductListError productListType="RECOMMEND" />}
+      >
+        <RecommendProductList />
+      </SuspenseErrorBoundary>
     </HydrationBoundary>
   );
 }
