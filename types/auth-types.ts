@@ -92,5 +92,6 @@ export interface ProfileReviewData {
   };
 }
 
+export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
 export type EmailVerificationType = "signup" | "resetPw";
 export type EmailVerificationStatus = "INITIAL" | "SEND" | "VERFICATION";
