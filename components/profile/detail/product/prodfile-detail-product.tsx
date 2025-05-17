@@ -1,16 +1,20 @@
-import ProductList from "@/components/commons/product-list/product-list";
 import ProfileProductCategoryMenu from "./profile-product-category-menu";
 import useProfileProductCategory from "@/hooks/profile/useProfileProductCategory";
 import { ProfileData } from "@/types/auth-types";
-import { Suspense } from "react";
 import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+import ProfileDetailProductList from "./profile-detail-product-list";
+import SuspenseErrorBoundary from "@/components/commons/suspense-error-boundary";
+import ProductListError from "@/components/commons/product-list/product-list-error";
 
 interface IProps {
   userProfileData: ProfileData | undefined;
   isMyProfile?: boolean;
 }
 
-export default function ProfileDetailProduct({ userProfileData, isMyProfile }: IProps) {
+export default function ProfileDetailProduct({
+  userProfileData,
+  isMyProfile
+}: IProps) {
   const { category, selectCategory } = useProfileProductCategory();
 
   return (
@@ -23,19 +27,15 @@ export default function ProfileDetailProduct({ userProfileData, isMyProfile }: I
         />
       </div>
 
-      <Suspense
-        fallback={
-          <ul>
-            <ProductListSkeletonUI />
-          </ul>
-        }
+      <SuspenseErrorBoundary
+        suspenseFallback={<ProductListSkeletonUI listCount={8} />}
+        errorFallback={<ProductListError productListType="PROFILE" />}
       >
-        <ProductList
-          productListType={isMyProfile ? "MY_PROFILE" : "PROFILE"}
+        <ProfileDetailProductList
+          isMyProfile={isMyProfile}
           productIds={userProfileData?.productIds}
-          productCategory={category}
         />
-      </Suspense>
+      </SuspenseErrorBoundary>
     </div>
   );
 }
