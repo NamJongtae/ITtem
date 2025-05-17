@@ -4,14 +4,13 @@ import useUserProfileFollowMutate from "@/hooks/react-query/mutations/profile/us
 import useUserProfileUnfollowMutate from "@/hooks/react-query/mutations/profile/useUserProfileUnfollowMutate";
 import { ProfileData } from "@/types/auth-types";
 import { toast } from "react-toastify";
+import { useGetQuerys } from "../commons/useGetQuerys";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/query-keys/query-keys";
 
 export default function useFollowUserInList({
-  myProfileData,
-  userProfileData,
   followProfileData
 }: {
-  myProfileData: ProfileData | undefined;
-  userProfileData: ProfileData | undefined;
   followProfileData: ProfileData | undefined;
 }) {
   const { myProfilefollowMutate } = useMyProfileFollowMutate(
@@ -28,11 +27,18 @@ export default function useFollowUserInList({
     followProfileData?.uid || ""
   );
 
+  const queryClient = useQueryClient();
+  const myProfileData = queryClient.getQueryData(
+    queryKeys.profile.my.queryKey
+  ) as ProfileData | undefined;
+
   const isFollow =
     !!myProfileData?.followings?.includes(followProfileData?.uid || "") &&
     !!followProfileData?.followers?.includes(myProfileData?.uid);
 
-  const isMyProfilePage = userProfileData?.uid === myProfileData?.uid;
+  const { uid } = useGetQuerys("uid");
+
+  const isMyProfilePage = !!uid;
 
   const isNotMyProfile = myProfileData?.uid !== followProfileData?.uid;
 
