@@ -7,9 +7,10 @@ import {
   dehydrate,
   QueryKey
 } from "@tanstack/react-query";
-import { ErrorBoundary } from "../commons/ErrorBoundary";
-import ProductListError from "../commons/product-list/product-list-error";
 import CategoryProductList from "./category-product-list";
+import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
+import ProductListSkeletonUI from "../commons/product-list/product-list-skeletonUI";
+import ProductListError from "../commons/product-list/product-list-error";
 
 interface IProps {
   category?: string;
@@ -49,11 +50,12 @@ export default async function CategoryProductListContainer({
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ErrorBoundary
-          fallback={<ProductListError productListType={"CATEGORY"} />}
+        <SuspenseErrorBoundary
+          susnpenseFallback={<ProductListSkeletonUI listCount={8} />}
+          errorFallback={<ProductListError productListType="CATEGORY" />}
         >
           <CategoryProductList />
-        </ErrorBoundary>
+        </SuspenseErrorBoundary>
       </HydrationBoundary>
     </>
   );
