@@ -27,9 +27,8 @@ export default function HomeLoading() {
       <div className="text-sm sm:text-base text-center mb-5">
         원하는 상품이 있는지 확인해보세요.
       </div>
-      <ul className="grid gap-5 grid-cols-autoFill mt-6">
-        <ProductListSkeletonUI listCount={12} />
-      </ul>
+
+      <ProductListSkeletonUI listCount={12} />
     </div>
   );
 }

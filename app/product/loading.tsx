@@ -21,9 +21,7 @@ export default function ProductLoading() {
       <div className="sm:hidden rounded-md w-[105px] h-9 bg-gray-200 ml-auto mr-[12px]" />
 
       {/* 상품 목록 */}
-      <ul className="w-full grid gap-5 grid-cols-autoFill mt-6">
-        <ProductListSkeletonUI listCount={12} />
-      </ul>
+      <ProductListSkeletonUI listCount={12} />
     </div>
   );
 }

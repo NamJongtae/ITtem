@@ -3,7 +3,7 @@
 import ProductListItem from "./product-list-item";
 import { ProductCategory, ProductData } from "@/types/product-types";
 import Empty from "../empty";
-import ProductListSkeletonUI from "./product-list-skeletonUI";
+import ProductItemSkeletonUI from "./product-item-skeletonUI";
 import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "../InfiniteScrollTarget";
 import InfiniteScrollEndMessage from "../InfiniteScrollEndMessage";
@@ -31,13 +31,19 @@ export default function ProductListUI({
     isFetchingNextPage
   });
 
+  const FetchingSkeletonUI = () => {
+    return Array.from({ length: 12 }).map((_, index) => (
+      <ProductItemSkeletonUI key={index} />
+    ));
+  };
+
   if (data?.length === 0) {
     return <Empty message={emptyMessage} />;
   }
 
   return (
     <div className="max-w-[1024px] mx-auto pb-12">
-      <ul className="grid gap-5 grid-cols-autoFill mt-6">
+      <ul className="grid gap-5 grid-cols-autoFill mt-6 px-8">
         <>
           {data?.map((item) => (
             <ProductListItem
@@ -46,7 +52,7 @@ export default function ProductListUI({
               category={productCategory}
             />
           ))}
-          {isFetchingNextPage && <ProductListSkeletonUI listCount={12} />}
+          {isFetchingNextPage && <FetchingSkeletonUI />}
           {<InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />}
         </>
       </ul>
