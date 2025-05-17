@@ -1,10 +1,9 @@
 import Header from "@/components/product/product-header";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
-import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+
 import CategoryProductListContainer from "@/components/product/category-product-list-container";
-import { ErrorBoundary } from "@/components/commons/ErrorBoundary";
-import ProductListError from "@/components/commons/product-list/product-list-error";
+import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
 
 export async function generateMetadata(props: {
   searchParams: Promise<{ category: string | undefined }>;
@@ -34,18 +33,8 @@ export default async function Product({
   return (
     <>
       <Header />
-      <Suspense
-        fallback={
-          <ul className="max-w-[1024px] mx-auto grid gap-5 grid-cols-autoFill mt-6 px-8">
-            <ProductListSkeletonUI listCount={8} />
-          </ul>
-        }
-      >
-        <ErrorBoundary
-          fallback={<ProductListError productListType="CATEGORY" />}
-        >
-          <CategoryProductListContainer category={category} />
-        </ErrorBoundary>
+      <Suspense fallback={<ProductListSkeletonUI listCount={8} />}>
+        <CategoryProductListContainer category={category} />
       </Suspense>
     </>
   );
