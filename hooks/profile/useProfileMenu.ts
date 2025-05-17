@@ -1,4 +1,4 @@
-import { ProfileMenu } from "@/components/profile/profile-page";
+import { ProfileMenu } from "@/types/auth-types";
 import { useState } from "react";
 
 export default function useProfileMenu() {
