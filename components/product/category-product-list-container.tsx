@@ -51,7 +51,7 @@ export default async function CategoryProductListContainer({
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SuspenseErrorBoundary
-          susnpenseFallback={<ProductListSkeletonUI listCount={8} />}
+          suspenseFallback={<ProductListSkeletonUI listCount={8} />}
           errorFallback={<ProductListError productListType="CATEGORY" />}
         >
           <CategoryProductList />
