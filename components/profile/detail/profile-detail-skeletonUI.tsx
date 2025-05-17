@@ -1,3 +1,5 @@
+import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+
 interface IProps {
   isMyProfile?: boolean;
 }
@@ -21,8 +23,8 @@ export default function ProfileDetailSkeletonUI({ isMyProfile }: IProps) {
       <div className="w-full h-10 bg-gray-300 mt-5 mb-5" />
       <div className="w-full h-1 border-b mb-4" />
 
-      {/* 리스트 */}
-      <div className="w-full h-96 bg-gray-300"></div>
+      {/* 상품 목록 */}
+      <ProductListSkeletonUI listCount={8} />
     </div>
   );
 }
