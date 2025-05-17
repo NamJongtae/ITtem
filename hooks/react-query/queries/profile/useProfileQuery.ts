@@ -1,5 +1,5 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 export default function useProfileQuery(uid?: string) {
@@ -9,14 +9,14 @@ export default function useProfileQuery(uid?: string) {
 
   const {
     data: profileData,
-    isLoading: loadProfileDataLoading,
-    error: loadProfileDataError,
-  } = useQuery({
+    isLoading: profileLoading,
+    error: profileError,
+    isSuccess: profileSuccess
+  } = useSuspenseQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn,
-    enabled: !!currentUid,
-    staleTime: 30 * 1000,
+    staleTime: 30 * 1000
   });
 
-  return { profileData, loadProfileDataLoading, loadProfileDataError };
+  return { profileData, profileLoading, profileError, profileSuccess };
 }
