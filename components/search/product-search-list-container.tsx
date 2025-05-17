@@ -8,6 +8,9 @@ import {
   QueryKey
 } from "@tanstack/react-query";
 import ProductSearchList from "./product-search-list";
+import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
+import ProductListError from "../commons/product-list/product-list-error";
+import ProductSearchLoading from '@/app/search/product/loading';
 
 interface IProps {
   category?: string;
@@ -45,7 +48,12 @@ export default async function ProductSearchListContainer({ category }: IProps) {
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductSearchList />
+        <SuspenseErrorBoundary
+          suspenseFallback={<ProductSearchLoading />}
+          errorFallback={<ProductListError productListType="SEARCH" />}
+        >
+          <ProductSearchList />
+        </SuspenseErrorBoundary>
       </HydrationBoundary>
     </>
   );
