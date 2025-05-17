@@ -97,6 +97,7 @@ export type ProductUploadData = Omit<
 
 export type ProductListType =
   | "RECOMMEND"
+  | "POPULAR"
   | "CATEGORY"
   | "SEARCH"
   | "PROFILE"
