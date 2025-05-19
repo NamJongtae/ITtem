@@ -1,7 +1,6 @@
 import { ProductUploadData } from "@/types/product-types";
 import { FieldValues } from "react-hook-form";
 import useProductUploadMutate from "../react-query/mutations/product/useProductUploadMutate";
-import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import useAuthStore from "@/store/auth-store";
 
@@ -29,11 +28,10 @@ export default function useProductUploadSubmit() {
 
       await productUploadMuate({ productData, values });
     } catch (error) {
-      if (isAxiosError<{ message: string }>(error)) {
-        toast.warn(error.response?.data.message);
-      } else if (error instanceof Error) {
-        toast.warn(error.message);
+      if (process.env.NODE_ENV !== "production") {
+        console.error(error);
       }
+      toast.warn("상품 등록에 실패했어요.\n잠시 후 다시 시도해주세요.");
     }
   };
 
