@@ -9,9 +9,9 @@ export default function useMyProfileQuery() {
   const queryKeyConfing = queryKeys.profile.my;
 
   const {
-    data,
-    isPending: queryIsPending,
-    isError: loadMyProfileError
+    data: myProfileData,
+    isPending: myProfilePending,
+    isError: myProfileError,
   } = useQuery({
     queryFn: queryKeyConfing.queryFn,
     queryKey: queryKeyConfing.queryKey,
@@ -20,14 +20,13 @@ export default function useMyProfileQuery() {
   });
 
   useEffect(() => {
-    if (loadMyProfileError) {
+    if (myProfileError) {
       toast.warn(
         "나의 프로필 정보를 가져오는데 실패했어요.\n로그인 정보를 확인해주세요."
       );
     }
-  }, [loadMyProfileError]);
+  }, [myProfileError]);
 
-  const loadMyProfileLoading = !!user && queryIsPending;
 
-  return { myProfileData: data, loadMyProfileLoading, loadMyProfileError };
+  return { myProfileData, myProfilePending, myProfileError };
 }

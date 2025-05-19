@@ -10,11 +10,11 @@ interface IProps {
 export default function ProductDetailContentBtns({
   productDetailData
 }: IProps) {
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const { myProfileData, myProfilePending } = useMyProfileQuery();
   const isSoldout = productDetailData?.status === ProductStatus.soldout;
   const isMyProduct = productDetailData?.uid === myProfileData?.uid;
 
-  if (loadMyProfileLoading || isSoldout) return null;
+  if (myProfilePending || isSoldout) return null;
 
   return (
     <div className="flex items-center mt-6 gap-3 flex-wrap">

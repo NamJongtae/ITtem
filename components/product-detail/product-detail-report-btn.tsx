@@ -7,14 +7,14 @@ interface IProps {
 }
 
 export default function ProductDetailReportBtn({ productDetailData }: IProps) {
-  const { loadMyProfileLoading, myProfileData, handleClickReport } =
+  const { myProfilePending, myProfileData, handleClickReport } =
     useProductReportHandler({
       reportUserIds: productDetailData?.reportUserIds
     });
 
   const isMyProduct = productDetailData?.uid !== myProfileData?.uid;
 
-  if (loadMyProfileLoading || isMyProduct) return null;
+  if (myProfilePending || isMyProduct) return null;
 
   return (
     <button

@@ -25,11 +25,11 @@ export default function ProfileEditForm({ isModal }: IProps) {
     submitBtnRef,
     profileImgBtnRef,
     profileImgResetBtnRef,
-    loadMyProfileLoading,
+    myProfilePending,
     closeModalHandler
   } = useProfileEditFormLogic({ isModal });
 
-  if (loadMyProfileLoading) {
+  if (myProfilePending) {
     return <Loading />;
   }
 

@@ -10,7 +10,7 @@ export default function ProductDetailSellerFollowBtn({
   uid,
   authFollowers
 }: IProps) {
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const { myProfileData, myProfilePending } = useMyProfileQuery();
 
   const { isFollowing, followHandler, isMyProfile } = useFollowUserInProduct({
     uid,
@@ -18,7 +18,7 @@ export default function ProductDetailSellerFollowBtn({
     myProfileData
   });
 
-  if (loadMyProfileLoading || isMyProfile) return null;
+  if (myProfilePending || isMyProfile) return null;
 
   return (
     <button

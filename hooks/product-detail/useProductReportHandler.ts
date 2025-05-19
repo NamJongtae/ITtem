@@ -8,7 +8,7 @@ interface IParams {
 
 export default function useProductReportHandler({ reportUserIds }: IParams) {
   const { productReportMutate } = useProductReportMutate();
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const { myProfileData, myProfilePending } = useMyProfileQuery();
   const isReport = reportUserIds?.includes(myProfileData?.uid || "");
 
   const handleClickReport = () => {
@@ -26,5 +26,5 @@ export default function useProductReportHandler({ reportUserIds }: IParams) {
     }
   };
 
-  return { loadMyProfileLoading, myProfileData, handleClickReport };
+  return { myProfilePending, myProfileData, handleClickReport };
 }

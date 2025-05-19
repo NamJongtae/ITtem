@@ -18,7 +18,7 @@ export default function useProfileEditFormLogic({ isModal }: IPrarms) {
 
   const { closeModalHandler } = useRouterBackToCloseModal();
 
-  const { myProfileData, loadMyProfileLoading } = useMyProfileQuery();
+  const { myProfileData, myProfilePending } = useMyProfileQuery();
   const { onSubmit, profileEditLoading } =
     useProfileEditSubmit(closeModalHandler);
 
@@ -26,7 +26,7 @@ export default function useProfileEditFormLogic({ isModal }: IPrarms) {
 
   return {
     myProfileData,
-    loadMyProfileLoading,
+    myProfilePending,
     onSubmit,
     profileEditLoading,
     nicknameRef,
