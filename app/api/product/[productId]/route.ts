@@ -208,7 +208,7 @@ export async function PATCH(
     const isValidAuth = await checkAuthorization();
     if (!isValidAuth.isValid) {
       return NextResponse.json(
-        { message: "isValidAuth.message," },
+        { message: isValidAuth.message },
         { status: 401 }
       );
     }
