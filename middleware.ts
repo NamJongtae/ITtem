@@ -5,15 +5,19 @@ import { sessionOptions } from "./lib/server";
 import { checkWithAuthPathname, withAuth } from "./lib/withAuth";
 
 export async function middleware(req: NextRequest, res: NextResponse) {
-  const { pathname } = req.nextUrl;
+  const { pathname, href } = req.nextUrl;
 
   const response = NextResponse.next();
-  response.cookies.set("X-Requested-URL", pathname, {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/"
-  });
+  response.cookies.set(
+    "X-Requested-URL",
+    encodeURIComponent(href.replace(req.nextUrl.origin, "")),
+    {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "strict",
+      path: "/"
+    }
+  );
 
   const isWithOutAuth = checkWithOutAuthPathname(pathname);
 
@@ -44,6 +48,6 @@ export const config = {
     "/find-password",
     "/chat/:path*",
     "/profile/:path*",
-    "/product/:path*",
+    "/product/:path*"
   ]
 };
