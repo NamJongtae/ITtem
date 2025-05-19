@@ -80,8 +80,11 @@ export async function GET() {
 
     if (!userWithReviews.length) {
       return NextResponse.json(
-        { message: "유저가 존재하지 않습니다.\n로그인 정보를 확인해주세요." },
-        { status: 404 }
+        {
+          message: "유저가 존재하지 않습니다.\n로그인 정보를 확인해주세요.",
+          profile: {}
+        },
+        { status: 200 }
       );
     }
 
