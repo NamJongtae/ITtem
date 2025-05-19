@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IProps {
-  isEdit?: boolean;
+  isEdit: boolean;
 }
 
 export default function ProductUploadHeader({ isEdit }: IProps) {

@@ -13,10 +13,9 @@ import ProductUploadBtns from "./btns/product-upload-btns";
 import ProductUploadImgField from "./imgField/product-upload-img-field";
 
 interface IProps {
-  isEdit?: boolean | undefined;
   imgData?: ProductImgData[];
 }
-export default function ProductUploadFormContent({ isEdit, imgData }: IProps) {
+export default function ProductUploadFormContent({ imgData }: IProps) {
   return (
     <>
       <ProductUploadImgField imgData={imgData} />
@@ -30,7 +29,7 @@ export default function ProductUploadFormContent({ isEdit, imgData }: IProps) {
       <ProductUploadPriceField />
       <ProductUploadDeliveryFeeField />
       <ProductUploadDescField />
-      <ProductUploadBtns isEdit={isEdit} />
+      <ProductUploadBtns />
     </>
   );
 }

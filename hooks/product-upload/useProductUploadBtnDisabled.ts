@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
-export default function useProductUploadBtnDisabled(isEdit?: boolean) {
+export default function useProductUploadBtnDisabled(isEditPage?: boolean) {
   const router = useRouter();
 
   const { formState } = useFormContext();
@@ -12,7 +12,7 @@ export default function useProductUploadBtnDisabled(isEdit?: boolean) {
 
   const { errors, dirtyFields } = formState;
 
-  const isDirties = isEdit
+  const isDirties = isEditPage
     ? dirtyFields["imgData"] ||
       dirtyFields["prevImgData"] ||
       dirtyFields["price"] ||
