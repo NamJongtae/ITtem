@@ -3,6 +3,9 @@ import NotificationModalList from "./notification-modal-list";
 import NotificationModalHeader from "./notification-modal-header";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
 import useNotificaitonModal from "@/hooks/commons/layout/useNotificaitonModal";
+import SuspenseErrorBoundary from "../suspense-error-boundary";
+import NotificationModalLoading from "./notification-modal-loading";
+import NotificaitonModalError from "./notificaiton-modal-error";
 
 interface IProps {
   isOpenModal: boolean;
@@ -26,7 +29,12 @@ const NotificationModal = forwardRef<HTMLDivElement, IProps>(
         }
       >
         <NotificationModalHeader />
-        <NotificationModalList />
+        <SuspenseErrorBoundary
+          suspenseFallback={<NotificationModalLoading />}
+          errorFallback={<NotificaitonModalError />}
+        >
+          <NotificationModalList />
+        </SuspenseErrorBoundary>
       </div>
     );
   }

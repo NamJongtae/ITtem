@@ -7,32 +7,14 @@ import useInfiniteScrollObserver from "@/hooks/commons/useInfiniteScrollObserver
 import InfiniteScrollTarget from "../InfiniteScrollTarget";
 
 export default function NotificationModalList() {
-  const {
-    data,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error
-  } = useNotificationInfiniteQuery();
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useNotificationInfiniteQuery();
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage
   });
-
-  if (error) {
-    return (
-      <Empty
-        message={
-          "알림 메세지를 조회에 실패했어요.\n 잠시 후 다시 시도해주세요."
-        }
-        messageSize="sm"
-        iconSize={50}
-      />
-    );
-  }
 
   if (data?.length === 0) {
     return (
@@ -50,11 +32,7 @@ export default function NotificationModalList() {
       )}
 
       <ul className="flex flex-col w-full p-5 pt-2">
-        {isLoading ? (
-          <li className="absolute center">
-            <Spinner />
-          </li>
-        ) : (
+        {
           <>
             {data?.map((data) => (
               <NotificationModalItem key={data.id} data={data} />
@@ -66,7 +44,7 @@ export default function NotificationModalList() {
             )}
             <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
           </>
-        )}
+        }
       </ul>
     </div>
   );
