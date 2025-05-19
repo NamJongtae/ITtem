@@ -4,12 +4,12 @@ type RouterAction =
   | {
       type: "push";
       url: string;
-      options?: { scroll?: boolean; shallow?: boolean };
+      options?: { scroll?: boolean };
     }
   | {
       type: "replace";
       url: string;
-      options?: { scroll?: boolean; shallow?: boolean };
+      options?: { scroll?: boolean };
     }
   | { type: "refresh" }
   | { type: "back" };
