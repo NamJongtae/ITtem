@@ -1,31 +1,17 @@
-import Image from "next/image";
+import ProfileDetailWishItemSkeltonUI from "./profile-detail-wish-item-skeletonUI";
 
-interface IProps {
-  listCount?: number;
-}
-
-export default function ProfileDetailWishSkeletonUI({
-  listCount = 10,
-}: IProps) {
-  return Array(listCount)
-    .fill("")
-    .map((_, index) => (
-      <li key={index} className="animate-pulse border">
-        <div className="flex gap-3 w-full">
-          <Image
-            className="w-32 h-32 border-r bg-gray-200"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-            width={56}
-            height={56}
-            alt="loading..."
-          />
-          <div className="flex flex-col gap-3 px-4 py-2">
-            <div className="w-32 h-[14px] bg-gray-300 mb-2"></div>
-            <div className="h-[14px] bg-gray-300 mb-1"></div>
-            <div className="h-[14px] bg-gray-300 mb-1"></div>
-            <div className="w-20 h-[14px] bg-gray-300"></div>
-          </div>
-        </div>
-      </li>
-    ));
+export default function ProfileDetailWishSkeletonUI() {
+  return (
+    <>
+      <div className="w-20 h-6 bg-gray-300 mb-5" />
+      <ul className="grid grid-col-1 md:grid-cols-2 gap-3">
+        {Array(8)
+          .fill("")
+          .map((_, index) => (
+            <ProfileDetailWishItemSkeltonUI key={index} />
+          ))}
+        ;
+      </ul>
+    </>
+  );
 }
