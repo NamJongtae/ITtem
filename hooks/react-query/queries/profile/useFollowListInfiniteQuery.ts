@@ -4,14 +4,13 @@ import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useFollowListInfiniteQuery({
   isFollowers,
   userIds,
-  uid,
   limit = 10
 }: {
   isFollowers: boolean;
@@ -36,7 +35,7 @@ export default function useFollowListInfiniteQuery({
     fetchNextPage,
     hasNextPage,
     error
-  } = useInfiniteQuery<ProfileData[], AxiosError, InfiniteData<ProfileData>>({
+  } = useSuspenseInfiniteQuery<ProfileData[], AxiosError, InfiniteData<ProfileData>>({
     queryKey: queryKeyConfing.queryKey,
     queryFn: queryKeyConfing.queryFn as QueryFunction<
       ProfileData[],
@@ -44,7 +43,6 @@ export default function useFollowListInfiniteQuery({
       unknown
     >,
     initialPageParam: null,
-    enabled: !!uid,
     retry: 0,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.uid;
