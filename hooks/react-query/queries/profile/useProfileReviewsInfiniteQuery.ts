@@ -4,7 +4,7 @@ import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -26,7 +26,7 @@ export default function useProfileReviewsInfiniteQuery({
     hasNextPage,
     fetchNextPage,
     error
-  } = useInfiniteQuery<
+  } = useSuspenseInfiniteQuery<
     ProfileReviewData[],
     AxiosError,
     InfiniteData<ProfileReviewData>
