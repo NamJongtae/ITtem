@@ -3,11 +3,16 @@
 import UserInfo from "./user-info/user-info";
 import Detail from "./detail/profile-detail";
 import useProfileMenu from "@/hooks/profile/useProfileMenu";
-import useMyProfileQuery from "@/hooks/react-query/queries/profile/useMyProfileQuery";
+import useMyProfileSuspenseQuery from "@/hooks/react-query/queries/profile/useMyProfileSuspenseQuery";
+import Empty from "../commons/empty";
 
 export default function MyProfilePage() {
-  const { myProfileData } = useMyProfileQuery();
+  const { myProfileData } = useMyProfileSuspenseQuery();
   const { profileMenu, onClickMenu } = useProfileMenu();
+
+  if (!myProfileData) {
+    <Empty message="존재하지 않는 유저에요." />;
+  }
 
   return (
     <>
