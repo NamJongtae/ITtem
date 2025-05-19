@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 import MyProfilePage from "./my-profile-page";
 import SuspenseErrorBoundary from "../commons/suspense-error-boundary";
 import ProfileDetailSkeletonUI from "./detail/profile-detail-skeletonUI";
-import ProductListError from "../commons/product-list/product-list-error";
+import Empty from "../commons/empty";
 
 async function prefetchProfile() {
   const { getIronSession } = await import("iron-session");
@@ -59,7 +59,13 @@ export default async function MyProfileContainer() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SuspenseErrorBoundary
         suspenseFallback={<ProfileDetailSkeletonUI />}
-        errorFallback={<ProductListError productListType="PROFILE" />}
+        errorFallback={
+          <Empty
+            message={
+              "나의 프로필을 불러올 수 없어요.\n 잠시 후 다시 시도해주세요."
+            }
+          />
+        }
       >
         <MyProfilePage />
       </SuspenseErrorBoundary>
