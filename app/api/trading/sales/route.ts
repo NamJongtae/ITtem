@@ -1,6 +1,6 @@
 import SaleTrading, { SaleTradingDB } from "@/lib/db/models/SaleTrading";
 import { checkAuthorization } from "@/lib/server";
-import { FilterQuery, PipelineStage } from 'mongoose';
+import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -34,10 +34,10 @@ export async function GET(req: NextRequest) {
     status === "CANCEL_END/RETURN_END"
       ? "취소/반품"
       : status === "TRADING_END"
-      ? "거래완료"
-      : status === "CANCEL_REJECT/RETURN_REJECT"
-      ? "취소/반품 거절"
-      : "거래중";
+        ? "거래완료"
+        : status === "CANCEL_REJECT/RETURN_REJECT"
+          ? "취소/반품 거절"
+          : "거래중";
 
   try {
     const currentCursor = cursor ? new Date(cursor) : new Date();
@@ -46,14 +46,14 @@ export async function GET(req: NextRequest) {
       status === "CANCEL_END/RETURN_END"
         ? ["CANCEL_END", "RETURN_END"]
         : status === "TRADING_END"
-        ? ["TRADING_END"]
-        : status === "CANCEL_REJECT/RETURN_REJECT"
-        ? ["CANCEL_REJECT", "RETURN_REJECT"]
-        : ["TRADING", "CANCEL", "RETURN"];
+          ? ["TRADING_END"]
+          : status === "CANCEL_REJECT/RETURN_REJECT"
+            ? ["CANCEL_REJECT", "RETURN_REJECT"]
+            : ["TRADING", "CANCEL", "RETURN"];
     const matchStage: FilterQuery<SaleTradingDB> = {
       saleStartDate: { $lt: currentCursor },
       sellerId: myUid,
-      status: { $in: currentStatus },
+      status: { $in: currentStatus }
     };
 
     if (search) {
@@ -62,45 +62,45 @@ export async function GET(req: NextRequest) {
 
     const aggregate: PipelineStage[] = [
       {
-        $match: matchStage,
+        $match: matchStage
       },
       {
-        $sort: { saleStartDate: -1 },
+        $sort: { saleStartDate: -1 }
       },
       {
-        $limit: currentLimit,
+        $limit: currentLimit
       },
       {
         $addFields: {
-          convertedSellerId: { $toObjectId: "$sellerId" },
-        },
+          convertedSellerId: { $toObjectId: "$sellerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "convertedSellerId",
           foreignField: "_id",
-          as: "sellerInfo",
-        },
+          as: "sellerInfo"
+        }
       },
       {
-        $unwind: { path: "$sellerInfo", preserveNullAndEmptyArrays: true },
+        $unwind: { path: "$sellerInfo", preserveNullAndEmptyArrays: true }
       },
       {
         $addFields: {
-          convertedbuyerId: { $toObjectId: "$buyerId" },
-        },
+          convertedbuyerId: { $toObjectId: "$buyerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "convertedbuyerId",
           foreignField: "_id",
-          as: "buyerInfo",
-        },
+          as: "buyerInfo"
+        }
       },
       {
-        $unwind: { path: "$buyerInfo", preserveNullAndEmptyArrays: true },
+        $unwind: { path: "$buyerInfo", preserveNullAndEmptyArrays: true }
       },
       {
         $project: {
@@ -127,19 +127,13 @@ export async function GET(req: NextRequest) {
           returnRejectDate: 1,
           process: 1,
           status: 1,
-          isReviewed: 1,
-        },
-      },
+          isReviewed: 1
+        }
+      }
     ];
 
     const saleTrading = await SaleTrading.aggregate(aggregate);
 
-    if (saleTrading.length === 0) {
-      return NextResponse.json(
-        { message: `${message} 목록이 없어요.` },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json(
       { message: `${message} 목록 조회에 성공했어요.`, saleTrading },
@@ -149,7 +143,7 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       {
-        message: `${message} 목록 조회에 실패하였습니다.\n잠시 후 다시 시도해주세요.`,
+        message: `${message} 목록 조회에 실패하였습니다.\n잠시 후 다시 시도해주세요.`
       },
       { status: 500 }
     );
