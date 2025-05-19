@@ -1,7 +1,7 @@
 import ProductUploadFieldSkeletonUI from '@/components/product-upload/product-upload-field-skeletonUI';
 
 interface IProps {
-  isEdit?: boolean;
+  isEdit: boolean;
 }
 
 export default function ProductUploadLoading({ isEdit }: IProps) {
