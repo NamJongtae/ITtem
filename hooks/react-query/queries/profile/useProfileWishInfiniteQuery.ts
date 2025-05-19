@@ -1,7 +1,7 @@
 import { getProfileWish } from "@/lib/api/profile";
 import { queryKeys } from "@/query-keys/query-keys";
 import { ProductData } from "@/types/product-types";
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData,  useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export default function useProfileWishInfiniteQuery({
@@ -20,7 +20,7 @@ export default function useProfileWishInfiniteQuery({
     hasNextPage,
     fetchNextPage,
     error,
-  } = useInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
+  } = useSuspenseInfiniteQuery<ProductData[], AxiosError, InfiniteData<ProductData>>({
     queryKey: myProfileQueryKey,
     queryFn: async ({ pageParam }) => {
       const response = await getProfileWish({
