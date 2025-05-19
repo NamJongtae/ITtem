@@ -1,15 +1,13 @@
 import { queryKeys } from "@/query-keys/query-keys";
-import useAuthStore from "@/store/auth-store";
 import { NotificationMessageData } from "@/types/notification-types";
 import {
   InfiniteData,
   QueryFunction,
   QueryKey,
-  useInfiniteQuery
+  useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 
 export default function useNotificationInfiniteQuery(limit: number = 10) {
-  const user = useAuthStore((state) => state.user);
   const queryKeyConfig = queryKeys.notification.messages(limit);
 
   const {
@@ -19,7 +17,7 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
     isFetchingNextPage,
     isLoading,
     error
-  } = useInfiniteQuery<
+  } = useSuspenseInfiniteQuery<
     { messages: NotificationMessageData[]; nextKey: string },
     Error,
     InfiniteData<{ messages: NotificationMessageData; nextKey: string }>
@@ -30,7 +28,6 @@ export default function useNotificationInfiniteQuery(limit: number = 10) {
       QueryKey,
       unknown
     >,
-    enabled: !!user,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage?.nextKey || undefined
   });
