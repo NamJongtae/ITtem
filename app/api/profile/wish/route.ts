@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
 
     if (!wishProductIds.length) {
       return NextResponse.json(
-        { message: "찜 목록이 없어요." },
-        { status: 422 }
+        { message: "찜 목록이 없어요.", products: [] },
+        { status: 200 }
       );
     }
 
