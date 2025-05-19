@@ -7,12 +7,9 @@ interface IProps {
 }
 
 export default function ChatRoomHeaderProduct({ productId }: IProps) {
-  const { productDetailData, loadProductLoading } = useProductQuery(
-    false,
-    productId
-  );
+  const { productData, productLoading } = useProductQuery(productId);
 
-  if (!productDetailData || loadProductLoading) {
+  if (!productData || productLoading) {
     return (
       <div className="rounded-full w-10 h-10">
         <span className="sr-only">loading</span>
@@ -20,22 +17,20 @@ export default function ChatRoomHeaderProduct({ productId }: IProps) {
     );
   }
   return (
-    <Link className="flex gap-2" href={`/product/${productDetailData._id}`}>
+    <Link className="flex gap-2" href={`/product/${productData._id}`}>
       <Image
         className="rounded-full w-10 h-10 object-cover object-center"
-        src={productDetailData?.imgData[0].url || ""}
-        alt={productDetailData?.name || ""}
+        src={productData?.imgData[0].url || ""}
+        alt={productData?.name || ""}
         width={40}
         height={40}
       />
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-sm line-clamp-1">
-            {productDetailData?.name}
-          </span>
+          <span className="text-sm line-clamp-1">{productData?.name}</span>
         </div>
         <span className="block text-xs font-semibold text-gray-400">
-          {productDetailData?.price.toLocaleString()} 원
+          {productData?.price.toLocaleString()} 원
         </span>
       </div>
     </Link>
