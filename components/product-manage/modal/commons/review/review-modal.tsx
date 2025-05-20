@@ -9,8 +9,7 @@ import ReviewModalCloseBtn from "./review-modal-close-btn";
 import ReviewModalHeader from "./review-modal-header";
 import ReviewModalBackDrop from "./review-modal-back-drop";
 import { escKeyClose } from "@/lib/optimizationKeyboard";
-import Loading from '@/components/commons/loading';
-
+import Empty from "@/components/commons/empty";
 
 interface IProps {
   productId: string;
@@ -19,16 +18,12 @@ interface IProps {
 
 export default function ReviewModal({
   productId,
-  handleClickCloseBtn,
+  handleClickCloseBtn
 }: IProps) {
-  const { data, isLoading } = useProductReviewQuery({
+  const { data } = useProductReviewQuery({
     productId,
-    closeModal: handleClickCloseBtn,
+    closeModal: handleClickCloseBtn
   });
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Portal>
@@ -42,17 +37,27 @@ export default function ReviewModal({
           escKeyClose({ event: e, closeCb: handleClickCloseBtn })
         }
       >
-        <ReviewModalHeader />
+        {!data ? (
+          <>
+            <ReviewModalHeader />
+            <Empty message="리뷰가 존재하지 않아요." />
+            <ReviewModalCloseBtn handleClickCloseBtn={handleClickCloseBtn} />
+          </>
+        ) : (
+          <>
+            <ReviewModalHeader />
 
-        <ReviewModalReviewer reviewer={data?.reviewer} />
+            <ReviewModalReviewer reviewer={data?.reviewer} />
 
-        <ReviewModalReviewStar reviewScore={data?.reviewScore} />
+            <ReviewModalReviewStar reviewScore={data?.reviewScore} />
 
-        <ReviewModalReviewTags reviewTags={data?.reviewTags} />
+            <ReviewModalReviewTags reviewTags={data?.reviewTags} />
 
-        <ReviewModalReviewContent reviewContent={data?.reviewContent} />
+            <ReviewModalReviewContent reviewContent={data?.reviewContent} />
 
-        <ReviewModalCloseBtn handleClickCloseBtn={handleClickCloseBtn} />
+            <ReviewModalCloseBtn handleClickCloseBtn={handleClickCloseBtn} />
+          </>
+        )}
       </div>
     </Portal>
   );
