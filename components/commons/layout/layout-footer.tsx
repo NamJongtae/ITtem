@@ -3,15 +3,15 @@ import useVisible from "@/hooks/commons/useVisible";
 
 export default function LayoutFooter() {
   const { isVisible } = useVisible({
-    pathnames: ["signup", "signin", "findpassword"],
+    pathnames: ["signup", "signin", "findpassword"]
   });
 
   if (!isVisible) {
     return null;
   }
-  
+
   return (
-    <footer className="footer footer-center  w-full p-4 bg-gray-300 text-gray-800">
+    <footer className="footer footer-center w-full p-4 bg-gray-300 text-gray-800 pb-[80px] md:pb-4">
       <div className="text-center">
         <p className="text-sm md:text-md">
           Copyright © 2024 -{" "}
