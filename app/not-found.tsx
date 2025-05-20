@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="pb-16 h-[calc(100vh-64px)]">
-      <div className="absolute center bg-white border border-gray-200 flex flex-col items-center px-4 md:px-8 py-8 rounded-lg shadow-2xl w-full max-w-[340px] sm:max-w-md">
+    <div className="h-[calc(100vh-165px)] md:h-[calc(100vh-179px)]">
+      <div className="absolute center flex flex-col items-center px-4 md:px-8 py-8 w-full max-w-[340px] sm:max-w-md ">
         <p className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider text-gray-300">
           404
         </p>
