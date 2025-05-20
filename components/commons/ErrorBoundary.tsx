@@ -1,8 +1,10 @@
 import React, { ErrorInfo, ReactNode } from "react";
+import { toast } from "react-toastify";
 
 interface ErrorBoundaryProps {
   fallback: ReactNode;
   children: ReactNode;
+  errorMessage?: string;
 }
 
 interface ErrorBoundaryState {
@@ -24,6 +26,7 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error("ErrorBoundary caught an error:", error, errorInfo);
+    toast.warn(this.props.errorMessage);
   }
 
   render() {
