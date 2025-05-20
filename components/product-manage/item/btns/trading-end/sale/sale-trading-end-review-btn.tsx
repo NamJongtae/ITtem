@@ -1,6 +1,8 @@
 import React from "react";
 import ReviewModal from "../../../../modal/commons/review/review-modal";
 import useModal from "@/hooks/commons/useModal";
+import SuspenseErrorBoundary from "@/components/commons/suspense-error-boundary";
+import Loading from "@/components/commons/loading";
 
 interface IProps {
   productId: string;
@@ -18,10 +20,17 @@ export default function SaleTradingEndReviewBtn({ productId }: IProps) {
         리뷰 보기
       </button>
       {isOpenModal && (
-        <ReviewModal
-          productId={productId}
-          handleClickCloseBtn={handleClickCloseBtn}
-        />
+        <SuspenseErrorBoundary
+          suspenseFallback={<Loading />}
+          errorMessage={
+            "리뷰 정보를 불러올 수 없습니다\n잠시 후 다시 시도해주세요."
+          }
+        >
+          <ReviewModal
+            productId={productId}
+            handleClickCloseBtn={handleClickCloseBtn}
+          />
+        </SuspenseErrorBoundary>
       )}
     </>
   );
