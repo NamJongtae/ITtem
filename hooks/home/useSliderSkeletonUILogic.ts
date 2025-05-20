@@ -1,10 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import useDebouncing from '../commons/useDebouncing';
+import { useThrottle } from "../commons/useThrottle";
+
+const getInitialLayout = () => {
+  if (typeof window === "undefined") return { slidesToShow: 4, gap: 30 };
+
+  const width = window.innerWidth;
+  if (width < 540) return { slidesToShow: 1, gap: 10 };
+  if (width < 768) return { slidesToShow: 2, gap: 20 };
+  if (width < 1024) return { slidesToShow: 3, gap: 30 };
+  return { slidesToShow: 4, gap: 30 };
+};
 
 export default function useSliderSkeletonUILogic() {
-  const [slidesToShow, setSlidesToShow] = useState(4);
-  const [gap, setGap] = useState(30);
-  const debounce = useDebouncing();
+  const initial = getInitialLayout();
+  const [slidesToShow, setSlidesToShow] = useState(initial.slidesToShow);
+  const [gap, setGap] = useState(initial.gap);
 
   const updateLayout = useCallback(() => {
     const width = window.innerWidth;
@@ -24,16 +34,14 @@ export default function useSliderSkeletonUILogic() {
     }
   }, []);
 
+  const throttledUpdateLayout = useThrottle(updateLayout, 100);
+
   useEffect(() => {
-    updateLayout();
+    throttledUpdateLayout();
 
-    const handleResize = () => {
-      debounce(updateLayout, 150);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [debounce, updateLayout]);
+    window.addEventListener("resize", throttledUpdateLayout);
+    return () => window.removeEventListener("resize", throttledUpdateLayout);
+  }, [throttledUpdateLayout]);
 
   return { slidesToShow, gap };
 }
