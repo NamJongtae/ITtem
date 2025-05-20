@@ -28,7 +28,7 @@ export default function ProfileDetailFollowings({ profileData }: IProps) {
           }
         >
           <ProfileDetailFollowList
-            isFollowers={true}
+            isFollowers={false}
             profileData={profileData}
           />
         </SuspenseErrorBoundary>
