@@ -9,7 +9,8 @@ export default function LayoutNavAuth() {
   const { user, authIsLoading } = useAuth();
   const isLoginUser = user?.uid;
 
-  if (authIsLoading) return null;
+  if (authIsLoading)
+    return <div className="w-[36px] md:w-[192px] lg:w-[246px]"></div>;
 
   return (
     <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
