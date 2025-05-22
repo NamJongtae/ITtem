@@ -48,6 +48,7 @@
   - [💫 전역 로딩 컴포넌트 및 로딩 상태 추가](#-전역-로딩-컴포넌트-및-로딩-상태-추가)
   - [🎯 SRP 원칙에 따라 custom hook 코드 분리 및 hook명 수정](#-srp-원칙에-따라-custom-hook-코드-분리-및-hook명-수정)
   - [🔁 Zustand 이메일 인증 상태 Context API로 전환](#-zustand-이메일-인증-상태-context-api로-전환)
+  - [🗂 도메인 디렉토리 구조 적용](#-도메인-디렉토리-구조-적용)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -2595,6 +2596,74 @@ export function EmailVerificationContextProvider({
     </EmailVerificationContext.Provider>
   );
 }
+```
+
+</details>
+
+<br/>
+
+#### 🗂 도메인 디렉토리 구조 적용
+> **적용이유**
+- 기존 파일 구조는 `components`, `constants`, `hooks`, `types` 등 역할별로 분산되어 있어, 수정이나 삭제 시 관련된 파일들을 일일이 찾아야 하는 번거로움이 있습니다.
+- 이를 개선하기 위해 관련된 코드들이 하나의 도메인안에서 관리되도록 도메인별 디렉토리 구조로 파일 구조를 변경하였습니다.
+
+> **적용 방법**
+- 공통 요소는 기존처럼 상위에 두되, `domains` 폴더 하위에 도메인별 폴더를 생성하고, 각 도메인 내부에 `components`, `constansts`, `hooks`, `types`, `utils` 등 폴더를 생성하여 관련된 코드들이 하나의 디렉토리 안에서 관리되도록 구성합니다.
+
+> **적용으로 얻은 이점**
+- 관련 코드들이 모여 있어 의존 관계 파악이 쉬워졌습니다.
+- 도메인 단위의 디렉토리 삭제로 깔끔한 코드 정리가능합니다.
+- import 경로만 보더라도 파일 위치 및 역할 파악 가능합니다.
+
+> **폴더 구조 비교**
+
+<details>
+<summary>폴더 구조 보기</summary>
+
+<br/>
+
+**적용 전 폴더 구조**
+
+```text
+ ┣ 📂app
+ ┣ 📂components
+ ┣ 📂constants
+ ┣ 📂hooks
+ ┣ 📂lib
+ ┣ 📂types
+ ┣ ...
+```
+
+**적용 후 폴더 구조**
+
+- 상위 components, contstants, hooks, utils, types 등 공통적으로 사용하는 파일들을 두며, domains 폴더 하위에 domain 폴더를 생성하여 관련된 코드들이 하나의 디렉토리 안에서 관리되도록 구성합니다.
+
+```text
+ ┣ 📂app
+ ┣ 📂components
+ ┣ 📂constants
+ ┣ 📂hooks
+ ┣ 📂utils
+ ┣ 📂types
+ ┣ 📂domains
+ ┃ ┣ 📂auth
+ ┃ ┣ ┣ 📂api
+ ┃ ┣ ┣ 📂components
+ ┃ ┣ ┣ 📂hooks
+ ┃ ┣ ┣ 📂models
+ ┃ ┣ ┗ ...
+ ┃ ┣ 📂chat
+ ┃ ┣ ┣ 📂api
+ ┃ ┣ ┣ 📂components
+ ┃ ┣ ┣ 📂hooks
+ ┃ ┣ ┣ 📂models
+ ┃ ┣ ┗ ...
+ ┃ ┣ 📂home
+ ┃ ┣ 📂notification
+ ┃ ┣ 📂product
+ ┃ ┣ 📂search
+ ┃ ┗ 📂user
+ ┣ ...
 ```
 
 </details>
