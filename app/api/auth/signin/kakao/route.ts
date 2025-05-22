@@ -1,17 +1,14 @@
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import {
-  createAndSaveToken,
-  createUniqueNickname,
-  sessionOptions,
-} from "@/lib/server";
-import { IronSessionType } from "@/types/api-types";
-import { LoginType } from "@/types/auth-types";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import { IronSessionType, LoginType } from "@/domains/auth/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import { getToken } from "@/lib/api/redis";
+import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
+import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
+import createUniqueNickname from "@/domains/auth/utils/createUniqueNickname";
+import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   const { user } = await req.json();
@@ -29,12 +26,12 @@ export async function POST(req: NextRequest) {
     await dbConnect();
 
     const dbUserData = await User.findOne({
-      email: kakaoUserData.id.toString(),
+      email: kakaoUserData.id.toString()
     });
 
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
 
     if (!dbUserData) {
@@ -50,7 +47,7 @@ export async function POST(req: NextRequest) {
           nickname: userNickname,
           profileImg,
           loginType: LoginType.KAKAO,
-          profileImgFilename: "",
+          profileImgFilename: ""
         };
 
         const newUser = new User(userData);
@@ -59,9 +56,9 @@ export async function POST(req: NextRequest) {
 
         await createAndSaveToken({
           user: {
-            uid: newUser._id,
+            uid: newUser._id
           },
-          session,
+          session
         });
 
         return NextResponse.json(
@@ -71,8 +68,8 @@ export async function POST(req: NextRequest) {
               uid: newUser._id,
               email: newUser.email,
               nickname: newUser.nickname,
-              profileImg: newUser.profileImg || "/icons/user_icon.svg",
-            },
+              profileImg: newUser.profileImg || "/icons/user_icon.svg"
+            }
           },
           { status: 201 }
         );
@@ -85,14 +82,14 @@ export async function POST(req: NextRequest) {
           return NextResponse.json(
             {
               message: "유효하지 않은 값이 있어요.",
-              error: errorMessages,
+              error: errorMessages
             },
             { status: 422 }
           );
         }
         return NextResponse.json(
           {
-            message: "회원가입에 실패했어요.",
+            message: "회원가입에 실패했어요."
           },
           { status: 500 }
         );
@@ -102,7 +99,7 @@ export async function POST(req: NextRequest) {
     if (dbUserData.loginType !== "KAKAO") {
       return NextResponse.json(
         {
-          message: "이미 가입된 이메일입니다.",
+          message: "이미 가입된 이메일입니다."
         },
         { status: 401 }
       );
@@ -111,12 +108,12 @@ export async function POST(req: NextRequest) {
     // 로그인 로직
     const { _id: uid, email, nickname, profileImg } = dbUserData;
 
-    const refreshTokenData = await getToken(uid, "refreshToken");
+    const refreshTokenData = await getTokenFromRedis(uid, "refreshToken");
 
     if (refreshTokenData) {
       return NextResponse.json(
         {
-          message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다.",
+          message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
         },
         { status: 409 }
       );
@@ -124,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     await createAndSaveToken({
       user: { uid },
-      session,
+      session
     });
 
     return NextResponse.json(
@@ -134,8 +131,8 @@ export async function POST(req: NextRequest) {
           uid,
           email,
           nickname,
-          profileImg,
-        },
+          profileImg
+        }
       },
       { status: 200 }
     );
@@ -143,7 +140,7 @@ export async function POST(req: NextRequest) {
     console.log(error);
     return NextResponse.json(
       {
-        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

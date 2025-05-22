@@ -1,8 +1,8 @@
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
-import ProductDetailContainer from "@/components/product-detail/product-detail-container";
-import { getProduct } from "@/lib/api/product";
-import ProductDetailSkeletonUI from "@/components/product-detail/product-detail-skeletonUI";
+import ProductDetailContainer from "@/domains/product/components/detail/product-detail-container";
+import getProduct from "@/domains/product/api/getProduct";
+import ProductDetailSkeletonUI from "@/domains/product/components/detail/product-detail-skeletonUI";
 
 export async function generateMetadata({
   params
@@ -39,7 +39,7 @@ export default async function ProductDetail({
   params: Promise<{ productId: string | undefined }>;
 }) {
   const { productId } = await params;
-  
+
   return (
     <>
       <Suspense fallback={<ProductDetailSkeletonUI userUid={productId} />}>

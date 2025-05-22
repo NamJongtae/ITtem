@@ -1,6 +1,6 @@
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
@@ -12,7 +12,7 @@ export async function GET() {
       const response = NextResponse.json(
         { message: isValidAuth.message },
         {
-          status: 401,
+          status: 401
         }
       );
       return response;
@@ -23,7 +23,7 @@ export async function GET() {
     await dbConnect();
 
     const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid),
+      _id: new mongoose.Types.ObjectId(myUid)
     });
 
     const response = NextResponse.json(
@@ -33,11 +33,11 @@ export async function GET() {
           uid: user._id,
           nickname: user.nickname,
           profileImg: user.profileImg,
-          email: user.email,
-        },
+          email: user.email
+        }
       },
       {
-        status: 200,
+        status: 200
       }
     );
 
@@ -46,7 +46,7 @@ export async function GET() {
     console.error(error);
     return NextResponse.json(
       {
-        message: "유저 인증에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "유저 인증에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

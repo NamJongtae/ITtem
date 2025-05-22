@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     await dbConnect();
 
     const isDuplication = await User.findOne({
-      email: { $regex: new RegExp(email, "i") },
+      email: { $regex: new RegExp(email, "i") }
     });
 
     if (isDuplication) {

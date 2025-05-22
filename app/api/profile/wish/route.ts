@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import Product from "@/lib/db/models/Product";
-import { checkAuthorization } from "@/lib/server";
-import User from "@/lib/db/models/User";
-import dbConnect from "@/lib/db/db";
+import Product from "@/domains/product/models/Product";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import User from "@/domains/auth/models/User";
+import dbConnect from "@/utils/db/db";
 
 export async function POST(req: NextRequest) {
   try {

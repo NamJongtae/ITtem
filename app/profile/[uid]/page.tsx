@@ -1,6 +1,6 @@
-import ProfileDetailSkeletonUI from "@/components/profile/detail/profile-detail-skeletonUI";
-import ProfileUserInfoSkeletonUI from "@/components/profile/user-info/profile-user-info-skeletonUI";
-import UserProfileContainer from "@/components/profile/user-profile-container";
+import ProfileDetailSkeletonUI from "@/domains/user/components/profile/detail/profile-detail-skeletonUI";
+import ProfileUserInfoSkeletonUI from "@/domains/user/components/profile/user-info/profile-user-info-skeletonUI";
+import UserProfileContainer from "@/domains/user/components/profile/user-profile-container";
 import { BASE_URL } from "@/constants/constant";
 import React, { Suspense } from "react";
 

@@ -4,13 +4,13 @@ import "react-toastify/dist/ReactToastify.min.css";
 import "@/styles/toast.css";
 import "@/styles/swiper-styles.css";
 import "@/styles/globals.css";
-import Layout from "@/components/commons/layout/layout";
+import Layout from "@/components/layout/layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 import { BASE_URL } from "@/constants/constant";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
-import Loading from "@/components/commons/loading";
-import GlobalLoading from '@/components/commons/global-loading';
+import Loading from "@/components/loading";
+import GlobalLoading from "@/components/global-loading";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],

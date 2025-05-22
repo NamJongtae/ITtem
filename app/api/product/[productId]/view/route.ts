@@ -1,5 +1,5 @@
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 

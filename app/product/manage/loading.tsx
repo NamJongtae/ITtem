@@ -1,4 +1,4 @@
-import ProductManageListSkeletonUI from "@/components/product-manage/list/product-manage-list-skeletonUI";
+import ProductManageListSkeletonUI from "@/domains/product/components/manage/list/product-manage-list-skeletonUI";
 
 export default function ProductManageLoading() {
   return (

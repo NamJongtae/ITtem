@@ -1,6 +1,6 @@
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
-import { ProductStatus } from "@/types/product-types";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
+import { ProductStatus } from "@/domains/product/types/product-types";
 
 export async function GET() {
   try {

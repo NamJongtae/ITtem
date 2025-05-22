@@ -1,4 +1,4 @@
-import SearchPage from "@/components/search/search-page";
+import SearchPage from "@/domains/search/components/search-page";
 import { BASE_URL } from "@/constants/constant";
 
 export async function generateMetadata({

@@ -1,7 +1,7 @@
-import HomeBanner from "@/components/home/hom-banner";
+import HomeBanner from "@/domains/home/components/hom-banner";
 import { Metadata } from "next";
-import PopularProduct from '@/components/home/popular-product';
-import RecommendProduct from '@/components/home/recommend-product';
+import PopularProduct from "@/domains/home/components/popular-product";
+import RecommendProduct from "@/domains/home/components/recommend-product";
 
 export const metadata: Metadata = {
   title: "ITtem | 홈",
@@ -16,7 +16,7 @@ export default async function Home() {
       <h2 className="sr-only">홈 페이지</h2>
       <HomeBanner />
       <PopularProduct />
-      <RecommendProduct/>
+      <RecommendProduct />
     </>
   );
 }

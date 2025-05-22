@@ -1,4 +1,4 @@
-import customAxios from "@/lib/customAxios";
+import customAxios from "@/utils/customAxios";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 

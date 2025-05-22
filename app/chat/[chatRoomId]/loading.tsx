@@ -1,4 +1,4 @@
-import Spinner from "@/components/commons/spinner";
+import Spinner from "@/components/spinner";
 import Image from "next/image";
 import React from "react";
 

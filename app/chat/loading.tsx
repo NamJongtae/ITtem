@@ -1,4 +1,4 @@
-import ChatRoomListSkeletonUI from "@/components/chat/room-list/chat-room-list-SkeletonUI";
+import ChatRoomListSkeletonUI from "@/domains/chat/components/room-list/chat-room-list-SkeletonUI";
 
 export default function ChatLoading() {
   return (

@@ -1,6 +1,8 @@
-import PurchaseTrading, { PurchaseTradingDB } from "@/lib/db/models/PurchaseTrading";
-import { checkAuthorization } from "@/lib/server";
-import { FilterQuery, PipelineStage } from 'mongoose';
+import PurchaseTrading, {
+  PurchaseTradingDB
+} from "@/domains/product/models/PurchaseTrading";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -15,7 +17,7 @@ export async function GET(req: NextRequest) {
   if (!isValidAuth.isValid) {
     return NextResponse.json(
       {
-        message: isValidAuth.message,
+        message: isValidAuth.message
       },
       { status: 401 }
     );
@@ -39,10 +41,10 @@ export async function GET(req: NextRequest) {
     status === "CANCEL_END/RETURN_END"
       ? "취소/반품"
       : status === "TRADING_END"
-      ? "거래완료"
-      : status === "CANCEL_REJECT/RETURN_REJECT"
-      ? "취소/반품 거절"
-      : "거래중";
+        ? "거래완료"
+        : status === "CANCEL_REJECT/RETURN_REJECT"
+          ? "취소/반품 거절"
+          : "거래중";
 
   try {
     const currentCursor = cursor ? new Date(cursor as string) : new Date();
@@ -51,15 +53,15 @@ export async function GET(req: NextRequest) {
       status === "CANCEL_END/RETURN_END"
         ? ["CANCEL_END", "RETURN_END"]
         : status === "TRADING_END"
-        ? ["TRADING_END"]
-        : status === "CANCEL_REJECT/RETURN_REJECT"
-        ? ["CANCEL_REJECT", "RETURN_REJECT"]
-        : ["TRADING", "CANCEL", "RETURN"];
+          ? ["TRADING_END"]
+          : status === "CANCEL_REJECT/RETURN_REJECT"
+            ? ["CANCEL_REJECT", "RETURN_REJECT"]
+            : ["TRADING", "CANCEL", "RETURN"];
 
     const matchStage: FilterQuery<PurchaseTradingDB> = {
       purchaseStartDate: { $lt: currentCursor },
       buyerId: myUid,
-      status: { $in: currentStatus },
+      status: { $in: currentStatus }
     };
 
     if (search) {
@@ -68,45 +70,45 @@ export async function GET(req: NextRequest) {
 
     const aggregate: PipelineStage[] = [
       {
-        $match: matchStage,
+        $match: matchStage
       },
       {
-        $sort: { purchaseStartDate: -1 },
+        $sort: { purchaseStartDate: -1 }
       },
       {
-        $limit: currentLimit,
+        $limit: currentLimit
       },
       {
         $addFields: {
-          convertedSellerId: { $toObjectId: "$sellerId" },
-        },
+          convertedSellerId: { $toObjectId: "$sellerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "convertedSellerId",
           foreignField: "_id",
-          as: "sellerInfo",
-        },
+          as: "sellerInfo"
+        }
       },
       {
-        $unwind: { path: "$sellerInfo", preserveNullAndEmptyArrays: true },
+        $unwind: { path: "$sellerInfo", preserveNullAndEmptyArrays: true }
       },
       {
         $addFields: {
-          convertedbuyerId: { $toObjectId: "$buyerId" },
-        },
+          convertedbuyerId: { $toObjectId: "$buyerId" }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "convertedbuyerId",
           foreignField: "_id",
-          as: "buyerInfo",
-        },
+          as: "buyerInfo"
+        }
       },
       {
-        $unwind: { path: "$buyerInfo", preserveNullAndEmptyArrays: true },
+        $unwind: { path: "$buyerInfo", preserveNullAndEmptyArrays: true }
       },
       {
         $project: {
@@ -133,21 +135,21 @@ export async function GET(req: NextRequest) {
           returnRejectDate: 1,
           process: 1,
           status: 1,
-          isReviewed: 1,
-        },
-      },
+          isReviewed: 1
+        }
+      }
     ];
     const purchaseTrading = await PurchaseTrading.aggregate(aggregate);
 
     return NextResponse.json({
       message: `${message} 목록 조회에 성공했어요.`,
-      purchaseTrading,
+      purchaseTrading
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       {
-        message: `${message} 목록 조회에 실패하였습니다.\n잠시 후 다시 시도해주세요.`,
+        message: `${message} 목록 조회에 실패하였습니다.\n잠시 후 다시 시도해주세요.`
       },
       { status: 500 }
     );

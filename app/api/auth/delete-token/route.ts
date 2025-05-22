@@ -1,6 +1,6 @@
-import { deleteToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
+import deleteTokenFromRedis from "@/domains/auth/api/deleteTokenFromRedis";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {
@@ -10,11 +10,11 @@ export async function DELETE(req: NextRequest) {
     await dbConnect();
 
     const dbUserData = await User.findOne({
-      email,
+      email
     });
 
-    await deleteToken(dbUserData?._id || "", "accessToken");
-    await deleteToken(dbUserData?._id || "", "refreshToken");
+    await deleteTokenFromRedis(dbUserData?._id || "", "accessToken");
+    await deleteTokenFromRedis(dbUserData?._id || "", "refreshToken");
     return NextResponse.json(
       { message: "성공적으로 토큰이 삭제됬어요." },
       { status: 200 }

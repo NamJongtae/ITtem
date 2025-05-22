@@ -1,4 +1,5 @@
-import { getKakaoAuthAccessToken, getKaKaoAuthInfo } from "@/lib/api/auth";
+import getKakaoAuthAccessToken from "@/domains/auth/api/signin/getKaKakaoAuthAccessToken";
+import getKaKaoAuthInfo from "@/domains/auth/api/signin/getKakaoAuthInfo";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "유저정보를 성공적으로 가져욌어요.",
-        user: { ...kakaoUserData },
+        user: { ...kakaoUserData }
       },
       { status: 200 }
     );

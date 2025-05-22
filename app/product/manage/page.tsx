@@ -1,4 +1,4 @@
-import ProductManagePage from "@/components/product-manage/product-manage-page";
+import ProductManagePage from "@/domains/product/components/manage/product-manage-page";
 import { BASE_URL } from "@/constants/constant";
 
 export async function generateMetadata({

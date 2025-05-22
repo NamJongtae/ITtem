@@ -1,9 +1,8 @@
 "use client";
 
-
-import Loading from '@/components/commons/loading';
-import useKakaoSigninMutate from "@/hooks/react-query/mutations/auth/useKakaoSigninMutate";
-import useKakaoUserInfoMutate from "@/hooks/react-query/mutations/auth/useKakaoUserInfoMutate";
+import Loading from "@/components/loading";
+import useKakaoSigninMutate from '@/domains/auth/hooks/signin/mutations/useKakaoSigninMutate';
+import useKakaoUserInfoMutate from '@/domains/auth/hooks/signin/mutations/useKakaoUserInfoMutate';
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 

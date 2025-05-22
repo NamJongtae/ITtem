@@ -1,7 +1,7 @@
 // /app/sitemap.xml/route.ts
 import { BASE_URL } from "@/constants/constant";
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 

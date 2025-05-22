@@ -1,5 +1,4 @@
-import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
-import React from "react";
+import ProductListSkeletonUI from "@/domains/product/components/product-list/product-list-skeletonUI";
 
 export default function ProductLoading() {
   return (

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
+import dbConnect from "@/utils/db/db";
 import mongoose from "mongoose";
-import Product from "@/lib/db/models/Product";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
+import Product from "@/domains/product/models/Product";
+import User from "@/domains/auth/models/User";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 
 export async function PATCH(
   req: NextRequest,

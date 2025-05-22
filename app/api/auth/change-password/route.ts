@@ -1,10 +1,11 @@
-import { getHasdPassword, verificationPassword } from "@/lib/api/auth";
 import mongoose from "mongoose";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
-import { LoginType } from "@/types/auth-types";
+import dbConnect from "@/utils/db/db";
+import User from '@/domains/auth/models/User';
+import checkAuthorization from '@/domains/auth/utils/checkAuthorization';
+import { LoginType } from "@/domains/auth/types/auth-types";
 import { NextRequest, NextResponse } from "next/server";
+import hashPassword from "@/domains/auth/utils/hashPassoword";
+import comparePassword from "@/domains/auth/utils/comparePassword";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -44,7 +45,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const isPasswordVerification = await verificationPassword(
+    const isPasswordVerification = await comparePassword(
       currentPassword,
       user?.password || ""
     );
@@ -56,7 +57,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const hashedPassword = await getHasdPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     const result = await User.updateOne(
       { _id: new mongoose.Types.ObjectId(myUid) },

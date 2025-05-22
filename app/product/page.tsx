@@ -1,9 +1,9 @@
-import Header from "@/components/product/product-header";
+import Header from "@/domains/product/components/product-header";
 import { BASE_URL } from "@/constants/constant";
 import { Suspense } from "react";
 
-import CategoryProductListContainer from "@/components/product/category-product-list-container";
-import ProductListSkeletonUI from "@/components/commons/product-list/product-list-skeletonUI";
+import CategoryProductListContainer from "@/domains/product/components/category-product-list-container";
+import ProductListSkeletonUI from "@/domains/product/components/product-list/product-list-skeletonUI";
 
 export async function generateMetadata(props: {
   searchParams: Promise<{ category: string | undefined }>;

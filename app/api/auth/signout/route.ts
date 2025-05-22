@@ -1,8 +1,9 @@
-import { deleteToken, getToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import { sessionOptions } from "@/lib/server";
-import { IronSessionType } from "@/types/api-types";
+import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
+import deleteTokenFromRedis from "@/domains/auth/api/deleteTokenFromRedis";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
+import { IronSessionType } from "@/domains/auth/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -14,13 +15,16 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
     const refreshToken = session.refreshToken;
 
     await dbConnect();
 
-    const redisRefreshToken = await getToken(uid as string, "refreshToken");
+    const redisRefreshToken = await getTokenFromRedis(
+      uid as string,
+      "refreshToken"
+    );
 
     if (redisRefreshToken && redisRefreshToken !== refreshToken) {
       const response = NextResponse.json(
@@ -32,8 +36,8 @@ export async function POST(req: NextRequest) {
     }
 
     // redis 토큰 삭제
-    await deleteToken(uid || "", "accessToken");
-    await deleteToken(uid || "", "refreshToken");
+    await deleteTokenFromRedis(uid || "", "accessToken");
+    await deleteTokenFromRedis(uid || "", "refreshToken");
 
     // 세션 쿠키 삭제
     session.destroy();
@@ -48,7 +52,7 @@ export async function POST(req: NextRequest) {
         { status: 202 }
       );
     }
-    
+
     return NextResponse.json(
       { message: "로그아웃에 성공했어요." },
       { status: 200 }

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkWithOutAuthPathname, withoutAuth } from "./lib/withoutAuth";
+import { checkWithOutAuthPathname, withoutAuth } from "./utils/withoutAuth";
 import { IronSession, getIronSession } from "iron-session";
-import { sessionOptions } from "./lib/server";
-import { checkWithAuthPathname, withAuth } from "./lib/withAuth";
+import { SESSION_OPTIONS } from "./domains/auth/constants/constansts";
+import { checkWithAuthPathname, withAuth } from "./utils/withAuth";
 
 export async function middleware(req: NextRequest, res: NextResponse) {
   const { pathname, href } = req.nextUrl;
@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
 
   const session = await getIronSession<
     IronSession<{ accessToken: string; refreshToken: string; exp: number }>
-  >(req, res, sessionOptions);
+  >(req, res, SESSION_OPTIONS);
 
   const refreshToken = session.refreshToken;
 

@@ -1,5 +1,5 @@
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     if (!email) {
       return new NextResponse(JSON.stringify({ message: "이메일이 없어요." }), {
-        status: 422,
+        status: 422
       });
     }
 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return new NextResponse(
       JSON.stringify({
-        message: "이메일 확인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "이메일 확인에 실패했어요.\n잠시 후 다시 시도해주세요."
       }),
       { status: 500 }
     );

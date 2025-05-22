@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   deleteAllNotificationMessage,
   getNotificationMessage,
-  readAllNotificationMessage,
-} from "@/lib/api/firebase";
-import { checkAuthorization } from "@/lib/server";
+  readAllNotificationMessage
+} from "@/utils/api/firebase";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 
 export async function GET(req: NextRequest) {
   try {
@@ -34,14 +34,14 @@ export async function GET(req: NextRequest) {
     const { messages, nextKey } = await getNotificationMessage({
       userId: myUid,
       lastKey,
-      limit: currentLimit,
+      limit: currentLimit
     });
 
     return NextResponse.json(
       {
         message: "알림 메세지 조회에 성공했어요.",
         messages,
-        nextKey,
+        nextKey
       },
       { status: 200 }
     );
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     }
     return NextResponse.json(
       {
-        message: "알림 메세지 조회에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "알림 메세지 조회에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
@@ -105,7 +105,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(
       {
         message:
-          "알림 메세지 읽음 처리에 실패했어요.\n잠시 후 다시 시도해주세요.",
+          "알림 메세지 읽음 처리에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
@@ -149,7 +149,7 @@ export async function DELETE(req: NextRequest) {
     }
     return NextResponse.json(
       {
-        message: "알림 메세지 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "알림 메세지 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

@@ -1,4 +1,4 @@
-import ProfileEditModal from "@/components/profile-edit/profile-edit-modal";
+import ProfileEditModal from "@/domains/user/components/profile-edit/profile-edit-modal";
 
 export default function Modal() {
   return <ProfileEditModal />;

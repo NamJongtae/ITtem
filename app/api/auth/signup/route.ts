@@ -1,14 +1,15 @@
-import { deleteEmailVerificationCode, getVerifiedEmail } from "@/lib/api/redis";
-import { getHasdPassword } from "@/lib/api/auth";
-import dbConnect from "@/lib/db/db";
+import deleteEmailVerificationCode from "@/domains/auth/api/email-verification/deleteEmailVerificationCode";
+import getVerifiedEmail from "@/domains/auth/api/email-verification/getVerifiedEmail";
+import hashPassword from "@/domains/auth/utils/hashPassoword";
+import dbConnect from "@/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
-import { IronSessionType } from "@/types/api-types";
-import { createAndSaveToken, sessionOptions } from "@/lib/server";
-import User from "@/lib/db/models/User";
-import { LoginType } from "@/types/auth-types";
+import { IronSessionType, LoginType } from "@/domains/auth/types/auth-types";
+import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
+import User from "@/domains/auth/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
+import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const hashedPassword = await getHasdPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     await dbConnect();
 
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
 
     await createAndSaveToken({

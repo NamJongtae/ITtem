@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
 import mongoose from "mongoose";
 
 export async function GET(

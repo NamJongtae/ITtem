@@ -1,4 +1,4 @@
-import SignupPage from "@/components/signup/signup-page";
+import SignupPage from '@/domains/auth/components/signup/signup-page';
 import { BASE_URL } from "@/constants/constant";
 import { Metadata } from "next";
 
@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   title: "ITtem | 회원가입",
   openGraph: {
     url: `${BASE_URL}/signup`,
-    title: "ITtem | 회원가입",
-  },
+    title: "ITtem | 회원가입"
+  }
 };
 
 export default function Signup() {

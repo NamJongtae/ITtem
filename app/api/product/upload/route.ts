@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
-import SaleTrading from "@/lib/db/models/SaleTrading";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
+import SaleTrading from "@/domains/product/models/SaleTrading";
+import User from "@/domains/auth/models/User";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       session.endSession();
       return NextResponse.json(
         {
-          message: isValidAuth.message,
+          message: isValidAuth.message
         },
         { status: 401 }
       );
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       productName: newProduct.name,
       productPrice: newProduct.price,
       productImg: newProduct.imgData[0].url,
-      saleStartDate: newProduct.createdAt,
+      saleStartDate: newProduct.createdAt
     });
 
     await saleTrading.save({ session });
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "상품 등록에 성공했어요.",
-        product: newProduct,
+        product: newProduct
       },
       { status: 201 }
     );
@@ -76,14 +76,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           message: "유효하지 않은 값이 있어요.",
-          error: errorMessages,
+          error: errorMessages
         },
         { status: 422 }
       );
     }
     return NextResponse.json(
       {
-        message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요.",
+        message: "상품 등록에 실패하였어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

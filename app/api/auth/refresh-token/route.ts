@@ -1,12 +1,14 @@
 import {
   ACCESS_TOKEN_EXP,
   ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY
-} from "@/constants/constant";
-import { getToken, saveToken } from "@/lib/api/redis";
-import { sessionOptions } from "@/lib/server";
-import { generateToken, verifyToken } from "@/lib/token";
-import { IronSessionType } from "@/types/api-types";
+  REFRESH_TOKEN_KEY,
+  SESSION_OPTIONS
+} from "@/domains/auth/constants/constansts";
+import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
+import saveTokenFromRedis from "@/domains/auth/api/saveTokenFromRedis";
+
+import { generateToken, verifyToken } from "@/utils/token";
+import { IronSessionType } from "@/domains/auth/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -15,7 +17,7 @@ export async function POST() {
   try {
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
 
     const accessToken = session.accessToken;
@@ -25,7 +27,7 @@ export async function POST() {
       ACCESS_TOKEN_KEY as string
     );
 
-    const redisAccessToken = await getToken(
+    const redisAccessToken = await getTokenFromRedis(
       decodeAccessToken?.data?.user.uid || "",
       "accessToken"
     );
@@ -44,7 +46,7 @@ export async function POST() {
       REFRESH_TOKEN_KEY as string
     );
 
-    const redisRefreshToken = await getToken(
+    const redisRefreshToken = await getTokenFromRedis(
       decodeRefreshToken?.data?.user.uid || "",
       "refreshToken"
     );
@@ -72,7 +74,7 @@ export async function POST() {
       secret: ACCESS_TOKEN_KEY
     });
 
-    await saveToken({
+    await saveTokenFromRedis({
       uid: decodeRefreshToken.data?.user.uid || "",
       token: newAccessToken,
       type: "accessToken",

@@ -1,4 +1,4 @@
-import ProductUploadFieldSkeletonUI from '@/components/product-upload/product-upload-field-skeletonUI';
+import ProductUploadFieldSkeletonUI from "@/domains/product/components/upload/form-content/product-upload-field-skeletonUI";
 
 interface IProps {
   isEdit: boolean;

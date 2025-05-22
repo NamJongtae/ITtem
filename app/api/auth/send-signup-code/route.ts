@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendVerificationCode } from "@/lib/server";
+import sendVerificationCode from "@/domains/auth/utils/sendVerificationCode";
 
 export async function POST(req: NextRequest) {
   try {

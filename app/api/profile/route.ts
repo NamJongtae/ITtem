@@ -1,10 +1,10 @@
-import dbConnect from "@/lib/db/db";
-import { checkAuthorization } from "@/lib/server";
+import dbConnect from "@/utils/db/db";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import User from "@/lib/db/models/User";
-import { deleteProfileImgToFirestore } from "@/lib/api/firebase";
-import { ProfileData } from "@/types/auth-types";
+import User from "@/domains/auth/models/User";
+import { deleteProfileImgToFirestore } from "@/utils/api/firebase";
+import { ProfileData } from "@/domains/user/types/profile-types";
 
 export async function GET() {
   try {

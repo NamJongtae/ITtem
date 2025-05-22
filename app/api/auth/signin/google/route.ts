@@ -1,17 +1,14 @@
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import {
-  createAndSaveToken,
-  createUniqueNickname,
-  sessionOptions
-} from "@/lib/server";
-import { IronSessionType } from "@/types/api-types";
-import { LoginType } from "@/types/auth-types";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import { IronSessionType, LoginType } from "@/domains/auth/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import { getToken } from "@/lib/api/redis";
+import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
+import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
+import createUniqueNickname from "@/domains/auth/utils/createUniqueNickname";
+import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   const { user } = await req.json();
@@ -32,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
 
     if (!dbUserData) {
@@ -110,7 +107,7 @@ export async function POST(req: NextRequest) {
     // 로그인 로직
     const { _id: uid } = dbUserData;
 
-    const refreshTokenData = await getToken(uid, "refreshToken");
+    const refreshTokenData = await getTokenFromRedis(uid, "refreshToken");
 
     if (refreshTokenData) {
       return NextResponse.json(

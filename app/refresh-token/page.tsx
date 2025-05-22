@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios, { isAxiosError } from "axios";
 import { BASE_URL } from "@/constants/constant";
-import { RegenerateAccessTokenResponseData } from "@/types/api-types";
-import Loading from "@/components/commons/loading";
+import Loading from "@/components/loading";
+import { ApiResponse } from "@/types/response-types";
 
 export default function RefreshToken() {
   const searchParams = useSearchParams();
@@ -22,7 +22,7 @@ export default function RefreshToken() {
         // SSR 재요청을 위한 서버 리다이렉트
         window.location.href = next;
       } catch (error) {
-        if (isAxiosError<RegenerateAccessTokenResponseData>(error)) {
+        if (isAxiosError<ApiResponse>(error)) {
           if (error.response?.status === 401) {
             router.replace("/session-expired");
           } else {
@@ -33,7 +33,7 @@ export default function RefreshToken() {
     };
 
     fechAccessToken();
-  }, []);
+  }, [next, router]);
 
   return <Loading />;
 }

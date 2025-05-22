@@ -1,10 +1,10 @@
-import { sendNotificationMessage } from "@/lib/api/firebase";
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
-import PurchaseTrading from "@/lib/db/models/PurchaseTrading";
-import SaleTrading from "@/lib/db/models/SaleTrading";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
+import { sendNotificationMessage } from "@/utils/api/firebase";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
+import PurchaseTrading from "@/domains/product/models/PurchaseTrading";
+import SaleTrading from "@/domains/product/models/SaleTrading";
+import User from "@/domains/auth/models/User";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import {
   ProductStatus,
   PurchaseCancelProcess,
@@ -13,7 +13,7 @@ import {
   SalesReturnProcess,
   SaleTradingProcess,
   TradingStatus
-} from "@/types/product-types";
+} from "@/domains/product/types/product-types";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
     if (/^[a-zA-Z]+$/.test(nickname)) {
       // 영문으로만 구성된 닉네임인 경우
       isDuplication = await User.findOne({
-        nickname: { $regex: new RegExp(nickname, "i") },
+        nickname: { $regex: new RegExp(nickname, "i") }
       });
     } else {
       // 한글로만 구성된 닉네임인 경우, 숫자 또는 한글, 영문, 숫자가 섞여있는 닉네임인 경우
       isDuplication = await User.findOne({
-        nickname: { $regex: new RegExp(`^${nickname}$`, "i") },
+        nickname: { $regex: new RegExp(`^${nickname}$`, "i") }
       });
     }
 

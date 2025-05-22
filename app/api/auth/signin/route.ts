@@ -1,12 +1,13 @@
-import { verificationPassword } from "@/lib/api/auth";
-import { getToken } from "@/lib/api/redis";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import { createAndSaveToken, sessionOptions } from "@/lib/server";
-import { IronSessionType } from "@/types/api-types";
+import comparePassword from "@/domains/auth/utils/comparePassword";
+import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import { IronSessionType } from "@/domains/auth/types/auth-types";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
+import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,7 +39,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isPasswordVerification = await verificationPassword(password, userData.password);
+    const isPasswordVerification = await comparePassword(
+      password,
+      userData.password
+    );
 
     if (!isPasswordVerification) {
       return NextResponse.json(
@@ -47,12 +51,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const refreshTokenData = await getToken(userData._id, "refreshToken");
+    const refreshTokenData = await getTokenFromRedis(
+      userData._id,
+      "refreshToken"
+    );
 
     if (refreshTokenData && !isDuplicateLogin) {
       return NextResponse.json(
         {
-          message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다.",
+          message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
         },
         { status: 409 }
       );
@@ -60,14 +67,14 @@ export async function POST(req: NextRequest) {
 
     const session = await getIronSession<IronSessionType>(
       await cookies(),
-      sessionOptions
+      SESSION_OPTIONS
     );
 
     await createAndSaveToken({
       user: {
-        uid: userData._id,
+        uid: userData._id
       },
-      session,
+      session
     });
 
     return NextResponse.json(
@@ -77,9 +84,9 @@ export async function POST(req: NextRequest) {
           uid: userData._id,
           email: userData.email,
           nickname: userData.nickname,
-          profileImg: userData.profileImg,
+          profileImg: userData.profileImg
         },
-        session,
+        session
       },
       { status: 200 }
     );
@@ -87,7 +94,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       {
-        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요.",
+        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );

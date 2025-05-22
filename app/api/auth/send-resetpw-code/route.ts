@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendVerificationCode } from "@/lib/server";
+import sendVerificationCode from "@/domains/auth/utils/sendVerificationCode";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const result = await sendVerificationCode(email, "resetPw"); 
+    const result = await sendVerificationCode(email, "resetPw");
 
     return NextResponse.json(
       { message: result.message, ok: result.success },

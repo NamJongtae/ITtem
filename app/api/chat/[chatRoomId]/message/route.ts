@@ -1,5 +1,5 @@
-import { sendToChatMessage } from "@/lib/api/firebase";
-import { checkAuthorization } from "@/lib/server";
+import { sendToChatMessage } from "@/utils/api/firebase";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(

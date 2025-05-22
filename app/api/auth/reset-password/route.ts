@@ -1,8 +1,9 @@
-import { getHasdPassword } from "@/lib/api/auth";
-import { deleteEmailVerificationCode, getVerifiedEmail } from "@/lib/api/redis";
-import dbConnect from "@/lib/db/db";
-import User from "@/lib/db/models/User";
-import { LoginType } from "@/types/auth-types";
+import hashPassword from "@/domains/auth/utils/hashPassoword";
+import deleteEmailVerificationCode from "@/domains/auth/api/email-verification/deleteEmailVerificationCode";
+import getVerifiedEmail from "@/domains/auth/api/email-verification/getVerifiedEmail";
+import dbConnect from "@/utils/db/db";
+import User from "@/domains/auth/models/User";
+import { LoginType } from "@/domains/auth/types/auth-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest) {
@@ -38,7 +39,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const hashedPassword = await getHasdPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     const result = await User.updateOne(
       { email },

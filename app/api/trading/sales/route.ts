@@ -1,5 +1,7 @@
-import SaleTrading, { SaleTradingDB } from "@/lib/db/models/SaleTrading";
-import { checkAuthorization } from "@/lib/server";
+import SaleTrading, {
+  SaleTradingDB
+} from "@/domains/product/models/SaleTrading";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -133,7 +135,6 @@ export async function GET(req: NextRequest) {
     ];
 
     const saleTrading = await SaleTrading.aggregate(aggregate);
-
 
     return NextResponse.json(
       { message: `${message} 목록 조회에 성공했어요.`, saleTrading },

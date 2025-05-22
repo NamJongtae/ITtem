@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db/db";
-import Product, { ProductDB } from "@/lib/db/models/Product";
-import { FilterQuery } from 'mongoose';
+import dbConnect from "@/utils/db/db";
+import Product, { ProductDB } from "@/domains/product/models/Product";
+import { FilterQuery } from "mongoose";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
   try {
     await dbConnect();
-    
+
     const todayStart = new Date();
     const cursorDate = cursor ? new Date(cursor) : todayStart;
     const currentLimit = parseInt(limit || "10");

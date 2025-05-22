@@ -1,16 +1,16 @@
-import dbConnect from "@/lib/db/db";
-import Product from "@/lib/db/models/Product";
+import dbConnect from "@/utils/db/db";
+import Product from "@/domains/product/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import User from "@/lib/db/models/User";
-import { checkAuthorization } from "@/lib/server";
+import User from "@/domains/auth/models/User";
+import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
 import {
   ProductImgData,
   ProductStatus,
   TradingStatus
-} from "@/types/product-types";
-import SaleTrading from "@/lib/db/models/SaleTrading";
-import { getStorageInstance } from "@/lib/firebaseSetting";
+} from "@/domains/product/types/product-types";
+import SaleTrading from "@/domains/product/models/SaleTrading";
+import { getStorageInstance } from "@/utils/firebaseSetting";
 import { deleteObject, ref } from "firebase/storage";
 
 export async function GET(

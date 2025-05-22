@@ -1,8 +1,8 @@
-import SuspenseErrorBoundary from "@/components/commons/suspense-error-boundary";
-import ProductEditPageContainer from "@/components/product-edit/product-edit-page-container";
+import SuspenseErrorBoundary from "@/components/suspense-error-boundary";
+import ProductEditPageContainer from "@/domains/product/components/edit/product-edit-page-container";
 import { BASE_URL } from "@/constants/constant";
 import ProductUploadLoading from "../../upload/loading";
-import Empty from "@/components/commons/empty";
+import Empty from "@/components/empty";
 
 export async function generateMetadata({
   params
