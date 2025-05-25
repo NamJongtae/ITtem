@@ -61,7 +61,7 @@
   - [🖌 tailwindcss 동적 스타일링 문제](#-tailwindcss-동적-스타일링-문제)
   - [❌ 배포 후 Hydrate 불일치 문제](#-배포-후-hydrate-불일치-문제)
   - [🍪 SSR to Client cookie 전달 문제](#-ssr-to-client-cookie-전달-문제)
-  - [🧨 CustomAxios acceessToken 재발급 중복 요청 문제](#-customaxios-accesstoken-재발급-중복-요청-문제) 
+  - [🧨 CustomAxios acceessToken 재발급 중복 요청 문제](#-customaxios-accesstoken-재발급-중복-요청-문제)
   - [🔴 Layout 컴포넌트 Invalid hook call 에러](#-layout-컴포넌트-invalid-hook-call-에러)
   - [🕳 로그아웃 시 빈 유저 정보가 페이지에 노출되는 문제](#-로그아웃-시-빈-유저-정보가-페이지에-노출되는-문제)
 
@@ -136,7 +136,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 | 세션 쿠키 확인          | GET    | /api/auth/session                                                                       |
 | 토큰 재발급             | POST   | /api/auth/refresh-token                                                                 |
 | 토큰 삭제               | DELETE | /api/auth/delete-token                                                                  |
-| 로그아웃                | POST    | /api/auth/signout                                                                       |
+| 로그아웃                | POST   | /api/auth/signout                                                                       |
 | **프로필(profile)**     |
 | 나의 프로필 조회        | GET    | /api/profile                                                                            |
 | 프로필 수정             | PATCH  | /api/profile                                                                            |
@@ -202,6 +202,11 @@ Serverless로 벡엔드 API를 구축하였습니다.
 
 ### 💡 프레임워크 및 라이브러리 사용 이유
 
+#### Axios
+
+- Fetch API 비해 직관적인 문법 및 편의 기능(에러 핸들링, JSON 자동 변환 등)을 제공.
+- 요청이나 응답전 특정 작업을 수행하는 intercetor 기능을 제공하며, 현재 프로젝트에서는 토큰 관리 로직을 수행.
+
 #### Next.js
 
 - **SSR, SSG, ISR 제공**: 서버 사이드 렌더링(SSR), 정적 사이트 생성(SSG), 점진적 정적 재생성(ISR)을 지원하여 다양한 렌더링 방식 제공.
@@ -237,6 +242,12 @@ Serverless로 벡엔드 API를 구축하였습니다.
 - **사용자 인증 및 인가**: 무상태(stateless) 방식으로 클라이언트 측에서 인증 및 인가 구현 가능.
 - **서버 세션 불필요**: 서버에 별도의 세션 저장소가 필요하지 않음.
 - **보안 강화**: 서명된 토큰을 사용하여 데이터의 무결성을 보장.
+
+#### IronSession
+
+- Access Token 및 Refresh Token이 브라우저에 직접 노출되지 않도록 하여 보안을 강화.
+- Next.js 환경에 최적화된 세션 관리 라이브러리로, App Router와 API Routes 등 다양한 곳에서 사용이 용이.
+- 별도의 세션 스토리지(Redis, DB 등) 없이도, 상태 기반 인증 세션을 간단하게 유지할 수 있어 구현이 간편.
 
 #### Redis
 
@@ -1647,7 +1658,7 @@ export default useAuthStore;
 - 로그인시 최초 한 번 유저 정보를 저장하고, 이후 부터 저장된 데이터를 사용하도록 변경하였습니다.
 - tanstack-query의 enable 옵션을 false로 설정하고, staleTime을 Infinity로 두고, 최초 로그인시 유저 데이터를 저장하도록 하였습니다.
 - 이를 통해 최초 로그인시에만 유저 데이터가 저장되도록 하였고, 이후 로그인이 된 상태에서만 유저 정보를 저장하도록 하기 위해 세션 쿠키를 불러와 세션 쿠키가 존재한다면 유저 정보를 refetch 하도록 하였습니다.
-  
+
 > **적용으로 얻은 이점**
 
 - 페이지 전환 마다 유저 정보를 갱신하지 않아 불필요한 요청이 발생하지 않게되었습니다.
@@ -1692,23 +1703,25 @@ export default function useAuthQuery() {
 
 ```javascript
 //...
-  useEffect(() => {
-    if (
-      sessionQueryIsSuccess &&
-      pathname !== "/refresh-token" &&
-      pathname !== "/session-expired"
-    ) {
-      // 세션 쿠키가 존재할 때 유저 refetch
-      if (isExistSession) {
-        refetchAuth();
-      } else {
-        actions.resetAuth();
-      }
-      actions.setIsLoading(false);
+useEffect(() => {
+  if (
+    sessionQueryIsSuccess &&
+    pathname !== "/refresh-token" &&
+    pathname !== "/session-expired"
+  ) {
+    // 세션 쿠키가 존재할 때 유저 refetch
+    if (isExistSession) {
+      refetchAuth();
+    } else {
+      actions.resetAuth();
     }
-  }, [isExistSession, sessionQueryIsSuccess, pathname, actions, refetchAuth]);
+    actions.setIsLoading(false);
+  }
+}, [isExistSession, sessionQueryIsSuccess, pathname, actions, refetchAuth]);
 ```
+
 //...
+
 </details>
 
 <br>
@@ -1724,7 +1737,7 @@ export default function useAuthQuery() {
 
 - 상품 목록 queryKey를 삼항연산자를 사용하여 동적으로 쿼리키를 지정하지 않고, 각 상품 목록 queryKey를 독립적으로 만들어서 관리하도록 수정하여 가독성을 향상시켰습니다.
 - 동적 queryKey와 정적 queryKey 타입에 차이가 존재하며, 동적 queryKey에는 쿼리키가 동적으로 계산되어 하위 키로 빈 배열이 사용될 수 있지만 정적 queryKey는 Tuple 타입을 가져 하나 이상의 배열 키값을 가져야한다는 것을 파악하였습니다. 이를 참고하여 빈 배열인 queryKey를 채우고 쿼리키 타입을 any 타입에서 읽기전용 타입인 const 타입으로 수정하였습니다.
-  
+
 > **적용으로 얻은 이점**
 
 - 상품 목록 queryKey 관리 부분의 가독성이 향상 되었으며, 타입 안정성이 향상 되었습니다.
@@ -1844,6 +1857,7 @@ export const productQueryKey = createQueryKeys("product", {
 });
 // ...
 ```
+
 </details>
 
 <br>
@@ -1857,7 +1871,7 @@ export const productQueryKey = createQueryKeys("product", {
 > **적용 방법**
 
 - 라이브러리에서 제공하는 공식 타입 정의를 참고하여, any를 제거하고 정확한 타입으로 대체하였습니다. 이를 통해 타입 안정성을 높였습니다.
-  
+
 > **적용으로 얻은 이점**
 
 - 타입 안정성이 향상 되었습니다.
@@ -1904,7 +1918,8 @@ const useAuthStore =
 
 <br/>
 
-####  🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선
+#### 🗂 비동기 처리 컴포넌트 분리 및 Suspense Fallback UI 개선
+
 > **적용이유**
 
 - 현재 일부 페이지에서는 비동기 데이터를 최상위에서 처리하고 있어, 데이터가 로딩되기 전까지 전체 페이지가 로딩 상태로 표시됩니다.
@@ -1916,7 +1931,7 @@ const useAuthStore =
 
 - 비동기 컴포넌트를 분리합니다.
 - Suspense Fallback UI를 Skeleton UI로 교체합니다.
-  
+
 > **적용으로 얻은 이점**
 
 - SSR 페이지의 초기 렌더링 속도가 향상되었습니다.
@@ -1966,6 +1981,7 @@ export default async function ProductDetailContainer({
 **Prouct Detail page**
 
 ProductDetailSkeletonUI 컴포넌트를 생성하고, ProductDetailContainer 비동기 컴포넌트 Suspense Fallback에 SkeletonUI 적용하였습니다.
+
 ```javascript
 //...
 export default async function ProductDetail({
@@ -2004,6 +2020,7 @@ export default async function ProductDetail({
 <br/>
 
 #### 🔨 Next.js v15 마이그레이션
+
 > **적용이유**
 
 - 개발 편의성 향상과 보안 취약점 해결을 위해 Next.js v15로 마이그레이션을 진행했습니다.
@@ -2012,7 +2029,7 @@ export default async function ProductDetail({
 
 - Next.js 공식 마이그레이션 가이드를 참고하여 주요 변경 사항을 반영하였습니다.
 - TurboPack 설정을 적용하고, React 19 및 기타 종속성 업데이트를 함께 진행하였습니다.
-  
+
 > **적용으로 얻은 이점**
 
 - 안정적인 TurboPack 사용으로 개발 서버 구동 속도가 향상되고, 번들링 시간이 대폭 단축되었습니다.
@@ -2022,6 +2039,7 @@ export default async function ProductDetail({
 <br/>
 
 #### 🔧 `react-infinite-scroller` → `react-intersection-observer`로 대체
+
 > **적용이유**
 
 - React 19 버전 업데이트 이후 종속성 충돌 문제가 발생하여, React 19를 지원하지 않는 `react-infinite-scroller` 라이브러리를 `react-intersection-observer`로 대체합니다.
@@ -2032,7 +2050,7 @@ export default async function ProductDetail({
 - InfiniteScrollTarget 컴포넌트로 관찰 대상 설정합니다.
 - 관찰 대상이 뷰포트(Viewport) 내에 진입할 경우, 다음 페이지 데이터를 비동기로 가져옵니다.
 - InfiniteScrollEndMessage 컴포넌트로 마지막 데이터 도달 시 메시지 출력합니다.
-  
+
 > **적용으로 얻은 이점**
 
 - React 19 버전 업데이트 이후 종속성 충돌 문제가 해결되었습니다.
@@ -2098,7 +2116,6 @@ const InfiniteScrollTarget = forwardRef<
 InfiniteScrollTarget.displayName = "InfiniteScrollTarget";
 
 export default InfiniteScrollTarget;
-
 ```
 
 **InfiniteScrollEndMessage.tsx**
@@ -2123,7 +2140,6 @@ export default function InfiniteScrollEndMessage({
     </div>
   ) : null;
 }
-
 ```
 
 </details>
@@ -2131,6 +2147,7 @@ export default function InfiniteScrollEndMessage({
 <br/>
 
 #### 🎈 page별 SkeletonUI Loading 컴포넌트 적용
+
 > **적용이유**
 
 - 현재 페이지별 Loading 컴포넌트가 동일하고, Loading 컴포넌트가 전체 페이지 UX가 일치하지 않아 사용자가 UI 형태를 미리 볼 수 없어 UX 개선이 필요하다고 생각되어 Loading 컴포넌트를 Skeleton UI로 생성하였습니다.
@@ -2138,16 +2155,17 @@ export default function InfiniteScrollEndMessage({
 > **적용 방법**
 
 아래 페이지들에 SkeletonUI Loading 컴포넌트를 생성하였습니다.
-  - home 페이지 Skeleton UI 생성
-  - Product 페이지 Skeleton UI 생성
-  - Product Serach 페이지 Skeleton UI 생성
-  - Product manage 페이지 Skeleton UI 생성
-  - Product Upload/Edit 페이지 Skeleton UI 생성
-  - Product Detail 페이지 Skeleton UI 생성
-  - Profile 페이지 Skeleton UI 생성
-  - Chat 페이지 Skeleton UI 생성
-  - Chat Detail 페이지 Skeleton UI 생성
-  
+
+- home 페이지 Skeleton UI 생성
+- Product 페이지 Skeleton UI 생성
+- Product Serach 페이지 Skeleton UI 생성
+- Product manage 페이지 Skeleton UI 생성
+- Product Upload/Edit 페이지 Skeleton UI 생성
+- Product Detail 페이지 Skeleton UI 생성
+- Profile 페이지 Skeleton UI 생성
+- Chat 페이지 Skeleton UI 생성
+- Chat Detail 페이지 Skeleton UI 생성
+
 > **적용으로 얻은 이점**
 
 - 사용자에게 페이지 UI 형태를 빠르게 보여 줄 수 있어 UX가 개선됩니다.
@@ -2169,14 +2187,15 @@ export default function InfiniteScrollEndMessage({
 
 <br/>
 
-
 #### 💫 전역 로딩 컴포넌트 및 로딩 상태 추가
+
 > **적용이유**
 
 - 기존 비동기 작업 중 Loading 컴포넌트는 페이지 하위에서 렌더링되기 때문에 레이아웃 컴포넌트를 포함하지 않아, 로딩 중에도 레이아웃이 노출되는 문제가 있었습니다.
 - 이로 인해 사용자가 로딩 중에 레이아웃과 상호작용하거나 다른 페이지로 이동할 수 있어 예기치 않은 문제 발생 가능성이 존재했습니다.
 
 > **적용 방법**
+
 - 전역 로딩 컴포넌트를 생성하여 root layout 컴포넌트에 추가하였습니다.
 - 로딩 상태 관리는 Zustand를 사용하여 전역에서 일관성 있게 제어합니다.
 - 전역 로딩 상태가 필요한 경우 useMutation 내부에서 전역 로딩 상태를 제어합니다.
@@ -2287,6 +2306,7 @@ export default function GlobalLoading() {
 <br/>
 
 #### 🎯 SRP 원칙에 따라 custom hook 코드 분리 및 hook명 수정
+
 > **적용이유**
 
 - 현재 각 컴포넌트 별로 custom hook를 통해 로직이 분리되어있습니다.
@@ -2301,12 +2321,12 @@ export default function GlobalLoading() {
 - 현재의 custom hook 로직이 복잡한 경우 별도의 custom hook으로 분리합니다.
 - 재사용의 여지가 있는 경우 별도의 custom hook으로 분리합니다.
 - 내부 로직이 복잡하지 않거나 변경 가능성이 낮고 재사용 하지 않는 로직은 별도로 분리하지 않습니다.
-  
+
 > **적용으로 얻은 이점**
+
 - 유지보수성 증가: 로직이 책임 단위로 분리되어 각 기능을 빠르게 파악하고 수정할 수 있습니다.
 - 재사용성 향상: 하나의 책임을 갖는 hook은 다양한 컴포넌트에서 쉽게 재사용할 수 있습니다.
 - 파일명을 통해 역할 파악 가능: 명확한 네이밍으로 hook의 기능을 직관적으로 이해할 수 있습니다.
-
 
 > **적용 코드**
 
@@ -2318,6 +2338,7 @@ export default function GlobalLoading() {
 **useSendToVerifyEmail.ts**
 
 기존 코드에서는 여러 가지 책을 수행하고 있습니다.
+
 - 인증 메일 전송 로직
 - 인증 메일 전송 로직 내부 이메일 유효성 검사
 - 이메일 input focus
@@ -2470,7 +2491,7 @@ export function useEmailVerificationValidator(type: EmailVerificationType) {
 
 ```javascript
 export function useFocusEmailVerificationInput() {
-  const emailRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = (useRef < HTMLInputElement) | (null > null);
   const { emailStatus } = useContext(EmailVerificationContext);
 
   useEffect(() => {
@@ -2486,7 +2507,7 @@ export function useFocusEmailVerificationInput() {
 **useResetVerificationEmail**
 
 ```javascript
-import { EmailVerificationContext } from '@/store/EmailVerificationProvider';
+import { EmailVerificationContext } from "@/store/EmailVerificationProvider";
 import { useContext } from "react";
 
 export default function useResetVerificationEmail() {
@@ -2498,7 +2519,6 @@ export default function useResetVerificationEmail() {
 
   return { resetSendToVerificationEmail };
 }
-
 ```
 
 </details>
@@ -2506,6 +2526,7 @@ export default function useResetVerificationEmail() {
 <br/>
 
 #### 🔁 Zustand 이메일 인증 상태 Context API로 전환
+
 > **적용이유**
 
 - 이메일 인증 상태는 회원가입과 비밀번호 찾기 과정에서만 사용되며, 애플리케이션 전체에서 공유할 필요가 없는 상태입니다.
@@ -2513,10 +2534,12 @@ export default function useResetVerificationEmail() {
 - 반면 Context API는 컴포넌트 트리 기반으로 상태 범위를 제한할 수 있어, 특정 흐름(회원가입/비밀번호 찾기)에 필요한 상태를 안전하게 캡슐화할 수 있습니다.
 
 > **적용 방법**
+
 - 이메일 인증 전용 Context API를 생성하여 회원가입, 비밀번호 찾기 페이지에서 공유 상태를 사용할 상위 컴포넌트를 Provider로 감쌈니다.
--  기존 Zustand 기반 커스텀 훅 및 상태 로직 제거 및 Context API 상태 로직 적용합니다.
-  
+- 기존 Zustand 기반 커스텀 훅 및 상태 로직 제거 및 Context API 상태 로직 적용합니다.
+
 > **적용으로 얻은 이점**
+
 - 페이지 전환 시 상태 초기화 코드 제거
 - 인증 관련 상태의 책임 범위가 명확해지고 응집력 향상
 - 메모리 사용 최적화 (필요할 때만 Context가 생성되고 해제됨)
@@ -2606,14 +2629,18 @@ export function EmailVerificationContextProvider({
 <br/>
 
 #### 🗂 도메인 디렉토리 구조 적용
+
 > **적용이유**
+
 - 기존 파일 구조는 `components`, `constants`, `hooks`, `types` 등 역할별로 분산되어 있어, 수정이나 삭제 시 관련된 파일들을 일일이 찾아야 하는 번거로움이 있습니다.
 - 이를 개선하기 위해 관련된 코드들이 하나의 도메인안에서 관리되도록 도메인별 디렉토리 구조로 파일 구조를 변경하였습니다.
 
 > **적용 방법**
+
 - 공통 요소는 기존처럼 상위에 두되, `domains` 폴더 하위에 도메인별 폴더를 생성하고, 각 도메인 내부에 `components`, `constansts`, `hooks`, `types`, `utils` 등 폴더를 생성하여 관련된 코드들이 하나의 디렉토리 안에서 관리되도록 구성합니다.
 
 > **적용으로 얻은 이점**
+
 - 관련 코드들이 모여 있어 의존 관계 파악이 쉬워졌습니다.
 - 도메인 단위의 디렉토리 삭제로 깔끔한 코드 정리가능합니다.
 - import 경로만 보더라도 파일 위치 및 역할 파악 가능합니다.
@@ -2674,12 +2701,15 @@ export function EmailVerificationContextProvider({
 <br/>
 
 #### 🗃 도메인 디렉토리 내부 구조 페이지별 세분화 및 네이밍 규칙 일관화
+
 > **적용이유**
+
 - 기존 도메인 단위 디렉토리 구조는 관련된 기능이 한곳에 모여 있어 유지보수에 유리하지만, 도메인 내 기능 수가 많아질 경우 파일이 혼잡해지고 탐색이 어려워지는 문제가 있습니다. 이를 개선하기 위해 페이지 단위로 하위 디렉토리를 세분화합니다.
 - 현재 파일명이 PascalCase와 kebab-case가 섞여 있어 일관성있지 않았습니다. 이를 개선하기 위해 폴더명을 제외한 파일명은 PascalCase로 명명합니다.
 - 기존에는 컴포넌트명에 페이지명을 prefix로 붙여 사용했으나,디렉토리 구조를 통해 이미 컴포넌트의 역할과 위치가 명확히 드러나므로불필요한 prefix는 제거합니다.
 
 > **적용 방법**
+
 - 도메인 내부를 페이지 단위로 세분화된 하위 디렉토리로 구성합니다.
 - 공통적으로 사용되는 코드(components, hooks, utils 등)는 shared 디렉토리로 이동시킵니다.
 - shared 디렉토리 내에서도 서로 관련이 깊고 함께 변경되는 경향이 있는 코드들은 하위 디렉토리로 나누어 관리합니다.
@@ -2687,6 +2717,7 @@ export function EmailVerificationContextProvider({
 - 컴포넌트명의 불필요한 prefix를 제거합니다.
 
 > **적용으로 얻은 이점**
+
 - 도메인 내 페이지별 흐름 파악이 명확해집니다.
 - import 경로가 예측 가능하고 가독성이 향상됩니다.
 - 페이지별로 세분화되어 유지보수가 편리해집니다.
@@ -3266,7 +3297,7 @@ export default customAxios;
 
 > 해결 방법
 
-- 날짜 형식 포맷팅 함수에 UTC -> KST 시간대로 변환하는 코드를 추가하여 해결하였습니다. 
+- 날짜 형식 포맷팅 함수에 UTC -> KST 시간대로 변환하는 코드를 추가하여 해결하였습니다.
 
 > 해결 코드
 
@@ -3283,6 +3314,7 @@ export default customAxios;
   //...
   }
 ```
+
 </details>
 
 <br>
@@ -3294,10 +3326,9 @@ export default customAxios;
 - SSR 페이지에서 토큰 만료 에러가 발생하면, cookie에 저장된 refreshToken를 통해 accessToken를 재발급 받은 cookie가 client로 전달되지 않는 문제가 발생하였습니다.
 - 이로 인해 Client에서 인증이 필요한 API 요청시 토큰 재발급 로직을 중복 요청한다는 문제가 있었습니다.
 
-
 > 문제 원인
 
-- App Router에서는 SSR 페이지의 쿠키를 클라이언트로 전송할 수 없기 때문에 SSR 측에서 새로운 accessToken를 갱신하여도 클라이언트에는 갱신된 accessToken이 포함된 cookie가 전달되지 않습니다. 
+- App Router에서는 SSR 페이지의 쿠키를 클라이언트로 전송할 수 없기 때문에 SSR 측에서 새로운 accessToken를 갱신하여도 클라이언트에는 갱신된 accessToken이 포함된 cookie가 전달되지 않습니다.
 
 > 해결 방법
 
@@ -3310,7 +3341,9 @@ export default customAxios;
 <summary>코드 보기</summary>
 
 #### profile page
+
 accessToken 만료 에러 감지 시 redirect를 통해 클라이언트 측으로 aceessToken 토큰 재발급을 위임합니다.
+
 ```javascript
 //...
 async function prefetchProfile() {
@@ -3344,27 +3377,28 @@ async function prefetchProfile() {
 //...
 ```
 
-
 **middleware.ts**
 
 현재 페이지를 저장하는 X-Requested-URL cookie 설정 로직 추가합니다.
+
 ```javascript
 //...
- const { pathname } = req.nextUrl;
+const { pathname } = req.nextUrl;
 
-  const response = NextResponse.next();
-  response.cookies.set("X-Requested-URL", pathname, {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/"
-  });
+const response = NextResponse.next();
+response.cookies.set("X-Requested-URL", pathname, {
+  secure: process.env.NODE_ENV === "production",
+  httpOnly: true,
+  sameSite: "strict",
+  path: "/"
+});
 //...
 ```
 
 **refresh-token page**
 
 accessToken 재발급을 위임받아 처리합니다.
+
 ```javascript
 "use client";
 
@@ -3389,7 +3423,7 @@ export default function RefreshToken() {
         // SSR 재요청을 위한 서버 리다이렉트
         window.location.href = next;
       } catch (error) {
-        if (isAxiosError<RegenerateAccessTokenResponseData>(error)) {
+        if (isAxiosError < RegenerateAccessTokenResponseData > error) {
           if (error.response?.status === 401) {
             router.replace("/session-expired");
           } else {
@@ -3415,7 +3449,6 @@ export default function RefreshToken() {
 > 문제 상황
 
 - 일부 페이지에서 accessToken이 만료된 경우 accessToken 재발급 요청이 중복으로 발생하는 문제가 있었습니다.
-
 
 > 문제 원인
 
@@ -3496,7 +3529,7 @@ customAxios.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (typeof window === "undefined" && 
+    if (typeof window === "undefined" &&
         isAxiosError<RegenerateAccessTokenResponseData>(error) &&
         error.response?.status === 401 &&
         error.response?.data.message === "만료된 토큰이에요."
@@ -3574,10 +3607,10 @@ export default customAxios;
 <br>
 
 #### 🔴 Layout 컴포넌트 Invalid hook call 에러
+
 > 문제 상황
 
 - layout.tsx에서 'Invalid hook call' 오류가 발생하였습니다.
-
 
 > 문제 원인
 
@@ -3613,6 +3646,7 @@ export default function RootLayout({
 <br/>
 
 #### 🕳 로그아웃 시 빈 유저 정보가 페이지에 노출되는 문제
+
 > 문제 상황
 
 - 기존 로그아웃은 클라이언트 유저 정보 데이터를 삭제한 후 페이지를 전환하는 방식이었습니다.
@@ -3673,7 +3707,7 @@ export default function useSignoutMutate() {
 ```javascript
 //...
 export default function Logout() {
- //...
+  //...
   useEffect(() => {
     if (!user) return navigate({ type: "replace", url: "/" });
 
