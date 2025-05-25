@@ -1,11 +1,11 @@
-import Review from "@/domains/user/models/Review";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
-import PurchaseTrading from "@/domains/product/models/PurchaseTrading";
-import { TradingStatus } from "@/domains/product/types/product-types";
-import SaleTrading from "@/domains/product/models/SaleTrading";
-import ReviewScore from "@/domains/user/models/ReviewScore";
+import Review from "@/domains/user/shared/models/Review";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
+import { TradingStatus } from "@/domains/product/manage/types/productManageTypes";
+import SaleTrading from "@/domains/product/shared/models/SaleTrading";
+import ReviewScore from "@/domains/user/shared/models/ReviewScore";
 import mongoose from "mongoose";
-import dbConnect from "@/utils/db/db";
+import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(

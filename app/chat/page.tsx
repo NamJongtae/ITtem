@@ -1,5 +1,5 @@
-import ChatRoomListPage from "@/domains/chat/components/room-list/chat-room-list-page";
-import { BASE_URL } from "@/constants/constant";
+import ChatRoomListPage from "@/domains/chat/room-list/components/ChatRoomListPage";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

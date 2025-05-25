@@ -1,5 +1,5 @@
-import SigninPage from '@/domains/auth/components/signin/signin-page';
-import { BASE_URL } from "@/constants/constant";
+import SigninPage from "@/domains/auth/signin/components/SigninPage";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
-import dbConnect from "@/utils/db/db";
-import SaleTrading from "@/domains/product/models/SaleTrading";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import dbConnect from "@/shared/common/utils/db/db";
+import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import {
   PurchaseCancelProcess,
   PurchaseReturnProcess,
@@ -10,11 +10,11 @@ import {
   SalesReturnProcess,
   SaleTradingProcess,
   TradingStatus
-} from "@/domains/product/types/product-types";
-import PurchaseTrading from "@/domains/product/models/PurchaseTrading";
-import User from "@/domains/auth/models/User";
-import { sendNotificationMessage } from "@/utils/api/firebase";
-import Product from "@/domains/product/models/Product";
+} from "@/domains/product/manage/types/productManageTypes";
+import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
+import User from "@/domains/auth/shared/common/models/User";
+import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(

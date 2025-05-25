@@ -1,4 +1,4 @@
-import customAxios from "@/utils/customAxios";
+import customAxios from "@/shared/common/utils/customAxios";
 
 export default async function readAllNotificationMessage(endKey: string) {
   try {

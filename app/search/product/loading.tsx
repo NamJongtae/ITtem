@@ -1,4 +1,4 @@
-import Spinner from "@/components/spinner";
+import Spinner from "@/shared/common/components/Spinner";
 
 export default function ProductSearchloading() {
   return (

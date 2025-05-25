@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import dbConnect from "@/utils/db/db";
-import User from '@/domains/auth/models/User';
-import checkAuthorization from '@/domains/auth/utils/checkAuthorization';
-import { LoginType } from "@/domains/auth/types/auth-types";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { NextRequest, NextResponse } from "next/server";
-import hashPassword from "@/domains/auth/utils/hashPassoword";
-import comparePassword from "@/domains/auth/utils/comparePassword";
+import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
+import comparePassword from "@/domains/auth/shared/common/utils/comparePassword";
 
 export async function PATCH(req: NextRequest) {
   try {

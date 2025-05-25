@@ -3,9 +3,9 @@
 import React, { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios, { isAxiosError } from "axios";
-import { BASE_URL } from "@/constants/constant";
-import Loading from "@/components/loading";
-import { ApiResponse } from "@/types/response-types";
+import { BASE_URL } from "@/shared/common/constants/constant";
+import Loading from "@/shared/common/components/Loading";
+import { ApiResponse } from "@/shared/common/types/responseTypes";
 
 export default function RefreshToken() {
   const searchParams = useSearchParams();

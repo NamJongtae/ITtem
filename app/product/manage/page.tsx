@@ -1,5 +1,5 @@
-import ProductManagePage from "@/domains/product/components/manage/product-manage-page";
-import { BASE_URL } from "@/constants/constant";
+import ProductManagePage from "@/domains/product/manage/components/ProductManagePage";
+import { BASE_URL } from "@/shared/common/constants/constant";
 
 export async function generateMetadata({
   searchParams

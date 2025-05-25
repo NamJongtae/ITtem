@@ -1,6 +1,5 @@
-import React from "react";
-import ProductUploadLoading from "../../upload/loading";
+import Loading from "../../upload/loading";
 
 export default function ProductEditloading() {
-  return <ProductUploadLoading isEdit={true} />;
+  return <Loading isEdit={true} />;
 }

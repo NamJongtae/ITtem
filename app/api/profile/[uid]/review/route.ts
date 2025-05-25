@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/utils/db/db";
-import Review from "@/domains/user/models/Review";
+import dbConnect from "@/shared/common/utils/db/db";
+import Review from "@/domains/user/shared/models/Review";
 
 export async function GET(
   req: NextRequest,

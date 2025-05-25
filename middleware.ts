@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkWithOutAuthPathname, withoutAuth } from "./utils/withoutAuth";
+import {
+  checkWithOutAuthPathname,
+  withoutAuth
+} from "./shared/common/utils/withoutAuth";
 import { IronSession, getIronSession } from "iron-session";
-import { SESSION_OPTIONS } from "./domains/auth/constants/constansts";
-import { checkWithAuthPathname, withAuth } from "./utils/withAuth";
+import { SESSION_OPTIONS } from "./domains/auth/shared/common/constants/constansts";
+import {
+  checkWithAuthPathname,
+  withAuth
+} from "./shared/common/utils/withAuth";
 
 export async function middleware(req: NextRequest, res: NextResponse) {
   const { pathname, href } = req.nextUrl;

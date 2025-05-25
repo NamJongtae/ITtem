@@ -1,5 +1,5 @@
-import ChangePasswordModal from "@/domains/auth/components/change-password/modal/change-password-modal";
+import Modal from "@/domains/auth/change-password/components/modal/Modal";
 
-export default function Modal() {
-  return <ChangePasswordModal />;
+export default function ChangePasswordModalPage() {
+  return <Modal />;
 }

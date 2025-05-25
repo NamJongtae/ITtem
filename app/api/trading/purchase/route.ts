@@ -1,7 +1,7 @@
 import PurchaseTrading, {
   PurchaseTradingDB
-} from "@/domains/product/models/PurchaseTrading";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+} from "@/domains/product/shared/models/PurchaseTrading";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

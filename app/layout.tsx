@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "react-toastify/dist/ReactToastify.min.css";
-import "@/styles/toast.css";
-import "@/styles/swiper-styles.css";
-import "@/styles/globals.css";
-import Layout from "@/components/layout/layout";
+import "@/shared/common/styles/toast.css";
+import "@/shared/common/styles/swiperStyles.css";
+import "@/shared/common/styles/globals.css";
+import Layout from "@/shared/layout/components/Layout";
 import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
-import { BASE_URL } from "@/constants/constant";
-import ReactQueryProvider from "@/store/ReactQueryProvider";
-import Loading from "@/components/loading";
-import GlobalLoading from "@/components/global-loading";
+import { BASE_URL } from "@/shared/common/constants/constant";
+import ReactQueryProvider from "@/shared/common/store/ReactQueryProvider";
+import Loading from "@/shared/common/components/Loading";
+import GlobalLoading from "@/shared/common/components/GlobalLoading";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],

@@ -1,13 +1,13 @@
-import comparePassword from "@/domains/auth/utils/comparePassword";
-import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
-import { IronSessionType } from "@/domains/auth/types/auth-types";
+import comparePassword from "@/domains/auth/shared/common/utils/comparePassword";
+import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
-import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
+import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
+import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   try {

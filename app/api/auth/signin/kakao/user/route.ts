@@ -1,5 +1,5 @@
-import getKakaoAuthAccessToken from "@/domains/auth/api/signin/getKaKakaoAuthAccessToken";
-import getKaKaoAuthInfo from "@/domains/auth/api/signin/getKakaoAuthInfo";
+import getKakaoAuthAccessToken from "@/domains/auth/signin/api/getKaKakaoAuthAccessToken";
+import getKaKaoAuthInfo from "@/domains/auth/signin/api/getKakaoAuthInfo";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

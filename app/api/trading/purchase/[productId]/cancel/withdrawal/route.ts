@@ -1,19 +1,19 @@
-import { sendNotificationMessage } from "@/utils/api/firebase";
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
-import PurchaseTrading from "@/domains/product/models/PurchaseTrading";
-import SaleTrading from "@/domains/product/models/SaleTrading";
-import User from "@/domains/auth/models/User";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
+import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
+import SaleTrading from "@/domains/product/shared/models/SaleTrading";
+import User from "@/domains/auth/shared/common/models/User";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import {
+  TradingStatus,
   PurchaseCancelProcess,
   PurchaseReturnProcess,
   PurchaseTradingProcess,
   SalesCancelProcess,
   SalesReturnProcess,
-  SaleTradingProcess,
-  TradingStatus
-} from "@/domains/product/types/product-types";
+  SaleTradingProcess
+} from "@/domains/product/manage/types/productManageTypes";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

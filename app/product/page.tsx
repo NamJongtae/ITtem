@@ -1,9 +1,9 @@
-import Header from "@/domains/product/components/product-header";
-import { BASE_URL } from "@/constants/constant";
+import ProductHeader from "@/domains/product/upload/components/ProductHeader";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Suspense } from "react";
 
-import CategoryProductListContainer from "@/domains/product/components/category-product-list-container";
-import ProductListSkeletonUI from "@/domains/product/components/product-list/product-list-skeletonUI";
+import CategoryProductListContainer from "@/domains/product/upload/components/CategoryProductListContainer";
+import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
 
 export async function generateMetadata(props: {
   searchParams: Promise<{ category: string | undefined }>;
@@ -32,7 +32,7 @@ export default async function Product({
 
   return (
     <>
-      <Header />
+      <ProductHeader />
       <Suspense fallback={<ProductListSkeletonUI listCount={8} />}>
         <CategoryProductListContainer category={category} />
       </Suspense>

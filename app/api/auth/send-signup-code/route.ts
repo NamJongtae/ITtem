@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sendVerificationCode from "@/domains/auth/utils/sendVerificationCode";
+import sendVerificationCode from "@/domains/auth/shared/email-verification/utils/sendVerificationCode";
 
 export async function POST(req: NextRequest) {
   try {

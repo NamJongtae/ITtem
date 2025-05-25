@@ -1,5 +1,5 @@
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

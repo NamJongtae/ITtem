@@ -1,6 +1,6 @@
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 

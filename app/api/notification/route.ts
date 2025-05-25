@@ -3,8 +3,8 @@ import {
   deleteAllNotificationMessage,
   getNotificationMessage,
   readAllNotificationMessage
-} from "@/utils/api/firebase";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+} from "@/shared/common/utils/api/firebase";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 
 export async function GET(req: NextRequest) {
   try {

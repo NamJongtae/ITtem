@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
-import SaleTrading from "@/domains/product/models/SaleTrading";
-import User from "@/domains/auth/models/User";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
+import SaleTrading from "@/domains/product/shared/models/SaleTrading";
+import User from "@/domains/auth/shared/common/models/User";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {

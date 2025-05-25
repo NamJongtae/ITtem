@@ -1,6 +1,6 @@
-import deleteNotificationMessage from '../../api/deleteNotificationMessage';
-import { queryKeys } from "@/query-keys/query-keys";
-import { NotificationMessageData } from '../../types/notification-types'; 
+import deleteNotificationMessage from "../../api/deleteNotificationMessage";
+import { queryKeys } from "@/shared/common/query-keys/queryKeys";
+import { NotificationMessageData } from "../../types/notificationTypes";
 import {
   InfiniteData,
   useMutation,
@@ -33,10 +33,9 @@ export default function useDeleteNotificationMessageMutate() {
         queryKey: notificationMessagesQueryKey
       });
 
-      const previousMessages = queryClient.getQueryData([
-        "notification",
-        "messages"
-      ]) as
+      const previousMessages = queryClient.getQueryData(
+        notificationMessagesQueryKey
+      ) as
         | InfiniteData<
             { messages: NotificationMessageData[]; nextKey: string },
             unknown

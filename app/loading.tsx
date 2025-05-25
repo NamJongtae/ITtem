@@ -1,5 +1,5 @@
-import ProductListSkeletonUI from "@/domains/product/components/product-list/product-list-skeletonUI";
-import PopularProductListSkeletonUI from "@/domains/home/components/popular-product-list-skeletonUI";
+import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
+import PopularProductListSkeletonUI from "@/domains/home/components/PopularProductListSkeletonUI";
 import Image from "next/image";
 
 export default function HomeLoading() {

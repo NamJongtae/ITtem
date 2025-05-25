@@ -1,5 +1,5 @@
 import useDeleteAllNotificationMessagesMutate from "./mutations/useDeleteAllNotificationMessagesMutate";
-import { NotificationMessageData } from "../types/notification-types";
+import { NotificationMessageData } from "../types/notificationTypes";
 import { toast } from "react-toastify";
 
 interface IParams {

@@ -1,9 +1,9 @@
-import hashPassword from "@/domains/auth/utils/hashPassoword";
-import deleteEmailVerificationCode from "@/domains/auth/api/email-verification/deleteEmailVerificationCode";
-import getVerifiedEmail from "@/domains/auth/api/email-verification/getVerifiedEmail";
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
-import { LoginType } from "@/domains/auth/types/auth-types";
+import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
+import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/api/deleteEmailVerificationCode";
+import getVerifiedEmail from "@/domains/auth/shared/email-verification/api/getVerifiedEmail";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(req: NextRequest) {

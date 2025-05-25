@@ -1,8 +1,8 @@
 "use client";
 
-import Loading from "@/components/loading";
-import useGoogleSigninMutate from "@/domains/auth/hooks/signin/mutations/useGoogleSigninMutate";
-import useGoogleUserInfo from "@/domains/auth/hooks/signin/mutations/useGoogleUserInfoMutate";
+import Loading from "@/shared/common/components/Loading";
+import useGoogleSigninMutate from "@/domains/auth/signin/hooks/mutations/useGoogleSigninMutate";
+import useGoogleUserInfo from "@/domains/auth/signin/hooks/mutations/useGoogleUserInfoMutate";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 

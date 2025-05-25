@@ -1,6 +1,6 @@
-import { BASE_URL } from "@/constants/constant";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
-import ResetPasswordPage from "@/domains/auth/components/reset-password/reset-password-page";
+import ResetPasswordPage from "@/domains/auth/reset-password/components/ResetPasswordPage";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${BASE_URL}/find-password`),

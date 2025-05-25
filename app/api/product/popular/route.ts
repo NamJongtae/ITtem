@@ -1,6 +1,6 @@
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
-import { ProductStatus } from "@/domains/product/types/product-types";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
+import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 
 export async function GET() {
   try {

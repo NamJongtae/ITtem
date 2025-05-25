@@ -1,5 +1,5 @@
-import getGoogleAuthAccessToken from "@/domains/auth/api/signin/getGoogleAuthAccessToken";
-import getGoogleAuthInfo from "@/domains/auth/api/signin/getGoogleAuthInfo";
+import getGoogleAuthAccessToken from "@/domains/auth/signin/api/getGoogleAuthAccessToken";
+import getGoogleAuthInfo from "@/domains/auth/signin/api/getGoogleAuthInfo";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

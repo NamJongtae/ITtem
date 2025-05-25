@@ -1,5 +1,5 @@
-import { enterChatRoom } from "@/utils/api/firebase";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import { enterChatRoom } from "@/shared/common/utils/api/firebase";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(

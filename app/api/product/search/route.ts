@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/utils/db/db";
-import Product, { ProductDB } from "@/domains/product/models/Product";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product, { ProductDB } from "@/domains/product/shared/models/Product";
 import { FilterQuery } from "mongoose";
 
 export async function GET(req: NextRequest) {

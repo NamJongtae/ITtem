@@ -1,5 +1,5 @@
-import SignupPage from '@/domains/auth/components/signup/signup-page';
-import { BASE_URL } from "@/constants/constant";
+import SignupPage from "@/domains/auth/signup/components/SignupPage";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

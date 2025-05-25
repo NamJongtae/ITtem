@@ -1,10 +1,10 @@
 "use client";
 
-import Loading from "@/components/loading";
-import { useCustomRouter } from "@/hooks/useCustomRouter";
-import useAuthStore from "@/domains/auth/store/auth-store";
-import useChatStore from "@/domains/chat/store/chat-store";
-import useNotificationStore from "@/domains/notification/store/notification-store";
+import Loading from "@/shared/common/components/Loading";
+import { useCustomRouter } from "@/shared/common/hooks/useCustomRouter";
+import useAuthStore from "@/domains/auth/shared/common/store/authStore";
+import useChatStore from "@/domains/chat/shared/store/chatStore";
+import useNotificationStore from "@/domains/notification/store/notificationStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 

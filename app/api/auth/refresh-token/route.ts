@@ -3,12 +3,12 @@ import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   SESSION_OPTIONS
-} from "@/domains/auth/constants/constansts";
-import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
-import saveTokenFromRedis from "@/domains/auth/api/saveTokenFromRedis";
+} from "@/domains/auth/shared/common/constants/constansts";
+import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import saveTokenFromRedis from "@/domains/auth/shared/common/api/saveTokenFromRedis";
 
-import { generateToken, verifyToken } from "@/utils/token";
-import { IronSessionType } from "@/domains/auth/types/auth-types";
+import { generateToken, verifyToken } from "@/shared/common/utils/token";
+import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";

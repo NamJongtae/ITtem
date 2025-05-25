@@ -1,15 +1,16 @@
-import deleteEmailVerificationCode from "@/domains/auth/api/email-verification/deleteEmailVerificationCode";
-import getVerifiedEmail from "@/domains/auth/api/email-verification/getVerifiedEmail";
-import hashPassword from "@/domains/auth/utils/hashPassoword";
-import dbConnect from "@/utils/db/db";
+import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/api/deleteEmailVerificationCode";
+import getVerifiedEmail from "@/domains/auth/shared/email-verification/api/getVerifiedEmail";
+import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
+import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
-import { IronSessionType, LoginType } from "@/domains/auth/types/auth-types";
-import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
-import User from "@/domains/auth/models/User";
+import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
+import { LoginType } from "@/domains/auth/signin/types/signinTypes";
+import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
+import User from "@/domains/auth/shared/common/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
-import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
+import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   try {

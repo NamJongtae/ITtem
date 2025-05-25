@@ -1,4 +1,4 @@
-import ProductListSkeletonUI from "@/domains/product/components/product-list/product-list-skeletonUI";
+import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
 
 export default function ProductLoading() {
   return (

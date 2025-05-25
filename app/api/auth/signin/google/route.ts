@@ -1,14 +1,15 @@
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
-import { IronSessionType, LoginType } from "@/domains/auth/types/auth-types";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
+import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
-import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
-import createUniqueNickname from "@/domains/auth/utils/createUniqueNickname";
-import createAndSaveToken from "@/domains/auth/utils/createAndSaveToken";
+import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
+import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
+import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
 
 export async function POST(req: NextRequest) {
   const { user } = await req.json();

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
-import { NotificationResponseData } from "../../chat/types/response-types";
-import customAxios from "@/utils/customAxios";
+import { NotificationResponseData } from "../types/responseTypes";
+import customAxios from "@/shared/common/utils/customAxios";
 
 export default async function getNotificationMessage({
   lastKey,

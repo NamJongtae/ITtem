@@ -1,8 +1,8 @@
-import SuspenseErrorBoundary from "@/components/suspense-error-boundary";
-import ProductEditPageContainer from "@/domains/product/components/edit/product-edit-page-container";
-import { BASE_URL } from "@/constants/constant";
+import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
+import PageContainer from "@/domains/product/edit/components/PageContainer";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import ProductUploadLoading from "../../upload/loading";
-import Empty from "@/components/empty";
+import Empty from "@/shared/common/components/empty";
 
 export async function generateMetadata({
   params
@@ -36,7 +36,7 @@ export default async function ProductEdit({
         <Empty message="상품 데이터를 불러올 수 없어요.\n잠시 후 다시 시도해주세요." />
       }
     >
-      <ProductEditPageContainer productId={productId} />
+      <PageContainer productId={productId} />
     </SuspenseErrorBoundary>
   );
 }

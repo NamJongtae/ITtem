@@ -1,5 +1,5 @@
-import ProductUploadPage from "@/domains/product/components/upload/product-upload-page";
-import { BASE_URL } from "@/constants/constant";
+import ProductUploadPage from "@/domains/product/upload/components/ProductUploadPage";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import ProductUploadLoading from "./loading";

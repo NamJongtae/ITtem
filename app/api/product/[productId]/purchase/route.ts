@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
 import mongoose from "mongoose";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import {
-  ProductStatus,
   SalesCancelProcess,
   SalesReturnProcess,
   SaleTradingProcess
-} from "@/domains/product/types/product-types";
-import PurchaseTrading from "@/domains/product/models/PurchaseTrading";
-import SaleTrading from "@/domains/product/models/SaleTrading";
-import { sendNotificationMessage } from "@/utils/api/firebase";
-import User from "@/domains/auth/models/User";
+} from "@/domains/product/manage/types/productManageTypes";
+import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
+import SaleTrading from "@/domains/product/shared/models/SaleTrading";
+import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import User from "@/domains/auth/shared/common/models/User";
 
 export async function POST(
   req: NextRequest,

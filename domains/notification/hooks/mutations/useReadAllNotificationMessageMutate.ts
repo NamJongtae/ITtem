@@ -1,6 +1,6 @@
 import readAllNotificationMessage from "../../api/readAllNotificationMessage";
-import { queryKeys } from "@/query-keys/query-keys";
-import { NotificationMessageData } from "../../types/notification-types";
+import { queryKeys } from "@/shared/common/query-keys/queryKeys";
+import { NotificationMessageData } from "../../types/notificationTypes";
 import {
   InfiniteData,
   useMutation,

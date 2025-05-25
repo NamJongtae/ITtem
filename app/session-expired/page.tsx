@@ -4,10 +4,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import useAuthStore from "@/domains/auth/store/auth-store";
-import useChatStore from "@/domains/chat/store/chat-store";
-import useNotificationStore from "@/domains/notification/store/notification-store";
-import Loading from "@/components/loading";
+import useAuthStore from "@/domains/auth/shared/common/store/authStore";
+import useChatStore from "@/domains/chat/shared/store/chatStore";
+import useNotificationStore from "@/domains/notification/store/notificationStore";
+import Loading from "@/shared/common/components/Loading";
 
 export default function SessionExpired() {
   const router = useRouter();

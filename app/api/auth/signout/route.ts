@@ -1,9 +1,9 @@
-import getTokenFromRedis from "@/domains/auth/api/getTokenFromRedis";
-import deleteTokenFromRedis from "@/domains/auth/api/deleteTokenFromRedis";
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
-import { SESSION_OPTIONS } from "@/domains/auth/constants/constansts";
-import { IronSessionType } from "@/domains/auth/types/auth-types";
+import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import deleteTokenFromRedis from "@/domains/auth/shared/common/api/deleteTokenFromRedis";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
+import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
+import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";

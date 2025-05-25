@@ -1,5 +1,5 @@
-import ProfileEditForm from "@/domains/user/components/profile-edit/profile-edit-form";
+import Form from "@/domains/user/profile-edit/components/Form";
 
 export default function ProfileEdit() {
-  return <ProfileEditForm />;
+  return <Form />;
 }

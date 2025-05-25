@@ -1,7 +1,7 @@
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
-import RecommendProduct from "@/domains/product/models/RecommendProduct";
-import { ProductStatus } from "@/domains/product/types/product-types";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
+import RecommendProduct from "@/domains/product/shared/models/RecommendProduct";
+import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

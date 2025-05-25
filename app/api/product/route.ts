@@ -1,5 +1,5 @@
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

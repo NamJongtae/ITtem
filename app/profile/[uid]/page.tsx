@@ -1,7 +1,7 @@
-import ProfileDetailSkeletonUI from "@/domains/user/components/profile/detail/profile-detail-skeletonUI";
-import ProfileUserInfoSkeletonUI from "@/domains/user/components/profile/user-info/profile-user-info-skeletonUI";
-import UserProfileContainer from "@/domains/user/components/profile/user-profile-container";
-import { BASE_URL } from "@/constants/constant";
+import ProfileDetailSkeletonUI from "@/domains/user/profile/components/detail/ProfileDetailSkeletonUI";
+import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
+import UserProfileContainer from "@/domains/user/profile/components/UserProfileContainer";
+import { BASE_URL } from "@/shared/common/constants/constant";
 import React, { Suspense } from "react";
 
 interface IProps {

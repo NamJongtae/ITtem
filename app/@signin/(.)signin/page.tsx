@@ -1,5 +1,5 @@
-import SigninModal from "@/domains/auth/components/signin/modal/signin-modal";
+import Modal from "@/domains/auth/signin/components/modal/Modal";
 
-export default function Modal() {
-  return <SigninModal />;
+export default function SigninModalPage() {
+  return <Modal />;
 }

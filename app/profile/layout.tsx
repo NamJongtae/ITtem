@@ -1,5 +1,5 @@
-import ProfileDetailSkeletonUI from "@/domains/user/components/profile/detail/profile-detail-skeletonUI";
-import ProfileUserInfoSkeletonUI from "@/domains/user/components/profile/user-info/profile-user-info-skeletonUI";
+import ProfileDetailSkeletonUI from "@/domains/user/profile/components/detail/ProfileDetailSkeletonUI";
+import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
 import { Suspense } from "react";
 
 interface IProps {

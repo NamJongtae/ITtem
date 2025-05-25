@@ -1,7 +1,7 @@
 import SaleTrading, {
   SaleTradingDB
-} from "@/domains/product/models/SaleTrading";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+} from "@/domains/product/shared/models/SaleTrading";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

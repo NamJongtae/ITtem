@@ -1,5 +1,5 @@
-import ChangePasswordForm from "@/domains/auth/components/change-password/change-password-form";
+import Form from "@/domains/auth/change-password/components/Form";
 
 export default function PasswordChange() {
-  return <ChangePasswordForm />;
+  return <Form />;
 }

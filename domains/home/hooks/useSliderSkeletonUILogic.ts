@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useThrottle } from "../../../hooks/useThrottle";
+import { useThrottle } from "../../../shared/common/hooks/useThrottle";
 
 const getInitialLayout = () => {
   if (typeof window === "undefined") return { slidesToShow: 4, gap: 30 };

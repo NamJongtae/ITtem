@@ -1,5 +1,5 @@
-import ChatRoomPage from "@/domains/chat/components/room/chat-room-page";
-import { BASE_URL } from "@/constants/constant";
+import ChatRoomPage from '@/domains/chat/room/components/ChatRoomPage';
+import { BASE_URL } from "@/shared/common/constants/constant";
 
 export async function generateMetadata({
   params

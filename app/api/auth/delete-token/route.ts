@@ -1,6 +1,6 @@
-import deleteTokenFromRedis from "@/domains/auth/api/deleteTokenFromRedis";
-import dbConnect from "@/utils/db/db";
-import User from "@/domains/auth/models/User";
+import deleteTokenFromRedis from "@/domains/auth/shared/common/api/deleteTokenFromRedis";
+import dbConnect from "@/shared/common/utils/db/db";
+import User from "@/domains/auth/shared/common/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {

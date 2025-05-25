@@ -1,5 +1,5 @@
-import { deleteChatRoom } from "@/utils/api/firebase";
-import checkAuthorization from "@/domains/auth/utils/checkAuthorization";
+import { deleteChatRoom } from "@/shared/common/utils/api/firebase";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(

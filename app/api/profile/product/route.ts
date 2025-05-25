@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/utils/db/db";
-import Product from "@/domains/product/models/Product";
+import dbConnect from "@/shared/common/utils/db/db";
+import Product from "@/domains/product/shared/models/Product";
 import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {
