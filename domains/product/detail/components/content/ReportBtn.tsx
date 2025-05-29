@@ -12,7 +12,7 @@ export default function ReportBtn({ productDetailData }: IProps) {
       reportUserIds: productDetailData?.reportUserIds
     });
 
-  const isMyProduct = productDetailData?.uid !== myProfileData?.uid;
+  const isMyProduct = productDetailData?.uid === myProfileData?.uid;
 
   if (myProfilePending || isMyProduct) return null;
 
