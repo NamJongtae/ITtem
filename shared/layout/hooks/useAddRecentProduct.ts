@@ -1,33 +1,24 @@
 import { RecentProductData } from "../types/layoutTypes";
-import { ProductDetailData } from "../../../domains/product/detail/types/productDetailTypes";
 import { useEffect } from "react";
 
 export default function useAddRecentProduct(
-  productDetailData: ProductDetailData | undefined
+  recentProduct: RecentProductData | undefined
 ) {
   useEffect(() => {
     const recentProductKey = "recentProduct";
     const maxRecentProducts = 10;
-    const productDetail = {
-      productId: productDetailData?._id,
-      productName: productDetailData?.name,
-      productImg: productDetailData?.imgData[0].url
-    };
+    const productDetail = { ...recentProduct };
 
-    const recentProduct = JSON.parse(
+    const recentProductList = JSON.parse(
       localStorage.getItem(recentProductKey) || "[]"
     ) as RecentProductData[];
 
-    const filteredRecent = recentProduct.filter(
+    const filteredRecent = recentProductList.filter(
       (product) => product.productId !== productDetail.productId
     );
 
-    if (productDetailData) {
-      filteredRecent.unshift({
-        productId: productDetailData._id,
-        productImg: productDetailData.imgData[0].url,
-        productName: productDetailData.name
-      });
+    if (recentProduct) {
+      filteredRecent.unshift(recentProduct);
 
       if (filteredRecent.length > maxRecentProducts) {
         filteredRecent.pop();
@@ -35,5 +26,5 @@ export default function useAddRecentProduct(
 
       localStorage.setItem(recentProductKey, JSON.stringify(filteredRecent));
     }
-  }, []);
+  }, [recentProduct]);
 }

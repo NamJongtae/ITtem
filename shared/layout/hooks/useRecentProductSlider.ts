@@ -1,15 +1,13 @@
 import { useRef, useState } from "react";
 import { RecentProductData } from "../types/layoutTypes";
 
-export default function useRecentProductSlider() {
+export default function useRecentProductSlider(
+  recentProduct: RecentProductData[]
+) {
   const [page, setPage] = useState(0);
   const sliderRef = useRef<HTMLUListElement>(null);
-  const rencentProduct: RecentProductData[] =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("recentProduct") || "[]")
-      : [];
 
-  const max = rencentProduct.length || 1;
+  const max = recentProduct?.length || 1;
 
   const handleClickNext = () => {
     if (!sliderRef.current) return;
@@ -24,7 +22,6 @@ export default function useRecentProductSlider() {
   };
 
   return {
-    rencentProduct,
     page,
     max,
     handleClickNext,

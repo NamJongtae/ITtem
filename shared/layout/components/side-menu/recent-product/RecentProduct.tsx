@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
 import RecentProductSlider from "./RecentProductSlider";
+import { RecentProductData } from "@/shared/layout/types/layoutTypes";
 
 export default function RecentProduct() {
-  const [recentProduct, setRecentProduct] = useState([]);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setRecentProduct(
-        JSON.parse(localStorage.getItem("recentProduct") || "[]")
-      );
-    }
-  }, []);
+  const recentProduct: RecentProductData[] =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("recentProduct") || "[]")
+      : [];
 
   return (
     <div className="hidden sm:block mb-3 bg-white border text-sm p-2 min-h-36">
@@ -21,7 +17,7 @@ export default function RecentProduct() {
           최근 본 상품이 존재하지 않습니다.
         </p>
       ) : (
-        <RecentProductSlider />
+        <RecentProductSlider recentProduct={recentProduct} />
       )}
     </div>
   );

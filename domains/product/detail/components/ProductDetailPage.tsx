@@ -10,7 +10,11 @@ import useAddRecentProduct from "../../../../shared/layout/hooks/useAddRecentPro
 export default function ProductDetailPage() {
   const { productData } = useProductQuery();
 
-  useAddRecentProduct(productData);
+  useAddRecentProduct({
+    productId: productData._id,
+    productImg: productData.imgData[0].url,
+    productName: productData.name
+  });
 
   return (
     <div className="pt-8 pb-12">
