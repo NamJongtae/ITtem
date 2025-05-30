@@ -1,4 +1,4 @@
-import { uploadMultiImgToFirestore } from "@/shared/common/utils/api/firebase";
+import uploadMultiImgToFirestore from "@/domains/product/upload/utils/uploadMultiProductImgToFirestore";
 import { ProductData } from "../../shared/types/productTypes";
 import { UploadImgResponseData } from "../../upload/types/productUploadTypes";
 import { FieldValues } from "react-hook-form";

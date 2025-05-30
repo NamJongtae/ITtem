@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
 import { SignupData } from "../types/signupTypes";
 import { SignupResponseData } from "../types/responseTypes";
-import { uploadImgToFireStore } from "@/shared/common/utils/api/firebase";
 import { toast } from "react-toastify";
 import customAxios from "@/shared/common/utils/customAxios";
+import uploadProductImgToFireStore from "@/domains/product/upload/utils/uploadProductImgToFireStore";
 
 export default async function createAccount({
   email,
@@ -14,7 +14,7 @@ export default async function createAccount({
 }: SignupData): Promise<AxiosResponse<SignupResponseData>> {
   let imgData;
   try {
-    imgData = await uploadImgToFireStore(profileImgFile);
+    imgData = await uploadProductImgToFireStore(profileImgFile);
   } catch (error) {
     if (error instanceof Error) {
       toast.warn(error.message);

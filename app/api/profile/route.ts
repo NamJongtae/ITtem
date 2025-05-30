@@ -3,7 +3,7 @@ import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthoriz
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import User from "@/domains/auth/shared/common/models/User";
-import { deleteProfileImgToFirestore } from "@/shared/common/utils/api/firebase";
+import deleteProfileImgToFirestore from "@/domains/user/profile/utils/deleteProfileImgToFirestore";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 
 export async function GET() {

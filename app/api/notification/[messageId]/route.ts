@@ -1,8 +1,6 @@
-import {
-  deleteNotificationMessage,
-  readyNotificationMessage
-} from "@/shared/common/utils/api/firebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import readyNotificationMessageInFirebase from "@/domains/notification/utils/readNotificationMessageInFirebase";
+import deleteNotificationMessageInFirebase from "@/domains/notification/utils/deleteNotificationMessageInFirebase";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -27,7 +25,7 @@ export async function PATCH(
 
     const myUid = isValidAuth?.auth?.uid || "";
 
-    await readyNotificationMessage({
+    await readyNotificationMessageInFirebase({
       userId: myUid,
       messageId: messageId || ""
     });
@@ -82,7 +80,7 @@ export async function DELETE(
       );
     }
 
-    await deleteNotificationMessage({
+    await deleteNotificationMessageInFirebase({
       userId: myUid,
       messageId: messageId || ""
     });

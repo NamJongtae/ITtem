@@ -1,4 +1,4 @@
-import { deleteChatRoom } from "@/shared/common/utils/api/firebase";
+import deleteChatRoomInFirebase from "@/domains/chat/room/utils/deleteChatRoomInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,7 +31,7 @@ export async function DELETE(
       );
     }
 
-    await deleteChatRoom(chatRoomId);
+    await deleteChatRoomInFirebase(chatRoomId);
 
     return new NextResponse(
       JSON.stringify({ message: "채팅방 삭제에 성공했어요." }),

@@ -13,7 +13,7 @@ import {
 } from "@/domains/product/manage/types/productManageTypes";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import User from "@/domains/auth/shared/common/models/User";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -242,7 +242,7 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    await sendNotificationMessage(
+    await sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
       `${user.nickname}님이 ${purchaseTrading.productName} 상품에 구매 취소를 거절하였습니다.`
     );

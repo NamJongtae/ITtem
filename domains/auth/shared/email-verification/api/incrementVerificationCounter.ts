@@ -1,4 +1,4 @@
-import { client } from "@/shared/common/utils/api/redis";
+import { client } from "@/shared/common/utils/redis";
 import { EmailVerificationType } from "../types/emailVerificationTypes";
 import { VERIFICATION_EMAIL_BLOCK_EXP } from "../../common/constants/constansts";
 

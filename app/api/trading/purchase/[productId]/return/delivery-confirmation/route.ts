@@ -6,7 +6,7 @@ import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import {
   TradingStatus,
   PurchaseCancelProcess,
@@ -230,7 +230,7 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       saleTrading.sellerId,
       `${user.nickname}님이 ${saleTrading.productName} 반품 상품을 전달 하였습니다.`
     );

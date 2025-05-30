@@ -1,6 +1,6 @@
 import { EmailVerificationType } from "../types/emailVerificationTypes";
 import { VERIFICATION_EMAIL_EXP } from "../../common/constants/constansts";
-import { client } from "@/shared/common/utils/api/redis";
+import { client } from "@/shared/common/utils/redis";
 
 export default async function saveEmailVerificationCode(
   email: string,

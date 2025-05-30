@@ -1,4 +1,4 @@
-import { enterChatRoom } from "@/shared/common/utils/api/firebase";
+import enterChatRoomInFirebase from "@/domains/chat/room/utils/enterChatRoomInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -33,7 +33,7 @@ export async function PATCH(
 
     const myUid = isValidAuth?.auth?.uid || "";
 
-    await enterChatRoom({ myUid, chatRoomId });
+    await enterChatRoomInFirebase({ myUid, chatRoomId });
 
     return new NextResponse(
       JSON.stringify({ message: "채팅방 입장에 성공했어요." }),

@@ -6,7 +6,7 @@ import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import {
   TradingStatus,
@@ -246,7 +246,7 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
       `${user.nickname}님이 ${purchaseTrading.productName} 상품에 구매 취소 요청을 확인하였습니다.`
     );

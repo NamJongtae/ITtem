@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { ProductData, ProductImgData } from "../types/productTypes";
-import { deleteImgToFirestore } from "@/shared/common/utils/api/firebase";
+import deleteProductImgToFirestore from "./deleteProductImgToFirestore";
 
 export default async function deleteProductImgs({
   values,
@@ -16,6 +16,6 @@ export default async function deleteProductImgs({
     const prevImgDataImgName = values.prevImgData.map(
       (data: ProductImgData) => data.name
     );
-    await deleteImgToFirestore(productDataImgName, prevImgDataImgName);
+    await deleteProductImgToFirestore(productDataImgName, prevImgDataImgName);
   }
 }

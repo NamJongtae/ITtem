@@ -1,7 +1,7 @@
 import { FieldValues } from "react-hook-form";
 import { ProfileData } from "../../profile/types/profileTypes";
 import { ProfileEditData } from "../types/profileEditTypes";
-import { uploadImgToFireStore } from "@/shared/common/utils/api/firebase";
+import { uploadProfileImgToFireStore } from "../../profile/utils/uploadProfileImgToFireStore";
 
 export default async function prepareProfileEditData({
   values,
@@ -25,7 +25,7 @@ export default async function prepareProfileEditData({
         }
         if (!(values.profileImg instanceof File)) return;
         const imgFiles = values.profileImg;
-        const imgData = await uploadImgToFireStore(imgFiles);
+        const imgData = await uploadProfileImgToFireStore(imgFiles);
         if (!imgData) return;
         profileEditData.profileImg = imgData.url;
         profileEditData.profileImgFilename = imgData.name;

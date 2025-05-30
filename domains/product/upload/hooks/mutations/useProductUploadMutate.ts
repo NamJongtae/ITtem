@@ -1,4 +1,4 @@
-import { uploadMultiImgToFirestore } from "@/shared/common/utils/api/firebase";
+import uploadMultiImgToFirestore from "@/domains/product/upload/utils/uploadMultiProductImgToFirestore";
 import uploadProduct from "../../api/uploadProduct";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import useGlobalLoadingStore from "@/shared/common/store/globalLogingStore";

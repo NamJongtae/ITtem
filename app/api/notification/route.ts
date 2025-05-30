@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  deleteAllNotificationMessage,
-  getNotificationMessage,
-  readAllNotificationMessage
-} from "@/shared/common/utils/api/firebase";
+import getNotificationMessageInFirebase from "@/domains/notification/utils/getNotificationMessageInFirebase";
+import readAllNotificationMessageInFirebase from "@/domains/notification/utils/readAllNotificationMessageInFirebase";
+import deleteAllNotificationMessageInFirebase from "@/domains/notification/utils/deleteAllNotificationMessageInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 
 export async function GET(req: NextRequest) {
@@ -31,7 +29,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const { messages, nextKey } = await getNotificationMessage({
+    const { messages, nextKey } = await getNotificationMessageInFirebase({
       userId: myUid,
       lastKey,
       limit: currentLimit
@@ -89,7 +87,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    await readAllNotificationMessage({ userId: myUid, endKey });
+    await readAllNotificationMessageInFirebase({ userId: myUid, endKey });
 
     return NextResponse.json(
       { message: "알림 메세지 읽음 처리에 성공했어요." },
@@ -134,7 +132,7 @@ export async function DELETE(req: NextRequest) {
 
     const myUid = isValidAuth?.auth?.uid || "";
 
-    await deleteAllNotificationMessage({ userId: myUid, endKey });
+    await deleteAllNotificationMessageInFirebase({ userId: myUid, endKey });
 
     return NextResponse.json(
       { message: "알림 메세지 삭제에 성공했어요." },

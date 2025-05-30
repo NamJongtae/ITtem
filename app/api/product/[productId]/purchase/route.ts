@@ -11,7 +11,7 @@ import {
 } from "@/domains/product/manage/types/productManageTypes";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
 import User from "@/domains/auth/shared/common/models/User";
 
 export async function POST(
@@ -172,7 +172,7 @@ export async function POST(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       saleTrading.sellerId,
       `${user.nickname}님이 ${product.name} 상품에 구매요청을 하였습니다.`
     );

@@ -1,4 +1,4 @@
-import { sendToChatMessage } from "@/shared/common/utils/api/firebase";
+import sendToChatMessageInFirebase from "@/domains/chat/room/utils/sendChatMessageInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -37,7 +37,7 @@ export async function POST(
 
     const myUid = isValidAuth?.auth?.uid;
 
-    await sendToChatMessage({
+    await sendToChatMessageInFirebase({
       myUid: myUid as string,
       message,
       chatRoomId: chatRoomId as string

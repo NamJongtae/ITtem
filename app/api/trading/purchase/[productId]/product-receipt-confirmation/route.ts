@@ -15,7 +15,7 @@ import {
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import Product from "@/domains/product/shared/models/Product";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
 import User from "@/domains/auth/shared/common/models/User";
 
 export async function PATCH(
@@ -262,12 +262,12 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       saleTrading.sellerId,
       `${user.nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`
     );
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       saleTrading.sellerId,
       `${saleTrading.productName} 상품에 대한 거래가 완료되었습니다.`
     );

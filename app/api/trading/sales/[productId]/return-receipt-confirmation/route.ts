@@ -1,4 +1,4 @@
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
@@ -271,7 +271,7 @@ export const PATCH = async (
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
       `${user.nickname}님이 ${purchaseTrading.productName} 반품 상품을 인수 확인하였습니다.`
     );

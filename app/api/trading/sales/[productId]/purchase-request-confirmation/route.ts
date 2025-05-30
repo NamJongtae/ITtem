@@ -14,7 +14,7 @@ import {
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import User from "@/domains/auth/shared/common/models/User";
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import Product from "@/domains/product/shared/models/Product";
 
 export async function PATCH(
@@ -230,7 +230,7 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
       `${user.nickname}님이 ${purchaseTrading.productName} 상품 구매 요청을 확인하였습니다.`
     );

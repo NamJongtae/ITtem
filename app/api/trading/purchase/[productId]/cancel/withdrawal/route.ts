@@ -1,4 +1,4 @@
-import { sendNotificationMessage } from "@/shared/common/utils/api/firebase";
+import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
 import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
@@ -208,7 +208,7 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
-    sendNotificationMessage(
+    sendNotificationMessageInFirebase(
       saleTrading.sellerId,
       `${user.nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`
     );

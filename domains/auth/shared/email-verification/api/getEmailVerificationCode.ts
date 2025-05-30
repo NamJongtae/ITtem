@@ -1,4 +1,4 @@
-import { client } from "@/shared/common/utils/api/redis";
+import { client } from "@/shared/common/utils/redis";
 
 export default async function getEmailVerificationCode(
   email: string,

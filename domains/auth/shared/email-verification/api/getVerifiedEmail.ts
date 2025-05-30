@@ -1,4 +1,4 @@
-import { client } from "@/shared/common/utils/api/redis";
+import { client } from "@/shared/common/utils/redis";
 import { EmailVerificationType } from "../types/emailVerificationTypes";
 
 export default async function getVerifiedEmail(

@@ -1,4 +1,4 @@
-import { startChat } from "@/shared/common/utils/api/firebase";
+import startChatInFirebase from "@/domains/product/shared/utils/startChatInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { chatRoomId, isExistRoom } = await startChat({
+    const { chatRoomId, isExistRoom } = await startChatInFirebase({
       productId,
       myUid,
       userId
