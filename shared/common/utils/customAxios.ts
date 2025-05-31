@@ -5,6 +5,7 @@ import axios, {
 } from "axios";
 import tokenObservable from "./Observable";
 import { ApiResponse } from "../types/responseTypes";
+import redirect from "./redirect";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
 
@@ -24,7 +25,7 @@ customAxios.interceptors.response.use(
     };
 
     if (
-      typeof window === "undefined" &&
+      (typeof window === "undefined" || process.env.TEST_ENV === "SSR") &&
       isAxiosError<ApiResponse>(error) &&
       error.response?.status === 401 &&
       error.response?.data.message === "만료된 토큰이에요."
@@ -45,14 +46,10 @@ customAxios.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          const cookies = originalRequest.headers["Cookie"];
-
           const response = await axios.post(
             `${BASE_URL}/api/auth/refresh-token`,
+            {},
             {
-              headers: {
-                Cookie: cookies
-              },
               withCredentials: true
             }
           );
@@ -64,7 +61,7 @@ customAxios.interceptors.response.use(
 
           // 리프레시 성공 → 대기중인 요청들 실행
           tokenObservable.notifyAll();
-          return customAxios(originalRequest);
+          return customAxios.request(originalRequest);
         } catch (refreshError) {
           tokenObservable.removeAll(); // 에러 시 구독 제거
           if (
@@ -72,7 +69,7 @@ customAxios.interceptors.response.use(
             refreshError.response?.status === 401
           ) {
             if (typeof window !== "undefined") {
-              window.location.replace("/session-expired");
+              redirect("/session-expired");
             }
           }
           return Promise.reject(refreshError);
@@ -84,7 +81,7 @@ customAxios.interceptors.response.use(
       // accessToken 재발급 중이면 받은 요청 구독
       return new Promise((resolve) => {
         tokenObservable.setObserver(() => {
-          resolve(customAxios(originalRequest));
+          resolve(customAxios.request(originalRequest));
         });
       });
     }
