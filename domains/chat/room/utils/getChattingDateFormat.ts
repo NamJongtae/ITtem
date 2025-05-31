@@ -1,12 +1,9 @@
 export default function getChattingDateFormat(inputDate: Date): string {
   const now = new Date();
-  now.setHours(0, 0, 0, 0); // 오늘 0시 기준
+  now.setHours(0, 0, 0, 0);
 
-  const dateOnly = new Date(inputDate);
-  dateOnly.setHours(0, 0, 0, 0);
-
-  const diff = Math.floor((now.getTime() - dateOnly.getTime()) / 1000);
-  const diffInDays = diff / (60 * 60 * 24);
+  const inputDateOnly = new Date(inputDate);
+  inputDateOnly.setHours(0, 0, 0, 0);
 
   const formatTime = (date: Date) => {
     const hours = date.getHours();
@@ -17,15 +14,20 @@ export default function getChattingDateFormat(inputDate: Date): string {
     return `${period} ${hourFor12}:${formattedMinutes}`;
   };
 
-  if (diffInDays < 1) return formatTime(inputDate);
+  // 오늘인 경우
+  if (inputDateOnly.getTime() === now.getTime()) {
+    return formatTime(inputDate);
+  }
 
-  if (diffInDays < 365) {
+  // 같은 연도면 MM.DD 포맷
+  if (now.getFullYear() === inputDate.getFullYear()) {
     return inputDate.toLocaleDateString("ko-KR", {
       month: "2-digit",
       day: "2-digit"
     });
   }
 
+  // 다른 연도면 YY.MM.DD 포맷
   return inputDate.toLocaleDateString("ko-KR", {
     year: "2-digit",
     month: "2-digit",
