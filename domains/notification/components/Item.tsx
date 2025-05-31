@@ -1,4 +1,4 @@
-import { getDateFormat } from "@/shared/common/utils/getDateFormate";
+import getProductDateFormat from "@/domains/product/shared/utils/getProductDateFormat";
 import { NotificationMessageData } from "../types/notificationTypes";
 import ReadBtn from "./ReadBtn";
 import DeleteBtn from "./DeleteBtn";
@@ -11,7 +11,7 @@ export default function Item({ data }: IProps) {
   return (
     <li className="text-xs" key={data?.id}>
       <time className="text-[11px] mb-1 inline-block ml-1 text-gray-500">
-        {getDateFormat((data?.timestamp as string) || "")}
+        {getProductDateFormat((data?.timestamp as string) || "")}
       </time>
       <p
         className={`${

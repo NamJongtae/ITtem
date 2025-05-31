@@ -1,4 +1,4 @@
-import { getTradingDateFormat } from "@/shared/common/utils/getDateFormate";
+import getTradingDateFormat from "@/domains/product/manage/utils/getTradingDateFormat";
 import {
   SaleTradingData,
   PurchaseTradingData

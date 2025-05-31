@@ -1,5 +1,5 @@
 import useProfileQuery from "@/domains/user/profile/hooks/queries/useProfileQuery";
-import { getChatRoomListDateFormat } from "@/shared/common/utils/getDateFormate";
+import getChatRoomListDateFormat from "@/domains/chat/room-list/utils/getChatRoomListDateFormat";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 import { ChatRoomData } from "../../room/types/chatRoomTypes";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 import useProfileQuery from "@/domains/user/profile/hooks/queries/useProfileQuery";
-import { getChattingDateFormat } from "@/shared/common/utils/getDateFormate";
+import getChattingDateFormat from "@/domains/chat/room/utils/getChattingDateFormat";
 import { ChatMessageData } from "../types/chatRoomTypes";
 import Image from "next/image";
 

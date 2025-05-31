@@ -1,4 +1,4 @@
-import { getChattingDateFormat } from "@/shared/common/utils/getDateFormate";
+import getChattingDateFormat from "@/domains/chat/room/utils/getChattingDateFormat";
 import { ChatMessageData } from "../types/chatRoomTypes";
 
 interface IProps {

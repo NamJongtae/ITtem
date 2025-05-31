@@ -1,4 +1,4 @@
-import { getDateFormat } from "@/shared/common/utils/getDateFormate";
+import getProductDateFormat from "@/domains/product/shared/utils/getProductDateFormat";
 import { ProductData } from "@/domains/product/shared/types/productTypes";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,7 +47,7 @@ export default function Item({
           <span className="text-sm line-clamp-1">{wishProduct?.location}</span>
         </div>
         <time className="text-xs text-gray-500">
-          {getDateFormat(wishProduct?.createdAt?.toString() || "")}
+          {getProductDateFormat(wishProduct?.createdAt?.toString() || "")}
         </time>
       </div>
 

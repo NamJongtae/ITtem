@@ -1,4 +1,4 @@
-import { getDateFormat } from "@/shared/common/utils/getDateFormate";
+import getProductDateFormat from "@/domains/product/shared/utils/getProductDateFormat";
 import { ProductData } from "../../types/productTypes";
 
 interface IProps {
@@ -20,7 +20,7 @@ export default function ProductListContent({ data }: IProps) {
       <div className="mt-1 text-xs text-gray-500 flex justify-between gap-3">
         <span className="truncate">{data.location}</span>
         <span className="shrink-0">
-          {getDateFormat(data.createdAt as string)}
+          {getProductDateFormat(data.createdAt as string)}
         </span>
       </div>
     </div>

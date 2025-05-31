@@ -1,4 +1,4 @@
-import { getDateFormat } from "@/shared/common/utils/getDateFormate";
+import getProductDateFormat from "@/domains/product/shared/utils/getProductDateFormat";
 import Image from "next/image";
 
 interface IProps {
@@ -41,7 +41,7 @@ export default function ContentInfoStats({
           width={16}
           height={16}
         />{" "}
-        {getDateFormat(createdAt.toString() || "")}
+        {getProductDateFormat(createdAt.toString() || "")}
       </time>
     </div>
   );
