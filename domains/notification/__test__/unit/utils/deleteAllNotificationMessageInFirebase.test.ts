@@ -86,7 +86,7 @@ describe("deleteAllNotificationMessageInFirebase 함수 테스트", () => {
   });
 
   it("메시지가 존재하지 않으면 에러를 throw합니다.", async () => {
-    (get as jest.Mock).mockResolvedValueOnce({ exists: false });
+    (get as jest.Mock).mockResolvedValueOnce({ exists: () => false });
 
     await expect(
       deleteAllNotificationMessageInFirebase({
