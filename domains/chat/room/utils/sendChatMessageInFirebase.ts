@@ -25,12 +25,11 @@ export default async function sendToChatMessageInFirebase({
     } = firestore;
     const chatRoomRef = doc(firestoreDB, `chatRooms/${chatRoomId}`);
     const messagesCollectionRef = collection(chatRoomRef, "messages");
-    const snapshot = await getDoc(chatRoomRef);
-    const data = snapshot.data() as ChatRoomData;
+    const chatRoomDoc = await getDoc(chatRoomRef);
+    const data = chatRoomDoc.data() as ChatRoomData;
     const userlist = Object.keys(data.entered);
     const userId = userlist.filter((id) => id !== myUid)[0];
     const userChatInfoRef = doc(firestoreDB, `userChatInfo/${userId}`);
-    const chatRoomDoc = await getDoc(chatRoomRef);
 
     if (!chatRoomDoc.exists()) {
       throw new Error("존재하지 않는 채팅방이에요.");
