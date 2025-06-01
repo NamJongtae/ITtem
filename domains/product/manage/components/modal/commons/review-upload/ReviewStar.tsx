@@ -1,5 +1,5 @@
 import useReviewModalStar from "@/domains/product/manage/hooks/useReviewModalStar";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import dynamic from "next/dynamic";
 import { RefObject, forwardRef } from "react";
 import { Controller } from "react-hook-form";

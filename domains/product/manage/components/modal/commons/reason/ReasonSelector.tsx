@@ -1,5 +1,5 @@
 import useReasonModalSeletor from "@/domains/product/manage/hooks/useReasonModalSelector";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { RefObject } from "react";
 
 interface IProps {

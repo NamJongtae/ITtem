@@ -4,7 +4,7 @@ import {
 } from "../../shared/common/constants/constansts";
 import CoreInputField from "@/shared/core-input-field/components/CoreInputField";
 import { RefObject } from "react";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 
 interface IProps {
   isModal?: boolean;

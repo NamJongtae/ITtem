@@ -6,7 +6,7 @@ import SubmitBtn from "./SubmitBtn";
 import ModalCloseBtn from "./CloseBtn";
 import useReviewModalRefs from "@/domains/product/manage/hooks/useReviewModalRefs";
 import Header from "./Header";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 interface IProps {
   handleClickCloseBtn: () => void;

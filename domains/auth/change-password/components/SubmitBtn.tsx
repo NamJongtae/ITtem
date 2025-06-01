@@ -1,5 +1,5 @@
 import useCheckDisabledBtn from "../hooks/useCheckDisabledBtn";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { RefObject, forwardRef } from "react";
 
 interface IProps {

@@ -5,7 +5,7 @@ import {
 } from "@/domains/auth/shared/common/constants/constansts";
 import { useFocusing } from "@/shared/common/hooks/useFocusing";
 import useProfileEditNicknameField from "../hooks/useProfileEditNicknameField";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { RefObject } from "react";
 
 interface IProps {

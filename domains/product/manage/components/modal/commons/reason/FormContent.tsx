@@ -4,7 +4,7 @@ import ReasonSelector from "./ReasonSelector";
 import ReasonTextarea from "./ReasonTextarea";
 import SubmitBtn from "./SubmitBtn";
 import CloseBtn from "./CloseBtn";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 interface IProps {
   name: string;

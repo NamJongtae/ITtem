@@ -4,7 +4,7 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERRORMSG
 } from "../../shared/common/constants/constansts";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import useCurrentPwValidation from "../hooks/useCurrentPwValidation";
 
 interface IProps {

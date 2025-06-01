@@ -1,4 +1,4 @@
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { RefObject, forwardRef } from "react";
 import CloseIcon from "@/public/icons/x-icon.svg";
 

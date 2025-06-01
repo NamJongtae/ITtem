@@ -1,6 +1,6 @@
 import XIcon from "@/public/icons/x-icon.svg";
 import { RefObject, forwardRef } from "react";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import useRouterBackToCloseModal from "@/shared/common/hooks/useRouterBackToCloseModal";
 
 interface IProps {

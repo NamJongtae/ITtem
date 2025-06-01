@@ -1,6 +1,6 @@
 "use client";
 
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import ModalBackdrop from "@/shared/common/components/ModalBackdrop";
 import EditForm from "./Form";
 import { useRouter } from "next/navigation";

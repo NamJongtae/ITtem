@@ -1,6 +1,6 @@
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 import { forwardRef } from "react";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import CategoryMenuItem from "./CategoryMenuItem";
 
 interface IProps {

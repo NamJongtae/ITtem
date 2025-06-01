@@ -3,7 +3,7 @@
 import CategoryMenuIcon from "@/public/icons/menu-icon.svg";
 import CategoryMenu from "./CategoryMenu";
 import useNavCategory from "@/shared/layout/hooks/useNavCategory";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import SubNavMenu from "./SubNavMenu";
 
 export default function SubNav() {

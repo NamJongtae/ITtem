@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import ModalBackDrop from "@/shared/common/components/ModalBackdrop";
 import Form from "../Form";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 export default function Modal() {
   const router = useRouter();

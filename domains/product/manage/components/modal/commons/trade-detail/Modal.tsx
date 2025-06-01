@@ -7,7 +7,7 @@ import { isMobile } from "react-device-detect";
 import Content from "./Content";
 import TradeDetailModalCloseBtn from "./CloseBtn";
 import DateInfo from "./DateInfo";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;

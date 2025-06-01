@@ -1,4 +1,4 @@
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import Image from "next/image";
 import XIcon from "@/public/icons/x-icon.svg";
 import { RefObject } from "react";

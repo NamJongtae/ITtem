@@ -1,7 +1,7 @@
 import { RefObject, forwardRef } from "react";
 import List from "./List";
 import Header from "./Header";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import useNotificaitonModal from "@/domains/notification/hooks/useNotificaitonModal";
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
 import Loading from "./Loading";

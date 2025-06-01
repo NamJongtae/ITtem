@@ -1,5 +1,5 @@
 import { useFocusing } from "@/shared/common/hooks/useFocusing";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import CloseIcon from "@/public/icons/x-icon.svg";
 import { useRef } from "react";
 
@@ -7,9 +7,7 @@ interface IProps {
   handleClickCloseBtn: () => void;
 }
 
-export default function CloseBtn({
-  handleClickCloseBtn
-}: IProps) {
+export default function CloseBtn({ handleClickCloseBtn }: IProps) {
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   useFocusing(closeBtnRef);
 

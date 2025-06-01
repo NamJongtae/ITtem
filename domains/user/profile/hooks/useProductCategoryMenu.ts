@@ -1,7 +1,7 @@
 import useDropdownMenu from "@/shared/common/hooks/useDropDownMenu";
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
-import { optimizationTabFocus } from "@/shared/common/utils/optimizationKeyboard";
+import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { useRef } from "react";
 
 interface IParams {

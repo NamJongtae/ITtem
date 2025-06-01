@@ -8,7 +8,7 @@ import Content from "./Content";
 import CloseBtn from "./CloseBtn";
 import Header from "./Header";
 import BackDrop from "./BackDrop";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import Empty from "@/shared/common/components/empty";
 
 interface IProps {
@@ -16,10 +16,7 @@ interface IProps {
   handleClickCloseBtn: () => void;
 }
 
-export default function Modal({
-  productId,
-  handleClickCloseBtn
-}: IProps) {
+export default function Modal({ productId, handleClickCloseBtn }: IProps) {
   const { data } = useProductReviewQuery({
     productId,
     closeModal: handleClickCloseBtn

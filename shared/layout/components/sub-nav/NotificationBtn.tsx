@@ -3,7 +3,7 @@
 import NotificatonIcon from "@/public/icons/notification-icon.svg";
 import Modal from "@/domains/notification/components/Modal";
 import useNotification from "@/shared/layout/hooks/useNotification";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 export default function NotificationBtn() {
   const { isOpenModal, toggleNotification, notificationRef, unreadCount } =

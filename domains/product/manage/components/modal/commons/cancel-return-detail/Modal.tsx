@@ -8,7 +8,7 @@ import Content from "./Content";
 import Reason from "./Reason";
 import DateInfo from "./DateInfo";
 import CloseBtn from "./CloseBtn";
-import { escKeyClose } from "@/shared/common/utils/optimizationKeyboard";
+import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 interface IProps {
   tradingData: SaleTradingData | PurchaseTradingData;
