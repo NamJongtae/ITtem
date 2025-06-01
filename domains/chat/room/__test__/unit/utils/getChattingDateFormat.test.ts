@@ -1,7 +1,7 @@
-import getChattingDateFormat from "../../utils/getChattingDateFormat";
+import getChattingDateFormat from "../../../utils/getChattingDateFormat";
 
 describe("getChattingDateFormat", () => {
-  const fixedNow = new Date("2025-05-31T15:00:00Z"); 
+  const fixedNow = new Date("2025-05-31T15:00:00Z");
 
   beforeAll(() => {
     jest.useFakeTimers();

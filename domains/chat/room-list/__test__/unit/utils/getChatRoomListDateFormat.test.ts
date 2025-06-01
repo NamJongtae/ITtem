@@ -1,4 +1,4 @@
-import getChatRoomListDateFormat from "../../utils/getChatRoomListDateFormat";
+import getChatRoomListDateFormat from "../../../utils/getChatRoomListDateFormat";
 
 describe("getChatRoomListDateFormat", () => {
   const fixedNow = new Date("2025-05-31T15:00:00Z"); // 오늘 기준 (KST)

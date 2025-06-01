@@ -1,4 +1,4 @@
-import getTradingDateFormat from "../../utils/getTradingDateFormat";
+import getTradingDateFormat from "../../../utils/getTradingDateFormat";
 
 describe("getTradingDateFormat 테스트", () => {
   const KST_OFFSET = 9 * 60 * 60 * 1000;
