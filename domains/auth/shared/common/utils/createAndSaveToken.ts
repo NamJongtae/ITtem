@@ -1,4 +1,4 @@
-import { generateToken } from "@/shared/common/utils/token";
+import { generateToken } from "@/shared/common/utils/generateToken";
 import { IronSessionType } from "../types/authTypes";
 import {
   ACCESS_TOKEN_EXP,
@@ -27,19 +27,19 @@ export default async function createAndSaveToken({
 
   await saveTokenFromRedis({
     uid: user.uid,
-    token: accessToken,
+    token: accessToken || "",
     type: "accessToken",
     exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP
   });
   await saveTokenFromRedis({
     uid: user.uid,
-    token: refreshToken,
+    token: refreshToken || "",
     type: "refreshToken",
     exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP
   });
 
-  session.accessToken = accessToken;
-  session.refreshToken = refreshToken;
+  session.accessToken = accessToken || "";
+  session.refreshToken = refreshToken || "";
 
   await session.save();
 }

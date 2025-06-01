@@ -1,6 +1,7 @@
+import { verifyToken } from "@/shared/common/utils/verifyToken";
+import { verifyTokenByJose } from "@/shared/common/utils/verifyTokenByJose";
 import getTokenFromRedis from "../api/getTokenFromRedis";
 import { SESSION_OPTIONS } from "../constants/constansts";
-import { verifyToken, verifyTokenByJose } from "@/shared/common/utils/token";
 import { IronSessionType } from "../types/authTypes";
 import { cookies } from "next/headers";
 

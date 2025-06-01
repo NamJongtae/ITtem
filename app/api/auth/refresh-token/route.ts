@@ -6,8 +6,8 @@ import {
 } from "@/domains/auth/shared/common/constants/constansts";
 import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
 import saveTokenFromRedis from "@/domains/auth/shared/common/api/saveTokenFromRedis";
-
-import { generateToken, verifyToken } from "@/shared/common/utils/token";
+import { generateToken } from "@/shared/common/utils/generateToken";
+import { verifyToken } from "@/shared/common/utils/verifyToken";
 import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
@@ -76,12 +76,12 @@ export async function POST() {
 
     await saveTokenFromRedis({
       uid: decodeRefreshToken.data?.user.uid || "",
-      token: newAccessToken,
+      token: newAccessToken || "",
       type: "accessToken",
       exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP
     });
 
-    session.accessToken = newAccessToken;
+    session.accessToken = newAccessToken || "";
     await session.save();
 
     const response = NextResponse.json(
