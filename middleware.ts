@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  checkWithOutAuthPathname,
+  checkWithoutAuthPathname,
   withoutAuth
 } from "./shared/common/utils/withoutAuth";
 import { IronSession, getIronSession } from "iron-session";
@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     }
   );
 
-  const isWithOutAuth = checkWithOutAuthPathname(pathname);
+  const isWithOutAuth = checkWithoutAuthPathname(pathname);
 
   const isWithAuth = checkWithAuthPathname(pathname);
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const checkWithOutAuthPathname = (pathname: string) => {
+export const checkWithoutAuthPathname = (pathname: string) => {
   return (
     pathname.startsWith("/signup") ||
     pathname.startsWith("/signin") ||
