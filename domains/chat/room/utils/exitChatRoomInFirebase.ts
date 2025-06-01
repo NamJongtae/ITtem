@@ -26,9 +26,7 @@ export default async function exitChatRoomInFirebase({
 
     const userChatInfoDoc = await getDoc(userChatInfoRef);
     if (!userChatInfoDoc.exists()) {
-      if (!chatRoomDoc.exists()) {
-        throw new Error("유저 채팅방 목록이 존재하지 않아요.");
-      }
+      throw new Error("채팅방 유저 정보가 존재하지 않아요.");
     }
     await updateDoc(chatRoomRef, {
       participantIDs: arrayRemove(myUid)
