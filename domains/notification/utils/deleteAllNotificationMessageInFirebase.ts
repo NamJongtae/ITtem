@@ -22,7 +22,7 @@ export default async function deleteAllNotificationMessageInFirebase({
 
     const snapshot = await get(messagesRef);
 
-    if (!snapshot.exists) {
+    if (!snapshot.exists()) {
       throw new Error("잘못된 접근이에요.");
     }
 
