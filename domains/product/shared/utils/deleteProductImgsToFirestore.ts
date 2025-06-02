@@ -1,6 +1,6 @@
 import { getStorageInstance } from "@/shared/common/utils/firebaseSetting";
 
-export default async function deleteProductImgToFirestore(
+export default async function deleteProductImgsToFirestore(
   productDataImgName: string[],
   prevImgDataImgName: string[]
 ) {
