@@ -31,22 +31,25 @@ export default function Form() {
         formOptions={{
           mode: "onChange",
           defaultValues: {
-            imgData: productData?.imgData.map(() => ({})),
-            prevImgData: productData?.imgData,
-            name: productData?.name,
-            sellType: productData?.sellType,
-            category: productData?.category,
-            location: productData?.location,
-            condition: productData?.condition,
-            returnPolicy: productData?.returnPolicy,
-            transaction: productData?.transaction,
-            deliveryFee: productData?.deliveryFee,
-            price: productData?.price,
-            description: productData?.description
+            imgData: [],
+            prevImgData: [],
+            name: "",
+            sellType: "",
+            category: "",
+            location: "",
+            condition: "",
+            returnPolicy: "",
+            transaction: "",
+            deliveryFee: "",
+            price: "",
+            description: ""
           }
         }}
       >
-        <ProductUploadFormContent imgData={productData?.imgData} />
+        <ProductUploadFormContent
+          productData={productData}
+          imgData={productData?.imgData}
+        />
       </MyForm>
     </>
   );
