@@ -32,13 +32,13 @@ export default async function startChatInFirebase({
 
     const querySnapshot = await getDocs(q);
     let chatRoomId = null;
-    querySnapshot.forEach((doc) => {
+    for (const doc of querySnapshot.docs) {
       const chatRoom = doc.data();
       if (chatRoom.participantIDs.includes(userId)) {
         chatRoomId = doc.id;
-        return;
+        break;
       }
-    });
+    }
 
     if (chatRoomId) {
       // 이미 존재하는 채팅방이 있음
