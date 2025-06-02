@@ -17,20 +17,18 @@ export default async function prepareProductEditData({
       if (productData[key] !== parseInt(values.price.replace(",", ""), 10)) {
         productEditData.price = parseInt(values.price.replace(",", ""), 10);
       }
-    } else if (key === "prevImgData") {
-      if (
-        JSON.stringify(productData?.imgData) !==
-        JSON.stringify(values.prevImgData)
-      ) {
-        productEditData.imgData = values.prevImgData;
-      }
+    } else if (key === "imgData") {
       if (values.imgData) {
+        const prevImg = values.imgData.filter(
+          (data: object) => !(data instanceof File)
+        );
         const imgFiles = values.imgData.filter(
           (data: object) => data instanceof File
         );
+        console.log(imgFiles);
         const imgData = await uploadMultiImgToFirestore(imgFiles);
         productEditData.imgData = [
-          ...values.prevImgData,
+          ...prevImg,
           ...(imgData as UploadImgResponseData[])
         ];
       }

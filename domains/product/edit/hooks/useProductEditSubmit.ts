@@ -31,7 +31,7 @@ export default function useProductEditSubmit() {
       setProductEditLoading(true);
       setProductEditError(false);
       await prepareProductEditData({ values, productData, productEditData });
-      await deleteProductImgs({ values, productData, productEditData });
+      await deleteProductImgs({ productData, productEditData });
       await productEditMutate(productEditData);
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {
