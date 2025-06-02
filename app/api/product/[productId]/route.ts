@@ -286,7 +286,7 @@ export async function PATCH(
       );
     }
 
-    if (productData.name) {
+    if (productData.name || productData.price || productData.imgData) {
       await SaleTrading.updateOne(
         {
           productId: new mongoose.Types.ObjectId(productId as string),
@@ -300,7 +300,6 @@ export async function PATCH(
         { session }
       );
     }
-
     await session.commitTransaction();
     session.endSession();
     return NextResponse.json(
