@@ -15,31 +15,35 @@ export default async function createAndSaveToken({
   user: { uid: string };
   session: IronSessionType;
 }) {
-  const accessToken = await generateToken({
-    payload: { user, exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP },
-    secret: ACCESS_TOKEN_KEY
-  });
+  try {
+    const accessToken = await generateToken({
+      payload: { user, exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP },
+      secret: ACCESS_TOKEN_KEY
+    });
 
-  const refreshToken = await generateToken({
-    payload: { user, exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP },
-    secret: REFRESH_TOKEN_KEY as string
-  });
+    const refreshToken = await generateToken({
+      payload: { user, exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP },
+      secret: REFRESH_TOKEN_KEY as string
+    });
 
-  await saveTokenFromRedis({
-    uid: user.uid,
-    token: accessToken || "",
-    type: "accessToken",
-    exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP
-  });
-  await saveTokenFromRedis({
-    uid: user.uid,
-    token: refreshToken || "",
-    type: "refreshToken",
-    exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP
-  });
+    await saveTokenFromRedis({
+      uid: user.uid,
+      token: accessToken || "",
+      type: "accessToken",
+      exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXP
+    });
+    await saveTokenFromRedis({
+      uid: user.uid,
+      token: refreshToken || "",
+      type: "refreshToken",
+      exp: Math.floor(Date.now() / 1000) + REFRESH_TOKEN_EXP
+    });
 
-  session.accessToken = accessToken || "";
-  session.refreshToken = refreshToken || "";
+    session.accessToken = accessToken || "";
+    session.refreshToken = refreshToken || "";
 
-  await session.save();
+    await session.save();
+  } catch (error) {
+    throw new Error("토큰 발급에 실패했어요.");
+  }
 }
