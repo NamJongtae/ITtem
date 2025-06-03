@@ -1,5 +1,5 @@
 import editProfile from "../../api/editProfile";
-import prepareProfileEditData from "../../api/prepareProfileEditData";
+import prepareProfileEditData from "../../utils/prepareProfileEditData";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import { ProfileResponseData } from "@/domains/user/profile/types/responseTypes";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
