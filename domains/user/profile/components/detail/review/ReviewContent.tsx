@@ -1,4 +1,4 @@
-import { ProfileReviewData } from "../../../types/profileTypes";
+import { ReviewSummaryData } from "../../../types/profileTypes";
 import ReviewInfo from "./ReviewInfo";
 import List from "./List";
 import Empty from "@/shared/common/components/empty";
@@ -6,7 +6,7 @@ import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBound
 import ReviewSkeletonUI from "./SkeletonUI";
 
 interface IProps {
-  reviewInfo: ProfileReviewData | undefined;
+  reviewInfo: ReviewSummaryData | undefined;
   uid: string | undefined;
 }
 

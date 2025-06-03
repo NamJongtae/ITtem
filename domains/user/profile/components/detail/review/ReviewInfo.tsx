@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { ProfileReviewData } from "../../../types/profileTypes";
+import { ReviewSummaryData } from "../../../types/profileTypes";
 import { REVIEW_TAGS } from "@/domains/product/shared/constants/constants";
 import calculateReviewStar from "../../../utils/calculateReviewStar";
 const ReactStars = dynamic(() => import("react-stars"), {
@@ -8,7 +8,7 @@ const ReactStars = dynamic(() => import("react-stars"), {
 });
 
 interface IProps {
-  reviewInfo: ProfileReviewData | undefined;
+  reviewInfo: ReviewSummaryData | undefined;
 }
 
 export default function ReviewInfo({ reviewInfo }: IProps) {
