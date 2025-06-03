@@ -1,16 +1,16 @@
 import { ApiResponse } from "@/shared/common/types/responseTypes";
-import { ProfileData, ProfileReviewData } from "./profileTypes";
+import { FollowUserData, ProfileData, ProfileReviewData } from "./profileTypes";
 
 export interface ProfileResponseData extends ApiResponse {
   profile: ProfileData;
 }
 
 export interface FollowersResponseData extends ApiResponse {
-  followers: ProfileData[];
+  followers: FollowUserData[];
 }
 
 export interface FollowingsResponseData extends ApiResponse {
-  followings: ProfileData[];
+  followings: FollowUserData[];
 }
 
 export interface ReceivedReviewsResponseData extends ApiResponse {

@@ -1,7 +1,7 @@
 import { ProductData } from "@/domains/product/shared/types/productTypes";
 import { ApiResponse } from "@/shared/common/types/responseTypes";
 
-export interface ProfileReviewData {
+export interface ReviewSummaryData {
   totalReviewScore: number;
   totalReviewCount: number;
   reviewPercentage: number;
@@ -22,7 +22,7 @@ export interface ProfileData {
   saleCount: number;
   purchaseCount: number;
   transactionCount: number;
-  reviewInfo?: ProfileReviewData;
+  reviewInfo?: ReviewSummaryData;
   reviewPercentage: number;
 }
 
@@ -46,8 +46,18 @@ export interface WishlistProductData extends ApiResponse {
   products: ProductData[];
 }
 
-export interface DeleteProfileWishesResponseData extends ApiResponse {
+export interface DeleteWishlistProductDataResponseData extends ApiResponse {
   wishProductIds: string[];
 }
 
 export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
+
+export interface FollowUserData {
+  uid: string;
+  nickname: string;
+  profileImg: string;
+  followers: string[];
+  followings: string[];
+  productIds: string[];
+  reviewPercentage: number;
+}
