@@ -155,12 +155,9 @@ export async function PATCH(req: NextRequest) {
       _id: new mongoose.Types.ObjectId(myUid)
     });
 
-    if (profileEditData.profileImgFilename && profile.profileImgFilename) {
+    if (profile.profileImgFilename) {
       try {
-        await deleteProfileImgToFirestore(
-          profileEditData.profileImgFilename,
-          profile.profileImgFilename
-        );
+        await deleteProfileImgToFirestore(profile.profileImgFilename);
       } catch (error) {
         console.error("프로필 이미지 삭제에 실패했어요.", error);
       }
