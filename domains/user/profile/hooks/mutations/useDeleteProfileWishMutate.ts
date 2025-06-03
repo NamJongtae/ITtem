@@ -1,4 +1,4 @@
-import deleteProfileWishes from "../../api/deleteProfileWishes";
+import deleteWishlistProductData from "../../api/deleteWishlistProductData";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import { ProfileData } from "../../types/profileTypes";
 import { ProductData } from "@/domains/product/shared/types/productTypes";
@@ -18,7 +18,7 @@ export default function useDeleteProfileWishMutate() {
 
   const { mutate: deleteWishMutate } = useMutation({
     mutationFn: (wishProductIds: string[]) =>
-      deleteProfileWishes(wishProductIds),
+      deleteWishlistProductData(wishProductIds),
     onMutate: async (wishProductIds) => {
       await queryClient.cancelQueries({ queryKey: wishQueryKey });
 
