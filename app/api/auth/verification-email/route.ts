@@ -1,6 +1,6 @@
-import getEmailVerificationCode from "@/domains/auth/shared/email-verification/api/getEmailVerificationCode";
-import incrementVerificationCounter from "@/domains/auth/shared/email-verification/api/incrementVerificationCounter";
-import saveVerifiedEmail from "@/domains/auth/shared/email-verification/api/saveVerifiedEmail";
+import getEmailVerificationCode from "@/domains/auth/shared/email-verification/utils/getEmailVerificationCode";
+import incrementVerificationCounter from "@/domains/auth/shared/email-verification/utils/incrementVerificationCounter";
+import saveVerifiedEmail from "@/domains/auth/shared/email-verification/utils/saveVerifiedEmail";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

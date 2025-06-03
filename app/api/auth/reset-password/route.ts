@@ -1,6 +1,6 @@
 import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
-import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/api/deleteEmailVerificationCode";
-import getVerifiedEmail from "@/domains/auth/shared/email-verification/api/getVerifiedEmail";
+import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/utils/deleteEmailVerificationCode";
+import getVerifiedEmail from "@/domains/auth/shared/email-verification/utils/getVerifiedEmail";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { LoginType } from "@/domains/auth/signin/types/signinTypes";

@@ -1,8 +1,8 @@
 import { emailHTML } from "@/domains/auth/shared/email-verification/utils/emailHTML";
 import { EmailVerificationType } from "../types/emailVerificationTypes";
 import { v4 as uuid } from "uuid";
-import getEmailVerificationCode from "../api/getEmailVerificationCode";
-import saveEmailVerificationCode from "../api/saveEmailVerificationCode";
+import getEmailVerificationCode from "./getEmailVerificationCode";
+import saveEmailVerificationCode from "./saveEmailVerificationCode";
 import {
   VERIFICATION_EMAIL_BLOCK_EXP,
   VERIFICATION_EMAIL_EXP
