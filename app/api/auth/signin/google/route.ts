@@ -6,7 +6,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
 import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
 import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
 import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";

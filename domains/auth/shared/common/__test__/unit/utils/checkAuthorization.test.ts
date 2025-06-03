@@ -4,7 +4,7 @@
 import checkAuthorization from "../../../utils/checkAuthorization";
 import { verifyToken } from "@/shared/common/utils/verifyToken";
 import { verifyTokenByJose } from "@/shared/common/utils/verifyTokenByJose";
-import getTokenFromRedis from "../../../api/getTokenFromRedis";
+import getTokenFromRedis from "../../../utils/getTokenFromRedis";
 import { IronSessionType } from "../../../types/authTypes";
 
 import { getIronSession } from "iron-session";
@@ -15,7 +15,7 @@ jest.mock("iron-session");
 jest.mock("next/headers");
 jest.mock("@/shared/common/utils/verifyToken");
 jest.mock("@/shared/common/utils/verifyTokenByJose");
-jest.mock("../../../api/getTokenFromRedis");
+jest.mock("../../../utils/getTokenFromRedis");
 
 describe("checkAuthorization", () => {
   const mockSession: IronSessionType = {

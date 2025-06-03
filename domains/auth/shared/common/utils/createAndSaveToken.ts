@@ -6,7 +6,7 @@ import {
   REFRESH_TOKEN_EXP,
   REFRESH_TOKEN_KEY
 } from "../constants/constansts";
-import saveTokenFromRedis from "../api/saveTokenFromRedis";
+import saveTokenFromRedis from "./saveTokenFromRedis";
 
 export default async function createAndSaveToken({
   user,

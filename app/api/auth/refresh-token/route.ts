@@ -4,8 +4,8 @@ import {
   REFRESH_TOKEN_KEY,
   SESSION_OPTIONS
 } from "@/domains/auth/shared/common/constants/constansts";
-import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
-import saveTokenFromRedis from "@/domains/auth/shared/common/api/saveTokenFromRedis";
+import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
+import saveTokenFromRedis from "@/domains/auth/shared/common/utils/saveTokenFromRedis";
 import { generateToken } from "@/shared/common/utils/generateToken";
 import { verifyToken } from "@/shared/common/utils/verifyToken";
 import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";

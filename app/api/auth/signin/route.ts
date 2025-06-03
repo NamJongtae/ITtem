@@ -1,5 +1,5 @@
 import comparePassword from "@/domains/auth/shared/common/utils/comparePassword";
-import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
+import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";

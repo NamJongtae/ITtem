@@ -17,5 +17,6 @@ export default async function saveTokenFromRedis({
     await redis.set(`${uid}:${type}`, token, { ex });
   } catch (error) {
     console.error("saveToken error:", error);
+    throw error;
   }
 }

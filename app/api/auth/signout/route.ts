@@ -1,5 +1,5 @@
-import getTokenFromRedis from "@/domains/auth/shared/common/api/getTokenFromRedis";
-import deleteTokenFromRedis from "@/domains/auth/shared/common/api/deleteTokenFromRedis";
+import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
+import deleteTokenFromRedis from "@/domains/auth/shared/common/utils/deleteTokenFromRedis";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";

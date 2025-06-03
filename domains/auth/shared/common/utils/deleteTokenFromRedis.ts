@@ -10,5 +10,6 @@ export default async function deleteTokenFromRedis(
     return response;
   } catch (error) {
     console.error("deleteToken error:", error);
+    throw error;
   }
 }

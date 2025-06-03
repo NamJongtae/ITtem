@@ -1,6 +1,6 @@
 import createAndSaveToken from "../../../utils/createAndSaveToken";
 import { generateToken } from "@/shared/common/utils/generateToken";
-import saveTokenFromRedis from "../../../api/saveTokenFromRedis";
+import saveTokenFromRedis from "../../../utils/saveTokenFromRedis";
 import {
   ACCESS_TOKEN_EXP,
   ACCESS_TOKEN_KEY,
@@ -9,7 +9,7 @@ import {
 
 // Mocks
 jest.mock("@/shared/common/utils/generateToken");
-jest.mock("../../../api/saveTokenFromRedis");
+jest.mock("../../../utils/saveTokenFromRedis");
 
 describe("createAndSaveToken 함수 테스트", () => {
   const MOCK_DATE = Date.now();

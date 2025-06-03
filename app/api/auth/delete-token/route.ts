@@ -1,4 +1,4 @@
-import deleteTokenFromRedis from "@/domains/auth/shared/common/api/deleteTokenFromRedis";
+import deleteTokenFromRedis from "@/domains/auth/shared/common/utils/deleteTokenFromRedis";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { NextRequest, NextResponse } from "next/server";
