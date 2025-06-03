@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const kakaoUserData = response.data;
     return NextResponse.json(
       {
-        message: "유저정보를 성공적으로 가져욌어요.",
+        message: "유저정보를 성공적으로 가져왔어요.",
         user: { ...kakaoUserData }
       },
       { status: 200 }
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { message: "유저정보를 가져오지못했어요." },
+      { message: "유저정보를 가져오지 못했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
