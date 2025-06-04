@@ -12,6 +12,6 @@ export default async function saveVerifiedEmail(
     await redis.hset(key, { isVerification: true });
     await redis.expire(key, VERIFIED_EMAIL_EXP);
   } catch (error) {
-    console.error("saveVerifiedEmail error:", error);
+    console.error("Save Verified Email Error:", error);
   }
 }

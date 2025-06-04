@@ -17,6 +17,6 @@ export default async function incrementVerificationCounter(
       await redis.expire(key, VERIFICATION_EMAIL_BLOCK_EXP);
     }
   } catch (error) {
-    console.error("increment tVerification Email Counter Error:", error);
+    console.error("increment Verification Email Counter Error:", error);
   }
 }

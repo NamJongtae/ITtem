@@ -12,7 +12,7 @@ export default async function getVerifiedEmail(
 
     return isVerification;
   } catch (error) {
-    console.error("getVerifiedEmail error:", error);
+    console.error("Get Verified Email Error:", error);
     return false;
   }
 }
