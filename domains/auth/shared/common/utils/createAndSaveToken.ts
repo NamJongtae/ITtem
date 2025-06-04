@@ -44,6 +44,6 @@ export default async function createAndSaveToken({
 
     await session.save();
   } catch (error) {
-    throw new Error("토큰 발급에 실패했어요.");
+    throw error;
   }
 }

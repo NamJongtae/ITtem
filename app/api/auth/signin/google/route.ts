@@ -54,12 +54,16 @@ export async function POST(req: NextRequest) {
 
         await newUser.save();
 
-        await createAndSaveToken({
-          user: {
-            uid: newUser._id
-          },
-          session
-        });
+        try {
+          await createAndSaveToken({
+            user: {
+              uid: newUser._id
+            },
+            session
+          });
+        } catch (error) {
+          console.log("Create And Save Token Error:", error);
+        }
 
         return NextResponse.json(
           {

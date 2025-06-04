@@ -56,12 +56,16 @@ export async function POST(req: NextRequest) {
       SESSION_OPTIONS
     );
 
-    await createAndSaveToken({
-      user: {
-        uid: newUser._id
-      },
-      session
-    });
+    try {
+      await createAndSaveToken({
+        user: {
+          uid: newUser._id
+        },
+        session
+      });
+    } catch (error) {
+      console.log("Create And Save Token Error:", error);
+    }
 
     await deleteEmailVerificationCode(email, "signup");
 
