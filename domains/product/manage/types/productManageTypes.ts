@@ -122,7 +122,7 @@ export interface PurchaseTradingData {
 export interface ProductReviewData {
   reviewTags: number[];
   reviewScore: number;
-  reviewContent: number;
+  reviewContent: string;
   reviewer: {
     nickname: string;
     profileImg: string;

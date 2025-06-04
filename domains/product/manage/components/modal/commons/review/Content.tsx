@@ -1,5 +1,5 @@
 interface IProps {
-  reviewContent: number | undefined;
+  reviewContent: string | undefined;
 }
 
 export default function ReviewContent({ reviewContent }: IProps) {
