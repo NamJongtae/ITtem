@@ -9,21 +9,23 @@ export default function useNavSearchBar() {
   const keyword = search.get("keyword") || "";
 
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: { keyword },
+    defaultValues: { keyword }
   });
 
   useEffect(() => {
     reset({ keyword: keyword });
   }, [keyword, reset]);
 
-  const onSubmit = handleSubmit((values: FieldValues) => {
+  const submitHandler = (values: FieldValues) => {
     const keyword = values.keyword;
     if (!keyword) {
       toast.warn("검색어를 입력해주세요.");
       return;
     }
     router.push(`/search/product?keyword=${keyword}`);
-  });
+  };
 
-  return { register, onSubmit };
+  const onSubmit = handleSubmit(submitHandler);
+
+  return { register, onSubmit, submitHandler };
 }
