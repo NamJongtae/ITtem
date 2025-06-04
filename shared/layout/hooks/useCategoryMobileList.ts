@@ -6,7 +6,7 @@ interface IParams {
   currentCategory: string | null;
 }
 
-export default function useCateogryMobileList({ currentCategory }: IParams) {
+export default function useCategoryMobileList({ currentCategory }: IParams) {
   const firstCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLButtonElement | null>(null);
