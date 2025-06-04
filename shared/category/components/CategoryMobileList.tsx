@@ -1,5 +1,5 @@
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
-import useCategoryMobileList from "@/shared/layout/hooks/useCategoryMobileList";
+import useMobileCategoryList from "@/shared/layout/hooks/useMobileCategoryList";
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import React, { forwardRef } from "react";
 
@@ -18,7 +18,7 @@ const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
     ref
   ) => {
     const { setCategoryClassName, setCategoryBtnRef, categoryOnKeyDown } =
-      useCategoryMobileList({ currentCategory });
+      useMobileCategoryList({ currentCategory });
 
     return (
       isOpenCategory && (
