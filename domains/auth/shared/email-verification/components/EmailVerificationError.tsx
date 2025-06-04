@@ -1,7 +1,7 @@
-import useVerificationCodeStatus from "../hooks/useVerificationCodeStatus";
+import useEmailVerificationStatus from '../hooks/useEmailVerificationStatus';
 
 export default function EmailVerificationError() {
-  const { errors } = useVerificationCodeStatus();
+  const { errors } = useEmailVerificationStatus();
 
   return (
     errors?.message && (
