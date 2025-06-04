@@ -249,7 +249,7 @@ export async function PATCH(
     session.endSession();
     return NextResponse.json(
       {
-        message: "물품전달 확인에 실패했어요.\n잠시 후 다시 시도해주세요."
+        message: "상품전달 확인에 실패했어요.\n잠시 후 다시 시도해주세요."
       },
       { status: 500 }
     );
