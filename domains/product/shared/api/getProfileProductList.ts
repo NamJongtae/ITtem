@@ -1,5 +1,7 @@
 import customAxios from "@/shared/common/utils/customAxios";
 import { ProductCategory } from "../types/productTypes";
+import { AxiosResponse } from "axios";
+import { ProductListResponseData } from "../types/reponseTypes";
 
 export default async function getProfileProductList({
   cursor = null,
@@ -11,7 +13,7 @@ export default async function getProfileProductList({
   cursor?: unknown;
   limit?: number;
   productIds: string[];
-}) {
+}): Promise<AxiosResponse<ProductListResponseData>> {
   try {
     const response = await customAxios.post(
       `/api/profile/product?${
