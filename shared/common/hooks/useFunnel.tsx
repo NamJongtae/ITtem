@@ -15,18 +15,20 @@ export const useFunnel = <S extends string>(steps: S[]) => {
   const [currentStep, setCurrentStep] = useState(steps[0]);
 
   // step index를 관리합니다.
-  const [setpIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
 
   // 이전 스텝으로 돌아갑니다.
   const prevStepHandler = () => {
+    if (stepIndex <= 0) return;
     setStepIndex((prev) => prev - 1);
-    setCurrentStep(steps[setpIndex - 1]);
+    setCurrentStep(steps[stepIndex - 1]);
   };
 
   // 다음 스텝으로 넘어갑니다.
   const nextStepHandler = () => {
+    if (stepIndex >= steps.length - 1) return;
     setStepIndex((prev) => prev + 1);
-    setCurrentStep(steps[setpIndex + 1]);
+    setCurrentStep(steps[stepIndex + 1]);
   };
 
   // 각 단계를 나타내는 Step 컴포넌트
@@ -51,5 +53,5 @@ export const useFunnel = <S extends string>(steps: S[]) => {
     currentStep,
     nextStepHandler,
     prevStepHandler
-  }
+  };
 };
