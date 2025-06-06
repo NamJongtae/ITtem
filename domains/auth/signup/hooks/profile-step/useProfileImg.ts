@@ -1,13 +1,12 @@
 import { imgValidation } from "@/shared/common/utils/imgValidation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 export default function useProfileImg() {
   const [preview, setPreview] = useState("/icons/user-icon.svg");
   const imgInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { setValue, getValues } = useFormContext();
-  const img = getValues("profileImg");
+  const { setValue } = useFormContext();
 
   const handleClickImgInput = useCallback(() => {
     if (!imgInputRef.current) return;
@@ -34,10 +33,6 @@ export default function useProfileImg() {
     setPreview("/icons/user-icon.svg");
   }, []);
 
-  // 프로필 수정시 초기 이미지 설정
-  useEffect(() => {
-    setPreview(img);
-  }, []);
 
   return {
     handleClickImgInput,
