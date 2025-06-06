@@ -26,7 +26,7 @@ export default function useKakaoSigninMutate() {
       actions.setAuth(response.data.user);
       queryClient.refetchQueries({ queryKey: queryKeys.session._def });
 
-      router.push("/");
+      router.replace("/");
     },
     onError: (error, variables) => {
       if (isAxiosError<{ message: string; email: string }>(error)) {
