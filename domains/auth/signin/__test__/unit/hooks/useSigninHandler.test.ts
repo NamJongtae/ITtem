@@ -18,6 +18,7 @@ describe("useSigninHandler 훅 테스트", () => {
       signinMutate: mockSigninMutate,
       signinLoading: mockSigninLoading 
     });
+    jest.clearAllMocks();
   });
 
   it("handleSignin 함수는 올바른 이메일과 패스워드로 signinMutate를 호출해야 합니다.", async () => {
