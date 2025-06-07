@@ -1,6 +1,6 @@
-import useAuthQuery from "./useAuthQuery";
+import useAuthQuery from "./queries/useAuthQuery";
 import { useEffect } from "react";
-import useSessionCookiesQuery from "./useSessionCookiesQuery";
+import useSessionCookiesQuery from "./queries/useSessionCookiesQuery";
 import useAuthStore from "../store/authStore";
 import { usePathname } from "next/navigation";
 

@@ -1,5 +1,5 @@
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import useAuthStore from "../store/authStore";
+import useAuthStore from "../../store/authStore";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useAuthQuery() {
