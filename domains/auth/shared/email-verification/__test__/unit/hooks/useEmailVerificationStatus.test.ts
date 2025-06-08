@@ -55,7 +55,7 @@ describe("useEmailVerificationStatus", () => {
     expect(result.current.isVerifiedEmail).toBe(true);
   });
 
-  it("dirtyFields가 비어 있을 경우 isDirty는 undefined입니다.", () => {
+  it("dirtyFields가 비어 있을 경우 isDirty는 unde입니다.", () => {
     mockUseFormContext.mockReturnValue({
       formState: {
         errors: {},
