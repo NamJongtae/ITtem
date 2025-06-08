@@ -21,7 +21,7 @@ export default function useChatRoomFollowBtnLogic({
     myProfileUnfollowMutate();
   };
 
-  const isFollow = myFollowings?.includes(otherUserId);
+  const isFollow = !!myFollowings?.includes(otherUserId);
 
   return {
     onClickFollow,
