@@ -14,7 +14,7 @@ jest.mock("@/domains/auth/shared/common/store/authStore");
 jest.mock("@/shared/common/store/globalLogingStore");
 jest.mock("@/domains/auth/signin/api/signin");
 
-const wrapper = createQueryClientWrapper();
+const { Wrapper: wrapper } = createQueryClientWrapper();
 
 describe("useSigninMutate 훅 테스트", () => {
   const mockAuthStore = authStore as unknown as jest.Mock;

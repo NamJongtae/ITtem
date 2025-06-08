@@ -7,7 +7,7 @@ import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClie
 jest.mock("@/domains/chat/room/api/leaveChatRoom");
 
 describe("useLeaveChatRoomMutate", () => {
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
   const mockChatRoomId = "room123";
   const mockLeaveChatRoom = leaveChatRoom as jest.Mock;
 

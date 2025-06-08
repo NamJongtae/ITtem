@@ -6,7 +6,8 @@ import sendSignupVerificationEmail from "../../../../api/sendSignupVerificationE
 import sendResetPwVerificationEmail from "@/domains/auth/reset-password/api/sendResetPwVerificationEmail";
 import * as React from "react";
 import { EmailVerificationContext } from "../../../../context/EmailVerificationProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
 
 jest.mock("react-hook-form", () => ({
   useFormContext: jest.fn()
@@ -36,9 +37,9 @@ const mockSendSignupVerificationEmail =
   sendSignupVerificationEmail as jest.Mock;
 const mockSendResetPwVerificationEmail =
   sendResetPwVerificationEmail as jest.Mock;
-
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={new QueryClient()}>
+const { Wrapper } = createQueryClientWrapper();
+const providerWithWrapper = ({ children }: { children: React.ReactNode }) => (
+  <Wrapper>
     <EmailVerificationContext.Provider
       value={{
         emailStatus: "INITIAL",
@@ -56,7 +57,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
     >
       {children}
     </EmailVerificationContext.Provider>
-  </QueryClientProvider>
+  </Wrapper>
 );
 
 beforeEach(() => {
@@ -73,7 +74,7 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
     mockSendSignupVerificationEmail.mockResolvedValue(mockResponse);
 
     const { result } = renderHook(() => useSendVerificationEmailMutate(), {
-      wrapper
+      wrapper: providerWithWrapper
     });
 
     act(() => {
@@ -98,7 +99,7 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
     mockSendResetPwVerificationEmail.mockResolvedValue(mockResponse);
 
     const { result } = renderHook(() => useSendVerificationEmailMutate(), {
-      wrapper
+      wrapper: providerWithWrapper
     });
 
     act(() => {
@@ -129,7 +130,7 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
     mockSendResetPwVerificationEmail.mockRejectedValue(mockError);
 
     const { result } = renderHook(() => useSendVerificationEmailMutate(), {
-      wrapper
+      wrapper: providerWithWrapper
     });
 
     act(() => {

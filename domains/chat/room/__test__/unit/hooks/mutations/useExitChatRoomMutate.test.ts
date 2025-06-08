@@ -22,7 +22,7 @@ jest.mock("@/shared/common/store/globalLogingStore");
 jest.mock("@/domains/chat/room/api/exitChatRoom");
 
 describe("useExitChatRoomMutate 훅 테스트", () => {
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
   const mockChatRoomId = "room123";
   const mockStartLoading = jest.fn();
   const mockStopLoading = jest.fn();

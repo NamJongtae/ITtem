@@ -23,7 +23,7 @@ describe("useEmailDuplicationMutate 훅 테스트", () => {
   const mockToastWarn = toast.warn as jest.Mock;
   const mockCheckEmailDuplication = checkEmailDuplication as jest.Mock;
 
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     jest.clearAllMocks();

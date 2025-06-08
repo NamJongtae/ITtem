@@ -8,7 +8,7 @@ import { AxiosHeaders, AxiosResponse } from "axios";
 jest.mock("@/domains/user/shared/api/getKakaoUser");
 describe("useKakaoUserInfoMutate 훅 테스트", () => {
   const mockGetKakaoUser = getKakaoUser as jest.Mock;
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     jest.clearAllMocks();

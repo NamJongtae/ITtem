@@ -20,7 +20,7 @@ describe("useNicknameDuplicationMutate 훅 테스트", () => {
   const mockCheckNickname = checkNicknameDuplication as jest.Mock;
   const mockToastWarn = toast.warn as jest.Mock;
 
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     jest.clearAllMocks();

@@ -9,5 +9,5 @@ export const createQueryClientWrapper = () => {
   );
 
   Wrapper.displayName = "QueryClientTestWrapper";
-  return Wrapper;
+  return { Wrapper, queryClient };
 };

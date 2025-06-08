@@ -23,7 +23,7 @@ describe("useChangePasswordMutate 훅 테스트", () => {
   const mockCloseModal = jest.fn();
   const mockStartLoading = jest.fn();
   const mockStopLoading = jest.fn();
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     mockUseGlobalLoadingStore.mockImplementation(() => ({

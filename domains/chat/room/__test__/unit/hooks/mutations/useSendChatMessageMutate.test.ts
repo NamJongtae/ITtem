@@ -13,7 +13,7 @@ jest.mock("react-toastify", () => ({
 }));
 
 describe("useSendChatMessageMutate 훅 테스트", () => {
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
   const mockChatRoomId = "room123";
   const mockSendChatMessage = sendChatMessage as jest.Mock;
   const mockScrollToBottom = jest.fn();

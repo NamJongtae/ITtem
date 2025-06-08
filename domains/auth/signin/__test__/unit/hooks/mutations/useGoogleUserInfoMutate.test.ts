@@ -8,7 +8,7 @@ import { AxiosHeaders, AxiosResponse } from "axios";
 jest.mock("@/domains/user/shared/api/getGoogleUser");
 describe("useGoogleUserInfo 훅 테스트", () => {
   const mockGetGoogleUser = getGoogleUser as jest.Mock;
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     jest.clearAllMocks();

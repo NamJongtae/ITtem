@@ -19,7 +19,7 @@ jest.mock("react-toastify", () => ({
 jest.mock("../../../api/startChat");
 
 describe("useStartChatMutate", () => {
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
   const mockRouterpush = jest.fn();
 
   beforeEach(() => {

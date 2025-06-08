@@ -15,7 +15,7 @@ jest.mock("react-toastify", () => ({ toast: { warn: jest.fn() } }));
 jest.mock("next/navigation", () => ({ useRouter: jest.fn() }));
 
 describe("useSignoutMutate", () => {
-  const wrapper = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
   const mockUseRouter = useRouter as jest.Mock;
   const mockUseAuthStore = useAuthStore as unknown as jest.Mock;
   const mockUseGlobalLoadingStore =
