@@ -35,8 +35,8 @@ export default function useProductDetailUnfollowMutate(uid: string) {
         ...previousProduct,
         auth: {
           ...previousProduct.auth,
-          followings: [
-            ...previousMyProfile.followings.filter(
+          followers: [
+            ...previousProduct.auth.followers.filter(
               (id) => id !== previousMyProfile.uid
             )
           ]
@@ -52,15 +52,15 @@ export default function useProductDetailUnfollowMutate(uid: string) {
 
       await queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
-      toast.success("유저 언팔로우에 성공했어요.");
-
       return { previousProduct, previousMyProfile };
     },
     onError: (error, data, ctx) => {
       queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
       queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
       if (isAxiosError<{ message: string }>(error)) {
-        toast.error(error.response?.data.message);
+        toast.warn(
+          "유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요."
+        );
       }
     },
     onSettled: () => {
