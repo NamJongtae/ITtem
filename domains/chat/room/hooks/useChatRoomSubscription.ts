@@ -77,7 +77,7 @@ export default function useChatRoomSubscription({
 
       unsubscribeChatRoom = onSnapshot(chatRoomRef, (docSnapshot) => {
         const data = docSnapshot.data() as ChatRoomData | null;
-        if (!data || !(myUid || "" in data.entered)) {
+        if (!data || !((myUid as string) in data.entered)) {
           router.push("/chat");
           return;
         }
