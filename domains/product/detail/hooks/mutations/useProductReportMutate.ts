@@ -19,7 +19,7 @@ export default function useProductReportMutate() {
   const { mutate: productReportMutate } = useMutation<
     AxiosResponse<{ message: string }>,
     AxiosError,
-    undefined,
+    void,
     { previousProduct: ProductDetailData }
   >({
     mutationFn: () => reportProduct(productId as string),
