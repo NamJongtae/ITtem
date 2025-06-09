@@ -22,8 +22,8 @@ export default function useProductReviewQuery({
     if (error) {
       if (isAxiosError<{ message: string }>(error)) {
         toast.warn(error.response?.data.message);
-        closeModal();
       }
+      closeModal();
     }
   }, [error, closeModal]);
 
