@@ -7,7 +7,7 @@ export default function useProductUploadNameField() {
   const handleChangeProductName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     if (inputValue[0] === " ") {
-      setValue("name", productName.trim());
+      setValue("name", inputValue.trim());
     } else {
       setValue("name", inputValue);
     }
