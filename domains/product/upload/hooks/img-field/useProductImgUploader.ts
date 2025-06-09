@@ -29,24 +29,23 @@ export function useProductImgUploader(
       return;
     }
 
-    const newPreviews = Array.from(files)
-      .map(validateAndPreview)
-      .filter((preview) => preview !== undefined) as {
-      url: string;
-      name: string;
-    }[];
+    const validFiles: File[] = [];
+    const newPreviews: ProductImgData[] = [];
 
-    const currentImgNameList = currentImgList.map((file: File) => file.name);
-    const fileArray = Array.from(files).filter(
-      (file) => !currentImgNameList.includes(file.name)
-    );
-
-    setValue("imgData", [...currentImgList, ...fileArray], {
-      shouldDirty: true,
-      shouldValidate: true
+    Array.from(files).forEach((file) => {
+      const previewItem = validateAndPreview(file);
+      if (previewItem) {
+        validFiles.push(file);
+        newPreviews.push(previewItem);
+      }
     });
 
-    if (newPreviews.length > 0) {
+    if (validFiles.length > 0) {
+      setValue("imgData", [...currentImgList, ...validFiles], {
+        shouldDirty: true,
+        shouldValidate: true
+      });
+
       addPreview(newPreviews);
     }
   };
