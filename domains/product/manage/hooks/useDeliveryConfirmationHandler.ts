@@ -8,7 +8,7 @@ export default function useDeliveryConfirmationHandler({ productId }: IParams) {
   const { productDeliveryConfirmationMutate } = useDeliveryConfirmationMutate();
 
   const onClickDeliveryConfirmation = () => {
-    const isDeliveryConfirmation = confirm("정말 물품전달 확인을 하겠어요?");
+    const isDeliveryConfirmation = confirm("정말 상품 전달 확인을 하겠어요?");
     if (isDeliveryConfirmation) {
       productDeliveryConfirmationMutate(productId);
     }

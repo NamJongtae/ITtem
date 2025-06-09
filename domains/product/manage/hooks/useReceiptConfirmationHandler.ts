@@ -9,7 +9,7 @@ export default function useReceiptConfirmationHandler({ productId }: IParams) {
     useProductReceiptConfirmationMutate();
 
   const onClickReceiptComfirmation = () => {
-    const isReceiptConfirmation = confirm("정말 상품을 인수 확인을 하겠어요?");
+    const isReceiptConfirmation = confirm("정말 상품 인수 확인을 하겠어요?");
     if (isReceiptConfirmation) {
       productReceiptConfirmationMutate(productId);
     }

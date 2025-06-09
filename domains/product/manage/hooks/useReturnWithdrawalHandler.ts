@@ -9,7 +9,7 @@ export default function useReturnWithdrawalHandler({ productId }: IParams) {
     useProductReturnRequestWithdrawalMutate();
 
   const onClickReturnWithdrawal = () => {
-    const isReturnWithdrawal = confirm("정말 반품요청을 철회 하겠어요?");
+    const isReturnWithdrawal = confirm("정말 상품 반품 요청을 철회 하겠어요?");
     if (isReturnWithdrawal) {
       productReturnRequestWithdrawalMutate(productId);
     }
