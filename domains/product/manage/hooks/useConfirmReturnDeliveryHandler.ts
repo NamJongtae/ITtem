@@ -10,12 +10,14 @@ export default function useConfirmReturnDeliveryHandler({
   const { productReturnDeliveryConfirmationMutate } =
     useProductReturnDeliveryConfirmationMutate();
 
-  const onClickDeliveryConfirmation = () => {
-    const isDeliveryConfirmation = confirm("정말 상품전달확인을 하겠어요?");
-    if (isDeliveryConfirmation) {
+  const onClickReturnDeliveryConfirmation = () => {
+    const isReturnDeliveryConfirmation = confirm(
+      "정말 반품 상품 전달 확인을 하겠어요?"
+    );
+    if (isReturnDeliveryConfirmation) {
       productReturnDeliveryConfirmationMutate(productId);
     }
   };
 
-  return { onClickDeliveryConfirmation };
+  return { onClickReturnDeliveryConfirmation };
 }
