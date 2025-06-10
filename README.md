@@ -50,6 +50,7 @@
   - [🔁 Zustand 이메일 인증 상태 Context API로 전환](#-zustand-이메일-인증-상태-context-api로-전환)
   - [🗂 도메인 디렉토리 구조 적용](#-도메인-디렉토리-구조-적용)
   - [🗃 도메인 디렉토리 내부 구조 페이지별 세분화 및 네이밍 규칙 일관화](#-도메인-디렉토리-내부-구조-페이지별-세분화-및-네이밍-규칙-일관화)
+  - [🧪 단위 테스트 코드 작성](#-단위-테스트-코드-작성)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -2784,6 +2785,168 @@ export function EmailVerificationContextProvider({
  ┃ ┣ 📂search
  ┃ ┗ 📂user
  ┣ ...
+```
+
+</details>
+
+<br/>
+
+#### 🧪 단위 테스트 코드 작성
+
+> **적용이유**
+
+- 내가 작성한 코드가 제대로 동작하는지에 대한 신뢰성 확보를 위해서입니다.
+- 수동 테스트 없이 자동 검증이 가능하기 때문입니다.
+- 다른 사람이 코드를 이해하기 쉬워지기 때문입니다.
+- 버그나 오류 발생시 위치를 파악이 용이하며 쉽게 해결할 수 있습니다.
+
+> **적용 방법**
+
+- jest와 react-testing-library를 사용하여 유틸 함수, API 함수, 커스텀 훅 중심으로 단위 테스트 코드를 작성합니다.
+
+> **적용으로 얻은 이점**
+
+- 기존에 발견하지 못했던 버그와 로직 오류를 사전에 수정할 수 있었습니다.
+- 로직을 수동으로 테스트하지 않아도 자동으로 검증할 수 있어 유지보수가 쉬워졌습니다.
+- 내가 작성한 코드에 대한 신뢰성과 안정성이 확보되었습니다.
+
+> **테스트 코드를 통해 발견한 오류**
+
+<details>
+<summary>문제 코드 및 수정 과정 보기</summary>
+
+<br/>
+
+**문제 발생 테스트 코드**
+
+```javascript
+//...
+it("onMutate에서 product, myProfile 캐시 cancelQueries, setQueryData가 호출됩니다.", async () => {
+  const cancelQueriesSpy = jest.spyOn(queryClient, "cancelQueries");
+  const setQueryDataSpy = jest.spyOn(queryClient, "setQueryData");
+
+  const { result } = renderHook(
+    () => useProductDetailFollowMutate("targetUser123"),
+    { wrapper }
+  );
+
+  act(() => {
+    result.current.productDetailfollowMutate();
+  });
+
+  await waitFor(() => {
+    expect(cancelQueriesSpy).toHaveBeenCalledWith({ queryKey: productKey });
+    expect(cancelQueriesSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
+
+    expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
+      _id: "123",
+      auth: {
+        followers: ["user1", "user123"]
+      }
+    });
+
+    expect(setQueryDataSpy).toHaveBeenCalledWith(myProfileKey, {
+      uid: "user123",
+      followings: ["user2", "targetUser123"]
+    });
+  });
+});
+//...
+```
+
+위 테스트 코드에서 아래 부분 불일치하여 테스트를 통과하지 못하였습니다.
+
+```javascript
+expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
+  _id: "123",
+  auth: {
+    followers: ["user1", "user123"]
+  }
+});
+```
+
+**테스트 실패 원인**
+
+- 낙관적 업데이트 코드에서 auth.followers를 수정해야 했으나, 잘못하여 auth.followings를 수정하고 있었습니다.
+- 또한 previousProduct.auth가 아닌 previousMyProfile의 데이터를 사용하여 잘못된 기준으로 필터링하고 있었습니다.
+- 실제 실행 시 눈에 띄는 오류는 없었지만, 이는 onSettled 내의 invalidateQueries가 서버 데이터를 다시 불러오기 때문에 문제가 드러나지 않았던 것입니다.
+
+```javascript
+//...
+  onMutate: async () => {
+    await queryClient.cancelQueries({ queryKey: productQueryKey });
+    await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
+    const previousProduct = queryClient.getQueryData(
+      productQueryKey
+    ) as ProductDetailData;
+    const previousMyProfile = queryClient.getQueryData(
+      myProfileQueryKey
+    ) as ProfileData;
+    const newProduct = {
+      ...previousProduct,
+      auth: {
+        ...previousProduct.auth,
+        followings: [
+          ...previousMyProfile.followings.filter(
+            (id) => id !== previousMyProfile.uid
+          )
+        ]
+      }
+    };
+    const newMyProfile = {
+      ...previousMyProfile,
+      followings: [...previousMyProfile.followings.filter((id) => id !== uid)]
+    };
+    //...
+  }
+  //...
+  onSettled: () => {
+    queryClient.invalidateQueries({ queryKey: productQueryKey });
+    queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
+  }
+ //...
+```
+
+**수정 후 코드**
+
+- auth.followings → auth.followers로 키 값을 올바르게 수정하였습니다.
+- 필터링 기준 역시 previousProduct.auth.followers로 정상적으로 참조하도록 수정하였습니다.
+- 수정 후 테스트가 정상적으로 통과되었습니다.
+
+```javascript
+    //...
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: productQueryKey });
+      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
+      const previousProduct = queryClient.getQueryData(
+        productQueryKey
+      ) as ProductDetailData;
+      const previousMyProfile = queryClient.getQueryData(
+        myProfileQueryKey
+      ) as ProfileData;
+      const newProduct = {
+        ...previousProduct,
+        auth: {
+          ...previousProduct.auth,
+          followers: [
+            ...previousProduct.auth.followers.filter(
+              (id) => id !== previousMyProfile.uid
+            )
+          ]
+        }
+      };
+      const newMyProfile = {
+        ...previousMyProfile,
+        followings: [...previousMyProfile.followings.filter((id) => id !== uid)]
+      };
+      //...
+    }
+    //...
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: productQueryKey });
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
+    }
+     //...
 ```
 
 </details>
