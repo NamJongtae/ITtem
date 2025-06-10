@@ -55,6 +55,9 @@ export default function useProductCategoryMenu({ selectCategory }: IParams) {
     menuRef,
     onClickCategory,
     setCategoryBtnRef,
+    firstCategoryRef,
+    lastCategoryRef,
+    lastCategoryPreviousRef,
     categoryOnKeyDown
   };
 }
