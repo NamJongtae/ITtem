@@ -28,13 +28,13 @@ describe("useProductDetailFollowMutate 훅 테스트", () => {
   const fakeProduct = {
     _id: "123",
     auth: {
-      followers: []
+      followers: ["user1"]
     }
   };
 
   const fakeMyProfile = {
     uid: "user123",
-    followings: []
+    followings: ["user2"]
   };
 
   let invalidateSpy: unknown;
@@ -74,12 +74,12 @@ describe("useProductDetailFollowMutate 훅 테스트", () => {
       expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
         _id: "123",
         auth: {
-          followers: ["user123"]
+          followers: ["user1", "user123"]
         }
       });
       expect(setQueryDataSpy).toHaveBeenCalledWith(myProfileKey, {
         uid: "user123",
-        followings: ["targetUser123"]
+        followings: ["user2", "targetUser123"]
       });
     });
   });
