@@ -36,7 +36,7 @@ export default function useProductDetailFollowMutate(uid: string) {
         auth: {
           ...previousProduct?.auth,
           followers: [
-            ...(previousMyProfile?.followers || []),
+            ...(previousProduct?.auth.followers || []),
             previousMyProfile?.uid
           ]
         }
