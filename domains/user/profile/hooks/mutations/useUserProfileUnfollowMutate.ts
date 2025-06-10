@@ -67,8 +67,9 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       const newUserProfile = {
         ...previousUserProfile,
         followers:
-          previousMyProfile?.followers.filter((data: string) => data !== uid) ||
-          []
+          previousUserProfile?.followers.filter(
+            (data: string) => data !== myUid
+          ) || []
       };
       queryClient.setQueryData(userProfileQueryKey, newUserProfile);
 
@@ -142,7 +143,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       }
 
       if (isAxiosError<{ message: string }>(error)) {
-        toast.error(error.response?.data.message);
+        toast.warn("유저 언팔로우에 실패했어요.\n 잠시 후 다시 시도해주세요.");
       }
     },
     onSettled: () => {
