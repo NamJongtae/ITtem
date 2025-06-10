@@ -82,8 +82,6 @@ export default function useMyProfileUnfollowMutate(uid: string) {
       return { previousMyProfile, previousMyFollowings, previousUserFollowers };
     },
     onError: (error, data, ctx) => {
-      console.error(error);
-
       queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       if (ctx?.previousMyFollowings)
@@ -100,7 +98,7 @@ export default function useMyProfileUnfollowMutate(uid: string) {
       }
 
       if (isAxiosError<{ message: string }>(error)) {
-        toast.error(error.response?.data.message);
+        toast.warn("유저 언팔로우에 실패했어요.\n 잠시 후 다시 시도해주세요.");
       }
     },
     onSettled: () => {

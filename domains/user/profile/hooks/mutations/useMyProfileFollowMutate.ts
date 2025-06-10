@@ -65,7 +65,6 @@ export default function useMyProfileFollowMutate(uid: string) {
       return { previousMyProfile, previousMyFollowers };
     },
     onError: (error, data, ctx) => {
-      console.error(error);
       queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       if (ctx?.previousMyFollowers) {
@@ -73,7 +72,7 @@ export default function useMyProfileFollowMutate(uid: string) {
       }
 
       if (isAxiosError<{ message: string }>(error)) {
-        toast.error(error.response?.data.message);
+        toast.warn("유저 팔로우에 실패했어요.\n 잠시 후 다시 시도해주세요.");
       }
     },
     onSettled: () => {
