@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import useProfileQuery from "./queries/useProfileQuery";
+import useProfileQuery from "./useProfileQuery";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 
 export default function useUserProfilePageQueries() {
