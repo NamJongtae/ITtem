@@ -22,10 +22,13 @@ export default function useProfileEditSubmit(closeModal: () => void) {
     try {
       await profileEditMutate({ values, profileData, profileEditData });
     } catch (error) {
-      if (isAxiosError<{ message: string }>(error)) {
+      if (
+        isAxiosError<{ message: string }>(error) &&
+        error.response?.status === 401
+      ) {
         toast.warn(error.response?.data.message);
       } else if (error instanceof Error) {
-        toast.warn(error.message);
+        toast.warn("프로필 수정에 실패했어요.\n잠시 후 다시 시도해주세요.");
       }
     }
   };
