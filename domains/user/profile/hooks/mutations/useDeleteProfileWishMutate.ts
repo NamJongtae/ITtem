@@ -20,7 +20,7 @@ export default function useDeleteProfileWishMutate() {
     mutationFn: (wishProductIds: string[]) =>
       deleteWishlistProductData(wishProductIds),
     onMutate: async (wishProductIds) => {
-      await queryClient.cancelQueries({ queryKey: wishQueryKey });
+      await queryClient.cancelQueries({ queryKey: myProfileQuerKey });
 
       await queryClient.cancelQueries({ queryKey: wishQueryKey });
 
