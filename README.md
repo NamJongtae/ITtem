@@ -51,6 +51,7 @@
   - [🗂 도메인 디렉토리 구조 적용](#-도메인-디렉토리-구조-적용)
   - [🗃 도메인 디렉토리 내부 구조 페이지별 세분화 및 네이밍 규칙 일관화](#-도메인-디렉토리-내부-구조-페이지별-세분화-및-네이밍-규칙-일관화)
   - [🧪 단위 테스트 코드 작성](#-단위-테스트-코드-작성)
+  - [👾 GitHub Actions를 활용한 CI/CD 구축을 통한 개발환경 개선](#-github-actions를-활용한-cicd-구축을-통한-개발한경-개선)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -2948,6 +2949,130 @@ expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
     }
      //...
 ```
+
+</details>
+
+<br/>
+
+#### 👾 GitHub Actions를 활용한 CI/CD 구축을 통한 개발환경 개선
+
+> **적용이유**
+
+- 코드 수정 시 테스트와 배포를 자동화하여 개발 효율을 높이기 위함입니다.
+- dev → main 브랜치 머지를 자동화하여 작업 흐름을 단순화하기 위함입니다.
+
+> **적용 방법**
+
+- dev 브랜치에 push가 발생하면 다음과 같은 작업이 자동으로 수행됩니다:
+  - 테스트를 실행하여 코드의 안정성을 확인합니다. (CI)
+  - Vercel을 통해 Preview 환경에 자동으로 배포합니다.
+  - 테스트 및 배포가 성공하면 main 브랜치로 자동 머지됩니다.
+- main 브랜치에 push 발생 시:
+  - Vercel을 통해 Production 환경에 자동으로 배포됩니다.
+
+> **적용으로 얻은 이점**
+
+- npm test 및 배포 과정이 자동으로 수행되어 사소한 작업을 줄일 수 있습니다.
+- dev 브랜치 작업 내용을 수동으로 main에 머지하지 않아도 됩니다.
+- Preview → Production 흐름이 자동화되어 배포 실수가 줄어듭니다.
+
+> **Workflow 구성 및 코드**
+
+<details>
+<summary><strong>📁 ci-dev.yml – 테스트 & Preview 배포 & 자동 Merge</strong></summary>
+
+```yml
+  name: Test and Auto-Merge to Main
+
+  on:
+  push:
+  branches: - dev
+
+  permissions:
+  contents: write
+
+  jobs:
+  test:
+  runs-on: ubuntu-latest
+  env:
+  TZ: Asia/Seoul
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v3
+          with:
+            node-version: "18"
+
+        - run: npm install
+        - run: npm test
+
+  deploy:
+  needs: test
+  runs-on: ubuntu-latest
+  if: success()
+
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Deploy to Vercel (Preview)
+          uses: amondnet/vercel-action@v25
+          with:
+            vercel-token: ${{ secrets.VERCEL_TOKEN }}
+            vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+            vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+            github-comment: false
+
+  merge:
+  needs: deploy
+  runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout main branch
+          uses: actions/checkout@v3
+          with:
+            ref: main
+
+        - name: Merge dev into main
+          run: |
+            git fetch origin dev
+            git merge origin/dev --ff-only
+            git push origin main
+```
+
+<br/>
+
+</details>
+
+<details>
+<summary><strong>📁 cd-prod.yml – Production 자동 배포</strong></summary>
+
+```yml
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+          github-comment: false
+```
+
+<br/>
 
 </details>
 
