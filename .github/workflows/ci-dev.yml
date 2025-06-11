@@ -3,13 +3,13 @@ name: Test and Deploy to Vercel
 on:
   push:
     branches:
-      - dev 
+      - dev
 
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TZ: Asia/Seoul 
+      TZ: Asia/Seoul
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
     steps:
@@ -41,3 +41,4 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github-comment: false
