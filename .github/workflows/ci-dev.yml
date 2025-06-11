@@ -1,9 +1,12 @@
-name: Test and Deploy to Vercel
+name: Test and Auto-Merge to Main
 
 on:
   push:
     branches:
       - dev
+
+permissions:
+  contents: write
 
 jobs:
   test:
@@ -14,17 +17,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - run: npm install
+      - run: npm test
 
   deploy:
     needs: test
@@ -34,11 +32,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel (Preview)
         uses: amondnet/vercel-action@v25
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           github-comment: false
+
+  merge:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Merge dev into main
+        run: |
+          git fetch origin dev
+          git merge origin/dev --ff-only
+          git push origin main
