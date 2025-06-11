@@ -49,8 +49,8 @@ describe("dbConnect 테스트", () => {
   it("환경변수가 없으면 에러가 발생해야 합니다.", async () => {
     delete process.env.NEXT_SECRET_MONGODB_URI;
 
-    await expect(import("@/shared/common/utils/db/db")).rejects.toThrow(
-      "DB 접속 정보를 확인해주세요."
-    );
+    const { default: dbConnect } = await import("@/shared/common/utils/db/db");
+
+    await expect(dbConnect()).rejects.toThrow("DB 접속 정보를 확인해주세요.");
   });
 });
