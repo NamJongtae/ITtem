@@ -1,3 +1,6 @@
+import dbConnect from "@/shared/common/utils/db/db";
+import mongoose from "mongoose";
+
 jest.mock("mongoose", () => {
   const mockConnect = jest.fn(() => Promise.resolve({ connected: true }));
   return {
@@ -6,8 +9,7 @@ jest.mock("mongoose", () => {
   };
 });
 
-import dbConnect from "@/shared/common/utils/db/db";
-import mongoose from "mongoose";
+process.env.NEXT_SECRET_MONGODB_URI = "mongodb://localhost:3000/test";
 
 describe("dbConnect 테스트", () => {
   afterEach(() => {
