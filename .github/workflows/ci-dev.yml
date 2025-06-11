@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - dev
+    paths-ignore:
+      - "README.md"
+      - ".github/**"
+      - ".gitignore"
+      - ".eslintrc.*"
+      - ".prettierrc*"
+      - "jest.config.*"
+      - "jest.setup.js"
+      - "*.md"
 
 permissions:
   contents: write
