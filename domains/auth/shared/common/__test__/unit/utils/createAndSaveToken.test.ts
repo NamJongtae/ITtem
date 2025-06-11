@@ -12,7 +12,17 @@ jest.mock("@/shared/common/utils/generateToken");
 jest.mock("../../../utils/saveTokenFromRedis");
 
 describe("createAndSaveToken 함수 테스트", () => {
-  const MOCK_DATE = Date.now();
+  const MOCK_DATE = new Date("2025-06-01T00:30:00Z").getTime();
+  const mockAccessToken = "mockedAccessToken";
+  const mockRefreshToken = "mockedRefreshToken";
+
+  beforeEach(() => {
+    (generateToken as jest.Mock).mockImplementation(({ secret }) => {
+      return secret === ACCESS_TOKEN_KEY ? mockAccessToken : mockRefreshToken;
+    });
+
+    (saveTokenFromRedis as jest.Mock).mockClear();
+  });
 
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(MOCK_DATE);
@@ -23,9 +33,6 @@ describe("createAndSaveToken 함수 테스트", () => {
   });
 
   it("토큰을 생성하고, Redis에 저장한 뒤, 세션에 저장합니다.", async () => {
-    const mockAccessToken = "mockedAccessToken";
-    const mockRefreshToken = "mockedRefreshToken";
-
     (generateToken as jest.Mock).mockImplementation(({ secret }) => {
       return secret === ACCESS_TOKEN_KEY ? mockAccessToken : mockRefreshToken;
     });
@@ -44,13 +51,13 @@ describe("createAndSaveToken 함수 테스트", () => {
     expect(generateToken).toHaveBeenCalledTimes(2);
 
     // Redis 저장 확인
-    expect(saveTokenFromRedis).toHaveBeenCalledWith({
+    expect(saveTokenFromRedis).toHaveBeenNthCalledWith(1, {
       uid: user.uid,
       token: mockAccessToken,
       type: "accessToken",
       exp: Math.floor(MOCK_DATE / 1000) + ACCESS_TOKEN_EXP
     });
-    expect(saveTokenFromRedis).toHaveBeenCalledWith({
+    expect(saveTokenFromRedis).toHaveBeenNthCalledWith(2, {
       uid: user.uid,
       token: mockRefreshToken,
       type: "refreshToken",
