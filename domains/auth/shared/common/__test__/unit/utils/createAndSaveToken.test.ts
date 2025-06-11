@@ -3,7 +3,6 @@ import { generateToken } from "@/shared/common/utils/generateToken";
 import saveTokenFromRedis from "../../../utils/saveTokenFromRedis";
 import {
   ACCESS_TOKEN_EXP,
-  ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_EXP
 } from "../../../constants/constansts";
 
@@ -13,16 +12,6 @@ jest.mock("../../../utils/saveTokenFromRedis");
 
 describe("createAndSaveToken 함수 테스트", () => {
   const MOCK_DATE = new Date("2025-06-01T00:30:00Z").getTime();
-  const mockAccessToken = "mockedAccessToken";
-  const mockRefreshToken = "mockedRefreshToken";
-
-  beforeEach(() => {
-    (generateToken as jest.Mock).mockImplementation(({ secret }) => {
-      return secret === ACCESS_TOKEN_KEY ? mockAccessToken : mockRefreshToken;
-    });
-
-    (saveTokenFromRedis as jest.Mock).mockClear();
-  });
 
   beforeAll(() => {
     jest.useFakeTimers().setSystemTime(MOCK_DATE);
@@ -33,9 +22,12 @@ describe("createAndSaveToken 함수 테스트", () => {
   });
 
   it("토큰을 생성하고, Redis에 저장한 뒤, 세션에 저장합니다.", async () => {
-    (generateToken as jest.Mock).mockImplementation(({ secret }) => {
-      return secret === ACCESS_TOKEN_KEY ? mockAccessToken : mockRefreshToken;
-    });
+    const mockAccessToken = "mockedAccessToken";
+    const mockRefreshToken = "mockedRefreshToken";
+
+    (generateToken as jest.Mock)
+    .mockImplementationOnce(() => mockAccessToken)
+    .mockImplementationOnce(() => mockRefreshToken);
 
     const sessionMock = {
       accessToken: "",
