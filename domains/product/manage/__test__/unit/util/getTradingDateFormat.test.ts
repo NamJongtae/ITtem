@@ -1,6 +1,9 @@
 import getTradingDateFormat from "../../../utils/getTradingDateFormat";
 
 describe("getTradingDateFormat 테스트", () => {
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date("2025-06-01T00:30:00Z"));
+  });
   const KST_OFFSET = 9 * 60 * 60 * 1000;
 
   const getUTCISOString = (timeStamp: string) => {
