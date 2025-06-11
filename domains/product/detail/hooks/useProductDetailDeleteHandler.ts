@@ -1,4 +1,4 @@
-import useProductDeleteMutate from "../../shared/hooks/mutations/useProducDeletetMutate";
+import useProductDeleteMutate from "../../shared/hooks/mutations/useProductDeleteMutate";
 import { ProductStatus } from "../../shared/types/productTypes";
 import { toast } from "react-toastify";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";

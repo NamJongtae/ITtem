@@ -1,4 +1,4 @@
-import useProductDeleteMutate from "../../shared/hooks/mutations/useProducDeletetMutate";
+import useProductDeleteMutate from "../../shared/hooks/mutations/useProductDeleteMutate";
 
 interface IParams {
   productId: string;

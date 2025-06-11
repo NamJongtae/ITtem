@@ -1,8 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import useProductDeleteHandler from "../../../hooks/useProductDeleteHandler";
-import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProducDeletetMutate";
+import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProductDeleteMutate";
 
-jest.mock("@/domains/product/shared/hooks/mutations/useProducDeletetMutate");
+jest.mock("@/domains/product/shared/hooks/mutations/useProductDeleteMutate");
 
 describe("useProductDeleteHandler 훅 테스트", () => {
   const mockMutate = jest.fn();

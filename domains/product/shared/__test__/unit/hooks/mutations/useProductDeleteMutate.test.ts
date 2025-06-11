@@ -1,5 +1,5 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
-import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProducDeletetMutate";
+import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProductDeleteMutate";
 import deleteProduct from "@/domains/product/shared/api/deleteProduct";
 import { toast } from "react-toastify";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";

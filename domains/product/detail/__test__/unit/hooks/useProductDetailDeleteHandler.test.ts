@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import useProductDetailDeleteHandler from "../../../hooks/useProductDetailDeleteHandler";
-import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProducDeletetMutate";
+import useProductDeleteMutate from "@/domains/product/shared/hooks/mutations/useProductDeleteMutate";
 import { toast } from "react-toastify";
 
 jest.mock("react-toastify", () => ({
@@ -8,7 +8,7 @@ jest.mock("react-toastify", () => ({
     warn: jest.fn()
   }
 }));
-jest.mock("@/domains/product/shared/hooks/mutations/useProducDeletetMutate");
+jest.mock("@/domains/product/shared/hooks/mutations/useProductDeleteMutate");
 jest.mock("@/domains/auth/shared/common/store/authStore");
 
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
