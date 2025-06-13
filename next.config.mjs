@@ -53,22 +53,15 @@ const withBundleAnalyzerConfig = withBundleAnalyzer({
 export default withSentryConfig(
   withSentryConfig(withBundleAnalyzerConfig, {
     org: "main-pg",
-    project: "javascript-nextjs",
+    project: "ittem",
     authToken: process.env.SENTRY_AUTH_TOKEN,
     silent: false,
     widenClientFileUpload: true,
     disableLogger: true,
     automaticVercelMonitors: true,
-    sourcemaps: {
-      disable: true,
-    },
-  }),
-  {
-    org: "main-pg",
-    project: "javascript-nextjs",
-    silent: !process.env.CI,
-    widenClientFileUpload: true,
     tunnelRoute: "/monitoring",
-    disableLogger: true
-  }
+    sourcemaps: {
+      disable: true
+    }
+  })
 );
