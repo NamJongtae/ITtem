@@ -1,5 +1,6 @@
-import React, { ErrorInfo, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { toast } from "react-toastify";
+import * as Sentry from "@sentry/nextjs";
 
 interface ErrorBoundaryProps {
   fallback: ReactNode;
@@ -24,9 +25,12 @@ export class ErrorBoundary extends React.Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
-    toast.warn(this.props.errorMessage);
+  componentDidCatch(error: Error): void {
+    if (this.props.errorMessage) {
+      toast.warn(this.props.errorMessage);
+    }
+
+    Sentry.captureException(error);
   }
 
   render() {
