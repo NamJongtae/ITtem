@@ -1,3 +1,4 @@
+import { withSentryConfig } from "@sentry/nextjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
 /** @type {import('next').NextConfig} */
@@ -19,7 +20,7 @@ const nextConfig = {
           as: "*.js"
         }
       }
-    },
+    }
   },
   images: {
     dangerouslyAllowSVG: true,
@@ -49,4 +50,25 @@ const withBundleAnalyzerConfig = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true"
 })(nextConfig);
 
-export default withBundleAnalyzerConfig;
+export default withSentryConfig(
+  withSentryConfig(withBundleAnalyzerConfig, {
+    org: "main-pg",
+    project: "javascript-nextjs",
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    silent: false,
+    widenClientFileUpload: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+    sourcemaps: {
+      disable: true,
+    },
+  }),
+  {
+    org: "main-pg",
+    project: "javascript-nextjs",
+    silent: !process.env.CI,
+    widenClientFileUpload: true,
+    tunnelRoute: "/monitoring",
+    disableLogger: true
+  }
+);
