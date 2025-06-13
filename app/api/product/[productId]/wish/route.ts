@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Product from "@/domains/product/shared/models/Product";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(
   req: NextRequest,
@@ -117,6 +118,7 @@ export async function PATCH(
     return NextResponse.json({ message: "상품을 찜했어요." }, { status: 200 });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(
@@ -218,6 +220,7 @@ export async function DELETE(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "상품 찜 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."

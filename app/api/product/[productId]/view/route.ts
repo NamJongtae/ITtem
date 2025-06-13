@@ -2,6 +2,7 @@ import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(
   req: NextRequest,
@@ -49,6 +50,7 @@ export async function PATCH(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
 
     return NextResponse.json(
       { message: "상품 조회수 갱신에 실패했어요." },

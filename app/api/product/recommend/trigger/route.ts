@@ -1,6 +1,7 @@
 import customAxios from "@/shared/common/utils/customAxios";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(req: NextRequest) {
   const CORN_KEY = process.env.CRON_SECRET;
@@ -30,6 +31,8 @@ export async function GET(req: NextRequest) {
     if (isAxiosError(error)) {
       const errorMessage =
         error.response?.data?.message || "알 수 없는 에러가 발생했어요.";
+
+      Sentry.captureException(error);
 
       return NextResponse.json(
         { message: errorMessage },

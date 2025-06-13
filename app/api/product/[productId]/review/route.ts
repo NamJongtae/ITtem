@@ -7,6 +7,7 @@ import ReviewScore from "@/domains/user/shared/models/ReviewScore";
 import mongoose from "mongoose";
 import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(
   req: NextRequest,
@@ -103,6 +104,7 @@ export async function GET(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "상품 리뷰 조회에 실패했어요.\n잠시 후 다시 시도해주세요."
@@ -264,6 +266,7 @@ export async function POST(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     if (error instanceof mongoose.Error.ValidationError) {

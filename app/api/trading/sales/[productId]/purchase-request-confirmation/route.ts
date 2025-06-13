@@ -16,6 +16,7 @@ import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthoriz
 import User from "@/domains/auth/shared/common/models/User";
 import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import Product from "@/domains/product/shared/models/Product";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(
   req: NextRequest,
@@ -240,6 +241,7 @@ export async function PATCH(
     });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(

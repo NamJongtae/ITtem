@@ -3,6 +3,7 @@ import Product from "@/domains/product/shared/models/Product";
 import RecommendProduct from "@/domains/product/shared/models/RecommendProduct";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -34,6 +35,7 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "추천 상품 조회에 실패했어요. 잠시 후 다시 시도해주세요."
@@ -84,6 +86,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "추천 상품 갱신에 실패했어요.\n잠시 후 다시 시도해주세요"

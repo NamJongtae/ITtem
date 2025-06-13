@@ -3,6 +3,7 @@ import getNotificationMessageInFirebase from "@/domains/notification/utils/getNo
 import readAllNotificationMessageInFirebase from "@/domains/notification/utils/readAllNotificationMessageInFirebase";
 import deleteAllNotificationMessageInFirebase from "@/domains/notification/utils/deleteAllNotificationMessageInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(req: NextRequest) {
   try {
@@ -45,6 +46,7 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     if (error instanceof Error) {
       if (error.message === "잘못된 접근이에요.") {
         return NextResponse.json({ message: error.message }, { status: 403 });
@@ -95,6 +97,7 @@ export async function PATCH(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     if (error instanceof Error) {
       if (error.message === "잘못된 접근이에요.") {
         return NextResponse.json({ message: error.message }, { status: 403 });
@@ -140,6 +143,7 @@ export async function DELETE(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     if (error instanceof Error) {
       if (error.message === "잘못된 접근이에요.") {
         return NextResponse.json({ message: error.message }, { status: 403 });

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(
   req: NextRequest,
@@ -110,6 +111,7 @@ export async function POST(
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    Sentry.captureException(error);
     console.error(error);
     return NextResponse.json(
       {
@@ -228,6 +230,7 @@ export async function DELETE(
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    Sentry.captureException(error);
     console.error(error);
     return NextResponse.json(
       {

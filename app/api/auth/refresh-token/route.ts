@@ -12,6 +12,7 @@ import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST() {
   try {
@@ -95,6 +96,7 @@ export async function POST() {
     return response;
   } catch (error) {
     console.log(error);
+    Sentry.captureException(error);
     const response = NextResponse.json(
       {
         message: "토큰 발급에 실패 했어요."

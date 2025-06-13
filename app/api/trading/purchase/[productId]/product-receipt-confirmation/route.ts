@@ -15,8 +15,9 @@ import {
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import Product from "@/domains/product/shared/models/Product";
-import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import User from "@/domains/auth/shared/common/models/User";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(
   req: NextRequest,
@@ -278,6 +279,7 @@ export async function PATCH(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(

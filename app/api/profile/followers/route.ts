@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import mongoose from "mongoose";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -123,6 +124,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "팔로워 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }

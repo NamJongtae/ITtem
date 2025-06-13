@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +26,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.log(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "이메일 확인에 실패하였습니다.", ok: false },
       { status: 500 }

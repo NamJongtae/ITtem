@@ -10,6 +10,7 @@ import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRe
 import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
 import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
 import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   const { user } = await req.json();
@@ -142,6 +143,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.log(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요."

@@ -12,6 +12,7 @@ import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import { getStorageInstance } from "@/shared/common/utils/firebaseSetting";
 import { deleteObject, ref } from "firebase/storage";
 import { TradingStatus } from "@/domains/product/manage/types/productManageTypes";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(
   req: NextRequest,
@@ -187,6 +188,7 @@ export async function GET(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "상품 조회에 실패했어요\n잠시 후 다시 시도해주세요." },
       { status: 500 }
@@ -308,6 +310,7 @@ export async function PATCH(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(
@@ -458,6 +461,7 @@ export async function DELETE(
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(

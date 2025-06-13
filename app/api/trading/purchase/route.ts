@@ -4,6 +4,7 @@ import PurchaseTrading, {
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { FilterQuery, PipelineStage } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
@@ -147,6 +148,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: `${message} 목록 조회에 실패하였습니다.\n잠시 후 다시 시도해주세요.`

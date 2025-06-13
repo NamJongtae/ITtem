@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import User from "@/domains/auth/shared/common/models/User";
 import deleteProfileImgToFirestore from "@/domains/user/profile/utils/deleteProfileImgToFirestore";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET() {
   try {
@@ -97,6 +98,7 @@ export async function GET() {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "프로필 조회에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
@@ -188,6 +190,7 @@ export async function PATCH(req: NextRequest) {
     });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "프로필 수정에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }

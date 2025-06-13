@@ -11,8 +11,9 @@ import {
 } from "@/domains/product/manage/types/productManageTypes";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
-import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import User from "@/domains/auth/shared/common/models/User";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(
   req: NextRequest,
@@ -185,6 +186,7 @@ export async function POST(
     console.error(error);
     await session.abortTransaction();
     session.endSession();
+    Sentry.captureException(error);
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message

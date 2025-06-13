@@ -5,6 +5,7 @@ import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import mongoose from "mongoose";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   const session = await mongoose.startSession();
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
     await session.abortTransaction();
     session.endSession();
     console.error(error);
+    Sentry.captureException(error);
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message

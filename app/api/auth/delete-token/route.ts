@@ -2,6 +2,7 @@ import deleteTokenFromRedis from "@/domains/auth/shared/common/utils/deleteToken
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -21,6 +22,7 @@ export async function DELETE(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { message: "토큰 삭제에 실패했어요." },
       { status: 500 }

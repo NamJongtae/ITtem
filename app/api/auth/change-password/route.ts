@@ -6,6 +6,7 @@ import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { NextRequest, NextResponse } from "next/server";
 import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
 import comparePassword from "@/domains/auth/shared/common/utils/comparePassword";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -79,6 +80,7 @@ export async function PATCH(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return new NextResponse(
       JSON.stringify({
         message: "비밀번호 변경에 실패하였습니다\n잠시 후 다시 시도해주세요."

@@ -1,6 +1,7 @@
 import startChatInFirebase from "@/domains/product/shared/utils/startChatInFirebase";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return new NextResponse(
       JSON.stringify({
         message: "채팅방 생성/조회에 실패했어요.\n잠시 후 다시 시도해주세요."

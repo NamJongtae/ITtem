@@ -2,6 +2,7 @@ import getEmailVerificationCode from "@/domains/auth/shared/email-verification/u
 import incrementVerificationCounter from "@/domains/auth/shared/email-verification/utils/incrementVerificationCounter";
 import saveVerifiedEmail from "@/domains/auth/shared/email-verification/utils/saveVerifiedEmail";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   const { email, verificationCode, type } = await req.json();
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
     }
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     return NextResponse.json(
       {
         message: "인증에 실패했어요.\n잠시 후 다시 시도해주세요.",

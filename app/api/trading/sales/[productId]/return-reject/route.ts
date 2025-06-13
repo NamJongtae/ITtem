@@ -17,6 +17,7 @@ import {
 } from "@/domains/product/manage/types/productManageTypes";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 export const PATCH = async (
   req: NextRequest,
@@ -324,6 +325,7 @@ export const PATCH = async (
     return NextResponse.json({ message: "상품 반품 요청 거절에 성공했어요." });
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     await session.abortTransaction();
     session.endSession();
     return NextResponse.json(

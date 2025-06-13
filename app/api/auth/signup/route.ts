@@ -11,6 +11,7 @@ import User from "@/domains/auth/shared/common/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message
