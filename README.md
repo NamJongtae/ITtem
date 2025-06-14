@@ -51,7 +51,8 @@
   - [🗂 도메인 디렉토리 구조 적용](#-도메인-디렉토리-구조-적용)
   - [🗃 도메인 디렉토리 내부 구조 페이지별 세분화 및 네이밍 규칙 일관화](#-도메인-디렉토리-내부-구조-페이지별-세분화-및-네이밍-규칙-일관화)
   - [🧪 단위 테스트 코드 작성](#-단위-테스트-코드-작성)
-  - [👾 GitHub Actions를 활용한 CI/CD 구축을 통한 개발환경 개선](#-github-actions를-활용한-cicd-구축을-통한-개발한경-개선)
+  - [👾 GitHub Actions를 활용한 CI/CD 구축을 통한 개발환경 개선](#-github-actions를-활용한-cicd-구축을-통한-개발환경-개선)
+  - [🐞Sentry 연동을 통한 에러 관리 개선](#-sentry-연동을-통한-에러-관리-개선)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -110,7 +111,7 @@ Serverless로 벡엔드 API를 구축하였습니다.
 
 ### ⛓ 아키텍처
 
-![architecture](https://github.com/user-attachments/assets/72eb0d09-31de-416b-b931-42d743c5e684)
+![project-architecture](https://github.com/user-attachments/assets/9290621e-fa4e-4be9-bd19-254f17260267)
 
 ### 📜 API Router 명세
 
@@ -3077,6 +3078,224 @@ jobs:
 </details>
 
 <br/>
+
+#### 🐞 Sentry 연동을 통한 에러 관리 개선
+
+> **적용이유**
+
+- 기존에는 에러가 발생해도 로그만으로는 디버깅이 어려웠으며, 에러 발생 시점, 사용자 정보, 재현 흐름 등을 파악하기 힘들었습니다.
+- Sentry 도입을 통해 에러를 분석하고, 사용자 경험에 영향을 주는 문제를 빠르게 인지하고 해결할 수 있는 기반을 마련합니다.
+
+> **적용 방법**
+
+- 클라이언트, 서버, 엣지 환경별로 Sentry를 분리 초기화하여 각 환경의 에러를 구분해서 추적합니다.
+- 400번대 에러는 Sentry로 전송하지 않도록 beforeSend 훅에서 필터링합니다.
+- 각 환경별로 태그(client/server/edge)를 추가하여 에러 발생 위치를 명확히 구분합니다.
+- 세션 리플레이 기능을 활성화하여 실제 사용자 흐름을 추적할 수 있도록 설정합니다.
+- ErrorBoundary 컴포넌트에서 Sentry.captureException을 활용해 클라이언트 렌더링 에러도 Sentry로 전송합니다.
+- api routes의 cateh문에 Sentry.captureException을 활용해 서버 측 에러도 Sentry로 전송합니다.
+
+> **적용으로 얻은 이점**
+
+- 에러 발생 위치, 코드 라인, 브라우저 환경 등 상세 정보를 자동으로 수집합니다.
+- 네트워크 에러, 클라이언트 JavaScript 에러, 서버 API 에러를 통합적으로 관리할 수 있습니다.
+- 세션 리플레이 기능을 통해 사용자의 실제 흐름을 시각적으로 확인할 수 있습니다.
+- 버전별 에러 발생 현황을 추적할 수 있어, 배포 이후 신규 에러를 빠르게 감지할 수 있습니다.
+- 에러 발생 시점에 대한 알림 및 대시보드 제공으로, 실시간 대응이 가능해졌습니다.
+
+> **적용 코드**
+
+<details>
+<summary>instrumentation-client.ts (클라이언트 Sentry 설정)</summary>
+
+```typescript
+import * as Sentry from "@sentry/nextjs";
+
+function isNetworkResponseError(error: unknown): boolean {
+  const networkError = error as {
+    isAxiosError?: boolean;
+    response?: unknown;
+    message?: string;
+  };
+
+  // Axios 에러
+  if (networkError.isAxiosError && networkError.response) {
+    return true;
+  }
+
+  const message =
+    typeof error === "string" ? error : (networkError.message ?? "");
+
+  // fetch 등의 네트워크 에러 메시지
+  const networkErrorPatterns = [
+    /Request failed with status code \d+/,
+    /\b4\d\d\b/,
+    /\b5\d\d\b/,
+    /Failed to fetch/,
+    /NetworkError/,
+    /Load failed/,
+    /Network request failed/
+  ];
+
+  return networkErrorPatterns.some((pattern) => pattern.test(message));
+}
+
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    integrations: [Sentry.replayIntegration()],
+    tracesSampleRate: 1,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+    debug: false,
+
+    beforeSend(event, hint) {
+      // 서버 측에서 에러를 전송하므로
+      // 네트워크 요청 결과로 받은 에러는 Sentry로 전송하지 않음
+      if (isNetworkResponseError(hint.originalException)) {
+        return null;
+      }
+    
+      // client tag를 넣어 에러를 구분
+      event.tags = {
+        ...event.tags,
+        client: true,
+      };
+
+        // 그 외의 클라이언트 에러만 전송
+      return event;
+    }
+  });
+}
+
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+```
+
+</details>
+
+<details>
+<summary>instrumentation.ts (환경별 Sentry 분기 로딩)</summary>
+
+```typescript
+import * as Sentry from "@sentry/nextjs";
+
+export async function register() {
+  if (process.env.NODE_ENV === "production") {
+    if (process.env.NEXT_RUNTIME === "nodejs") {
+      await import("./sentry.server.config");
+    }
+    if (process.env.NEXT_RUNTIME === "edge") {
+      await import("./sentry.edge.config");
+    }
+  }
+}
+
+export const onRequestError = Sentry.captureRequestError;
+```
+
+</details>
+
+<details>
+<summary>sentry.server.config.ts (서버 Sentry 설정)</summary>
+
+```typescript
+import * as Sentry from "@sentry/nextjs";
+
+function isExcludedClientError(error: any): boolean {
+  const status = error?.response?.status ?? error?.status;
+  return typeof status === "number" && status >= 400 && status < 500;
+}
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  tracesSampleRate: 1,
+  debug: false,
+  beforeSend(event, hint) {
+    // 400번대 에러는 전송하지 않음
+    if (isExcludedClientError(hint?.originalException)) return null;
+    // server 태그 추가
+    event.tags = { ...event.tags, server: true };
+    return event;
+  }
+});
+```
+
+</details>
+
+<details>
+<summary>sentry.edge.config.ts (엣지 Sentry 설정)</summary>
+
+```typescript
+import * as Sentry from "@sentry/nextjs";
+
+function isExcludedClientError(error: any): boolean {
+  const status = error?.response?.status ?? error?.status;
+  return typeof status === "number" && status >= 400 && status < 500;
+}
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  tracesSampleRate: 1,
+  debug: false,
+  beforeSend(event, hint) {
+    // 400번대 에러는 전송하지 않음
+    if (isExcludedClientError(hint?.originalException)) return null;
+    // edge 태그 추가
+    event.tags = { ...event.tags, edge: true };
+    return event;
+  }
+});
+```
+
+</details>
+
+<details>
+<summary>ErrorBoundary.tsx (클라이언트 렌더링 에러 Sentry 전송)</summary>
+
+```tsx
+import * as Sentry from "@sentry/nextjs";
+import { toast } from "react-toastify";
+
+class ErrorBoundary extends React.Component<
+  { errorMessage?: string },
+  { hasError: boolean }
+> {
+  // ...
+
+  componentDidCatch(error: Error): void {
+    if (this.props.errorMessage) {
+      toast.warn(this.props.errorMessage);
+    }
+    // Sentry로 클라이언트 에러 전송
+    Sentry.captureException(error);
+  }
+
+  // ...
+}
+```
+
+</details>
+
+<details>
+<summary>route.ts (api routes 에러 Sentry 전송)</summary>
+
+```tsx
+//...
+import * as Sentry from "@sentry/nextjs";
+export async function GET(req: NextRequest) {
+  try {
+    //...
+  } catch (error) {
+    console.error(error);
+    Sentry.captureException(error);
+    //...
+  }
+}
+```
+
+</details>
+
+</br>
 
 ### 🔫 트러블 슈팅
 
