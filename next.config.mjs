@@ -59,9 +59,22 @@ export default withSentryConfig(
     widenClientFileUpload: true,
     disableLogger: true,
     automaticVercelMonitors: true,
-    tunnelRoute: "/monitoring",
     sourcemaps: {
       disable: true
     }
-  })
+  }),
+  {
+    // 아래는 Sentry Webpack 플러그인 옵션
+    org: "main-pg", // Sentry 조직 슬러그
+    project: "ittem", // Sentry 프로젝트 슬러그
+
+    // CI 환경에서만 로그 출력 (로컬에서는 출력 X)
+    silent: !process.env.CI,
+
+    widenClientFileUpload: true, // 더 많은 소스맵 업로드
+
+    disableLogger: true, // Sentry 로거 번들에서 제거
+
+    automaticVercelMonitors: true // Vercel Cron 자동 모니터링
+  }
 );
