@@ -4,7 +4,7 @@ import Loading from "@/shared/common/components/Loading";
 import { isAxiosError } from "axios";
 import useProductEditSubmit from "../hooks/useProductEditSubmit";
 import MyForm from "@/shared/common/components/MyForm";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import useProductQuery from "../../shared/hooks/queries/useProductQuery";
 import ProductUploadFormContent from "../../upload/components/form-content/FormContent";
 

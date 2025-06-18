@@ -1,7 +1,7 @@
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
 import List from "./List";
 import SkeletonUI from "./SkeletonUI";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   wishProductIds: string[] | undefined;

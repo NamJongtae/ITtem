@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 import MyProfilePage from "./MyProfilePage";
 import SuspenseErrorBoundary from "../../../../shared/common/components/SuspenseErrorBoundary";
 import ProfileDetailSkeletonUI from "./detail/ProfileDetailSkeletonUI";
-import Empty from "../../../../shared/common/components/empty";
+import Empty from "../../../../shared/common/components/Empty";
 
 async function prefetchProfile() {
   const { getIronSession } = await import("iron-session");

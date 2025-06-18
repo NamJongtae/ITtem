@@ -9,7 +9,7 @@ import CloseBtn from "./CloseBtn";
 import Header from "./Header";
 import BackDrop from "./BackDrop";
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   productId: string;

@@ -1,5 +1,5 @@
 import useProfileReviewsInfiniteQuery from "../../../hooks/queries/useProfileReviewsInfiniteQuery";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import Item from "./Item";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";
@@ -28,9 +28,7 @@ export default function ReviewList({ uid }: IProps) {
     <>
       <ul className="flex flex-col gap-5 mt-12">
         <>
-          {data?.map((review) => (
-            <Item key={review._id} review={review} />
-          ))}
+          {data?.map((review) => <Item key={review._id} review={review} />)}
           {isFetchingNextPage &&
             Array(8)
               .fill("")

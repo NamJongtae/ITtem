@@ -1,7 +1,7 @@
 import { ProfileData } from "../../../types/profileTypes";
 import FollowList from "./List";
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import SkeletonUI from "./SkeletonUI";
 
 interface IProps {

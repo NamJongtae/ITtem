@@ -1,5 +1,5 @@
 import useTradeInfiniteQuery from "../../hooks/queries/useTradeInfiniteQuery";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import { isAxiosError } from "axios";
 import Item from "../item/Item";
 import ListSkeletonUI from "./ListSkeletonUI";

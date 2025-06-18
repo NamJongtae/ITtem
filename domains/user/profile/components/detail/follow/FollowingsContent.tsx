@@ -2,7 +2,7 @@ import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBound
 import List from "./List";
 import { ProfileData } from "../../../types/profileTypes";
 import SkeletonUI from "./SkeletonUI";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   profileData: ProfileData | undefined;

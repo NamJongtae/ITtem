@@ -4,7 +4,7 @@ import UserInfo from "./user-info/UserInfo";
 import Detail from "./detail/ProfileDetail";
 import useProfileMenu from "../hooks/useProfileMenu";
 import useMyProfileSuspenseQuery from "../hooks/queries/useMyProfileSuspenseQuery";
-import Empty from "../../../../shared/common/components/empty";
+import Empty from "../../../../shared/common/components/Empty";
 
 export default function MyProfilePage() {
   const { myProfileData } = useMyProfileSuspenseQuery();

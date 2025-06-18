@@ -2,7 +2,7 @@ import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBound
 import PageContainer from "@/domains/product/edit/components/PageContainer";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import ProductUploadLoading from "../../upload/loading";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 export async function generateMetadata({
   params

@@ -1,4 +1,4 @@
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   introuduce: string | undefined;

@@ -2,7 +2,7 @@
 
 import useChatRoomListLogic from "../../room/hooks/useChatRoomListLogic";
 import Item from "./Item";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import SkeletonUI from "./SkeletonUI";
 
 export default function List() {

@@ -1,5 +1,5 @@
 import { ProductListType } from "../../types/productTypes";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   productListType: ProductListType;

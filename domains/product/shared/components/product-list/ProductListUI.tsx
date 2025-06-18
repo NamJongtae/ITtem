@@ -2,7 +2,7 @@
 
 import ProductListItem from "./ProductListItem";
 import { ProductCategory, ProductData } from "../../types/productTypes";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import ProductItemSkeletonUI from "./ProductItemSkeletonUI";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";

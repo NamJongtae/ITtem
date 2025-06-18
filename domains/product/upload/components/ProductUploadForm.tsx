@@ -1,7 +1,7 @@
 "use client";
 
 import MyForm from "@/shared/common/components/MyForm";
-import Empty from "@/shared/common/components/empty";
+import Empty from "@/shared/common/components/Empty";
 import { isAxiosError } from "axios";
 import ProductUploadFormContent from "./form-content/FormContent";
 import Loading from "@/shared/common/components/Loading";
