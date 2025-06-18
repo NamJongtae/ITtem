@@ -6,7 +6,7 @@ const createJestConfig = nextJest({
 
 const customJestConfig = {
   testEnvironment: "jest-environment-jsdom", // DOM 환경에서 테스트
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // 테스트 환경 설정 파일
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.tsx"], // 테스트 환경 설정 파일
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1" // 절대 경로 매핑
   },
