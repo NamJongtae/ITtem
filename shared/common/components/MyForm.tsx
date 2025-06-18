@@ -33,6 +33,7 @@ export default function MyForm<TFormData extends FieldValues>({
     <>
       <FormProvider {...methods}>
         <form
+          role="form"
           className={className}
           onSubmit={methods.handleSubmit(onSubmit)}
           noValidate
