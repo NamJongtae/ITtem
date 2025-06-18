@@ -12,7 +12,7 @@ export default function Empty({ message, iconSize, messageSize }: IProps) {
       <Image
         className={`${iconSize ? `w-[${iconSize}px] h-[${iconSize}px]` : "w-[60px] h-[60px]"} object-contain`}
         src={"/icons/empty-icon.svg"}
-        alt="상품이 존재하지 않아요."
+        alt="Empty Icon"
         width={iconSize ? iconSize : 60}
         height={iconSize ? iconSize : 60}
       />
