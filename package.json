@@ -26,7 +26,7 @@
     "firebase": "^11.6.1",
     "iron-session": "^8.0.1",
     "jose": "^5.2.4",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.0",
     "next": "^15.5.7",
