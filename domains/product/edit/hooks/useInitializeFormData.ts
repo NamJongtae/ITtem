@@ -3,24 +3,57 @@ import { useFormContext } from "react-hook-form";
 import { ProductData } from "../../shared/types/productTypes";
 
 export default function useInitializeFormData(productData?: ProductData) {
-  const { reset } = useFormContext();
+  const { resetField } = useFormContext();
 
   useEffect(() => {
-    if (productData) {
-      reset({
-        imgData: productData?.imgData,
-        prevImgData: productData?.imgData,
-        name: productData?.name,
-        sellType: productData?.sellType,
-        category: productData?.category,
-        location: productData?.location,
-        condition: productData?.condition,
-        returnPolicy: productData?.returnPolicy,
-        transaction: productData?.transaction,
-        deliveryFee: productData?.deliveryFee,
-        price: productData?.price.toString(),
-        description: productData?.description
-      });
-    }
-  }, [productData, reset]);
+    if (!productData) return;
+
+    resetField("imgData", {
+      defaultValue: productData.imgData ?? []
+    });
+
+    resetField("prevImgData", {
+      defaultValue: productData.imgData ?? []
+    });
+
+    resetField("name", {
+      defaultValue: productData.name ?? ""
+    });
+
+    resetField("sellType", {
+      defaultValue: productData.sellType ?? ""
+    });
+
+    resetField("category", {
+      defaultValue: productData.category ?? ""
+    });
+
+    resetField("location", {
+      defaultValue: productData.location ?? ""
+    });
+
+    resetField("condition", {
+      defaultValue: productData.condition ?? ""
+    });
+
+    resetField("returnPolicy", {
+      defaultValue: productData.returnPolicy ?? ""
+    });
+
+    resetField("transaction", {
+      defaultValue: productData.transaction ?? ""
+    });
+
+    resetField("deliveryFee", {
+      defaultValue: productData.deliveryFee ?? ""
+    });
+
+    resetField("price", {
+      defaultValue: productData.price ? productData.price.toString() : ""
+    });
+
+    resetField("description", {
+      defaultValue: productData.description ?? ""
+    });
+  }, [productData, resetField]);
 }
