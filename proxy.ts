@@ -10,7 +10,7 @@ import {
   withAuth
 } from "./shared/common/utils/withAuth";
 
-export async function middleware(req: NextRequest, res: NextResponse) {
+export async function proxy(req: NextRequest, res: NextResponse) {
   const { pathname, href } = req.nextUrl;
 
   const response = NextResponse.next();
