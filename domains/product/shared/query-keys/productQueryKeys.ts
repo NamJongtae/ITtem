@@ -74,7 +74,7 @@ const productQueryKey = createQueryKeys("product", {
     queryKey: [productId] as const,
     queryFn: async () => {
       const response = await getProduct(productId);
-      return response.data.product;
+      return response.product;
     }
   }),
   review: (productId: string) => ({
