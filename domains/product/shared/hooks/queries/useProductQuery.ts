@@ -14,7 +14,8 @@ export default function useProductQuery(productId?: string) {
   } = useSuspenseQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn,
-    staleTime: 30 * 1000
+    staleTime: 5 * 1000,
+    refetchOnMount: true
   });
 
   return { productData, productLoading, productError };
