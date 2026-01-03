@@ -1,27 +1,41 @@
-import { AxiosResponse } from "axios";
+import { customFetch } from "@/shared/common/utils/customFetch";
 import { ProductCategory } from "../types/productTypes";
 import { ProductListResponseData } from "../types/reponseTypes";
-import customAxios from "@/shared/common/utils/customAxios";
+import { BASE_URL } from "@/shared/common/constants/constant";
 
 export default async function getCategoryProductList({
   category = ProductCategory.전체,
-  cursor = null,
+  cursor,
   limit = 10,
   location
 }: {
   category?: ProductCategory;
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
   location?: string;
-}): Promise<AxiosResponse<ProductListResponseData>> {
-  try {
-    const response = await customAxios(
-      `/api/product?category=${category}${
-        cursor ? `&cursor=${cursor}` : ""
-      }&limit=${limit}${location ? `&location=${location}` : ""}`
-    );
-    return response;
-  } catch (error) {
-    throw error;
+}): Promise<ProductListResponseData> {
+  const params = new URLSearchParams({
+    category,
+    limit: String(limit)
+  });
+
+  if (cursor) params.append("cursor", cursor);
+  if (location) params.append("location", location);
+
+  const res = await customFetch(`/api/product?${params.toString()}`, false, {
+    next: {
+      revalidate: 60,
+      tags: ["products", `products-${category}`]
+    }
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => {});
+    throw {
+      status: res.status,
+      message: errorData?.message ?? `${category} 상품 목록 조회에 실패했어요.`
+    };
   }
+
+  return res.json();
 }
