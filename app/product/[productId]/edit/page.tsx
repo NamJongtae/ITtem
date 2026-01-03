@@ -4,6 +4,11 @@ import { BASE_URL } from "@/shared/common/constants/constant";
 import ProductUploadLoading from "../../upload/loading";
 import Empty from "@/shared/common/components/Empty";
 
+export const revalidate = 180;
+export function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({
   params
 }: {
@@ -29,6 +34,7 @@ export default async function ProductEdit({
   params: Promise<{ productId: string | undefined }>;
 }) {
   const { productId } = await params;
+  
   return (
     <SuspenseErrorBoundary
       suspenseFallback={<ProductUploadLoading isEdit={true} />}

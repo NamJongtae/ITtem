@@ -1,4 +1,3 @@
-import React from "react";
 import ProductUploadHeader from "../../upload/components/ProductUploadHeader";
 import ProductEditForm from "./Form";
 
