@@ -7,7 +7,7 @@ import {
   QueryKey,
   useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { FetchError } from "@/shared/common/types/errorTypes";
 
 export default function useCategoryProductListInfiniteQuery({
   limit = 10,
@@ -32,7 +32,7 @@ export default function useCategoryProductListInfiniteQuery({
     error
   } = useSuspenseInfiniteQuery<
     ProductData[],
-    AxiosError,
+    FetchError,
     InfiniteData<ProductData>
   >({
     queryKey: queryKeyConfig.queryKey,
