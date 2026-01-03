@@ -13,6 +13,7 @@ import { getStorageInstance } from "@/shared/common/utils/firebaseSetting";
 import { deleteObject, ref } from "firebase/storage";
 import { TradingStatus } from "@/domains/product/manage/types/productManageTypes";
 import * as Sentry from "@sentry/nextjs";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   req: NextRequest,
@@ -27,14 +28,14 @@ export async function GET(
     if (!productId) {
       return NextResponse.json(
         { message: "상품 ID가 없어요." },
-        { status: 422 }
+        { status: 404 }
       );
     }
 
     if (productId.length < 24) {
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
-        { status: 422 }
+        { status: 404 }
       );
     }
 
@@ -304,6 +305,10 @@ export async function PATCH(
     }
     await session.commitTransaction();
     session.endSession();
+
+    // 상품 상세 페이지 재검증
+    revalidatePath(`/product/${productId}`);
+
     return NextResponse.json(
       { message: "상품 수정에 성공했어요.", product: result },
       { status: 200 }
@@ -455,6 +460,10 @@ export async function DELETE(
 
     await session.commitTransaction();
     session.endSession();
+
+    // 해당 상품 상세 페이지 재검증
+    revalidatePath(`/product/${productId}`);
+
     return NextResponse.json(
       { message: "상품이 삭제됬어요." },
       { status: 200 }
