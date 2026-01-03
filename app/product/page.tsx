@@ -5,13 +5,11 @@ import { Suspense } from "react";
 import CategoryProductListContainer from "@/domains/product/upload/components/CategoryProductListContainer";
 import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
 
-export async function generateMetadata(props: {
-  searchParams: Promise<{ category: string | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
-  const category = searchParams?.category || "전체";
-  const title = category ? `ITtem | 상품-${category}` : "ITtem | 상품-전체";
-  const url = `${BASE_URL}/product?category=${category}`;
+export const revalidate = 60;
+
+export async function generateMetadata() {
+  const title = "ITtem | 상품";
+  const url = `${BASE_URL}/product`;
 
   return {
     metadataBase: new URL(url),
@@ -23,18 +21,12 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Product({
-  searchParams
-}: {
-  searchParams: Promise<{ category: string | undefined }>;
-}) {
-  const { category } = await searchParams;
-
+export default async function Product() {
   return (
     <>
       <ProductHeader />
       <Suspense fallback={<ProductListSkeletonUI listCount={8} />}>
-        <CategoryProductListContainer category={category} />
+        <CategoryProductListContainer />
       </Suspense>
     </>
   );

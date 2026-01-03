@@ -12,19 +12,10 @@ import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBound
 import ProductListSkeletonUI from "../../shared/components/product-list/ProductListSkeletonUI";
 import ProductListError from "../../shared/components/product-list/ProductListError";
 
-interface IProps {
-  category?: string;
-}
-
-async function prefetchProductList({
-  category = ProductCategory.전체,
-  queryClient
-}: {
-  category: ProductCategory;
-  queryClient: QueryClient;
-}) {
+async function prefetchProductList(queryClient: QueryClient) {
+  // ISR을 위해 기본 카테고리(전체)만 prefetch
   const queryKeyConfig = queryKeys.product.category({
-    category: category || ProductCategory.전체
+    category: ProductCategory.전체
   });
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
@@ -37,15 +28,10 @@ async function prefetchProductList({
   });
 }
 
-export default async function CategoryProductListContainer({
-  category
-}: IProps) {
+export default async function CategoryProductListContainer() {
   const queryClient = new QueryClient();
 
-  await prefetchProductList({
-    category: category as ProductCategory,
-    queryClient
-  });
+  await prefetchProductList(queryClient);
 
   return (
     <>
