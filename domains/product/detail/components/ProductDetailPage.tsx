@@ -6,6 +6,8 @@ import Description from "./Description";
 import SellerSection from "./seller/SellerSection";
 import useProductQuery from "../../shared/hooks/queries/useProductQuery";
 import useAddRecentProduct from "../../../../shared/layout/hooks/useAddRecentProduct";
+import { useEffect } from "react";
+import incrementProductView from "../api/incrementProductView";
 
 export default function ProductDetailPage() {
   const { productData } = useProductQuery();
@@ -15,6 +17,10 @@ export default function ProductDetailPage() {
     productImg: productData.imgData[0].url,
     productName: productData.name
   });
+
+  useEffect(() => {
+    incrementProductView(productData._id);
+  }, [productData._id]);
 
   return (
     <div className="pt-8 pb-12">
