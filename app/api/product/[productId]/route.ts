@@ -306,6 +306,8 @@ export async function PATCH(
     await session.commitTransaction();
     session.endSession();
 
+    // 상품 페이지 재검증
+    revalidatePath(`/product`);
     // 상품 상세 페이지 재검증
     revalidatePath(`/product/${productId}`);
 
@@ -461,6 +463,8 @@ export async function DELETE(
     await session.commitTransaction();
     session.endSession();
 
+    // 상품 페이지 재검증
+    revalidatePath(`/product`);
     // 해당 상품 상세 페이지 재검증
     revalidatePath(`/product/${productId}`);
 

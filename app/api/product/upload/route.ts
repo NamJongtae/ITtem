@@ -6,6 +6,7 @@ import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import mongoose from "mongoose";
 import * as Sentry from "@sentry/nextjs";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   const session = await mongoose.startSession();
@@ -58,6 +59,9 @@ export async function POST(req: NextRequest) {
 
     await session.commitTransaction();
     session.endSession();
+
+    // 상품 페이지 재검증
+    revalidatePath(`/product`);
 
     return NextResponse.json(
       {
