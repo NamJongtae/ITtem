@@ -45,9 +45,9 @@ const productQueryKey = createQueryKeys("product", {
         category,
         location,
         limit,
-        cursor: pageParam
+        cursor: pageParam as string | null
       });
-      return response.data.products;
+      return response.products;
     }
   }),
   search: ({
