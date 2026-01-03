@@ -51,7 +51,8 @@ describe("useProductQuery 훅 테스트", () => {
       expect.objectContaining({
         queryKey: queryKeyConfig.queryKey,
         queryFn: queryKeyConfig.queryFn,
-        staleTime: 30 * 1000
+        staleTime: 5 * 1000,
+        refetchOnMount: true
       })
     );
 
@@ -84,7 +85,8 @@ describe("useProductQuery 훅 테스트", () => {
       expect.objectContaining({
         queryKey: queryKeyConfig.queryKey,
         queryFn: queryKeyConfig.queryFn,
-        staleTime: 30 * 1000
+        staleTime: 5 * 1000,
+        refetchOnMount: true
       })
     );
     expect(result.current.productData).toEqual(mockData);
