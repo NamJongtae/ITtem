@@ -28,7 +28,7 @@ export default function CategoryNav({ className }: IPorops) {
               width={15}
               height={19}
             />
-            <span className="text-gray-700dark:text-gray-400">
+            <span className="text-gray-700">
               {CATEGORY.includes(currentCategory || "")
                 ? currentCategory
                 : "전체"}
