@@ -13,7 +13,7 @@ const profileQueryKey = createQueryKeys("profile", {
     queryKey: null,
     queryFn: async () => {
       const response = await getMyProfile();
-      return response.data.profile;
+      return response.profile;
     },
     contextQueries: {
       products: ({
