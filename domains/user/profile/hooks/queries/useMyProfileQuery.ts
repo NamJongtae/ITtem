@@ -16,7 +16,7 @@ export default function useMyProfileQuery() {
     queryFn: queryKeyConfing.queryFn,
     queryKey: queryKeyConfing.queryKey,
     enabled: !!user,
-    staleTime: 30 * 1000
+    staleTime: Infinity
   });
 
   useEffect(() => {

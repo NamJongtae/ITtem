@@ -15,7 +15,7 @@ export default function useMyProfileSuspenseQuery() {
   } = useSuspenseQuery({
     queryFn: queryKeyConfing.queryFn,
     queryKey: queryKeyConfing.queryKey,
-    staleTime: 30 * 1000
+    staleTime: Infinity
   });
 
   useEffect(() => {
