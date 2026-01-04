@@ -4,11 +4,10 @@ import {
   HydrationBoundary,
   QueryClient
 } from "@tanstack/react-query";
-import React from "react";
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
 import ProfileDetailSkeletonUI from "./detail/ProfileDetailSkeletonUI";
-import ProductListError from "@/domains/product/shared/components/product-list/ProductListError";
 import UserProfilePage from "./UserProfilePage";
+import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
   uid: string;
@@ -26,7 +25,7 @@ export default async function UserProfileContainer({ uid }: IProps) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SuspenseErrorBoundary
         suspenseFallback={<ProfileDetailSkeletonUI />}
-        errorFallback={<ProductListError productListType="PROFILE" />}
+        errorFallback={<Empty message={"존재하지 않는 유저입니다."} />}
       >
         <UserProfilePage />
       </SuspenseErrorBoundary>
