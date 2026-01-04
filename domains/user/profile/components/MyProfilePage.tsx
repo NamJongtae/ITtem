@@ -11,7 +11,7 @@ export default function MyProfilePage() {
   const { profileMenu, onClickMenu } = useProfileMenu();
 
   if (!myProfileData) {
-    <Empty message="존재하지 않는 유저에요." />;
+    <Empty message="나의 프로필 정보를 불러올 수 없습니다." />;
   }
 
   return (
