@@ -2,6 +2,7 @@ import customAxios from "@/shared/common/utils/customAxios";
 import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 
 export async function GET(req: NextRequest) {
   const CORN_KEY = process.env.CRON_SECRET;
@@ -20,6 +21,9 @@ export async function GET(req: NextRequest) {
         headers: { Authorization: `Bearer ${CORN_KEY}` }
       }
     );
+
+    revalidateTag("product-recommend", { expire: 86400 });
+
     return NextResponse.json(
       {
         message: response.data.message,
