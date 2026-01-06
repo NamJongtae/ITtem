@@ -18,7 +18,6 @@ export default async function getPopularProductList(): Promise<ProductListRespon
   }
 
   const data = await response.json();
-  console.log("[getPopularProductList] debug:", data.debug);
 
   return data;
 }
