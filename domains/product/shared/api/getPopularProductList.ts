@@ -1,14 +1,24 @@
-import customAxios from "@/shared/common/utils/customAxios";
 import { ProductListResponseData } from "../types/reponseTypes";
-import { AxiosResponse } from "axios";
+import { customFetch } from "@/shared/common/utils/customFetch";
 
-export default async function getPopularProductList(): Promise<
-  AxiosResponse<ProductListResponseData>
-> {
-  try {
-    const response = await customAxios("/api/product/popular");
-    return response;
-  } catch (error) {
-    throw error;
+export default async function getPopularProductList(): Promise<ProductListResponseData> {
+  const response = await customFetch("/api/product/popular", false, {
+    next: {
+      revalidate: 60,
+      tags: ["product-popular"]
+    }
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => {});
+    throw {
+      status: response.status,
+      message: errorData?.message ?? "인기 상품 목록 조회에 실패했어요."
+    };
   }
+
+  const data = await response.json();
+  console.log("[getPopularProductList] debug:", data.debug);
+
+  return data;
 }
