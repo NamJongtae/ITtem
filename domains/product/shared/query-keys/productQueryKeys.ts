@@ -15,14 +15,14 @@ const productQueryKey = createQueryKeys("product", {
     queryKey: ["list"] as const,
     queryFn: async () => {
       const response = await getPopularProductList();
-      return response.data.products;
+      return response.products;
     }
   },
   recommend: (limit: number = 10) => ({
     queryKey: ["list"] as const,
     queryFn: async ({ pageParam }) => {
       const response = await getRecommendProductList(pageParam, limit);
-      return response.data.products;
+      return response.products;
     }
   }),
   category: ({
