@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import PopularProduct from "@/domains/home/components/PopularProduct";
 import RecommendProduct from "@/domains/home/components/RecommendProduct";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "ITtem | 홈",
   openGraph: {
