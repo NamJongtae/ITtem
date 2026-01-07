@@ -6,7 +6,7 @@ export default async function getSessionCookies(): Promise<
   AxiosResponse<SessionCookiesResponseData>
 > {
   try {
-    const response = await customAxios.get("/api/auth/session");
+    const response = await customAxios.get("/api/auth/session-cookie");
     return response;
   } catch (error) {
     throw error;
