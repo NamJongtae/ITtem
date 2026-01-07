@@ -1,16 +1,14 @@
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
-import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
 import { LoginType } from "@/domains/auth/signin/types/signinTypes";
-import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
-import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
 import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
-import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
 import * as Sentry from "@sentry/nextjs";
+import { v4 as uuid } from "uuid";
+import Session from "@/domains/auth/shared/common/models/Sessions";
+import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
 
 export async function POST(req: NextRequest) {
   const { user } = await req.json();
@@ -31,11 +29,6 @@ export async function POST(req: NextRequest) {
       email: kakaoUserData.id.toString()
     });
 
-    const session = await getIronSession<IronSessionType>(
-      await cookies(),
-      SESSION_OPTIONS
-    );
-
     if (!dbUserData) {
       // 회원가입 로직
       try {
@@ -44,28 +37,34 @@ export async function POST(req: NextRequest) {
         const email = kakaoUserData.id.toString();
         const profileImg = kakaoUserData.properties.profile_image;
 
-        const userData = {
+        const newUser = await User.create({
           email,
           nickname: userNickname,
           profileImg,
           loginType: LoginType.KAKAO,
           profileImgFilename: ""
-        };
+        });
 
-        const newUser = new User(userData);
+        // 🔐 세션 생성 (회원가입 후 바로 로그인)
+        const sessionId = uuid();
+        const expiresAt = new Date(Date.now() + SESSION_TTL);
 
-        await newUser.save();
+        await Session.create({
+          sessionId,
+          uid: newUser._id,
+          expiresAt
+        });
 
-        try {
-          await createAndSaveToken({
-            user: {
-              uid: newUser._id
-            },
-            session
-          });
-        } catch (error) {
-          console.log("Create And Save Token Error:", error);
-        }
+        const cookieStore = await cookies();
+        cookieStore.set("sessionId", sessionId, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          expires: expiresAt
+        });
+
+        console.log(newUser._id, userNickname);
 
         return NextResponse.json(
           {
@@ -114,9 +113,12 @@ export async function POST(req: NextRequest) {
     // 로그인 로직
     const { _id: uid, email, nickname, profileImg } = dbUserData;
 
-    const refreshTokenData = await getTokenFromRedis(uid, "refreshToken");
+    const existingSession = await Session.findOne({
+      uid: dbUserData._id,
+      expiresAt: { $gt: new Date() }
+    });
 
-    if (refreshTokenData) {
+    if (existingSession) {
       return NextResponse.json(
         {
           message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
@@ -125,9 +127,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await createAndSaveToken({
-      user: { uid },
-      session
+    const sessionId = uuid();
+    const expiresAt = new Date(Date.now() + SESSION_TTL);
+
+    await Session.create({
+      sessionId,
+      uid: dbUserData._id,
+      expiresAt
+    });
+
+    const cookieStore = await cookies();
+    cookieStore.set("sessionId", sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: expiresAt
     });
 
     return NextResponse.json(
