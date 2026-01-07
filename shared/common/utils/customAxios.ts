@@ -12,7 +12,11 @@ const customAxios = axios.create({
 customAxios.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<ApiResponse>) => {
-    if (isAxiosError(error) && error.response?.status === 401) {
+    if (
+      isAxiosError(error) &&
+      error.response?.status === 401 &&
+      error.response?.data.message === "만료된 세션이에요."
+    ) {
       if (typeof window !== "undefined" && process.env.TEST_ENV !== "SSR") {
         await fetch("/api/auth/session-cookie", { method: "DELETE" });
         redirect("/session-expired");
