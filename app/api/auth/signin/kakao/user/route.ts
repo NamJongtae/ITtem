@@ -1,5 +1,6 @@
 import getKakaoAuthAccessToken from "@/domains/auth/signin/api/getKaKakaoAuthAccessToken";
 import getKaKaoAuthInfo from "@/domains/auth/signin/api/getKakaoAuthInfo";
+import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -19,6 +20,15 @@ export async function POST(req: NextRequest) {
     kakaoAccessToken = response.data.access_token;
   } catch (error) {
     console.error(error);
+    if (isAxiosError(error) && error.response?.status === 429) {
+      return NextResponse.json(
+        {
+          message:
+            "너무 잦은 로그인 시도로 카카오 로그인이 일시적으로 제한되었습니다. 잠시 후 다시 시도해주세요."
+        },
+        { status: 429 }
+      );
+    }
     return NextResponse.json(
       { message: "토큰을 가져오지못했어요." },
       { status: 401 }
