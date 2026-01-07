@@ -3,9 +3,6 @@ import { customFetch } from "@/shared/common/utils/customFetch";
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import { ProductListResponseData } from "@/domains/product/shared/types/reponseTypes";
 
-/**
- * customFetch mock
- */
 jest.mock("@/shared/common/utils/customFetch", () => ({
   customFetch: jest.fn()
 }));
@@ -21,11 +18,7 @@ describe("getCategoryProductList API 함수 테스트", () => {
   });
 
   it("category가 없으면 '전체', limit이 없으면 '10'을 쿼리에 포함하여 요청합니다.", async () => {
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: jest.fn().mockResolvedValue(mockResponseData)
-    });
+    (customFetch as jest.Mock).mockResolvedValue(mockResponseData);
 
     const result = await getCategoryProductList({});
 
@@ -36,7 +29,6 @@ describe("getCategoryProductList API 함수 테스트", () => {
 
     expect(customFetch).toHaveBeenCalledWith(
       `/api/product?${params.toString()}`,
-      false,
       {
         next: {
           revalidate: 60,
@@ -54,11 +46,7 @@ describe("getCategoryProductList API 함수 테스트", () => {
     const limit = 5;
     const location = "서울";
 
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: jest.fn().mockResolvedValue(mockResponseData)
-    });
+    (customFetch as jest.Mock).mockResolvedValue(mockResponseData);
 
     await getCategoryProductList({
       category,
@@ -76,7 +64,6 @@ describe("getCategoryProductList API 함수 테스트", () => {
 
     expect(customFetch).toHaveBeenCalledWith(
       `/api/product?${params.toString()}`,
-      false,
       {
         next: {
           revalidate: 60,
@@ -86,35 +73,18 @@ describe("getCategoryProductList API 함수 테스트", () => {
     );
   });
 
-  it("응답이 ok가 아니면 status와 message를 포함한 객체를 throw 합니다.", async () => {
+  it("customFetch가 에러를 throw하면 getCategoryProductList도 동일한 에러를 throw합니다.", async () => {
     const category = ProductCategory.전자기기;
 
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: jest.fn().mockResolvedValue({
-        message: "상품 목록 조회에 실패했어요."
-      })
-    });
-
-    await expect(getCategoryProductList({ category })).rejects.toEqual({
+    const fetchError = {
       status: 500,
       message: "상품 목록 조회에 실패했어요."
-    });
-  });
+    };
 
-  it("에러 응답에 message가 없으면 기본 메시지를 사용합니다.", async () => {
-    const category = ProductCategory.전자기기;
+    (customFetch as jest.Mock).mockRejectedValue(fetchError);
 
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: jest.fn().mockResolvedValue({})
-    });
-
-    await expect(getCategoryProductList({ category })).rejects.toEqual({
-      status: 500,
-      message: `${category} 상품 목록 조회에 실패했어요.`
-    });
+    await expect(getCategoryProductList({ category })).rejects.toEqual(
+      fetchError
+    );
   });
 });

@@ -9,10 +9,12 @@ jest.mock("@/shared/common/utils/customFetch", () => ({
 }));
 
 jest.mock("next/navigation", () => ({
-  notFound: jest.fn()
+  notFound: jest.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  })
 }));
 
-describe("getProduct API 함수 테스트 (customFetch)", () => {
+describe("getProduct API 함수 테스트", () => {
   const mockProductId = "product123";
 
   const mockResponseData: ProductDetailResponseData = {
@@ -30,50 +32,37 @@ describe("getProduct API 함수 테스트 (customFetch)", () => {
   });
 
   it("상품 ID로 GET 요청을 보내고 응답 데이터를 반환합니다.", async () => {
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: jest.fn().mockResolvedValue(mockResponseData)
-    });
+    (customFetch as jest.Mock).mockResolvedValue(mockResponseData);
 
     const result = await getProduct(mockProductId);
 
-    expect(customFetch).toHaveBeenCalledWith(
-      `/api/product/${mockProductId}`,
-      false,
-      {
-        next: {
-          tags: [`product-${mockProductId}`]
-        }
+    expect(customFetch).toHaveBeenCalledWith(`/api/product/${mockProductId}`, {
+      next: {
+        tags: [`product-${mockProductId}`]
       }
-    );
+    });
 
     expect(result).toEqual(mockResponseData);
   });
 
-  it("응답이 404일 경우 notFound를 호출합니다.", async () => {
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      status: 404
+  it("customFetch가 404 에러를 throw하면 notFound를 호출합니다.", async () => {
+    (customFetch as jest.Mock).mockRejectedValue({
+      status: 404,
+      message: "Not Found"
     });
 
-    await getProduct(mockProductId);
-
+    await expect(getProduct(mockProductId)).rejects.toThrow("NEXT_NOT_FOUND");
     expect(notFound).toHaveBeenCalled();
   });
 
-  it("응답이 404가 아닌 에러일 경우 에러 객체를 throw 합니다.", async () => {
-    (customFetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: jest.fn().mockResolvedValue({
-        message: "서버 에러"
-      })
-    });
-
-    await expect(getProduct(mockProductId)).rejects.toEqual({
+  it("404가 아닌 에러는 그대로 전파합니다.", async () => {
+    const fetchError = {
       status: 500,
       message: "서버 에러"
-    });
+    };
+
+    (customFetch as jest.Mock).mockRejectedValue(fetchError);
+
+    await expect(getProduct(mockProductId)).rejects.toEqual(fetchError);
   });
 });

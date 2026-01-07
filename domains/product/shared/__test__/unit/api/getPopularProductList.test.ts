@@ -2,7 +2,9 @@ import getPopularProductList from "@/domains/product/shared/api/getPopularProduc
 import { customFetch } from "@/shared/common/utils/customFetch";
 import { ProductListResponseData } from "@/domains/product/shared/types/reponseTypes";
 
-jest.mock("@/shared/common/utils/customFetch");
+jest.mock("@/shared/common/utils/customFetch", () => ({
+  customFetch: jest.fn()
+}));
 
 describe("getPopularProductList API 함수 테스트", () => {
   const mockResponseData: ProductListResponseData = {
@@ -14,17 +16,13 @@ describe("getPopularProductList API 함수 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("GET 요청을 보내고 응답을 반환합니다.", async () => {
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue(mockResponseData)
-    };
+  it("GET 요청을 보내고 응답 데이터를 그대로 반환합니다.", async () => {
 
-    (customFetch as jest.Mock).mockResolvedValue(mockResponse);
+    (customFetch as jest.Mock).mockResolvedValue(mockResponseData);
 
     const result = await getPopularProductList();
 
-    expect(customFetch).toHaveBeenCalledWith("/api/product/popular", false, {
+    expect(customFetch).toHaveBeenCalledWith("/api/product/popular", {
       next: {
         revalidate: 60,
         tags: ["product-popular"]
@@ -34,19 +32,14 @@ describe("getPopularProductList API 함수 테스트", () => {
     expect(result).toEqual(mockResponseData);
   });
 
-  it("요청 중 에러가 발생하면 예외를 던집니다.", async () => {
-    const errorMessage = "인기 상품 목록 조회에 실패했어요.";
-    const mockErrorResponse = {
-      ok: false,
+  it("customFetch가 에러를 throw하면 동일한 에러를 전파합니다.", async () => {
+    const fetchError = {
       status: 500,
-      json: jest.fn().mockResolvedValue({ message: errorMessage })
+      message: "인기 상품 목록 조회에 실패했어요."
     };
 
-    (customFetch as jest.Mock).mockResolvedValue(mockErrorResponse);
+    (customFetch as jest.Mock).mockRejectedValue(fetchError);
 
-    await expect(getPopularProductList()).rejects.toEqual({
-      status: 500,
-      message: errorMessage
-    });
+    await expect(getPopularProductList()).rejects.toEqual(fetchError);
   });
 });
