@@ -8,8 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import deleteAllToken from "../../../shared/common/api/deleteToken";
 import googleSignin from "../../../signin/api/googleSignin";
+import destoryDBSession from "@/domains/auth/shared/common/api/destoryDBSession";
 
 export default function useGoogleSigninMutate() {
   const queryClient = useQueryClient();
@@ -37,7 +37,7 @@ export default function useGoogleSigninMutate() {
           if (isLogin) {
             const user = variables;
             // 토큰 삭제 로직
-            (async () => await deleteAllToken(user.email))();
+            (async () => await destoryDBSession(user.email))();
 
             router.push(
               `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`
