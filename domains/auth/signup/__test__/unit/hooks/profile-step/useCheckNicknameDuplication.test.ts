@@ -52,7 +52,7 @@ describe("useCheckNicknameDuplication 훅 테스트", () => {
   it("닉네임이 중복되면 setError가 호출되고 nextStepHandler는 호출되지 않습니다.", async () => {
     const error = {
       response: {
-        status: 401,
+        status: 409,
         data: { message: "중복된 닉네임입니다." }
       },
       isAxiosError: true
