@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (isDuplication) {
       return NextResponse.json(
         { message: "이미 사용중인 닉네임입니다.", ok: false },
-        { status: 401 }
+        { status: 409 }
       );
     }
 
