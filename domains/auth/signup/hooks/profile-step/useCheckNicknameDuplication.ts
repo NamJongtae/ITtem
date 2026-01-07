@@ -18,7 +18,7 @@ export default function useCheckNicknameDuplication({
       await nicknameDuplicationMutate(nickname);
     } catch (error) {
       if (isAxiosError<NicknameDuplicationResponseData>(error)) {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 409) {
           setError("nickname", {
             type: "duplication",
             message: "이미 사용중인 닉네임입니다."

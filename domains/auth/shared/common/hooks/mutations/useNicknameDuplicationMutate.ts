@@ -14,7 +14,7 @@ export default function useNicknameDuplicationMutate() {
     mutationFn: (nickname: string) => checkNicknameDuplication(nickname),
     onError: (error: unknown) => {
       if (isAxiosError<NicknameDuplicationResponseData>(error)) {
-        if (error.response?.status !== 401) {
+        if (error.response?.status !== 409) {
           toast.warn(ERROR_MESSAGE);
         }
       }
