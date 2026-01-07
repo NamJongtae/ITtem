@@ -16,7 +16,7 @@ export default function useEmailDuplicationMutate() {
     mutationFn: async (email: string) => await checkEmailDuplication(email),
     onError: (error: unknown) => {
       if (isAxiosError<EmailDuplicationResponseData>(error)) {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 409) {
           setError("email", {
             type: "duplication",
             message: "이미 사용중인 이메일이에요."
