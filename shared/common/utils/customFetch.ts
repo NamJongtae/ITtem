@@ -27,7 +27,8 @@ export const createFetch = (baseURL: string, defaultOptions?: RequestInit) => {
     if (
       response.status === 401 &&
       data?.message === "만료된 세션이에요." &&
-      typeof window !== "undefined"
+      typeof window !== "undefined" &&
+      process.env.TEST_ENV !== "SSR"
     ) {
       await fetch("/api/auth/session-cookie", { method: "DELETE" });
       redirect("/session-expired");
