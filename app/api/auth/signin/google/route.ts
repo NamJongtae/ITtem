@@ -1,19 +1,18 @@
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
-import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
+import Session from "@/domains/auth/shared/common/models/Sessions";
 import { LoginType } from "@/domains/auth/signin/types/signinTypes";
-import { getIronSession } from "iron-session";
+import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import getTokenFromRedis from "@/domains/auth/shared/common/utils/getTokenFromRedis";
-import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
-import createUniqueNickname from "@/domains/auth/signup/utils/createUniqueNickname";
-import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
+import { v4 as uuid } from "uuid";
 import * as Sentry from "@sentry/nextjs";
+import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
 
 export async function POST(req: NextRequest) {
-  const { user } = await req.json();
+  const { user, isDuplicateLogin } = await req.json();
+  console.log("isDuplicateLoigin:", isDuplicateLogin);
 
   if (!user) {
     return NextResponse.json(
@@ -27,44 +26,65 @@ export async function POST(req: NextRequest) {
 
     await dbConnect();
 
-    const dbUserData = await User.findOne({ email: googleUserData.email });
+    const email = googleUserData.email.toLowerCase();
+    const dbUserData = await User.findOne({ email });
 
-    const session = await getIronSession<IronSessionType>(
-      await cookies(),
-      SESSION_OPTIONS
-    );
-
+    /**
+     * 1️⃣ 회원가입
+     */
     if (!dbUserData) {
-      // 회원가입 로직
       try {
         const userNickname = await createUniqueNickname(User);
 
-        const email = googleUserData.email.toLowerCase();
-        const profileImg = googleUserData.picture;
-
-        const userData = {
+        const newUser = await User.create({
           email,
           password: "",
           nickname: userNickname,
-          profileImg,
+          profileImg: googleUserData.picture,
           loginType: LoginType.GOOGLE,
           profileImgFilename: ""
-        };
+        });
 
-        const newUser = new User(userData);
+        const existingSession = await Session.findOne({
+          uid: dbUserData._id,
+          expiresAt: { $gt: new Date() }
+        });
 
-        await newUser.save();
-
-        try {
-          await createAndSaveToken({
-            user: {
-              uid: newUser._id
+        // ❌ 중복 로그인 차단
+        if (existingSession && !isDuplicateLogin) {
+          return NextResponse.json(
+            {
+              message:
+                "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
             },
-            session
-          });
-        } catch (error) {
-          console.log("Create And Save Token Error:", error);
+            { status: 409 }
+          );
         }
+
+        // ✅ 중복 로그인 허용 → 기존 세션 제거
+        if (existingSession && isDuplicateLogin) {
+          const result = await Session.deleteMany({ uid: dbUserData._id });
+          console.log
+        }
+
+        // 🔐 세션 생성 (회원가입 후 바로 로그인)
+        const sessionId = uuid();
+        const expiresAt = new Date(Date.now() + SESSION_TTL);
+
+        await Session.create({
+          sessionId,
+          uid: newUser._id,
+          expiresAt
+        });
+
+        const cookieStore = await cookies();
+        cookieStore.set("sessionId", sessionId, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          expires: expiresAt
+        });
 
         return NextResponse.json(
           {
@@ -79,7 +99,7 @@ export async function POST(req: NextRequest) {
           { status: 201 }
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
         if (error instanceof mongoose.Error.ValidationError) {
           const errorMessages = Object.values(error.errors).map(
             (err) => err.message
@@ -93,29 +113,31 @@ export async function POST(req: NextRequest) {
           );
         }
         return NextResponse.json(
-          {
-            message: "회원가입에 실패했어요."
-          },
+          { message: "회원가입에 실패했어요." },
           { status: 500 }
         );
       }
     }
 
-    if (dbUserData.loginType !== "GOOGLE") {
+    /**
+     * 2️⃣ 로그인 타입 검증
+     */
+    if (dbUserData.loginType !== LoginType.GOOGLE) {
       return NextResponse.json(
-        {
-          message: "이미 가입된 이메일입니다."
-        },
+        { message: "이미 가입된 이메일입니다." },
         { status: 401 }
       );
     }
 
-    // 로그인 로직
-    const { _id: uid } = dbUserData;
+    /**
+     * 3️⃣ 중복 로그인 체크
+     */
+    const existingSession = await Session.findOne({
+      uid: dbUserData._id,
+      expiresAt: { $gt: new Date() }
+    });
 
-    const refreshTokenData = await getTokenFromRedis(uid, "refreshToken");
-
-    if (refreshTokenData) {
+    if (existingSession) {
       return NextResponse.json(
         {
           message: "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
@@ -124,9 +146,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await createAndSaveToken({
-      user: { uid },
-      session
+    /**
+     * 4️⃣ 로그인 → 세션 생성
+     */
+    const sessionId = uuid();
+    const expiresAt = new Date(Date.now() + SESSION_TTL);
+
+    await Session.create({
+      sessionId,
+      uid: dbUserData._id,
+      expiresAt
+    });
+
+    const cookieStore = await cookies();
+    cookieStore.set("sessionId", sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: expiresAt
     });
 
     return NextResponse.json(
@@ -142,12 +180,10 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     Sentry.captureException(error);
     return NextResponse.json(
-      {
-        message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요."
-      },
+      { message: "로그인에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
