@@ -1,4 +1,3 @@
-import { IronSession } from "iron-session";
 import { ObjectId } from "mongodb";
 import { LoginType } from "../../../signin/types/signinTypes";
 
@@ -25,11 +24,3 @@ export interface AuthData {
   nickname: string;
   profileImg: string;
 }
-
-export interface IronSessionData {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export type IronSessionType = IronSession<IronSessionData>;
-
