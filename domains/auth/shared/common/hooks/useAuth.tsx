@@ -2,9 +2,10 @@ import useAuthQuery from "./queries/useAuthQuery";
 import { useEffect } from "react";
 import useSessionCookiesQuery from "./queries/useSessionCookiesQuery";
 import useAuthStore from "../store/authStore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function useAuth() {
+  const router = useRouter();
   const { isExistSession, sessionQueryIsSuccess, sessionQueryError } =
     useSessionCookiesQuery();
   const { user, authIsLoading, authError, refetchAuth } = useAuthQuery();
@@ -15,18 +16,27 @@ export default function useAuth() {
   useEffect(() => {
     if (
       sessionQueryIsSuccess &&
-      pathname !== "/refresh-token" &&
       pathname !== "/session-expired" &&
       pathname !== "/logout"
     ) {
       if (isExistSession) {
         refetchAuth();
       } else {
-        actions.resetAuth();
+        // 세션이 없는데 user가 있으면 세션 만료 처리
+        if (user) {
+          router.replace("/session-expired");
+        }
       }
       actions.setIsLoading(false);
     }
-  }, [isExistSession, sessionQueryIsSuccess, pathname, actions, refetchAuth]);
+  }, [
+    isExistSession,
+    sessionQueryIsSuccess,
+    pathname,
+    actions,
+    refetchAuth,
+    user
+  ]);
 
   // 로그인 상태 확인 => 전역 상태에 유저 정보 저장
   useEffect(() => {
