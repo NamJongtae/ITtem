@@ -3,7 +3,7 @@ import useKakaoSigninMutate from "@/domains/auth/signin/hooks/mutations/useKakao
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 import kakaoSign from "@/domains/auth/signin/api/kakaoSignin";
-import deleteToken from "@/domains/auth/shared/common/api/deleteToken";
+
 import { toast } from "react-toastify";
 import { AxiosHeaders, AxiosResponse } from "axios";
 
@@ -13,13 +13,14 @@ import {
 } from "@/domains/auth/signin/types/responseTypes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
+import destoryDBSession from "@/domains/auth/shared/common/api/destoryDBSession";
 
 jest.mock("next/navigation");
 jest.mock("react-toastify", () => ({
   toast: { warn: jest.fn() }
 }));
 jest.mock("@/domains/auth/signin/api/kakaoSignin");
-jest.mock("@/domains/auth/shared/common/api/deleteToken");
+jest.mock("@/domains/auth/shared/common/api/destoryDBSession");
 jest.mock("@/domains/auth/shared/common/store/authStore");
 
 const queryClient = new QueryClient();
@@ -39,7 +40,7 @@ const wrapper = createWrapper();
 describe("useKakaoSigninMutate 훅 테스트", () => {
   const mockUseRouter = useRouter as jest.Mock;
   const mockuseAuthStore = useAuthStore as unknown as jest.Mock;
-  const mockDeleteToken = deleteToken as jest.Mock;
+  const mockDestoryDBSession = destoryDBSession as jest.Mock;
   const mockKakaoSign = kakaoSign as jest.Mock;
   const mockRouterReplace = jest.fn();
   const mockRouterPush = jest.fn();
@@ -104,7 +105,7 @@ describe("useKakaoSigninMutate 훅 테스트", () => {
     });
   });
 
-  it("409 에러 + confirm=true 시 deleteToken, router.push 호출해야 합니다.", async () => {
+  it("409 에러 + confirm=true 시 destoryDBSession, router.push 호출해야 합니다.", async () => {
     const fakeUser = {
       id: 123,
       properties: {
@@ -133,7 +134,7 @@ describe("useKakaoSigninMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      expect(mockDeleteToken).toHaveBeenCalledWith("123");
+      expect(mockDestoryDBSession).toHaveBeenCalledWith("123");
       expect(mockRouterPush).toHaveBeenCalledWith(
         expect.stringContaining("https://kauth.kakao.com/oauth")
       );
