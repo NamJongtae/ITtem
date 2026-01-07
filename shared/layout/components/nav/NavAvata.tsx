@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import useAuthStore from "@/domains/auth/shared/common/store/authStore";
+import { AuthData } from "@/domains/auth/shared/common/types/authTypes";
 
-export default function LayoutNavAvata() {
-  const user = useAuthStore((state) => state.user);
-
+export default function LayoutNavAvata({ user }: { user: AuthData | null }) {
   return (
     <Link className="relative inline-block" href="/profile">
       <Image

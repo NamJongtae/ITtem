@@ -16,7 +16,7 @@ export default function NavAuth() {
     <div className="flex items-center gap-3 flex-shrink-0 md:basis-1/4 justify-end">
       {isLoginUser ? (
         <div className="flex items-center gap-3 w-full justify-end">
-          <NavAvata />
+          <NavAvata user={user} />
           <LogoutBtn />
         </div>
       ) : (
