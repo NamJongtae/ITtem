@@ -28,7 +28,7 @@ describe("getSessionCookies API 함수 테스트", () => {
 
     const result = await getSessionCookies();
 
-    expect(customAxios.get).toHaveBeenCalledWith("/api/auth/session");
+    expect(customAxios.get).toHaveBeenCalledWith("/api/auth/session-cookie");
     expect(result).toEqual(mockResponse);
   });
 
