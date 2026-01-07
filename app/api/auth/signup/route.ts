@@ -3,31 +3,23 @@ import getVerifiedEmail from "@/domains/auth/shared/email-verification/utils/get
 import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
 import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
-import { getIronSession } from "iron-session";
-import { IronSessionType } from "@/domains/auth/shared/common/types/authTypes";
-import { LoginType } from "@/domains/auth/signin/types/signinTypes";
-import { SESSION_OPTIONS } from "@/domains/auth/shared/common/constants/constansts";
 import User from "@/domains/auth/shared/common/models/User";
+import Session from "@/domains/auth/shared/common/models/Sessions";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
-import createAndSaveToken from "@/domains/auth/shared/common/utils/createAndSaveToken";
+import { LoginType } from "@/domains/auth/signin/types/signinTypes";
+import { v4 as uuid } from "uuid";
 import * as Sentry from "@sentry/nextjs";
+import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
 
 export async function POST(req: NextRequest) {
   try {
     const { email, password, nickname, profileImgData, introduce } =
       await req.json();
 
-    try {
-      const isEmailVerified = await getVerifiedEmail(email, "signup");
-      if (!isEmailVerified) {
-        return NextResponse.json(
-          { message: "인증되지 않은 이메일이에요." },
-          { status: 401 }
-        );
-      }
-    } catch (error) {
-      console.error(error);
+    // 1️⃣ 이메일 인증 확인
+    const isEmailVerified = await getVerifiedEmail(email, "signup");
+    if (!isEmailVerified) {
       return NextResponse.json(
         { message: "인증되지 않은 이메일이에요." },
         { status: 401 }
@@ -38,7 +30,8 @@ export async function POST(req: NextRequest) {
 
     await dbConnect();
 
-    const userData = {
+    // 2️⃣ 유저 생성
+    const newUser = await User.create({
       loginType: LoginType.EMAIL,
       email: email.toLowerCase(),
       password: hashedPassword,
@@ -46,28 +39,29 @@ export async function POST(req: NextRequest) {
       profileImg: profileImgData.url,
       profileImgFilename: profileImgData.name,
       introduce
-    };
+    });
 
-    const newUser = new User(userData);
+    // 3️⃣ 🔐 회원가입 즉시 세션 생성 (자동 로그인)
+    const sessionId = uuid();
+    const expiresAt = new Date(Date.now() + SESSION_TTL);
 
-    await newUser.save();
+    await Session.create({
+      sessionId,
+      uid: newUser._id,
+      expiresAt
+    });
 
-    const session = await getIronSession<IronSessionType>(
-      await cookies(),
-      SESSION_OPTIONS
-    );
+    // 4️⃣ 쿠키 설정
+    const cookieStore = await cookies();
+    cookieStore.set("sessionId", sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: expiresAt
+    });
 
-    try {
-      await createAndSaveToken({
-        user: {
-          uid: newUser._id
-        },
-        session
-      });
-    } catch (error) {
-      console.log("Create And Save Token Error:", error);
-    }
-
+    // 5️⃣ 이메일 인증 코드 삭제
     await deleteEmailVerificationCode(email, "signup");
 
     return NextResponse.json(
@@ -75,9 +69,9 @@ export async function POST(req: NextRequest) {
         message: "회원가입에 성공했어요.",
         user: {
           uid: newUser._id,
-          email,
-          nickname,
-          profileImg: profileImgData.url
+          email: newUser.email,
+          nickname: newUser.nickname,
+          profileImg: newUser.profileImg
         }
       },
       { status: 201 }
@@ -85,6 +79,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
+
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message
@@ -97,6 +92,7 @@ export async function POST(req: NextRequest) {
         { status: 422 }
       );
     }
+
     return NextResponse.json(
       {
         message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요."
