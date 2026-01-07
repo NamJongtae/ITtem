@@ -40,11 +40,11 @@ describe("useNicknameDuplicationMutate 훅 테스트", () => {
     expect(mockCheckNickname).toHaveBeenCalledWith("tester");
   });
 
-  it("401 오류가 발생하면 아무것도 호출되지 않습니다.", async () => {
+  it("409 오류가 발생하면 아무것도 호출되지 않습니다.", async () => {
     const error = {
       response: {
-        status: 401,
-        data: { message: "인증 오류" }
+        status: 409,
+        data: { message: "중복된 닉네임이에요." }
       }
     };
 
@@ -61,7 +61,7 @@ describe("useNicknameDuplicationMutate 훅 테스트", () => {
     expect(mockToastWarn).not.toHaveBeenCalled();
   });
 
-  it("401에러 이외 오류가 발생하면 toast.warn이 호출됩니다.", async () => {
+  it("409에러 이외 오류가 발생하면 toast.warn이 호출됩니다.", async () => {
     const error = {
       response: {
         status: 500,
