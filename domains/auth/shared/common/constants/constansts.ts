@@ -20,13 +20,7 @@ export const VERIFICATION_EMAIL_BLOCK_EXP = 60 * 60 * 24;
 export const VERIFICATION_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
-export const ACCESS_TOKEN_KEY = process.env
-  .NEXT_SECRET_ACCESS_TOKEN_KEY as string;
-export const REFRESH_TOKEN_KEY = process.env
-  .NEXT_SECRET_REFRESH_TOKEN_KEY as string;
-
-export const ACCESS_TOKEN_EXP = 60 * 60; // 1h
-export const REFRESH_TOKEN_EXP = 60 * 60 * 24 * 30; // 30d
+export const SESSION_TTL = 60 * 10 * 1000;
 
 export const SESSION_OPTIONS: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
