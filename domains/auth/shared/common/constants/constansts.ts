@@ -20,7 +20,7 @@ export const VERIFICATION_EMAIL_BLOCK_EXP = 60 * 60 * 24;
 export const VERIFICATION_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
-export const SESSION_TTL = 60 * 10 * 1000;
+export const SESSION_TTL = 60 * 60 * 24 * 7 * 1000;
 
 export const SESSION_OPTIONS: SessionOptions = {
   password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
