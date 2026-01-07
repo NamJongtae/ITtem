@@ -48,10 +48,10 @@ describe("useEmailDuplicationMutate 훅 테스트", () => {
     expect(mockCheckEmailDuplication).toHaveBeenCalledWith("test@example.com");
   });
 
-  it("401 에러 발생 시 setError가 호출됩니다.", async () => {
+  it("409 에러 발생 시 setError가 호출됩니다.", async () => {
     const error = {
       response: {
-        status: 401,
+        status: 409,
         data: { message: "이미 사용중인 이메일이에요." }
       }
     };
