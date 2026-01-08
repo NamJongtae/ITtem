@@ -45,7 +45,7 @@ export default async function checkAuthorization() {
     return {
       isValid: true,
       auth: {
-        uid: user._id,
+        uid: user._id.toString(),
         email: user.email,
         nickname: user.nickname,
         profileImg: user.profileImg
