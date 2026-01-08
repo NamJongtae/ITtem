@@ -1,5 +1,3 @@
-import { SessionOptions } from "iron-session";
-
 export const EMAIL_REGEX = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 export const EMAIL_REGEX_ERRORMSG = "이메일 형식을 확인해주세요.";
 
@@ -21,14 +19,3 @@ export const VERIFICATION_EMAIL_EXP = 60 * 5;
 export const VERIFIED_EMAIL_EXP = 60 * 30;
 
 export const SESSION_TTL = 60 * 60 * 24 * 7 * 1000;
-
-export const SESSION_OPTIONS: SessionOptions = {
-  password: process.env.NEXT_SECRET_IRON_SESSION_KEY as string,
-  cookieName: "session",
-  cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/"
-  }
-};
