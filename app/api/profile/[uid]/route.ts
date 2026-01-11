@@ -3,6 +3,7 @@ import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import mongoose from "mongoose";
 import * as Sentry from "@sentry/nextjs";
+import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 
 export async function GET(
   req: NextRequest,
@@ -10,8 +11,6 @@ export async function GET(
 ) {
   try {
     const { uid } = await params;
-
-    await dbConnect();
 
     if (!uid) {
       return NextResponse.json(
@@ -27,11 +26,32 @@ export async function GET(
       );
     }
 
-    // 사용자 정보와 리뷰 점수 정보를 조인합니다.
-    const aggregation = [
-      {
-        $match: { _id: new mongoose.Types.ObjectId(uid) }
-      },
+    await dbConnect();
+
+    const targetUserId = new mongoose.Types.ObjectId(uid);
+
+    const auth = await checkAuthorization();
+    const myUid = auth?.isValid && auth.auth?.uid ? auth.auth.uid : null;
+
+    /**
+     * ✅ isFollow 계산
+     */
+    let isFollow = false;
+    if (myUid && myUid !== uid) {
+      const followExists = await mongoose.connection
+        .collection("follows")
+        .findOne({
+          followerId: new mongoose.Types.ObjectId(myUid),
+          followingId: targetUserId
+        });
+
+      isFollow = !!followExists;
+    }
+
+    const aggregation: any[] = [
+      { $match: { _id: targetUserId } },
+
+      /** 리뷰 정보 */
       {
         $lookup: {
           from: "reviewScores",
@@ -48,7 +68,16 @@ export async function GET(
                     {
                       $multiply: [
                         {
-                          $divide: ["$totalReviewScore", "$totalReviewCount"]
+                          $cond: [
+                            { $eq: ["$totalReviewCount", 0] },
+                            0,
+                            {
+                              $divide: [
+                                "$totalReviewScore",
+                                "$totalReviewCount"
+                              ]
+                            }
+                          ]
                         },
                         20
                       ]
@@ -58,12 +87,7 @@ export async function GET(
                 }
               }
             },
-            {
-              $project: {
-                _id: 0,
-                uid: 0
-              }
-            }
+            { $project: { _id: 0, uid: 0 } }
           ],
           as: "reviewInfo"
         }
@@ -74,6 +98,56 @@ export async function GET(
           preserveNullAndEmptyArrays: true
         }
       },
+
+      /** followersCount */
+      {
+        $lookup: {
+          from: "follows",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$followingId", "$$userId"] }
+              }
+            },
+            { $count: "count" }
+          ],
+          as: "followersCount"
+        }
+      },
+      {
+        $addFields: {
+          followersCount: {
+            $ifNull: [{ $arrayElemAt: ["$followersCount.count", 0] }, 0]
+          }
+        }
+      },
+
+      /** followingsCount */
+      {
+        $lookup: {
+          from: "follows",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$followerId", "$$userId"] }
+              }
+            },
+            { $count: "count" }
+          ],
+          as: "followingsCount"
+        }
+      },
+      {
+        $addFields: {
+          followingsCount: {
+            $ifNull: [{ $arrayElemAt: ["$followingsCount.count", 0] }, 0]
+          }
+        }
+      },
+
+      /** 불필요 필드 제거 */
       {
         $project: {
           email: 0,
@@ -83,22 +157,25 @@ export async function GET(
           createdAt: 0,
           chatRoomList: 0,
           profileImgFilename: 0,
-          wishProductIds: 0,
-          "reviewInfo.__v": 0
+          wishProductIds: 0
         }
       }
     ];
 
-    const userWithReviews = await User.aggregate(aggregation);
+    const result = await User.aggregate(aggregation);
 
-    if (userWithReviews.length === 0) {
+    if (!result.length) {
       return NextResponse.json(
         { message: "유저가 존재하지 않아요." },
         { status: 404 }
       );
     }
 
-    const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
+    const profile = {
+      ...result[0],
+      uid: result[0]._id,
+      isFollow // ✅ 추가됨
+    };
     delete profile._id;
 
     return NextResponse.json({
