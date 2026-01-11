@@ -1,31 +1,27 @@
-import useMyProfileFollowMutate from "@/domains/user/profile/hooks/mutations/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "@/domains/user/profile/hooks/mutations/useMyProfileUnfollowMutate";
+
+import useChatRoomFollowMutate from "./mutations/useChatRoomFollowMutate";
+import useChatRoomUnFollowMutate from "./mutations/useChatRoomUnFollowMutate";
 
 interface IParams {
-  otherUserId: string;
-  myFollowings: string[] | undefined;
+  otherUserId: string | undefined;
 }
 
-export default function useChatRoomFollowBtnLogic({
-  otherUserId,
-  myFollowings
-}: IParams) {
-  const { myProfilefollowMutate } = useMyProfileFollowMutate(otherUserId);
-  const { myProfileUnfollowMutate } = useMyProfileUnfollowMutate(otherUserId);
+export default function useChatRoomFollowBtnLogic({ otherUserId }: IParams) {
+  const { userFollowMutate } = useChatRoomFollowMutate(otherUserId || "");
+  const { userUnFollowMutate } = useChatRoomUnFollowMutate(
+    otherUserId || ""
+  );
 
   const onClickFollow = () => {
-    myProfilefollowMutate();
+    userFollowMutate();
   };
 
   const onClickUnfollow = () => {
-    myProfileUnfollowMutate();
+    userUnFollowMutate();
   };
-
-  const isFollow = !!myFollowings?.includes(otherUserId);
 
   return {
     onClickFollow,
-    onClickUnfollow,
-    isFollow
+    onClickUnfollow
   };
 }
