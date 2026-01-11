@@ -27,20 +27,21 @@ describe("useProductQuery 훅 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("productId 인자를 전달한 경우 해당 id로 queryKey, queryFn를 구성하고 데이터를 반환합니다.", () => {
+  it("productId 인자를 전달한 경우 해당 id로 queryKey/queryFn 구성하고 값을 반환합니다.", () => {
     const productId = "product123";
     const mockData = { id: productId, name: "테스트 상품" };
+
     mockUseParams.mockReturnValue({});
 
     const queryKeyConfig = queryKeys.product.detail(productId);
-    mockUseSuspenseQuery.mockImplementation((options) => {
-      options.queryKey = queryKeyConfig.queryKey;
-      options.queryFn = queryKeyConfig.queryFn;
-      return {
-        data: mockData,
-        isLoading: false,
-        error: null
-      };
+
+    mockUseSuspenseQuery.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+      isFetching: false,
+      isPending: false,
+      isFetchedAfterMount: true,
+      error: null
     });
 
     const { result } = renderHook(() => useProductQuery(productId), {
@@ -50,46 +51,73 @@ describe("useProductQuery 훅 테스트", () => {
     expect(mockUseSuspenseQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: queryKeyConfig.queryKey,
-        queryFn: queryKeyConfig.queryFn,
-        staleTime: 5 * 1000,
-        refetchOnMount: true
+        queryFn: expect.any(Function),
+        staleTime: Infinity,
+        refetchOnMount: "always"
       })
     );
 
     expect(result.current.productData).toEqual(mockData);
     expect(result.current.productLoading).toBe(false);
+    expect(result.current.productIsFetching).toBe(false);
+    expect(result.current.productIsPending).toBe(false);
+    expect(result.current.productIsFetchedAfterMount).toBe(true);
+    expect(result.current.showCSRSkeleton).toBe(false);
     expect(result.current.productError).toBeNull();
   });
 
-  it("productId 인자가 없는 경우 params.productId로 queryKey, queryFn를 구성하고 데이터를 반환합니다.", () => {
+  it("productId 인자가 없으면 params.productId로 queryKey/queryFn 구성하고 값을 반환합니다.", () => {
     const productId = "product-from-params";
     const mockData = { id: productId, name: "상품 A" };
 
     mockUseParams.mockReturnValue({ productId });
+
     const queryKeyConfig = queryKeys.product.detail(productId);
-    mockUseSuspenseQuery.mockImplementation((options) => {
-      options.queryKey = queryKeyConfig.queryKey;
-      options.queryFn = queryKeyConfig.queryFn;
-      return {
-        data: mockData,
-        isLoading: false,
-        error: null
-      };
+
+    mockUseSuspenseQuery.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+      isFetching: false,
+      isPending: false,
+      isFetchedAfterMount: true,
+      error: null
     });
 
-    const { result } = renderHook(() => useProductQuery(), {
-      wrapper
-    });
+    const { result } = renderHook(() => useProductQuery(), { wrapper });
 
     expect(mockUseSuspenseQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: queryKeyConfig.queryKey,
-        queryFn: queryKeyConfig.queryFn,
-        staleTime: 5 * 1000,
-        refetchOnMount: true
+        queryFn: expect.any(Function),
+        staleTime: Infinity,
+        refetchOnMount: "always"
       })
     );
+
     expect(result.current.productData).toEqual(mockData);
+    expect(result.current.showCSRSkeleton).toBe(false);
+  });
+
+  it("showCSRSkeleton은 (isFetching=true && isFetchedAfterMount=false) 일 때 true 입니다.", () => {
+    const productId = "product123";
+    const mockData = { id: productId, name: "테스트 상품" };
+
+    mockUseParams.mockReturnValue({ productId });
+
+    mockUseSuspenseQuery.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+      isFetching: true,
+      isPending: false,
+      isFetchedAfterMount: false,
+      error: null
+    });
+
+    const { result } = renderHook(() => useProductQuery(), { wrapper });
+
+    expect(result.current.productIsFetching).toBe(true);
+    expect(result.current.productIsFetchedAfterMount).toBe(false);
+    expect(result.current.showCSRSkeleton).toBe(true);
   });
 
   it("에러가 발생하면 productError에 값이 반환됩니다.", () => {
@@ -97,15 +125,17 @@ describe("useProductQuery 훅 테스트", () => {
     const error = new Error("상품 조회 실패");
 
     mockUseParams.mockReturnValue({ productId });
+
     mockUseSuspenseQuery.mockReturnValue({
       data: undefined,
       isLoading: false,
+      isFetching: false,
+      isPending: false,
+      isFetchedAfterMount: false,
       error
     });
 
-    const { result } = renderHook(() => useProductQuery(), {
-      wrapper
-    });
+    const { result } = renderHook(() => useProductQuery(), { wrapper });
 
     expect(result.current.productData).toBeUndefined();
     expect(result.current.productError).toBe(error);

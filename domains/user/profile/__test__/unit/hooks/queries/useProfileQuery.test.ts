@@ -10,11 +10,14 @@ jest.mock("@tanstack/react-query", () => {
     useSuspenseQuery: jest.fn()
   };
 });
-jest.mock("next/navigation");
+
+jest.mock("next/navigation", () => ({
+  useParams: jest.fn()
+}));
 
 describe("useProfileQuery 훅 테스트", () => {
   const mockUseSuspenseQuery = useSuspenseQuery as jest.Mock;
-  const mockUseParams = useParams as jest.Mock;
+  const mockUseParams = useParams as unknown as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -37,7 +40,8 @@ describe("useProfileQuery 훅 테스트", () => {
       expect.objectContaining({
         queryKey: expect.any(Array),
         queryFn: expect.any(Function),
-        staleTime: 30 * 1000
+        staleTime: Infinity,
+        refetchOnMount: "always"
       })
     );
 
@@ -64,7 +68,9 @@ describe("useProfileQuery 훅 테스트", () => {
     expect(mockUseSuspenseQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: expect.any(Array),
-        queryFn: expect.any(Function)
+        queryFn: expect.any(Function),
+        staleTime: Infinity,
+        refetchOnMount: "always"
       })
     );
 
