@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import incrementProductView from "../api/incrementProductView";
 
 export default function ProductDetailPage() {
-  const { productData } = useProductQuery();
+  const { productData, showCSRSkeleton } = useProductQuery();
 
   useAddRecentProduct({
     productId: productData._id,
@@ -26,10 +26,16 @@ export default function ProductDetailPage() {
     <div className="pt-8 pb-12">
       <div className="relative container mx-auto px-6 max-w-[1024px]">
         <CategoryNav className={"max-w-7xl mx-auto mb-5"} />
-        <Content productDetailData={productData} />
+        <Content
+          productDetailData={productData}
+          showCSRSkeleton={showCSRSkeleton}
+        />
         <div className="container mt-16 flex flex-col xl:flex-row border-t-2 border-solid border-black justify-between gap-10 xl:gap-5 pt-10 mx-auto max-w-7xl">
           <Description description={productData?.description} />
-          <SellerSection auth={productData?.auth} />
+          <SellerSection
+            auth={productData?.auth}
+            showCSRSkeleton={showCSRSkeleton}
+          />
         </div>
       </div>
     </div>
