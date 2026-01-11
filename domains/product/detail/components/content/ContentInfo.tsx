@@ -6,9 +6,13 @@ import ContentInfoList from "./ContentInfoList";
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
+  showCSRSkeleton: boolean;
 }
 
-export default function ContentInfo({ productDetailData }: IProps) {
+export default function ContentInfo({
+  productDetailData,
+  showCSRSkeleton
+}: IProps) {
   return (
     <>
       <h3 className="text-gray-700 text-3xl md:text-4xl">
@@ -18,10 +22,12 @@ export default function ContentInfo({ productDetailData }: IProps) {
       <hr className="my-3" />
       <div className="flex justify-between">
         <ContentInfoStatus
+          showCSRSkeleton={showCSRSkeleton}
           wishCount={productDetailData?.wishCount || 0}
           viewCount={productDetailData?.viewCount || 0}
           createdAt={productDetailData?.createdAt || ""}
         />
+
         <ReportBtn productDetailData={productDetailData} />
       </div>
 
