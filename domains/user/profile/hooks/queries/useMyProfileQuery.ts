@@ -10,13 +10,15 @@ export default function useMyProfileQuery() {
 
   const {
     data: myProfileData,
+    isLoading: myProfileLoading,
     isPending: myProfilePending,
     isError: myProfileError
   } = useQuery({
     queryFn: queryKeyConfing.queryFn,
     queryKey: queryKeyConfing.queryKey,
     enabled: !!user,
-    staleTime: Infinity
+    staleTime: Infinity,
+    refetchOnMount: "always"
   });
 
   useEffect(() => {
@@ -27,5 +29,5 @@ export default function useMyProfileQuery() {
     }
   }, [myProfileError]);
 
-  return { myProfileData, myProfilePending, myProfileError };
+  return { myProfileData, myProfileLoading, myProfilePending, myProfileError };
 }
