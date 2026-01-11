@@ -1,10 +1,7 @@
-import customAxios from "@/shared/common/utils/customAxios";
+import { customFetch } from "@/shared/common/utils/customFetch";
 
 export default async function unfollowUser(uid: string) {
-  try {
-    const response = await customAxios.delete(`/api/profile/${uid}/follow`);
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  return await customFetch(`/api/user/${uid}/follow`, {
+    method: "DELETE"
+  });
 }
