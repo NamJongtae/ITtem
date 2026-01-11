@@ -15,8 +15,9 @@ export interface ProfileData {
   profileImg: string;
   profileImgFilename: string;
   introduce: string;
-  followers: string[];
-  followings: string[];
+  followersCount: number;
+  followingsCount: number;
+  isFollow?: boolean;
   productIds: string[];
   wishProductIds: string[];
   saleCount: number;
@@ -56,8 +57,9 @@ export interface FollowUserData {
   uid: string;
   nickname: string;
   profileImg: string;
-  followers: string[];
-  followings: string[];
+  followersCount: number;
+  followingsCount: number;
+  isFollow: boolean;
   productIds: string[];
   reviewPercentage: number;
 }
