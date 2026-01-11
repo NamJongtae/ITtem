@@ -11,12 +11,22 @@ export default function useProfileQuery(uid?: string) {
     data: profileData,
     isLoading: profileLoading,
     error: profileError,
-    isSuccess: profileSuccess
+    isSuccess: profileSuccess,
+    isFetching: profileIsFetching,
+    isFetchedAfterMount: profileIsFetchedAfterMount
   } = useSuspenseQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn,
-    staleTime: 30 * 1000
+    staleTime: Infinity,
+    refetchOnMount: "always"
   });
 
-  return { profileData, profileLoading, profileError, profileSuccess };
+  return {
+    profileData,
+    profileLoading,
+    profileIsFetching,
+    showCSRSkeleton: profileIsFetching && !profileIsFetchedAfterMount,
+    profileError,
+    profileSuccess
+  };
 }
