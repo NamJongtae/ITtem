@@ -41,6 +41,9 @@ export async function GET(
 
     await dbConnect();
 
+    const isValidAuth = await checkAuthorization();
+    const myUid = isValidAuth?.auth?.uid || null;
+
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)
     });
@@ -59,10 +62,33 @@ export async function GET(
       );
     }
 
+    // 👇 상품 작성자 ID
+    const productOwnerId = product.uid;
+
+    // ✅ isFollow 여부 계산
+    let isFollow = false;
+
+    if (!myUid) {
+      // 비로그인 상태면 무조건 false
+      isFollow = false;
+    } else if (String(myUid) === String(productOwnerId)) {
+      // 내 상품이면 팔로우 false
+      isFollow = false;
+    } else {
+      // 로그인 + 남의 상품일 때만 follow 조회
+      const followExists = await mongoose.connection
+        .collection("follows")
+        .findOne({
+          followerId: new mongoose.Types.ObjectId(myUid),
+          followingId: new mongoose.Types.ObjectId(productOwnerId)
+        });
+
+      isFollow = !!followExists;
+    }
     // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
     const aggregation = [
       {
-        $match: { _id: new mongoose.Types.ObjectId(product.uid as string) }
+        $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) }
       },
       {
         $lookup: {
@@ -70,7 +96,7 @@ export async function GET(
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$uid", product.uid as string] }
+                $expr: { $eq: ["$uid", productOwnerId as string] }
               }
             }
           ],
@@ -167,7 +193,6 @@ export async function GET(
           nickname: 1,
           profileImg: 1,
           recentProducts: 1,
-          followers: 1,
           reviewPercentage: 1
         }
       }
@@ -182,7 +207,7 @@ export async function GET(
         message: "상품 조회에 성공했어요.",
         product: {
           ...product._doc,
-          auth: { ...userWithReviews[0] }
+          auth: { ...userWithReviews[0], isFollow }
         }
       },
       { status: 200 }
