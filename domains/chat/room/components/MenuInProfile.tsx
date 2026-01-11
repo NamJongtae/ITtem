@@ -21,10 +21,7 @@ export default function MenuInProfile({
       {participantIDs.map((id) => (
         <li key={id} className="flex gap-3 items-center justify-between w-full">
           {isMe(id) ? (
-            <MenuInMyProfile
-              myProfileData={myProfileData}
-              otherUserId={otherUserId}
-            />
+            <MenuInMyProfile myProfileData={myProfileData} />
           ) : (
             <MenuInOtherUserProfile
               otherUserProfileData={otherUserProfileData}
