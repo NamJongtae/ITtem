@@ -62,7 +62,7 @@ export default function useProductDetailUnFollowMutate(uid: string) {
         if (error.status === 409) {
           toast.warn("이미 언팔로우한 유저 입니다.");
         } else {
-          toast.warn("유저 팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요.");
+          toast.warn("유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요.");
         }
       }
     },
