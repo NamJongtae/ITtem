@@ -5,16 +5,17 @@ import { ProductDetailAuthData } from "../../types/productDetailTypes";
 
 interface IProps {
   auth: ProductDetailAuthData | undefined;
+  showCSRSkeleton: boolean;
 }
 
-export default function SellerSection({ auth }: IProps) {
+export default function SellerSection({ auth, showCSRSkeleton }: IProps) {
   return (
     <section className="basis-1/3">
       <h3 className="text-gray-600 text-xl font-medium">판매자 정보</h3>
       <hr className="h-px border-0 bg-gray-500 my-3" />
       {auth?.uid ? (
         <>
-          <SellerInfo auth={auth} />
+          <SellerInfo auth={auth} showCSRSkeleton={showCSRSkeleton} />
           <ProductList auth={auth} />
         </>
       ) : (
