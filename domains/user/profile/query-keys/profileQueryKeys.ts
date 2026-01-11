@@ -36,36 +36,24 @@ const profileQueryKey = createQueryKeys("profile", {
           return response.data.products;
         }
       }),
-      followers: ({
-        userIds,
-        limit = 10
-      }: {
-        userIds: string[];
-        limit?: number;
-      }) => ({
+      followers: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowers({
             cursor: pageParam,
             limit,
-            userIds
+            uid
           });
           return response.data.followers;
         }
       }),
-      followings: ({
-        userIds,
-        limit = 10
-      }: {
-        userIds: string[];
-        limit?: number;
-      }) => ({
+      followings: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowings({
             cursor: pageParam,
             limit,
-            userIds
+            uid
           });
           return response.data.followings;
         }
@@ -104,7 +92,7 @@ const profileQueryKey = createQueryKeys("profile", {
     queryKey: [userId],
     queryFn: async () => {
       const response = await getUserProfile(userId);
-      return response.data.profile;
+      return response.profile;
     },
     contextQueries: {
       products: ({
@@ -127,36 +115,24 @@ const profileQueryKey = createQueryKeys("profile", {
           return response.data.products;
         }
       }),
-      followers: ({
-        userIds,
-        limit = 10
-      }: {
-        userIds: string[];
-        limit?: number;
-      }) => ({
+      followers: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowers({
             cursor: pageParam,
             limit,
-            userIds
+            uid
           });
           return response.data.followers;
         }
       }),
-      followings: ({
-        userIds,
-        limit = 10
-      }: {
-        userIds: string[];
-        limit?: number;
-      }) => ({
+      followings: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowings({
             cursor: pageParam,
             limit,
-            userIds
+            uid
           });
           return response.data.followings;
         }
