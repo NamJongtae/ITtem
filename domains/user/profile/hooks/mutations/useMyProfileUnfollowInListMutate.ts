@@ -8,6 +8,7 @@ import {
   useQueryClient
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { isFetchError } from "@/shared/common/utils/isFetchError";
 
 type InfiniteFollowList = InfiniteData<FollowUserData[], unknown>;
 
@@ -117,7 +118,7 @@ export default function useMyProfileUnfollowInListMutate(uid: string) {
       };
     },
 
-    onError: (_err, _vars, ctx) => {
+    onError: (error, _vars, ctx) => {
       queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
       if (ctx?.previousMyFollowers) {
@@ -131,7 +132,13 @@ export default function useMyProfileUnfollowInListMutate(uid: string) {
         );
       }
 
-      toast.warn("유저 언팔로우에 실패했어요.\n잠시 후 다시 시도해주세요.");
+      if (isFetchError(error)) {
+        if (error.status === 409) {
+          toast.warn("이미 언팔로우한 유저에요.");
+        } else {
+          toast.warn("유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요.");
+        }
+      }
     },
 
     onSettled: () => {

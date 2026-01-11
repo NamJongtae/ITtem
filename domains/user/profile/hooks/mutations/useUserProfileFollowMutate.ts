@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
+import { isFetchError } from "@/shared/common/utils/isFetchError";
 
 type InfiniteProfileList = InfiniteData<FollowUserData[], unknown>;
 
@@ -134,7 +135,7 @@ export default function useUserProfileFollowMutate(uid: string) {
       };
     },
 
-    onError: (_error, _vars, ctx) => {
+    onError: (error, _vars, ctx) => {
       queryClient.setQueryData(
         targetProfileQueryKey,
         ctx?.previousTargetProfile
@@ -154,7 +155,13 @@ export default function useUserProfileFollowMutate(uid: string) {
         );
       }
 
-      toast.warn("유저 팔로우에 실패했어요.\n잠시 후 다시 시도해주세요.");
+      if (isFetchError(error)) {
+        if (error.status === 409) {
+          toast.warn("이미 팔로우한 유저에요.");
+        } else {
+          toast.warn("유저 팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요.");
+        }
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: myProfileQueryKey });

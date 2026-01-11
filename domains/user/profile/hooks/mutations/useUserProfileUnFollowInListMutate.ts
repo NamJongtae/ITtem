@@ -9,6 +9,7 @@ import {
 import { toast } from "react-toastify";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 import { useParams } from "next/navigation";
+import { isFetchError } from "@/shared/common/utils/isFetchError";
 
 type InfiniteProfileList = InfiniteData<FollowUserData[], unknown>;
 type ListType = "followers" | "followings";
@@ -39,7 +40,7 @@ export default function useUserProfileUnFollowInListMutate({
     uid,
     limit: 10
   }).queryKey;
-    const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
+  const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
     uid,
     limit: 10
   }).queryKey;
@@ -127,7 +128,7 @@ export default function useUserProfileUnFollowInListMutate({
       };
     },
 
-    onError: (_err, _vars, ctx) => {
+    onError: (error, _vars, ctx) => {
       if (ctx?.previousPageFollowList) {
         queryClient.setQueryData(
           pageFollowListQueryKey,
@@ -135,7 +136,15 @@ export default function useUserProfileUnFollowInListMutate({
         );
       }
 
-      toast.warn("언팔로우에 실패했어요. 잠시 후 다시 시도해주세요.");
+      if (isFetchError(error)) {
+        if (error.status === 409) {
+          toast.warn("이미 언팔로우한 유저에요.");
+        } else {
+          toast.warn(
+            "유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요."
+          );
+        }
+      }
     },
 
     onSettled: () => {
