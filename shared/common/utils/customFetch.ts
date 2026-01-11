@@ -1,3 +1,4 @@
+import { redirect as serverRedirect } from "next/navigation";
 import redirect from "./redirect";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
@@ -21,17 +22,24 @@ export const createFetch = (baseURL: string, defaultOptions?: RequestInit) => {
     };
 
     const response = await fetch(fullURL, mergedOptions);
-
     const data = await response.json().catch(() => null);
 
-    if (
-      response.status === 401 &&
-      data?.message === "만료된 세션이에요." &&
-      typeof window !== "undefined" &&
-      process.env.TEST_ENV !== "SSR"
-    ) {
+    const isServer = typeof window === "undefined";
+
+    const isSessionExpired =
+      response.status === 401 && data?.message === "만료된 세션이에요.";
+
+    if (isSessionExpired) {
       await fetch("/api/auth/session-cookie", { method: "DELETE" });
-      redirect("/session-expired");
+
+      if (isServer) {
+        // ✅ 서버 환경: Next.js redirect 사용
+        serverRedirect("/session-expired");
+      } else if (process.env.TEST_ENV !== "SSR") {
+        // ✅ 클라이언트 환경: 클라이언트 리다이렉트
+        redirect("/session-expired");
+      }
+
       throw new Error("SESSION_EXPIRED");
     }
 
