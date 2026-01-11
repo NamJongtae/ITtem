@@ -4,12 +4,10 @@ import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 
 interface IProps {
   myProfileData: ProfileData | undefined;
-  otherUserId: string;
 }
 
 export default function MenuInMyProfile({
   myProfileData,
-  otherUserId
 }: IProps) {
   return (
     <>
@@ -23,11 +21,6 @@ export default function MenuInMyProfile({
         />
         <span className="font-medium">{myProfileData?.nickname}</span>
       </div>
-
-      <FollowBtn
-        otherUserId={otherUserId}
-        myFollowings={myProfileData?.followings}
-      />
     </>
   );
 }
