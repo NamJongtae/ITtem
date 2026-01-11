@@ -10,13 +10,24 @@ export default function useProductQuery(productId?: string) {
   const {
     data: productData,
     isLoading: productLoading,
+    isFetching: productIsFetching,
+    isPending: productIsPending,
+    isFetchedAfterMount: productIsFetchedAfterMount,
     error: productError
   } = useSuspenseQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: queryKeyConfig.queryFn,
-    staleTime: 5 * 1000,
-    refetchOnMount: true
+    staleTime: Infinity,
+    refetchOnMount: "always"
   });
 
-  return { productData, productLoading, productError };
+  return {
+    productData,
+    productLoading,
+    productIsPending,
+    productIsFetching,
+    productIsFetchedAfterMount,
+    showCSRSkeleton: productIsFetching && !productIsFetchedAfterMount,
+    productError
+  };
 }
