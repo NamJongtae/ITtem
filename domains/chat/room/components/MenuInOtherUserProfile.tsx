@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
+import FollowBtn from "./FollowBtn";
 
 interface IProps {
   otherUserProfileData: ProfileData | undefined;
@@ -19,6 +20,10 @@ export default function MenuInOtherUserProfile({
           height={30}
         />
         <span className="font-medium">{otherUserProfileData?.nickname}</span>
+        <FollowBtn
+          otherUserId={otherUserProfileData?.uid}
+          isFollow={otherUserProfileData?.isFollow}
+        />
       </div>
     </>
   );
