@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ProductDetailResponseData } from "../../detail/types/responseTypes";
 import { customFetch } from "@/shared/common/utils/customFetch";
-import { FetchError } from "@/shared/common/types/errorTypes";
+import { isFetchError } from "@/shared/common/utils/isFetchError";
 
 export default async function getProduct(
   id: string
@@ -10,9 +10,8 @@ export default async function getProduct(
     return await customFetch<ProductDetailResponseData>(`/api/product/${id}`, {
       next: { tags: [`product-${id}`] }
     });
-  } catch (error: unknown) {
-    const err = error as FetchError;
-    if (err.status === 404) {
+  } catch (error) {
+    if (isFetchError(error) && error.status === 404) {
       notFound();
     }
 
