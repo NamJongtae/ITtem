@@ -25,7 +25,7 @@ export default async function prepareProductEditData({
         const imgFiles = values.imgData.filter(
           (data: object) => data instanceof File
         );
-        console.log(imgFiles);
+        
         const imgData = await uploadMultiImgToFirestore(imgFiles);
         productEditData.imgData = [
           ...prevImg,

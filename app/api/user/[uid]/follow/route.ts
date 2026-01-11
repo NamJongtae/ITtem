@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import dbConnect from "@/shared/common/utils/db/db";
-import User from "@/domains/auth/shared/common/models/User";
 import Follow from "@/domains/auth/shared/common/models/Follow";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import * as Sentry from "@sentry/nextjs";
@@ -105,8 +104,6 @@ export async function DELETE(
     await dbConnect();
 
     const myUid = isValidAuth.auth!.uid;
-
-    console.log(myUid, uid);
 
     if (myUid === uid) {
       return NextResponse.json(

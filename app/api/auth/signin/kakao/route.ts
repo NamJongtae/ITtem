@@ -64,8 +64,6 @@ export async function POST(req: NextRequest) {
           expires: expiresAt
         });
 
-        console.log(newUser._id, userNickname);
-
         return NextResponse.json(
           {
             message: "회원가입에 성공했어요.",

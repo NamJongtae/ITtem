@@ -12,7 +12,6 @@ import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
 
 export async function POST(req: NextRequest) {
   const { user, isDuplicateLogin } = await req.json();
-  console.log("isDuplicateLoigin:", isDuplicateLogin);
 
   if (!user) {
     return NextResponse.json(
