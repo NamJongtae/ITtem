@@ -1,28 +1,24 @@
 import useProductDetailFollowMutate from "./mutations/useProductDetailFollowMutate";
-import useProductDetailUnfollowMutate from "./mutations/useProductDetailUnfollowMutate";
+import useProductDetailUnFollowMutate from "./mutations/useProductDetailUnFollowMutate";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 
 interface IParams {
   uid: string;
-  authFollowers: string[];
+  isFollow: boolean | undefined;
   myProfileData: ProfileData | undefined;
 }
 
 export default function useFollowUserInProduct({
   uid,
-  authFollowers,
+  isFollow,
   myProfileData
 }: IParams) {
   const { productDetailfollowMutate } = useProductDetailFollowMutate(uid);
 
-  const { productDetailUnfollowMutate } = useProductDetailUnfollowMutate(uid);
-
-  const isFollowing =
-    !!myProfileData?.followings?.includes(uid) &&
-    !!authFollowers.includes(myProfileData?.uid);
+  const { productDetailUnfollowMutate } = useProductDetailUnFollowMutate(uid);
 
   const followHandler = () => {
-    if (isFollowing) {
+    if (isFollow) {
       productDetailUnfollowMutate();
     } else {
       productDetailfollowMutate();
@@ -31,5 +27,5 @@ export default function useFollowUserInProduct({
 
   const isMyProfile = uid === myProfileData?.uid;
 
-  return { isMyProfile, isFollowing, followHandler };
+  return { isMyProfile, followHandler };
 }
