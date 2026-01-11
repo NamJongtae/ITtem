@@ -2,19 +2,17 @@ import { ProfileData } from "../types/profileTypes";
 import useUserProfileFollowMutate from "./mutations/useUserProfileFollowMutate";
 import useUserProfileUnfollowMutate from "./mutations/useUserProfileUnfollowMutate";
 import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/shared/common/query-keys/queryKeys";
+import useMyProfileQuery from "./queries/useMyProfileQuery";
 
 interface IParams {
   profileData: ProfileData | undefined;
+  myProfileData: ProfileData | undefined;
 }
 
-export default function useFollowUserInProfile({ profileData }: IParams) {
-  const queryClient = useQueryClient();
-  const myProfileData = queryClient.getQueryData(
-    queryKeys.profile.my.queryKey
-  ) as ProfileData | undefined;
-
+export default function useFollowUserInProfile({
+  profileData,
+  myProfileData
+}: IParams) {
   const { userFollowMutate } = useUserProfileFollowMutate(
     profileData?.uid || ""
   );
@@ -23,10 +21,6 @@ export default function useFollowUserInProfile({ profileData }: IParams) {
     profileData?.uid || ""
   );
 
-  const isFollow =
-    !!myProfileData?.followings?.includes(profileData?.uid || "") &&
-    !!profileData?.followers?.includes(myProfileData?.uid);
-
   const isNotMyProfile = myProfileData?.uid !== profileData?.uid;
 
   const followHandler = () => {
@@ -34,12 +28,12 @@ export default function useFollowUserInProfile({ profileData }: IParams) {
       toast.warn("로그인이 필요해요.");
       return;
     }
-    if (isFollow) {
+    if (profileData?.isFollow) {
       userUnfollowMutate();
     } else {
       userFollowMutate();
     }
   };
 
-  return { isFollow, isNotMyProfile, followHandler };
+  return { isNotMyProfile, followHandler };
 }
