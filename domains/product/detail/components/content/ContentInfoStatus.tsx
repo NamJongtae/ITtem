@@ -2,46 +2,64 @@ import getProductDateFormat from "@/domains/product/shared/utils/getProductDateF
 import Image from "next/image";
 
 interface IProps {
+  showCSRSkeleton: boolean;
   wishCount: number;
   viewCount: number;
   createdAt: string | Date;
 }
 
 export default function ContentInfoStats({
+  showCSRSkeleton,
   wishCount,
   viewCount,
   createdAt
 }: IProps) {
+  const SkeletonBox = () => (
+    <div className="flex gap-2 items-center w-12 h-5 bg-gray-200 animate-pulse" />
+  );
   return (
     <div className="flex gap-3">
-      <span className="flex gap-2">
-        <Image
-          style={{ width: 14, height: 28 }}
-          src={"/icons/heart-icon.svg"}
-          alt="찜 횟수"
-          width={14}
-          height={28}
-        />{" "}
-        {wishCount}
-      </span>
-      <span className="flex gap-2 items-center">
-        <Image
-          className="w-[20px] h-[14px]"
-          src={"/icons/eye-icon.svg"}
-          alt="조회수"
-          width={20}
-          height={14}
-        />{" "}
-        {viewCount}
-      </span>
+      {/* 찜 수 */}
+      {showCSRSkeleton ? (
+        <SkeletonBox />
+      ) : (
+        <span className="flex gap-2 items-center">
+          <Image
+            style={{ width: 14, height: 28 }}
+            src="/icons/heart-icon.svg"
+            alt="찜 횟수"
+            width={14}
+            height={28}
+          />
+          {wishCount}
+        </span>
+      )}
+
+      {/* 조회 수 */}
+      {showCSRSkeleton ? (
+        <SkeletonBox />
+      ) : (
+        <span className="flex gap-2 items-center">
+          <Image
+            className="w-[20px] h-[14px]"
+            src="/icons/eye-icon.svg"
+            alt="조회수"
+            width={20}
+            height={14}
+          />
+          {viewCount}
+        </span>
+      )}
+
+      {/* 게시일 (변경 없음) */}
       <time dateTime={createdAt.toString()} className="flex gap-2 items-center">
         <Image
-          src={"/icons/clock-icon.svg"}
+          src="/icons/clock-icon.svg"
           alt="게시일"
           width={16}
           height={16}
-        />{" "}
-        {getProductDateFormat(createdAt.toString() || "")}
+        />
+        {getProductDateFormat(createdAt.toString())}
       </time>
     </div>
   );
