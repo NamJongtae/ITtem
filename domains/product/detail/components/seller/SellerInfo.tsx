@@ -5,9 +5,10 @@ import SellerFollowBtn from "./SellerFollowBtn";
 
 interface IProps {
   auth: ProductDetailAuthData;
+  showCSRSkeleton: boolean;
 }
 
-export default function SellerInfo({ auth }: IProps) {
+export default function SellerInfo({ auth, showCSRSkeleton }: IProps) {
   return (
     <div className="flex items-center gap-3">
       <Link
@@ -30,7 +31,11 @@ export default function SellerInfo({ auth }: IProps) {
           </span>
         </div>
       </Link>
-      <SellerFollowBtn uid={auth.uid} authFollowers={auth.followers} />
+      <SellerFollowBtn
+        uid={auth.uid}
+        isFollow={auth.isFollow}
+        showCSRSkeleton={showCSRSkeleton}
+      />
     </div>
   );
 }
