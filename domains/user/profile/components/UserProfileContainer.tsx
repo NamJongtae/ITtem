@@ -25,7 +25,7 @@ export default async function UserProfileContainer({ uid }: IProps) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SuspenseErrorBoundary
         suspenseFallback={<ProfileDetailSkeletonUI />}
-        errorFallback={<Empty message={"존재하지 않는 유저입니다."} />}
+        errorFallback={<Empty message={"유저 정보를 불러올 수 없어요."} />}
       >
         <UserProfilePage />
       </SuspenseErrorBoundary>
