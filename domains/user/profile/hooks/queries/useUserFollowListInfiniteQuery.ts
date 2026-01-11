@@ -1,5 +1,5 @@
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import { ProfileData } from "../../types/profileTypes";
+import { FollowUserData, ProfileData } from "../../types/profileTypes";
 import {
   InfiniteData,
   QueryFunction,
@@ -8,25 +8,25 @@ import {
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export default function useFollowListInfiniteQuery({
-  isFollowers,
-  userIds,
+export default function useUserFollowListInfiniteQuery({
+  listType,
+  uid,
   limit = 10
 }: {
-  isFollowers: boolean;
-  userIds: string[] | undefined;
+  listType: "followers" | "followings";
   uid: string | undefined;
   limit?: number;
 }) {
-  const queryKeyConfing = isFollowers
-    ? queryKeys.profile.my._ctx.followers({
-        userIds: userIds as string[],
-        limit
-      })
-    : queryKeys.profile.my._ctx.followings({
-        userIds: userIds as string[],
-        limit
-      });
+  const queryKeyConfing =
+    listType === "followers"
+      ? queryKeys.profile.user(uid || "")._ctx.followers({
+          uid: uid as string,
+          limit
+        })
+      : queryKeys.profile.user(uid || "")._ctx.followings({
+          uid: uid as string,
+          limit
+        });
 
   const {
     data,
@@ -36,13 +36,13 @@ export default function useFollowListInfiniteQuery({
     hasNextPage,
     error
   } = useSuspenseInfiniteQuery<
-    ProfileData[],
+    FollowUserData[],
     AxiosError,
-    InfiniteData<ProfileData>
+    InfiniteData<FollowUserData>
   >({
     queryKey: queryKeyConfing.queryKey,
     queryFn: queryKeyConfing.queryFn as QueryFunction<
-      ProfileData[],
+      FollowUserData[],
       QueryKey,
       unknown
     >,
