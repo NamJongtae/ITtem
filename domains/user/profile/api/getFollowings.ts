@@ -3,22 +3,19 @@ import { FollowingsResponseData } from "../types/responseTypes";
 import { AxiosResponse } from "axios";
 
 export default async function getFollowings({
+  uid,
   cursor,
-  limit = 10,
-  userIds
+  limit = 10
 }: {
-  userIds: string[] | undefined;
+  uid: string;
   cursor?: unknown;
   limit?: number;
 }): Promise<AxiosResponse<FollowingsResponseData>> {
   try {
-    const response = await customAxios.post(
-      `/api/profile/followings?limit=${limit}${
+    const response = await customAxios.get(
+      `/api/user/${uid}/followings?limit=${limit}${
         cursor ? `&cursor=${cursor}` : ""
-      }`,
-      {
-        userIds
-      }
+      }`
     );
     return response;
   } catch (error) {
