@@ -6,6 +6,7 @@ import User from "@/domains/auth/shared/common/models/User";
 import deleteProfileImgToFirestore from "@/domains/user/profile/utils/deleteProfileImgToFirestore";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 import * as Sentry from "@sentry/nextjs";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET() {
   try {
@@ -68,6 +69,59 @@ export async function GET() {
           preserveNullAndEmptyArrays: true
         }
       },
+
+      // 🔽 followers count
+      {
+        $lookup: {
+          from: "follows",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$followingId", "$$userId"] }
+              }
+            },
+            {
+              $count: "count"
+            }
+          ],
+          as: "followersCount"
+        }
+      },
+      {
+        $addFields: {
+          followersCount: {
+            $ifNull: [{ $arrayElemAt: ["$followersCount.count", 0] }, 0]
+          }
+        }
+      },
+
+      // 🔽 followings count
+      {
+        $lookup: {
+          from: "follows",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$followerId", "$$userId"] }
+              }
+            },
+            {
+              $count: "count"
+            }
+          ],
+          as: "followingsCount"
+        }
+      },
+      {
+        $addFields: {
+          followingsCount: {
+            $ifNull: [{ $arrayElemAt: ["$followingsCount.count", 0] }, 0]
+          }
+        }
+      },
+
       {
         $project: {
           password: 0,
@@ -179,6 +233,9 @@ export async function PATCH(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    revalidatePath(`/profile/${myUid}`);
+    revalidateTag(`profile-${myUid}`, { expire: 60 });
 
     return NextResponse.json({
       message: "프로필을 수정했어요.",
