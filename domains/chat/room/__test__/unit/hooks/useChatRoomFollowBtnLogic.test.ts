@@ -1,34 +1,32 @@
 import { renderHook, act } from "@testing-library/react";
 import useChatRoomFollowBtnLogic from "../../../hooks/useChatRoomFollowBtnLogic";
-import useMyProfileFollowMutate from "@/domains/user/profile/hooks/mutations/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "@/domains/user/profile/hooks/mutations/useMyProfileUnfollowMutate";
+import useChatRoomFollowMutate from "../../../hooks/mutations/useChatRoomFollowMutate";
+import useChatRoomUnFollowMutate from "../../../hooks/mutations/useChatRoomUnFollowMutate";
 
-jest.mock("@/domains/user/profile/hooks/mutations/useMyProfileFollowMutate");
-jest.mock("@/domains/user/profile/hooks/mutations/useMyProfileUnfollowMutate");
+jest.mock("../../../hooks/mutations/useChatRoomFollowMutate");
+jest.mock("../../../hooks/mutations/useChatRoomUnFollowMutate");
 
 describe("useChatRoomFollowBtnLogic 훅 테스트", () => {
   const mockFollowMutate = jest.fn();
   const mockUnfollowMutate = jest.fn();
+
   const otherUserId = "user123";
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    (useMyProfileFollowMutate as jest.Mock).mockReturnValue({
-      myProfilefollowMutate: mockFollowMutate
+    (useChatRoomFollowMutate as jest.Mock).mockReturnValue({
+      userFollowMutate: mockFollowMutate
     });
 
-    (useMyProfileUnfollowMutate as jest.Mock).mockReturnValue({
-      myProfileUnfollowMutate: mockUnfollowMutate
+    (useChatRoomUnFollowMutate as jest.Mock).mockReturnValue({
+      userUnFollowMutate: mockUnfollowMutate
     });
   });
 
-  it("onClickFollow 호출 시 follow mutate 함수가 실행됩니다.", () => {
+  it("onClickFollow 호출 시 userFollowMutate가 실행됩니다.", () => {
     const { result } = renderHook(() =>
-      useChatRoomFollowBtnLogic({
-        otherUserId,
-        myFollowings: []
-      })
+      useChatRoomFollowBtnLogic({ otherUserId })
     );
 
     act(() => {
@@ -38,12 +36,9 @@ describe("useChatRoomFollowBtnLogic 훅 테스트", () => {
     expect(mockFollowMutate).toHaveBeenCalled();
   });
 
-  it("onClickUnfollow 호출 시 unfollow mutate 함수가 실행됩니다.", () => {
+  it("onClickUnfollow 호출 시 userUnFollowMutate가 실행됩니다.", () => {
     const { result } = renderHook(() =>
-      useChatRoomFollowBtnLogic({
-        otherUserId,
-        myFollowings: [otherUserId]
-      })
+      useChatRoomFollowBtnLogic({ otherUserId })
     );
 
     act(() => {
@@ -53,36 +48,24 @@ describe("useChatRoomFollowBtnLogic 훅 테스트", () => {
     expect(mockUnfollowMutate).toHaveBeenCalled();
   });
 
-  it("myFollowings에 otherUserId가 포함되어 있으면 isFollow는 true가 됩니다.", () => {
+  it("otherUserId가 undefined여도 mutate 함수는 호출됩니다(빈 문자열로 초기화).", () => {
     const { result } = renderHook(() =>
-      useChatRoomFollowBtnLogic({
-        otherUserId,
-        myFollowings: [otherUserId, "user456"]
-      })
+      useChatRoomFollowBtnLogic({ otherUserId: undefined })
     );
 
-    expect(result.current.isFollow).toBe(true);
+    act(() => {
+      result.current.onClickFollow();
+      result.current.onClickUnfollow();
+    });
+
+    expect(mockFollowMutate).toHaveBeenCalled();
+    expect(mockUnfollowMutate).toHaveBeenCalled();
   });
 
-  it("myFollowings에 otherUserId가 없으면 isFollow는 false가 됩니다.", () => {
-    const { result } = renderHook(() =>
-      useChatRoomFollowBtnLogic({
-        otherUserId,
-        myFollowings: ["user456"]
-      })
-    );
+  it("mutate 훅들이 otherUserId를 인자로 받습니다.", () => {
+    renderHook(() => useChatRoomFollowBtnLogic({ otherUserId }), {});
 
-    expect(result.current.isFollow).toBe(false);
-  });
-
-  it("myFollowings가 undefined이면 isFollow는 false가 됩니다.", () => {
-    const { result } = renderHook(() =>
-      useChatRoomFollowBtnLogic({
-        otherUserId,
-        myFollowings: undefined
-      })
-    );
-
-    expect(result.current.isFollow).toBe(false);
+    expect(useChatRoomFollowMutate).toHaveBeenCalledWith(otherUserId);
+    expect(useChatRoomUnFollowMutate).toHaveBeenCalledWith(otherUserId);
   });
 });

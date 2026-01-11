@@ -12,56 +12,81 @@ jest.mock("react-toastify", () => ({
     warn: jest.fn()
   }
 }));
-jest.mock("next/navigation");
-jest.mock("@/domains/auth/shared/common/store/authStore");
+jest.mock("next/navigation", () => ({
+  __esModule: true,
+  useParams: jest.fn()
+}));
+jest.mock("@/domains/auth/shared/common/store/authStore", () => ({
+  __esModule: true,
+  default: jest.fn()
+}));
 jest.mock("@/domains/user/shared/api/followUser");
+
+type FetchError = {
+  status: number;
+  message: string;
+};
 
 describe("useProductDetailFollowMutate 훅 테스트", () => {
   const { Wrapper: wrapper, queryClient } = createQueryClientWrapper();
   const mockFollowUser = followUser as jest.Mock;
   const mockUseAuthStore = useAuthStore as unknown as jest.Mock;
-  const mockUseParams = useParams as jest.Mock;
+  const mockUseParams = useParams as unknown as jest.Mock;
 
-  const productKey = queryKeys.product.detail("123").queryKey;
-  const myProfileKey = queryKeys.profile.my.queryKey;
+  const productId = "123";
+  const myUid = "user123";
+  const targetUid = "targetUser123";
+
+  const productQueryKey = queryKeys.product.detail(productId).queryKey;
+
+  // ✅ 훅 내부와 동일한 queryKey 구성
+  const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
+    uid: myUid,
+    limit: 10
+  }).queryKey;
+  const userProfileQueryKey = queryKeys.profile.user(targetUid).queryKey;
+  const userFollowersQueryKey = queryKeys.profile
+    .user(targetUid)
+    ._ctx.followers({
+      uid: targetUid,
+      limit: 10
+    }).queryKey;
+  const userFollowingsQueryKey = queryKeys.profile
+    .user(targetUid)
+    ._ctx.followings({
+      uid: targetUid,
+      limit: 10
+    }).queryKey;
 
   const fakeProduct = {
-    _id: "123",
+    _id: productId,
     auth: {
-      followers: ["user1"]
+      isFollow: false
     }
   };
 
-  const fakeMyProfile = {
-    uid: "user123",
-    followings: ["user2"]
-  };
-
-  let invalidateSpy: unknown;
+  let invalidateSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    queryClient.setQueryData(productKey, fakeProduct);
-    queryClient.setQueryData(myProfileKey, fakeMyProfile);
+    queryClient.setQueryData(productQueryKey, fakeProduct);
 
-    mockUseParams.mockReturnValue({ productId: "123" });
-    mockUseAuthStore.mockImplementation((selector) =>
-      selector({ user: { uid: "user123" } })
+    mockUseParams.mockReturnValue({ productId });
+    mockUseAuthStore.mockImplementation((selector: any) =>
+      selector({ user: { uid: myUid } })
     );
 
     invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
   });
 
-  it("onMutate에서 product, myProfile 캐시 cancelQueries, setQueryData가 호출됩니다.", async () => {
+  it("onMutate에서 product 캐시 cancelQueries 후 auth.isFollow를 true로 optimistic 업데이트합니다.", async () => {
     const cancelQueriesSpy = jest.spyOn(queryClient, "cancelQueries");
-    const setQueryDataSpy = jest.spyOn(queryClient, "setQueryData");
 
     const { result } = renderHook(
-      () => useProductDetailFollowMutate("targetUser123"),
-      {
-        wrapper
-      }
+      () => useProductDetailFollowMutate(targetUid),
+      { wrapper }
     );
 
     act(() => {
@@ -69,29 +94,22 @@ describe("useProductDetailFollowMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      expect(cancelQueriesSpy).toHaveBeenCalledWith({ queryKey: productKey });
-      expect(cancelQueriesSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
-      expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
-        _id: "123",
-        auth: {
-          followers: ["user1", "user123"]
-        }
+      expect(cancelQueriesSpy).toHaveBeenCalledWith({
+        queryKey: productQueryKey
       });
-      expect(setQueryDataSpy).toHaveBeenCalledWith(myProfileKey, {
-        uid: "user123",
-        followings: ["user2", "targetUser123"]
-      });
+
+      const updatedProduct = queryClient.getQueryData(productQueryKey) as any;
+      expect(updatedProduct.auth.isFollow).toBe(true);
     });
   });
 
-  it("mutate가 성공하면 product, myProfile 캐시 invalidateQueries가 호출됩니다.", async () => {
-    mockFollowUser.mockResolvedValue({ data: { message: "팔로우 성공" } });
+  it("onError에서 product 캐시를 롤백하고, status 409이면 toast.warn(이미 팔로우) 호출", async () => {
+    const err: FetchError = { status: 409, message: "dup" };
+    mockFollowUser.mockRejectedValue(err);
 
     const { result } = renderHook(
-      () => useProductDetailFollowMutate("targetUser123"),
-      {
-        wrapper
-      }
+      () => useProductDetailFollowMutate(targetUid),
+      { wrapper }
     );
 
     act(() => {
@@ -99,22 +117,20 @@ describe("useProductDetailFollowMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: productKey });
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
+      // ✅ 롤백: 원래 데이터로 복구
+      expect(queryClient.getQueryData(productQueryKey)).toEqual(fakeProduct);
+
+      expect(toast.warn).toHaveBeenCalledWith("이미 팔로우한 유저 입니다.");
     });
   });
 
-  it("onError 발생 시 이전 데이터로 rollback되고 product, myProfile 캐시 invalidateQueries가 호출되며, toast.warn이 호출됩니다.", async () => {
-    mockFollowUser.mockRejectedValue({
-      response: { data: { message: "서버 오류" } },
-      isAxiosError: true
-    });
+  it("onError에서 status가 409가 아니면 일반 실패 toast.warn 호출", async () => {
+    const err: FetchError = { status: 500, message: "fail" };
+    mockFollowUser.mockRejectedValue(err);
 
     const { result } = renderHook(
-      () => useProductDetailFollowMutate("targetUser123"),
-      {
-        wrapper
-      }
+      () => useProductDetailFollowMutate(targetUid),
+      { wrapper }
     );
 
     act(() => {
@@ -122,13 +138,40 @@ describe("useProductDetailFollowMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      expect(queryClient.getQueryData(productKey)).toEqual(fakeProduct);
-      expect(queryClient.getQueryData(myProfileKey)).toEqual(fakeMyProfile);
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: productKey });
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
       expect(toast.warn).toHaveBeenCalledWith(
         "유저 팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요."
       );
+    });
+  });
+
+  it("onSettled에서 myProfile/userProfile/myFollowings/userFollowers/userFollowings 를 invalidateQueries 합니다.", async () => {
+    mockFollowUser.mockResolvedValue({ message: "ok" });
+
+    const { result } = renderHook(
+      () => useProductDetailFollowMutate(targetUid),
+      { wrapper }
+    );
+
+    act(() => {
+      result.current.productDetailfollowMutate();
+    });
+
+    await waitFor(() => {
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: myProfileQueryKey
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: userProfileQueryKey
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: myFollowingsQueryKey
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: userFollowersQueryKey
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: userFollowingsQueryKey
+      });
     });
   });
 });
