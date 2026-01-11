@@ -1,157 +1,164 @@
 import followUser from "@/domains/user/shared/api/followUser";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import useAuthStore from "@/domains/auth/shared/common/store/authStore";
-import { ProfileData } from "../../types/profileTypes";
+import { FollowUserData, ProfileData } from "../../types/profileTypes";
 import {
   InfiniteData,
   useMutation,
   useQueryClient
 } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
-import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import useAuthStore from "@/domains/auth/shared/common/store/authStore";
+
+type InfiniteProfileList = InfiniteData<FollowUserData[], unknown>;
 
 export default function useUserProfileFollowMutate(uid: string) {
   const queryClient = useQueryClient();
-  const user = useAuthStore((state) => state.user);
-  const myUid = user?.uid || "";
-  const searchParams = useSearchParams();
-  const urlQueryUid = searchParams.get("uid") || "";
+  const myUid = useAuthStore((s) => s.user?.uid ?? "");
 
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const userProfileQueryKey = queryKeys.profile.user(
-    urlQueryUid as string
-  ).queryKey;
-  const userFollowingsQueryKey = queryKeys.profile.user(urlQueryUid as string)
-    ._ctx.followings._def;
-  const userFollowersQueryKey = queryKeys.profile.user(urlQueryUid as string)
-    ._ctx.followers._def;
+  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
+    uid: myUid,
+    limit: 10
+  }).queryKey;
+
+  const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
+  const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
+    uid,
+    limit: 10
+  }).queryKey;
+
+  // ✅ (UI동기화용) 상대의 팔로잉 목록에 "내 카드"가 있을 수 있음
+  const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
+    uid,
+    limit: 10
+  }).queryKey;
 
   const { mutate: userFollowMutate } = useMutation({
     mutationFn: () => followUser(uid),
+
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
-
-      await queryClient.cancelQueries({ queryKey: userProfileQueryKey });
-
-      await queryClient.cancelQueries({ queryKey: userFollowingsQueryKey });
-
-      await queryClient.cancelQueries({ queryKey: userFollowersQueryKey });
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: targetProfileQueryKey }),
+        queryClient.cancelQueries({ queryKey: targetFollowersQueryKey }),
+        queryClient.cancelQueries({ queryKey: targetFollowingsQueryKey })
+      ]);
 
       const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
         | ProfileData
         | undefined;
 
-      const previousUserProfile = queryClient.getQueryData(
-        userProfileQueryKey
+      const previousTargetProfile = queryClient.getQueryData(
+        targetProfileQueryKey
       ) as ProfileData | undefined;
 
-      const previousUserFollowings = queryClient.getQueryData(
-        userFollowingsQueryKey
-      ) as InfiniteData<ProfileData[], unknown> | undefined;
+      const previousTargetFollowers = queryClient.getQueryData(
+        targetFollowersQueryKey
+      ) as InfiniteProfileList | undefined;
 
-      const previousUserFollowers = queryClient.getQueryData(
-        userFollowersQueryKey
-      ) as InfiniteData<ProfileData[], unknown> | undefined;
+      const previousTargetFollowings = queryClient.getQueryData(
+        targetFollowingsQueryKey
+      ) as InfiniteProfileList | undefined;
 
-      const newMyProfile = {
-        ...previousMyProfile,
-        followings: [...(previousMyProfile?.followings || []), uid]
-      };
-
-      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
-
-      const newUserProfile = {
-        ...previousUserProfile,
-        followers: [...(previousUserProfile?.followers || []), myUid]
-      };
-      queryClient.setQueryData(userProfileQueryKey, newUserProfile);
-
-      if (previousUserFollowings) {
-        const newUserFollowings = previousUserFollowings?.pages.map(
-          (page: ProfileData[]) => {
-            return page.map((profile) => {
-              if (profile.uid === uid) {
-                return {
-                  ...profile,
-                  followers: [...(profile.followers || []), myUid]
-                };
-              } else {
-                return profile;
-              }
-            });
-          }
-        );
-        queryClient.setQueryData(userFollowingsQueryKey, {
-          ...previousUserFollowings,
-          pages: newUserFollowings
+      /** ✅ 1) 상대 프로필: followersCount +1, isFollow true */
+      if (previousTargetProfile) {
+        queryClient.setQueryData(targetProfileQueryKey, {
+          ...previousTargetProfile,
+          followersCount: (previousTargetProfile.followersCount || 0) + 1,
+          isFollow: true
         });
       }
 
-      if (previousUserFollowers) {
-        const newUserFollowers = previousUserFollowers?.pages.map(
-          (page: ProfileData[]) => {
-            return page.map((profile) => {
-              if (profile.uid === uid) {
-                return {
-                  ...profile,
-                  followers: [...(profile.followers || []), myUid]
-                };
-              } else {
-                return profile;
-              }
-            });
-          }
+      /** ✅ 2) 상대 followers 목록: 나(myUid) 추가 (중복 방지 + 맨 앞 삽입) */
+      if (previousTargetFollowers && previousMyProfile && myUid) {
+        const alreadyExists = previousTargetFollowers.pages.some((page) =>
+          page.some((u) => u.uid === myUid)
         );
-        queryClient.setQueryData(userFollowersQueryKey, {
-          ...previousUserFollowers,
-          pages: newUserFollowers
-        });
+
+        if (!alreadyExists) {
+          const meAsFollower: FollowUserData = {
+            uid: myUid,
+            nickname: previousMyProfile.nickname,
+            profileImg: previousMyProfile.profileImg,
+            followersCount: previousMyProfile.followersCount || 0,
+            // ✅ 팔로우 했으니 내 팔로잉 수는 +1 된 상태로 보여주는 게 자연스러움
+            followingsCount: (previousMyProfile.followingsCount || 0) + 1,
+            isFollow: false, // "상대 followers 목록"에서 내 카드의 isFollow 의미가 애매하면 false 고정 추천
+            productIds: previousMyProfile.productIds || [],
+            reviewPercentage:
+              previousMyProfile.reviewInfo?.reviewPercentage || 0
+          };
+
+          const updatedTargetFollowers: InfiniteProfileList = {
+            ...previousTargetFollowers,
+            pages: previousTargetFollowers.pages.map((page, index) =>
+              index === 0 ? [meAsFollower, ...page] : page
+            )
+          };
+
+          queryClient.setQueryData(
+            targetFollowersQueryKey,
+            updatedTargetFollowers
+          );
+        }
       }
 
-      toast.success("유저 팔로우에 성공했어요.");
+      /**
+       * ✅ 3) (UI 동기화) 상대의 팔로잉 목록에 "내 카드"가 있다면 → 내 followingsCount +1 반영
+       * - 이건 관계 변경이 아니라, 캐시에 떠있는 "내 카드" 숫자만 맞추는 용도
+       */
+      if (previousTargetFollowings && myUid) {
+        const updatedTargetFollowings: InfiniteProfileList = {
+          ...previousTargetFollowings,
+          pages: previousTargetFollowings.pages.map((page) =>
+            page.map((user) =>
+              user.uid === myUid
+                ? {
+                    ...user,
+                    followingsCount: (user.followingsCount || 0) + 1
+                  }
+                : user
+            )
+          )
+        };
+
+        queryClient.setQueryData(
+          targetFollowingsQueryKey,
+          updatedTargetFollowings
+        );
+      }
+
       return {
-        previousMyProfile,
-        previousUserProfile,
-        previousUserFollowings,
-        previousUserFollowers
+        previousTargetProfile,
+        previousTargetFollowers,
+        previousTargetFollowings
       };
     },
-    onError: (error, data, ctx) => {
-      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
 
-      queryClient.setQueryData(userProfileQueryKey, ctx?.previousUserProfile);
+    onError: (_error, _vars, ctx) => {
+      queryClient.setQueryData(
+        targetProfileQueryKey,
+        ctx?.previousTargetProfile
+      );
 
-      if (ctx?.previousUserFollowings) {
+      if (ctx?.previousTargetFollowers) {
         queryClient.setQueryData(
-          userFollowingsQueryKey,
-          ctx.previousUserFollowings
+          targetFollowersQueryKey,
+          ctx.previousTargetFollowers
         );
       }
 
-      if (ctx?.previousUserFollowers) {
+      if (ctx?.previousTargetFollowings) {
         queryClient.setQueryData(
-          userFollowersQueryKey,
-          ctx.previousUserFollowers
+          targetFollowingsQueryKey,
+          ctx.previousTargetFollowings
         );
       }
 
-      if (isAxiosError<{ message: string }>(error)) {
-        toast.warn("유저 팔로우에 실패했어요.\n 잠시 후 다시 시도해주세요.");
-      }
+      toast.warn("유저 팔로우에 실패했어요.\n잠시 후 다시 시도해주세요.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
-
-      queryClient.invalidateQueries({ queryKey: userProfileQueryKey });
-
-      queryClient.invalidateQueries({
-        queryKey: userFollowingsQueryKey
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: userFollowersQueryKey
-      });
+      queryClient.invalidateQueries({ queryKey: myFollowingsQueryKey });
     }
   });
 
