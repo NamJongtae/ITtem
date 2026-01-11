@@ -1,15 +1,13 @@
 import useChatRoomFollowBtnLogic from "../hooks/useChatRoomFollowBtnLogic";
 
 interface IProps {
-  otherUserId: string;
-  myFollowings: string[] | undefined;
+  otherUserId: string | undefined;
+  isFollow: boolean | undefined;
 }
-export default function FollowBtn({
-  otherUserId,
-  myFollowings
-}: IProps) {
-  const { onClickFollow, onClickUnfollow, isFollow } =
-    useChatRoomFollowBtnLogic({ otherUserId, myFollowings });
+export default function FollowBtn({ otherUserId, isFollow }: IProps) {
+  const { onClickFollow, onClickUnfollow } = useChatRoomFollowBtnLogic({
+    otherUserId
+  });
 
   const followBtnStyle =
     "bg-rootColor betterhover:hover:bg-[#5588D9] text-white";
