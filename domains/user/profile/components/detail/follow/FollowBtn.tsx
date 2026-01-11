@@ -1,13 +1,15 @@
 import useFollowUserInList from "../../../hooks/useFollowUserInList";
-import { ProfileData } from "../../../types/profileTypes";
+import { FollowUserData } from "../../../types/profileTypes";
 
 interface IProps {
-  followProfileData: ProfileData | undefined;
+  followProfileData: FollowUserData | undefined;
+  listType: "followers" | "followings";
 }
 
-export default function FollowBtn({ followProfileData }: IProps) {
-  const { isFollow, isNotMyProfile, onClickFollow } = useFollowUserInList({
-    followProfileData
+export default function FollowBtn({ followProfileData, listType }: IProps) {
+  const { isNotMyProfile, onClickFollow } = useFollowUserInList({
+    followProfileData,
+    listType
   });
 
   return (
@@ -17,7 +19,7 @@ export default function FollowBtn({ followProfileData }: IProps) {
         onClick={onClickFollow}
         className="w-full max-w-[180px] border mt-3 py-2 px-4 betterhover:hover:bg-gray-100"
       >
-        {isFollow ? "- 언팔로우" : "+ 팔로우"}
+        {followProfileData?.isFollow ? "- 언팔로우" : "+ 팔로우"}
       </button>
     )
   );
