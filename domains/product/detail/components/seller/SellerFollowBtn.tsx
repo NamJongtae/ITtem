@@ -1,24 +1,28 @@
 import useFollowUserInProduct from "../../hooks/useFollowUserInProduct";
 import useMyProfileQuery from "@/domains/user/profile/hooks/queries/useMyProfileQuery";
-
 interface IProps {
   uid: string;
-  authFollowers: string[];
+  isFollow: boolean | undefined;
+  showCSRSkeleton: boolean;
 }
 
 export default function SellerFollowBtn({
   uid,
-  authFollowers
+  isFollow,
+  showCSRSkeleton
 }: IProps) {
-  const { myProfileData, myProfilePending } = useMyProfileQuery();
+  const { myProfileData } = useMyProfileQuery();
 
-  const { isFollowing, followHandler, isMyProfile } = useFollowUserInProduct({
+  const { followHandler, isMyProfile } = useFollowUserInProduct({
     uid,
-    authFollowers,
+    isFollow,
     myProfileData
   });
 
-  if (myProfilePending || isMyProfile) return null;
+  if (isMyProfile) return null;
+
+  if (showCSRSkeleton)
+    return <div className="py-2 px-4 bg-gray-100 animate-pulse w-24 h-10" />;
 
   return (
     <button
@@ -26,7 +30,7 @@ export default function SellerFollowBtn({
       onClick={followHandler}
       className="border py-2 px-4 text-md betterhover:hover:bg-gray-100"
     >
-      {isFollowing ? "- 언팔로우" : "+ 팔로우"}
+      {isFollow ? "- 언팔로우" : "+ 팔로우"}
     </button>
   );
 }
