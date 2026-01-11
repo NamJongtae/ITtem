@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { ProfileData } from "../../../types/profileTypes";
 import FollowBtn from "../FollowBtn";
 import ChangePasswordBtn from "./ChangePasswordBtn";
@@ -13,7 +12,6 @@ export default function UserInfoCardBtns({ profileData }: IProps) {
   const { uid } = useParams();
 
   const isUserProfile = !!uid;
-
 
   return isUserProfile ? (
     <FollowBtn profileData={profileData} />
