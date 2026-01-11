@@ -13,8 +13,6 @@ export interface UserDB {
   saleCount: number;
   purchaseCount: number;
   transactionCount: number;
-  followers: string[];
-  followings: string[];
   createdAt: Date;
 }
 
@@ -47,8 +45,6 @@ export const userSchema = new mongoose.Schema<UserDB>(
     saleCount: { type: Number, default: 0 },
     purchaseCount: { type: Number, default: 0 },
     transactionCount: { type: Number, default: 0 },
-    followers: { type: [String], default: [] },
-    followings: { type: [String], default: [] },
     createdAt: { type: Date, default: Date.now },
   },
   { collection: "users" }
