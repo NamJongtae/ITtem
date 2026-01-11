@@ -2,10 +2,16 @@ import ProfileDetailSkeletonUI from "@/domains/user/profile/components/detail/Pr
 import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
 import UserProfileContainer from "@/domains/user/profile/components/UserProfileContainer";
 import { BASE_URL } from "@/shared/common/constants/constant";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 interface IProps {
   params: Promise<{ uid: string }>;
+}
+
+export const revaildate = 60;
+
+export async function generateStaticParams() {
+  return [];
 }
 
 export async function generateMetadata() {
