@@ -1,4 +1,4 @@
-import { ProfileData } from "../../../types/profileTypes";
+import { FollowUserData, ProfileData } from "../../../types/profileTypes";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,10 +9,11 @@ const ReactStars = dynamic(() => import("react-stars"), {
 });
 
 interface IProps {
-  data: ProfileData;
+  data: FollowUserData;
+  listType: "followers" | "followings";
 }
 
-export default function Item({ data }: IProps) {
+export default function Item({ data, listType }: IProps) {
   return (
     <li className="mx-auto">
       <div className="flex gap-3">
@@ -46,12 +47,17 @@ export default function Item({ data }: IProps) {
                 : `${data.reviewPercentage}%`}
             </span>
           </div>
-          <span className="font-medium text-sm">
-            팔로워 {data.followers.length}
-          </span>
+          <div>
+            <span className="relative mr-4 font-medium text-sm before:w-[1px] before:h-3 before:absolute before:bg-gray-400 before:-right-[9px] before:top-1/2 before:-translate-y-1/2">
+              팔로워 {data.followersCount}
+            </span>
+            <span className="font-medium text-sm">
+              팔로잉 {data.followingsCount}
+            </span>
+          </div>
         </div>
       </div>
-      <FollowBtn followProfileData={data} />
+      <FollowBtn followProfileData={data} listType={listType} />
     </li>
   );
 }
