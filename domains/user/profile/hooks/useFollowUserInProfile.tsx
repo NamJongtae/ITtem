@@ -2,7 +2,6 @@ import { ProfileData } from "../types/profileTypes";
 import useUserProfileFollowMutate from "./mutations/useUserProfileFollowMutate";
 import useUserProfileUnfollowMutate from "./mutations/useUserProfileUnfollowMutate";
 import { toast } from "react-toastify";
-import useMyProfileQuery from "./queries/useMyProfileQuery";
 
 interface IParams {
   profileData: ProfileData | undefined;
