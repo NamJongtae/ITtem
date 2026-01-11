@@ -1,14 +1,10 @@
-import customAxios from "@/shared/common/utils/customAxios";
 import { ProfileResponseData } from "../types/responseTypes";
-import { AxiosResponse } from "axios";
+import { customFetch } from "@/shared/common/utils/customFetch";
 
 export default async function getUserProfile(
   uid: string
-): Promise<AxiosResponse<ProfileResponseData>> {
-  try {
-    const response = await customAxios(`/api/profile/${uid}`);
-    return response;
-  } catch (error) {
-    throw error;
-  }
+): Promise<ProfileResponseData> {
+  return await customFetch(`/api/profile/${uid}`, {
+    next: { revalidate: 60, tags: [`profile-${uid}`] }
+  });
 }
