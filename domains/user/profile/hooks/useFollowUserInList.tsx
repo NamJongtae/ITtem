@@ -1,44 +1,46 @@
-import useMyProfileFollowMutate from "./mutations/useMyProfileFollowMutate";
-import useMyProfileUnfollowMutate from "./mutations/useMyProfileUnfollowMutate";
-import useUserProfileFollowMutate from "./mutations/useUserProfileFollowMutate";
-import useUserProfileUnfollowMutate from "./mutations/useUserProfileUnfollowMutate";
-import { ProfileData } from "../types/profileTypes";
+import useMyProfileFollowInListMutate from "./mutations/useMyProfileFollowInListMutate";
+import useMyProfileUnfollowInListMutate from "./mutations/useMyProfileUnfollowInListMutate";
+import { FollowUserData, ProfileData } from "../types/profileTypes";
 import { toast } from "react-toastify";
-import { useGetQuerys } from "@/shared/common/hooks/useGetQuerys";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
+import useUserProfileFollowInListMutate from "./mutations/useUserProfileFollowInListMutate";
+import useUserProfileUnFollowInListMutate from "./mutations/useUserProfileUnFollowInListMutate";
+import { useParams } from "next/navigation";
 
 export default function useFollowUserInList({
-  followProfileData
+  followProfileData,
+  listType
 }: {
-  followProfileData: ProfileData | undefined;
+  followProfileData: FollowUserData | undefined;
+  listType: "followers" | "followings";
 }) {
-  const { myProfilefollowMutate } = useMyProfileFollowMutate(
+  const { myProfilefollowMutate } = useMyProfileFollowInListMutate(
     followProfileData?.uid || ""
   );
-  const { myProfileUnfollowMutate } = useMyProfileUnfollowMutate(
+  const { myProfileUnfollowMutate } = useMyProfileUnfollowInListMutate(
     followProfileData?.uid || ""
   );
 
-  const { userFollowMutate } = useUserProfileFollowMutate(
-    followProfileData?.uid || ""
-  );
-  const { userUnfollowMutate } = useUserProfileUnfollowMutate(
-    followProfileData?.uid || ""
-  );
+  const { userFollowMutate } = useUserProfileFollowInListMutate({
+    uid: followProfileData?.uid || "",
+    listType
+  });
+  const { userUnfollowMutate } = useUserProfileUnFollowInListMutate({
+    uid: followProfileData?.uid || "",
+    listType
+  });
 
   const queryClient = useQueryClient();
   const myProfileData = queryClient.getQueryData(
     queryKeys.profile.my.queryKey
   ) as ProfileData | undefined;
 
-  const isFollow =
-    !!myProfileData?.followings?.includes(followProfileData?.uid || "") &&
-    !!followProfileData?.followers?.includes(myProfileData?.uid);
+  const isFollow = followProfileData?.isFollow;
 
-  const { uid } = useGetQuerys("uid");
+  const { uid } = useParams();
 
-  const isMyProfilePage = !!uid;
+  const isMyProfilePage = !!!uid;
 
   const isNotMyProfile = myProfileData?.uid !== followProfileData?.uid;
 
