@@ -1,7 +1,6 @@
 import addProductWish from "../../api/addProductWish";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
-import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 import { ProductDetailData } from "../../types/productDetailTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
@@ -9,60 +8,61 @@ import { useParams } from "next/navigation";
 
 export default function useAddWishMutate() {
   const params = useParams();
-  const productId = params?.productId || "";
+  const productId = (params?.productId as string) || "";
   const queryClient = useQueryClient();
-  const productQueryKey = queryKeys.product.detail(
-    productId as string
-  ).queryKey;
-  const myUid = useAuthStore((state) => state.user?.uid);
+
+  const productQueryKey = queryKeys.product.detail(productId).queryKey;
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
+  const myWishListQueryKey = queryKeys.profile.my._ctx.wish({
+    limit: 10
+  }).queryKey;
+
+  const isLoggedIn = !!useAuthStore((state) => state.user?.uid);
+
   const { mutate: addWishMutate, isPending: addWishPending } = useMutation<
     AxiosResponse<{ message: string }>,
     AxiosError,
     void,
-    { previousProduct: ProductDetailData; previousMyProfile: ProfileData }
+    { previousProduct?: ProductDetailData }
   >({
-    mutationFn: () => addProductWish(productId as string),
+    mutationFn: () => addProductWish(productId),
     onMutate: async () => {
-      await queryClient.cancelQueries({
-        queryKey: productQueryKey
-      });
+      if (!isLoggedIn) return {};
 
-      await queryClient.cancelQueries({ queryKey: myProfileQueryKey });
+      // 상품 상세만 낙관적 업데이트
+      await queryClient.cancelQueries({ queryKey: productQueryKey });
 
-      const previousProduct = queryClient.getQueryData(
-        productQueryKey
-      ) as ProductDetailData;
+      const previousProduct = queryClient.getQueryData(productQueryKey) as
+        | ProductDetailData
+        | undefined;
 
-      const previousMyProfile = queryClient.getQueryData(
-        myProfileQueryKey
-      ) as ProfileData;
+      if (!previousProduct) return { previousProduct };
 
-      const newProduct = {
+      // 이미 찜 상태면 중복 업데이트 방지 (UI 연타 대비)
+      if (previousProduct.isWish) return { previousProduct };
+
+      const newProduct: ProductDetailData = {
         ...previousProduct,
-        wishUserIds: [...previousProduct.wishUserIds, myUid],
-        wishCount: previousProduct.wishCount + 1
-      };
-
-      const newMyProfile = {
-        ...previousMyProfile,
-        wishProductIds: [
-          ...previousMyProfile.wishProductIds,
-          previousProduct._id
-        ]
+        isWish: true,
+        wishCount: (previousProduct.wishCount ?? 0) + 1
       };
 
       queryClient.setQueryData(productQueryKey, newProduct);
-      queryClient.setQueryData(myProfileQueryKey, newMyProfile);
 
-      return { previousProduct, previousMyProfile };
+      return { previousProduct };
     },
-    onError: (error, data, ctx) => {
-      queryClient.setQueryData(productQueryKey, ctx?.previousProduct);
-      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
+    onError: (_error, _data, ctx) => {
+      // 상품 상세 롤백
+      if (ctx?.previousProduct) {
+        queryClient.setQueryData(productQueryKey, ctx.previousProduct);
+      }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: productQueryKey });
+      // ✅ 프로필 wishCount 반영
+      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
+
+      // ✅ 내 찜 목록 반영
+      queryClient.invalidateQueries({ queryKey: myWishListQueryKey });
     }
   });
 
