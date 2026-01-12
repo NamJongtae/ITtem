@@ -1,5 +1,10 @@
 import { ApiResponse } from "@/shared/common/types/responseTypes";
-import { FollowUserData, ProfileData, ProfileReviewData } from "./profileTypes";
+import {
+  FollowUserData,
+  ProfileData,
+  ProfileReviewData,
+  WishlistProductData
+} from "./profileTypes";
 
 export interface ProfileResponseData extends ApiResponse {
   profile: ProfileData;
@@ -15,4 +20,8 @@ export interface FollowingsResponseData extends ApiResponse {
 
 export interface ReceivedReviewsResponseData extends ApiResponse {
   reviews: ProfileReviewData[];
+}
+
+export interface WishlistProductResponseData extends ApiResponse {
+  products: WishlistProductData[];
 }
