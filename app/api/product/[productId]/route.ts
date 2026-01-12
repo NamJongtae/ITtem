@@ -3,6 +3,7 @@ import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import User from "@/domains/auth/shared/common/models/User";
+import Wish from "@/domains/product/shared/models/Wish";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import {
   ProductImgData,
@@ -17,21 +18,17 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(
   req: NextRequest,
-  {
-    params
-  }: {
-    params: Promise<{ productId: string }>;
-  }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   try {
     const { productId } = await params;
+
     if (!productId) {
       return NextResponse.json(
         { message: "상품 ID가 없어요." },
         { status: 404 }
       );
     }
-
     if (productId.length < 24) {
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
@@ -65,26 +62,29 @@ export async function GET(
     // 👇 상품 작성자 ID
     const productOwnerId = product.uid;
 
-    // ✅ isFollow 여부 계산
-    let isFollow = false;
+    const followPromise =
+      myUid && String(myUid) !== String(productOwnerId)
+        ? mongoose.connection.collection("follows").findOne({
+            followerId: new mongoose.Types.ObjectId(myUid),
+            followingId: new mongoose.Types.ObjectId(productOwnerId)
+          })
+        : Promise.resolve(null);
 
-    if (!myUid) {
-      // 비로그인 상태면 무조건 false
-      isFollow = false;
-    } else if (String(myUid) === String(productOwnerId)) {
-      // 내 상품이면 팔로우 false
-      isFollow = false;
-    } else {
-      // 로그인 + 남의 상품일 때만 follow 조회
-      const followExists = await mongoose.connection
-        .collection("follows")
-        .findOne({
-          followerId: new mongoose.Types.ObjectId(myUid),
-          followingId: new mongoose.Types.ObjectId(productOwnerId)
-        });
+    const wishPromise = myUid
+      ? Wish.exists({
+          userId: new mongoose.Types.ObjectId(myUid),
+          productId: new mongoose.Types.ObjectId(productId as string)
+        })
+      : Promise.resolve(null);
 
-      isFollow = !!followExists;
-    }
+    const [followExists, wishExists] = await Promise.all([
+      followPromise,
+      wishPromise
+    ]);
+
+    const isFollow = !!followExists;
+    const isWish = !!wishExists;
+
     // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
     const aggregation = [
       {
@@ -207,6 +207,7 @@ export async function GET(
         message: "상품 조회에 성공했어요.",
         product: {
           ...product._doc,
+          isWish,
           auth: { ...userWithReviews[0], isFollow }
         }
       },
@@ -354,14 +355,11 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  {
-    params
-  }: {
-    params: Promise<{ productId: string }>;
-  }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
     const isValidAuth = await checkAuthorization();
 
@@ -374,7 +372,6 @@ export async function DELETE(
     }
 
     const { productId } = await params;
-
     const myUid = isValidAuth?.auth?.uid;
 
     if (!productId) {
@@ -444,6 +441,7 @@ export async function DELETE(
       console.log("상품 이미지 삭제에 실패했어요.");
     }
 
+    // 유저의 productIds에서 제거
     const profileResult = await User.updateOne(
       { _id: new mongoose.Types.ObjectId(myUid) },
       {
@@ -454,10 +452,18 @@ export async function DELETE(
       { session }
     );
 
+    const wishDeleteResult = await Wish.deleteMany(
+      { productId: new mongoose.Types.ObjectId(productId as string) },
+      { session }
+    );
+
+    if (!wishDeleteResult.acknowledged) {
+      throw new Error("상품 찜(Wish) 데이터 삭제에 실패했어요.");
+    }
+
+    // 상품 삭제
     const productResult = await Product.deleteOne(
-      {
-        _id: new mongoose.Types.ObjectId(productId as string)
-      },
+      { _id: new mongoose.Types.ObjectId(productId as string) },
       { session }
     );
 
@@ -470,6 +476,7 @@ export async function DELETE(
       throw new Error("상품 삭제에 실패했어요.\n잠시 후 다시 시도해주세요.");
     }
 
+    // 판매 거래 정보 삭제
     const saleTradingDeleteResult = await SaleTrading.deleteOne(
       {
         productId: new mongoose.Types.ObjectId(productId as string),
@@ -488,9 +495,7 @@ export async function DELETE(
     await session.commitTransaction();
     session.endSession();
 
-    // 상품 페이지 재검증
     revalidatePath(`/product`);
-    // 해당 상품 상세 페이지 재검증
     revalidatePath(`/product/${productId}`);
 
     return NextResponse.json(
