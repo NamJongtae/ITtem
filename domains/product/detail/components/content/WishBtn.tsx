@@ -9,9 +9,9 @@ interface IProps {
 }
 
 export default function WishBtn({ productDetailData, myProfileData }: IProps) {
-  const { handleClickWish, isWish, addWishPending, deleteWishPending } =
+  const { handleClickWish, addWishPending, deleteWishPending } =
     useProductWishHandler({
-      productDetailData,
+      isWish: productDetailData?.isWish,
       myProfileData
     });
 
@@ -23,12 +23,16 @@ export default function WishBtn({ productDetailData, myProfileData }: IProps) {
       disabled={addWishPending || deleteWishPending}
     >
       <Image
-        src={isWish ? "/icons/heart-icon.svg" : "/icons/heart-unfill-icon.svg"}
+        src={
+          productDetailData?.isWish
+            ? "/icons/heart-icon.svg"
+            : "/icons/heart-unfill-icon.svg"
+        }
         width={12}
         height={12}
-        alt={isWish ? "찜해제" : "찜하기"}
+        alt={productDetailData?.isWish ? "찜해제" : "찜하기"}
       />{" "}
-      {isWish ? "찜해제" : "찜하기"}
+      {productDetailData?.isWish ? "찜해제" : "찜하기"}
     </button>
   );
 }
