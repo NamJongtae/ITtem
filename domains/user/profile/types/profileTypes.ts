@@ -1,4 +1,4 @@
-import { ProductData } from "@/domains/product/shared/types/productTypes";
+import { ProductImgData } from "@/domains/product/shared/types/productTypes";
 import { ApiResponse } from "@/shared/common/types/responseTypes";
 
 export interface ReviewSummaryData {
@@ -18,8 +18,8 @@ export interface ProfileData {
   followersCount: number;
   followingsCount: number;
   isFollow?: boolean;
+  wishCount?: number;
   productIds: string[];
-  wishProductIds: string[];
   saleCount: number;
   purchaseCount: number;
   transactionCount: number;
@@ -43,8 +43,13 @@ export interface ProfileReviewData {
   };
 }
 
-export interface WishlistProductData extends ApiResponse {
-  products: ProductData[];
+export interface WishlistProductData {
+  _id: string;
+  name: string;
+  createdAt?: Date | string;
+  imgData: ProductImgData[];
+  location: string;
+  price: number;
 }
 
 export interface DeleteWishlistProductDataResponseData extends ApiResponse {
