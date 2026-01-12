@@ -1,22 +1,17 @@
-import { WishlistProductData } from "../types/profileTypes";
 import customAxios from "@/shared/common/utils/customAxios";
 import { AxiosResponse } from "axios";
+import { WishlistProductResponseData } from "../types/responseTypes";
 
 export default async function getWishlistProductData({
-  wishProductIds,
   cursor,
   limit = 10
 }: {
-  wishProductIds: string[];
   cursor?: unknown;
   limit?: number;
-}): Promise<AxiosResponse<WishlistProductData>> {
+}): Promise<AxiosResponse<WishlistProductResponseData>> {
   try {
-    const response = await customAxios.post(
-      `/api/profile/wish?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
-      {
-        wishProductIds
-      }
+    const response = await customAxios(
+      `/api/profile/wish?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`
     );
     return response;
   } catch (error) {
