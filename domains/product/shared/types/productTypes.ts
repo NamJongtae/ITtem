@@ -56,6 +56,7 @@ export interface ProductData {
   reportCount: number;
   reportUserIds: string[];
   wishCount: number;
+  isWish: boolean;
   wishUserIds: string[];
   viewCount: number;
   imgData: ProductImgData[];
