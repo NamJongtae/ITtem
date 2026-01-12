@@ -58,17 +58,10 @@ const profileQueryKey = createQueryKeys("profile", {
           return response.data.followings;
         }
       }),
-      wish: ({
-        wishProductIds,
-        limit = 10
-      }: {
-        wishProductIds: string[];
-        limit?: number;
-      }) => ({
+      wish: ({ limit = 10 }: { limit?: number } = {}) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getWishlistProductData({
-            wishProductIds,
             cursor: pageParam,
             limit
           });
