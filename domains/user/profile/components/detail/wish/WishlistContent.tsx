@@ -4,17 +4,17 @@ import SkeletonUI from "./SkeletonUI";
 import Empty from "@/shared/common/components/Empty";
 
 interface IProps {
-  wishProductIds: string[] | undefined;
+  wishCount: number | undefined;
 }
 
-export default function WishlistContent({ wishProductIds }: IProps) {
+export default function WishlistContent({ wishCount }: IProps) {
   return (
     <div className="mt-8 mb-8">
       <h2 className="font-semibold border-b pb-3 mb-3">
-        찜 {wishProductIds?.length || 0}개
+        찜 {wishCount || 0}개
       </h2>
 
-      {wishProductIds?.length === 0 ? (
+      {!wishCount || wishCount === 0 ? (
         <Empty message={"찜 목록이 없어요."} />
       ) : (
         <SuspenseErrorBoundary
@@ -27,7 +27,7 @@ export default function WishlistContent({ wishProductIds }: IProps) {
             />
           }
         >
-          <List wishProductIds={wishProductIds} />
+          <List />
         </SuspenseErrorBoundary>
       )}
     </div>
