@@ -8,6 +8,7 @@ export type ProductUploadData = Omit<
   | "wishCount"
   | "wishUserIds"
   | "viewCount"
+  | "isWish"
   | "block"
   | "reportCount"
   | "reportUserIds"
