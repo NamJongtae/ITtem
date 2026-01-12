@@ -6,10 +6,7 @@ interface IProps {
   onClickSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function DeleteBtn({
-  selectedWish,
-  onClickSelectAll
-}: IProps) {
+export default function DeleteBtn({ selectedWish, onClickSelectAll }: IProps) {
   const { allCheckBoxInputRef, onClickDelete } =
     useWishDeleteHandler(selectedWish);
 
@@ -23,7 +20,7 @@ export default function DeleteBtn({
           <input
             type="checkbox"
             onChange={onClickSelectAll}
-            className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all  checked:border-red-400 checked:bg-red-400"
+            className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-blue-gray-200 transition-all  checked:border-red-400 checked:bg-red-400"
             id="selectAll"
             ref={allCheckBoxInputRef}
           />

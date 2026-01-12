@@ -17,7 +17,7 @@ export default function Item({
   selectedWish
 }: IProps) {
   return (
-    <li key={wishProduct._id} className="relative flex border">
+    <li key={wishProduct._id} className="relative flex border rounded-md">
       <Link href={`/product/${wishProduct._id}`}>
         <Image
           className="w-32 h-32 border-r"
@@ -60,7 +60,7 @@ export default function Item({
         >
           <input
             type="checkbox"
-            className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all checked:border-red-400 checked:bg-red-400"
+            className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-blue-gray-200 transition-all checked:border-red-400 checked:bg-red-400"
             id="wish-delete-checkbox"
             onChange={() => onClickCheckBox(wishProduct._id)}
             checked={selectedWish.includes(wishProduct._id)}
