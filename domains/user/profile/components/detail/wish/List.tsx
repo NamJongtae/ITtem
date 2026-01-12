@@ -8,15 +8,9 @@ import useProfileWishInfiniteQuery from "../../../hooks/queries/useProfileWishIn
 import useWishDeleteSelector from "../../../hooks/useWishDeleteSelector";
 import ItemSkeltonUI from "./ItemSkeletonUI";
 
-interface IProps {
-  wishProductIds: string[] | undefined;
-}
-
-export default function List({ wishProductIds }: IProps) {
+export default function List() {
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useProfileWishInfiniteQuery({
-      wishProductIds: wishProductIds || []
-    });
+    useProfileWishInfiniteQuery({ limit: 10 });
 
   const { selectedWish, onClickSelectAll, onClickCheckBox } =
     useWishDeleteSelector({
