@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/shared/common/utils/db/db";
 import mongoose from "mongoose";
 import Product from "@/domains/product/shared/models/Product";
-import User from "@/domains/auth/shared/common/models/User";
+import Wish from "@/domains/product/shared/models/Wish";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import * as Sentry from "@sentry/nextjs";
 
@@ -15,7 +15,6 @@ export async function PATCH(
 
   try {
     const isValidAuth = await checkAuthorization();
-
     if (!isValidAuth?.isValid) {
       return NextResponse.json(
         { message: isValidAuth?.message },
@@ -24,7 +23,6 @@ export async function PATCH(
     }
 
     const { productId } = await params;
-
     const myUid = isValidAuth?.auth?.uid;
 
     if (!productId) {
@@ -33,7 +31,6 @@ export async function PATCH(
         { status: 422 }
       );
     }
-
     if (productId.length < 24) {
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
@@ -43,73 +40,52 @@ export async function PATCH(
 
     await dbConnect();
 
+    // 상품 존재 확인
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string)
-    }).session(session);
-
-    const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid)
+      _id: new mongoose.Types.ObjectId(productId)
     }).session(session);
 
     if (!product) {
+      await session.abortTransaction();
+      session.endSession();
       return NextResponse.json(
         { message: "상품이 존재하지 않아요." },
         { status: 404 }
       );
     }
 
-    if (!user) {
-      return NextResponse.json(
-        { message: "유저가 존재하지 않아요." },
-        { status: 401 }
-      );
-    }
-
-    if (
-      product.wishUserIds.includes(myUid) &&
-      user.wishProductIds.includes(product._id)
-    ) {
-      return NextResponse.json(
-        { message: "이미 찜한 상품이에요." },
-        { status: 409 }
-      );
-    }
-
-    // 유저 찜 목록에 상품 추가
-    if (!user.wishProductIds.includes(product._id)) {
-      const profileResult = await User.updateOne(
-        {
-          _id: new mongoose.Types.ObjectId(myUid)
-        },
-        {
-          $addToSet: {
-            wishProductIds: new mongoose.Types.ObjectId(product._id as string)
+    // Wish 생성 (중복이면 에러)
+    try {
+      await Wish.create(
+        [
+          {
+            userId: new mongoose.Types.ObjectId(myUid),
+            productId: new mongoose.Types.ObjectId(productId)
           }
-        },
+        ],
         { session }
       );
-
-      if (!profileResult.acknowledged || profileResult.modifiedCount === 0) {
-        throw new Error("유저 찜 목록에 상품 ID 추가에 실패했어요.");
+    } catch (e: any) {
+      if (e?.code === 11000) {
+        await session.abortTransaction();
+        session.endSession();
+        return NextResponse.json(
+          { message: "이미 찜한 상품이에요." },
+          { status: 409 }
+        );
       }
+      throw e;
     }
 
-    // 상품 찜 목록에 유저 추가
-    if (!product.wishUserIds.includes(myUid)) {
-      const productResult = await Product.updateOne(
-        {
-          _id: new mongoose.Types.ObjectId(product._id as string)
-        },
-        {
-          $addToSet: { wishUserIds: myUid },
-          $inc: { wishCount: 1 }
-        },
-        { session }
-      );
+    // Wish가 생성됐을 때 카운트 증가
+    const productResult = await Product.updateOne(
+      { _id: new mongoose.Types.ObjectId(productId) },
+      { $inc: { wishCount: 1 } },
+      { session }
+    );
 
-      if (!productResult.acknowledged || productResult.modifiedCount === 0) {
-        throw new Error("상품 찜 목록에 유저 ID 추가에 실패했어요.");
-      }
+    if (!productResult.acknowledged || productResult.modifiedCount === 0) {
+      throw new Error("상품 wishCount 증가에 실패했어요.");
     }
 
     await session.commitTransaction();
@@ -132,20 +108,19 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const isValidAuth = await checkAuthorization();
-
     if (!isValidAuth?.isValid) {
       return NextResponse.json(
-        {
-          message: isValidAuth?.message
-        },
+        { message: isValidAuth?.message },
         { status: 401 }
       );
     }
 
     const { productId } = await params;
-
     const myUid = isValidAuth?.auth?.uid;
 
     if (!productId) {
@@ -154,77 +129,61 @@ export async function DELETE(
         { status: 422 }
       );
     }
+    if (productId.length < 24) {
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 422 }
+      );
+    }
 
     await dbConnect();
 
-    const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string)
-    });
+    // Wish 삭제 (삭제된 경우에만 카운트 감소)
+    const deleteResult = await Wish.deleteOne(
+      {
+        userId: new mongoose.Types.ObjectId(myUid),
+        productId: new mongoose.Types.ObjectId(productId)
+      },
+      { session }
+    );
 
-    const user = await User.findOne({
-      _id: new mongoose.Types.ObjectId(myUid)
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "유저가 존재하지 않아요." },
-        { status: 401 }
-      );
+    if (!deleteResult.acknowledged) {
+      throw new Error("Wish 삭제 요청이 정상 처리되지 않았어요.");
     }
 
-    if (!product) {
-      return NextResponse.json(
-        { message: "상품이 존재하지 않아요." },
-        { status: 404 }
-      );
-    }
-
-    if (
-      !product.wishUserIds.includes(isValidAuth?.auth?.uid) &&
-      !user.wishProductIds.includes(product._id)
-    ) {
+    if (deleteResult.deletedCount === 0) {
+      await session.abortTransaction();
+      session.endSession();
       return NextResponse.json(
         { message: "찜한 상품이 아니에요." },
         { status: 409 }
       );
     }
 
-    if (user.wishProductIds.includes(product._id)) {
-      const profileResult = await User.updateOne(
-        {
-          _id: new mongoose.Types.ObjectId(myUid)
-        },
-        { $pull: { wishProductIds: product._id } }
-      );
-      if (!profileResult.acknowledged || profileResult.modifiedCount === 0) {
-        throw new Error("유저 찜 목록에서 상품 ID 삭제에 실패했어요.");
-      }
+    const productResult = await Product.updateOne(
+      { _id: new mongoose.Types.ObjectId(productId) },
+      { $inc: { wishCount: -1 } },
+      { session }
+    );
+
+    if (!productResult.acknowledged || productResult.modifiedCount === 0) {
+      throw new Error("상품 wishCount 감소에 실패했어요.");
     }
 
-    if (product.wishUserIds.includes(isValidAuth?.auth?.uid)) {
-      const productResult = await Product.updateOne(
-        { _id: new mongoose.Types.ObjectId(productId as string) },
-        {
-          $inc: { wishCount: -1 },
-          $pull: { wishUserIds: isValidAuth?.auth?.uid }
-        }
-      );
-      if (!productResult.acknowledged || productResult.modifiedCount === 0) {
-        throw new Error("상품 찜 목록에서 유저 ID 삭제에 실패했어요.");
-      }
-    }
+    await session.commitTransaction();
+    session.endSession();
 
     return NextResponse.json(
-      { message: "상품을 찜 삭제에 성공했어요." },
+      { message: "상품 찜 삭제에 성공했어요." },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
+    await session.abortTransaction();
+    session.endSession();
     return NextResponse.json(
-      {
-        message: "상품 찜 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
-      },
+      { message: "상품 찜 삭제에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
