@@ -25,6 +25,7 @@ describe("deleteProductImgs 함수 테스트", () => {
     name: "상품",
     price: 10000,
     description: "설명",
+    isWish: false,
     transaction: ProductTransaction.직거래,
     deliveryFee: "포함",
     returnPolicy: "가능",
@@ -40,7 +41,6 @@ describe("deleteProductImgs 함수 테스트", () => {
     reportCount: 0,
     reportUserIds: [],
     wishCount: 0,
-    wishUserIds: [],
     viewCount: 0,
     sellType: ProductSellType.중고거래
   };
@@ -62,7 +62,7 @@ describe("deleteProductImgs 함수 테스트", () => {
   });
 
   it("productEditData.imgData가 없으면 deleteProductImgsToFirestore를 호출하지 않아야 합니다.", async () => {
-    const productEditData = {}; 
+    const productEditData = {};
 
     await deleteProductImgs({
       productData: baseProductData,
