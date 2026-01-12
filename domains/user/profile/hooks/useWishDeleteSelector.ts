@@ -1,10 +1,10 @@
-import { ProductData } from "@/domains/product/shared/types/productTypes";
-import React, { useState } from "react";
+import { WishlistProductData } from "../types/profileTypes";
+import { useState } from "react";
 
 export default function useWishDeleteSelector({
   data
 }: {
-  data: ProductData[] | undefined;
+  data: WishlistProductData[] | undefined;
 }) {
   const [selectedWish, setSelectedWish] = useState<string[]>([]);
 
