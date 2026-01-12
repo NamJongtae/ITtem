@@ -19,10 +19,7 @@ export default function Content({
   switch (profileMenu) {
     case "판매상품": {
       return (
-        <ProductContent
-          profileData={profileData}
-          isMyProfile={isMyProfile}
-        />
+        <ProductContent profileData={profileData} isMyProfile={isMyProfile} />
       );
     }
     case "거래후기": {
@@ -34,7 +31,7 @@ export default function Content({
       );
     }
     case "찜": {
-      return <WishlistContent wishProductIds={profileData?.wishProductIds} />;
+      return <WishlistContent wishCount={profileData?.wishCount} />;
     }
     case "팔로잉": {
       return <FollowingsContent profileData={profileData} />;
