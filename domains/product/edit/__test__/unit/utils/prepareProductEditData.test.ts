@@ -28,6 +28,7 @@ describe("prepareProductEditData", () => {
     price: 10000,
     description: "기존 설명",
     transaction: ProductTransaction.직거래,
+    isWish: false,
     deliveryFee: "포함",
     returnPolicy: "가능" as ProductReturnPolicy,
     condition: ProductCondition.A,
@@ -39,7 +40,6 @@ describe("prepareProductEditData", () => {
     reportCount: 0,
     reportUserIds: [],
     wishCount: 0,
-    wishUserIds: [],
     viewCount: 0,
     sellType: ProductSellType.중고거래
   };
