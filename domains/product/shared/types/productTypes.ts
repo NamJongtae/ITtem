@@ -57,7 +57,6 @@ export interface ProductData {
   reportUserIds: string[];
   wishCount: number;
   isWish: boolean;
-  wishUserIds: string[];
   viewCount: number;
   imgData: ProductImgData[];
   price: number;
