@@ -3,9 +3,10 @@ import { ProductData } from "@/domains/product/shared/types/productTypes";
 import Image from "next/image";
 import Link from "next/link";
 import CheckIcon from "@/public/icons/check-icon.svg";
+import { WishlistProductData } from "../../../types/profileTypes";
 
 interface IProps {
-  wishProduct: ProductData;
+  wishProduct: WishlistProductData;
   onClickCheckBox: (id: string) => void;
   selectedWish: string[];
 }
