@@ -1,17 +1,15 @@
 import getWishlistProductData from "../../api/getWishlistProductData";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import { ProductData } from "@/domains/product/shared/types/productTypes";
 import { InfiniteData, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { WishlistProductData } from "../../types/profileTypes";
 
 export default function useProfileWishInfiniteQuery({
-  wishProductIds,
   limit = 10
 }: {
-  wishProductIds: string[];
   limit?: number;
 }) {
-  const myProfileQueryKey = queryKeys.profile.my._ctx.wish._def;
+  const myProfileQueryKey = queryKeys.profile.my._ctx.wish({ limit }).queryKey;
 
   const {
     data,
@@ -21,14 +19,13 @@ export default function useProfileWishInfiniteQuery({
     fetchNextPage,
     error
   } = useSuspenseInfiniteQuery<
-    ProductData[],
+    WishlistProductData[],
     AxiosError,
-    InfiniteData<ProductData>
+    InfiniteData<WishlistProductData>
   >({
     queryKey: myProfileQueryKey,
     queryFn: async ({ pageParam }) => {
       const response = await getWishlistProductData({
-        wishProductIds,
         cursor: pageParam,
         limit
       });
