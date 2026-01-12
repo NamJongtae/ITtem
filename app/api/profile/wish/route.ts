@@ -47,12 +47,12 @@ export async function GET(req: NextRequest) {
     };
 
     if (cursor && cursor.length >= 24) {
-      wishQuery._id = { $gt: new mongoose.Types.ObjectId(cursor) };
+      wishQuery._id = { $lt: new mongoose.Types.ObjectId(cursor) };
     }
 
     const wishes = await Wish.find(wishQuery)
       .select("_id productId createdAt")
-      .sort({ _id: 1 })
+      .sort({ _id: -1 })
       .limit(pageLimit)
       .lean<WishListItem[]>();
 
@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
       .select("_id price name imgData createdAt location")
       .lean<WishlistProductData[]>();
 
+    // ✅ $in 조회는 순서 보장 X → wish 순서대로 재정렬
     const productMap = new Map<string, WishlistProductData>(
       products.map((p) => [String(p._id), p])
     );
@@ -83,6 +84,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       message: "찜 목록 조회에 성공했어요.",
       products: orderedProducts,
+      // ✅ 다음 페이지 커서: 이번 페이지의 "마지막" (가장 오래된) wish _id
       nextCursor: String(wishes[wishes.length - 1]._id)
     });
   } catch (error) {
@@ -94,7 +96,6 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-
 export async function DELETE(req: NextRequest) {
   try {
     const isValidAuth = await checkAuthorization();
