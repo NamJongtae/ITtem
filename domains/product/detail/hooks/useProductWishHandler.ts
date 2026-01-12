@@ -5,19 +5,16 @@ import { toast } from "react-toastify";
 import { ProductDetailData } from "../types/productDetailTypes";
 
 interface IParams {
-  productDetailData: ProductDetailData | undefined;
+  isWish: boolean | undefined;
   myProfileData: ProfileData | undefined;
 }
 
 export default function useProductWishHandler({
-  productDetailData,
+  isWish,
   myProfileData
 }: IParams) {
   const { addWishMutate, addWishPending } = useAddWishMutate();
   const { deleteWishMutate, deleteWishPending } = useDeleteWishMutate();
-  const isWish =
-    !!myProfileData?.wishProductIds.includes(productDetailData?._id || "") &&
-    !!productDetailData?.wishUserIds.includes(myProfileData?.uid || "");
 
   const handleClickWish = () => {
     if (!myProfileData) {
@@ -31,5 +28,5 @@ export default function useProductWishHandler({
     }
   };
 
-  return { handleClickWish, isWish, addWishPending, deleteWishPending };
+  return { handleClickWish, addWishPending, deleteWishPending };
 }
