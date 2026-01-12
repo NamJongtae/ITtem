@@ -7,6 +7,7 @@ import deleteProfileImgToFirestore from "@/domains/user/profile/utils/deleteProf
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 import * as Sentry from "@sentry/nextjs";
 import { revalidatePath, revalidateTag } from "next/cache";
+import Wish from "@/domains/product/shared/models/Wish";
 
 export async function GET() {
   try {
@@ -70,7 +71,7 @@ export async function GET() {
         }
       },
 
-      // 🔽 followers count
+      // followers count
       {
         $lookup: {
           from: "follows",
@@ -81,9 +82,7 @@ export async function GET() {
                 $expr: { $eq: ["$followingId", "$$userId"] }
               }
             },
-            {
-              $count: "count"
-            }
+            { $count: "count" }
           ],
           as: "followersCount"
         }
@@ -96,7 +95,7 @@ export async function GET() {
         }
       },
 
-      // 🔽 followings count
+      // followings count
       {
         $lookup: {
           from: "follows",
@@ -107,9 +106,7 @@ export async function GET() {
                 $expr: { $eq: ["$followerId", "$$userId"] }
               }
             },
-            {
-              $count: "count"
-            }
+            { $count: "count" }
           ],
           as: "followingsCount"
         }
@@ -131,7 +128,12 @@ export async function GET() {
       }
     ];
 
-    const userWithReviews = await User.aggregate(aggregation);
+    const [userWithReviews, wishCount] = await Promise.all([
+      User.aggregate(aggregation),
+      Wish.countDocuments({
+        userId: new mongoose.Types.ObjectId(myUid as string)
+      })
+    ]);
 
     if (!userWithReviews.length) {
       return NextResponse.json(
@@ -143,7 +145,11 @@ export async function GET() {
       );
     }
 
-    const profile = { ...userWithReviews[0], uid: userWithReviews[0]._id };
+    const profile = {
+      ...userWithReviews[0],
+      uid: userWithReviews[0]._id,
+      wishCount
+    };
     delete profile._id;
 
     return NextResponse.json(
@@ -187,12 +193,10 @@ export async function PATCH(req: NextRequest) {
 
     if (profileEditData.nickname) {
       if (/^[a-zA-Z]+$/.test(profileEditData.nickname)) {
-        // 영문으로만 구성된 닉네임인 경우
         checkDuplicationNickname = await User.findOne({
           nickname: { $regex: new RegExp(profileEditData.nickname, "i") }
         });
       } else {
-        // 한글로만 구성된 닉네임인 경우, 숫자 또는 한글, 영문, 숫자가 섞여있는 닉네임인 경우
         checkDuplicationNickname = await User.findOne({
           nickname: {
             $regex: new RegExp(`^${profileEditData.nickname}$`, "i")
@@ -220,9 +224,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const profileUpdateResult = (await User.findOneAndUpdate(
-      {
-        _id: new mongoose.Types.ObjectId(myUid)
-      },
+      { _id: new mongoose.Types.ObjectId(myUid) },
       { $set: profileEditData },
       { returnNewDocument: true }
     )) as ProfileData | undefined;
