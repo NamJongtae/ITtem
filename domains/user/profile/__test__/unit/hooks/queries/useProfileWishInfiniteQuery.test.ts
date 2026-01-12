@@ -1,10 +1,23 @@
 import { renderHook } from "@testing-library/react";
 import useProfileWishInfiniteQuery from "@/domains/user/profile/hooks/queries/useProfileWishInfiniteQuery";
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import {
+  useSuspenseInfiniteQuery,
+  type InfiniteData,
+  type UseSuspenseInfiniteQueryOptions
+} from "@tanstack/react-query";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import getWishlistProductData from "@/domains/user/profile/api/getWishlistProductData";
 import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
-import type { ProductData } from "@/domains/product/shared/types/productTypes";
+import type { WishlistProductData } from "@/domains/user/profile/types/profileTypes";
+import type { AxiosError } from "axios";
+
+type WishInfiniteOptions = UseSuspenseInfiniteQueryOptions<
+  WishlistProductData,
+  AxiosError,
+  InfiniteData<WishlistProductData[]>,
+  readonly unknown[],
+  string | null
+>;
 
 jest.mock("@tanstack/react-query", () => {
   const original = jest.requireActual("@tanstack/react-query");
@@ -16,101 +29,138 @@ jest.mock("@tanstack/react-query", () => {
 
 jest.mock("@/domains/user/profile/api/getWishlistProductData");
 
-describe("useProfileWishInfiniteQuery 훅 테스트", () => {
-  const mockUseSuspenseInfiniteQuery = useSuspenseInfiniteQuery as jest.Mock;
-  const mockGetWishlistProductData = getWishlistProductData as jest.Mock;
+describe("useProfileWishInfiniteQuery 훅 테스트 (typed mock)", () => {
+  const mockUseSuspenseInfiniteQuery =
+    useSuspenseInfiniteQuery as jest.MockedFunction<
+      typeof useSuspenseInfiniteQuery
+    >;
+
+  const mockGetWishlistProductData =
+    getWishlistProductData as jest.MockedFunction<
+      typeof getWishlistProductData
+    >;
+
   const { Wrapper: wrapper } = createQueryClientWrapper();
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("queryKey, queryFn을 설정하고 wishlist 데이터 요청 및 데이터를 반환합니다.", async () => {
-    const wishProductIds = ["p1", "p2"];
+  it("queryKey를 limit 기반으로 설정하고, queryFn이 getWishlistProductData를 호출합니다.", async () => {
     const limit = 10;
 
     const mockProducts = Array.from({ length: 10 }, (_, i) => ({
       _id: `product${i + 1}`,
       name: `상품 ${i + 1}`,
-      createdAt: `2024-06-${i + 1}`
-    })) as ProductData[];
+      createdAt: `2024-06-${String(i + 1).padStart(2, "0")}`
+    })) as WishlistProductData[];
 
     mockGetWishlistProductData.mockResolvedValue({
       data: { products: mockProducts }
-    });
+    } as any);
 
-    let getNextPageParamFn: any;
-    const queryKey = queryKeys.profile.my._ctx.wish._def;
+    let capturedOptions: WishInfiniteOptions | undefined;
 
-    mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      options.queryKey = queryKey;
-      options.queryFn = mockGetWishlistProductData;
-      getNextPageParamFn = options.getNextPageParam;
+    mockUseSuspenseInfiniteQuery.mockImplementation((options: any) => {
+      capturedOptions = options;
       return {
-        data: { pages: [mockProducts] },
+        data: { pages: [mockProducts], pageParams: [null] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: true,
         fetchNextPage: jest.fn(),
         error: null
-      };
+      } as any;
     });
 
     const { result } = renderHook(
-      () =>
-        useProfileWishInfiniteQuery({
-          wishProductIds,
-          limit
-        }),
-      { wrapper }
+      () => useProfileWishInfiniteQuery({ limit }),
+      {
+        wrapper
+      }
     );
 
+    // ✅ queryKey 검증
     expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
       expect.objectContaining({
-        queryKey: queryKeys.profile.my._ctx.wish._def,
-        queryFn: mockGetWishlistProductData
+        queryKey: queryKeys.profile.my._ctx.wish({ limit }).queryKey,
+        initialPageParam: null,
+        retry: 0
       })
     );
 
-    expect(getNextPageParamFn(mockProducts)).toBe("product10");
+    // ✅ queryFn이 내부에서 getWishlistProductData를 호출하는지 검증
+    expect(capturedOptions).toBeTruthy();
+    await (capturedOptions as any).queryFn({ pageParam: "cursor-abc" });
+
+    expect(mockGetWishlistProductData).toHaveBeenCalledWith({
+      cursor: "cursor-abc",
+      limit
+    });
+
+    // ✅ 반환 데이터 flatten 검증
     expect(result.current.data).toEqual(mockProducts);
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
   });
 
-  it("마지막 페이지의 상품 수가 limit보다 적으면 getNextPageParam은 undefined를 반환합니다.", () => {
+  it("마지막 페이지 길이가 limit보다 작으면 getNextPageParam은 undefined", () => {
+    const limit = 10;
     const mockProducts = [
       { _id: "product1", name: "상품1", createdAt: "2024-06-01" }
-    ] as ProductData[];
+    ] as WishlistProductData[];
 
-    let getNextPageParamFn: any;
+    let capturedOptions: WishInfiniteOptions | undefined;
 
-    mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      getNextPageParamFn = options.getNextPageParam;
+    mockUseSuspenseInfiniteQuery.mockImplementation((options: any) => {
+      capturedOptions = options;
       return {
-        data: { pages: [mockProducts] },
+        data: { pages: [mockProducts], pageParams: [null] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: false,
         fetchNextPage: jest.fn(),
         error: null
-      };
+      } as any;
     });
 
-    renderHook(
-      () =>
-        useProfileWishInfiniteQuery({
-          wishProductIds: ["product1"],
-          limit: 10
-        }),
-      { wrapper }
-    );
+    renderHook(() => useProfileWishInfiniteQuery({ limit }), { wrapper });
 
-    expect(getNextPageParamFn(mockProducts)).toBeUndefined();
+    const next = (capturedOptions as any).getNextPageParam(mockProducts);
+    expect(next).toBeUndefined();
+  });
+
+  it("마지막 페이지 길이가 limit과 같으면 getNextPageParam은 마지막 _id를 반환", () => {
+    const limit = 3;
+
+    const mockProducts = [
+      { _id: "p1", name: "상품1" },
+      { _id: "p2", name: "상품2" },
+      { _id: "p3", name: "상품3" }
+    ] as WishlistProductData[];
+
+    let capturedOptions: WishInfiniteOptions | undefined;
+
+    mockUseSuspenseInfiniteQuery.mockImplementation((options: any) => {
+      capturedOptions = options;
+      return {
+        data: { pages: [mockProducts], pageParams: [null] },
+        isLoading: false,
+        isFetchingNextPage: false,
+        hasNextPage: true,
+        fetchNextPage: jest.fn(),
+        error: null
+      } as any;
+    });
+
+    renderHook(() => useProfileWishInfiniteQuery({ limit }), { wrapper });
+
+    const next = (capturedOptions as any).getNextPageParam(mockProducts);
+    expect(next).toBe("p3");
   });
 
   it("에러 발생 시 error를 반환합니다.", () => {
-    const error = new Error("찜 목록 불러오기 실패");
+    const error = new Error("찜 목록 불러오기 실패") as any;
 
     mockUseSuspenseInfiniteQuery.mockReturnValue({
       data: undefined,
@@ -119,15 +169,11 @@ describe("useProfileWishInfiniteQuery 훅 테스트", () => {
       hasNextPage: false,
       fetchNextPage: jest.fn(),
       error
-    });
+    } as any);
 
-    const { result } = renderHook(
-      () =>
-        useProfileWishInfiniteQuery({
-          wishProductIds: ["p1", "p2"]
-        }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useProfileWishInfiniteQuery({}), {
+      wrapper
+    });
 
     expect(result.current.error).toBe(error);
     expect(result.current.data).toBeUndefined();

@@ -1,11 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import useWishDeleteSelector from "../../../hooks/useWishDeleteSelector";
-import type { ProductData } from "@/domains/product/shared/types/productTypes";
+import type { WishlistProductData } from "../../../types/profileTypes";
 
-const mockData: ProductData[] = [
-  { _id: "1", name: "Product 1" } as ProductData,
-  { _id: "2", name: "Product 2" } as ProductData,
-  { _id: "3", name: "Product 3" } as ProductData
+const mockData: WishlistProductData[] = [
+  { _id: "1", name: "Product 1" } as WishlistProductData,
+  { _id: "2", name: "Product 2" } as WishlistProductData,
+  { _id: "3", name: "Product 3" } as WishlistProductData
 ];
 
 describe("useWishDeleteSelector", () => {

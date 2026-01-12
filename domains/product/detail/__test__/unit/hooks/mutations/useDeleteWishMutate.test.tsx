@@ -18,25 +18,27 @@ describe("useDeleteWishMutate 훅 테스트", () => {
 
   const productKey = queryKeys.product.detail("123").queryKey;
   const myProfileKey = queryKeys.profile.my.queryKey;
+  const myWishListKey = queryKeys.profile.my._ctx.wish({ limit: 10 }).queryKey;
 
   const fakeProduct = {
     _id: "123",
-    wishUserIds: ["user123"],
+    isWish: true,
     wishCount: 1
   };
 
   const fakeMyProfile = {
     uid: "user123",
-    wishProductIds: ["123"]
+    wishCount: 1
   };
 
-  let invalidateSpy: unknown;
+  let invalidateSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     queryClient.setQueryData(productKey, fakeProduct);
     queryClient.setQueryData(myProfileKey, fakeMyProfile);
+    queryClient.setQueryData(myWishListKey, { pages: [], pageParams: [] });
 
     mockUseParams.mockReturnValue({ productId: "123" });
     mockUseAuthStore.mockImplementation((selector) =>
@@ -46,13 +48,11 @@ describe("useDeleteWishMutate 훅 테스트", () => {
     invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
   });
 
-  it("onMutate에서 product, myProfile 캐시 cancelQueries, setQueryData가 실행됩니다.", async () => {
+  it("onMutate에서 product 캐시 cancelQueries, setQueryData가 실행됩니다. (isWish=false, wishCount-1)", async () => {
     const cancelQueriesSpy = jest.spyOn(queryClient, "cancelQueries");
     const setQueryDataSpy = jest.spyOn(queryClient, "setQueryData");
 
-    const { result } = renderHook(() => useDeleteWishMutate(), {
-      wrapper
-    });
+    const { result } = renderHook(() => useDeleteWishMutate(), { wrapper });
 
     act(() => {
       result.current.deleteWishMutate();
@@ -63,51 +63,62 @@ describe("useDeleteWishMutate 훅 테스트", () => {
 
       expect(setQueryDataSpy).toHaveBeenCalledWith(productKey, {
         _id: "123",
-        wishUserIds: [],
+        isWish: false,
         wishCount: 0
-      });
-
-      expect(setQueryDataSpy).toHaveBeenCalledWith(myProfileKey, {
-        uid: "user123",
-        wishProductIds: []
       });
     });
   });
 
-  it("mutate가 성공하면 product 캐시 invalidateQueries가 호출됩니다.", async () => {
+  it("mutate가 성공하면 onSettled에서 myProfile, myWishList invalidateQueries가 호출됩니다.", async () => {
     mockDeleteWish.mockResolvedValue({ data: { message: "찜 취소 완료" } });
 
-    const { result } = renderHook(() => useDeleteWishMutate(), {
-      wrapper
-    });
+    const { result } = renderHook(() => useDeleteWishMutate(), { wrapper });
 
     act(() => {
       result.current.deleteWishMutate();
     });
 
     await waitFor(() => {
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: productKey });
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myWishListKey });
     });
   });
 
-  it("onError 발생 시 이전 데이터로 rollback되고, product 캐시 invalidateQueries가 호출됩니다.", async () => {
+  it("onError 발생 시 product 캐시가 이전 데이터로 rollback되고, onSettled invalidateQueries가 호출됩니다.", async () => {
     mockDeleteWish.mockRejectedValue({
       response: { data: { message: "찜 취소 실패" } },
       isAxiosError: true
     });
 
-    const { result } = renderHook(() => useDeleteWishMutate(), {
-      wrapper
-    });
+    const { result } = renderHook(() => useDeleteWishMutate(), { wrapper });
 
     act(() => {
       result.current.deleteWishMutate();
     });
 
     await waitFor(() => {
+      // ✅ rollback 확인
       expect(queryClient.getQueryData(productKey)).toEqual(fakeProduct);
-      expect(queryClient.getQueryData(myProfileKey)).toEqual(fakeMyProfile);
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: productKey });
+
+      // ✅ onSettled invalidate 확인
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: myWishListKey });
+    });
+  });
+
+  it("이미 isWish=false 상태면 optimistic update(setQueryData)를 하지 않습니다.", async () => {
+    queryClient.setQueryData(productKey, {
+      _id: "123",
+      isWish: false,
+      wishCount: 0
+    });
+
+    const setQueryDataSpy = jest.spyOn(queryClient, "setQueryData");
+
+    const { result } = renderHook(() => useDeleteWishMutate(), { wrapper });
+
+    act(() => {
+      result.current.deleteWishMutate();
     });
   });
 });

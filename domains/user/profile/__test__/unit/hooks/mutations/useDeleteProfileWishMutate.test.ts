@@ -20,13 +20,12 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
   const { Wrapper: wrapper, queryClient } = createQueryClientWrapper();
   const mockDeleteWish = deleteWishlistProductData as jest.Mock;
 
-  const wishQueryKey = queryKeys.profile.my._ctx.wish._def;
+  const wishQueryKey = queryKeys.profile.my._ctx.wish({ limit: 10 }).queryKey;
   const myProfileKey = queryKeys.profile.my.queryKey;
-  const detailQueryKey = queryKeys.product.detail._def;
 
   const fakeMyProfile: ProfileData = {
     uid: "user1",
-    wishProductIds: ["1", "2", "3"]
+    wishCount: 3
   } as ProfileData;
 
   const fakeWishList: InfiniteData<ProductData[], unknown> = {
@@ -40,9 +39,9 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
     pageParams: []
   };
 
-  let invalidateSpy: unknown;
-  let cancelSpy: unknown;
-  let setDataSpy: unknown;
+  let invalidateSpy: jest.SpyInstance;
+  let cancelSpy: jest.SpyInstance;
+  let setDataSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -55,7 +54,7 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
     setDataSpy = jest.spyOn(queryClient, "setQueryData");
   });
 
-  it("onMutate에서 cancelQueries와 setQueryData로 optimistic 업데이트를 수행합니다.", async () => {
+  it("onMutate에서 cancelQueries + optimistic 업데이트(찜목록 제거, 프로필 wishCount 감소)를 수행합니다.", async () => {
     const { result } = renderHook(() => useDeleteProfileWishMutate(), {
       wrapper
     });
@@ -65,32 +64,35 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      expect(cancelSpy).toHaveBeenCalledWith({ queryKey: wishQueryKey });
+      // cancelQueries 2개
       expect(cancelSpy).toHaveBeenCalledWith({ queryKey: myProfileKey });
-      expect(setDataSpy).toHaveBeenCalledWith(myProfileKey, {
-        uid: "user1",
-        wishProductIds: ["2"]
-      });
+      expect(cancelSpy).toHaveBeenCalledWith({ queryKey: wishQueryKey });
 
-      const updatedProfile = queryClient.getQueryData(myProfileKey);
-      expect(updatedProfile).toEqual({
-        uid: "user1",
-        wishProductIds: ["2"]
-      });
+      // 프로필 wishCount 감소 (3 -> 1)
+      expect(setDataSpy).toHaveBeenCalledWith(
+        myProfileKey,
+        expect.objectContaining({
+          uid: "user1",
+          wishCount: 1
+        })
+      );
 
+      const updatedProfile = queryClient.getQueryData(
+        myProfileKey
+      ) as ProfileData;
+      expect(updatedProfile.wishCount).toBe(1);
+
+      // 찜 목록에서 1,3 제거 -> 2만 남음
       const updatedWish = queryClient.getQueryData(wishQueryKey) as
         | InfiniteData<ProductData[], unknown>
         | undefined;
-      const updatedWishIds = updatedWish?.pages
-        .flat()
-        .map((p: ProductData) => p._id);
-      expect(updatedWishIds).toEqual(["2"]);
 
-      expect(toast.success).toHaveBeenCalledWith("찜 목록 삭제에 성공했어요.");
+      const updatedWishIds = updatedWish?.pages.flat().map((p) => p._id);
+      expect(updatedWishIds).toEqual(["2"]);
     });
   });
 
-  it("onSuccess에서 productDetail 캐시 invalidateQueries를 호출합니다.", async () => {
+  it("onSuccess에서 삭제된 상품들의 detail 쿼리를 각각 invalidateQueries 합니다.", async () => {
     mockDeleteWish.mockResolvedValue({ data: { message: "ok" } });
 
     const { result } = renderHook(() => useDeleteProfileWishMutate(), {
@@ -98,17 +100,22 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
     });
 
     act(() => {
-      result.current.deleteWishMutate(["2"]);
+      result.current.deleteWishMutate(["2", "3"]);
     });
 
     await waitFor(() => {
       expect(invalidateSpy).toHaveBeenCalledWith({
-        queryKey: detailQueryKey
+        queryKey: queryKeys.product.detail("2").queryKey
       });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: queryKeys.product.detail("3").queryKey
+      });
+
+      expect(toast.success).toHaveBeenCalledWith("찜 목록 삭제에 성공했어요.");
     });
   });
 
-  it("onError 발생 시 setQueryData를 호출하여 캐시 데이터 rollback 하고, toast.warn를 호출합니다.", async () => {
+  it("onError 발생 시 프로필/찜목록 캐시를 rollback 하고 toast.warn를 호출합니다.", async () => {
     mockDeleteWish.mockRejectedValue({
       response: { data: { message: "삭제 실패" } },
       isAxiosError: true
@@ -128,10 +135,8 @@ describe("useDeleteProfileWishMutate 훅 테스트", () => {
       const restoredWish = queryClient.getQueryData(wishQueryKey) as
         | InfiniteData<ProductData[], unknown>
         | undefined;
-      const restoredWishIds = restoredWish?.pages
-        .flat()
-        .map((p: ProductData) => p._id);
 
+      const restoredWishIds = restoredWish?.pages.flat().map((p) => p._id);
       expect(restoredWishIds).toEqual(["1", "2", "3"]);
 
       expect(toast.warn).toHaveBeenCalledWith("삭제 실패");

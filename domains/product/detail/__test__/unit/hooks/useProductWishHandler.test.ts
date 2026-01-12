@@ -13,7 +13,6 @@ jest.mock("react-toastify", () => ({
 jest.mock("../../../hooks/mutations/useAddWishMutate");
 jest.mock("../../../hooks/mutations/useDeleteWishMutate");
 
-import { ProductDetailData } from "../../../types/productDetailTypes";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 
 const mockToastWarn = toast.warn as jest.Mock;
@@ -38,20 +37,14 @@ describe("useProductWishHandler", () => {
     });
   });
 
-  const mockProduct: ProductDetailData = {
-    _id: "product1",
-    wishUserIds: ["user123"]
-  } as ProductDetailData;
-
   const mockProfile: ProfileData = {
-    uid: "user123",
-    wishProductIds: ["product1"]
+    uid: "user123"
   } as ProfileData;
 
   it("로그인하지 않은 경우 toast.warn이 호출됩니다.", () => {
     const { result } = renderHook(() =>
       useProductWishHandler({
-        productDetailData: mockProduct,
+        isWish: false,
         myProfileData: undefined
       })
     );
@@ -65,10 +58,10 @@ describe("useProductWishHandler", () => {
     expect(mockDeleteMutate).not.toHaveBeenCalled();
   });
 
-  it("이미 찜한 경우 deleteWishMutate가 호출됩니다.", () => {
+  it("isWish=true인 경우 deleteWishMutate가 호출됩니다.", () => {
     const { result } = renderHook(() =>
       useProductWishHandler({
-        productDetailData: mockProduct,
+        isWish: true,
         myProfileData: mockProfile
       })
     );
@@ -77,26 +70,15 @@ describe("useProductWishHandler", () => {
       result.current.handleClickWish();
     });
 
-    expect(result.current.isWish).toBe(true);
-    expect(mockDeleteMutate).toHaveBeenCalled();
+    expect(mockDeleteMutate).toHaveBeenCalledTimes(1);
     expect(mockAddMutate).not.toHaveBeenCalled();
   });
 
-  it("해당 상품을 찜하지 않은 경우 addWishMutate가 호출됩니다.", () => {    
-    const mockProfileNoWish = {
-      uid: "user123",
-      wishProductIds: ["prodcut2"] 
-    } as ProfileData;
-
-    const mockProductNoWish = {
-      _id: "product1",
-      wishUserIds: ["user456"]
-    } as ProductDetailData;
-
+  it("isWish=false인 경우 addWishMutate가 호출됩니다.", () => {
     const { result } = renderHook(() =>
       useProductWishHandler({
-        productDetailData: mockProductNoWish,
-        myProfileData: mockProfileNoWish
+        isWish: false,
+        myProfileData: mockProfile
       })
     );
 
@@ -104,8 +86,23 @@ describe("useProductWishHandler", () => {
       result.current.handleClickWish();
     });
 
-    expect(result.current.isWish).toBe(false);
-    expect(mockAddMutate).toHaveBeenCalled();
+    expect(mockAddMutate).toHaveBeenCalledTimes(1);
+    expect(mockDeleteMutate).not.toHaveBeenCalled();
+  });
+
+  it("isWish가 undefined인 경우(현재 구현상) addWishMutate가 호출됩니다.", () => {
+    const { result } = renderHook(() =>
+      useProductWishHandler({
+        isWish: undefined,
+        myProfileData: mockProfile
+      })
+    );
+
+    act(() => {
+      result.current.handleClickWish();
+    });
+
+    expect(mockAddMutate).toHaveBeenCalledTimes(1);
     expect(mockDeleteMutate).not.toHaveBeenCalled();
   });
 });
