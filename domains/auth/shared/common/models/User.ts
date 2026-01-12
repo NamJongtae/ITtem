@@ -9,7 +9,6 @@ export interface UserDB {
   profileImgFilename: string;
   introduce: string;
   productIds: string[];
-  wishProductIds: string[];
   saleCount: number;
   purchaseCount: number;
   transactionCount: number;
@@ -41,7 +40,6 @@ export const userSchema = new mongoose.Schema<UserDB>(
     profileImgFilename: { type: String, default: "" },
     introduce: { type: String, default: "" },
     productIds: { type: [String], default: [] },
-    wishProductIds: { type: [String], default: [] },
     saleCount: { type: Number, default: 0 },
     purchaseCount: { type: Number, default: 0 },
     transactionCount: { type: Number, default: 0 },
