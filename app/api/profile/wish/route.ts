@@ -1,79 +1,95 @@
 import { NextRequest, NextResponse } from "next/server";
-import mongoose from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import Product from "@/domains/product/shared/models/Product";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
-import User from "@/domains/auth/shared/common/models/User";
 import dbConnect from "@/shared/common/utils/db/db";
 import * as Sentry from "@sentry/nextjs";
+import Wish, { type WishDB } from "@/domains/product/shared/models/Wish";
+import { WishlistProductData } from "@/domains/user/profile/types/profileTypes";
 
-export async function POST(req: NextRequest) {
+type WishListItem = {
+  _id: mongoose.Types.ObjectId;
+  productId: mongoose.Types.ObjectId;
+  createdAt: Date;
+};
+
+export async function GET(req: NextRequest) {
   try {
     const isValidAuth = await checkAuthorization();
-
     if (!isValidAuth.isValid) {
       return NextResponse.json(
-        {
-          message: isValidAuth.message
-        },
+        { message: isValidAuth.message },
         { status: 401 }
       );
     }
 
-    const body = await req.json();
-    const { wishProductIds } = body;
-    const cursor = req.nextUrl.searchParams.get("cursor");
-    const limit = req.nextUrl.searchParams.get("limit");
-
-    if (!wishProductIds) {
+    const myUid = isValidAuth.auth?.uid;
+    if (!myUid || myUid.length < 24) {
       return NextResponse.json(
-        { message: "찜 목록 ID가 필요합니다." },
-        { status: 422 }
+        { message: "유저 정보가 없어요." },
+        { status: 401 }
       );
     }
 
-    if (!wishProductIds.length) {
+    const cursor = req.nextUrl.searchParams.get("cursor");
+    const limit = req.nextUrl.searchParams.get("limit");
+
+    await dbConnect();
+
+    const pageLimit = Number.isFinite(Number(limit))
+      ? Math.max(Number(limit), 1)
+      : 10;
+
+    const userObjectId = new mongoose.Types.ObjectId(myUid);
+
+    const wishQuery: FilterQuery<WishDB> = {
+      userId: userObjectId
+    };
+
+    if (cursor && cursor.length >= 24) {
+      wishQuery._id = { $gt: new mongoose.Types.ObjectId(cursor) };
+    }
+
+    const wishes = await Wish.find(wishQuery)
+      .select("_id productId createdAt")
+      .sort({ _id: 1 })
+      .limit(pageLimit)
+      .lean<WishListItem[]>();
+
+    if (!wishes.length) {
       return NextResponse.json(
-        { message: "찜 목록이 없어요.", products: [] },
+        { message: "찜 목록이 없어요.", products: [] as WishlistProductData[] },
         { status: 200 }
       );
     }
 
-    await dbConnect();
+    const productIds = wishes.map((w) => w.productId);
 
-    const pageLimit = parseInt(limit as string, 10) || 10;
+    const products = await Product.find({
+      _id: { $in: productIds },
+      block: false
+    })
+      .select("_id price name imgData createdAt location")
+      .lean<WishlistProductData[]>();
 
-    const objectIdArray = wishProductIds.map(
-      (id: string) => new mongoose.Types.ObjectId(id)
+    const productMap = new Map<string, WishlistProductData>(
+      products.map((p) => [String(p._id), p])
     );
 
-    const query = {
-      _id: cursor
-        ? {
-            $in: objectIdArray,
-            $gt: new mongoose.Types.ObjectId(cursor as string)
-          }
-        : {
-            $in: objectIdArray
-          },
-      block: false
-    };
-
-    const products = await Product.find(query)
-      .select("_id price name imgData createdAt location")
-      .limit(pageLimit)
-      .sort({ _id: 1 });
+    const orderedProducts: WishlistProductData[] = wishes
+      .map((w) => productMap.get(String(w.productId)))
+      .filter((p): p is WishlistProductData => Boolean(p));
 
     return NextResponse.json({
       message: "찜 목록 조회에 성공했어요.",
-      products
+      products: orderedProducts,
+      nextCursor: String(wishes[wishes.length - 1]._id)
     });
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
     return NextResponse.json(
-      {
-        message: "찜 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요."
-      },
+      { message: "찜 목록 조회에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
@@ -81,70 +97,92 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { wishProductIds } = await req.json();
-
     const isValidAuth = await checkAuthorization();
-
     if (!isValidAuth.isValid) {
       return NextResponse.json(
-        {
-          message: isValidAuth.message
-        },
+        { message: isValidAuth.message },
         { status: 401 }
       );
     }
 
-    if (!wishProductIds || !wishProductIds.length) {
+    const myUid = isValidAuth.auth?.uid;
+    if (!myUid || myUid.length < 24) {
+      return NextResponse.json(
+        { message: "유저 정보가 없어요." },
+        { status: 401 }
+      );
+    }
+
+    const body = (await req.json()) as { wishProductIds?: string[] };
+    const wishProductIds = body.wishProductIds;
+
+    if (!wishProductIds || wishProductIds.length === 0) {
       return NextResponse.json(
         { message: "삭제할 찜 목록 ID가 없어요." },
         { status: 422 }
       );
     }
 
-    const myUid = isValidAuth?.auth?.uid;
+    await dbConnect();
 
-    const objectIdArray = wishProductIds.map(
-      (id: string) => new mongoose.Types.ObjectId(id)
-    );
+    const userObjectId = new mongoose.Types.ObjectId(myUid);
 
-    const profileUpadteResult = await User.findOneAndUpdate(
-      {
-        _id: new mongoose.Types.ObjectId(myUid)
-      },
-      {
-        $pull: { wishProductIds: { $in: objectIdArray } }
-      },
-      { returnDocument: "after" }
-    );
+    // ✅ 유효한 ObjectId만 변환 (안전)
+    const objectIdArray = wishProductIds
+      .filter((id) => typeof id === "string" && id.length >= 24)
+      .map((id) => new mongoose.Types.ObjectId(id));
 
-    const productUpdateResults = await Product.updateMany(
-      { _id: { $in: objectIdArray } },
-      {
-        $inc: { wishCount: -1 },
-        $pull: { wishUserIds: myUid }
-      }
-    );
-
-    if (!profileUpadteResult || productUpdateResults.modifiedCount === 0) {
+    if (objectIdArray.length === 0) {
       return NextResponse.json(
-        {
-          message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
-        },
+        { message: "삭제할 찜 목록 ID가 올바르지 않아요." },
+        { status: 422 }
+      );
+    }
+
+    // ✅ any 제거: select + lean 타입 지정
+    const existingWishes = await Wish.find({
+      userId: userObjectId,
+      productId: { $in: objectIdArray }
+    })
+      .select("productId")
+      .lean<Array<Pick<WishDB, "productId">>>();
+
+    if (existingWishes.length === 0) {
+      return NextResponse.json(
+        { message: "삭제할 찜이 없어요." },
+        { status: 409 }
+      );
+    }
+
+    const existingProductIds = existingWishes.map((w) => w.productId);
+
+    const wishDeleteResult = await Wish.deleteMany({
+      userId: userObjectId,
+      productId: { $in: existingProductIds }
+    });
+
+    if (!wishDeleteResult.acknowledged) {
+      return NextResponse.json(
+        { message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요." },
         { status: 500 }
       );
     }
 
+    // ✅ wishCount는 0 아래로 내려가지 않게 조건 유지
+    await Product.updateMany(
+      { _id: { $in: existingProductIds }, wishCount: { $gt: 0 } },
+      { $inc: { wishCount: -1 } }
+    );
+
     return NextResponse.json({
       message: "찜 목록 삭제에 성공했어요.",
-      wishProductIds: profileUpadteResult.wishProductIds
+      deletedProductIds: existingProductIds.map(String)
     });
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
     return NextResponse.json(
-      {
-        message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요."
-      },
+      { message: "찜 목록 삭제에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
