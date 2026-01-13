@@ -55,8 +55,11 @@ export async function GET(
 
     if (product.block) {
       return NextResponse.json(
-        { message: "신고에 의해 블라인드 처리된 상품이에요." },
-        { status: 409 }
+        {
+          product: { block: true },
+          message: "신고에 의해 블라인드 처리된 상품이에요."
+        },
+        { status: 200 }
       );
     }
 
