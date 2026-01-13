@@ -24,12 +24,12 @@ describe("reportProduct API 함수 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("PATCH 요청을 보내고 응답을 반환합니다.", async () => {
-    (customAxios.patch as jest.Mock).mockResolvedValue(mockResponse);
+  it("POST 요청을 보내고 응답을 반환합니다.", async () => {
+    (customAxios.post as jest.Mock).mockResolvedValue(mockResponse);
 
     const result = await reportProduct(mockProductId);
 
-    expect(customAxios.patch).toHaveBeenCalledWith(
+    expect(customAxios.post).toHaveBeenCalledWith(
       `/api/product/${mockProductId}/report`
     );
     expect(result).toEqual(mockResponse);
@@ -39,7 +39,7 @@ describe("reportProduct API 함수 테스트", () => {
     const error = new Error(
       "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요."
     );
-    (customAxios.patch as jest.Mock).mockRejectedValue(error);
+    (customAxios.post as jest.Mock).mockRejectedValue(error);
 
     await expect(reportProduct(mockProductId)).rejects.toThrow(
       "상품 신고에 실패했어요.\n잠시 후 다시 시도해주세요."

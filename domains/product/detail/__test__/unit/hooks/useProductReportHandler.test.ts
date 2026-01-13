@@ -16,6 +16,7 @@ describe("useProductReportHandler 훅 테스트", () => {
   const mockToastWarn = toast.warn as jest.Mock;
   const mockUseProductReportMutate = useProductReportMutate as jest.Mock;
   const mockUseMyProfileQuery = useMyProfileQuery as jest.Mock;
+
   const mockMutate = jest.fn();
   const mockConfirm = jest.fn();
 
@@ -35,7 +36,7 @@ describe("useProductReportHandler 훅 테스트", () => {
     });
 
     const { result } = renderHook(() =>
-      useProductReportHandler({ reportUserIds: [] })
+      useProductReportHandler({ isReported: false })
     );
 
     act(() => {
@@ -43,17 +44,18 @@ describe("useProductReportHandler 훅 테스트", () => {
     });
 
     expect(mockToastWarn).toHaveBeenCalledWith("로그인 후 이용해주세요.");
+    expect(mockConfirm).not.toHaveBeenCalled();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it("이미 신고한 경우 toast.warn이 호출됩니다.", () => {
+  it("이미 신고한 경우 toast.warn이 호출되고 confirm/mutate는 호출되지 않습니다.", () => {
     mockUseMyProfileQuery.mockReturnValue({
       myProfileData: { uid: "user123" },
       myProfilePending: false
     });
 
     const { result } = renderHook(() =>
-      useProductReportHandler({ reportUserIds: ["user123"] })
+      useProductReportHandler({ isReported: true })
     );
 
     act(() => {
@@ -61,6 +63,7 @@ describe("useProductReportHandler 훅 테스트", () => {
     });
 
     expect(mockToastWarn).toHaveBeenCalledWith("이미 신고한 상품이에요.");
+    expect(mockConfirm).not.toHaveBeenCalled();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -73,13 +76,14 @@ describe("useProductReportHandler 훅 테스트", () => {
     mockConfirm.mockReturnValue(false);
 
     const { result } = renderHook(() =>
-      useProductReportHandler({ reportUserIds: [] })
+      useProductReportHandler({ isReported: false })
     );
 
     act(() => {
       result.current.handleClickReport();
     });
 
+    expect(mockConfirm).toHaveBeenCalledWith("정말 신고하겠습니까?");
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -92,13 +96,14 @@ describe("useProductReportHandler 훅 테스트", () => {
     mockConfirm.mockReturnValue(true);
 
     const { result } = renderHook(() =>
-      useProductReportHandler({ reportUserIds: [] })
+      useProductReportHandler({ isReported: false })
     );
 
     act(() => {
       result.current.handleClickReport();
     });
 
-    expect(mockMutate).toHaveBeenCalled();
+    expect(mockConfirm).toHaveBeenCalledWith("정말 신고하겠습니까?");
+    expect(mockMutate).toHaveBeenCalledWith(undefined);
   });
 });

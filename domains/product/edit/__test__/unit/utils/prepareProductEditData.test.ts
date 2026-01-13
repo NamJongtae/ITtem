@@ -38,7 +38,7 @@ describe("prepareProductEditData", () => {
     status: ProductStatus.sold,
     block: false,
     reportCount: 0,
-    reportUserIds: [],
+    isReported: false,
     wishCount: 0,
     viewCount: 0,
     sellType: ProductSellType.중고거래
