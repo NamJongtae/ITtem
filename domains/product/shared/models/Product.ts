@@ -15,7 +15,6 @@ export interface ProductDB {
   status: ProductStatus;
   block: boolean;
   reportCount: number;
-  reportUserIds: string[];
   wishCount: number;
   viewCount: number;
   imgData: { url: string; name: string }[];
@@ -38,7 +37,6 @@ export const productSchema = new mongoose.Schema<ProductDB>(
     status: { type: String, default: ProductStatus.sold },
     block: { type: Boolean, default: false },
     reportCount: { type: Number, default: 0 },
-    reportUserIds: { type: [String], default: [] },
     wishCount: { type: Number, default: 0 },
     viewCount: { type: Number, default: 0 },
     imgData: {
