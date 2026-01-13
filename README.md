@@ -20,7 +20,7 @@
 
 - [⚙ 개발환경](#-개발환경)
 
-- [🔩 벡엔드&API](#-벡엔드--api)
+- [🔩 백엔드&API](#-백엔드--api)
 
 - [📜 API Router 명세](#-api-router-명세)
 
@@ -55,6 +55,7 @@
   - [🐞Sentry 연동을 통한 에러 관리 개선](#-sentry-연동을-통한-에러-관리-개선)
   - [🪄 불필요한 SSR 페이지 SSG/ISR 페이지로 전환](#-불필요한-ssr-페이지-ssgisr-페이지로-전환)
   - [🔐 JWT 로그인 인증 DB Session 로그인 인증 방식으로 변경](#-jwt-로그인-인증-db-session-로그인-인증-방식으로-변경)
+  - [📊 팔로우, 찜, 신고 관계 데이터 컬렉션 분리 및 정규화](#-팔로우-찜-신고-관계-데이터-컬렉션-분리-및-정규화)
 
 - [🔫 트러블 슈팅](#-트러블-슈팅)
 
@@ -96,15 +97,15 @@
 
 ### ⚙ 개발환경
 
-| 프론트엔드                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 벡엔드                                                                                                                                                                                                                                                                                | 디자인                                                                                    | 배포, 관리                                                                                                                                                            |
+| 프론트엔드                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 백엔드                                                                                                                                                                                                                                                                                | 디자인                                                                                    | 배포, 관리                                                                                                                                                            |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img alt="Html" src ="https://img.shields.io/badge/HTML5-E34F26?logo=HTML5&logoColor=white"/> <img alt="CSS" src ="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white"/> <img alt="TypeScript" src ="https://img.shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=white"/> <img src="https://img.shields.io/badge/react-61DAFB?logo=react&logoColor=black"> <img src ="https://img.shields.io/badge/next.js-000000?logo=nextdotjs&logoColor=white"/> <img src="https://img.shields.io/badge/redux_toolkit-764ABC?&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/reactquery-FF4154?&logo=reactquery&logoColor=fff"> <img src="https://img.shields.io/badge/tailwindcss-0F172A?&logo=tailwindcss"> | <img src ="https://img.shields.io/badge/-MongoDB-13aa52?logo=mongodb&logoColor=white"/> <img src ="https://img.shields.io/badge/next.js_API_Routers-000000?logo=nextdotjs&logoColor=white"/> <img src ="https://img.shields.io/badge/firebase-ffca28?logo=firebase&logoColor=black"/> | <img src="https://img.shields.io/badge/figma-F24E1E?logo=figma&logoColor=white" width=70> | <img src="https://img.shields.io/badge/vercel-000000?logo=vercel&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?logo=github&logoColor=white"> |
 
 <br>
 
-### 🔩 벡엔드 & API
+### 🔩 백엔드 & API
 
-Serverless로 벡엔드 API를 구축하였습니다.
+Serverless로 백엔드 API를 구축하였습니다.
 
 - Nextjs api routers를 통해 api 엔드 포인트를 구현하였습니다.
 - firebase를 통해 실시간 채팅 및 알림 기능을 구현하였습니다.
@@ -3392,6 +3393,27 @@ JWT 방식으로 인해 다음과 같은 부가 로직이 필요했습니다.
 - 요청 → 세션 조회 → 사용자 인증
 - 로그아웃 → 세션 삭제
 - 복잡한 인증 관련 코드량 감소
+
+<br/>
+
+#### 📊 팔로우, 찜, 신고 관계 데이터 컬렉션 분리 및 정규화
+
+> **적용이유**
+
+기존에는 User나 Product 문서 내부에 배열 형태로 관계 데이터를 관리하여 문서 크기 증가에 따른 성능 저하와, 팔로우/찜/신고 처리 로직의 복잡도가 지속적으로 증가하는 문제가 있었습니다. 
+또한 목록 조회, 페이징, 관계 여부 확인과 같은 기능에서 쿼리 최적화가 어려웠습니다.
+
+> **적용 방법**
+
+- 팔로우(Follow), 찜(Wish), 신고(Report)를 각각 독립된 컬렉션으로 분리하여 관계 데이터를 정규화했습니다.
+- 기존 User, Product 문서에 있던 배열 필드를 제거하고, 각 관계를 단일 문서(insert/delete) 기반으로 관리하도록 API 로직을 전면 수정했습니다.
+
+> **적용으로 얻은 이점**
+
+- 관계 데이터를 정규화하여 DB 구조의 확장성과 안정성을 확보
+- 팔로우/찜/신고 로직이 단일 문서 insert·delete 중심으로 단순화
+- User, Product 문서 비대화 방지로 전반적인 DB 운영 효율 향상
+- 비즈니스 로직과 데이터 구조가 명확히 분리되어 유지보수성과 가독성 향상
 
 <br/>
 
