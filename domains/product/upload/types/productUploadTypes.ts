@@ -9,9 +9,9 @@ export type ProductUploadData = Omit<
   | "wishUserIds"
   | "viewCount"
   | "isWish"
+  | "isReported"
   | "block"
   | "reportCount"
-  | "reportUserIds"
 >;
 
 export interface UploadImgResponseData {

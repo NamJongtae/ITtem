@@ -54,9 +54,9 @@ export interface ProductData {
   status: ProductStatus;
   block: boolean;
   reportCount: number;
-  reportUserIds: string[];
   wishCount: number;
   isWish: boolean;
+  isReported: boolean;
   viewCount: number;
   imgData: ProductImgData[];
   price: number;
