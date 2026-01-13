@@ -1,10 +1,16 @@
 import { RecentProductData } from "../types/layoutTypes";
 import { useEffect } from "react";
 
-export default function useAddRecentProduct(
-  recentProduct: RecentProductData | undefined
-) {
+export default function useAddRecentProduct({
+  recentProduct,
+  enabled
+}: {
+  recentProduct: RecentProductData | undefined;
+  enabled: boolean;
+}) {
   useEffect(() => {
+    if (!enabled) return;
+    
     const recentProductKey = "recentProduct";
     const maxRecentProducts = 10;
     const productDetail = { ...recentProduct };
@@ -26,5 +32,5 @@ export default function useAddRecentProduct(
 
       localStorage.setItem(recentProductKey, JSON.stringify(filteredRecent));
     }
-  }, [recentProduct]);
+  }, [recentProduct, enabled]);
 }
