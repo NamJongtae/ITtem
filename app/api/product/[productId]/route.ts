@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import User from "@/domains/auth/shared/common/models/User";
 import Wish from "@/domains/product/shared/models/Wish";
+import Report from "@/domains/product/shared/models/Report";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import {
   ProductImgData,
@@ -42,7 +43,7 @@ export async function GET(
     const myUid = isValidAuth?.auth?.uid || null;
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string)
+      _id: new mongoose.Types.ObjectId(productId)
     });
 
     if (!product) {
@@ -59,7 +60,6 @@ export async function GET(
       );
     }
 
-    // 👇 상품 작성자 ID
     const productOwnerId = product.uid;
 
     const followPromise =
@@ -73,19 +73,27 @@ export async function GET(
     const wishPromise = myUid
       ? Wish.exists({
           userId: new mongoose.Types.ObjectId(myUid),
-          productId: new mongoose.Types.ObjectId(productId as string)
+          productId: new mongoose.Types.ObjectId(productId)
         })
       : Promise.resolve(null);
 
-    const [followExists, wishExists] = await Promise.all([
+    const reportPromise = myUid
+      ? Report.exists({
+          userId: new mongoose.Types.ObjectId(myUid),
+          productId: new mongoose.Types.ObjectId(productId)
+        })
+      : Promise.resolve(null);
+
+    const [followExists, wishExists, reportExists] = await Promise.all([
       followPromise,
-      wishPromise
+      wishPromise,
+      reportPromise
     ]);
 
     const isFollow = !!followExists;
     const isWish = !!wishExists;
+    const isReported = !!reportExists;
 
-    // 유저 프로필, 리뷰점수 및 최신 상품 목록을 조인합니다.
     const aggregation = [
       {
         $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) }
@@ -94,21 +102,12 @@ export async function GET(
         $lookup: {
           from: "reviewScores",
           pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$uid", productOwnerId as string] }
-              }
-            }
+            { $match: { $expr: { $eq: ["$uid", productOwnerId as string] } } }
           ],
           as: "reviewInfo"
         }
       },
-      {
-        $unwind: {
-          path: "$reviewInfo",
-          preserveNullAndEmptyArrays: true
-        }
-      },
+      { $unwind: { path: "$reviewInfo", preserveNullAndEmptyArrays: true } },
       {
         $addFields: {
           reviewPercentage: {
@@ -146,7 +145,7 @@ export async function GET(
               cond: {
                 $ne: [
                   { $toObjectId: "$$id" },
-                  new mongoose.Types.ObjectId(productId as string)
+                  new mongoose.Types.ObjectId(productId)
                 ]
               }
             }
@@ -208,6 +207,7 @@ export async function GET(
         product: {
           ...product._doc,
           isWish,
+          isReported,
           auth: { ...userWithReviews[0], isFollow }
         }
       },
