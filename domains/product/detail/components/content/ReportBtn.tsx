@@ -9,7 +9,7 @@ interface IProps {
 export default function ReportBtn({ productDetailData }: IProps) {
   const { myProfilePending, myProfileData, handleClickReport } =
     useProductReportHandler({
-      reportUserIds: productDetailData?.reportUserIds
+      isReported: productDetailData?.isReported
     });
 
   const isMyProduct = productDetailData?.uid === myProfileData?.uid;
