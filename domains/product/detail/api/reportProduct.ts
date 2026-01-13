@@ -6,7 +6,7 @@ export default async function reportProduct(
   id: string
 ): Promise<AxiosResponse<ApiResponse>> {
   try {
-    const response = await customAxios.patch(`/api/product/${id}/report`);
+    const response = await customAxios.post(`/api/product/${id}/report`);
     return response;
   } catch (error) {
     throw error;
