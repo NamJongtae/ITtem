@@ -8,19 +8,33 @@ import useProductQuery from "../../shared/hooks/queries/useProductQuery";
 import useAddRecentProduct from "../../../../shared/layout/hooks/useAddRecentProduct";
 import { useEffect } from "react";
 import incrementProductView from "../api/incrementProductView";
+import Empty from "@/shared/common/components/Empty";
 
 export default function ProductDetailPage() {
   const { productData, showCSRSkeleton } = useProductQuery();
 
+  const isBlocked = !!productData?.block;
+  const recentProduct = {
+    productId: productData?._id ?? "",
+    productImg: productData?.imgData?.[0]?.url ?? "",
+    productName: productData?.name ?? ""
+  };
+
   useAddRecentProduct({
-    productId: productData._id,
-    productImg: productData.imgData[0].url,
-    productName: productData.name
+    recentProduct,
+    enabled: !!productData && !isBlocked
   });
 
   useEffect(() => {
+    if (!productData?._id) return;
+    if (isBlocked) return;
+
     incrementProductView(productData._id);
-  }, [productData._id]);
+  }, [productData?._id, isBlocked]);
+
+  if (isBlocked) {
+    return <Empty message="신고 누적으로 블라인드 처리된 상품입니다." />;
+  }
 
   return (
     <div className="pt-8 pb-12">
