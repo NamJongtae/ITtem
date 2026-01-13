@@ -22,9 +22,9 @@ export async function generateMetadata({
 
   if (product) {
     return {
-      title: `ITtem | ${product.name}`,
+      title: `ITtem | ${product.block ? "블라인드 상품" : product.name}`,
       openGraph: {
-        title: product.name
+        title: product.block ? "블라인드 상품" : product.name
       }
     };
   } else {
