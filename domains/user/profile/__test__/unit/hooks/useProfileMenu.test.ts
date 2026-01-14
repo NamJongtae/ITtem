@@ -1,11 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import useProfileMenu from "../../../hooks/useProfileMenu";
-import { ProfileMenu } from "../../../types/profileTypes";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
-  useSearchParams: jest.fn()
+  useSearchParams: jest.fn(),
+  useParams: jest.fn()
 }));
 
 describe("useProfileMenu 훅 테스트", () => {
@@ -25,6 +25,7 @@ describe("useProfileMenu 훅 테스트", () => {
     (useSearchParams as jest.Mock).mockReturnValue({
       get: () => null
     });
+    (useParams as jest.Mock).mockReturnValue({});
 
     const { result } = renderHook(() => useProfileMenu());
 
@@ -35,16 +36,18 @@ describe("useProfileMenu 훅 테스트", () => {
     (useSearchParams as jest.Mock).mockReturnValue({
       get: () => "reviews"
     });
+    (useParams as jest.Mock).mockReturnValue({});
 
     const { result } = renderHook(() => useProfileMenu());
 
     expect(result.current.currentMenu).toBe("reviews");
   });
 
-  it("onClickMenu를 호출하면 router.push가 올바른 URL로 호출됩니다.", () => {
+  it("uid가 없을 때 onClickMenu는 /profile 경로로 이동합니다.", () => {
     (useSearchParams as jest.Mock).mockReturnValue({
       get: () => "products"
     });
+    (useParams as jest.Mock).mockReturnValue({}); // uid 없음
 
     const { result } = renderHook(() => useProfileMenu());
 
@@ -55,10 +58,11 @@ describe("useProfileMenu 훅 테스트", () => {
     expect(pushMock).toHaveBeenCalledWith("/profile?m=wishlist");
   });
 
-  it("onClickMenu는 전달받은 menu 값을 그대로 쿼리에 반영합니다.", () => {
+  it("uid가 있을 때 onClickMenu는 /profile/[uid] 경로로 이동합니다.", () => {
     (useSearchParams as jest.Mock).mockReturnValue({
       get: () => "products"
     });
+    (useParams as jest.Mock).mockReturnValue({ uid: "user123" });
 
     const { result } = renderHook(() => useProfileMenu());
 
@@ -66,7 +70,22 @@ describe("useProfileMenu 훅 테스트", () => {
       result.current.onClickMenu("followers");
     });
 
+    expect(pushMock).toHaveBeenCalledWith("/profile/user123?m=followers");
+  });
+
+  it("uid가 있을 때도 menu 값은 그대로 쿼리에 반영됩니다.", () => {
+    (useSearchParams as jest.Mock).mockReturnValue({
+      get: () => "products"
+    });
+    (useParams as jest.Mock).mockReturnValue({ uid: "abc999" });
+
+    const { result } = renderHook(() => useProfileMenu());
+
+    act(() => {
+      result.current.onClickMenu("reviews");
+    });
+
     expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock).toHaveBeenLastCalledWith("/profile?m=followers");
+    expect(pushMock).toHaveBeenLastCalledWith("/profile/abc999?m=reviews");
   });
 });
