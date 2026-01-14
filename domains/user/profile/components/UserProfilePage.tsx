@@ -9,7 +9,7 @@ import useProfileQuery from "../hooks/queries/useProfileQuery";
 
 export default function UserProfilePage() {
   const { profileData, showCSRSkeleton } = useProfileQuery();
-  const { profileMenu, onClickMenu } = useProfileMenu();
+  const { currentMenu, onClickMenu } = useProfileMenu();
 
   if (showCSRSkeleton)
     return (
@@ -23,7 +23,7 @@ export default function UserProfilePage() {
     <>
       <UserInfo handleClickMenu={onClickMenu} profileData={profileData} />
       <Detail
-        profileMenu={profileMenu}
+        currentMenu={currentMenu}
         handleClickMenu={onClickMenu}
         profileData={profileData}
         isMyProfile={false}

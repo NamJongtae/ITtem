@@ -11,7 +11,7 @@ import ProfileDetailSkeletonUI from "./detail/ProfileDetailSkeletonUI";
 export default function MyProfilePage() {
   const { myProfileData, myProfilePending, myProfileError } =
     useMyProfileQuery();
-  const { profileMenu, onClickMenu } = useProfileMenu();
+  const { currentMenu, onClickMenu } = useProfileMenu();
 
   if (myProfilePending) {
     return (
@@ -30,7 +30,7 @@ export default function MyProfilePage() {
     <>
       <UserInfo handleClickMenu={onClickMenu} profileData={myProfileData} />
       <Detail
-        profileMenu={profileMenu}
+        currentMenu={currentMenu}
         handleClickMenu={onClickMenu}
         profileData={myProfileData}
         isMyProfile={true}
