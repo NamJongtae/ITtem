@@ -56,7 +56,12 @@ export interface DeleteWishlistProductDataResponseData extends ApiResponse {
   wishProductIds: string[];
 }
 
-export type ProfileMenu = "판매상품" | "거래후기" | "팔로잉" | "팔로워" | "찜";
+export type ProfileMenu =
+  | "products"
+  | "reviews"
+  | "followers"
+  | "followings"
+  | "wishlist";
 
 export interface FollowUserData {
   uid: string;
