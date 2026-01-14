@@ -6,23 +6,23 @@ import FollowersContent from "./follow/FollowersContent";
 import { ProfileData, ProfileMenu } from "../../types/profileTypes";
 
 interface IProps {
-  profileMenu: ProfileMenu;
+  currentMenu: ProfileMenu;
   profileData: ProfileData | undefined;
   isMyProfile?: boolean;
 }
 
 export default function Content({
-  profileMenu,
+  currentMenu,
   profileData,
   isMyProfile
 }: IProps) {
-  switch (profileMenu) {
-    case "판매상품": {
+  switch (currentMenu) {
+    case "products": {
       return (
         <ProductContent profileData={profileData} isMyProfile={isMyProfile} />
       );
     }
-    case "거래후기": {
+    case "reviews": {
       return (
         <ReviewContent
           reviewInfo={profileData?.reviewInfo}
@@ -30,17 +30,20 @@ export default function Content({
         />
       );
     }
-    case "찜": {
+    case "wishlist": {
       return <WishlistContent wishCount={profileData?.wishCount} />;
     }
-    case "팔로잉": {
-      return <FollowingsContent profileData={profileData} />;
-    }
-    case "팔로워": {
+    case "followers": {
       return <FollowersContent profileData={profileData} />;
     }
+    case "followings": {
+      return <FollowingsContent profileData={profileData} />;
+    }
+
     default: {
-      return null;
+      return (
+        <ProductContent profileData={profileData} isMyProfile={isMyProfile} />
+      );
     }
   }
 }
