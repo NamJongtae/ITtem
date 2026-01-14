@@ -3,14 +3,14 @@ import Content from "./Content";
 import { ProfileData, ProfileMenu } from "../../types/profileTypes";
 
 interface IProps {
-  profileMenu: ProfileMenu;
+  currentMenu: ProfileMenu;
   handleClickMenu: (menu: ProfileMenu) => void;
   profileData: ProfileData | undefined;
   isMyProfile: boolean;
 }
 
 export default function ProfileDetail({
-  profileMenu,
+  currentMenu,
   handleClickMenu,
   profileData,
   isMyProfile
@@ -18,12 +18,12 @@ export default function ProfileDetail({
   return (
     <section className="mt-5 max-w-[1024px] mx-auto px-4 md:px-8">
       <ContentMenu
-        profileMenu={profileMenu}
+        currentMenu={currentMenu}
         handleClickMenu={handleClickMenu}
         isMyProfile={isMyProfile}
       />
       <Content
-        profileMenu={profileMenu}
+        currentMenu={currentMenu}
         profileData={profileData}
         isMyProfile={isMyProfile}
       />
