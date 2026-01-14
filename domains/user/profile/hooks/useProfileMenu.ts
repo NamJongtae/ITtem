@@ -1,12 +1,14 @@
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProfileMenu } from "../types/profileTypes";
-import { useState } from "react";
 
 export default function useProfileMenu() {
-  const [profileMenu, setProfileMenu] = useState<ProfileMenu>("판매상품");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentMenu = (searchParams?.get("m") ?? "products") as ProfileMenu;
 
   const onClickMenu = (menu: ProfileMenu) => {
-    setProfileMenu(menu);
+    router.push(`/profile?m=${menu}`);
   };
 
-  return { profileMenu, onClickMenu };
+  return { currentMenu, onClickMenu };
 }
