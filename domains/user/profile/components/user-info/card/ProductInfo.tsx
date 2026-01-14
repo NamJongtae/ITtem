@@ -10,13 +10,13 @@ export default function ProductInfo({ profileData, handleClickMenu }: IProps) {
     <>
       <div className="text-sm font-medium">
         <button
-          onClick={() => handleClickMenu("판매상품")}
+          onClick={() => handleClickMenu("products")}
           className="relative mr-4 before:w-[1px] before:h-3 before:absolute before:bg-gray-400 before:-right-[9px] before:top-1/2 before:-translate-y-1/2"
         >
           상품 {profileData?.productIds.length || 0}
         </button>
 
-        <button onClick={() => handleClickMenu("거래후기")}>
+        <button onClick={() => handleClickMenu("reviews")}>
           평가{" "}
           {profileData?.reviewInfo?.reviewPercentage
             ? `${profileData?.reviewInfo?.reviewPercentage}%`
