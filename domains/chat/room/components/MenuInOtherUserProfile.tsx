@@ -20,10 +20,7 @@ export default function MenuInOtherUserProfile({
           height={30}
         />
         <span className="font-medium">{otherUserProfileData?.nickname}</span>
-        <FollowBtn
-          otherUserId={otherUserProfileData?.uid}
-          isFollow={otherUserProfileData?.isFollow}
-        />
+        <FollowBtn otherUserId={otherUserProfileData?.uid} />
       </div>
     </>
   );
