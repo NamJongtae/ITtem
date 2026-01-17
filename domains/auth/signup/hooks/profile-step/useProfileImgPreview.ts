@@ -18,13 +18,13 @@ export function useProfileImgPreview() {
       setValue("profileImg", file, { shouldDirty: true, shouldValidate: true });
       setPreview(imgPreview);
     },
-    []
+    [setValue]
   );
 
   const resetProfileImg = useCallback(() => {
     setValue("profileImg", "", { shouldDirty: true, shouldValidate: true });
     setPreview("/icons/user-icon.svg");
-  }, []);
+  }, [setValue]);
 
   return {
     preview,
