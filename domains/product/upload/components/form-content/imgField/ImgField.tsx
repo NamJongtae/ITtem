@@ -4,7 +4,7 @@ import ProductUploadImgEnlargeBtn from "./ImgEnlargeBtn";
 import ImgInput from "./HiddenImgInput";
 import ProductUploadImgPreviewList from "./ImgPreviewList";
 import { ProductImgData } from "../../../../shared/types/productTypes";
-import useProductUploadImgField from "@/domains/product/upload/hooks/img-field/useProductUploadimgField";
+import useProductUploadImgField from "../../../hooks/img-field/useProductUploadImgField";
 interface IProps {
   imgData?: ProductImgData[];
 }
