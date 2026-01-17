@@ -62,8 +62,7 @@ export async function POST(req: NextRequest) {
 
         // ✅ 중복 로그인 허용 → 기존 세션 제거
         if (existingSession && isDuplicateLogin) {
-          const result = await Session.deleteMany({ uid: dbUserData._id });
-          console.log
+          await Session.deleteMany({ uid: dbUserData._id });
         }
 
         // 🔐 세션 생성 (회원가입 후 바로 로그인)
