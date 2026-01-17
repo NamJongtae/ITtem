@@ -5,10 +5,11 @@ import CategoryMenuItem from "./CategoryMenuItem";
 
 interface IProps {
   toggleCategory: () => void;
+  closeCategory: () => void;
 }
 
 const CategoryMenu = forwardRef<HTMLDivElement, IProps>(
-  ({ toggleCategory }, ref) => {
+  ({ toggleCategory, closeCategory }, ref) => {
     return (
       <div
         className="absolute top-[40px] md:top-[54px] left-4 md:left-8 w-[200px] bg-white z-40 border"
@@ -25,6 +26,7 @@ const CategoryMenu = forwardRef<HTMLDivElement, IProps>(
             <CategoryMenuItem
               key={category}
               category={category}
+              closeCategory={closeCategory}
               index={index}
             />
           ))}

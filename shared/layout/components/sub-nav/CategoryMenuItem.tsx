@@ -3,12 +3,13 @@ import Link from "next/link";
 
 interface CategoryItemProps {
   category: string;
+  closeCategory: () => void;
   index: number;
 }
 
 export default function CategoryMenuItem({
   category,
-
+  closeCategory,
   index
 }: CategoryItemProps) {
   const { setCategoryLinkRef, categoryOnKeyDown } = useNavCategoryMenu();
@@ -23,6 +24,7 @@ export default function CategoryMenuItem({
         className="block pl-5 py-2 w-full h-full text-sm betterhover:hover:bg-red-400 betterhover:hover:text-white focus:outline-none focus:bg-red-400 focus:text-white "
         ref={setCategoryLinkRef(index)}
         onKeyDown={(e) => categoryOnKeyDown(e, index)}
+        onClick={closeCategory}
       >
         {category}
       </Link>

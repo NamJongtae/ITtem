@@ -7,8 +7,13 @@ import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 import SubNavMenu from "./SubNavMenu";
 
 export default function SubNav() {
-  const { isOpenCategory, toggleCategory, categoryRef, buttonRef } =
-    useNavCategory();
+  const {
+    isOpenCategory,
+    toggleCategory,
+    closeCategory,
+    categoryRef,
+    buttonRef
+  } = useNavCategory();
 
   return (
     <nav className="relative flex justify-between px-4 sm:px-8 pb-4 max-w-[1024px] mx-auto">
@@ -26,7 +31,11 @@ export default function SubNav() {
           />
         </button>
         {isOpenCategory && (
-          <CategoryMenu toggleCategory={toggleCategory} ref={categoryRef} />
+          <CategoryMenu
+            toggleCategory={toggleCategory}
+            closeCategory={closeCategory}
+            ref={categoryRef}
+          />
         )}
       </div>
       <SubNavMenu />
