@@ -16,6 +16,11 @@ interface IProps {
   emptyMessage: string;
   productCategory?: ProductCategory;
 }
+const FetchingSkeletonUI = () => {
+  return Array.from({ length: 12 }).map((_, index) => (
+    <ProductItemSkeletonUI key={index} />
+  ));
+};
 
 export default function ProductListUI({
   data,
@@ -30,12 +35,6 @@ export default function ProductListUI({
     hasNextPage,
     isFetchingNextPage
   });
-
-  const FetchingSkeletonUI = () => {
-    return Array.from({ length: 12 }).map((_, index) => (
-      <ProductItemSkeletonUI key={index} />
-    ));
-  };
 
   if (data?.length === 0) {
     return <Empty message={emptyMessage} />;
