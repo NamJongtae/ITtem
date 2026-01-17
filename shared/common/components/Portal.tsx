@@ -7,6 +7,7 @@ export default function Portal({ children }: { children: React.ReactNode }) {
   const [isCSR, setIsCSR] = useState<boolean>(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsCSR(true);
   }, []);
 
