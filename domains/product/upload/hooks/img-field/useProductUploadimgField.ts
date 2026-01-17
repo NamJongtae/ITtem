@@ -35,7 +35,7 @@ export default function useProductUploadImgField(imgData?: ProductImgData[]) {
       return;
     }
     openModal();
-  }, [preview]);
+  }, [preview, openModal]);
 
   const handleClickImgInput = useCallback(() => {
     if (!imgInputRef.current) return;
