@@ -4,8 +4,6 @@ export interface ProductDetailAuthData {
   uid: string;
   nickname: string;
   profileImg: string;
-  followers: string[];
-  isFollow: boolean;
   reviewPercentage: number;
   recentProducts: ProductData[];
 }
