@@ -1,18 +1,18 @@
 import { act, renderHook } from "@testing-library/react";
 import useNavCategory from "@/shared/layout/hooks/useNavCategory";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-jest.mock("next/navigation");
+jest.mock("next/navigation", () => ({
+  __esModule: true,
+  useSearchParams: jest.fn()
+}));
 
 describe("useNavCategory 훅 테스트", () => {
-  const mockPathname = "/products";
-
   beforeEach(() => {
     jest.clearAllMocks();
     (useSearchParams as jest.Mock).mockReturnValue(
       new URLSearchParams("category=신발")
     );
-    (usePathname as jest.Mock).mockReturnValue(mockPathname);
   });
 
   it("기본 상태는 isOpenCategory가 false여야 합니다.", () => {
@@ -34,18 +34,17 @@ describe("useNavCategory 훅 테스트", () => {
     expect(result.current.isOpenCategory).toBe(false);
   });
 
-  it("pathname 또는 category가 바뀌면 자동으로 NavCategory가 닫혀야합니다.", () => {
-    const { result, rerender } = renderHook(() => useNavCategory());
+  it("closeCategory 호출 시 NavCategory는 닫혀야 합니다.", () => {
+    const { result } = renderHook(() => useNavCategory());
 
     act(() => {
       result.current.toggleCategory(); // 열기
     });
     expect(result.current.isOpenCategory).toBe(true);
 
-    // pathname 변경 트리거
-    (usePathname as jest.Mock).mockReturnValue("/changed-path");
-    rerender();
-
+    act(() => {
+      result.current.closeCategory();
+    });
     expect(result.current.isOpenCategory).toBe(false);
   });
 
@@ -68,14 +67,12 @@ describe("useNavCategory 훅 테스트", () => {
     });
     expect(result.current.isOpenCategory).toBe(true);
 
-    // 외부 클릭 이벤트
-    const clickEvent = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(clickEvent, "target", {
-      value: document.createElement("div")
-    });
+    // 외부 클릭: categoryDiv/button 둘 다 아닌 요소
+    const outside = document.createElement("div");
+    document.body.appendChild(outside);
 
     act(() => {
-      document.dispatchEvent(clickEvent);
+      outside.click(); // document에 걸린 click 리스너가 받음
     });
 
     expect(result.current.isOpenCategory).toBe(false);
@@ -86,6 +83,8 @@ describe("useNavCategory 훅 테스트", () => {
 
     const categoryDiv = document.createElement("div");
     const button = document.createElement("button");
+    document.body.appendChild(categoryDiv);
+    document.body.appendChild(button);
 
     result.current.categoryRef.current = categoryDiv;
     result.current.buttonRef.current = button;
@@ -95,15 +94,19 @@ describe("useNavCategory 훅 테스트", () => {
     });
     expect(result.current.isOpenCategory).toBe(true);
 
-    const insideClick = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(insideClick, "target", {
-      value: categoryDiv
+    act(() => {
+      categoryDiv.click(); // 내부 클릭
     });
+    expect(result.current.isOpenCategory).toBe(true);
 
     act(() => {
-      document.dispatchEvent(insideClick);
+      button.click(); // 버튼 클릭
     });
+    expect(result.current.isOpenCategory).toBe(true);
+  });
 
-    expect(result.current.isOpenCategory).toBe(true); // 닫히지 않아야 함
+  it("currentCategory는 searchParams의 category 값을 반환합니다.", () => {
+    const { result } = renderHook(() => useNavCategory());
+    expect(result.current.currentCategory).toBe("신발");
   });
 });
