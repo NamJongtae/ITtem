@@ -1,43 +1,49 @@
 import { imgValidation } from "@/shared/common/utils/imgValidation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-export default function useProfileEditImg() {
-  const [preview, setPreview] = useState("/icons/user-icon.svg");
-  const imgInputRef = useRef<HTMLInputElement | null>(null);
+const DEFAULT_PREVIEW = "/icons/user-icon.svg";
 
+export default function useProfileEditImg() {
+  const imgInputRef = useRef<HTMLInputElement | null>(null);
   const { setValue, getValues } = useFormContext();
-  const img = getValues("profileImg");
+
+  const [preview, setPreview] = useState<string>(() => {
+    const img = getValues("profileImg");
+    return (img as string) || DEFAULT_PREVIEW;
+  });
 
   const handleClickImgInput = useCallback(() => {
-    if (!imgInputRef.current) return;
-    imgInputRef.current.click();
+    imgInputRef.current?.click();
   }, []);
 
   const handleChangeImg = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      const file = e.target.files[0];
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-      const isValid = imgValidation(file);
-      if (!isValid) return;
+      if (!imgValidation(file)) return;
 
       const imgPreview = URL.createObjectURL(file);
+
       setValue("profileImg", file, { shouldDirty: true, shouldValidate: true });
-      setPreview(imgPreview);
+
+      setPreview((prev) => {
+        if (prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+        return imgPreview;
+      });
     },
-    []
+    [setValue]
   );
 
   const resetProfileImg = useCallback(() => {
     setValue("profileImg", "", { shouldDirty: true, shouldValidate: true });
-    setPreview("/icons/user-icon.svg");
-  }, []);
 
-  // 프로필 수정시 초기 이미지 설정
-  useEffect(() => {
-    setPreview(img);
-  }, []);
+    setPreview((prev) => {
+      if (prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return DEFAULT_PREVIEW;
+    });
+  }, [setValue]);
 
   return {
     handleClickImgInput,
