@@ -8,15 +8,18 @@ interface IProps {
   createdAt: string | Date;
 }
 
+const SkeletonBox = () => {
+  return (
+    <div className="flex gap-2 items-center w-12 h-5 bg-gray-200 animate-pulse" />
+  );
+};
+
 export default function ContentInfoStats({
   showCSRSkeleton,
   wishCount,
   viewCount,
   createdAt
 }: IProps) {
-  const SkeletonBox = () => (
-    <div className="flex gap-2 items-center w-12 h-5 bg-gray-200 animate-pulse" />
-  );
   return (
     <div className="flex gap-3">
       {/* 찜 수 */}
