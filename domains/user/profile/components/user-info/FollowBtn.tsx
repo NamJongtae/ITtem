@@ -1,4 +1,5 @@
 import useMyProfileQuery from "../../hooks/queries/useMyProfileQuery";
+import useCheckFollowStatusQuery from "../../hooks/queries/useCheckFollowStatusQuery";
 import useFollowUserInProfile from "../../hooks/useFollowUserInProfile";
 import { ProfileData } from "../../types/profileTypes";
 
@@ -7,12 +8,16 @@ interface IProps {
 }
 export default function FollowBtn({ profileData }: IProps) {
   const { myProfileData, myProfileLoading } = useMyProfileQuery();
+  const { isFollow, isFollowPending } = useCheckFollowStatusQuery(
+    profileData?.uid || ""
+  );
   const { followHandler } = useFollowUserInProfile({
     profileData,
-    myProfileData
+    myProfileData,
+    isFollow
   });
 
-  if (myProfileLoading)
+  if (myProfileLoading || isFollowPending)
     return <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />;
 
   return (
@@ -21,7 +26,7 @@ export default function FollowBtn({ profileData }: IProps) {
       onClick={followHandler}
       className="border py-2 px-4 w-full betterhover:hover:bg-gray-100"
     >
-      {profileData?.isFollow ? "- 언팔로우" : "+ 팔로우"}
+      {isFollow ? "- 언팔로우" : "+ 팔로우"}
     </button>
   );
 }
