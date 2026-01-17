@@ -6,11 +6,13 @@ import { toast } from "react-toastify";
 interface IParams {
   profileData: ProfileData | undefined;
   myProfileData: ProfileData | undefined;
+  isFollow: boolean | undefined;
 }
 
 export default function useFollowUserInProfile({
   profileData,
-  myProfileData
+  myProfileData,
+  isFollow
 }: IParams) {
   const { userFollowMutate } = useUserProfileFollowMutate(
     profileData?.uid || ""
@@ -27,7 +29,7 @@ export default function useFollowUserInProfile({
       toast.warn("로그인이 필요해요.");
       return;
     }
-    if (profileData?.isFollow) {
+    if (isFollow) {
       userUnfollowMutate();
     } else {
       userFollowMutate();
