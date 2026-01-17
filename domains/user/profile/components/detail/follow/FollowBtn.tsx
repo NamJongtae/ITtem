@@ -1,3 +1,4 @@
+import useMyProfileQuery from "../../../hooks/queries/useMyProfileQuery";
 import useFollowUserInList from "../../../hooks/useFollowUserInList";
 import { FollowUserData } from "../../../types/profileTypes";
 
@@ -7,10 +8,16 @@ interface IProps {
 }
 
 export default function FollowBtn({ followProfileData, listType }: IProps) {
+  const { myProfileData, myProfileLoading } = useMyProfileQuery();
   const { isNotMyProfile, onClickFollow } = useFollowUserInList({
     followProfileData,
+    myProfileData,
     listType
   });
+
+  if (myProfileLoading) {
+    return <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />;
+  }
 
   return (
     isNotMyProfile && (
