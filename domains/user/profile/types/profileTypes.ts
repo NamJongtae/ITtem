@@ -17,7 +17,6 @@ export interface ProfileData {
   introduce: string;
   followersCount: number;
   followingsCount: number;
-  isFollow?: boolean;
   wishCount?: number;
   productIds: string[];
   saleCount: number;
