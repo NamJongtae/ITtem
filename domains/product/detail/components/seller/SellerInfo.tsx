@@ -33,7 +33,6 @@ export default function SellerInfo({ auth, showCSRSkeleton }: IProps) {
       </Link>
       <SellerFollowBtn
         uid={auth.uid}
-        isFollow={auth.isFollow}
         showCSRSkeleton={showCSRSkeleton}
       />
     </div>

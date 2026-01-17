@@ -1,17 +1,14 @@
+import useCheckFollowStatusQuery from "@/domains/user/profile/hooks/queries/useCheckFollowStatusQuery";
 import useFollowUserInProduct from "../../hooks/useFollowUserInProduct";
 import useMyProfileQuery from "@/domains/user/profile/hooks/queries/useMyProfileQuery";
 interface IProps {
   uid: string;
-  isFollow: boolean | undefined;
   showCSRSkeleton: boolean;
 }
 
-export default function SellerFollowBtn({
-  uid,
-  isFollow,
-  showCSRSkeleton
-}: IProps) {
+export default function SellerFollowBtn({ uid, showCSRSkeleton }: IProps) {
   const { myProfileData } = useMyProfileQuery();
+  const { isFollow } = useCheckFollowStatusQuery(uid);
 
   const { followHandler, isMyProfile } = useFollowUserInProduct({
     uid,
