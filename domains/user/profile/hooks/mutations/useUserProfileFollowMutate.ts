@@ -17,10 +17,6 @@ export default function useUserProfileFollowMutate(uid: string) {
   const myUid = useAuthStore((s) => s.user?.uid ?? "");
 
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
-    uid: myUid,
-    limit: 10
-  }).queryKey;
 
   const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
   const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
@@ -28,11 +24,13 @@ export default function useUserProfileFollowMutate(uid: string) {
     limit: 10
   }).queryKey;
 
-  // ✅ (UI동기화용) 상대의 팔로잉 목록에 "내 카드"가 있을 수 있음
   const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
     uid,
     limit: 10
   }).queryKey;
+
+  const targetFollowStatusQueryKey =
+    queryKeys.profile.user(uid)._ctx.isFollow.queryKey;
 
   const { mutate: userFollowMutate } = useMutation({
     mutationFn: () => followUser(uid),
@@ -41,7 +39,8 @@ export default function useUserProfileFollowMutate(uid: string) {
       await Promise.all([
         queryClient.cancelQueries({ queryKey: targetProfileQueryKey }),
         queryClient.cancelQueries({ queryKey: targetFollowersQueryKey }),
-        queryClient.cancelQueries({ queryKey: targetFollowingsQueryKey })
+        queryClient.cancelQueries({ queryKey: targetFollowingsQueryKey }),
+        queryClient.cancelQueries({ queryKey: targetFollowStatusQueryKey })
       ]);
 
       const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
@@ -60,16 +59,22 @@ export default function useUserProfileFollowMutate(uid: string) {
         targetFollowingsQueryKey
       ) as InfiniteProfileList | undefined;
 
-      /** ✅ 1) 상대 프로필: followersCount +1, isFollow true */
+      const previousFollowStatus = queryClient.getQueryData(
+        targetFollowStatusQueryKey
+      ) as boolean | undefined;
+
+      /** ✅ 1) 상대 프로필: followersCount + 1 */
       if (previousTargetProfile) {
         queryClient.setQueryData(targetProfileQueryKey, {
           ...previousTargetProfile,
-          followersCount: (previousTargetProfile.followersCount || 0) + 1,
-          isFollow: true
+          followersCount: (previousTargetProfile.followersCount || 0) + 1
         });
       }
 
-      /** ✅ 2) 상대 followers 목록: 나(myUid) 추가 (중복 방지 + 맨 앞 삽입) */
+      /** ✅ 1-2) isFollowQuery: true */
+      queryClient.setQueryData(targetFollowStatusQueryKey, true);
+
+      /** ✅ 2) 상대 followers 목록: 나(myUid) 추가 */
       if (previousTargetFollowers && previousMyProfile && myUid) {
         const alreadyExists = previousTargetFollowers.pages.some((page) =>
           page.some((u) => u.uid === myUid)
@@ -81,9 +86,8 @@ export default function useUserProfileFollowMutate(uid: string) {
             nickname: previousMyProfile.nickname,
             profileImg: previousMyProfile.profileImg,
             followersCount: previousMyProfile.followersCount || 0,
-            // ✅ 팔로우 했으니 내 팔로잉 수는 +1 된 상태로 보여주는 게 자연스러움
             followingsCount: (previousMyProfile.followingsCount || 0) + 1,
-            isFollow: false, // "상대 followers 목록"에서 내 카드의 isFollow 의미가 애매하면 false 고정 추천
+            isFollow: false,
             productIds: previousMyProfile.productIds || [],
             reviewPercentage:
               previousMyProfile.reviewInfo?.reviewPercentage || 0
@@ -103,10 +107,7 @@ export default function useUserProfileFollowMutate(uid: string) {
         }
       }
 
-      /**
-       * ✅ 3) (UI 동기화) 상대의 팔로잉 목록에 "내 카드"가 있다면 → 내 followingsCount +1 반영
-       * - 이건 관계 변경이 아니라, 캐시에 떠있는 "내 카드" 숫자만 맞추는 용도
-       */
+      /** ✅ 3) 상대 followings 목록에 내 카드가 있다면 followingsCount +1 반영 */
       if (previousTargetFollowings && myUid) {
         const updatedTargetFollowings: InfiniteProfileList = {
           ...previousTargetFollowings,
@@ -131,7 +132,8 @@ export default function useUserProfileFollowMutate(uid: string) {
       return {
         previousTargetProfile,
         previousTargetFollowers,
-        previousTargetFollowings
+        previousTargetFollowings,
+        previousFollowStatus
       };
     },
 
@@ -155,6 +157,15 @@ export default function useUserProfileFollowMutate(uid: string) {
         );
       }
 
+      if (ctx?.previousFollowStatus !== undefined) {
+        queryClient.setQueryData(
+          targetFollowStatusQueryKey,
+          ctx.previousFollowStatus
+        );
+      } else {
+        queryClient.removeQueries({ queryKey: targetFollowStatusQueryKey });
+      }
+
       if (isFetchError(error)) {
         if (error.status === 409) {
           toast.warn("이미 팔로우한 유저에요.");
@@ -163,9 +174,9 @@ export default function useUserProfileFollowMutate(uid: string) {
         }
       }
     },
+
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: myFollowingsQueryKey });
+      queryClient.invalidateQueries({ queryKey: targetFollowStatusQueryKey });
     }
   });
 

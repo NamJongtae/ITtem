@@ -28,13 +28,6 @@ export default function useMyProfileUnfollowInListMutate(uid: string) {
     limit: 10
   }).queryKey;
 
-  const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
-
-  const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
-    uid,
-    limit: 10
-  }).queryKey;
-
   const { mutate: myProfileUnfollowMutate } = useMutation({
     mutationFn: () => unfollowUser(uid),
 
@@ -136,15 +129,14 @@ export default function useMyProfileUnfollowInListMutate(uid: string) {
         if (error.status === 409) {
           toast.warn("이미 언팔로우한 유저에요.");
         } else {
-          toast.warn("유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요.");
+          toast.warn(
+            "유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요."
+          );
         }
       }
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: targetProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowersQueryKey });
-    }
+    onSettled: () => {}
   });
 
   return { myProfileUnfollowMutate };

@@ -154,10 +154,7 @@ export default function useMyProfileFollowInListMutate(uid: string) {
       }
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: targetProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowersQueryKey });
-    }
+    onSettled: () => {}
   });
 
   return { myProfilefollowMutate };

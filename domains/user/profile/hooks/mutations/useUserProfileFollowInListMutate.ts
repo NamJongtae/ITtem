@@ -15,8 +15,8 @@ type InfiniteFollowList = InfiniteData<FollowUserData[], unknown>;
 type ListType = "followers" | "followings";
 
 interface Props {
-  uid: string; // 내가 팔로우할 대상 유저 uid
-  listType: ListType; // 지금 보고 있는 목록 타입 (followers인지 followings인지)
+  uid: string;
+  listType: ListType;
 }
 
 export default function useUserProfileFollowInListMutate({
@@ -28,24 +28,6 @@ export default function useUserProfileFollowInListMutate({
 
   const params = useParams();
   const pageUid = (params?.uid as string) ?? "";
-
-  // ✅ 내 프로필 / 내 팔로잉 (invalidate 용)
-  const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
-    uid: myUid,
-    limit: 10
-  }).queryKey;
-
-  // ✅ 타겟(팔로우 당하는 유저) 프로필 / followers (invalidate 용)
-  const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
-  const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
-    uid,
-    limit: 10
-  }).queryKey;
-  const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
-    uid,
-    limit: 10
-  }).queryKey;
 
   // ✅ 지금 화면에 보이는 리스트
   const pageFollowListQueryKey =
@@ -68,14 +50,13 @@ export default function useUserProfileFollowInListMutate({
     mutationFn: () => followUser(uid),
 
     onMutate: async () => {
-      // ✅ 현재 화면 리스트만 optimistic 업데이트 하므로 이것만 cancel하면 충분
       await queryClient.cancelQueries({ queryKey: pageFollowListQueryKey });
 
       const previousPageFollowList = queryClient.getQueryData(
         pageFollowListQueryKey
       ) as InfiniteFollowList | undefined;
 
-      // ✅ 현재 보고 있는 리스트에서만 버튼/카운트 즉시 반영
+      // 현재 보고 있는 리스트에서만 버튼/카운트 즉시 반영
       if (previousPageFollowList) {
         const updatedPageFollowList: InfiniteFollowList = {
           ...previousPageFollowList,
@@ -90,7 +71,7 @@ export default function useUserProfileFollowInListMutate({
                 };
               }
 
-              // (요구사항) 리스트에 내 정보가 있으면 내 followingsCount +1
+              // 리스트에 내 정보가 있으면 내 followingsCount +1
               if (u.uid === myUid) {
                 return {
                   ...u,
@@ -128,11 +109,7 @@ export default function useUserProfileFollowInListMutate({
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: myFollowingsQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowersQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowingsQueryKey });
+      // queryClient.invalidateQueries({ queryKey: pageFollowListQueryKey });
     }
   });
 

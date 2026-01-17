@@ -1,6 +1,6 @@
 import unfollowUser from "@/domains/user/shared/api/unfollowUser";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import { FollowUserData, ProfileData } from "../../types/profileTypes";
+import { FollowUserData } from "../../types/profileTypes";
 import {
   InfiniteData,
   useMutation,
@@ -29,21 +29,7 @@ export default function useUserProfileUnFollowInListMutate({
   const params = useParams();
   const pageUid = (params?.uid as string) ?? "";
 
-  const myProfileQueryKey = queryKeys.profile.my.queryKey;
-  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
-    uid: myUid,
-    limit: 10
-  }).queryKey;
-
   const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
-  const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
-    uid,
-    limit: 10
-  }).queryKey;
-  const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
-    uid,
-    limit: 10
-  }).queryKey;
 
   const pageFollowListQueryKey =
     listType === "followers"
@@ -60,38 +46,16 @@ export default function useUserProfileUnFollowInListMutate({
     mutationFn: () => unfollowUser(uid),
 
     onMutate: async () => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: myProfileQueryKey }),
-        queryClient.cancelQueries({ queryKey: myFollowingsQueryKey }),
-        queryClient.cancelQueries({ queryKey: targetProfileQueryKey }),
-        queryClient.cancelQueries({ queryKey: targetFollowersQueryKey }),
-        queryClient.cancelQueries({ queryKey: pageFollowListQueryKey })
-      ]);
-
-      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
-        | ProfileData
-        | undefined;
-
-      const previousMyFollowings = queryClient.getQueryData(
-        myFollowingsQueryKey
-      ) as InfiniteProfileList | undefined;
-
-      const previousTargetProfile = queryClient.getQueryData(
-        targetProfileQueryKey
-      ) as ProfileData | undefined;
-
-      const previousTargetFollowers = queryClient.getQueryData(
-        targetFollowersQueryKey
-      ) as InfiniteProfileList | undefined;
+      await queryClient.cancelQueries({ queryKey: targetProfileQueryKey });
 
       const previousPageFollowList = queryClient.getQueryData(
         pageFollowListQueryKey
       ) as InfiniteProfileList | undefined;
 
       /**
-       * ✅ 현재 보고 있는 리스트에서도 즉시 반영
+       * 현재 보고 있는 리스트에서도 즉시 반영
        * - 타겟(uid): isFollow false, followersCount -1
-       * - ✅ 추가: 내(myUid)가 리스트에 있으면 followingsCount -1
+       * - 내(myUid)가 리스트에 있으면 followingsCount -1
        */
       if (previousPageFollowList) {
         const updatedPageFollowList: InfiniteProfileList = {
@@ -107,7 +71,7 @@ export default function useUserProfileUnFollowInListMutate({
                 };
               }
 
-              // ✅ (추가) 리스트에 내 정보가 있으면 followingsCount -1
+              // 리스트에 내 정보가 있으면 followingsCount -1
               if (u.uid === myUid) {
                 return {
                   ...u,
@@ -148,11 +112,7 @@ export default function useUserProfileUnFollowInListMutate({
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: myFollowingsQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowersQueryKey });
-      queryClient.invalidateQueries({ queryKey: targetFollowingsQueryKey });
+      // queryClient.invalidateQueries({ queryKey: pageFollowListQueryKey });
     }
   });
 

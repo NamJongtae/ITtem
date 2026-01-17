@@ -16,29 +16,24 @@ export default function useUserProfileUnfollowMutate(uid: string) {
   const queryClient = useQueryClient();
   const myUid = useAuthStore((s) => s.user?.uid ?? "");
 
-  // ✅ 내 프로필
-  const myProfileQueryKey = queryKeys.profile.my.queryKey;
-
-  // ✅ 내 팔로잉 목록 (내가 팔로우한 사람들)
-  const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
-    uid: myUid,
-    limit: 10
-  }).queryKey;
-
   // ✅ 언팔로우 대상(상대) 프로필
   const targetProfileQueryKey = queryKeys.profile.user(uid).queryKey;
 
-  // ✅ 상대 팔로워 목록 (상대를 팔로우하는 사람들 => 여기서 "나"가 빠져야 함)
+  // ✅ 상대 팔로워 목록
   const targetFollowersQueryKey = queryKeys.profile.user(uid)._ctx.followers({
     uid,
     limit: 10
   }).queryKey;
 
-  // ✅ 추가: 상대의 팔로잉 목록 (내 정보가 있을 수 있음)
+  // ✅ 상대의 팔로잉 목록 (내 정보가 있을 수 있음)
   const targetFollowingsQueryKey = queryKeys.profile.user(uid)._ctx.followings({
     uid,
     limit: 10
   }).queryKey;
+
+  // ✅ 추가: isFollowQuery key
+  const targetFollowStatusQueryKey =
+    queryKeys.profile.user(uid)._ctx.isFollow.queryKey;
 
   const { mutate: userUnfollowMutate } = useMutation({
     mutationFn: () => unfollowUser(uid),
@@ -47,16 +42,9 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       await Promise.all([
         queryClient.cancelQueries({ queryKey: targetProfileQueryKey }),
         queryClient.cancelQueries({ queryKey: targetFollowersQueryKey }),
-        queryClient.cancelQueries({ queryKey: targetFollowingsQueryKey })
+        queryClient.cancelQueries({ queryKey: targetFollowingsQueryKey }),
+        queryClient.cancelQueries({ queryKey: targetFollowStatusQueryKey })
       ]);
-
-      const previousMyProfile = queryClient.getQueryData(myProfileQueryKey) as
-        | ProfileData
-        | undefined;
-
-      const previousMyFollowings = queryClient.getQueryData(
-        myFollowingsQueryKey
-      ) as InfiniteProfileList | undefined;
 
       const previousTargetProfile = queryClient.getQueryData(
         targetProfileQueryKey
@@ -70,17 +58,23 @@ export default function useUserProfileUnfollowMutate(uid: string) {
         targetFollowingsQueryKey
       ) as InfiniteProfileList | undefined;
 
-      /** ✅ 상대 프로필: followersCount -1 + isFollow false */
+      const previousFollowStatus = queryClient.getQueryData(
+        targetFollowStatusQueryKey
+      ) as boolean | undefined;
+
+      /** ✅ 상대 프로필: followersCount -1 */
       if (previousTargetProfile) {
         queryClient.setQueryData(targetProfileQueryKey, {
           ...previousTargetProfile,
           followersCount: Math.max(
             (previousTargetProfile.followersCount || 0) - 1,
             0
-          ),
-          isFollow: false
+          )
         });
       }
+
+      /** ✅ isFollowQuery: false */
+      queryClient.setQueryData(targetFollowStatusQueryKey, false);
 
       /** ✅ 상대의 팔로워 목록에서 "나(myUid)" 제거 */
       if (previousTargetFollowers && myUid) {
@@ -123,24 +117,14 @@ export default function useUserProfileUnfollowMutate(uid: string) {
       }
 
       return {
-        previousMyProfile,
-        previousMyFollowings,
         previousTargetProfile,
         previousTargetFollowers,
-        previousTargetFollowings
+        previousTargetFollowings,
+        previousFollowStatus
       };
     },
 
     onError: (error, _vars, ctx) => {
-      queryClient.setQueryData(myProfileQueryKey, ctx?.previousMyProfile);
-
-      if (ctx?.previousMyFollowings) {
-        queryClient.setQueryData(
-          myFollowingsQueryKey,
-          ctx.previousMyFollowings
-        );
-      }
-
       queryClient.setQueryData(
         targetProfileQueryKey,
         ctx?.previousTargetProfile
@@ -160,6 +144,15 @@ export default function useUserProfileUnfollowMutate(uid: string) {
         );
       }
 
+      if (ctx?.previousFollowStatus) {
+        queryClient.setQueryData(
+          targetFollowStatusQueryKey,
+          ctx.previousFollowStatus
+        );
+      } else {
+        queryClient.removeQueries({ queryKey: targetFollowStatusQueryKey });
+      }
+
       if (isFetchError(error)) {
         if (error.status === 409) {
           toast.warn("이미 언팔로우한 유저에요.");
@@ -172,8 +165,7 @@ export default function useUserProfileUnfollowMutate(uid: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: myProfileQueryKey });
-      queryClient.invalidateQueries({ queryKey: myFollowingsQueryKey });
+      queryClient.invalidateQueries({ queryKey: targetFollowStatusQueryKey });
     }
   });
 
