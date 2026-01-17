@@ -3,7 +3,6 @@ import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import mongoose from "mongoose";
 import * as Sentry from "@sentry/nextjs";
-import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 
 export async function GET(
   req: NextRequest,
@@ -29,24 +28,6 @@ export async function GET(
     await dbConnect();
 
     const targetUserId = new mongoose.Types.ObjectId(uid);
-
-    const auth = await checkAuthorization();
-    const myUid = auth?.isValid && auth.auth?.uid ? auth.auth.uid : null;
-
-    /**
-     * ✅ isFollow 계산
-     */
-    let isFollow = false;
-    if (myUid && myUid !== uid) {
-      const followExists = await mongoose.connection
-        .collection("follows")
-        .findOne({
-          followerId: new mongoose.Types.ObjectId(myUid),
-          followingId: targetUserId
-        });
-
-      isFollow = !!followExists;
-    }
 
     const aggregation: any[] = [
       { $match: { _id: targetUserId } },
@@ -173,8 +154,7 @@ export async function GET(
 
     const profile = {
       ...result[0],
-      uid: result[0]._id,
-      isFollow // ✅ 추가됨
+      uid: result[0]._id
     };
     delete profile._id;
 
