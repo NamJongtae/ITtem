@@ -1,7 +1,5 @@
 import Session from "@/domains/auth/shared/common/models/Sessions";
 import User from "@/domains/auth/shared/common/models/User";
-import dbConnect from "@/shared/common/utils/db/db";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {

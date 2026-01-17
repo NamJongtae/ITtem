@@ -2,10 +2,10 @@ import dbConnect from "@/shared/common/utils/db/db";
 import Session from "@/domains/auth/shared/common/models/Sessions";
 import User from "@/domains/auth/shared/common/models/User";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get("sessionId")?.value;
