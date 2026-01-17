@@ -21,7 +21,6 @@ async function dbConnect() {
     throw new Error("DB 접속 정보를 확인해주세요.");
   }
   if (cached.conn) {
-    console.log("캐싱된 커넥션을 사용합니다.");
     return cached.conn;
   }
   if (!cached.promise) {
