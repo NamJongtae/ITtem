@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import useProductUploadImgField from "@/domains/product/upload/hooks/img-field/useProductUploadimgField";
+import useProductUploadImgField from "@/domains/product/upload/hooks/img-field/useProductUploadImgField";
 import useModal from "@/shared/common/hooks/useModal";
 import { useProductImgUploader } from "@/domains/product/upload/hooks/img-field/useProductImgUploader";
 import { useProductUploadImgPreview } from "@/domains/product/upload/hooks/img-field/useProductUploadImgPreview";
