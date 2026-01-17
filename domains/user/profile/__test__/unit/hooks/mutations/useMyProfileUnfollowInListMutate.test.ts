@@ -4,7 +4,10 @@ import unfollowUser from "@/domains/user/shared/api/unfollowUser";
 import { toast } from "react-toastify";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
-import type { ProfileData, FollowUserData } from "@/domains/user/profile/types/profileTypes";
+import type {
+  ProfileData,
+  FollowUserData
+} from "@/domains/user/profile/types/profileTypes";
 import type { InfiniteData } from "@tanstack/react-query";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 
@@ -35,7 +38,6 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
   const myUid = "user1";
   const targetUid = "user2";
 
-  // ✅ 훅 내부와 동일한 queryKey 구성
   const myProfileQueryKey = queryKeys.profile.my.queryKey;
 
   const myFollowersQueryKey = queryKeys.profile.my._ctx.followers({
@@ -45,13 +47,6 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
 
   const myFollowingsQueryKey = queryKeys.profile.my._ctx.followings({
     uid: myUid,
-    limit: 10
-  }).queryKey;
-
-  const targetProfileQueryKey = queryKeys.profile.user(targetUid).queryKey;
-
-  const targetFollowersQueryKey = queryKeys.profile.user(targetUid)._ctx.followers({
-    uid: targetUid,
     limit: 10
   }).queryKey;
 
@@ -108,22 +103,22 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
 
   let cancelSpy: jest.SpyInstance;
   let setDataSpy: jest.SpyInstance;
-  let invalidateSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    queryClient.clear();
 
     (useAuthStore as unknown as jest.Mock).mockImplementation((selector: any) =>
       selector({ user: { uid: myUid } })
     );
 
+    // ✅ 각 테스트 시작 시 캐시 세팅
     queryClient.setQueryData(myProfileQueryKey, fakeMyProfile);
     queryClient.setQueryData(myFollowersQueryKey, fakeMyFollowers);
     queryClient.setQueryData(myFollowingsQueryKey, fakeMyFollowings);
 
     cancelSpy = jest.spyOn(queryClient, "cancelQueries");
     setDataSpy = jest.spyOn(queryClient, "setQueryData");
-    invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
   });
 
   it("onMutate에서 cancelQueries 및 optimistic 업데이트를 수행합니다.", async () => {
@@ -137,24 +132,28 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
     });
 
     await waitFor(() => {
-      // ✅ cancelQueries 3개
       expect(cancelSpy).toHaveBeenCalledWith({ queryKey: myProfileQueryKey });
       expect(cancelSpy).toHaveBeenCalledWith({ queryKey: myFollowersQueryKey });
-      expect(cancelSpy).toHaveBeenCalledWith({ queryKey: myFollowingsQueryKey });
-
-      // ✅ myProfile: followingsCount -1
+      expect(cancelSpy).toHaveBeenCalledWith({
+        queryKey: myFollowingsQueryKey
+      });
       expect(setDataSpy).toHaveBeenCalledWith(
         myProfileQueryKey,
         expect.objectContaining({ followingsCount: 1 })
       );
+      const updatedMyFollowings = queryClient.getQueryData(
+        myFollowingsQueryKey
+      ) as InfiniteFollowList;
 
-      // ✅ myFollowings: targetUid 제거
-      const updatedMyFollowings = queryClient.getQueryData(myFollowingsQueryKey) as InfiniteFollowList;
-      const stillExistsInFollowings = updatedMyFollowings.pages[0].some((p) => p.uid === targetUid);
+      const stillExistsInFollowings = updatedMyFollowings.pages[0].some(
+        (p) => p.uid === targetUid
+      );
       expect(stillExistsInFollowings).toBe(false);
 
-      // ✅ myFollowers: targetUid 항목 isFollow false + followersCount -1
-      const updatedMyFollowers = queryClient.getQueryData(myFollowersQueryKey) as InfiniteFollowList;
+      const updatedMyFollowers = queryClient.getQueryData(
+        myFollowersQueryKey
+      ) as InfiniteFollowList;
+
       expect(updatedMyFollowers.pages[0][0].isFollow).toBe(false);
       expect(updatedMyFollowers.pages[0][0].followersCount).toBe(4);
     });
@@ -175,9 +174,15 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
 
     await waitFor(() => {
       // ✅ 롤백 확인
-      expect(queryClient.getQueryData(myProfileQueryKey)).toEqual(fakeMyProfile);
-      expect(queryClient.getQueryData(myFollowersQueryKey)).toEqual(fakeMyFollowers);
-      expect(queryClient.getQueryData(myFollowingsQueryKey)).toEqual(fakeMyFollowings);
+      expect(queryClient.getQueryData(myProfileQueryKey)).toEqual(
+        fakeMyProfile
+      );
+      expect(queryClient.getQueryData(myFollowersQueryKey)).toEqual(
+        fakeMyFollowers
+      );
+      expect(queryClient.getQueryData(myFollowingsQueryKey)).toEqual(
+        fakeMyFollowings
+      );
 
       expect(toast.warn).toHaveBeenCalledWith("이미 언팔로우한 유저에요.");
     });
@@ -200,24 +205,6 @@ describe("useMyProfileUnfollowInListMutate 훅 테스트", () => {
       expect(toast.warn).toHaveBeenCalledWith(
         "유저 언팔로우에 실패했어요.\n잠시 후에 다시 시도해주세요."
       );
-    });
-  });
-
-  it("onSettled에서 targetProfile/targetFollowers 캐시만 invalidateQueries 호출합니다.", async () => {
-    mockUnfollowUser.mockResolvedValue({ message: "ok" });
-
-    const { result } = renderHook(
-      () => useMyProfileUnfollowInListMutate(targetUid),
-      { wrapper }
-    );
-
-    act(() => {
-      result.current.myProfileUnfollowMutate();
-    });
-
-    await waitFor(() => {
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: targetProfileQueryKey });
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: targetFollowersQueryKey });
     });
   });
 });

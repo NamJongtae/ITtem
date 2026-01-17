@@ -6,7 +6,6 @@ import useMyProfileUnfollowInListMutate from "../../../hooks/mutations/useMyProf
 import useUserProfileFollowInListMutate from "../../../hooks/mutations/useUserProfileFollowInListMutate";
 import useUserProfileUnFollowInListMutate from "../../../hooks/mutations/useUserProfileUnFollowInListMutate";
 
-import { queryKeys } from "@/shared/common/query-keys/queryKeys";
 import { toast } from "react-toastify";
 import { ProfileData } from "../../../types/profileTypes";
 import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
@@ -29,7 +28,7 @@ jest.mock("react-toastify", () => ({
 }));
 
 describe("useFollowUserInList 훅 테스트", () => {
-  const { Wrapper: wrapper, queryClient } = createQueryClientWrapper();
+  const { Wrapper: wrapper } = createQueryClientWrapper();
 
   const mockFollowUserId = "user-456";
   const mockMyUid = "user-123";
@@ -41,15 +40,12 @@ describe("useFollowUserInList 훅 테스트", () => {
 
   const listType = "followers" as const;
 
+  const myProfileData: ProfileData = {
+    uid: mockMyUid
+  } as ProfileData;
+
   beforeEach(() => {
     jest.clearAllMocks();
-
-    // 로그인 상태 기본 세팅
-    const myProfileData: ProfileData = {
-      uid: mockMyUid
-    } as ProfileData;
-
-    queryClient.setQueryData(queryKeys.profile.my.queryKey, myProfileData);
 
     (useMyProfileFollowInListMutate as jest.Mock).mockReturnValue({
       myProfilefollowMutate
@@ -64,7 +60,6 @@ describe("useFollowUserInList 훅 테스트", () => {
       userUnfollowMutate
     });
 
-    // 기본: uid param이 존재 => isMyProfilePage = false
     (useParams as jest.Mock).mockReturnValue({ uid: "someone" });
   });
 
@@ -75,7 +70,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -89,7 +89,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -97,7 +102,7 @@ describe("useFollowUserInList 훅 테스트", () => {
   });
 
   it("isFollow true, isMyProfilePage이 true(uid param 없음)일 때 onClickFollow 호출 시 myProfileUnfollowMutate를 호출합니다.", () => {
-    (useParams as jest.Mock).mockReturnValue({}); // uid 없음 => isMyProfilePage = true
+    (useParams as jest.Mock).mockReturnValue({});
 
     const followProfileData = {
       uid: mockFollowUserId,
@@ -105,7 +110,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -113,7 +123,8 @@ describe("useFollowUserInList 훅 테스트", () => {
       result.current.onClickFollow();
     });
 
-    expect(myProfileUnfollowMutate).toHaveBeenCalled();
+    expect(myProfileUnfollowMutate).toHaveBeenCalledTimes(1);
+    expect(userUnfollowMutate).not.toHaveBeenCalled();
   });
 
   it("isFollow true, isMyProfilePage이 false(uid param 있음)일 때 onClickFollow 호출 시 userUnfollowMutate를 호출합니다.", () => {
@@ -123,7 +134,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -131,11 +147,12 @@ describe("useFollowUserInList 훅 테스트", () => {
       result.current.onClickFollow();
     });
 
-    expect(userUnfollowMutate).toHaveBeenCalled();
+    expect(userUnfollowMutate).toHaveBeenCalledTimes(1);
+    expect(myProfileUnfollowMutate).not.toHaveBeenCalled();
   });
 
   it("isFollow false, isMyProfilePage이 true(uid param 없음)일 때 onClickFollow 호출 시 myProfilefollowMutate를 호출합니다.", () => {
-    (useParams as jest.Mock).mockReturnValue({}); // uid 없음 => isMyProfilePage = true
+    (useParams as jest.Mock).mockReturnValue({});
 
     const followProfileData = {
       uid: mockFollowUserId,
@@ -143,7 +160,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -151,7 +173,8 @@ describe("useFollowUserInList 훅 테스트", () => {
       result.current.onClickFollow();
     });
 
-    expect(myProfilefollowMutate).toHaveBeenCalled();
+    expect(myProfilefollowMutate).toHaveBeenCalledTimes(1);
+    expect(userFollowMutate).not.toHaveBeenCalled();
   });
 
   it("isFollow false, isMyProfilePage이 false(uid param 있음)일 때 onClickFollow 호출 시 userFollowMutate를 호출합니다.", () => {
@@ -161,7 +184,12 @@ describe("useFollowUserInList 훅 테스트", () => {
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData,
+          listType
+        }),
       { wrapper }
     );
 
@@ -169,19 +197,23 @@ describe("useFollowUserInList 훅 테스트", () => {
       result.current.onClickFollow();
     });
 
-    expect(userFollowMutate).toHaveBeenCalled();
+    expect(userFollowMutate).toHaveBeenCalledTimes(1);
+    expect(myProfilefollowMutate).not.toHaveBeenCalled();
   });
 
-  it("로그인 안 된 경우(myProfileData 없음) toast.warn이 호출됩니다.", () => {
-      queryClient.removeQueries({ queryKey: queryKeys.profile.my.queryKey });
-      
+  it("로그인 안 된 경우(myProfileData 없음) toast.warn이 호출되고 mutate는 호출되지 않습니다.", () => {
     const followProfileData = {
       uid: mockFollowUserId,
       isFollow: false
     } as any;
 
     const { result } = renderHook(
-      () => useFollowUserInList({ followProfileData, listType }),
+      () =>
+        useFollowUserInList({
+          followProfileData,
+          myProfileData: undefined,
+          listType
+        }),
       { wrapper }
     );
 
@@ -190,5 +222,9 @@ describe("useFollowUserInList 훅 테스트", () => {
     });
 
     expect(toast.warn).toHaveBeenCalledWith("로그인이 필요해요.");
+    expect(myProfilefollowMutate).not.toHaveBeenCalled();
+    expect(myProfileUnfollowMutate).not.toHaveBeenCalled();
+    expect(userFollowMutate).not.toHaveBeenCalled();
+    expect(userUnfollowMutate).not.toHaveBeenCalled();
   });
 });

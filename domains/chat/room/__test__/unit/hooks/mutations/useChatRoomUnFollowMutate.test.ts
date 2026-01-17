@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import useProductDetailUnFollowMutate from "@/domains/product/detail/hooks/mutations/useProductDetailUnFollowMutate";
+import useChatRoomUnFollowMutate from "@/domains/chat/room/hooks/mutations/useChatRoomUnFollowMutate";
 import unfollowUser from "@/domains/user/shared/api/unfollowUser";
 import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
 import { toast } from "react-toastify";
@@ -18,13 +18,12 @@ type FetchError = {
   message: string;
 };
 
-describe("useProductDetailUnFollowMutate 훅 테스트", () => {
+describe("useChatRoomUnFollowMutate 훅 테스트", () => {
   const { Wrapper: wrapper, queryClient } = createQueryClientWrapper();
   const mockUnfollowUser = unfollowUser as jest.Mock;
 
   const targetUid = "targetUser123";
 
-  // ✅ 훅 내부와 동일한 queryKey
   const targetFollowStatusQueryKey =
     queryKeys.profile.user(targetUid)._ctx.isFollow.queryKey;
 
@@ -44,13 +43,12 @@ describe("useProductDetailUnFollowMutate 훅 테스트", () => {
   });
 
   it("onMutate에서 follow-status cancelQueries 후 isFollow를 false로 optimistic 업데이트합니다.", async () => {
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
@@ -63,41 +61,55 @@ describe("useProductDetailUnFollowMutate 훅 테스트", () => {
   });
 
   it("onError에서 이전 follow-status가 true면 true로 롤백합니다.", async () => {
-    // 이전값: true
     queryClient.setQueryData(targetFollowStatusQueryKey, true);
 
     const err: FetchError = { status: 500, message: "fail" };
     mockUnfollowUser.mockRejectedValue(err);
 
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
-      // 현재 훅 구현은 previousFollowStatus가 true이면 ctx truthy라 setQueryData로 복구
       expect(setSpy).toHaveBeenCalledWith(targetFollowStatusQueryKey, true);
       expect(queryClient.getQueryData(targetFollowStatusQueryKey)).toBe(true);
     });
   });
 
-  it("onError에서 이전 follow-status가 undefined면 follow-status 쿼리를 removeQueries 합니다.", async () => {
-    // 이전값: undefined (캐시에 없음)
+  it("onError에서 이전 follow-status가 false여도 false로 롤백합니다.", async () => {
+    queryClient.setQueryData(targetFollowStatusQueryKey, false);
 
     const err: FetchError = { status: 500, message: "fail" };
     mockUnfollowUser.mockRejectedValue(err);
 
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
+    });
+
+    await waitFor(() => {
+      expect(setSpy).toHaveBeenCalledWith(targetFollowStatusQueryKey, false);
+      expect(queryClient.getQueryData(targetFollowStatusQueryKey)).toBe(false);
+    });
+  });
+
+  it("onError에서 이전 follow-status가 undefined면 follow-status 쿼리를 removeQueries 합니다.", async () => {
+    const err: FetchError = { status: 500, message: "fail" };
+    mockUnfollowUser.mockRejectedValue(err);
+
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
+
+    act(() => {
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
@@ -114,17 +126,16 @@ describe("useProductDetailUnFollowMutate 훅 테스트", () => {
     const err: FetchError = { status: 409, message: "dup" };
     mockUnfollowUser.mockRejectedValue(err);
 
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith("이미 언팔로우한 유저 입니다.");
+      expect(toast.warn).toHaveBeenCalledWith("이미 언팔로우한 유저에요.");
     });
   });
 
@@ -132,13 +143,12 @@ describe("useProductDetailUnFollowMutate 훅 테스트", () => {
     const err: FetchError = { status: 500, message: "fail" };
     mockUnfollowUser.mockRejectedValue(err);
 
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
@@ -151,13 +161,12 @@ describe("useProductDetailUnFollowMutate 훅 테스트", () => {
   it("onSettled에서 follow-status 쿼리를 invalidateQueries 합니다.", async () => {
     mockUnfollowUser.mockResolvedValue({ message: "ok" });
 
-    const { result } = renderHook(
-      () => useProductDetailUnFollowMutate(targetUid),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useChatRoomUnFollowMutate(targetUid), {
+      wrapper
+    });
 
     act(() => {
-      result.current.productDetailUnfollowMutate();
+      result.current.userUnFollowMutate();
     });
 
     await waitFor(() => {
