@@ -10,6 +10,10 @@ export interface ProfileResponseData extends ApiResponse {
   profile: ProfileData;
 }
 
+export interface FollowStatusResponseData extends ApiResponse {
+  isFollow: boolean;
+}
+
 export interface FollowersResponseData extends ApiResponse {
   followers: FollowUserData[];
 }
