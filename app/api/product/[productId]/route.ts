@@ -65,14 +65,6 @@ export async function GET(
 
     const productOwnerId = product.uid;
 
-    const followPromise =
-      myUid && String(myUid) !== String(productOwnerId)
-        ? mongoose.connection.collection("follows").findOne({
-            followerId: new mongoose.Types.ObjectId(myUid),
-            followingId: new mongoose.Types.ObjectId(productOwnerId)
-          })
-        : Promise.resolve(null);
-
     const wishPromise = myUid
       ? Wish.exists({
           userId: new mongoose.Types.ObjectId(myUid),
@@ -87,13 +79,11 @@ export async function GET(
         })
       : Promise.resolve(null);
 
-    const [followExists, wishExists, reportExists] = await Promise.all([
-      followPromise,
+    const [wishExists, reportExists] = await Promise.all([
       wishPromise,
       reportPromise
     ]);
 
-    const isFollow = !!followExists;
     const isWish = !!wishExists;
     const isReported = !!reportExists;
 
@@ -211,7 +201,7 @@ export async function GET(
           ...product._doc,
           isWish,
           isReported,
-          auth: { ...userWithReviews[0], isFollow }
+          auth: { ...userWithReviews[0] }
         }
       },
       { status: 200 }
