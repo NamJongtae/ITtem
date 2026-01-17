@@ -1,4 +1,4 @@
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function useNavCategory() {
@@ -6,7 +6,7 @@ export default function useNavCategory() {
   const categoryRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const search = useSearchParams();
-  const pathname = usePathname();
+
   const currentCategory = search.get("category");
 
   const openCategory = () => {
@@ -43,15 +43,12 @@ export default function useNavCategory() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isOpenCategory) closeCategory();
-  }, [currentCategory, pathname]);
-
   return {
     isOpenCategory,
     toggleCategory,
+    closeCategory,
     categoryRef,
     buttonRef,
-    currentCategory,
+    currentCategory
   };
 }
