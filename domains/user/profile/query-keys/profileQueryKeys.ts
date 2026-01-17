@@ -7,6 +7,7 @@ import getUserProfile from "@/domains/user/profile/api/getUserProfile";
 import getWishlistProductData from "@/domains/user/profile/api/getWishlistProductData";
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
+import checkFollowStatus from "../api/checkFollowStatus";
 
 const profileQueryKey = createQueryKeys("profile", {
   my: {
@@ -108,6 +109,13 @@ const profileQueryKey = createQueryKeys("profile", {
           return response.data.products;
         }
       }),
+      isFollow: {
+        queryKey: null,
+        queryFn: async () => {
+          const data = await checkFollowStatus(userId);
+          return data.isFollow;
+        }
+      },
       followers: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
         queryKey: ["list"] as const,
         queryFn: async ({ pageParam }) => {
