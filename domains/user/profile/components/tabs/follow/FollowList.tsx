@@ -14,9 +14,9 @@ interface IProps {
 
 export default function FollowList({ listType, isMyProfile, uid }: IProps) {
   return isMyProfile ? (
-    <UserProfileList listType={listType} uid={uid} />
-  ) : (
     <MyProfileList listType={listType} />
+  ) : (
+    <UserProfileList listType={listType} uid={uid} />
   );
 }
 
