@@ -1,54 +1,78 @@
 import Image from "next/image";
-
 import dynamic from "next/dynamic";
-import { ProfileData, ProfileMenu } from "../../../types/profileTypes";
-import CardBtns from "./CardBtns";
+
+import type { ProfileData, ProfileMenu } from "../../../types/profileTypes";
+import UserInfoCardBtns from "./UserInfoCardBtns";
 import FollowInfo from "./FollowInfo";
 import ProductInfo from "./ProductInfo";
+
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>
+  loading: () => (
+    <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded animate-pulse" />
+  )
 });
 
 interface IProps {
   handleClickMenu: (menu: ProfileMenu) => void;
   profileData: ProfileData | undefined;
+  isMyProfile: boolean;
 }
 
-export default function UserInfoCard({ handleClickMenu, profileData }: IProps) {
+export default function UserInfoCard({
+  handleClickMenu,
+  profileData,
+  isMyProfile
+}: IProps) {
+  const profileImg = profileData?.profileImg || "/icons/user-icon.svg";
+  const nickname = profileData?.nickname || "";
+
+  const followersCount = profileData?.followersCount ?? 0;
+  const followingsCount = profileData?.followingsCount ?? 0;
+
+  const productCount = profileData?.productIds?.length ?? 0;
+  const saleCount = profileData?.saleCount ?? 0;
+
+  const reviewPercentage = profileData?.reviewInfo?.reviewPercentage ?? 0;
+  const starValue = (reviewPercentage / 100) * 5;
+
   return (
-    <>
-      <div className="relative flex flex-col gap-3 justify-center items-start basis-1/3 before:hidden before:md:block before:absolute before:bg-gray-200 before:top-0 before:-right-[10px] before:w-[1px] before:h-full">
-        <Image
-          className="w-24 h-24 object-cover object-center rounded-full mx-auto"
-          src={profileData?.profileImg || "/icons/user-icon.svg"}
-          alt=""
-          width={100}
-          height={100}
+    <div className="relative flex flex-col gap-3 justify-center items-start basis-1/3 before:hidden before:md:block before:absolute before:bg-gray-200 before:top-0 before:-right-[10px] before:w-[1px] before:h-full">
+      <Image
+        className="w-24 h-24 object-cover object-center rounded-full mx-auto"
+        src={profileImg}
+        alt={nickname ? `${nickname} 프로필 이미지` : "프로필 이미지"}
+        width={100}
+        height={100}
+      />
+
+      <span className="font-bold text-lg mx-auto max-w-36">{nickname}</span>
+
+      <div className="flex flex-col items-center gap-3 w-full max-w-36 mx-auto">
+        <FollowInfo
+          followersCount={followersCount}
+          followingsCount={followingsCount}
+          handleClickMenu={handleClickMenu}
         />
-        <span className="font-bold text-lg mx-auto max-w-36">
-          {profileData?.nickname}
-        </span>
-        <div className="flex flex-col items-center gap-3 w-full max-w-36 mx-auto">
-          <FollowInfo
-            profileData={profileData}
-            handleClickMenu={handleClickMenu}
-          />
-          <ReactStars
-            size={20}
-            half
-            value={((profileData?.reviewInfo?.reviewPercentage || 0) / 100) * 5}
-            color1="#ddd"
-            color2="#fec323"
-            edit={false}
-          />
-          <ProductInfo
-            profileData={profileData}
-            handleClickMenu={handleClickMenu}
-          />
-          <CardBtns profileData={profileData} />
-        </div>
+
+        <ReactStars
+          size={20}
+          half
+          value={starValue}
+          color1="#ddd"
+          color2="#fec323"
+          edit={false}
+        />
+
+        <ProductInfo
+          productCount={productCount}
+          saleCount={saleCount}
+          reviewPercentage={reviewPercentage}
+          handleClickMenu={handleClickMenu}
+        />
+
+        <UserInfoCardBtns isMyProfile={isMyProfile} profileData={profileData} />
       </div>
-    </>
+    </div>
   );
 }
