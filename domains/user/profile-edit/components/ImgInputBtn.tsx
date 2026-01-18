@@ -29,7 +29,7 @@ export default function ImgInputBtn({
       <button
         onClick={handleClickImgInput}
         type="button"
-        className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img-upload_icon.svg')] before:rounded-full before:bg-center before:bg-cover"
+        className="relative before:absolute before:bottom-0 before:right-0 before:w-10 before:h-10 before:bg-[url('/icons/img-upload-icon.svg')] before:rounded-full before:bg-center before:bg-cover"
         ref={profileImgBtnRef}
         onKeyDown={(e) =>
           optimizationTabFocus({
