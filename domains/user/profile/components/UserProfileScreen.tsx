@@ -1,7 +1,7 @@
 "use client";
 
 import UserInfo from "./user-info/UserInfo";
-import Detail from "./tabs/ProfileTabsView";
+import ProfileTabsView from "./tabs/ProfileTabsView";
 import useProfileMenu from "../hooks/useProfileMenu";
 import UserInfoSkeletonUI from "./user-info/UserInfoSkeletonUI";
 import ProfileTabsSSRSkeletonUI from "./tabs/ProfileTabsSSRSkeletonUI";
@@ -26,7 +26,7 @@ export default function UserProfileScreen() {
         profileData={profileData}
         isMyProfile={false}
       />
-      <Detail
+      <ProfileTabsView
         currentMenu={currentMenu}
         handleClickMenu={onClickMenu}
         profileData={profileData}
