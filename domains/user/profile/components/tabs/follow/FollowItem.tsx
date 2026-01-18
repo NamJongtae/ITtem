@@ -1,4 +1,4 @@
-import { FollowUserData, ProfileData } from "../../../types/profileTypes";
+import { FollowUserData } from "../../../types/profileTypes";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
