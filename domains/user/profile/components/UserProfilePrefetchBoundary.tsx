@@ -5,15 +5,16 @@ import {
   QueryClient
 } from "@tanstack/react-query";
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
-import ProfileDetailSkeletonUI from "./detail/ProfileDetailSkeletonUI";
-import UserProfilePage from "./UserProfilePage";
+import ProfileTabsSSRSkeletonUI from "./tabs/ProfileTabsSSRSkeletonUI";
+import UserProfileScreen from "./UserProfileScreen";
 import Empty from "@/shared/common/components/Empty";
+import UserInfoSkeletonUI from "./user-info/UserInfoSkeletonUI";
 
 interface IProps {
   uid: string;
 }
 
-export default async function UserProfileContainer({ uid }: IProps) {
+export default async function UserProfilePrefetchBoundary({ uid }: IProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -24,10 +25,15 @@ export default async function UserProfileContainer({ uid }: IProps) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SuspenseErrorBoundary
-        suspenseFallback={<ProfileDetailSkeletonUI />}
+        suspenseFallback={
+          <>
+            <UserInfoSkeletonUI />
+            <ProfileTabsSSRSkeletonUI isMyProfile={false} />
+          </>
+        }
         errorFallback={<Empty message={"유저 정보를 불러올 수 없어요."} />}
       >
-        <UserProfilePage />
+        <UserProfileScreen />
       </SuspenseErrorBoundary>
     </HydrationBoundary>
   );
