@@ -1,5 +1,5 @@
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import { FollowUserData, ProfileData } from "../../types/profileTypes";
+import { FollowUserData } from "../../types/profileTypes";
 import {
   InfiniteData,
   QueryFunction,
