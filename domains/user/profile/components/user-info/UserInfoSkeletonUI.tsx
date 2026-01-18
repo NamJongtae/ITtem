@@ -17,12 +17,12 @@ export default function UserInfoSkeletonUI({ isMyProfile }: IProps) {
           <div className="flex flex-col items-center gap-3 w-full max-w-36 mx-auto">
             {/* 팔로우 정보 */}
             <div className="flex flex-row w-full gap-3">
-              <div className="w-32 h-12 bg-gray-300/60 rounded" />
-              <div className="w-32 h-12 bg-gray-300/60 rounded" />
+              <div className="w-32 h-10 bg-gray-300/60 rounded" />
+              <div className="w-32 h-10 bg-gray-300/60 rounded" />
             </div>
 
             {/* 별점 */}
-            <div className="w-28 h-4 bg-gray-300/60 rounded" />
+            <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
 
             {/* 판매 정보 */}
             <div className="w-32 h-4 bg-gray-300/60 rounded" />
