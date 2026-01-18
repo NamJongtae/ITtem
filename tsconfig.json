@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
-    "types": ["node", "jest", "@testing-library/jest-dom"],
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,10 +19,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     "plugins": [
       {
@@ -30,7 +40,10 @@
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts",
     "__tests__/**/*.ts",
-    "__tests__/**/*.tsx"
+    "__tests__/**/*.tsx",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
