@@ -1,16 +1,23 @@
+"use client";
+
 import useProductCategoryMenu from "../../../hooks/useProductCategoryMenu";
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import Image from "next/image";
-import ProfileProductCategoryMenuList from "./CategoryMenuList";
+import { useId } from "react";
+import CategoryMenuList from "./CategoryMenuList";
+import { CATEGORY } from "@/domains/product/shared/constants/constants";
 
 interface IProps {
   currentCategory: ProductCategory;
   selectCategory: (category: ProductCategory) => void;
 }
+
 export default function CategoryMenu({
   currentCategory,
   selectCategory
 }: IProps) {
+  const menuButtonId = useId();
+
   const {
     isOpenMenu,
     toggleMenu,
@@ -26,8 +33,8 @@ export default function CategoryMenu({
         type="button"
         onClick={toggleMenu}
         className="inline-flex w-[105px] justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 betterhover:hover:bg-gray-50 line-clamp-1"
-        id="menu-button"
-        aria-expanded="true"
+        id={menuButtonId}
+        aria-expanded={isOpenMenu}
         aria-haspopup="true"
       >
         {currentCategory}
@@ -41,8 +48,11 @@ export default function CategoryMenu({
           height={20}
         />
       </button>
+
       {isOpenMenu && (
-        <ProfileProductCategoryMenuList
+        <CategoryMenuList
+          categories={CATEGORY}
+          labelledBy={menuButtonId}
           menuRef={menuRef}
           onClickCategory={onClickCategory}
           setCategoryBtnRef={setCategoryBtnRef}

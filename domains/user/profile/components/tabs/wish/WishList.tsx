@@ -1,5 +1,5 @@
 import Empty from "@/shared/common/components/Empty";
-import Item from "./Item";
+import Item from "./WishItem";
 import DeleteBtn from "./DeleteBtn";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";
@@ -8,7 +8,7 @@ import useProfileWishInfiniteQuery from "../../../hooks/queries/useProfileWishIn
 import useWishDeleteSelector from "../../../hooks/useWishDeleteSelector";
 import ItemSkeltonUI from "./ItemSkeletonUI";
 
-export default function List() {
+export default function WishList() {
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useProfileWishInfiniteQuery({ limit: 10 });
 
@@ -23,8 +23,8 @@ export default function List() {
     isFetchingNextPage
   });
 
-  if (data?.length === 0) {
-    return <Empty message={"찜 목록이 없어요."} />;
+  if (!data || data?.length === 0) {
+    return <Empty message={"찜한 상품이 없어요."} />;
   }
 
   return (

@@ -1,19 +1,26 @@
-import { ProfileData } from "../../../types/profileTypes";
-import FollowItem from "./Item";
+import FollowItem from "./FollowItem";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";
 import InfiniteScrollEndMessage from "@/shared/common/components/InfiniteScrollEndMessage";
 import ItemSkeletonUI from "./ItemSkeletonUI";
 import useUserFollowListInfiniteQuery from "../../../hooks/queries/useUserFollowListInfiniteQuery";
 import useMyFollowListInfiniteQuery from "../../../hooks/queries/useMyFollowListInfiniteQuery";
-import { useParams } from "next/navigation";
 
 interface IProps {
   listType: "followers" | "followings";
-  profileData: ProfileData | undefined;
+  isMyProfile: boolean;
+  uid: string | undefined;
 }
 
-function UserFollowList({
+export default function FollowList({ listType, isMyProfile, uid }: IProps) {
+  return isMyProfile ? (
+    <UserProfileList listType={listType} uid={uid} />
+  ) : (
+    <MyProfileList listType={listType} />
+  );
+}
+
+function UserProfileList({
   listType,
   uid
 }: {
@@ -53,7 +60,7 @@ function UserFollowList({
   );
 }
 
-function MyFollowList({ listType }: { listType: "followers" | "followings" }) {
+function MyProfileList({ listType }: { listType: "followers" | "followings" }) {
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useMyFollowListInfiniteQuery({ listType });
 
@@ -84,18 +91,5 @@ function MyFollowList({ listType }: { listType: "followers" | "followings" }) {
         hasNextPage={hasNextPage}
       />
     </>
-  );
-}
-
-export default function List({ listType, profileData }: IProps) {
-  const params = useParams<{ uid?: string }>();
-  const uidParam = params?.uid;
-
-  const isUserProfilePage = Boolean(uidParam);
-
-  return isUserProfilePage ? (
-    <UserFollowList listType={listType} uid={profileData?.uid} />
-  ) : (
-    <MyFollowList listType={listType} />
   );
 }

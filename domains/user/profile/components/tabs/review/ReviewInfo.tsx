@@ -4,7 +4,7 @@ import { REVIEW_TAGS } from "@/domains/product/shared/constants/constants";
 import calculateReviewStar from "../../../utils/calculateReviewStar";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>
+  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
 });
 
 interface IProps {

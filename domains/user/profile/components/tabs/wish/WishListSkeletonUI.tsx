@@ -1,9 +1,9 @@
 import ItemSkeltonUI from "./ItemSkeletonUI";
 
-export default function SkeletonUI() {
+export default function WishListSkeletonUI() {
   return (
     <>
-      <div className="w-20 h-6 bg-gray-300 mb-5" />
+      <div className="w-20 h-6 bg-gray-300 mb-5 rounded" />
       <ul className="grid grid-col-1 md:grid-cols-2 gap-3">
         {Array(8)
           .fill("")

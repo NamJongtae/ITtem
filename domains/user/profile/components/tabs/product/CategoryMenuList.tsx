@@ -1,8 +1,11 @@
-import { CATEGORY } from "@/domains/product/shared/constants/constants";
+"use client";
+
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import React, { RefObject } from "react";
 
 interface IProps {
+  categories: readonly string[];
+  labelledBy: string;
   menuRef: RefObject<HTMLUListElement | null>;
   onClickCategory: (category: ProductCategory) => void;
   setCategoryBtnRef: (
@@ -14,7 +17,10 @@ interface IProps {
   ) => void;
   currentCategory: string;
 }
+
 export default function CategoryMenuList({
+  categories,
+  labelledBy,
   menuRef,
   onClickCategory,
   setCategoryBtnRef,
@@ -27,11 +33,11 @@ export default function CategoryMenuList({
       role="menu"
       ref={menuRef}
       aria-orientation="vertical"
-      aria-labelledby="menu-button"
+      aria-labelledby={labelledBy}
       tabIndex={-1}
     >
-      {CATEGORY.map((category, index) => (
-        <li key={category} className="">
+      {categories.map((category, index) => (
+        <li key={category}>
           <button
             type="button"
             onClick={() => onClickCategory(category as ProductCategory)}

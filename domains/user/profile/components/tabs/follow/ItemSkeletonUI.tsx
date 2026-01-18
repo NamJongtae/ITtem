@@ -12,13 +12,13 @@ export default function FollowItemSkeletonUI() {
           alt="loading..."
         />
         <div className="flex flex-col">
-          <div className="h-[14px] bg-gray-300 mb-2"></div>
-          <div className="h-[14px] w-28 bg-gray-300 mb-2"></div>
-          <div className="h-[14px] bg-gray-300 mb-1"></div>
-          <div className="h-[14px] w-20  bg-gray-300"></div>
+          <div className="h-[14px] bg-gray-300 mb-2 rounded"></div>
+          <div className="h-[14px] w-28 bg-gray-300 mb-2 rounded"></div>
+          <div className="h-[14px] bg-gray-300 mb-1 rounded"></div>
+          <div className="h-[14px] w-20  bg-gray-300 rounded"></div>
         </div>
       </div>
-      <div className="w-full max-w-[180px] mt-3 h-10 bg-gray-300"></div>
+      <div className="w-full max-w-[180px] mt-3 h-10 bg-gray-300 rounded"></div>
     </li>
   );
 }

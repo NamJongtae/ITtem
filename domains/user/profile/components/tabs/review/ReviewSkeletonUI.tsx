@@ -3,7 +3,7 @@ import ItemSkeletonUI from "./ItemSkeletonUI";
 interface IProps {
   listCount?: number;
 }
-export default function SkeletonUI({ listCount = 10 }: IProps) {
+export default function ReviewSkeletonUI({ listCount = 10 }: IProps) {
   return (
     <div className="animate-pulse">
       <div className="border h-14 rounded-md flex items-center justify-center bg-gray-200 mb-5" />

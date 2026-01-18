@@ -4,7 +4,7 @@ import CategoryMenu from "./CategoryMenu";
 import useProfileProductCategory from "../../../hooks/useProfileProductCategory";
 import { ProfileData } from "../../../types/profileTypes";
 import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
-import List from "./List";
+import ProductList from "./ProductList";
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
 import ProductListError from "@/domains/product/shared/components/product-list/ProductListError";
 
@@ -33,7 +33,7 @@ export default function ProductContent({
         suspenseFallback={<ProductListSkeletonUI listCount={8} />}
         errorFallback={<ProductListError productListType="PROFILE" />}
       >
-        <List
+        <ProductList
           isMyProfile={isMyProfile}
           productIds={profileData?.productIds}
           productCategory={category}

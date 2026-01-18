@@ -5,7 +5,7 @@ import Link from "next/link";
 import FollowBtn from "./FollowBtn";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>
+  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
 });
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IProps {
   listType: "followers" | "followings";
 }
 
-export default function Item({ data, listType }: IProps) {
+export default function FollowItem({ data, listType }: IProps) {
   return (
     <li className="mx-auto">
       <div className="flex gap-3">

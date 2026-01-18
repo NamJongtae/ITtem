@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 const ReactStars = dynamic(() => import("react-stars"), {
   ssr: false,
-  loading: () => <p>loading...</p>
+  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
 });
 
 interface IProps {
@@ -53,7 +53,7 @@ export default function ReviewItem({ review }: IProps) {
           <ul className="flex text-xs mt-5 gap-3 flex-wrap">
             {REVIEW_TAGS.map(
               (tag, index) =>
-                review?.reviewTags[index] === 1 && (
+                review?.reviewTags?.[index] === 1 && (
                   <li key={tag}>
                     <p className="bg-gray-100 py-1 px-2 rounded-md">{tag}</p>
                   </li>

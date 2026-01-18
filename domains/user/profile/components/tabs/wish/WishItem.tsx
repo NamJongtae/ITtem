@@ -1,5 +1,4 @@
 import getProductDateFormat from "@/domains/product/shared/utils/getProductDateFormat";
-import { ProductData } from "@/domains/product/shared/types/productTypes";
 import Image from "next/image";
 import Link from "next/link";
 import CheckIcon from "@/public/icons/check-icon.svg";
@@ -11,7 +10,7 @@ interface IProps {
   selectedWish: string[];
 }
 
-export default function Item({
+export default function WishItem({
   wishProduct,
   onClickCheckBox,
   selectedWish
@@ -55,13 +54,13 @@ export default function Item({
       <div className="absolute top-0 right-0 inline-flex items-center">
         <label
           className="relative flex cursor-pointer items-center rounded-full p-3"
-          htmlFor="wish-delete-checkbox"
+          htmlFor={`wish-delete-checkbox-${wishProduct._id}`}
           data-wishproduct-ripple-dark="true"
         >
           <input
             type="checkbox"
             className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-blue-gray-200 transition-all checked:border-red-400 checked:bg-red-400"
-            id="wish-delete-checkbox"
+            id={`wish-delete-checkbox-${wishProduct._id}`}
             onChange={() => onClickCheckBox(wishProduct._id)}
             checked={selectedWish.includes(wishProduct._id)}
           />

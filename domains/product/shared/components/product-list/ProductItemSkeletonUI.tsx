@@ -13,11 +13,11 @@ export default function ProductItemSkeletonUI() {
           />
         </div>
         <div className="px-[10px] py-[15px]">
-          <div className="h-[14px] bg-gray-300 mb-2"></div>
-          <div className="h-[14px] bg-gray-300 w-2/3 mb-2"></div>
-          <div className="flex justify-between">
-            <div className="w-20 h-3 bg-gray-300"></div>
-            <div className="w-12 h-3 bg-gray-300"></div>
+          <div className="h-[14px] bg-gray-300 mb-2 rounded"></div>
+          <div className="h-[14px] bg-gray-300 w-2/3 mb-2 rounded"></div>
+          <div className="flex justify-between rounded">
+            <div className="w-20 h-3 bg-gray-300 rounded"></div>
+            <div className="w-12 h-3 bg-gray-300 rounded"></div>
           </div>
         </div>
       </div>
