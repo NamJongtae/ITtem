@@ -13,7 +13,7 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
   return (
     <div className="pt-8 pb-12">
       <div className="relative container mx-auto px-6 max-w-[1024px]">
-        <div className={"w-36 h-5 max-w-7xl mb-5 bg-gray-200"} />
+        <div className={"w-36 h-5 max-w-7xl mb-5 bg-gray-200 rounded"} />
 
         {/* 상단 */}
         <div className="md:flex block animate-pulse">
@@ -24,27 +24,27 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
 
           {/* 상품 정보 */}
           <div className="w-full mx-auto mt-5 md:ml-8 md:mt-0 md:w-1/2">
-            <div className="w-full h-10 font-size-[1.875rem] line-height-[2.25rem] md: font-size-[2.25rem] md:line-height-[2.5rem] bg-gray-200" />
+            <div className="w-full h-10 font-size-[1.875rem] line-height-[2.25rem] md: font-size-[2.25rem] md:line-height-[2.5rem] bg-gray-200 rounded" />
 
-            <div className="w-40 h-10 mt-3 font-size-[1.875rem] line-height-[2.25rem] md: font-size-[2.25rem] md:line-height-[2.5rem] bg-gray-200" />
+            <div className="w-40 h-10 mt-3 font-size-[1.875rem] line-height-[2.25rem] md: font-size-[2.25rem] md:line-height-[2.5rem] bg-gray-200 rounded" />
 
             <hr className="my-3" />
 
             <div className="flex justify-between">
               <div className="flex gap-3">
-                <div className="flex gap-2 w-12 h-5 bg-gray-200" />
+                <div className="flex gap-2 w-12 h-5 bg-gray-200 rounded" />
 
-                <div className="flex gap-2 items-center w-12 h-5 bg-gray-200" />
+                <div className="flex gap-2 items-center w-12 h-5 bg-gray-200 rounded" />
 
-                <div className="flex gap-2 items-center w-20 h-5 bg-gray-200" />
+                <div className="flex gap-2 items-center w-20 h-5 bg-gray-200 rounded" />
               </div>
-              <div className="flex gap-2 items-center w-20 h-5 bg-gray-200" />
+              <div className="flex gap-2 items-center w-20 h-5 bg-gray-200 rounded" />
             </div>
 
             <div className="mt-5">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="mb-3 flex gap-3">
-                  <div className="w-full h-5 bg-gray-200" />
+                  <div className="w-full h-5 bg-gray-200 rounded" />
                 </div>
               ))}
             </div>
@@ -76,7 +76,7 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
             <hr className="h-px border-0 bg-gray-200 my-3" />
             <div className="w-full space-y-3 animate-pulse">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-4 bg-gray-200" />
+                <div key={i} className="h-4 bg-gray-200 rounded" />
               ))}
             </div>
           </div>
@@ -93,13 +93,13 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
                 <div className="inline-block h-14 w-14 rounded-full mr-1 bg-gray-200" />
                 {/* 닉네임, 평가 정보 */}
                 <div className="flex flex-col gap-1">
-                  <div className="w-20 h-5 bg-gray-200" />
-                  <div className="w-16 h-4 bg-gray-200" />
+                  <div className="w-20 h-5 bg-gray-200 rounded" />
+                  <div className="w-16 h-4 bg-gray-200 rounded" />
                 </div>
 
                 {/* 팔로우 버튼 */}
                 {myUid && myUid === userUid && (
-                  <div className="w-24 h-[40px] bg-gray-200" />
+                  <div className="w-24 h-[40px] bg-gray-200 rounded" />
                 )}
               </div>
             </div>
@@ -109,9 +109,9 @@ export default function ProductDetailSkeletonUI({ userUid }: IProps) {
               <div>판매자의 다른 상품</div>
               <hr className="h-px border-0 bg-gray-200 my-3" />
               <div className="grid grid-cols-autoFill_140 lg:grid-cols-autoFill_180 xl:grid-cols-3 gap-3 animate-pulse">
-                <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
-                <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
-                <div className="mx-auto w-full h-full aspect-square bg-gray-200" />
+                <div className="mx-auto w-full h-full aspect-square bg-gray-200 rounded" />
+                <div className="mx-auto w-full h-full aspect-square bg-gray-200 rounded" />
+                <div className="mx-auto w-full h-full aspect-square bg-gray-200 rounded" />
               </div>
             </div>
           </div>
