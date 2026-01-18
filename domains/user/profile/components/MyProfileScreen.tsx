@@ -1,14 +1,14 @@
 "use client";
 
 import UserInfo from "./user-info/UserInfo";
-import Detail from "./detail/ProfileDetail";
+import Detail from "./tabs/ProfileTabsView";
 import useProfileMenu from "../hooks/useProfileMenu";
 import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
 import Empty from "../../../../shared/common/components/Empty";
 import useMyProfileQuery from "../hooks/queries/useMyProfileQuery";
-import ProfileDetailSkeletonUI from "./detail/ProfileDetailSkeletonUI";
+import ProfileTabsCSRSkeletonUI from "./tabs/ProfileTabsCSRSkeletonUI";
 
-export default function MyProfilePage() {
+export default function MyProfileScreen() {
   const { myProfileData, myProfilePending, myProfileError } =
     useMyProfileQuery();
   const { currentMenu, onClickMenu } = useProfileMenu();
@@ -17,7 +17,7 @@ export default function MyProfilePage() {
     return (
       <>
         <ProfileUserInfoSkeletonUI isMyProfile={true} />
-        <ProfileDetailSkeletonUI isMyProfile={true} />
+        <ProfileTabsCSRSkeletonUI isMyProfile={true} />
       </>
     );
   }
@@ -28,7 +28,11 @@ export default function MyProfilePage() {
 
   return (
     <>
-      <UserInfo handleClickMenu={onClickMenu} profileData={myProfileData} />
+      <UserInfo
+        handleClickMenu={onClickMenu}
+        profileData={myProfileData}
+        isMyProfile={true}
+      />
       <Detail
         currentMenu={currentMenu}
         handleClickMenu={onClickMenu}
