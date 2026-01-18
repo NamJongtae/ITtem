@@ -8,7 +8,7 @@ interface IProps {
 }
 export default function FollowBtn({ profileData }: IProps) {
   const { myProfileData, myProfileLoading } = useMyProfileQuery();
-  const { isFollow, isFollowPending } = useCheckFollowStatusQuery(
+  const { isFollow, showSkeleton } = useCheckFollowStatusQuery(
     profileData?.uid || ""
   );
   const { followHandler } = useFollowUserInProfile({
@@ -17,7 +17,7 @@ export default function FollowBtn({ profileData }: IProps) {
     isFollow
   });
 
-  if (myProfileLoading || isFollowPending)
+  if (myProfileLoading || showSkeleton)
     return <div className="w-32 h-10 bg-gray-300/60 rounded mt-2" />;
 
   return (
