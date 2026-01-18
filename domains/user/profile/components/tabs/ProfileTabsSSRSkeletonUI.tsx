@@ -1,10 +1,10 @@
-import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
+import Spinner from "@/shared/common/components/Spinner";
 
 interface IProps {
   isMyProfile?: boolean;
 }
 
-export default function ProfileDetailSkeletonUI({ isMyProfile }: IProps) {
+export default function ProfileTabsSSRSkeletonUI({ isMyProfile }: IProps) {
   return (
     <div className="mt-5 max-w-[1024px] mx-auto px-4 md:px-8 animate-pulse">
       {/* 메뉴 */}
@@ -19,12 +19,11 @@ export default function ProfileDetailSkeletonUI({ isMyProfile }: IProps) {
         ))}
       </div>
 
-      {/* 필터 네비게이션 */}
-      <div className="w-full h-10 bg-gray-300 mt-5 mb-5" />
-      <div className="w-full h-1 border-b mb-4" />
-
-      {/* 상품 목록 */}
-      <ProductListSkeletonUI listCount={8} />
+      <div
+        className="flex justify-center items-center w-full h-32"
+      >
+        <Spinner />
+      </div>
     </div>
   );
 }

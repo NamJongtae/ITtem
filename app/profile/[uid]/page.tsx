@@ -1,6 +1,6 @@
-import ProfileDetailSkeletonUI from "@/domains/user/profile/components/detail/ProfileDetailSkeletonUI";
+import ProfileTabsSSRSkeletonUI from "@/domains/user/profile/components/tabs/ProfileTabsSSRSkeletonUI";
 import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
-import UserProfileContainer from "@/domains/user/profile/components/UserProfileContainer";
+import UserProfilePrefetchBoundary from "@/domains/user/profile/components/UserProfilePrefetchBoundary";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import { Suspense } from "react";
 
@@ -36,11 +36,11 @@ export default async function UserProfile({ params }: IProps) {
         fallback={
           <>
             <ProfileUserInfoSkeletonUI />
-            <ProfileDetailSkeletonUI />
+            <ProfileTabsSSRSkeletonUI isMyProfile={false} />
           </>
         }
       >
-        <UserProfileContainer uid={uid} />
+        <UserProfilePrefetchBoundary uid={uid} />
       </Suspense>
     </>
   );
