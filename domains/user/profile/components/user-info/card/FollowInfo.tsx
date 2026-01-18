@@ -1,11 +1,16 @@
 import { ProfileData, ProfileMenu } from "../../../types/profileTypes";
 
 interface IProps {
-  profileData: ProfileData | undefined;
+  followersCount: number;
+  followingsCount: number;
   handleClickMenu: (menu: ProfileMenu) => void;
 }
 
-export default function FollowInfo({ profileData, handleClickMenu }: IProps) {
+export default function FollowInfo({
+  followersCount,
+  followingsCount,
+  handleClickMenu
+}: IProps) {
   return (
     <div className="flex gap-5 text-sm font-medium">
       <button
@@ -14,7 +19,7 @@ export default function FollowInfo({ profileData, handleClickMenu }: IProps) {
       >
         <span>팔로워</span>
         <span className="block w-full text-center">
-          {profileData?.followersCount || 0}
+          {followersCount || 0}
         </span>
       </button>
       <button
@@ -23,7 +28,7 @@ export default function FollowInfo({ profileData, handleClickMenu }: IProps) {
       >
         <span>팔로잉</span>
         <span className="block w-full text-center">
-          {profileData?.followingsCount || 0}
+          {followingsCount || 0}
         </span>
       </button>
     </div>
