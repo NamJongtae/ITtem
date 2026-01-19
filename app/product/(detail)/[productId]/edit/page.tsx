@@ -1,7 +1,7 @@
 import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBoundary";
 import PageContainer from "@/domains/product/edit/components/PageContainer";
 import { BASE_URL } from "@/shared/common/constants/constant";
-import ProductUploadLoading from "../../upload/loading";
+import ProductUploadLoading from "../../../(upload)/upload/loading";
 import Empty from "@/shared/common/components/Empty";
 
 export const revalidate = 180;
@@ -34,7 +34,7 @@ export default async function ProductEdit({
   params: Promise<{ productId: string | undefined }>;
 }) {
   const { productId } = await params;
-  
+
   return (
     <SuspenseErrorBoundary
       suspenseFallback={<ProductUploadLoading isEdit={true} />}

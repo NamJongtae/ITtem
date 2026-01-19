@@ -13,7 +13,7 @@ export default function ProductUploadLoading({ isEdit }: IProps) {
         <div className="text-red-500 text-sm ml-5">*필수입력</div>
       </div>
 
-      <ProductUploadFieldSkeletonUI />
+      <ProductUploadFieldSkeletonUI isEdit={isEdit} />
     </div>
   );
 }
