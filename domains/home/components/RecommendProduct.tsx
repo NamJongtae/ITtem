@@ -5,7 +5,7 @@ import RecommendProductListContainer from "./RecommendProductListContainer";
 
 export default function RecommendProduct() {
   return (
-    <section>
+    <section className="max-w-[1024px] mx-auto">
       <h2 className="flex justify-center items-center font-semibold text-xl sm:text-2xl mt-20 mb-5 gap-2">
         <Image src={"/icons/star.svg"} alt="" width={29} height={29} /> 오늘의
         추천 상품
