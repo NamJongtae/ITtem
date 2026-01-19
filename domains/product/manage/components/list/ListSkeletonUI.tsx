@@ -4,13 +4,11 @@ interface IProps {
   listCount?: number;
 }
 
-export default function ListSkeletonUI({
-  listCount = 10,
-}: IProps) {
+export default function ListSkeletonUI({ listCount = 10 }: IProps) {
   return Array(listCount)
     .fill("")
     .map((_, index) => (
-      <li
+      <div
         key={index}
         className="animate-pulse flex gap-3 flex-col sm:flex-row sm:items-center sm:justify-between border-b py-5 "
       >
@@ -23,17 +21,17 @@ export default function ListSkeletonUI({
             alt="loading..."
           />
           <div className="flex flex-col gap-2 text-sm">
-            <div className="h-[14px] w-40 bg-gray-300 mb-2"></div>
-            <div className="h-[14px] w-40 bg-gray-300 mb-2"></div>
-            <div className="h-[14px] w-40 bg-gray-300 mb-2"></div>
-            <div className="h-[14px] w-40 bg-gray-300 mb-2"></div>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-[14px] w-40 bg-gray-300 mb-2 rounded" />
+            ))}
           </div>
         </div>
 
         <div className="flex flex-row justify-end sm:flex-col gap-3">
-          <button className="bg-gray-300 w-[91px] h-[40px]"></button>
-          <button className="bg-gray-300 w-[91px] h-[40px]"></button>
+          {[...Array(2)].map((_, i) => (
+            <button key={i} className="bg-gray-300 w-[91px] h-[40px] rounded" />
+          ))}
         </div>
-      </li>
+      </div>
     ));
 }
