@@ -1,4 +1,4 @@
-import { ProfileData, ProfileMenu } from "../../../types/profileTypes";
+import { ProfileMenu } from "../../../types/profileTypes";
 
 interface IProps {
   followersCount: number;
@@ -18,18 +18,14 @@ export default function FollowInfo({
         className="relative font-semibold before:absolute before:bg-gray-400 before:top-1/2 before:-translate-y-1/2 before:-right-[10px] before:w-[1px] before:h-7"
       >
         <span>팔로워</span>
-        <span className="block w-full text-center">
-          {followersCount || 0}
-        </span>
+        <span className="block w-full text-center">{followersCount || 0}</span>
       </button>
       <button
         onClick={() => handleClickMenu("followings")}
         className="font-semibold"
       >
         <span>팔로잉</span>
-        <span className="block w-full text-center">
-          {followingsCount || 0}
-        </span>
+        <span className="block w-full text-center">{followingsCount || 0}</span>
       </button>
     </div>
   );
