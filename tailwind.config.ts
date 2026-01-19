@@ -41,7 +41,11 @@ const config: Config = {
       },
       screens: {
         betterhover: { raw: "(hover: hover)" },
-        xs: "486px"
+        xs: "486px",
+        slider_sm: "320px",
+        slider_md: "540px",
+        slider_l: "764px",
+        slider_xl: "1024px"
       },
       keyframes: {
         fadeInUp: {
