@@ -1,7 +1,16 @@
+"use client";
+
 import MenuChatBtn from "./ChatBtn";
 import MenuProductBtn from "./ProductBtn";
-import NotificationBtn from "@/shared/layout/components/sub-nav/NotificationBtn";
 import MenuSellBtn from "./SellBtn";
+import dynamic from "next/dynamic";
+
+const NotificationBtn = dynamic(
+  () => import("@/shared/layout/components/sub-nav/NotificationBtn"),
+  {
+    ssr: false
+  }
+);
 
 export default function SubNavMenu() {
   return (
