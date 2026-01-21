@@ -118,6 +118,35 @@ describe("customFetch(createFetch) 테스트", () => {
     expect(mockServerRedirect).not.toHaveBeenCalled();
   });
 
+  it("401 + '로그인이 필요해요.' + CSR(window 존재)면 세션 쿠키 삭제 후 client redirect하고 Error('SESSION_EXPIRED')를 throw한다.", async () => {
+    // 1) 원 요청 (401 로그인 필요)
+    mockFetchOnce({
+      ok: false,
+      status: 401,
+      json: jest.fn().mockResolvedValue({ message: "로그인이 필요해요." })
+    });
+
+    // 2) 세션쿠키 삭제 요청 응답
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: jest.fn().mockResolvedValue({})
+    });
+
+    await expect(customFetch("/api/test")).rejects.toThrow("SESSION_EXPIRED");
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect((global.fetch as jest.Mock).mock.calls[1][0]).toBe(
+      "/api/auth/session-cookie"
+    );
+    expect((global.fetch as jest.Mock).mock.calls[1][1]).toEqual({
+      method: "DELETE"
+    });
+
+    expect(mockClientRedirect).toHaveBeenCalledWith("/session-expired");
+    expect(mockServerRedirect).not.toHaveBeenCalled();
+  });
+
   it("401이지만 message가 다르면 redirect/세션삭제를 하지 않고 FetchError로 throw한다.", async () => {
     mockFetchOnce({
       ok: false,
