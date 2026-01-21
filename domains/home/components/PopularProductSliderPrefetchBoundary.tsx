@@ -41,7 +41,7 @@ async function prefetchPopularProduct(queryClient: QueryClient) {
   });
 }
 
-export default async function PopularProductSliderContainer() {
+export default async function PopularProductSliderPrefetchBoundary() {
   const queryClinet = new QueryClient();
   await prefetchPopularProduct(queryClinet);
 

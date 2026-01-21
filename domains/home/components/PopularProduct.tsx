@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Suspense } from "react";
 import PopularProductListSkeletonUI from "./PopularProductListSkeletonUI";
-import PopularProductSliderContainer from "./PopularProductSliderContainer";
+import PopularProductSliderPrefetchBoundary from "./PopularProductSliderPrefetchBoundary";
 
 export default function PopularProduct() {
   return (
@@ -16,7 +16,7 @@ export default function PopularProduct() {
       </p>
 
       <Suspense fallback={<PopularProductListSkeletonUI />}>
-        <PopularProductSliderContainer />
+        <PopularProductSliderPrefetchBoundary />
       </Suspense>
     </section>
   );
