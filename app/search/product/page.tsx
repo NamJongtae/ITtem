@@ -1,4 +1,4 @@
-import SearchPage from "@/domains/search/components/SearchPage";
+import SearchBoundary from "@/domains/search/components/SearchBoundary";
 import { BASE_URL } from "@/shared/common/constants/constant";
 
 export async function generateMetadata({
@@ -26,5 +26,5 @@ export async function generateMetadata({
 }
 
 export default function Search() {
-  return <SearchPage />;
+  return <SearchBoundary />;
 }

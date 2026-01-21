@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import ProductSearchListContainer from "./ProductSearchListContainer";
+import ProductSearchListPrefetchBoundary from "./ProductSearchListPrefetchBoundary";
 import SearchHeader from "./SearchHeader";
 import ProductSearchLoading from "@/app/search/product/loading";
 
-export default function SearchPage() {
+export default function SearchBoundary() {
   return (
     <>
+      <SearchHeader />
       <Suspense fallback={<ProductSearchLoading />}>
-        <SearchHeader />
-        <ProductSearchListContainer />
+        <ProductSearchListPrefetchBoundary />
       </Suspense>
     </>
   );

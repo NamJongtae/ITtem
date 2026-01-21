@@ -40,7 +40,7 @@ async function prefetchProductList({
   });
 }
 
-export default async function ProductSearchListContainer({ category }: IProps) {
+export default async function ProductSearchListPrefetchBoundary({ category }: IProps) {
   const queryClient = new QueryClient();
 
   await prefetchProductList({
