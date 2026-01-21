@@ -4,7 +4,7 @@ import {
   HydrationBoundary,
   QueryClient
 } from "@tanstack/react-query";
-import ProductDetailPage from "./ProductDetailPage";
+import ProductDetailScreen from "./ProductDetailScreen";
 
 async function fetchProductData({
   productId,
@@ -21,7 +21,7 @@ async function fetchProductData({
   });
 }
 
-export default async function PageContainer({
+export default async function ProductDetailPrefetchBoundary({
   productId
 }: {
   productId: string | undefined;
@@ -34,7 +34,7 @@ export default async function PageContainer({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductDetailPage />
+      <ProductDetailScreen />
     </HydrationBoundary>
   );
 }

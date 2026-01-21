@@ -1,6 +1,6 @@
 import { BASE_URL } from "@/shared/common/constants/constant";
 import { Suspense } from "react";
-import PageContainer from "@/domains/product/detail/components/PageContainer";
+import ProductDetailPrefetchBoundary from "@/domains/product/detail/components/ProductDetailPrefetchBoundary";
 import ProductDetailSkeletonUI from "@/domains/product/detail/components/ProductDetailSkeletonUI";
 
 export const revalidate = 180;
@@ -47,7 +47,7 @@ export default async function ProductDetail({
   return (
     <>
       <Suspense fallback={<ProductDetailSkeletonUI userUid={productId} />}>
-        <PageContainer productId={productId} />
+        <ProductDetailPrefetchBoundary productId={productId} />
       </Suspense>
     </>
   );

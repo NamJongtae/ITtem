@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import incrementProductView from "../api/incrementProductView";
 import Empty from "@/shared/common/components/Empty";
 
-export default function ProductDetailPage() {
+export default function ProductDetailScreen() {
   const { productData, showCSRSkeleton } = useProductQuery();
 
   const isBlocked = !!productData?.block;
