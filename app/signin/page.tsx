@@ -1,4 +1,4 @@
-import SigninPage from "@/domains/auth/signin/components/SigninPage";
+import SigninScreen from "@/domains/auth/signin/components/SigninScreen";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import { Metadata } from "next";
 
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function Signin() {
-  return <SigninPage />;
+  return <SigninScreen />;
 }

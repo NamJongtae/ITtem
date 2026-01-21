@@ -1,6 +1,6 @@
 import Form from "./Form";
 
-export default function SigninPage() {
+export default function SigninScreen() {
   return (
     <div className="w-full h-[calc(100vh-113px)] bg-gray-100 overflow-hidden fixed">
       <h2 className="sr-only">로그인</h2>
