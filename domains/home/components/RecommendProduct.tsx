@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Suspense } from "react";
 import ProductListSkeletonUI from "../../product/shared/components/product-list/ProductListSkeletonUI";
-import RecommendProductListContainer from "./RecommendProductListContainer";
+import RecommendProductListPrefetchBoundary from "./RecommendProductListPrefetchBoundary";
 
 export default function RecommendProduct() {
   return (
@@ -16,7 +16,7 @@ export default function RecommendProduct() {
       </p>
 
       <Suspense fallback={<ProductListSkeletonUI listCount={8} />}>
-        <RecommendProductListContainer />
+        <RecommendProductListPrefetchBoundary />
       </Suspense>
     </section>
   );

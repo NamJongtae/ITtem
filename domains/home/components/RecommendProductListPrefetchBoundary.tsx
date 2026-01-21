@@ -45,7 +45,7 @@ async function prefetchProductListData(queryClient: QueryClient) {
   });
 }
 
-export default async function RecommendProductListContainer() {
+export default async function RecommendProductListPrefetchBoundary() {
   const queryClient = new QueryClient();
 
   await prefetchProductListData(queryClient);
