@@ -27,11 +27,12 @@ export const createFetch = (baseURL: string, defaultOptions?: RequestInit) => {
     const isServer = typeof window === "undefined";
 
     const isSessionExpired =
-      response.status === 401 && data?.message === "만료된 세션이에요.";
+      (response.status === 401 && data?.message === "만료된 세션이에요.") ||
+      (response.status === 401 && data?.message === "로그인이 필요해요.");
 
     if (isSessionExpired) {
       await fetch("/api/auth/session-cookie", { method: "DELETE" });
-
+      
       if (isServer) {
         // ✅ 서버 환경: Next.js redirect 사용
         serverRedirect("/session-expired");
