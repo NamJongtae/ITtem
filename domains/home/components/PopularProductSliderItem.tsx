@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import FallbackImage from "../../../shared/common/components/FallbackImage";
 import ProductListContent from "../../product/shared/components/product-list/ProductListContent";
 import { ProductData } from "../../product/shared/types/productTypes";
@@ -13,12 +12,12 @@ export default function PopularProductSliderItem({ data }: IProps) {
     <div className="relative w-full h-[340px] mx-auto">
       <Link
         href={`/product/${data._id}`}
-        className="mx-auto group flex w-full h-full max-w-xs flex-col overflow-hidden bg-white border "
+        className="mx-auto group flex w-full h-full max-w-xs flex-col overflow-hidden bg-white border"
       >
         <div className="w-full h-full overflow-hidden">
           <FallbackImage
             className="w-full h-full object-cover object-center aspect-square"
-            src={data.imgData[0].url}
+            src={data.imgData[0]?.url ?? "/images/no-image.png"}
             alt={data.name}
             width={300}
             height={300}
