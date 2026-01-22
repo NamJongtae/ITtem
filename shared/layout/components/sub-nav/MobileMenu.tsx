@@ -1,6 +1,5 @@
 "use client";
 
-import ChatBtn from "./ChatBtn";
 import SellBtn from "./SellBtn";
 import ProductBtn from "./ProductBtn";
 import HomeBtn from "./HomeBtn";
@@ -8,6 +7,22 @@ import useVisible from "@/shared/common/hooks/useVisible";
 import useAuthStore from "@/domains/auth/shared/common/store/authStore";
 import MobileMenuLogoutBtn from "./MobileMenuLoginoutBtn";
 import MoblieMenuLoginBtn from "./MoblieMenuLoginBtn";
+import ChatIcon from "@/public/icons/chat-icon.svg";
+import dynamic from "next/dynamic";
+
+const ChatBtn = dynamic(() => import("./ChatBtn"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className={
+        "inline-flex flex-col items-center gap-[2px] text-xs text-gary-600"
+      }
+    >
+      <ChatIcon className="fill-black w-5 h-5" />
+      <span>채팅</span>
+    </div>
+  )
+});
 
 export default function MobileMenu() {
   const { user } = useAuthStore();

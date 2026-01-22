@@ -1,10 +1,10 @@
 "use client";
 
-import MenuChatBtn from "./ChatBtn";
 import MenuProductBtn from "./ProductBtn";
 import MenuSellBtn from "./SellBtn";
 import dynamic from "next/dynamic";
 import NotificatonIcon from "@/public/icons/notification-icon.svg";
+import ChatIcon from "@/public/icons/chat-icon.svg";
 
 const NotificationBtn = dynamic(
   () => import("@/shared/layout/components/sub-nav/NotificationBtn"),
@@ -18,6 +18,20 @@ const NotificationBtn = dynamic(
     )
   }
 );
+
+const MenuChatBtn = dynamic(() => import("./ChatBtn"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className={
+        "inline-flex flex-col items-center gap-[2px] text-xs text-gary-600"
+      }
+    >
+      <ChatIcon className="fill-black w-5 h-5" />
+      <span>채팅</span>
+    </div>
+  )
+});
 
 export default function SubNavMenu() {
   return (
