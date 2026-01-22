@@ -10,37 +10,47 @@ import ProductListSkeletonUI from "../../product/shared/components/product-list/
 import ProductListError from "../../product/shared/components/product-list/ProductListError";
 import dbConnect from "@/shared/common/utils/db/db";
 import RecommendProduct from "@/domains/product/shared/models/RecommendProduct";
+import { unstable_cache } from "next/cache";
 
-const getReommendProdcuts = async () => {
-  try {
-    await dbConnect();
+export const getRecommendProducts = unstable_cache(
+  async () => {
+    try {
+      await dbConnect();
 
-    const cursorDate = new Date();
-    const pageLimit = 10;
+      const cursorDate = new Date();
+      const pageLimit = 10;
 
-    const products = await RecommendProduct.find({
-      createdAt: { $lt: cursorDate },
-      block: false
-    })
-      .select(
-        "_id name description uid createdAt status block imgData price location sellType category"
-      )
-      .sort({ createdAt: -1 })
-      .limit(pageLimit)
-      .lean();
+      const products = await RecommendProduct.find({
+        createdAt: { $lt: cursorDate },
+        block: false
+      })
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
+        .sort({ createdAt: -1 })
+        .limit(pageLimit)
+        .lean();
 
-    return JSON.parse(JSON.stringify(products));
-  } catch (error) {
-    console.error(error);
-    throw new Error("추천 상품 조회에 실패했어요. 잠시 후 다시 시도해주세요.");
+      return JSON.parse(JSON.stringify(products));
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        "추천 상품 조회에 실패했어요. 잠시 후 다시 시도해주세요."
+      );
+    }
+  },
+  ["product-recommend"],
+  {
+    revalidate:  60 * 60 * 24,
+    tags: ["product-recommend"]
   }
-};
+);
 
 async function prefetchProductListData(queryClient: QueryClient) {
   const queryKeyConfig = queryKeys.product.recommend();
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
-    queryFn: () => getReommendProdcuts(),
+    queryFn: () => getRecommendProducts(),
     initialPageParam: null
   });
 }

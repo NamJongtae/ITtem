@@ -11,28 +11,38 @@ import ProductListError from "../../product/shared/components/product-list/Produ
 import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
+import { unstable_cache } from "next/cache";
 
-export const getPopularProducts = async () => {
-  try {
-    await dbConnect();
 
-    const products = await Product.find({
-      block: false,
-      status: ProductStatus.sold
-    })
-      .select(
-        "_id name description uid createdAt status block imgData price location sellType category"
-      )
-      .sort({ viewCount: -1 })
-      .limit(12)
-      .lean(); // Mongoose 객체를 순수 JS 객체로 변환
+export const getPopularProducts = unstable_cache(
+  async () => {
+    try {
+      await dbConnect();
 
-    return JSON.parse(JSON.stringify(products));
-  } catch (error) {
-    console.error(error);
-    throw new Error("인기 상품 조회 실패"); // 에러를 던져서 prefetchQuery가 실패를 인지하게 함
+      const products = await Product.find({
+        block: false,
+        status: ProductStatus.sold
+      })
+        .select(
+          "_id name description uid createdAt status block imgData price location sellType category"
+        )
+        .sort({ viewCount: -1 })
+        .limit(12)
+        .lean();
+
+      return JSON.parse(JSON.stringify(products));
+    } catch (error) {
+      console.error(error);
+      throw new Error("인기 상품 조회 실패");
+    }
+  },
+  ["product-popular"],
+  {
+    revalidate: 60,
+    tags: ["product-popular"]
   }
-};
+);
+
 async function prefetchPopularProduct(queryClient: QueryClient) {
   const queryKeyConfig = queryKeys.product.popular;
   await queryClient.prefetchQuery({
