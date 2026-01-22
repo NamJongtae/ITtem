@@ -1,13 +1,22 @@
 import ProductUploadImgUploadBtn from "./ImgUploadBtn";
-import ProductImgEnlargeModal from "../../ProductImgEnlargeModal";
 import ProductUploadImgEnlargeBtn from "./ImgEnlargeBtn";
 import ImgInput from "./HiddenImgInput";
 import ProductUploadImgPreviewList from "./ImgPreviewList";
 import { ProductImgData } from "../../../../shared/types/productTypes";
 import useProductUploadImgField from "../../../hooks/img-field/useProductUploadImgField";
+import dynamic from "next/dynamic";
+import Loading from "@/domains/notification/components/Loading";
 interface IProps {
   imgData?: ProductImgData[];
 }
+
+const ProductImgEnlargeModal = dynamic(
+  () => import("../../ProductImgEnlargeModal"),
+  {
+    ssr: false,
+    loading: () => <Loading />
+  }
+);
 
 export default function ImgField({ imgData }: IProps) {
   const {
