@@ -25,32 +25,20 @@ export async function GET(
     const { productId } = await params;
 
     if (!productId) {
-      return NextResponse.json(
-        { message: "상품 ID가 없어요." },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "상품 ID가 없어요." }, { status: 404 });
     }
     if (productId.length < 24) {
-      return NextResponse.json(
-        { message: "잘못된 상품 ID에요." },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "잘못된 상품 ID에요." }, { status: 404 });
     }
 
     await dbConnect();
-
-    const isValidAuth = await checkAuthorization();
-    const myUid = isValidAuth?.auth?.uid || null;
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId)
     });
 
     if (!product) {
-      return NextResponse.json(
-        { message: "상품이 존재하지 않아요." },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "상품이 존재하지 않아요." }, { status: 404 });
     }
 
     if (product.block) {
@@ -65,38 +53,12 @@ export async function GET(
 
     const productOwnerId = product.uid;
 
-    const wishPromise = myUid
-      ? Wish.exists({
-          userId: new mongoose.Types.ObjectId(myUid),
-          productId: new mongoose.Types.ObjectId(productId)
-        })
-      : Promise.resolve(null);
-
-    const reportPromise = myUid
-      ? Report.exists({
-          userId: new mongoose.Types.ObjectId(myUid),
-          productId: new mongoose.Types.ObjectId(productId)
-        })
-      : Promise.resolve(null);
-
-    const [wishExists, reportExists] = await Promise.all([
-      wishPromise,
-      reportPromise
-    ]);
-
-    const isWish = !!wishExists;
-    const isReported = !!reportExists;
-
     const aggregation = [
-      {
-        $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) }
-      },
+      { $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) } },
       {
         $lookup: {
           from: "reviewScores",
-          pipeline: [
-            { $match: { $expr: { $eq: ["$uid", productOwnerId as string] } } }
-          ],
+          pipeline: [{ $match: { $expr: { $eq: ["$uid", productOwnerId as string] } } }],
           as: "reviewInfo"
         }
       },
@@ -105,20 +67,13 @@ export async function GET(
         $addFields: {
           reviewPercentage: {
             $cond: {
-              if: {
-                $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null]
-              },
+              if: { $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null] },
               then: 0,
               else: {
                 $round: [
                   {
                     $multiply: [
-                      {
-                        $divide: [
-                          "$reviewInfo.totalReviewScore",
-                          "$reviewInfo.totalReviewCount"
-                        ]
-                      },
+                      { $divide: ["$reviewInfo.totalReviewScore", "$reviewInfo.totalReviewCount"] },
                       20
                     ]
                   },
@@ -136,20 +91,13 @@ export async function GET(
               input: "$productIds",
               as: "id",
               cond: {
-                $ne: [
-                  { $toObjectId: "$$id" },
-                  new mongoose.Types.ObjectId(productId)
-                ]
+                $ne: [{ $toObjectId: "$$id" }, new mongoose.Types.ObjectId(productId)]
               }
             }
           }
         }
       },
-      {
-        $addFields: {
-          lastTenProductIds: { $slice: ["$filteredProductIds", -9] }
-        }
-      },
+      { $addFields: { lastTenProductIds: { $slice: ["$filteredProductIds", -9] } } },
       {
         $addFields: {
           convertedProductIds: {
@@ -190,18 +138,47 @@ export async function GET(
       }
     ];
 
-    const userWithReviews = await User.aggregate(aggregation);
-    userWithReviews[0].uid = userWithReviews[0]._id;
-    delete userWithReviews[0]._id;
+    // ✅ auth + aggregate 병렬
+    const authPromise = checkAuthorization({ skipDbConnect: true });
+    const userAggregatePromise = User.aggregate(aggregation);
+
+    const [isValidAuth, userWithReviews] = await Promise.all([
+      authPromise,
+      userAggregatePromise
+    ]);
+
+    const myUid = isValidAuth?.auth?.uid ?? null;
+
+    const seller = userWithReviews?.[0];
+ 
+    // ✅ wish/report는 myUid 필요, 두 개는 병렬
+    const wishPromise = myUid
+      ? Wish.exists({
+          userId: new mongoose.Types.ObjectId(myUid),
+          productId: new mongoose.Types.ObjectId(productId)
+        })
+      : Promise.resolve(null);
+
+    const reportPromise = myUid
+      ? Report.exists({
+          userId: new mongoose.Types.ObjectId(myUid),
+          productId: new mongoose.Types.ObjectId(productId)
+        })
+      : Promise.resolve(null);
+
+    const [wishExists, reportExists] = await Promise.all([wishPromise, reportPromise]);
+
+    seller.uid = seller._id;
+    delete seller._id;
 
     return NextResponse.json(
       {
         message: "상품 조회에 성공했어요.",
         product: {
           ...product._doc,
-          isWish,
-          isReported,
-          auth: { ...userWithReviews[0] }
+          isWish: !!wishExists,
+          isReported: !!reportExists,
+          auth: { ...seller }
         }
       },
       { status: 200 }
@@ -215,6 +192,7 @@ export async function GET(
     );
   }
 }
+
 
 export async function PATCH(
   req: NextRequest,
@@ -259,8 +237,6 @@ export async function PATCH(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)
@@ -381,8 +357,6 @@ export async function DELETE(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)

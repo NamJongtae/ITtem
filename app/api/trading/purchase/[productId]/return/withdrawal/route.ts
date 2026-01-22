@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
@@ -43,8 +42,6 @@ export async function PATCH(
       null,
       { session }
     );
-
-    await dbConnect();
 
     const { productId } = await params;
 

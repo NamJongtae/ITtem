@@ -1,5 +1,4 @@
 import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
-import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
@@ -46,8 +45,6 @@ export const PATCH = async (
       null,
       { session }
     );
-
-    await dbConnect();
 
     const { productId } = await params;
     const { cancelReason } = await req.json();

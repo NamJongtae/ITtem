@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import Product from "@/domains/product/shared/models/Product";
 import Report from "@/domains/product/shared/models/Report";
@@ -54,8 +53,6 @@ export async function POST(
         { status: 401 }
       );
     }
-
-    await dbConnect();
 
     const productObjectId = new mongoose.Types.ObjectId(productId);
     const userObjectId = new mongoose.Types.ObjectId(myUid);

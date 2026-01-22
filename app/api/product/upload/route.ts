@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import User from "@/domains/auth/shared/common/models/User";
@@ -29,8 +28,6 @@ export async function POST(req: NextRequest) {
     const { productData } = await req.json();
 
     const myUid = isValidAuth?.auth?.uid;
-
-    await dbConnect();
 
     const newProduct = new Product(productData);
 

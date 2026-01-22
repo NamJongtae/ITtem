@@ -5,7 +5,6 @@ import { TradingStatus } from "@/domains/product/manage/types/productManageTypes
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import ReviewScore from "@/domains/user/shared/models/ReviewScore";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
@@ -43,8 +42,6 @@ export async function GET(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const purchaseTrading = await PurchaseTrading.findOne({
       productId,
@@ -155,8 +152,6 @@ export async function POST(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const purchaseTrading = await PurchaseTrading.findOneAndUpdate(
       {

@@ -1,4 +1,3 @@
-import dbConnect from "@/shared/common/utils/db/db";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
@@ -21,8 +20,6 @@ export async function GET() {
     }
 
     const myUid = isValidAuth?.auth?.uid;
-
-    await dbConnect();
 
     const aggregation = [
       {
@@ -188,7 +185,6 @@ export async function PATCH(req: NextRequest) {
 
     const myUid = isValidAuth?.auth?.uid;
 
-    await dbConnect();
     let checkDuplicationNickname;
 
     if (profileEditData.nickname) {

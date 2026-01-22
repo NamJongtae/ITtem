@@ -1,5 +1,4 @@
 import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
-import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
@@ -72,8 +71,6 @@ export async function PATCH(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)

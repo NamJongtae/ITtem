@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import {
   PurchaseCancelProcess,
@@ -66,8 +65,6 @@ export async function PATCH(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)

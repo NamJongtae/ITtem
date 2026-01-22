@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose, { FilterQuery } from "mongoose";
 import Product from "@/domains/product/shared/models/Product";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
-import dbConnect from "@/shared/common/utils/db/db";
 import * as Sentry from "@sentry/nextjs";
 import Wish, { type WishDB } from "@/domains/product/shared/models/Wish";
 import { WishlistProductData } from "@/domains/user/profile/types/profileTypes";
@@ -33,8 +32,6 @@ export async function GET(req: NextRequest) {
 
     const cursor = req.nextUrl.searchParams.get("cursor");
     const limit = req.nextUrl.searchParams.get("limit");
-
-    await dbConnect();
 
     const pageLimit = Number.isFinite(Number(limit))
       ? Math.max(Number(limit), 1)
@@ -123,8 +120,6 @@ export async function DELETE(req: NextRequest) {
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const userObjectId = new mongoose.Types.ObjectId(myUid);
 

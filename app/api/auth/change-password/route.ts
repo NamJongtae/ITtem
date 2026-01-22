@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { LoginType } from "@/domains/auth/signin/types/signinTypes";
@@ -11,8 +10,6 @@ import * as Sentry from "@sentry/nextjs";
 export async function PATCH(req: NextRequest) {
   try {
     const { password, currentPassword } = await req.json();
-
-    await dbConnect();
 
     if (!currentPassword || !password) {
       return new NextResponse(

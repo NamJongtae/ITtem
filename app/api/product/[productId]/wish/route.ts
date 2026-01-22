@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/shared/common/utils/db/db";
 import mongoose from "mongoose";
 import Product from "@/domains/product/shared/models/Product";
 import Wish from "@/domains/product/shared/models/Wish";
@@ -37,8 +36,6 @@ export async function PATCH(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     // 상품 존재 확인
     const product = await Product.findOne({
@@ -135,8 +132,6 @@ export async function DELETE(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     // Wish 삭제 (삭제된 경우에만 카운트 감소)
     const deleteResult = await Wish.deleteOne(

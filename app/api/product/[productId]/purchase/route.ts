@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/shared/common/utils/db/db";
 import Product from "@/domains/product/shared/models/Product";
 import mongoose from "mongoose";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
@@ -64,8 +63,6 @@ export async function POST(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)

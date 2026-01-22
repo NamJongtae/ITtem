@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/shared/common/utils/db/db";
 import mongoose from "mongoose";
 import * as Sentry from "@sentry/nextjs";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
@@ -24,8 +23,6 @@ export async function GET(
         { status: 404 }
       );
     }
-
-    await dbConnect();
 
     const auth = await checkAuthorization();
     const myUid = auth?.isValid && auth.auth?.uid ? auth.auth.uid : null;

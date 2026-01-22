@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import {
   PurchaseCancelProcess,
@@ -45,8 +44,6 @@ export async function PATCH(
       null,
       { session }
     );
-
-    await dbConnect();
 
     const { productId } = await params;
 

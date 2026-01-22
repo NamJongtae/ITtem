@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import Follow from "@/domains/auth/shared/common/models/Follow";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import * as Sentry from "@sentry/nextjs";
@@ -28,8 +27,6 @@ export async function POST(
         { status: 401 }
       );
     }
-
-    await dbConnect();
 
     const myUid = isValidAuth.auth!.uid;
 
@@ -100,8 +97,6 @@ export async function DELETE(
         { status: 401 }
       );
     }
-
-    await dbConnect();
 
     const myUid = isValidAuth.auth!.uid;
 

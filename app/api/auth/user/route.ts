@@ -1,4 +1,3 @@
-import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { NextResponse } from "next/server";
@@ -20,8 +19,6 @@ export async function GET() {
     }
 
     const myUid = isValidAuth?.auth?.uid;
-
-    await dbConnect();
 
     const user = await User.findOne({
       _id: new mongoose.Types.ObjectId(myUid)

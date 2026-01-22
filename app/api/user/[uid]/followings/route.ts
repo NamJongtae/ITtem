@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import dbConnect from "@/shared/common/utils/db/db";
 import Follow from "@/domains/auth/shared/common/models/Follow";
 import * as Sentry from "@sentry/nextjs";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
@@ -22,8 +21,6 @@ export async function GET(
         { status: 422 }
       );
     }
-
-    await dbConnect();
 
     /** 팔로잉 목록 = followerId가 uid */
     const match: any = {

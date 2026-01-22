@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
-import dbConnect from "@/shared/common/utils/db/db";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
 import {
   PurchaseCancelProcess,
@@ -45,8 +44,6 @@ export async function PATCH(
       null,
       { session }
     );
-
-    await dbConnect();
 
     const { productId } = await params;
     const { rejectReason } = await req.json();
