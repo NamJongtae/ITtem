@@ -3,7 +3,7 @@ import Session from "@/domains/auth/shared/common/models/Sessions";
 import User from "@/domains/auth/shared/common/models/User";
 import { cookies } from "next/headers";
 
-export default async function checkAuthorization() {
+export default async function checkAuthorization({skipDbConnect = false}: {skipDbConnect?: boolean} = {}) {
   try {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get("sessionId")?.value;
@@ -15,7 +15,9 @@ export default async function checkAuthorization() {
       };
     }
 
-    await dbConnect();
+    if (!skipDbConnect) {
+      await dbConnect();
+    }
 
     // 1️⃣ 세션 조회
     const session = await Session.findOne({
@@ -24,6 +26,7 @@ export default async function checkAuthorization() {
     });
 
     if (!session) {
+      console.log("")
       return {
         isValid: false,
         message: "만료된 세션이에요."
