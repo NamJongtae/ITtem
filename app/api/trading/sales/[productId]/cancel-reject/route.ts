@@ -11,7 +11,6 @@ import {
   TradingStatus
 } from "@/domains/product/manage/types/productManageTypes";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
-import User from "@/domains/auth/shared/common/models/User";
 import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import Product from "@/domains/product/shared/models/Product";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,36 +20,24 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
+
   try {
     const isValidAuth = await checkAuthorization();
-
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: isValidAuth.message },
         { status: 401 }
       );
     }
 
-    const myUid = isValidAuth?.auth?.uid;
-
-    const user = await User.findOne(
-      {
-        _id: new mongoose.Types.ObjectId(myUid as string)
-      },
-      null,
-      { session }
-    );
+    const myUid = isValidAuth.auth?.uid;
+    const nickname = isValidAuth.auth?.nickname || "";
 
     const { productId } = await params;
     const { rejectReason } = await req.json();
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 존재하지 않아요." },
         { status: 422 }
@@ -58,8 +45,6 @@ export async function PATCH(
     }
 
     if (productId.length < 24) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
         { status: 422 }
@@ -67,7 +52,7 @@ export async function PATCH(
     }
 
     const product = await Product.findOne({
-      _id: new mongoose.Types.ObjectId(productId as string)
+      _id: new mongoose.Types.ObjectId(productId)
     });
 
     if (!product) {
@@ -77,19 +62,15 @@ export async function PATCH(
       );
     }
 
-    const saleTrading = await SaleTrading.findOne(
-      {
-        $and: [
-          { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
-          { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } }
-        ],
-        productId
-      },
-      null,
-      { session }
-    );
+    const saleTrading = await SaleTrading.findOne({
+      $and: [
+        { process: { $ne: SalesCancelProcess.취소완료 } },
+        { process: { $ne: SalesReturnProcess.반품완료 } },
+        { process: { $ne: SalesCancelProcess.취소거절 } },
+        { process: { $ne: SalesReturnProcess.반품거절 } }
+      ],
+      productId
+    });
 
     if (!saleTrading) {
       return NextResponse.json(
@@ -126,17 +107,13 @@ export async function PATCH(
       );
     }
 
-    const purchaseTrading = await PurchaseTrading.findOne(
-      {
-        $and: [
-          { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } }
-        ],
-        productId
-      },
-      null,
-      { session }
-    );
+    const purchaseTrading = await PurchaseTrading.findOne({
+      $and: [
+        { process: { $ne: PurchaseCancelProcess.취소완료 } },
+        { process: { $ne: PurchaseReturnProcess.반품완료 } }
+      ],
+      productId
+    });
 
     if (!purchaseTrading) {
       return NextResponse.json(
@@ -146,7 +123,7 @@ export async function PATCH(
     }
 
     if (
-      saleTrading.process !== SalesCancelProcess.취소요청확인 &&
+      saleTrading.process !== SalesCancelProcess.취소요청확인 ||
       purchaseTrading.process !== PurchaseCancelProcess.판매자확인중
     ) {
       return NextResponse.json(
@@ -155,7 +132,11 @@ export async function PATCH(
       );
     }
 
+    session = await mongoose.startSession();
+    session.startTransaction();
+
     const currentDate = new Date();
+
     const cancelRejectSaleTrading = new SaleTrading({
       sellerId: saleTrading.sellerId,
       buyerId: saleTrading.buyerId,
@@ -242,7 +223,7 @@ export async function PATCH(
 
     await sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
-      `${user.nickname}님이 ${purchaseTrading.productName} 상품에 구매 취소를 거절하였습니다.`
+      `${nickname}님이 ${purchaseTrading.productName} 상품에 구매 취소를 거절하였습니다.`
     );
 
     return NextResponse.json({
@@ -251,8 +232,12 @@ export async function PATCH(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       {
         message: "취소 요청 거부에 실패했어요.\n잠시 후 다시 시도해주세요."

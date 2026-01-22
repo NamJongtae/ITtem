@@ -8,8 +8,7 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ uid: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const { uid } = await params;
@@ -37,6 +36,9 @@ export async function POST(
       );
     }
 
+    session = await mongoose.startSession();
+    session.startTransaction();
+
     // 팔로우 관계 생성
     await Follow.create(
       [
@@ -54,7 +56,9 @@ export async function POST(
       { status: 200 }
     );
   } catch (error: any) {
-    await session.abortTransaction();
+    if (session) {
+      await session.abortTransaction();
+    }
 
     // 이미 팔로우한 경우 (unique index)
     if (error.code === 11000) {
@@ -70,7 +74,9 @@ export async function POST(
       { status: 500 }
     );
   } finally {
-    session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 }
 

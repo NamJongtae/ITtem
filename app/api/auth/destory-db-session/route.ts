@@ -1,5 +1,6 @@
 import Session from "@/domains/auth/shared/common/models/Sessions";
 import User from "@/domains/auth/shared/common/models/User";
+import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {
@@ -13,6 +14,8 @@ export async function DELETE(req: NextRequest) {
       }
     );
   }
+
+  await dbConnect();
 
   const dbUserData = await User.findOne({ email });
 

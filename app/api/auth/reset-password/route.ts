@@ -11,8 +11,6 @@ export async function PATCH(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    await dbConnect();
-
     if (!email || !password) {
       return new NextResponse(
         JSON.stringify({ message: "유효하지 않은 값이 있어요." }),
@@ -20,6 +18,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
+    await dbConnect();
     const user = await User.findOne({ email });
 
     if (user.loginType !== LoginType.EMAIL) {

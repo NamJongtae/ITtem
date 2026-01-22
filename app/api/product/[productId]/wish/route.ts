@@ -9,8 +9,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const isValidAuth = await checkAuthorization();
@@ -36,6 +35,9 @@ export async function PATCH(
         { status: 422 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     // 상품 존재 확인
     const product = await Product.findOne({
@@ -92,8 +94,12 @@ export async function PATCH(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       { message: "상품 찜에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }

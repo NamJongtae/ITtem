@@ -25,10 +25,16 @@ export async function GET(
     const { productId } = await params;
 
     if (!productId) {
-      return NextResponse.json({ message: "상품 ID가 없어요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "상품 ID가 없어요." },
+        { status: 404 }
+      );
     }
     if (productId.length < 24) {
-      return NextResponse.json({ message: "잘못된 상품 ID에요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "잘못된 상품 ID에요." },
+        { status: 404 }
+      );
     }
 
     await dbConnect();
@@ -38,7 +44,10 @@ export async function GET(
     });
 
     if (!product) {
-      return NextResponse.json({ message: "상품이 존재하지 않아요." }, { status: 404 });
+      return NextResponse.json(
+        { message: "상품이 존재하지 않아요." },
+        { status: 404 }
+      );
     }
 
     if (product.block) {
@@ -54,11 +63,15 @@ export async function GET(
     const productOwnerId = product.uid;
 
     const aggregation = [
-      { $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) } },
+      {
+        $match: { _id: new mongoose.Types.ObjectId(productOwnerId as string) }
+      },
       {
         $lookup: {
           from: "reviewScores",
-          pipeline: [{ $match: { $expr: { $eq: ["$uid", productOwnerId as string] } } }],
+          pipeline: [
+            { $match: { $expr: { $eq: ["$uid", productOwnerId as string] } } }
+          ],
           as: "reviewInfo"
         }
       },
@@ -67,13 +80,20 @@ export async function GET(
         $addFields: {
           reviewPercentage: {
             $cond: {
-              if: { $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null] },
+              if: {
+                $eq: [{ $ifNull: ["$reviewInfo.totalReviewScore", null] }, null]
+              },
               then: 0,
               else: {
                 $round: [
                   {
                     $multiply: [
-                      { $divide: ["$reviewInfo.totalReviewScore", "$reviewInfo.totalReviewCount"] },
+                      {
+                        $divide: [
+                          "$reviewInfo.totalReviewScore",
+                          "$reviewInfo.totalReviewCount"
+                        ]
+                      },
                       20
                     ]
                   },
@@ -91,13 +111,20 @@ export async function GET(
               input: "$productIds",
               as: "id",
               cond: {
-                $ne: [{ $toObjectId: "$$id" }, new mongoose.Types.ObjectId(productId)]
+                $ne: [
+                  { $toObjectId: "$$id" },
+                  new mongoose.Types.ObjectId(productId)
+                ]
               }
             }
           }
         }
       },
-      { $addFields: { lastTenProductIds: { $slice: ["$filteredProductIds", -9] } } },
+      {
+        $addFields: {
+          lastTenProductIds: { $slice: ["$filteredProductIds", -9] }
+        }
+      },
       {
         $addFields: {
           convertedProductIds: {
@@ -150,7 +177,7 @@ export async function GET(
     const myUid = isValidAuth?.auth?.uid ?? null;
 
     const seller = userWithReviews?.[0];
- 
+
     // ✅ wish/report는 myUid 필요, 두 개는 병렬
     const wishPromise = myUid
       ? Wish.exists({
@@ -166,7 +193,10 @@ export async function GET(
         })
       : Promise.resolve(null);
 
-    const [wishExists, reportExists] = await Promise.all([wishPromise, reportPromise]);
+    const [wishExists, reportExists] = await Promise.all([
+      wishPromise,
+      reportPromise
+    ]);
 
     seller.uid = seller._id;
     delete seller._id;
@@ -193,7 +223,6 @@ export async function GET(
   }
 }
 
-
 export async function PATCH(
   req: NextRequest,
   {
@@ -202,8 +231,8 @@ export async function PATCH(
     params: Promise<{ productId: string }>;
   }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
+
   try {
     const isValidAuth = await checkAuthorization();
     if (!isValidAuth.isValid) {
@@ -237,6 +266,9 @@ export async function PATCH(
         { status: 422 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const product = await Product.findOne({
       _id: new mongoose.Types.ObjectId(productId as string)
@@ -313,8 +345,12 @@ export async function PATCH(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       { message: "상품 수정에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }

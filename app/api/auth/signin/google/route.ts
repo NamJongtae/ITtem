@@ -44,27 +44,6 @@ export async function POST(req: NextRequest) {
           profileImgFilename: ""
         });
 
-        const existingSession = await Session.findOne({
-          uid: dbUserData._id,
-          expiresAt: { $gt: new Date() }
-        });
-
-        // ❌ 중복 로그인 차단
-        if (existingSession && !isDuplicateLogin) {
-          return NextResponse.json(
-            {
-              message:
-                "제대로 로그아웃 하지 않았거나\n이미 로그인 중인 ID 입니다."
-            },
-            { status: 409 }
-          );
-        }
-
-        // ✅ 중복 로그인 허용 → 기존 세션 제거
-        if (existingSession && isDuplicateLogin) {
-          await Session.deleteMany({ uid: dbUserData._id });
-        }
-
         // 🔐 세션 생성 (회원가입 후 바로 로그인)
         const sessionId = uuid();
         const expiresAt = new Date(Date.now() + SESSION_TTL);

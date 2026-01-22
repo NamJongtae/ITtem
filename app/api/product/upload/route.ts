@@ -8,15 +8,12 @@ import * as Sentry from "@sentry/nextjs";
 import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         {
           message: isValidAuth.message
@@ -28,6 +25,9 @@ export async function POST(req: NextRequest) {
     const { productData } = await req.json();
 
     const myUid = isValidAuth?.auth?.uid;
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const newProduct = new Product(productData);
 
@@ -68,10 +68,14 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     console.error(error);
     Sentry.captureException(error);
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message

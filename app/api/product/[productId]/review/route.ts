@@ -115,8 +115,8 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
+
   try {
     const { productId } = await params;
     const body = await req.json();
@@ -125,8 +125,6 @@ export async function POST(
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         {
           message: isValidAuth.message
@@ -138,8 +136,6 @@ export async function POST(
     const myUid = isValidAuth?.auth?.uid;
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 아이디가 없어요." },
         { status: 422 }
@@ -152,6 +148,9 @@ export async function POST(
         { status: 422 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const purchaseTrading = await PurchaseTrading.findOneAndUpdate(
       {
@@ -255,6 +254,7 @@ export async function POST(
 
     await session.commitTransaction();
     session.endSession();
+
     return NextResponse.json(
       { message: "상품 리뷰 작성에 성공했어요." },
       { status: 201 }
@@ -262,8 +262,11 @@ export async function POST(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message

@@ -1,4 +1,4 @@
-import sendNotificationMessageInFirebase from '@/domains/notification/utils/sendNotificationMessageInFirebase';
+import sendNotificationMessageInFirebase from "@/domains/notification/utils/sendNotificationMessageInFirebase";
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
@@ -21,15 +21,12 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: isValidAuth.message },
         { status: 401 }
@@ -37,18 +34,11 @@ export async function PATCH(
     }
 
     const myUid = isValidAuth?.auth?.uid;
-
-    const user = await User.findOne(
-      { _id: new mongoose.Types.ObjectId(myUid) },
-      null,
-      { session }
-    );
+    const nickname = isValidAuth?.auth?.nickname || "";
 
     const { productId } = await params;
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 존재하지 않아요." },
         { status: 422 }
@@ -56,8 +46,6 @@ export async function PATCH(
     }
 
     if (productId.length < 24) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
         { status: 422 }
@@ -75,21 +63,15 @@ export async function PATCH(
       );
     }
 
-    const purchaseTrading = await PurchaseTrading.findOne(
-      {
-        $and: [
-          { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } }
-        ],
-        productId
-      },
-      null,
-      { session }
-    );
+    const purchaseTrading = await PurchaseTrading.findOne({
+      $and: [
+        { process: { $ne: SalesCancelProcess.취소완료 } },
+        { process: { $ne: PurchaseReturnProcess.반품완료 } }
+      ],
+      productId
+    });
 
     if (!purchaseTrading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래중인 구매 상품 정보가 없어요." },
         { status: 404 }
@@ -97,8 +79,6 @@ export async function PATCH(
     }
 
     if (myUid !== purchaseTrading.buyerId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 요청이에요" },
         { status: 401 }
@@ -106,8 +86,6 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status !== TradingStatus.CANCEL) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "취소 요청한 상품이 아니에요." },
         { status: 409 }
@@ -115,8 +93,6 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status === TradingStatus.RETURN) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "반품 요청한 상품이에요." },
         { status: 409 }
@@ -124,13 +100,14 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status === TradingStatus.TRADING_END) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래가 완료된 상품이에요." },
         { status: 409 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const saleTrading = await SaleTrading.findOne(
       {
@@ -208,7 +185,7 @@ export async function PATCH(
 
     sendNotificationMessageInFirebase(
       saleTrading.sellerId,
-      `${user.nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`
+      `${nickname}님이 ${saleTrading.productName} 상품 구매 취소를 철회하였습니다.`
     );
 
     return NextResponse.json(
@@ -218,8 +195,12 @@ export async function PATCH(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       {
         message: "상품 구매 취소 철회에 실패했어요.\n잠시 후 다시 시도해주세요."

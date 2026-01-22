@@ -22,14 +22,12 @@ export async function POST(
     params: Promise<{ productId: string | undefined }>;
   }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
+
   try {
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: isValidAuth.message },
         { status: 401 }
@@ -42,15 +40,12 @@ export async function POST(
       {
         _id: new mongoose.Types.ObjectId(myUid as string)
       },
-      null,
-      { session }
+      null
     );
 
     const { productId } = await params;
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 존재하지 않아요." },
         { status: 422 }
@@ -69,8 +64,6 @@ export async function POST(
     });
 
     if (!product) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품이 존재하지 않아요." },
         { status: 404 }
@@ -78,8 +71,6 @@ export async function POST(
     }
 
     if (product.status === ProductStatus.trading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "이미 거래중인 상품이에요." },
         { status: 409 }
@@ -87,13 +78,14 @@ export async function POST(
     }
 
     if (product.status === ProductStatus.soldout) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "이미 판매된 상품이에요." },
         { status: 409 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const productUpdateResult = await Product.findOneAndUpdate(
       {
@@ -181,9 +173,13 @@ export async function POST(
     );
   } catch (error) {
     console.error(error);
-    await session.abortTransaction();
-    session.endSession();
     Sentry.captureException(error);
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+    
     if (error instanceof mongoose.Error.ValidationError) {
       const errorMessages = Object.values(error.errors).map(
         (err) => err.message

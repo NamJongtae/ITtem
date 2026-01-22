@@ -22,14 +22,12 @@ export const PATCH = async (
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
+
   try {
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: isValidAuth.message },
         { status: 401 }
@@ -38,20 +36,12 @@ export const PATCH = async (
 
     const myUid = isValidAuth?.auth?.uid;
 
-    const user = await User.findOne(
-      {
-        _id: new mongoose.Types.ObjectId(myUid as string)
-      },
-      null,
-      { session }
-    );
+    const nickname = isValidAuth?.auth?.nickname || "";
 
     const { productId } = await params;
     const { rejectReason } = await req.json();
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 존재하지 않아요." },
         { status: 422 }
@@ -59,8 +49,6 @@ export const PATCH = async (
     }
 
     if (productId.length < 24) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
         { status: 422 }
@@ -68,8 +56,6 @@ export const PATCH = async (
     }
 
     if (!rejectReason || !rejectReason.trim()) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 반품 거절 사유가 존재하지 않아요." },
         { status: 422 }
@@ -81,31 +67,23 @@ export const PATCH = async (
     });
 
     if (!product) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품이 존재하지 않아요." },
         { status: 404 }
       );
     }
 
-    const saleTrading = await SaleTrading.findOne(
-      {
-        $and: [
-          { process: { $ne: SalesCancelProcess.취소완료 } },
-          { process: { $ne: SalesReturnProcess.반품완료 } },
-          { process: { $ne: SalesCancelProcess.취소거절 } },
-          { process: { $ne: SalesReturnProcess.반품거절 } }
-        ],
-        productId
-      },
-      null,
-      { session }
-    );
+    const saleTrading = await SaleTrading.findOne({
+      $and: [
+        { process: { $ne: SalesCancelProcess.취소완료 } },
+        { process: { $ne: SalesReturnProcess.반품완료 } },
+        { process: { $ne: SalesCancelProcess.취소거절 } },
+        { process: { $ne: SalesReturnProcess.반품거절 } }
+      ],
+      productId
+    });
 
     if (!saleTrading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래중인 판매 상품 정보가 없어요." },
         { status: 404 }
@@ -113,8 +91,6 @@ export const PATCH = async (
     }
 
     if (myUid !== saleTrading.sellerId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 요청이에요." },
         { status: 401 }
@@ -122,8 +98,6 @@ export const PATCH = async (
     }
 
     if (saleTrading.status === TradingStatus.CANCEL) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "취소 요청한 상품이에요." },
         { status: 409 }
@@ -131,8 +105,6 @@ export const PATCH = async (
     }
 
     if (saleTrading.status !== TradingStatus.RETURN) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "구매자가 반품 요청한 상품이 아니에요." },
         { status: 409 }
@@ -140,29 +112,21 @@ export const PATCH = async (
     }
 
     if (saleTrading.status === TradingStatus.TRADING_END) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래가 완료된 상품이에요." },
         { status: 409 }
       );
     }
 
-    const purchaseTrading = await PurchaseTrading.findOne(
-      {
-        $and: [
-          { process: { $ne: PurchaseCancelProcess.취소완료 } },
-          { process: { $ne: PurchaseReturnProcess.반품완료 } }
-        ],
-        productId
-      },
-      null,
-      { session }
-    );
+    const purchaseTrading = await PurchaseTrading.findOne({
+      $and: [
+        { process: { $ne: PurchaseCancelProcess.취소완료 } },
+        { process: { $ne: PurchaseReturnProcess.반품완료 } }
+      ],
+      productId
+    });
 
     if (!purchaseTrading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래중인 구매 상품 정보가 없어요." },
         { status: 404 }
@@ -173,8 +137,6 @@ export const PATCH = async (
       saleTrading.process === SalesReturnProcess.구매자반품상품전달중 &&
       purchaseTrading.process === PurchaseReturnProcess.반품상품전달확인
     ) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         {
           message: "상품 확인 후 반품 거절이 가능해요."
@@ -182,6 +144,9 @@ export const PATCH = async (
         { status: 409 }
       );
     }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     const productUpdateResult = await Product.updateOne(
       {
@@ -316,15 +281,19 @@ export const PATCH = async (
 
     sendNotificationMessageInFirebase(
       purchaseTrading.buyerId,
-      `${user.nickname}님이 ${purchaseTrading.productName} 상품에 반품 요청을 거절하였습니다.`
+      `${nickname}님이 ${purchaseTrading.productName} 상품에 반품 요청을 거절하였습니다.`
     );
 
     return NextResponse.json({ message: "상품 반품 요청 거절에 성공했어요." });
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       {
         message: "반품 요청 거절에 실패했어요.\n잠시 후 다시 시도해주세요."

@@ -2,7 +2,6 @@ import sendNotificationMessageInFirebase from "@/domains/notification/utils/send
 import Product from "@/domains/product/shared/models/Product";
 import PurchaseTrading from "@/domains/product/shared/models/PurchaseTrading";
 import SaleTrading from "@/domains/product/shared/models/SaleTrading";
-import User from "@/domains/auth/shared/common/models/User";
 import checkAuthorization from "@/domains/auth/shared/common/utils/checkAuthorization";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import {
@@ -21,15 +20,12 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ productId: string | undefined }> }
 ) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const isValidAuth = await checkAuthorization();
 
     if (!isValidAuth.isValid) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: isValidAuth.message },
         { status: 401 }
@@ -37,17 +33,12 @@ export async function PATCH(
     }
 
     const myUid = isValidAuth.auth?.uid;
-    const user = await User.findOne(
-      { _id: new mongoose.Types.ObjectId(myUid) },
-      null,
-      { session }
-    );
+    const nickname = isValidAuth.auth?.nickname || "";
+
     const { productId } = await params;
     const { cancelReason } = await req.json();
 
     if (!cancelReason || !cancelReason.trim()) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "취소 사유가 입력되지 않았어요." },
         { status: 422 }
@@ -55,8 +46,6 @@ export async function PATCH(
     }
 
     if (!productId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "상품 ID가 존재하지 않아요." },
         { status: 422 }
@@ -64,8 +53,6 @@ export async function PATCH(
     }
 
     if (productId.length < 24) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 상품 ID에요." },
         { status: 422 }
@@ -96,8 +83,6 @@ export async function PATCH(
     );
 
     if (!purchaseTrading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래중인 구매 상품 정보가 없어요." },
         { status: 404 }
@@ -105,8 +90,6 @@ export async function PATCH(
     }
 
     if (myUid !== purchaseTrading.buyerId) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "잘못된 요청이에요." },
         { status: 401 }
@@ -114,8 +97,6 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status === TradingStatus.CANCEL) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "이미 취소 요청한 상품이에요." },
         { status: 409 }
@@ -123,8 +104,6 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status === TradingStatus.RETURN) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "반품 요청한 상품이에요." },
         { status: 409 }
@@ -132,8 +111,6 @@ export async function PATCH(
     }
 
     if (purchaseTrading.status === TradingStatus.TRADING_END) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래가 완료된 상품이에요." },
         { status: 409 }
@@ -155,8 +132,6 @@ export async function PATCH(
     );
 
     if (!saleTrading) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "거래중인 판매 상품 정보가 없어요." },
         { status: 404 }
@@ -164,8 +139,6 @@ export async function PATCH(
     }
 
     if (saleTrading.process === SaleTradingProcess.구매자상품인수중) {
-      await session.abortTransaction();
-      session.endSession();
       return NextResponse.json(
         { message: "판매자가 전달한 상품은 취소할 수 없어요." },
         { status: 409 }
@@ -173,6 +146,9 @@ export async function PATCH(
     }
 
     const currentDate = new Date();
+
+    session = await mongoose.startSession();
+    session.startTransaction();
 
     if (saleTrading.process === SaleTradingProcess.구매요청확인) {
       const productUpdateResult = await Product.updateOne(
@@ -255,7 +231,7 @@ export async function PATCH(
 
       sendNotificationMessageInFirebase(
         saleTrading.sellerId,
-        `${user.nickname}님이 ${saleTrading.productName} 상품을 구매 취소하였습니다.`
+        `${nickname}님이 ${saleTrading.productName} 상품을 구매 취소하였습니다.`
       );
 
       return NextResponse.json(
@@ -316,7 +292,7 @@ export async function PATCH(
 
       sendNotificationMessageInFirebase(
         saleTrading.sellerId,
-        `${user.nickname}님이 ${saleTrading.productName} 상품에 구매 취소 요청을 하였습니다.`
+        `${nickname}님이 ${saleTrading.productName} 상품에 구매 취소 요청을 하였습니다.`
       );
 
       return NextResponse.json(
@@ -327,8 +303,12 @@ export async function PATCH(
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
-    await session.abortTransaction();
-    session.endSession();
+
+    if (session) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+
     return NextResponse.json(
       {
         message: "상품 구매 취소에 실패했어요.\n잠시 후 다시 시도해주세요."

@@ -21,7 +21,7 @@ export async function POST(
     params: Promise<{ productId: string | undefined }>;
   }
 ) {
-  const session = await mongoose.startSession();
+  let session: mongoose.ClientSession | null = null;
 
   try {
     const isValidAuth = await checkAuthorization();
@@ -56,6 +56,8 @@ export async function POST(
 
     const productObjectId = new mongoose.Types.ObjectId(productId);
     const userObjectId = new mongoose.Types.ObjectId(myUid);
+
+    session = await mongoose.startSession();
 
     const result = await session.withTransaction(
       async (): Promise<ProductReportResult> => {
@@ -134,9 +136,8 @@ export async function POST(
         if (shouldBlock && !afterInc.block) {
           await Product.updateOne(
             { _id: productObjectId },
-            { $set: { block: true } },
-            { session }
-          );
+            { $set: { block: true } }
+          ).session(session);
           return { ...afterInc, block: true };
         }
 
@@ -166,6 +167,8 @@ export async function POST(
 
     return NextResponse.json({ message }, { status });
   } finally {
-    await session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 }
