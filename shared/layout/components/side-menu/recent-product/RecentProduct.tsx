@@ -1,11 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import RecentProductSlider from "./RecentProductSlider";
 import { RecentProductData } from "@/shared/layout/types/layoutTypes";
 
+function readRecentProduct(): RecentProductData[] {
+  try {
+    return JSON.parse(localStorage.getItem("recentProduct") || "[]");
+  } catch {
+    return [];
+  }
+}
+
 export default function RecentProduct() {
-  const recentProduct: RecentProductData[] =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("recentProduct") || "[]")
-      : [];
+  const [recentProduct] = useState<RecentProductData[]>(readRecentProduct);
 
   return (
     <div className="hidden sm:block mb-3 bg-white border text-sm p-2 min-h-36">
