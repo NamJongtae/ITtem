@@ -2,8 +2,17 @@ import Image from "next/image";
 import ImgSlider from "@/shared/common/components/ImgSlider";
 import { ProductStatus } from "../../../shared/types/productTypes";
 import { ProductDetailData } from "../../types/productDetailTypes";
-import ProductImgEnlargeModal from "../../../upload/components/ProductImgEnlargeModal";
 import useModal from "@/shared/common/hooks/useModal";
+import dynamic from "next/dynamic";
+import Loading from "@/domains/notification/components/Loading";
+
+const ProductImgEnlargeModal = dynamic(
+  () => import("../../../upload/components/ProductImgEnlargeModal"),
+  {
+    ssr: false,
+    loading: () => <Loading />
+  }
+);
 
 interface IProps {
   productDetailData: ProductDetailData | undefined;
