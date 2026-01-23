@@ -19,7 +19,7 @@ interface IProps {
 
 const FetchingSkeletonUI = () => (
   <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5">
-    {Array.from({ length: 4 }).map((_, index) => (
+    {Array.from({ length: 8 }).map((_, index) => (
       <ProductItemSkeletonUI key={index} />
     ))}
   </div>
