@@ -8,11 +8,12 @@ import {
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export default function useRecommendProductInfiniteQuery(props?: {
+export default function useRecommendProductInfiniteQuery({
+  limit = 8
+}: {
   limit?: number;
 }) {
-  const limit = props?.limit ?? 10;
-  const queryKeyConfig = queryKeys.product.recommend();
+  const queryKeyConfig = queryKeys.product.recommend(limit);
 
   const {
     data,
