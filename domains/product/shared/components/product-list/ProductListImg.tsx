@@ -22,10 +22,11 @@ export default function ProductListImg({ data }: IProps) {
       data-status={dataStatus}
       className={`${
         data.status !== ProductStatus.sold ? soldoutStyles : ""
-      } relative flex h-full w-full`}
+      } relative w-full overflow-hidden
+         h-[280px] sm:h-[240px] md:h-[220px] lg:h-[200px]`}
     >
       <FallbackImage
-        className="w-full h-full object-cover object-center aspect-square"
+        className="w-full h-full object-cover"
         src={data.imgData[0].url}
         alt={data.status !== ProductStatus.sold ? "soldout" : data.name}
         width={300}

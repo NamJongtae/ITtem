@@ -7,11 +7,11 @@ interface IProps {
 
 export default function ProductListContent({ data }: IProps) {
   return (
-    <div className="px-[15px] py-[10px]">
+    <div className="px-[15px] py-[10px] h-[86px]">
       <h5 className="tracking-tight text-gray-500 line-clamp-1 text-sm">
         {data.name}
       </h5>
-      <p>
+      <p className="leading-tight">
         <span className="text-sm font-bold text-gray-900">
           {data.price.toLocaleString()}
         </span>
