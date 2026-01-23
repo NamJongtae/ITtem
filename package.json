@@ -7,7 +7,7 @@
     "build": "cross-env NODE_ENV=production npm run lint && next build",
     "start": "cross-env NODE_ENV=production next start",
     "lint": "eslint .",
-    "analyze": "cross-env ANALYZE=true next build",
+    "analyze": "next experimental-analyze",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -18,6 +18,7 @@
     "@sentry/nextjs": "^10.32.1",
     "@sentry/node": "^9.29.0",
     "@tanstack/react-query": "^5.28.14",
+    "@tanstack/react-virtual": "^3.13.18",
     "@types/nodemailer": "^6.4.14",
     "@upstash/redis": "^1.29.0",
     "axios": "^1.9.0",
