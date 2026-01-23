@@ -5,6 +5,7 @@ import {
   QueryClient
 } from "@tanstack/react-query";
 import ProductDetailScreen from "./ProductDetailScreen";
+import { getProductCached } from "@/app/product/(detail)/[productId]/page";
 
 async function fetchProductData({
   productId,
@@ -17,7 +18,10 @@ async function fetchProductData({
 
   await queryClient.prefetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
-    queryFn: productQueryKeyConfing.queryFn
+    queryFn: async () => {
+      const data = await getProductCached(productId);
+      return data.product;
+    }
   });
 }
 
@@ -30,7 +34,7 @@ export default async function ProductDetailPrefetchBoundary({
 
   if (productId) {
     await fetchProductData({ productId, queryClient });
-  } 
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

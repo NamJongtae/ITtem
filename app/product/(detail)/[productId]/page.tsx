@@ -1,9 +1,11 @@
-import { BASE_URL } from "@/shared/common/constants/constant";
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 import ProductDetailPrefetchBoundary from "@/domains/product/detail/components/ProductDetailPrefetchBoundary";
 import ProductDetailSkeletonUI from "@/domains/product/detail/components/ProductDetailSkeletonUI";
+import getProduct from "@/domains/product/shared/api/getProduct";
 
 export const revalidate = 180;
+
+export const getProductCached = cache((id: string) => getProduct(id));
 
 export async function generateStaticParams() {
   return [];
@@ -15,10 +17,19 @@ export async function generateMetadata({
   params: Promise<{ productId: string | undefined }>;
 }) {
   const { productId } = await params;
-  const res = await fetch(`${BASE_URL}/api/product/${productId}`);
 
-  const data = await res.json();
-  const product = data.product;
+  if (!productId) {
+    return {
+      title: "ITtem | 존재하지 않는 상품",
+      openGraph: {
+        title: "존재하지 않는 상품"
+      }
+    };
+  }
+
+  const res = await getProductCached(productId);
+
+  const product = res.product;
 
   if (product) {
     return {
