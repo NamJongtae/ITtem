@@ -26,10 +26,10 @@ const profileQueryKey = createQueryKeys("profile", {
         productIds: string[];
         limit?: number;
       }) => ({
-        queryKey: [category, "list"] as const,
+        queryKey: [category, "list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getProfileProductList({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             category,
             limit,
             productIds
@@ -38,10 +38,10 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       }),
       followers: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowers({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit,
             uid
           });
@@ -49,10 +49,10 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       }),
       followings: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowings({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit,
             uid
           });
@@ -60,24 +60,24 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       }),
       wish: ({ limit = 10 }: { limit?: number } = {}) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getWishlistProductData({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit
           });
           return response.data.products;
         }
       }),
       reviews: ({ uid, limit = 10 }: { uid: string; limit: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
-          const response = getReceivedReviews({
+          const response = await getReceivedReviews({
             uid,
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit
           });
-          return (await response).data.reviews;
+          return response.data.reviews;
         }
       })
     }
@@ -101,7 +101,7 @@ const profileQueryKey = createQueryKeys("profile", {
         queryKey: [category, "list"] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getProfileProductList({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             category,
             limit,
             productIds
@@ -117,10 +117,10 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       },
       followers: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowers({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit,
             uid
           });
@@ -128,10 +128,10 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       }),
       followings: ({ uid, limit = 10 }: { uid: string; limit?: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getFollowings({
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit,
             uid
           });
@@ -139,11 +139,11 @@ const profileQueryKey = createQueryKeys("profile", {
         }
       }),
       reviews: ({ limit = 10 }: { limit: number }) => ({
-        queryKey: ["list"] as const,
+        queryKey: ["list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = getReceivedReviews({
             uid: userId,
-            cursor: pageParam,
+            cursor: pageParam as string | null,
             limit
           });
           return (await response).data.reviews;
