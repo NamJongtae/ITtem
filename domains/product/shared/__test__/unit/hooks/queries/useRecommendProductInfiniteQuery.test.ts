@@ -21,9 +21,9 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
   });
 
   it("queryKey, queryFn를 구성하고, 데이터를 반환합니다.", () => {
-    const limit = 10;
+    const limit = 8;
 
-    const mockData = Array.from({ length: 10 }, (_, i) => ({
+    const mockData = Array.from({ length: 8 }, (_, i) => ({
       id: i + 1,
       createdAt: `2024-04-${(i + 1).toString().padStart(2, "0")}`
     }));
@@ -60,7 +60,7 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
         queryFn: queryKeyConfig.queryFn
       })
     );
-    expect(getNextPageParamFn(mockData)).toBe("2024-04-10");
+    expect(getNextPageParamFn(mockData)).toBe("2024-04-08");
     expect(result.current.data).toEqual(mockData);
     expect(result.current.hasNextPage).toBe(true);
     expect(result.current.isLoading).toBe(false);
@@ -68,7 +68,7 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
   });
 
   it("마지막 페이지가 limit보다 작을 경우 getNextPageParam이 undefined를 반환합니다.", () => {
-    const limit = 10;
+    const limit = 8;
 
     const mockData = [
       { id: 1, createdAt: "2024-04-01" },
@@ -110,9 +110,14 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
       error
     });
 
-    const { result } = renderHook(() => useRecommendProductInfiniteQuery(), {
-      wrapper
-    });
+    const limit = 8;
+
+    const { result } = renderHook(
+      () => useRecommendProductInfiniteQuery({ limit }),
+      {
+        wrapper
+      }
+    );
 
     expect(result.current.error).toBe(error);
     expect(result.current.data).toBeUndefined();
