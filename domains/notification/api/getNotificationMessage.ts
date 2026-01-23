@@ -6,7 +6,7 @@ export default async function getNotificationMessage({
   lastKey,
   limit = 10
 }: {
-  lastKey?: unknown;
+  lastKey?: string | null;
   limit?: number;
 }): Promise<AxiosResponse<NotificationResponseData>> {
   try {

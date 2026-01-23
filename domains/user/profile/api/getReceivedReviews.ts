@@ -8,7 +8,7 @@ export default async function getReceivedReviews({
   limit = 10
 }: {
   uid: string;
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
 }): Promise<AxiosResponse<ReceivedReviewsResponseData>> {
   try {

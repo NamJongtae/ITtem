@@ -8,7 +8,7 @@ export default async function getFollowings({
   limit = 10
 }: {
   uid: string;
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
 }): Promise<AxiosResponse<FollowingsResponseData>> {
   try {

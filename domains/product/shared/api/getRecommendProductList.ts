@@ -1,4 +1,3 @@
-import { FetchError } from "@/shared/common/types/errorTypes";
 import { ProductListResponseData } from "../types/reponseTypes";
 import { customFetch } from "@/shared/common/utils/customFetch";
 

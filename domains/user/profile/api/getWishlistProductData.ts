@@ -6,7 +6,7 @@ export default async function getWishlistProductData({
   cursor,
   limit = 10
 }: {
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
 }): Promise<AxiosResponse<WishlistProductResponseData>> {
   try {

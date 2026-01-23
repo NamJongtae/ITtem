@@ -10,7 +10,7 @@ export default async function getPurchaseTrading({
   search
 }: {
   status?: string;
-  cursor?: unknown;
+  cursor?: string | null;
   search?: string;
   limit?: number;
 }): Promise<AxiosResponse<PurchaseTradingResponseData>> {

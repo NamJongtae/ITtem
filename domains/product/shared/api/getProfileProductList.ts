@@ -10,7 +10,7 @@ export default async function getProfileProductList({
   productIds
 }: {
   category: ProductCategory;
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
   productIds: string[];
 }): Promise<AxiosResponse<ProductListResponseData>> {

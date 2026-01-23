@@ -11,7 +11,7 @@ export default async function getSearchProductList({
 }: {
   category: ProductCategory;
   keyword: string;
-  cursor?: unknown;
+  cursor?: string | null;
   limit?: number;
 }): Promise<AxiosResponse<ProductListResponseData>> {
   try {
