@@ -19,7 +19,7 @@ const productQueryKey = createQueryKeys("product", {
     }
   },
   recommend: (limit: number = 10) => ({
-    queryKey: ["list"] as const,
+    queryKey: ["list", limit] as const,
     queryFn: async ({ pageParam }) => {
       const response = await getRecommendProductList(pageParam, limit);
       return response.products;
@@ -36,9 +36,9 @@ const productQueryKey = createQueryKeys("product", {
   }) => ({
     queryKey: (() => {
       if (location) {
-        return [category, location, "list"] as const;
+        return [category, location, "list", limit] as const;
       }
-      return [category, "list"] as const;
+      return [category, "list", limit] as const;
     })(),
     queryFn: async ({ pageParam }) => {
       const response = await getCategoryProductList({
@@ -59,11 +59,11 @@ const productQueryKey = createQueryKeys("product", {
     category?: ProductCategory;
     limit?: number;
   }) => ({
-    queryKey: [keyword, category] as const,
+    queryKey: [keyword, category, limit] as const,
     queryFn: async ({ pageParam }) => {
       const response = await getSearchProductList({
         category,
-        cursor: pageParam,
+        cursor: pageParam as string | null,
         limit,
         keyword: (keyword as string) || ""
       });
@@ -95,12 +95,12 @@ const productQueryKey = createQueryKeys("product", {
     menu: ProductManageMenuType;
     limit?: number;
   }) => ({
-    queryKey: [menu, status, search] as const,
+    queryKey: [menu, status, limit, search ?? "ALL"] as const,
     queryFn: async ({ pageParam }) => {
       if (menu === "sale") {
         const response = await getSalesTrading({
           status,
-          cursor: pageParam,
+          cursor: pageParam as string | null,
           search,
           limit
         });
@@ -108,7 +108,7 @@ const productQueryKey = createQueryKeys("product", {
       } else {
         const response = await getPurchaseTrading({
           status,
-          cursor: pageParam,
+          cursor: pageParam as string | null,
           search,
           limit
         });
