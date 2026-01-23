@@ -1,6 +1,6 @@
 export default function ProductItemSkeletonUI() {
   return (
-    <li className="w-full h-full mx-auto rounded shadow-lg animate-pulse border max-w-xs">
+    <div className="w-full h-full mx-auto rounded shadow-lg animate-pulse border max-w-xs">
       <div className="mx-auto group flex w-full h-full flex-col overflow-hidden">
         <div className="relative w-full overflow-hidden bg-gray-300 h-[280px] sm:h-[240px] md:h-[220px] lg:h-[200px]">
           <div className="w-full h-full bg-gray-300" />
@@ -14,6 +14,6 @@ export default function ProductItemSkeletonUI() {
           </div>
         </div>
       </div>
-    </li>
+    </div>
   );
 }
