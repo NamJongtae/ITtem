@@ -8,7 +8,7 @@ export default async function getProduct(
 ): Promise<ProductDetailResponseData> {
   try {
     return await customFetch<ProductDetailResponseData>(`/api/product/${id}`, {
-      next: { tags: [`product-${id}`] }
+      next: { tags: [`product-${id}`], revalidate: 180 }
     });
   } catch (error) {
     if (isFetchError(error) && error.status === 404) {
