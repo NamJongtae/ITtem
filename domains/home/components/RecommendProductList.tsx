@@ -10,7 +10,7 @@ const ProductListUI = dynamic(
 
 export default function RecommendProductList() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useRecommendProductInfiniteQuery();
+    useRecommendProductInfiniteQuery({ limit: 8 });
 
   return (
     <ProductListUI
