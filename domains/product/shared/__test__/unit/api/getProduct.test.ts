@@ -38,7 +38,8 @@ describe("getProduct API 함수 테스트", () => {
 
     expect(customFetch).toHaveBeenCalledWith(`/api/product/${mockProductId}`, {
       next: {
-        tags: [`product-${mockProductId}`]
+        tags: [`product-${mockProductId}`],
+        revalidate: 180
       }
     });
 
