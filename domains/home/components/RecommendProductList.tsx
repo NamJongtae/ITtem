@@ -1,7 +1,12 @@
 "use client";
 
+import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
 import useRecommendProductInfiniteQuery from "@/domains/product/shared/hooks/queries/useRecommendProductInfiniteQuery";
-import ProductListUI from "../../product/shared/components/product-list/ProductListUI";
+import dynamic from "next/dynamic";
+const ProductListUI = dynamic(
+  () => import("../../product/shared/components/product-list/ProductListUI"),
+  { ssr: false, loading: () => <ProductListSkeletonUI /> }
+);
 
 export default function RecommendProductList() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =

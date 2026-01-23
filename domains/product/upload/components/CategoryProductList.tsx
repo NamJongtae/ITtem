@@ -1,9 +1,17 @@
 "use client";
 
 import { useGetQuerys } from "@/shared/common/hooks/useGetQuerys";
-import ProductListUI from "../../shared/components/product-list/ProductListUI";
 import useCategoryProductListInfiniteQuery from "../../shared/hooks/queries/useCategoryProductListInfiniteQuery";
 import { ProductCategory } from "../../shared/types/productTypes";
+import dynamic from "next/dynamic";
+import ProductListSkeletonUI from "../../shared/components/product-list/ProductListSkeletonUI";
+const ProductListUI = dynamic(
+  () => import("../../shared/components/product-list/ProductListUI"),
+  {
+    ssr: false,
+    loading: () => <ProductListSkeletonUI />
+  }
+);
 
 export default function CategoryProductList() {
   const { category } = useGetQuerys("category");
