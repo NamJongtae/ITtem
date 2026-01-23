@@ -4,11 +4,7 @@ const InfiniteScrollTarget = forwardRef<
   HTMLDivElement | null,
   { hasNextPage: boolean }
 >(({ hasNextPage }, ref) => {
-  return hasNextPage ? (
-    <li>
-      <div ref={ref} className="h-10" />
-    </li>
-  ) : null;
+  return hasNextPage ? <div ref={ref} className="h-10" /> : null;
 });
 
 InfiniteScrollTarget.displayName = "InfiniteScrollTarget";
