@@ -7,9 +7,9 @@ interface IProps {
 
 export default function MyMessage({ message }: IProps) {
   return (
-    <li
+    <div
       key={message.id}
-      className="max-w-[80%] self-end flex items-center gap-3"
+      className="max-w-[80%] flex items-center gap-3"
     >
       <div className="flex items-end flex-row-reverse gap-2">
         <p className="text-sm border py-1 px-3 rounded-lg rounded-tr-none bg-gray-200 text-black whitespace-pre-wrap">
@@ -19,6 +19,6 @@ export default function MyMessage({ message }: IProps) {
           {getChattingDateFormat(message.timestamp.toDate())}
         </time>
       </div>
-    </li>
+    </div>
   );
 }

@@ -11,7 +11,7 @@ export default function OtherUserMessage({ message }: IProps) {
   const { profileData } = useProfileQuery(message.senderId);
 
   return (
-    <li key={message.id} className="max-w-[80%] flex items-center gap-3">
+    <div key={message.id} className="max-w-[80%] flex items-center gap-3">
       {profileData?.profileImg ? (
         <Image
           className="rounded-xl self-start w-10 h-10 object-cover object-center"
@@ -37,6 +37,6 @@ export default function OtherUserMessage({ message }: IProps) {
           </time>
         </div>
       </div>
-    </li>
+    </div>
   );
 }
