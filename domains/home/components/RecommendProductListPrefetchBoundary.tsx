@@ -18,7 +18,7 @@ export const getRecommendProducts = unstable_cache(
       await dbConnect();
 
       const cursorDate = new Date();
-      const pageLimit = 10;
+      const pageLimit = 12;
 
       const products = await RecommendProduct.find({
         createdAt: { $lt: cursorDate },
@@ -41,13 +41,13 @@ export const getRecommendProducts = unstable_cache(
   },
   ["product-recommend"],
   {
-    revalidate:  60 * 60 * 24,
+    revalidate: 60 * 60 * 24,
     tags: ["product-recommend"]
   }
 );
 
 async function prefetchProductListData(queryClient: QueryClient) {
-  const queryKeyConfig = queryKeys.product.recommend();
+  const queryKeyConfig = queryKeys.product.recommend(12);
   await queryClient.prefetchInfiniteQuery({
     queryKey: queryKeyConfig.queryKey,
     queryFn: () => getRecommendProducts(),
