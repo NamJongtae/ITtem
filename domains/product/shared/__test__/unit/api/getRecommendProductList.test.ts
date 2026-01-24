@@ -61,7 +61,7 @@ describe("getRecommendProductList API 함수 테스트", () => {
     );
   });
 
-it("limit가 없는 경우 기본값(limit=10)을 쿼리에 포함하여 요청을 보냅니다.", async () => {
+it("limit가 없는 경우 기본값(limit=12)을 쿼리에 포함하여 요청을 보냅니다.", async () => {
   mockedCustomFetch.mockResolvedValue(mockData);
 
   await getRecommendProductList(mockCursor);
@@ -71,7 +71,7 @@ it("limit가 없는 경우 기본값(limit=10)을 쿼리에 포함하여 요청�
   const url = new URL(calledUrl, "http://localhost");
   expect(url.pathname).toBe("/api/product/recommend");
   expect(url.searchParams.get("cursor")).toBe(mockCursor);
-  expect(url.searchParams.get("limit")).toBe("10");
+  expect(url.searchParams.get("limit")).toBe("12");
 });
 
   it("customFetch 에러를 가공하지 않고 그대로 전파합니다.", async () => {

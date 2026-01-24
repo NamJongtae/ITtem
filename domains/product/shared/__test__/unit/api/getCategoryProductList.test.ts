@@ -17,14 +17,14 @@ describe("getCategoryProductList API 함수 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("category가 없으면 '전체', limit이 없으면 '10'을 쿼리에 포함하여 요청합니다.", async () => {
+  it("category가 없으면 '전체', limit이 없으면 '12'을 쿼리에 포함하여 요청합니다.", async () => {
     (customFetch as jest.Mock).mockResolvedValue(mockResponseData);
 
     const result = await getCategoryProductList({});
 
     const params = new URLSearchParams({
       category: "전체",
-      limit: String(10)
+      limit: String(12)
     });
 
     expect(customFetch).toHaveBeenCalledWith(

@@ -46,7 +46,7 @@ describe("getProfileProductList API 함수 테스트", () => {
     expect(result).toEqual(mockResponse);
   });
 
-  it("limit가 없는 경우 'limit=10'을 쿼리에 포함하여 요청을 보냅니다.", async () => {
+  it("limit가 없는 경우 'limit=12'을 쿼리에 포함하여 요청을 보냅니다.", async () => {
     (customAxios.post as jest.Mock).mockResolvedValue(mockResponse);
 
     await getProfileProductList({
@@ -55,7 +55,7 @@ describe("getProfileProductList API 함수 테스트", () => {
     });
 
     expect(customAxios.post).toHaveBeenCalledWith(
-      `/api/profile/product?category=${ProductCategory.전체}&limit=10`,
+      `/api/profile/product?category=${ProductCategory.전체}&limit=12`,
       { productIds: mockProductIds }
     );
   });

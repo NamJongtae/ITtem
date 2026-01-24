@@ -59,7 +59,7 @@ describe("getSearchProductList API 함수 테스트", () => {
     );
   });
 
-  it("limit가 없는 경우 'limit=10'이 쿼리에 포함하여 요청을 보냅니다.", async () => {
+  it("limit가 없는 경우 'limit=12'이 쿼리에 포함하여 요청을 보냅니다.", async () => {
     (customAxios as unknown as jest.Mock).mockResolvedValue(mockResponse);
 
     await getSearchProductList({
@@ -68,7 +68,7 @@ describe("getSearchProductList API 함수 테스트", () => {
     });
 
     expect(customAxios).toHaveBeenCalledWith(
-      `/api/product/search?keyword=${mockKeyword}&category=${ProductCategory.전체}&limit=10`
+      `/api/product/search?keyword=${mockKeyword}&category=${ProductCategory.전체}&limit=12`
     );
   });
 
