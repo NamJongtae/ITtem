@@ -19,7 +19,7 @@ export default function Item({
   productManageStatus
 }: IProps) {
   return (
-    <li className="flex gap-3 flex-col sm:flex-row sm:items-center sm:justify-between border-b py-5">
+    <div className="flex gap-3 flex-col sm:flex-row sm:items-center sm:justify-between border-b py-5">
       <ItemContents
         tradingData={tradingData}
         productManageStatus={productManageStatus}
@@ -30,6 +30,6 @@ export default function Item({
         menu={menu}
         productManageStatus={productManageStatus}
       />
-    </li>
+    </div>
   );
 }
