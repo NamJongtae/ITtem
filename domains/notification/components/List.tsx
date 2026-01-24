@@ -5,10 +5,18 @@ import Empty from "@/shared/common/components/Empty";
 import Btns from "./Btns";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";
+import { useMemo } from "react";
+import useNotificationVirtualizer from "../hooks/useNotificationVirtualizer";
 
 export default function List() {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useNotificationInfiniteQuery();
+
+  const items = useMemo(() => data ?? [], [data]);
+  const { virtualizer, parentRef, virtualItems, totalSize, getRowStyle } =
+    useNotificationVirtualizer({
+      items
+    });
 
   const { ref } = useInfiniteScrollObserver({
     fetchNextPage,
@@ -23,24 +31,32 @@ export default function List() {
   }
 
   return (
-    <div className="h-[380px] overflow-y-scroll">
+    <div className="h-[380px] overflow-auto p-5 pt-2" ref={parentRef}>
       {data && (
         <Btns messageData={data} lastMessageKey={data[data.length - 1].id} />
       )}
 
-      <ul className="flex flex-col w-full p-5 pt-2">
-        {
-          <>
-            {data?.map((data) => <Item key={data.id} data={data} />)}
-            {isFetchingNextPage && (
-              <li className="flex justify-center w-full">
-                <Spinner />
-              </li>
-            )}
-            <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
-          </>
-        }
+      <ul className="relative w-full" style={{ height: totalSize }}>
+        {virtualItems.map((vItem) => (
+          <li
+            key={vItem.key}
+            data-index={vItem.index}
+            ref={virtualizer.measureElement}
+            className="absolute left-0 top-0 w-full"
+            style={getRowStyle(vItem.start)}
+          >
+            <Item data={items[vItem.index]} />
+          </li>
+        ))}
       </ul>
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center w-full">
+          <Spinner />
+        </div>
+      )}
+
+      <InfiniteScrollTarget ref={ref} hasNextPage={hasNextPage} />
     </div>
   );
 }

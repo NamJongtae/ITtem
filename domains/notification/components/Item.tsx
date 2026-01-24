@@ -9,7 +9,7 @@ interface IProps {
 
 export default function Item({ data }: IProps) {
   return (
-    <li className="text-xs" key={data?.id}>
+    <div className="text-xs" key={data?.id}>
       <time className="text-[11px] mb-1 inline-block ml-1 text-gray-500">
         {getProductDateFormat((data?.timestamp as string) || "")}
       </time>
@@ -24,6 +24,6 @@ export default function Item({ data }: IProps) {
         <ReadBtn messageId={data.id} isRead={data.isRead} />
         <DeleteBtn messageId={data.id} />
       </div>
-    </li>
+    </div>
   );
 }
