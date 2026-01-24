@@ -10,7 +10,7 @@ import {
 import { FetchError } from "@/shared/common/types/errorTypes";
 
 export default function useCategoryProductListInfiniteQuery({
-  limit = 8,
+  limit = 12,
   category = ProductCategory.전체
 }: {
   limit?: number;

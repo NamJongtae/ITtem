@@ -16,7 +16,7 @@ import { useParams } from "next/navigation";
 import profileQueryKey from "@/domains/user/profile/query-keys/profileQueryKeys";
 
 export default function useProfileProductListInfiniteQuery({
-  limit = 10,
+  limit = 12,
   productListType,
   productIds,
   productCategory

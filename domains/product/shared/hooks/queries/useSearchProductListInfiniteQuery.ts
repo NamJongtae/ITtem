@@ -10,7 +10,7 @@ import {
 import { AxiosError } from "axios";
 
 export default function useSearchProductListInfiniteQuery({
-  limit = 10
+  limit = 12
 }: {
   limit?: number;
 } = {}) {

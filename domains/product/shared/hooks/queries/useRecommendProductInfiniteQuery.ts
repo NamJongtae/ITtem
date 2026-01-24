@@ -9,7 +9,7 @@ import {
 import { AxiosError } from "axios";
 
 export default function useRecommendProductInfiniteQuery({
-  limit = 8
+  limit = 12
 }: {
   limit?: number;
 }) {
