@@ -3,7 +3,7 @@ import { customFetch } from "@/shared/common/utils/customFetch";
 
 export default async function getRecommendProductList(
   cursor: unknown = null,
-  limit: number = 10
+  limit: number = 12
 ): Promise<ProductListResponseData> {
   const params = new URLSearchParams({ limit: String(limit) });
   if (cursor) params.set("cursor", String(cursor));

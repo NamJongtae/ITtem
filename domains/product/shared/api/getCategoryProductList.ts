@@ -5,7 +5,7 @@ import { ProductListResponseData } from "../types/reponseTypes";
 export default async function getCategoryProductList({
   category = ProductCategory.전체,
   cursor,
-  limit = 10,
+  limit = 12,
   location
 }: {
   category?: ProductCategory;

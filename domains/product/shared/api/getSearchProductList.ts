@@ -6,7 +6,7 @@ import customAxios from "@/shared/common/utils/customAxios";
 export default async function getSearchProductList({
   category = ProductCategory.전체,
   cursor = null,
-  limit = 10,
+  limit = 12,
   keyword
 }: {
   category: ProductCategory;

@@ -5,7 +5,7 @@ import { ProductListResponseData } from "../types/reponseTypes";
 
 export default async function getProfileProductList({
   cursor = null,
-  limit = 10,
+  limit = 12,
   category = ProductCategory.전체,
   productIds
 }: {
