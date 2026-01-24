@@ -20,7 +20,7 @@ const profileQueryKey = createQueryKeys("profile", {
       products: ({
         category = ProductCategory.전체,
         productIds,
-        limit = 10
+        limit = 12
       }: {
         category: ProductCategory;
         productIds: string[];
@@ -91,14 +91,14 @@ const profileQueryKey = createQueryKeys("profile", {
     contextQueries: {
       products: ({
         category = ProductCategory.전체,
-        limit = 10,
+        limit = 12,
         productIds
       }: {
         category: ProductCategory;
         productIds: string[];
         limit?: number;
       }) => ({
-        queryKey: [category, "list"] as const,
+        queryKey: [category, "list", limit] as const,
         queryFn: async ({ pageParam }) => {
           const response = await getProfileProductList({
             cursor: pageParam as string | null,

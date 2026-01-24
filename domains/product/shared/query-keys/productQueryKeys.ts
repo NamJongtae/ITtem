@@ -18,7 +18,7 @@ const productQueryKey = createQueryKeys("product", {
       return response.products;
     }
   },
-  recommend: (limit: number = 10) => ({
+  recommend: (limit: number = 12) => ({
     queryKey: ["list", limit] as const,
     queryFn: async ({ pageParam }) => {
       const response = await getRecommendProductList(pageParam, limit);
@@ -28,7 +28,7 @@ const productQueryKey = createQueryKeys("product", {
   category: ({
     category,
     location,
-    limit = 10
+    limit = 12
   }: {
     category: ProductCategory;
     location?: string;
@@ -53,7 +53,7 @@ const productQueryKey = createQueryKeys("product", {
   search: ({
     keyword,
     category = ProductCategory.전체,
-    limit = 10
+    limit = 12
   }: {
     keyword?: string;
     category?: ProductCategory;
@@ -88,7 +88,7 @@ const productQueryKey = createQueryKeys("product", {
     status,
     search,
     menu,
-    limit = 10
+    limit = 12
   }: {
     status: string;
     search: string | undefined;
