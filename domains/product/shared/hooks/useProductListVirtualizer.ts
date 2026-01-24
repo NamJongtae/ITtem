@@ -48,7 +48,7 @@ export function useProductListVirtualizer(
    * - 화면 크기에 따라 row에 들어갈 아이템 개수가 달라진다.
    * - columns 변경은 rowCount, fallbackRowHeight, slicing 방식 등 전체 구조에 영향을 줌.
    */
-  const columns = useMediaColumns(throttleMs);
+  const columns = useMediaColumns();
 
   /**
    * ✅ rowCount: "행(row)" 개수
