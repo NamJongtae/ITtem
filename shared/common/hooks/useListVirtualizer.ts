@@ -1,22 +1,28 @@
 import { useCallback, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
-type UseListVirtualizerOptions<T> = {
+type UseListVirtualizerOptions<T, TEl extends HTMLElement = HTMLDivElement> = {
   items: T[];
   estimateSize: number | ((index: number) => number);
   scrollMargin?: number;
   overscan?: number;
   gap?: number;
+  scrollRef?: React.RefObject<TEl | null>;
 };
 
-export default function useListVirtualizer<T>({
+export default function useListVirtualizer<
+  T,
+  TEl extends HTMLElement = HTMLDivElement
+>({
   items,
   estimateSize,
   scrollMargin = 0,
   overscan = 3,
-  gap = 0
-}: UseListVirtualizerOptions<T>) {
-  const parentRef = useRef<HTMLDivElement | null>(null);
+  gap = 0,
+  scrollRef
+}: UseListVirtualizerOptions<T, TEl>) {
+  const innerRef = useRef<TEl | null>(null);
+  const parentRef = scrollRef ?? innerRef;
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -40,7 +46,7 @@ export default function useListVirtualizer<T>({
   );
 
   return {
-    parentRef,
+    parentRef, // ✅ 항상 이걸 쓰면 됨 (내부 or 외부)
     scrollMargin,
     virtualizer,
     virtualItems,
