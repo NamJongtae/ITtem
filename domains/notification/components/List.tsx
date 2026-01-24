@@ -6,16 +6,20 @@ import Btns from "./Btns";
 import useInfiniteScrollObserver from "@/shared/common/hooks/useInfiniteScrollObserver";
 import InfiniteScrollTarget from "@/shared/common/components/InfiniteScrollTarget";
 import { useMemo } from "react";
-import useNotificationVirtualizer from "../hooks/useNotificationVirtualizer";
+import useListVirtualizer from "@/shared/common/hooks/useListVirtualizer";
 
 export default function List() {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useNotificationInfiniteQuery();
 
   const items = useMemo(() => data ?? [], [data]);
-  const { virtualizer, parentRef, virtualItems, totalSize, getRowStyle } =
-    useNotificationVirtualizer({
-      items
+
+  const { parentRef, virtualizer, virtualItems, totalSize, getRowStyle } =
+    useListVirtualizer({
+      items,
+      scrollMargin: 45,
+      estimateSize: 92.5,
+      overscan: 3
     });
 
   const { ref } = useInfiniteScrollObserver({
