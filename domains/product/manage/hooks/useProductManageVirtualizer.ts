@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import useProductManageMedia from "./useProductManageMedia";
 import { useScrollMargin } from "@/domains/product/shared/hooks/useScrollMargin";
 
 type IParams = {
@@ -12,22 +11,16 @@ export function useProductManageVirtualizer({
   itemCount,
   overscan = 3
 }: IParams) {
-  const isSmUp = useProductManageMedia();
-  const rowHeight = isSmUp ? 217 : 169;
 
   const listRef = useRef<HTMLUListElement | null>(null);
   const { scrollMargin } = useScrollMargin(listRef);
 
   const virtualizer = useWindowVirtualizer({
     count: itemCount,
-    estimateSize: () => rowHeight,
+    estimateSize: () => 216,
     overscan,
     scrollMargin
   });
-
-  useEffect(() => {
-    virtualizer.measure();
-  }, [rowHeight, virtualizer]);
 
   const virtualItems = virtualizer.getVirtualItems();
   const totalSize = virtualizer.getTotalSize();
@@ -41,8 +34,6 @@ export function useProductManageVirtualizer({
 
   return {
     listRef,
-    isSmUp,
-    rowHeight,
     scrollMargin,
     virtualizer,
     virtualItems,
