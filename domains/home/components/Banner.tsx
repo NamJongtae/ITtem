@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const BannerSwiper = dynamic(() => import("./BannerSwiper"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-gray-200 object-cover object-center aspect-[256/75]" />
+    <div className="w-full bg-gray-200 aspect-[256/75] animate-pulse" />
   )
 });
 
