@@ -15,11 +15,8 @@ function getColumnsFromWidth(width: number) {
  * - breakpoint를 "넘나드는 순간"에만 columns를 갱신
  */
 export function useMediaColumns() {
-  // ✅ SSR 안전 + 초기값은 현재 width로부터 계산
-  const [columns, setColumns] = useState(() => {
-    if (typeof window === "undefined") return 4;
-    return getColumnsFromWidth(window.innerWidth);
-  });
+  // ✅ SSR/CSR 초기 colums 1로 통합
+  const [columns, setColumns] = useState(1);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
