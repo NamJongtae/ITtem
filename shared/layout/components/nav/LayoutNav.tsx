@@ -1,10 +1,10 @@
 import Link from "next/link";
 import SearchBar from "./SearchBar";
-import SubNav from "../sub-nav/SubNav";
+
 import Image from "next/image";
 import NavAuth from "./NavAuth";
 import { Suspense } from "react";
-import CategoryMenuIcon from "@/public/icons/menu-icon.svg";
+import SubNavClient from "../sub-nav/SubNavClient";
 
 export default function LayoutNav() {
   return (
@@ -20,7 +20,9 @@ export default function LayoutNav() {
 
           <Suspense
             fallback={
-              <div className="relative w-full max-w-[200px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] ml-auto mr-5 md:ml-0 md:mr-0 flex bg-gray-200 animate-pulse" />
+              <div className="relative w-full max-w-[200px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] ml-auto mr-5 md:ml-0 md:mr-0 flex">
+                <div className="w-full h-10 border-2 border-gray-300 bg-gray-200 animate-pulse" />
+              </div>
             }
           >
             <SearchBar />
@@ -29,9 +31,8 @@ export default function LayoutNav() {
           <NavAuth />
         </div>
       </nav>
-      <Suspense fallback={<CategoryMenuIcon className="w-6 h-6" />}>
-        <SubNav />
-      </Suspense>
+
+      <SubNavClient />
     </>
   );
 }
