@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import SubNavMobileMenu from "./sub-nav/MobileMenu";
 import SideMenu from "./side-menu/SideMenu";
+import MobileMenuClient from "./sub-nav/MobileMenuClient";
 
 interface IProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export default function Layout({ children }: IProps) {
     <>
       <Header />
       {children}
-      <SubNavMobileMenu />
+      <MobileMenuClient />
       <SideMenu />
       <Footer />
     </>
