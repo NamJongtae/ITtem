@@ -3,6 +3,8 @@ import SearchBar from "./SearchBar";
 import SubNav from "../sub-nav/SubNav";
 import Image from "next/image";
 import NavAuth from "./NavAuth";
+import { Suspense } from "react";
+import CategoryMenuIcon from "@/public/icons/menu-icon.svg";
 
 export default function LayoutNav() {
   return (
@@ -16,12 +18,20 @@ export default function LayoutNav() {
             </Link>
           </h1>
 
-          <SearchBar />
+          <Suspense
+            fallback={
+              <div className="relative w-full max-w-[200px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] ml-auto mr-5 md:ml-0 md:mr-0 flex bg-gray-200 animate-pulse" />
+            }
+          >
+            <SearchBar />
+          </Suspense>
 
           <NavAuth />
         </div>
       </nav>
-      <SubNav />
+      <Suspense fallback={<CategoryMenuIcon className="w-6 h-6" />}>
+        <SubNav />
+      </Suspense>
     </>
   );
 }
