@@ -50,28 +50,26 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <ReactQueryProvider>
-          <Suspense fallback={<Loading />}>
-            <GlobalLoading />
-            <Layout>
-              {signin}
-              <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
-                {children}
-              </main>
+          <GlobalLoading />
+          <Layout>
+            {signin}
+            <main className={"flex-grow mt-[113px] md:mt-[127px]"}>
+              {children}
+            </main>
 
-              <ToastContainer
-                position="top-center"
-                limit={1}
-                closeOnClick={true}
-                closeButton={true}
-                pauseOnHover={false}
-                draggable={true}
-                autoClose={2000}
-                pauseOnFocusLoss={false}
-                theme="light"
-                hideProgressBar={true}
-              />
-            </Layout>
-          </Suspense>
+            <ToastContainer
+              position="top-center"
+              limit={1}
+              closeOnClick={true}
+              closeButton={true}
+              pauseOnHover={false}
+              draggable={true}
+              autoClose={2000}
+              pauseOnFocusLoss={false}
+              theme="light"
+              hideProgressBar={true}
+            />
+          </Layout>
         </ReactQueryProvider>
         <div id="portal-root"></div>
       </body>
