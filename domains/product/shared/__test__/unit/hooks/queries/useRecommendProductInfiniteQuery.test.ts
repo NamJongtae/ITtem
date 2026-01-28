@@ -20,8 +20,9 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("queryKey, queryFn를 구성하고, 데이터를 반환합니다.", () => {
+  it("queryKey, queryFn, initialPageParam을 구성하고 데이터를 반환합니다.", () => {
     const limit = 8;
+    const nextCursor = "2024-04-01";
 
     const mockData = Array.from({ length: 8 }, (_, i) => ({
       id: i + 1,
@@ -29,16 +30,16 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
     }));
 
     let getNextPageParamFn: any;
-    const queryKeyConfig = queryKeys.product.recommend();
+    let initialPageParamValue: any;
+
+    const queryKeyConfig = queryKeys.product.recommend(limit);
 
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      options.queryKey = queryKeyConfig.queryKey;
-      options.queryFn = queryKeyConfig.queryFn;
       getNextPageParamFn = options.getNextPageParam;
+      initialPageParamValue = options.initialPageParam;
+
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: true,
@@ -48,18 +49,19 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
     });
 
     const { result } = renderHook(
-      () => useRecommendProductInfiniteQuery({ limit }),
-      {
-        wrapper
-      }
+      () => useRecommendProductInfiniteQuery({ limit, nextCursor }),
+      { wrapper }
     );
 
     expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: queryKeyConfig.queryKey,
-        queryFn: queryKeyConfig.queryFn
+        staleTime: 60 * 1000,
+        initialPageParam: nextCursor
       })
     );
+
+    expect(initialPageParamValue).toBe(nextCursor);
     expect(getNextPageParamFn(mockData)).toBe("2024-04-08");
     expect(result.current.data).toEqual(mockData);
     expect(result.current.hasNextPage).toBe(true);
@@ -67,8 +69,39 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
     expect(result.current.error).toBeNull();
   });
 
+  it("nextCursor가 null이면 initialPageParam이 null입니다.", () => {
+    const limit = 8;
+    const nextCursor = null;
+
+    const mockData = Array.from({ length: 8 }, (_, i) => ({
+      id: i + 1,
+      createdAt: `2024-04-${(i + 1).toString().padStart(2, "0")}`
+    }));
+
+    let initialPageParamValue: any;
+
+    mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
+      initialPageParamValue = options.initialPageParam;
+      return {
+        data: { pages: [mockData] },
+        isLoading: false,
+        isFetchingNextPage: false,
+        hasNextPage: true,
+        fetchNextPage: jest.fn(),
+        error: null
+      };
+    });
+
+    renderHook(() => useRecommendProductInfiniteQuery({ limit, nextCursor }), {
+      wrapper
+    });
+
+    expect(initialPageParamValue).toBeNull();
+  });
+
   it("마지막 페이지가 limit보다 작을 경우 getNextPageParam이 undefined를 반환합니다.", () => {
     const limit = 8;
+    const nextCursor = "2024-04-01";
 
     const mockData = [
       { id: 1, createdAt: "2024-04-01" },
@@ -80,9 +113,7 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
       getNextPageParamFn = options.getNextPageParam;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: false,
@@ -91,7 +122,7 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
       };
     });
 
-    renderHook(() => useRecommendProductInfiniteQuery({ limit }), {
+    renderHook(() => useRecommendProductInfiniteQuery({ limit, nextCursor }), {
       wrapper
     });
 
@@ -100,6 +131,8 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
 
   it("에러가 발생한 경우 error를 반환합니다.", () => {
     const error = new Error("추천 상품 에러 발생");
+    const limit = 8;
+    const nextCursor = "2024-04-01";
 
     mockUseSuspenseInfiniteQuery.mockReturnValue({
       data: undefined,
@@ -110,13 +143,9 @@ describe("useRecommendProductInfiniteQuery 훅 테스트", () => {
       error
     });
 
-    const limit = 8;
-
     const { result } = renderHook(
-      () => useRecommendProductInfiniteQuery({ limit }),
-      {
-        wrapper
-      }
+      () => useRecommendProductInfiniteQuery({ limit, nextCursor }),
+      { wrapper }
     );
 
     expect(result.current.error).toBe(error);
