@@ -9,6 +9,8 @@ import ProfileTabsSSRSkeletonUI from "./tabs/ProfileTabsSSRSkeletonUI";
 import UserProfileScreen from "./UserProfileScreen";
 import Empty from "@/shared/common/components/Empty";
 import UserInfoSkeletonUI from "./user-info/UserInfoSkeletonUI";
+import { ProfileData } from "../types/profileTypes";
+import { getUserProfileServer } from "../server/getUserProfileServer";
 
 interface IProps {
   uid: string;
@@ -17,10 +19,10 @@ interface IProps {
 export default async function UserProfilePrefetchBoundary({ uid }: IProps) {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
+  const initProfileData = (await queryClient.fetchQuery({
     queryKey: queryKeys.profile.user(uid).queryKey,
-    queryFn: queryKeys.profile.user(uid).queryFn
-  });
+    queryFn: () => getUserProfileServer(uid)
+  })) as ProfileData | undefined;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -33,7 +35,7 @@ export default async function UserProfilePrefetchBoundary({ uid }: IProps) {
         }
         errorFallback={<Empty message={"유저 정보를 불러올 수 없어요."} />}
       >
-        <UserProfileScreen />
+        <UserProfileScreen initProfileData={initProfileData} />
       </SuspenseErrorBoundary>
     </HydrationBoundary>
   );
