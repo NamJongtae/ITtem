@@ -1,12 +1,8 @@
 import useReviewModalStar from "@/domains/product/manage/hooks/useReviewModalStar";
+import ReactStarClient from "@/domains/user/profile/components/ReactStarClient";
 import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
-import dynamic from "next/dynamic";
 import { RefObject, forwardRef } from "react";
 import { Controller } from "react-hook-form";
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
-});
 
 interface IProps {
   closeBtnRef: RefObject<HTMLButtonElement | null>;
@@ -36,16 +32,7 @@ const ReviewStar = forwardRef<HTMLDivElement | null, IProps>(
           control={control}
           rules={{ required: true }}
           defaultValue={0}
-          render={({ field }) => (
-            <ReactStars
-              value={field.value}
-              onChange={field.onChange}
-              size={24}
-              half
-              color1="#ddd"
-              color2="#fec323"
-            />
-          )}
+          render={({ field }) => <ReactStarClient starValue={field.value} />}
         />
         <span className="mt-[1px] w-[20px] font-medium">{score}</span>
       </div>
