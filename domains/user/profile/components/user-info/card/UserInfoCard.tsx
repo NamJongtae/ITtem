@@ -1,29 +1,16 @@
 import Image from "next/image";
-import dynamic from "next/dynamic";
-
-import type { ProfileData, ProfileMenu } from "../../../types/profileTypes";
+import type { ProfileData } from "../../../types/profileTypes";
 import UserInfoCardBtns from "./UserInfoCardBtns";
 import FollowInfo from "./FollowInfo";
 import ProductInfo from "./ProductInfo";
-
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded animate-pulse" />
-  )
-});
+import ReactStarClient from "../../ReactStarClient";
 
 interface IProps {
-  handleClickMenu: (menu: ProfileMenu) => void;
   profileData: ProfileData | undefined;
   isMyProfile: boolean;
 }
 
-export default function UserInfoCard({
-  handleClickMenu,
-  profileData,
-  isMyProfile
-}: IProps) {
+export default function UserInfoCard({ profileData, isMyProfile }: IProps) {
   const profileImg = profileData?.profileImg || "/icons/user-icon.svg";
   const nickname = profileData?.nickname || "";
 
@@ -52,23 +39,14 @@ export default function UserInfoCard({
         <FollowInfo
           followersCount={followersCount}
           followingsCount={followingsCount}
-          handleClickMenu={handleClickMenu}
         />
 
-        <ReactStars
-          size={20}
-          half
-          value={starValue}
-          color1="#ddd"
-          color2="#fec323"
-          edit={false}
-        />
+        <ReactStarClient starValue={starValue} />
 
         <ProductInfo
           productCount={productCount}
           saleCount={saleCount}
           reviewPercentage={reviewPercentage}
-          handleClickMenu={handleClickMenu}
         />
 
         <UserInfoCardBtns isMyProfile={isMyProfile} profileData={profileData} />

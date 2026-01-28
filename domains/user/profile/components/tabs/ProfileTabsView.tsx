@@ -1,21 +1,22 @@
+"use client";
+
 import ContentMenu from "./ContentMenu";
 import Content from "./Content";
-import { ProfileData, ProfileMenu } from "../../types/profileTypes";
+import { ProfileData } from "../../types/profileTypes";
 import { PROFILE_TABS } from "./ProfileTabs";
+import useProfileMenu from "../../hooks/useProfileMenu";
 
 interface IProps {
-  currentMenu: ProfileMenu;
-  handleClickMenu: (menu: ProfileMenu) => void;
   profileData: ProfileData | undefined;
   isMyProfile: boolean;
 }
 
 export default function ProfileTabsView({
-  currentMenu,
-  handleClickMenu,
   profileData,
   isMyProfile
 }: IProps) {
+  const { currentMenu, onClickMenu } = useProfileMenu();
+
   const ctx = { profileData, isMyProfile };
 
   const visibleTabs = PROFILE_TABS.filter((t) =>
@@ -30,7 +31,7 @@ export default function ProfileTabsView({
       <ContentMenu
         tabs={visibleTabs}
         activeKey={activeKey}
-        onChange={handleClickMenu}
+        onChange={onClickMenu}
       />
       <Content
         tabs={visibleTabs}

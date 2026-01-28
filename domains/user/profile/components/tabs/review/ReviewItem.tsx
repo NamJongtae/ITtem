@@ -1,12 +1,8 @@
 import { REVIEW_TAGS } from "@/domains/product/shared/constants/constants";
 import { ProfileReviewData } from "../../../types/profileTypes";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
-});
+import ReactStarClient from "../../ReactStarClient";
 
 interface IProps {
   review: ProfileReviewData;
@@ -25,14 +21,7 @@ export default function ReviewItem({ review }: IProps) {
       <div>
         <div className="flex flex-col mb-3">
           <span>{review?.reviewer.nickname}</span>
-          <ReactStars
-            size={20}
-            half
-            value={review?.reviewScore}
-            color1="#ddd"
-            color2="#fec323"
-            edit={false}
-          />
+          <ReactStarClient starValue={review?.reviewScore} />
         </div>
         <Link
           href={`/product/${review.productId}`}

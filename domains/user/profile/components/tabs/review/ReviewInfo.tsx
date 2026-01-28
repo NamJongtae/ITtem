@@ -1,11 +1,7 @@
-import dynamic from "next/dynamic";
 import { ReviewSummaryData } from "../../../types/profileTypes";
 import { REVIEW_TAGS } from "@/domains/product/shared/constants/constants";
 import calculateReviewStar from "../../../utils/calculateReviewStar";
-const ReactStars = dynamic(() => import("react-stars"), {
-  ssr: false,
-  loading: () => <div className="w-28 h-4 mt-3 bg-gray-300/60 rounded" />
-});
+import ReactStarClient from "../../ReactStarClient";
 
 interface IProps {
   reviewInfo: ReviewSummaryData | undefined;
@@ -30,14 +26,7 @@ export default function ReviewInfo({ reviewInfo }: IProps) {
         </span>
         <div className="flex gap-1 items-center">
           <span className="ml-3">평점 </span>
-          <ReactStars
-            size={20}
-            half
-            value={reviewStar}
-            color1="#ddd"
-            color2="#fec323"
-            edit={false}
-          />
+          <ReactStarClient starValue={reviewStar} />
           <span className="font-semibold">{reviewStar}</span>
         </div>
       </div>

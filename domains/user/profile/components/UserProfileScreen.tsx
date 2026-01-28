@@ -1,37 +1,21 @@
-"use client";
-
 import UserInfo from "./user-info/UserInfo";
-import ProfileTabsView from "./tabs/ProfileTabsView";
-import useProfileMenu from "../hooks/useProfileMenu";
-import UserInfoSkeletonUI from "./user-info/UserInfoSkeletonUI";
-import ProfileTabsSSRSkeletonUI from "./tabs/ProfileTabsSSRSkeletonUI";
-import useProfileQuery from "../hooks/queries/useProfileQuery";
+import { ProfileData } from "../types/profileTypes";
+import UserProfileTabView from "./tabs/UserProfileTabView";
+import Empty from "@/shared/common/components/Empty";
 
-export default function UserProfileScreen() {
-  const { profileData, showCSRSkeleton } = useProfileQuery();
-  const { currentMenu, onClickMenu } = useProfileMenu();
-
-  if (showCSRSkeleton)
-    return (
-      <>
-        <UserInfoSkeletonUI />
-        <ProfileTabsSSRSkeletonUI isMyProfile={false} />
-      </>
-    );
+export default function UserProfileScreen({
+  initProfileData
+}: {
+  initProfileData: ProfileData | undefined;
+}) {
+  if (!initProfileData) {
+    return <Empty message="유저 정보를 불러올 수 없어요." />;
+  }
 
   return (
     <>
-      <UserInfo
-        handleClickMenu={onClickMenu}
-        profileData={profileData}
-        isMyProfile={false}
-      />
-      <ProfileTabsView
-        currentMenu={currentMenu}
-        handleClickMenu={onClickMenu}
-        profileData={profileData}
-        isMyProfile={false}
-      />
+      <UserInfo profileData={initProfileData} isMyProfile={false} />
+      <UserProfileTabView />
     </>
   );
 }

@@ -2,7 +2,6 @@
 
 import UserInfo from "./user-info/UserInfo";
 import ProfileTabsView from "./tabs/ProfileTabsView";
-import useProfileMenu from "../hooks/useProfileMenu";
 import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
 import Empty from "../../../../shared/common/components/Empty";
 import useMyProfileQuery from "../hooks/queries/useMyProfileQuery";
@@ -11,7 +10,6 @@ import ProfileTabsCSRSkeletonUI from "./tabs/ProfileTabsCSRSkeletonUI";
 export default function MyProfileScreen() {
   const { myProfileData, myProfilePending, myProfileError } =
     useMyProfileQuery();
-  const { currentMenu, onClickMenu } = useProfileMenu();
 
   if (myProfilePending) {
     return (
@@ -28,17 +26,8 @@ export default function MyProfileScreen() {
 
   return (
     <>
-      <UserInfo
-        handleClickMenu={onClickMenu}
-        profileData={myProfileData}
-        isMyProfile={true}
-      />
-      <ProfileTabsView
-        currentMenu={currentMenu}
-        handleClickMenu={onClickMenu}
-        profileData={myProfileData}
-        isMyProfile={true}
-      />
+      <UserInfo profileData={myProfileData} isMyProfile={true} />
+      <ProfileTabsView profileData={myProfileData} isMyProfile={true} />
     </>
   );
 }

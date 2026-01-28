@@ -1,3 +1,5 @@
+"use client";
+
 import useMyProfileQuery from "../../hooks/queries/useMyProfileQuery";
 import useCheckFollowStatusQuery from "../../hooks/queries/useCheckFollowStatusQuery";
 import useFollowUserInProfile from "../../hooks/useFollowUserInProfile";
