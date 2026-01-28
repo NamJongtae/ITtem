@@ -17,7 +17,7 @@ describe("InfiniteScrollEndMessage 컴포넌트 테스트", () => {
       "text-center",
       "text-xs",
       "sm:text-sm",
-      "text-gray-400",
+      "text-gray-500",
       "bg-white",
       "px-4",
       "sm:px-8"
