@@ -13,18 +13,23 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
 
-    const cursorDate = cursor ? new Date(cursor as string) : new Date();
-    const pageLimit = parseInt(limit as string, 10) || 10;
+    const cursorDate = cursor ? new Date(cursor) : new Date();
+    const pageLimit = Math.max(parseInt(limit ?? "10", 10) || 10, 1);
 
-    const products = await RecommendProduct.find({
-      createdAt: { $lt: cursorDate },
-      block: false
+    const recommendDocs = await RecommendProduct.find({
+      createdAt: { $lt: cursorDate }
     })
-      .select(
-        "_id name description uid createdAt status block imgData price location sellType category"
-      )
       .sort({ createdAt: -1 })
-      .limit(pageLimit);
+      .limit(pageLimit)
+      .populate({
+        path: "productId",
+        match: { block: false },
+        select:
+          "_id name description uid createdAt status block imgData price location sellType category"
+      })
+      .lean();
+
+    const products = recommendDocs.map((d: any) => d.productId).filter(Boolean);
 
     return NextResponse.json(
       {
@@ -46,51 +51,34 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (
-    req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
   try {
     await dbConnect();
 
     await RecommendProduct.deleteMany({});
 
-    const products = await Product.aggregate([
+    const docs = await Product.aggregate([
       { $match: { block: false, status: ProductStatus.sold } },
       { $sample: { size: 100 } },
       {
         $project: {
-          _id: 1,
-          name: 1,
-          description: 1,
-          uid: 1,
-          createdAt: 1,
-          status: 1,
-          block: 1,
-          imgData: 1,
-          price: 1,
-          location: 1,
-          sellType: 1,
-          category: 1
+          _id: 0,
+          productId: "$_id",
+          createdAt: 1
         }
       }
     ]);
 
-    await RecommendProduct.insertMany(products);
+    await RecommendProduct.insertMany(docs);
 
     return NextResponse.json(
-      { message: "추천 상품이 새로 갱신되었어요.", products },
+      { message: "추천 상품이 새로 갱신되었어요.", count: docs.length },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
     return NextResponse.json(
-      {
-        message: "추천 상품 갱신에 실패했어요.\n잠시 후 다시 시도해주세요"
-      },
+      { message: "추천 상품 갱신에 실패했어요.\n잠시 후 다시 시도해주세요" },
       { status: 500 }
     );
   }
