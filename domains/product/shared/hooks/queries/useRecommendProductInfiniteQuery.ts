@@ -9,9 +9,11 @@ import {
 import { AxiosError } from "axios";
 
 export default function useRecommendProductInfiniteQuery({
-  limit = 12
+  limit = 12,
+  nextCursor
 }: {
   limit?: number;
+  nextCursor: string | null;
 }) {
   const queryKeyConfig = queryKeys.product.recommend(limit);
 
@@ -34,7 +36,7 @@ export default function useRecommendProductInfiniteQuery({
       unknown
     >,
     staleTime: 60 * 1000,
-    initialPageParam: null,
+    initialPageParam: nextCursor ? nextCursor : null,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;
       if (lastPage.length < limit) {
