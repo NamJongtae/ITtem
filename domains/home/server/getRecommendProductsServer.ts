@@ -32,18 +32,16 @@ export const getRecommendProductsServer = unstable_cache(
         .filter(Boolean);
 
       const nextCursor =
-        recommendDocs.length > 0
+        recommendDocs.length === pageLimit
           ? new Date(
               recommendDocs[recommendDocs.length - 1].createdAt
             ).toISOString()
           : null;
 
-      return JSON.parse(
-        JSON.stringify({
-          products: products,
-          nextCursor: nextCursor
-        })
-      );
+      return {
+        products,
+        nextCursor
+      };
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
