@@ -121,8 +121,8 @@ export const getUserProfileServer = async (uid: string) => {
 
       return JSON.parse(JSON.stringify(profile));
     },
-    ["getUserProfileServer", uid],
-    { revalidate: 60, tags: [`profile:${uid}`] }
+    ["profile", uid],
+    { revalidate: 60, tags: [`profile-${uid}`] }
   );
 
   return cachedFn();
