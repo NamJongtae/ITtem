@@ -13,23 +13,29 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
 
-    const todayStart = new Date();
+    const cursorDate = cursor ? new Date(cursor) : new Date();
+    const currentLimit = Math.max(parseInt(limit ?? "12", 10) || 12, 1);
 
-    const cursorDate = cursor ? new Date(cursor as string) : todayStart;
-    const currentLimit = parseInt(limit as string) || 10;
+    const query: Record<string, unknown> = {
+      block: false,
+      createdAt: { $lt: cursorDate }
+    };
 
-    let query: object = { createdAt: { $lt: cursorDate }, block: false };
-    query = category !== "전체" ? { category } : query;
-    query = location
-      ? { ...query, location: new RegExp(location as string, "i") }
-      : query;
+    if (category && category !== "전체") {
+      query.category = category;
+    }
+
+    if (location) {
+      query.location = new RegExp(location, "i");
+    }
 
     const products = await Product.find(query)
       .select(
         "_id name description uid createdAt status block imgData price location sellType category"
       )
+      .sort({ createdAt: -1, _id: -1 })
       .limit(currentLimit)
-      .sort({ createdAt: -1, _id: -1 });
+      .lean();
 
     return NextResponse.json(
       { message: "상품 조회에 성공 했어요.", products },
