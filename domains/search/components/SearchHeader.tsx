@@ -1,5 +1,5 @@
-import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import SearchCategoryMenu from "./SearchCategoryMenu";
+import SearchCategoryNav from "./SearchCategoryNav";
 
 export default function SearchHeader() {
   return (
@@ -7,7 +7,7 @@ export default function SearchHeader() {
       <h2 className="sr-only">검색결과</h2>
 
       <div className="flex gap-5 justify-between w-full items-center">
-        <CategoryNav className="ml-2" />
+        <SearchCategoryNav />
       </div>
       <SearchCategoryMenu />
     </div>
