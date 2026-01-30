@@ -2,11 +2,11 @@
 
 import useSearchProductListInfiniteQuery from "@/domains/product/shared/hooks/queries/useSearchProductListInfiniteQuery";
 import ProductListUI from "../../product/shared/components/product-list/ProductListUI";
-import { useGetQuerys } from "@/shared/common/hooks/useGetQuerys";
 import Empty from "@/shared/common/components/Empty";
+import useSerachCategory from "../hooks/useSerachCategory";
 
 export default function ProductSearchList() {
-  const { keyword } = useGetQuerys("keyword");
+  const { keyword, currentCategory } = useSerachCategory();
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useSearchProductListInfiniteQuery();
 
@@ -24,6 +24,7 @@ export default function ProductSearchList() {
       isFetchingNextPage={isFetchingNextPage}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
+      productCategory={currentCategory}
     />
   );
 }
