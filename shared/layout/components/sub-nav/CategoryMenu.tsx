@@ -25,7 +25,7 @@ const CategoryMenu = forwardRef<HTMLDivElement, IProps>(
           {CATEGORY.map((category, index) => (
             <CategoryMenuItem
               key={category}
-              category={category}
+              categoryId={index}
               closeCategory={closeCategory}
               index={index}
             />

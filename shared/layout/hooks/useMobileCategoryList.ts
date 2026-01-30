@@ -3,18 +3,19 @@ import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus
 import { useRef } from "react";
 
 interface IParams {
-  currentCategory: string | null;
+  currentCategoryId: number;
 }
 
-export default function useMobileCategoryList({ currentCategory }: IParams) {
+export default function useMobileCategoryList({ currentCategoryId }: IParams) {
   const firstCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryRef = useRef<HTMLButtonElement | null>(null);
   const lastCategoryPreviousRef = useRef<HTMLButtonElement | null>(null);
 
-  const setCategoryClassName = (category: string) =>
+  const setCategoryClassName = (index: number) =>
     `${
-      currentCategory === category &&
-      "bg-gray-700 text-white betterhover:hover:text-black betterhover:hover:bg-gray-200"
+      currentCategoryId === index
+        ? "bg-gray-700 text-white betterhover:hover:text-black betterhover:hover:bg-gray-200"
+        : ""
     } text-gray-700 block px-3 py-2 text-sm w-full text-left rounded-md betterhover:hover:bg-gray-100 transition duration-150 ease-in-out`;
 
   const setCategoryBtnRef = (index: number) => {

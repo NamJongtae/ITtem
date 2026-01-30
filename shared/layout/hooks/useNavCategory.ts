@@ -1,13 +1,19 @@
-import { useSearchParams } from "next/navigation";
+import { CATEGORY } from "@/domains/product/shared/constants/constants";
+import { ProductCategory } from "@/domains/product/shared/types/productTypes";
+import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function useNavCategory() {
   const [isOpenCategory, setIsOpenCategory] = useState(false);
   const categoryRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const search = useSearchParams();
+  const params = useParams();
+  const id = Number(params?.categoryId);
+  const currentCategoryId =
+    Number.isInteger(id) && id >= 0 && id <= 13 ? id : 0;
 
-  const currentCategory = search.get("category");
+
+  const currentCategory = CATEGORY[currentCategoryId] ?? ProductCategory.전체;
 
   const openCategory = () => {
     setIsOpenCategory(true);
