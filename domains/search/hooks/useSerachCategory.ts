@@ -11,7 +11,7 @@ export default function useSerachCategory() {
     params.set("category_id", String(nextId));
     if (keyword) params.set("keyword", keyword);
     else params.delete("keyword");
-    return `/search?${params.toString()}`;
+    return `/product/search?${params.toString()}`;
   };
 
   return { currentCategoryId, makeHref };
