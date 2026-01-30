@@ -1,14 +1,22 @@
+import { CATEGORY } from "@/domains/product/shared/constants/constants";
 import CategoryMobileBtn from "./CategoryMobileBtn";
 import CategoryMobileList from "./CategoryMobileList";
 import useMobileCategory from "@/shared/layout/hooks/useMobileCategory";
 
 interface IProps {
-  currentCategory: string;
+  currentCategoryId: number;
+  makeHref: (id: number) => string;
 }
 
-export default function CategoryMobileMenu({ currentCategory }: IProps) {
+export default function CategoryMobileMenu({
+  currentCategoryId,
+  makeHref
+}: IProps) {
+  const currentCategory = CATEGORY[currentCategoryId] ?? "전체";
+
   const { isOpenMenu, toggleMenu, handleSelectMenu, menuRef } =
-    useMobileCategory();
+    useMobileCategory(makeHref);
+
   return (
     <div className="relative sm:hidden mx-auto px-3 flex justify-end z-[11]">
       <CategoryMobileBtn
@@ -18,7 +26,7 @@ export default function CategoryMobileMenu({ currentCategory }: IProps) {
       />
       <CategoryMobileList
         isOpenCategory={isOpenMenu}
-        currentCategory={currentCategory}
+        currentCategoryId={currentCategoryId}
         toggleMenu={toggleMenu}
         handleSelectCategory={handleSelectMenu}
         ref={menuRef}

@@ -10,12 +10,14 @@ import {
 import { FetchError } from "@/shared/common/types/errorTypes";
 
 export default function useCategoryProductListInfiniteQuery({
+  nextCursor,
   limit = 12,
   category = ProductCategory.전체
 }: {
+  nextCursor: string | null;
   limit?: number;
   category?: ProductCategory;
-} = {}) {
+}) {
   const location = useLocationStore((state) => state.location);
   const queryKeyConfig = queryKeys.product.category({
     category,
@@ -42,7 +44,7 @@ export default function useCategoryProductListInfiniteQuery({
       unknown
     >,
     retry: 0,
-    initialPageParam: null,
+    initialPageParam: nextCursor ? nextCursor : null,
     staleTime: 60 * 1000,
     getNextPageParam: (lastPage) => {
       const nextCursor = lastPage[lastPage.length - 1]?.createdAt;

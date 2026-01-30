@@ -1,12 +1,16 @@
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function useCurrentCategory() {
-  const search = useSearchParams();
+  const params = useParams<{ categoryId?: string }>();
+  const raw = params?.categoryId;
 
-  const currentCategory = CATEGORY.includes(search.get("category") || "")
-    ? (search.get("category") as string)
-    : "전체";
+  // ✅ 숫자 id 파싱 (없거나 잘못되면 0 = "전체")
+  const id = Number(raw);
+  const currentCategoryId =
+    Number.isInteger(id) && id >= 0 && id <= 13 ? id : 0;
 
-  return { currentCategory };
+  const currentCategory = CATEGORY[currentCategoryId] ?? "전체";
+
+  return { currentCategoryId, currentCategory };
 }

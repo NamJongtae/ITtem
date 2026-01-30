@@ -13,7 +13,6 @@ interface IProps {
   fetchNextPage: () => void;
   isFetchingNextPage: boolean;
   hasNextPage: boolean;
-  emptyMessage: string;
   productCategory?: ProductCategory;
 }
 
@@ -30,7 +29,6 @@ export default function ProductListUI({
   fetchNextPage,
   isFetchingNextPage,
   hasNextPage,
-  emptyMessage,
   productCategory
 }: IProps) {
   const flatData = data ?? [];
@@ -54,17 +52,8 @@ export default function ProductListUI({
     throttleMs: 100
   });
 
-  if (flatData.length === 0) {
-    return (
-      <div ref={listRef} className="max-w-[1024px] mx-auto pb-12 px-8 mt-6">
-        <Empty message={emptyMessage} />
-      </div>
-    );
-  }
-
   return (
     <div ref={listRef} className="max-w-[1024px] mx-auto pb-12 px-8 mt-6">
-      
       <ul
         aria-label="상품 목록"
         className="relative w-full list-none p-0 m-0"

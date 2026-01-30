@@ -6,19 +6,17 @@ import React, { forwardRef } from "react";
 interface IProps {
   isOpenCategory: boolean;
   toggleMenu: () => void;
-  handleSelectCategory: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
-  currentCategory: string;
+  handleSelectCategory: (id: number) => void;
+  currentCategoryId: number;
 }
 
 const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
   (
-    { isOpenCategory, toggleMenu, handleSelectCategory, currentCategory },
+    { isOpenCategory, toggleMenu, handleSelectCategory, currentCategoryId },
     ref
   ) => {
     const { setCategoryClassName, setCategoryBtnRef, categoryOnKeyDown } =
-      useMobileCategoryList({ currentCategory });
+      useMobileCategoryList({ currentCategoryId });
 
     return (
       isOpenCategory && (
@@ -31,12 +29,11 @@ const CategoryMobileList = forwardRef<HTMLUListElement, IProps>(
           onKeyDown={(e) => escKeyClose({ event: e, closeCb: toggleMenu })}
         >
           {CATEGORY.map((category, index) => (
-            <li key={category} className="">
+            <li key={category}>
               <button
                 type="button"
-                data-category={category}
-                onClick={handleSelectCategory}
-                className={setCategoryClassName(category)}
+                onClick={() => handleSelectCategory(index)}
+                className={setCategoryClassName(index)}
                 role="menuitem"
                 ref={setCategoryBtnRef(index)}
                 onKeyDown={(e) => categoryOnKeyDown(e, index)}
