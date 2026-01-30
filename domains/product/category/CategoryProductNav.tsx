@@ -1,3 +1,5 @@
+"use client";
+
 import CategoryNavUI from "../shared/components/categoryNav/CategoryNavUI";
 import { useCategoryProductCategory } from "./hooks/useCategoryProductCategory";
 
