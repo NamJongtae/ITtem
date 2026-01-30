@@ -17,7 +17,6 @@ export default function RecommendProductList({
       fetchNextPage={fetchNextPage}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
-      emptyMessage={"오늘의 추천 상품이 없어요."}
     />
   );
 }
