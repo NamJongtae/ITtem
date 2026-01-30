@@ -6,5 +6,5 @@ import { useCategoryProductCategory } from "./hooks/useCategoryProductCategory";
 export default function CategoryProductNav() {
   const { currentCategory } = useCategoryProductCategory();
 
-  return <CategoryNavUI className="ml-2" currentCategory={currentCategory} />;
+  return <CategoryNavUI currentCategory={currentCategory} />;
 }

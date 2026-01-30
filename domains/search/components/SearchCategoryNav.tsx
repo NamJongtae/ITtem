@@ -8,5 +8,5 @@ export default function SearchCategoryNav() {
   const { currentCategoryId } = useSerachCategory();
   const currentCategory = CATEGORY[currentCategoryId];
 
-  return <CategoryNavUI className="ml-2" currentCategory={currentCategory} />;
+  return <CategoryNavUI currentCategory={currentCategory} />;
 }
