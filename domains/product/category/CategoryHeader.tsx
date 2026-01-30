@@ -1,6 +1,6 @@
-import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import LocationCheckbox from "../upload/components/ProductLocationCheckbox";
 import ProductCategoryMenu from "./ProductCategoryMenu";
+import CategoryProductNav from "./CategoryProductNav";
 
 export default function CategoryHeader() {
   return (
@@ -8,7 +8,7 @@ export default function CategoryHeader() {
       <h2 className="sr-only">중고거래</h2>
 
       <div className="flex gap-5 justify-between w-full items-center">
-        <CategoryNav className="ml-2" />
+        <CategoryProductNav />
         <LocationCheckbox />
       </div>
       <ProductCategoryMenu />

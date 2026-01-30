@@ -1,3 +1,5 @@
+"use client";
+
 import { ProductDetailData } from "../../types/productDetailTypes";
 import Image from "next/image";
 import useProductReportHandler from "../../hooks/useProductReportHandler";

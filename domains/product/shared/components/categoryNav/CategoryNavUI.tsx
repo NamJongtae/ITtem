@@ -1,17 +1,15 @@
 "use client";
 
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
-import useCurrentCategory from "./hooks/useCurrentCategory";
 import Image from "next/image";
 import HomeIcon from "@/public/icons/home-icon.svg";
 
 interface IPorops {
+  currentCategory: string;
   className?: string;
 }
 
-export default function CategoryNav({ className }: IPorops) {
-  const { currentCategory } = useCurrentCategory();
-
+export default function CategoryNavUI({ className, currentCategory }: IPorops) {
   return (
     <nav className={`flex self-start ${className}`}>
       <ol className="inline-flex items-center">

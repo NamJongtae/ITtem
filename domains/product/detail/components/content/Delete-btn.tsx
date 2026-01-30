@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ProductStatus } from "../../../shared/types/productTypes";
 import useProductDetailDeleteHandler from "../../hooks/useProductDetailDeleteHandler";

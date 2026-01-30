@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import ProductDetailScreen from "./ProductDetailScreen";
 import { getProductCached } from "@/app/product/(detail)/[productId]/page";
+import Empty from "@/shared/common/components/Empty";
 
 async function fetchProductData({
   productId,
@@ -16,7 +17,7 @@ async function fetchProductData({
 }) {
   const productQueryKeyConfing = queryKeys.product.detail(productId);
 
-  await queryClient.prefetchQuery({
+  return await queryClient.fetchQuery({
     queryKey: productQueryKeyConfing.queryKey,
     queryFn: async () => {
       const data = await getProductCached(productId);
@@ -30,15 +31,23 @@ export default async function ProductDetailPrefetchBoundary({
 }: {
   productId: string | undefined;
 }) {
+  if (!productId) {
+    return <Empty message="존재하지 않는 상품이에요." />;
+  }
+
+
+
   const queryClient = new QueryClient();
 
-  if (productId) {
-    await fetchProductData({ productId, queryClient });
+  const product = await fetchProductData({ productId, queryClient });
+
+    if (product.block) {
+    return <Empty message="신고 누적으로 블라인드 처리된 상품입니다." />;
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductDetailScreen />
+      <ProductDetailScreen product={product} />
     </HydrationBoundary>
   );
 }

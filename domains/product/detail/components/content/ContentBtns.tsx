@@ -1,3 +1,5 @@
+"use client";
+
 import { ProductStatus } from "../../../shared/types/productTypes";
 import { ProductDetailData } from "../../types/productDetailTypes";
 import useMyProfileQuery from "@/domains/user/profile/hooks/queries/useMyProfileQuery";
@@ -8,9 +10,7 @@ interface IProps {
   productDetailData: ProductDetailData | undefined;
 }
 
-export default function ContentBtns({
-  productDetailData
-}: IProps) {
+export default function ContentBtns({ productDetailData }: IProps) {
   const { myProfileData, myProfilePending } = useMyProfileQuery();
   const isSoldout = productDetailData?.status === ProductStatus.soldout;
   const isMyProduct = productDetailData?.uid === myProfileData?.uid;

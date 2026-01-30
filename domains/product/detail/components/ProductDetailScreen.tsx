@@ -1,55 +1,33 @@
-"use client";
-
-import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import Content from "./content/Content";
 import Description from "./Description";
 import SellerSection from "./seller/SellerSection";
-import useProductQuery from "../../shared/hooks/queries/useProductQuery";
-import useAddRecentProduct from "../../../../shared/layout/hooks/useAddRecentProduct";
-import { useEffect } from "react";
-import incrementProductView from "../api/incrementProductView";
-import Empty from "@/shared/common/components/Empty";
+import { ProductDetailData } from "../types/productDetailTypes";
+import { Suspense } from "react";
+import ProductDetailCategoryNav from "./ProductDetailCategoryNav";
 
-export default function ProductDetailScreen() {
-  const { productData, showCSRSkeleton } = useProductQuery();
-
-  const isBlocked = !!productData?.block;
-  const recentProduct = {
-    productId: productData?._id ?? "",
-    productImg: productData?.imgData?.[0]?.url ?? "",
-    productName: productData?.name ?? ""
-  };
-
-  useAddRecentProduct({
-    recentProduct,
-    enabled: !!productData && !isBlocked
-  });
-
-  useEffect(() => {
-    if (!productData?._id) return;
-    if (isBlocked) return;
-
-    incrementProductView(productData._id);
-  }, [productData?._id, isBlocked]);
-
-  if (isBlocked) {
-    return <Empty message="신고 누적으로 블라인드 처리된 상품입니다." />;
-  }
-
+export default function ProductDetailScreen({
+  product
+}: {
+  product: ProductDetailData;
+}) {
   return (
     <div className="pt-8 pb-12">
       <div className="relative container mx-auto px-6 max-w-[1024px]">
-        <CategoryNav className={"max-w-7xl mx-auto mb-5"} />
-        <Content
-          productDetailData={productData}
-          showCSRSkeleton={showCSRSkeleton}
-        />
+        <Suspense
+          fallback={
+            <div
+              className={
+                "w-36 h-5 max-w-7xl mb-5 bg-gray-200 rounded animate-pulse"
+              }
+            />
+          }
+        >
+          <ProductDetailCategoryNav />
+        </Suspense>
+        <Content productDetailData={product} />
         <div className="container mt-16 flex flex-col xl:flex-row border-t-2 border-solid border-black justify-between gap-10 xl:gap-5 pt-10 mx-auto max-w-7xl">
-          <Description description={productData?.description} />
-          <SellerSection
-            auth={productData?.auth}
-            showCSRSkeleton={showCSRSkeleton}
-          />
+          <Description description={product?.description} />
+          <SellerSection />
         </div>
       </div>
     </div>

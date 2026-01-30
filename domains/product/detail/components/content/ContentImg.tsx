@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import ImgSlider from "@/shared/common/components/ImgSlider";
 import { ProductStatus } from "../../../shared/types/productTypes";

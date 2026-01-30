@@ -1,3 +1,5 @@
+"use client";
+
 import useProductDetailEditHandler from "../../hooks/useProductDetailEditHandler";
 import { ProductStatus } from "../../../shared/types/productTypes";
 import Image from "next/image";

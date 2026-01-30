@@ -1,3 +1,5 @@
+"use client";
+
 import useProductWishHandler from "../../hooks/useProductWishHandler";
 import { ProfileData } from "@/domains/user/profile/types/profileTypes";
 import { ProductDetailData } from "../../types/productDetailTypes";

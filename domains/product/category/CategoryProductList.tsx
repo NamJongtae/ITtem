@@ -22,6 +22,7 @@ export default function CategoryProductList({ category, nextCursor }: IProps) {
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
       fetchNextPage={fetchNextPage}
+      productCategory={category}
     />
   );
 }

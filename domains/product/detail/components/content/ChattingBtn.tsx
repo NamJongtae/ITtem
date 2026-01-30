@@ -1,3 +1,5 @@
+"use client";
+
 import ChatIcon from "@/public/icons/chat-icon.svg";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
 import useProductDetailChattingHandler from "../../hooks/useProductDetailChattingHandler";

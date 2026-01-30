@@ -1,3 +1,5 @@
+"use client";
+
 import useProductPurchaseHandler from "../../hooks/useProductPurchaseHandler";
 import BuyIcon from "@/public/icons/money-icon.svg";
 import { ProductStatus } from "@/domains/product/shared/types/productTypes";
