@@ -1,5 +1,3 @@
-import React from "react";
-import ImgSlider from "@/shared/common/components/ImgSlider";
 import { ProductData, ProductStatus } from "../../types/productTypes";
 import FallbackImage from "@/shared/common/components/FallbackImage";
 
