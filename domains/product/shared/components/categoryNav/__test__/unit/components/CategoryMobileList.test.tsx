@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import CategoryMobileList from "../../../components/CategoryMobileList";
+import CategoryMobileList from "../../../../../domains/product/shared/components/categoryNav/CategoryMobileList";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 import { optimizationTabFocus } from "@/shared/common/utils/optimizationTabFocus";
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";

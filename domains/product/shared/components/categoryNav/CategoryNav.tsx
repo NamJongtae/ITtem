@@ -1,7 +1,7 @@
 "use client";
 
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
-import useCurrentCategory from "@/shared/category/hooks/useCurrentCategory";
+import useCurrentCategory from "./hooks/useCurrentCategory";
 import Image from "next/image";
 import HomeIcon from "@/public/icons/home-icon.svg";
 

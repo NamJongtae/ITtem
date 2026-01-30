@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import CategoryNav from "../../../components/CategoryNav";
+import CategoryNav from "../../../../../domains/product/shared/components/categoryNav/CategoryNav";
 import useCurrentCategory from "@/shared/category/hooks/useCurrentCategory";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 

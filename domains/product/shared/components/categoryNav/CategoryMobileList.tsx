@@ -1,7 +1,7 @@
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 import useMobileCategoryList from "@/shared/layout/hooks/useMobileCategoryList";
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 interface IProps {
   isOpenCategory: boolean;

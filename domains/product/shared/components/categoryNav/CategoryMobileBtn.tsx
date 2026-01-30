@@ -1,5 +1,4 @@
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";
-import React from "react";
 import Image from "next/image";
 
 interface IProps {

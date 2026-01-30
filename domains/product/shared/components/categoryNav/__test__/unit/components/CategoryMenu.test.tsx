@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import CategoryMenu from "../../../components/CategoryMenu";
+import CategoryMenu from "../../../../../domains/product/shared/components/categoryNav/CategoryMenuUI";
 import useCurrentCategory from "../../../hooks/useCurrentCategory";
-import CategoryMobileMenu from "../../../components/CategoryMobileMenu";
-import CategoryList from "../../../components/CategoryList";
+import CategoryMobileMenu from "../../../../../domains/product/shared/components/categoryNav/CategoryMobileMenu";
+import CategoryList from "../../../../../domains/product/shared/components/categoryNav/CategoryList";
 
 jest.mock("@/shared/category/hooks/useCurrentCategory");
 jest.mock("../../../components/CategoryList");

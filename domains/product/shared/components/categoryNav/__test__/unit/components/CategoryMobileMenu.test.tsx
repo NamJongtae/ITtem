@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import CategoryMobileMenu from "../../../components/CategoryMobileMenu";
+import CategoryMobileMenu from "../../../../../domains/product/shared/components/categoryNav/CategoryMobileMenu";
 import useMobileCategory from "@/shared/layout/hooks/useMobileCategory";
-import CategoryMobileBtn from "@/shared/category/components/CategoryMobileBtn";
-import CategoryMobileList from "@/shared/category/components/CategoryMobileList";
+import CategoryMobileBtn from "@/domains/product/shared/components/categoryNav/CategoryMobileBtn";
+import CategoryMobileList from "@/domains/product/shared/components/categoryNav/CategoryMobileList";
 
 jest.mock("@/shared/layout/hooks/useMobileCategory");
 jest.mock("../../../components/CategoryMobileBtn", () => ({
@@ -35,7 +35,6 @@ describe("CategoryMobileMenu 컴포넌트 테스트", () => {
       handleSelectMenu: mockHandleSelectMenu,
       menuRef: mockMenuRef
     });
-    
   });
 
   it("CategoryMobileBtn과 CategoryMobileList이 렌더링됩니다.", () => {

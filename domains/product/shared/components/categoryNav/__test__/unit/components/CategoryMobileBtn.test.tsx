@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import CategoryMobileBtn from "../../../components/CategoryMobileBtn";
+import CategoryMobileBtn from "../../../../../domains/product/shared/components/categoryNav/CategoryMobileBtn";
 import { escKeyClose } from "@/shared/common/utils/escKeyClose";
 
 jest.mock("@/shared/common/utils/escKeyClose");
