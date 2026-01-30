@@ -18,7 +18,7 @@ export default function useNavSearchBar() {
   }, [keyword, reset]);
 
   useEffect(() => {
-    const isSearchPage = pathname.startsWith("/search");
+    const isSearchPage = pathname.startsWith("/product/search");
     if (isSearchPage) reset({ keyword: keyword ?? "" });
     else reset({ keyword: "" });
   }, [pathname, keyword, reset]);
@@ -30,7 +30,7 @@ export default function useNavSearchBar() {
       return;
     }
     router.push(
-      `/search?keyword=${keyword}${category_id ? `&category_id=${category_id}` : ""}`
+      `/product/search?keyword=${keyword}${category_id ? `&category_id=${category_id}` : ""}`
     );
   };
 
