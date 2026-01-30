@@ -1,18 +1,19 @@
 import { act, renderHook } from "@testing-library/react";
 import useNavCategory from "@/shared/layout/hooks/useNavCategory";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
+import { CATEGORY } from "@/domains/product/shared/constants/constants";
+import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 
 jest.mock("next/navigation", () => ({
   __esModule: true,
-  useSearchParams: jest.fn()
+  useParams: jest.fn()
 }));
 
 describe("useNavCategory 훅 테스트", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useSearchParams as jest.Mock).mockReturnValue(
-      new URLSearchParams("category=신발")
-    );
+    // 기본값: categoryId = 0 (전체)
+    (useParams as jest.Mock).mockReturnValue({ categoryId: "0" });
   });
 
   it("기본 상태는 isOpenCategory가 false여야 합니다.", () => {
@@ -72,10 +73,15 @@ describe("useNavCategory 훅 테스트", () => {
     document.body.appendChild(outside);
 
     act(() => {
-      outside.click(); // document에 걸린 click 리스너가 받음
+      outside.click(); // document click listener가 동작
     });
 
     expect(result.current.isOpenCategory).toBe(false);
+
+    // cleanup
+    categoryDiv.remove();
+    button.remove();
+    outside.remove();
   });
 
   it("카테고리 요소 또는 버튼 내부 클릭 시 NavCategory는 닫히지 않아야 합니다.", () => {
@@ -103,10 +109,32 @@ describe("useNavCategory 훅 테스트", () => {
       button.click(); // 버튼 클릭
     });
     expect(result.current.isOpenCategory).toBe(true);
+
+    // cleanup
+    categoryDiv.remove();
+    button.remove();
   });
 
-  it("currentCategory는 searchParams의 category 값을 반환합니다.", () => {
+  it("currentCategory는 params.categoryId에 해당하는 CATEGORY 라벨을 반환합니다.", () => {
+    const categoryId = 1;
+    (useParams as jest.Mock).mockReturnValue({
+      categoryId: String(categoryId)
+    });
+
     const { result } = renderHook(() => useNavCategory());
-    expect(result.current.currentCategory).toBe("신발");
+
+    expect(result.current.currentCategory).toBe(CATEGORY[categoryId]);
+  });
+
+  it("categoryId가 유효하지 않으면 currentCategory는 '전체'로 fallback 됩니다.", () => {
+    // 숫자 아님
+    (useParams as jest.Mock).mockReturnValue({ categoryId: "abc" });
+    const { result: r1 } = renderHook(() => useNavCategory());
+    expect(r1.current.currentCategory).toBe(ProductCategory.전체);
+
+    // 범위 밖
+    (useParams as jest.Mock).mockReturnValue({ categoryId: "999" });
+    const { result: r2 } = renderHook(() => useNavCategory());
+    expect(r2.current.currentCategory).toBe(ProductCategory.전체);
   });
 });

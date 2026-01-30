@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import CategoryNav from "../../../../../domains/product/shared/components/categoryNav/CategoryNav";
-import useCurrentCategory from "@/shared/category/hooks/useCurrentCategory";
+import CategoryNav from "../../../CategoryNav";
+import useCurrentCategory from "../../../hooks/useCurrentCategory";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 
-jest.mock("@/shared/category/hooks/useCurrentCategory");
+jest.mock("../../../hooks/useCurrentCategory");
 jest.mock("@/public/icons/home-icon.svg", () => ({
   __esModule: true,
   default: (props: React.ComponentProps<"svg">) => (

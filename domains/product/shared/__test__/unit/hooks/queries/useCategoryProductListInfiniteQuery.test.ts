@@ -8,17 +8,24 @@ import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClie
 
 jest.mock("@tanstack/react-query", () => {
   const original = jest.requireActual("@tanstack/react-query");
-  return {
-    ...original,
-    useSuspenseInfiniteQuery: jest.fn()
-  };
+  return { ...original, useSuspenseInfiniteQuery: jest.fn() };
 });
 
 jest.mock("@/shared/common/store/locationStore");
 
+jest.mock("@/shared/common/query-keys/queryKeys", () => ({
+  queryKeys: {
+    product: {
+      category: jest.fn()
+    }
+  }
+}));
+
 describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
   const mockUseSuspenseInfiniteQuery = useSuspenseInfiniteQuery as jest.Mock;
   const mockUseLocationStore = useLocationStore as unknown as jest.Mock;
+  const mockProductCategoryKey = queryKeys.product
+    .category as unknown as jest.Mock;
 
   const wrapper = createQueryClientWrapper().Wrapper;
 
@@ -26,7 +33,7 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("category와 location가 있는 경우 해당 값으로 queryKey, queryfn를 구성하고 데이터를 반환합니다.", () => {
+  it("category와 location가 있는 경우 해당 값으로 queryKey, queryFn를 구성하고 데이터를 반환합니다.", () => {
     const location = "서울";
     const limit = 10;
     const category = ProductCategory.전체;
@@ -40,22 +47,24 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
       createdAt: `2024-04-${(i + 1).toString().padStart(2, "0")}`
     }));
 
-    let getNextPageParamFn: any;
+    const fixedQueryKey = [
+      "product",
+      "category",
+      { category, location, limit }
+    ];
+    const fixedQueryFn = jest.fn();
 
-    const queryKeyConfig = queryKeys.product.category({
-      category,
-      location,
-      limit
+    mockProductCategoryKey.mockReturnValue({
+      queryKey: fixedQueryKey,
+      queryFn: fixedQueryFn
     });
 
+    let capturedOptions: any;
+
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      options.queryKey = queryKeyConfig.queryKey;
-      options.queryFn = queryKeyConfig.queryFn;
-      getNextPageParamFn = options.getNextPageParam;
+      capturedOptions = options;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: true,
@@ -65,24 +74,33 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
     });
 
     const { result } = renderHook(
-      () => useCategoryProductListInfiniteQuery({ limit, category }),
+      () =>
+        useCategoryProductListInfiniteQuery({
+          nextCursor: null,
+          limit,
+          category
+        }),
       { wrapper }
     );
 
-    expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        queryKey: queryKeyConfig.queryKey,
-        queryFn: queryKeyConfig.queryFn
-      })
-    );
-    expect(getNextPageParamFn(mockData)).toBe("2024-04-10");
+    expect(mockProductCategoryKey).toHaveBeenCalledWith({
+      category,
+      location,
+      limit
+    });
+
+    expect(capturedOptions.queryKey).toBe(fixedQueryKey);
+    expect(capturedOptions.queryFn).toBe(fixedQueryFn);
+
+    expect(capturedOptions.getNextPageParam(mockData)).toBe("2024-04-10");
+
     expect(result.current.data).toEqual(mockData);
     expect(result.current.hasNextPage).toBe(true);
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
   });
 
-  it("category와 location이 없는 경우 기본값 '전체'로 queryKey, queryFn를 구성하고 데이터를 반환합니다.", () => {
+  it("location이 없고 category도 없으면 기본값 '전체'로 queryKey, queryFn를 구성합니다.", () => {
     const limit = 10;
 
     mockUseLocationStore.mockImplementation((selector) => selector({}));
@@ -92,21 +110,24 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
       createdAt: `2024-04-${(i + 1).toString().padStart(2, "0")}`
     }));
 
-    let getNextPageParamFn: any;
+    const fixedQueryKey = [
+      "product",
+      "category",
+      { category: ProductCategory.전체, location: undefined, limit }
+    ];
+    const fixedQueryFn = jest.fn();
 
-    const queryKeyConfig = queryKeys.product.category({
-      category: ProductCategory.전체,
-      limit
+    mockProductCategoryKey.mockReturnValue({
+      queryKey: fixedQueryKey,
+      queryFn: fixedQueryFn
     });
 
+    let capturedOptions: any;
+
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      options.queryKey = queryKeyConfig.queryKey;
-      options.queryFn = queryKeyConfig.queryFn;
-      getNextPageParamFn = options.getNextPageParam;
+      capturedOptions = options;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetchingNextPage: false,
         hasNextPage: true,
@@ -116,20 +137,22 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
     });
 
     const { result } = renderHook(
-      () => useCategoryProductListInfiniteQuery({ limit }),
+      () => useCategoryProductListInfiniteQuery({ nextCursor: null, limit }),
       { wrapper }
     );
 
-    expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        queryKey: queryKeyConfig.queryKey,
-        queryFn: queryKeyConfig.queryFn
-      })
-    );
-    expect(getNextPageParamFn(mockData)).toBe("2024-04-10");
+    expect(mockProductCategoryKey).toHaveBeenCalledWith({
+      category: ProductCategory.전체,
+      location: undefined,
+      limit
+    });
+
+    expect(capturedOptions.queryKey).toBe(fixedQueryKey);
+    expect(capturedOptions.queryFn).toBe(fixedQueryFn);
+
+    expect(capturedOptions.getNextPageParam(mockData)).toBe("2024-04-10");
+
     expect(result.current.data).toEqual(mockData);
-    expect(result.current.hasNextPage).toBe(true);
-    expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
   });
 
@@ -146,10 +169,18 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
       { id: 2, createdAt: "2024-04-02" }
     ];
 
-    let getNextPageParamFn: any;
+    const fixedQueryKey = ["product", "category", { location, limit }];
+    const fixedQueryFn = jest.fn();
+
+    mockProductCategoryKey.mockReturnValue({
+      queryKey: fixedQueryKey,
+      queryFn: fixedQueryFn
+    });
+
+    let capturedOptions: any;
 
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
-      getNextPageParamFn = options.getNextPageParam;
+      capturedOptions = options;
       return {
         data: { pages: [mockData] },
         isLoading: false,
@@ -160,20 +191,28 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
       };
     });
 
-    renderHook(() => useCategoryProductListInfiniteQuery({ limit }), {
-      wrapper
-    });
+    renderHook(
+      () => useCategoryProductListInfiniteQuery({ nextCursor: null, limit }),
+      { wrapper }
+    );
 
-    expect(getNextPageParamFn(mockData)).toBeUndefined();
+    expect(capturedOptions.getNextPageParam(mockData)).toBeUndefined();
   });
 
   it("에러 발생 시 error를 반환합니다.", () => {
-    const location = "서울";
     mockUseLocationStore.mockImplementation((selector) =>
-      selector({ location })
+      selector({ location: "서울" })
     );
 
     const error = new Error("에러 발생");
+
+    const fixedQueryKey = ["product", "category", { any: "value" }];
+    const fixedQueryFn = jest.fn();
+
+    mockProductCategoryKey.mockReturnValue({
+      queryKey: fixedQueryKey,
+      queryFn: fixedQueryFn
+    });
 
     mockUseSuspenseInfiniteQuery.mockReturnValue({
       data: undefined,
@@ -184,9 +223,10 @@ describe("useCategoryProductListInfiniteQuery 훅 테스트", () => {
       error
     });
 
-    const { result } = renderHook(() => useCategoryProductListInfiniteQuery(), {
-      wrapper
-    });
+    const { result } = renderHook(
+      () => useCategoryProductListInfiniteQuery({ nextCursor: null }),
+      { wrapper }
+    );
 
     expect(result.current.error).toBe(error);
     expect(result.current.data).toBeUndefined();

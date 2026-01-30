@@ -2,9 +2,10 @@ import { renderHook } from "@testing-library/react";
 import useSearchProductListInfiniteQuery from "@/domains/product/shared/hooks/queries/useSearchProductListInfiniteQuery";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/common/query-keys/queryKeys";
-import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 import { createQueryClientWrapper } from "@/shared/__mocks__/utils/testQueryClientWrapper";
 import { useGetQuerys } from "@/shared/common/hooks/useGetQuerys";
+import { CATEGORY } from "@/domains/product/shared/constants/constants";
+import { ProductCategory } from "@/domains/product/shared/types/productTypes";
 
 jest.mock("@tanstack/react-query", () => {
   const original = jest.requireActual("@tanstack/react-query");
@@ -26,12 +27,19 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     jest.clearAllMocks();
   });
 
-  it("category, keyword가 있는 경우 queryKey, queryFn이 구성되고 데이터를 반환합니다.", () => {
+  it("category_id, keyword가 있는 경우 queryKey가 구성되고 데이터를 반환합니다.", () => {
     const keyword = "가방";
-    const category = ProductCategory.가방지갑;
     const limit = 10;
 
-    mockUseGetQuerys.mockReturnValue({ keyword, category });
+    // ✅ category_id 기반으로 변경된 훅에 맞춘 mock
+    const categoryId = 3; // 예시: CATEGORY[3]이 "가방/지갑"인 index로 맞춰주면 됨
+    mockUseGetQuerys.mockReturnValue({
+      keyword,
+      category_id: String(categoryId)
+    });
+
+    const categoryLabel = CATEGORY[categoryId] || "전체";
+    const category = (categoryLabel as ProductCategory) ?? ProductCategory.전체;
 
     const mockData = Array.from({ length: 10 }, (_, i) => ({
       id: i + 1,
@@ -43,9 +51,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
       getNextPageParamFn = options.getNextPageParam;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetching: false,
         isFetchingNextPage: false,
@@ -67,9 +73,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     }).queryKey;
 
     expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        queryKey: expectedQueryKey
-      })
+      expect.objectContaining({ queryKey: expectedQueryKey })
     );
 
     expect(getNextPageParamFn(mockData)).toBe("2024-04-10");
@@ -80,11 +84,11 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     expect(result.current.error).toBeNull();
   });
 
-  it("category가 없는 경우 기본값 '전체'로 queryKey, queryFn이 구성되고 데이터를 반환합니다.", () => {
+  it("category_id가 없으면 기본값 '전체'로 queryKey가 구성됩니다.", () => {
     const keyword = "신발";
     const limit = 10;
 
-    mockUseGetQuerys.mockReturnValue({ keyword, category: undefined });
+    mockUseGetQuerys.mockReturnValue({ keyword, category_id: undefined });
 
     const mockData = Array.from({ length: 10 }, (_, i) => ({
       id: i + 1,
@@ -96,9 +100,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
       getNextPageParamFn = options.getNextPageParam;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetching: false,
         isFetchingNextPage: false,
@@ -108,9 +110,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
       };
     });
 
-    renderHook(() => useSearchProductListInfiniteQuery({ limit }), {
-      wrapper
-    });
+    renderHook(() => useSearchProductListInfiniteQuery({ limit }), { wrapper });
 
     const expectedQueryKey = queryKeys.product.search({
       keyword,
@@ -119,9 +119,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     }).queryKey;
 
     expect(mockUseSuspenseInfiniteQuery).toHaveBeenCalledWith(
-      expect.objectContaining({
-        queryKey: expectedQueryKey
-      })
+      expect.objectContaining({ queryKey: expectedQueryKey })
     );
 
     expect(getNextPageParamFn(mockData)).toBe("2024-04-10");
@@ -129,10 +127,10 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
 
   it("마지막 페이지 데이터 수가 limit보다 작으면 getNextPageParam이 undefined를 반환합니다.", () => {
     const keyword = "노트북";
-    const category = ProductCategory.전자기기;
     const limit = 10;
 
-    mockUseGetQuerys.mockReturnValue({ keyword, category });
+    // category_id가 유효하든 아니든 이 테스트는 getNextPageParam만 검증
+    mockUseGetQuerys.mockReturnValue({ keyword, category_id: "0" });
 
     const mockData = [
       { id: 1, createdAt: "2024-04-01" },
@@ -144,9 +142,7 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
     mockUseSuspenseInfiniteQuery.mockImplementation((options) => {
       getNextPageParamFn = options.getNextPageParam;
       return {
-        data: {
-          pages: [mockData]
-        },
+        data: { pages: [mockData] },
         isLoading: false,
         isFetching: false,
         isFetchingNextPage: false,
@@ -156,18 +152,15 @@ describe("useSearchProductListInfiniteQuery 훅 테스트", () => {
       };
     });
 
-    renderHook(() => useSearchProductListInfiniteQuery({ limit }), {
-      wrapper
-    });
+    renderHook(() => useSearchProductListInfiniteQuery({ limit }), { wrapper });
 
     expect(getNextPageParamFn(mockData)).toBeUndefined();
   });
 
   it("에러가 발생한 경우 error를 반환합니다.", () => {
     const keyword = "가방";
-    const category = ProductCategory.가방지갑;
 
-    mockUseGetQuerys.mockReturnValue({ keyword, category });
+    mockUseGetQuerys.mockReturnValue({ keyword, category_id: "0" });
 
     const error = new Error("검색 실패");
 

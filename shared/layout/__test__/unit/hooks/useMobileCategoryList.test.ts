@@ -8,18 +8,17 @@ jest.mock("@/shared/common/utils/optimizationTabFocus", () => ({
 }));
 
 describe("useMobileCategoryList 훅 테스트", () => {
-  const mockCategory = CATEGORY[0];
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("setCategoryClassName: 현재 카테고리와 선택한 카테고리가 일치하면 active 클래스명을 반환합니다.", () => {
+  it("setCategoryClassName: currentCategoryId와 index가 일치하면 active 클래스가 포함됩니다.", () => {
+    const currentCategoryId = 0;
     const { result } = renderHook(() =>
-      useMobileCategoryList({ currentCategory: mockCategory })
+      useMobileCategoryList({ currentCategoryId })
     );
 
-    const activeClassName = result.current.setCategoryClassName(mockCategory);
+    const activeClassName = result.current.setCategoryClassName(0);
 
     expect(activeClassName).toContain("bg-gray-700");
     expect(activeClassName).toContain("text-white");
@@ -28,12 +27,13 @@ describe("useMobileCategoryList 훅 테스트", () => {
     );
   });
 
-  it("setCategoryClassName: 현재 카테고리와 선택한 카테고리가 일치하지 않으면 active 클래스명을 반환하지 않습니다.", () => {
+  it("setCategoryClassName: currentCategoryId와 index가 다르면 active 클래스가 포함되지 않습니다.", () => {
+    const currentCategoryId = 0;
     const { result } = renderHook(() =>
-      useMobileCategoryList({ currentCategory: mockCategory })
+      useMobileCategoryList({ currentCategoryId })
     );
 
-    const notActiveClassName = result.current.setCategoryClassName(CATEGORY[1]);
+    const notActiveClassName = result.current.setCategoryClassName(1);
 
     expect(notActiveClassName).not.toContain("bg-gray-700");
     expect(notActiveClassName).not.toContain("text-white");
@@ -44,30 +44,30 @@ describe("useMobileCategoryList 훅 테스트", () => {
 
   it("setCategoryBtnRef: 인덱스에 따라 올바른 ref를 반환합니다.", () => {
     const { result } = renderHook(() =>
-      useMobileCategoryList({ currentCategory: CATEGORY[0] })
+      useMobileCategoryList({ currentCategoryId: 0 })
     );
 
     const firstRef = result.current.setCategoryBtnRef(0);
     const lastRef = result.current.setCategoryBtnRef(CATEGORY.length - 1);
-    const lastPrevLastRef = result.current.setCategoryBtnRef(
-      CATEGORY.length - 2
-    );
+    const lastPrevRef = result.current.setCategoryBtnRef(CATEGORY.length - 2);
+    const midRef = result.current.setCategoryBtnRef(1);
 
     expect(firstRef).toBeDefined();
     expect(lastRef).toBeDefined();
-    expect(lastPrevLastRef).toBeDefined();
+    expect(lastPrevRef).toBeDefined();
+    expect(midRef).toBeNull();
 
-    // 리턴된 ref 객체가 useRef에서 반환된 것인지 확인
+    // 같은 인덱스면 같은 ref 객체가 반환되는지(참조 동일성)
     expect(result.current.setCategoryBtnRef(0)).toBe(firstRef);
     expect(result.current.setCategoryBtnRef(CATEGORY.length - 1)).toBe(lastRef);
     expect(result.current.setCategoryBtnRef(CATEGORY.length - 2)).toBe(
-      lastPrevLastRef
+      lastPrevRef
     );
   });
 
-  it("categoryOnKeyDown: 첫 인덱스에서 optimizationTabFocus 호출됩니다.", () => {
+  it("categoryOnKeyDown: 첫 인덱스(0)에서 optimizationTabFocus가 호출됩니다.", () => {
     const { result } = renderHook(() =>
-      useMobileCategoryList({ currentCategory: CATEGORY[0] })
+      useMobileCategoryList({ currentCategoryId: 0 })
     );
 
     const fakeEvent = {
@@ -79,13 +79,13 @@ describe("useMobileCategoryList 훅 테스트", () => {
 
     expect(optimizationTabFocus).toHaveBeenCalledWith({
       event: fakeEvent,
-      previousTarget: null
+      previousTarget: null // lastCategoryRef.current 초기값
     });
   });
 
-  it("categoryOnKeyDown: 마지막 인덱스에서 optimizationTabFocus 호출됩니다.", () => {
+  it("categoryOnKeyDown: 마지막 인덱스에서 optimizationTabFocus가 호출됩니다.", () => {
     const { result } = renderHook(() =>
-      useMobileCategoryList({ currentCategory: CATEGORY[0] })
+      useMobileCategoryList({ currentCategoryId: 0 })
     );
 
     const fakeEvent = {
@@ -97,8 +97,23 @@ describe("useMobileCategoryList 훅 테스트", () => {
 
     expect(optimizationTabFocus).toHaveBeenCalledWith({
       event: fakeEvent,
-      previousTarget: null,
-      nextTarget: null
+      previousTarget: null, // lastCategoryPreviousRef.current 초기값
+      nextTarget: null // firstCategoryRef.current 초기값
     });
+  });
+
+  it("categoryOnKeyDown: 중간 인덱스에서는 optimizationTabFocus가 호출되지 않습니다.", () => {
+    const { result } = renderHook(() =>
+      useMobileCategoryList({ currentCategoryId: 0 })
+    );
+
+    const fakeEvent = {
+      key: "Tab",
+      preventDefault: jest.fn()
+    } as unknown as React.KeyboardEvent<HTMLElement>;
+
+    result.current.categoryOnKeyDown(fakeEvent, 1);
+
+    expect(optimizationTabFocus).not.toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import useCategoryList from "@/shared/category/hooks/useCategoryList";
+import useCategoryList from "../../../hooks/useCategoryList";
 import { usePathname, useSearchParams } from "next/navigation";
 
 jest.mock("next/navigation");

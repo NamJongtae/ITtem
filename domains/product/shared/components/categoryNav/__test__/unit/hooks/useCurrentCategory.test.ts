@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import useCurrentCategory from "@/shared/category/hooks/useCurrentCategory";
+import useCurrentCategory from "../../../hooks/useCurrentCategory";
 import { useSearchParams } from "next/navigation";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 
