@@ -8,13 +8,17 @@ import {
   useSuspenseInfiniteQuery
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { CATEGORY } from "../../constants/constants";
 
 export default function useSearchProductListInfiniteQuery({
   limit = 12
 }: {
   limit?: number;
 } = {}) {
-  const { category, keyword } = useGetQuerys(["category", "keyword"]);
+  const { category_id, keyword } = useGetQuerys(["category_id", "keyword"]);
+  const id = Number(category_id);
+  const safeId = Number.isInteger(id) ? id : 0;
+  const category = CATEGORY[safeId] || "전체";
 
   const queryKeyConfig = queryKeys.product.search({
     keyword: keyword as string,
