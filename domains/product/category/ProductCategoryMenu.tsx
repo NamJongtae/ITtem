@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import CategoryMenuUI from "@/shared/category/components/CategoryMenuUI";
+import CategoryMenuUI from "@/domains/product/shared/components/categoryNav/CategoryMenuUI";
 
 const clampCategoryId = (raw: string | undefined, max = 13) => {
   const id = Number(raw);

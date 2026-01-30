@@ -1,4 +1,4 @@
-import CategoryNav from "@/shared/category/components/CategoryNav";
+import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import SearchCategoryMenu from "./SearchCategoryMenu";
 
 export default function SearchHeader() {

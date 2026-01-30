@@ -1,6 +1,6 @@
 "use client";
 
-import CategoryNav from "@/shared/category/components/CategoryNav";
+import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import Content from "./content/Content";
 import Description from "./Description";
 import SellerSection from "./seller/SellerSection";

@@ -1,4 +1,4 @@
-import CategoryNav from "@/shared/category/components/CategoryNav";
+import CategoryNav from "@/domains/product/shared/components/categoryNav/CategoryNav";
 import LocationCheckbox from "../upload/components/ProductLocationCheckbox";
 import ProductCategoryMenu from "./ProductCategoryMenu";
 
