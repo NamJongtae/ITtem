@@ -2,7 +2,7 @@ import SearchHeader from "@/domains/search/components/SearchHeader";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import { Suspense } from "react";
 import ProductSearchloading from "./loading";
-import ProductSearchListPrefetchBoundary from "@/domains/search/components/ProductSearchListPrefetchBoundary";
+import ProductSearchListBoundary from "@/domains/search/components/ProductSearchListBoundary";
 
 export async function generateMetadata() {
   return {
@@ -20,7 +20,7 @@ export default async function Search() {
     <>
       <SearchHeader />
       <Suspense fallback={<ProductSearchloading />}>
-        <ProductSearchListPrefetchBoundary />
+        <ProductSearchListBoundary />
       </Suspense>
     </>
   );

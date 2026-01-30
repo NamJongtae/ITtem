@@ -3,7 +3,7 @@ import SuspenseErrorBoundary from "@/shared/common/components/SuspenseErrorBound
 import ProductListError from "../../product/shared/components/product-list/ProductListError";
 import ProductListSkeletonUI from "../../product/shared/components/product-list/ProductListSkeletonUI";
 
-export default async function ProductSearchListPrefetchBoundary() {
+export default async function ProductSearchListBoundary() {
   return (
     <SuspenseErrorBoundary
       suspenseFallback={<ProductListSkeletonUI listCount={8} />}
