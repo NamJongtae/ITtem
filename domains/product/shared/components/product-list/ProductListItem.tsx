@@ -14,7 +14,7 @@ export default function ProductListItem({ data, category }: IProps) {
 
   return (
     <Link
-      href={`/product/${data._id}${category ? `?category_id=${categoryId}` : ""}`}
+      href={`/product/${data._id}${categoryId ? `?category_id=${categoryId}` : ""}`}
       className="mx-auto group flex w-full h-full max-w-xs flex-col overflow-hidden bg-white border "
     >
       <ProductListImg
