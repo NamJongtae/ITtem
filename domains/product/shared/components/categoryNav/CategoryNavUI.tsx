@@ -11,7 +11,7 @@ interface IPorops {
 
 export default function CategoryNavUI({ className, currentCategory }: IPorops) {
   return (
-    <nav className={`flex self-start ${className}`}>
+    <nav className={`flex self-start ${className ? className : ""}`}>
       <ol className="inline-flex items-center">
         <li className="inline-flex items-center">
           <HomeIcon className="w-4 h-4 stroke-black fill-black mr-1" />
