@@ -6,10 +6,8 @@ import "@/shared/common/styles/swiperStyles.css";
 import "@/shared/common/styles/globals.css";
 import Layout from "@/shared/layout/components/Layout";
 import { ToastContainer } from "react-toastify";
-import { Suspense } from "react";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import ReactQueryProvider from "@/shared/common/store/ReactQueryProvider";
-import Loading from "@/shared/common/components/Loading";
 import GlobalLoading from "@/shared/common/components/GlobalLoading";
 
 const inter = Noto_Sans_KR({
