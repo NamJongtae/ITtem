@@ -1,10 +1,9 @@
 import Link from "next/link";
 import SearchBar from "./SearchBar";
-
 import Image from "next/image";
 import NavAuth from "./NavAuth";
 import { Suspense } from "react";
-import SubNav from "../sub-nav/SubNav";
+import SubNavClient from "./SubNavClient";
 
 export default function LayoutNav() {
   return (
@@ -32,28 +31,7 @@ export default function LayoutNav() {
         </div>
       </nav>
 
-      <Suspense
-        fallback={
-          <div className="relative flex justify-between px-4 sm:px-8 pb-4 max-w-[1024px] mx-auto">
-            <div className="flex gap-3 items-center">
-              <div className="bg-gray-200 w-6 h-6 rounded animate-pulse" />
-            </div>
-            <div className={"relative flex gap-3 animate-pulse"}>
-              <div className="w-[22px] h-[38px] bg-gray-200 rounded" />
-              <div className="hidden md:flex gap-3">
-                {[...new Array(3)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-[22px] h-[38px] bg-gray-200 round"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        }
-      >
-        <SubNav />
-      </Suspense>
+      <SubNavClient />
     </>
   );
 }
