@@ -1,5 +1,5 @@
 import { ProfileData } from "../../../types/profileTypes";
-import FollowBtn from "../FollowBtn";
+import FollowBtnClient from "../FollowBtnClient";
 import ChangePasswordBtn from "./ChangePasswordBtn";
 import EditProfileBtn from "./EditProfileBtn";
 
@@ -15,6 +15,6 @@ export default function UserInfoCardBtns({ profileData, isMyProfile }: IProps) {
       <ChangePasswordBtn />
     </>
   ) : (
-    <FollowBtn profileData={profileData} />
+    <FollowBtnClient profileData={profileData} />
   );
 }
