@@ -6,7 +6,7 @@ import ProductListSkeletonUI from "../../product/shared/components/product-list/
 export default async function ProductSearchListBoundary() {
   return (
     <SuspenseErrorBoundary
-      suspenseFallback={<ProductListSkeletonUI listCount={8} />}
+      suspenseFallback={<ProductListSkeletonUI listCount={12} />}
       errorFallback={<ProductListError productListType="SEARCH" />}
     >
       <ProductSearchList />
