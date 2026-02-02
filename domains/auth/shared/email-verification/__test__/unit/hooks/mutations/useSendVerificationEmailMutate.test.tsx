@@ -28,16 +28,20 @@ jest.mock("@/domains/auth/reset-password/api/sendResetPwVerificationEmail");
 const mockSetError = jest.fn();
 const mockSetIsError = jest.fn();
 const mockSetIsLoading = jest.fn();
-const mockSetEmailStatus = jest.fn();
 const mockResetTimer = jest.fn();
+const mockExpireTimer = jest.fn();
+
 const mockUseFormContext = useFormContext as jest.Mock;
 const mockToastSuccess = toast.success as jest.Mock;
 const mockToastWarn = toast.warn as jest.Mock;
+
 const mockSendSignupVerificationEmail =
   sendSignupVerificationEmail as jest.Mock;
 const mockSendResetPwVerificationEmail =
   sendResetPwVerificationEmail as jest.Mock;
+
 const { Wrapper } = createQueryClientWrapper();
+
 const providerWithWrapper = ({ children }: { children: React.ReactNode }) => (
   <Wrapper>
     <EmailVerificationContext.Provider
@@ -46,10 +50,11 @@ const providerWithWrapper = ({ children }: { children: React.ReactNode }) => (
         isLoading: false,
         isError: false,
         timer: 0,
-        setEmailStatus: mockSetEmailStatus,
+        setEmailStatus: jest.fn(), // 타입 때문에 남겨둬도 됨 (훅에서 사용 안 함)
         setIsLoading: mockSetIsLoading,
         setIsError: mockSetIsError,
         resetTimer: mockResetTimer,
+        expireTimer: mockExpireTimer, // ✅ 추가
         countDown: jest.fn(),
         reset: jest.fn(),
         send: jest.fn()
@@ -94,7 +99,7 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
     });
   });
 
-  it("type이 'resetPw'이면 sendResetPwVerificationEmail API가 호출되고 toast.sucess 성공 메시지가 표시됩니다.", async () => {
+  it("type이 'resetPw'이면 sendResetPwVerificationEmail API가 호출되고 toast.success 성공 메시지가 표시됩니다.", async () => {
     const mockResponse = { data: { message: "이메일 전송 완료" } };
     mockSendResetPwVerificationEmail.mockResolvedValue(mockResponse);
 
@@ -119,7 +124,7 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
     });
   });
 
-  it("이메일 전송 중 403 에러가 발생하면 상태 초기화, 에러 객체를 설정하며, toast.warn 에러 메세지가 출력됩니다.", async () => {
+  it("이메일 전송 중 403 에러가 발생하면 제한 안내 에러를 설정하고, 타이머를 만료 처리합니다.", async () => {
     const mockError = {
       isAxiosError: true,
       response: {
@@ -144,15 +149,19 @@ describe("useSendVerificationEmailMutate 훅 테스트", () => {
       expect(mockSendResetPwVerificationEmail).toHaveBeenCalledWith(
         "test@example.com"
       );
+
       expect(mockResetTimer).toHaveBeenCalled();
       expect(mockSetIsLoading).toHaveBeenCalledWith(false);
       expect(mockSetIsError).toHaveBeenCalledWith(true);
-      expect(mockSetEmailStatus).toHaveBeenCalledWith("INITIAL");
-      expect(mockToastWarn).toHaveBeenCalledWith("403 에러 발생");
+
+      expect(mockToastWarn).not.toHaveBeenCalled();
+
       expect(mockSetError).toHaveBeenCalledWith("verificationCode", {
         type: "validate",
-        message: "일일 시도 횟수를 초과했어요."
+        message: "일일 시도 횟수를 초과했어요. (24시간 후 초기화)"
       });
+
+      expect(mockExpireTimer).toHaveBeenCalled();
     });
   });
 });
