@@ -11,7 +11,7 @@ import sendSignupVerificationEmail from "../../api/sendSignupVerificationEmail";
 import sendResetPwVerificationEmail from "../../../../reset-password/api/sendResetPwVerificationEmail";
 
 export default function useSendVerificationEmailMutate() {
-  const { setEmailStatus, setIsLoading, setIsError, resetTimer } = useContext(
+  const { setIsLoading, setIsError, resetTimer, expireTimer } = useContext(
     EmailVerificationContext
   );
   const { setError } = useFormContext();
@@ -35,12 +35,11 @@ export default function useSendVerificationEmailMutate() {
       if (isAxiosError<VerificationEmailResponseData>(error)) {
         setIsError(true);
         if (error.response?.status === 403) {
-          setEmailStatus("INITIAL");
-          toast.warn(error.response?.data.message);
           setError("verificationCode", {
             type: "validate",
-            message: "일일 시도 횟수를 초과했어요."
+            message: "일일 시도 횟수를 초과했어요. (24시간 후 초기화)"
           });
+          expireTimer();
         } else {
           toast.warn(ERROR_MESSAGE);
         }
