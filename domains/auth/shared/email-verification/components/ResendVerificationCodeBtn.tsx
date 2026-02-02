@@ -3,6 +3,7 @@ import useResendEmailVerificationHandler from "../hooks/useResendEmailVerificati
 import { EmailVerificationContext } from "../context/EmailVerificationProvider";
 import { EmailVerificationType } from "../types/emailVerificationTypes";
 import { RefObject, useContext } from "react";
+import useVerificationCodeStatus from "../hooks/useVerificationCodeStatus";
 
 interface IProps {
   verificationCodeRef: RefObject<HTMLInputElement | null>;
@@ -17,6 +18,11 @@ export default function ResendVerificationCodeBtn({
   const { requestSendToVerificationEmail } = useResendEmailVerificationHandler(
     emailVerificationType
   );
+  const { errors } = useVerificationCodeStatus();
+
+  if (errors) {
+    return null;
+  }
 
   return (
     <p>
