@@ -1,11 +1,10 @@
 import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
-import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/utils/deleteEmailVerificationCode";
-import getVerifiedEmail from "@/domains/auth/shared/email-verification/utils/getVerifiedEmail";
 import dbConnect from "@/shared/common/utils/db/db";
 import User from "@/domains/auth/shared/common/models/User";
 import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { NextRequest, NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
+import EmailVerification from "@/domains/auth/signup/models/EmailVerification";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -19,7 +18,15 @@ export async function PATCH(req: NextRequest) {
     }
 
     await dbConnect();
+
     const user = await User.findOne({ email });
+
+    if (!user) {
+      return new NextResponse(
+        JSON.stringify({ message: "존재하지 않는 사용자입니다." }),
+        { status: 404 }
+      );
+    }
 
     if (user.loginType !== LoginType.EMAIL) {
       return new NextResponse(
@@ -31,8 +38,15 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const isEmailVerification = await getVerifiedEmail(email, "resetPw");
-    if (!isEmailVerification) {
+    const now = new Date();
+    const verification = await EmailVerification.findOne({
+      email,
+      type: "resetPw",
+      isVerified: true,
+      expiresAt: { $gt: now }
+    }).select({ _id: 1 });
+
+    if (!verification) {
       return new NextResponse(
         JSON.stringify({ message: "인증되지 않은 이메일입니다." }),
         { status: 401 }
@@ -55,7 +69,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    await deleteEmailVerificationCode(email, "resetPw");
+    await EmailVerification.deleteOne({ email, type: "resetPw" });
 
     return new NextResponse(
       JSON.stringify({ message: "비밀번호가 변경되었어요." }),
