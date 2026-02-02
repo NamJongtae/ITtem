@@ -18,6 +18,7 @@ interface EmailVerificationContextType {
   setIsError: Dispatch<SetStateAction<boolean>>;
   countDown: () => void;
   resetTimer: () => void;
+  expireTimer: () => void;
   reset: () => void;
   send: () => void;
 }
@@ -33,6 +34,7 @@ export const EmailVerificationContext =
     setIsError: () => {},
     countDown: () => {},
     resetTimer: () => {},
+    expireTimer: () => {},
     reset: () => {},
     send: () => {}
   });
@@ -53,6 +55,9 @@ export function EmailVerificationContextProvider({
   };
   const resetTimer = () => {
     setTimer(VERIFICATION_EMAIL_EXP);
+  };
+  const expireTimer = () => {
+    setTimer(0);
   };
 
   const reset = () => {
@@ -81,6 +86,7 @@ export function EmailVerificationContextProvider({
         setIsError,
         countDown,
         resetTimer,
+        expireTimer,
         reset,
         send
       }}
