@@ -19,7 +19,6 @@
     "@sentry/node": "^9.29.0",
     "@tanstack/react-query": "^5.28.14",
     "@tanstack/react-virtual": "^3.13.18",
-    "@upstash/redis": "^1.29.0",
     "axios": "^1.9.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "bcryptjs": "^2.4.3",
