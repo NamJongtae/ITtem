@@ -11,7 +11,7 @@ import * as Sentry from "@sentry/nextjs";
 import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
 
 export async function POST(req: NextRequest) {
-  const { user, isDuplicateLogin } = await req.json();
+  const { user } = await req.json();
 
   if (!user) {
     return NextResponse.json(
