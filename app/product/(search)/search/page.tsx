@@ -1,8 +1,8 @@
-import SearchHeader from "@/domains/search/components/SearchHeader";
+import SearchHeader from "@/domains/product/search/components/SearchHeader";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import { Suspense } from "react";
 import ProductSearchloading from "./loading";
-import ProductSearchListBoundary from "@/domains/search/components/ProductSearchListBoundary";
+import ProductSearchListBoundary from "@/domains/product/search/components/ProductSearchListBoundary";
 
 export async function generateMetadata() {
   return {
