@@ -1,7 +1,7 @@
 "use client";
 
 import useSearchProductListInfiniteQuery from "@/domains/product/shared/hooks/queries/useSearchProductListInfiniteQuery";
-import ProductListUI from "../../product/shared/components/product-list/ProductListUI";
+import ProductListUI from "../../shared/components/product-list/ProductListUI";
 import Empty from "@/shared/common/components/Empty";
 import useSerachCategory from "../hooks/useSerachCategory";
 
