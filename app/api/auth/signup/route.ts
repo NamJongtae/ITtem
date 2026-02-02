@@ -1,5 +1,3 @@
-import deleteEmailVerificationCode from "@/domains/auth/shared/email-verification/utils/deleteEmailVerificationCode";
-import getVerifiedEmail from "@/domains/auth/shared/email-verification/utils/getVerifiedEmail";
 import hashPassword from "@/domains/auth/shared/common/utils/hashPassoword";
 import dbConnect from "@/shared/common/utils/db/db";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,15 +9,32 @@ import { LoginType } from "@/domains/auth/signin/types/signinTypes";
 import { v4 as uuid } from "uuid";
 import * as Sentry from "@sentry/nextjs";
 import { SESSION_TTL } from "@/domains/auth/shared/common/constants/constansts";
+import EmailVerification from "@/domains/auth/signup/models/EmailVerification";
 
 export async function POST(req: NextRequest) {
   try {
     const { email, password, nickname, profileImgData, introduce } =
       await req.json();
 
+    if (!email || !password) {
+      return NextResponse.json(
+        { message: "유효하지 않은 값이 있어요." },
+        { status: 422 }
+      );
+    }
+
+    await dbConnect();
+
     // 1️⃣ 이메일 인증 확인
-    const isEmailVerified = await getVerifiedEmail(email, "signup");
-    if (!isEmailVerified) {
+    const now = new Date();
+    const verified = await EmailVerification.findOne({
+      email,
+      type: "signup",
+      isVerified: true,
+      expiresAt: { $gt: now }
+    }).select({ _id: 1 });
+
+    if (!verified) {
       return NextResponse.json(
         { message: "인증되지 않은 이메일이에요." },
         { status: 401 }
@@ -28,16 +43,14 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await hashPassword(password);
 
-    await dbConnect();
-
     // 2️⃣ 유저 생성
     const newUser = await User.create({
       loginType: LoginType.EMAIL,
       email: email.toLowerCase(),
       password: hashedPassword,
       nickname,
-      profileImg: profileImgData.url,
-      profileImgFilename: profileImgData.name,
+      profileImg: profileImgData?.url,
+      profileImgFilename: profileImgData?.name,
       introduce
     });
 
@@ -61,8 +74,7 @@ export async function POST(req: NextRequest) {
       expires: expiresAt
     });
 
-    // 5️⃣ 이메일 인증 코드 삭제
-    await deleteEmailVerificationCode(email, "signup");
+    await EmailVerification.deleteOne({ email, type: "signup" });
 
     return NextResponse.json(
       {
@@ -85,18 +97,13 @@ export async function POST(req: NextRequest) {
         (err) => err.message
       );
       return NextResponse.json(
-        {
-          message: "유효하지 않은 값이 있어요.",
-          error: errorMessages
-        },
+        { message: "유효하지 않은 값이 있어요.", error: errorMessages },
         { status: 422 }
       );
     }
 
     return NextResponse.json(
-      {
-        message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요."
-      },
+      { message: "회원가입에 실패했어요.\n잠시 후 다시 시도해주세요." },
       { status: 500 }
     );
   }
