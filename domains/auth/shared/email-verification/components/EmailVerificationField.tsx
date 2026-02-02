@@ -16,7 +16,8 @@ interface IProps {
 export default function EmailVerificationField({
   emailVerificationType
 }: IProps) {
-  const { isSendToVerificationEmail } = useEmailVerificationStatus();
+  const { isSendToVerificationEmail, isVerifiedEmail } =
+    useEmailVerificationStatus();
   const { emailRef } = useFocusEmailVerificationInput();
 
   return (
@@ -29,7 +30,7 @@ export default function EmailVerificationField({
           inputType="email"
           inputPlaceholder="이메일을 입력해주세요."
           inputRequired="이메일을 입력해주세요."
-          inputReadOnly={isSendToVerificationEmail}
+          inputReadOnly={isSendToVerificationEmail || isVerifiedEmail}
           inputPattern={{
             value: EMAIL_REGEX,
             message: EMAIL_REGEX_ERRORMSG
@@ -38,7 +39,7 @@ export default function EmailVerificationField({
           inputRef={emailRef}
         />
 
-        {!isSendToVerificationEmail && (
+        {!isSendToVerificationEmail && !isVerifiedEmail && (
           <SendVerificationCodeBtn
             emailVerificationType={emailVerificationType}
           />
