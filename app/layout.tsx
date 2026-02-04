@@ -9,33 +9,14 @@ import { ToastContainer } from "react-toastify";
 import { BASE_URL } from "@/shared/common/constants/constant";
 import ReactQueryProvider from "@/shared/common/store/ReactQueryProvider";
 import GlobalLoading from "@/shared/common/components/GlobalLoading";
+import { BASE_METADATA } from "@/domains/auth/shared/common/constants/constansts";
 
 const inter = Noto_Sans_KR({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
   subsets: ["latin"]
 });
 
-export const metadata: Metadata = {
-  title: "ITtem",
-  metadataBase: new URL(BASE_URL),
-  description:
-    "중고거래 플랫폼, 잇템. 안전하고 쉬운 중고거래, 다양한 상품과 빠른 거래를 경험하세요.",
-  verification: {
-    google: "c6hLQ83ILZIlJb0fwdyrw71DGHnTFaI7hmmORy7fpk0",
-    other: {
-      "naver-site-verification": "8a189164663805b9eeea137c43336f57fa7bdcf2"
-    }
-  },
-  icons: {
-    icon: "/icons/logo.svg"
-  },
-  openGraph: {
-    url: BASE_URL,
-    title: "ITtem",
-    description:
-      "중고거래 플랫폼, 잇템. 안전하고 쉬운 중고거래, 다양한 상품과 빠른 거래를 경험하세요."
-  }
-};
+export const metadata = BASE_METADATA;
 
 export default function RootLayout({
   children,

@@ -5,6 +5,7 @@ import CategoryProductListContainer from "@/domains/product/category/CategoryPro
 import ProductListSkeletonUI from "@/domains/product/shared/components/product-list/ProductListSkeletonUI";
 import { CATEGORY } from "@/domains/product/shared/constants/constants";
 import { ProductCategory } from "@/domains/product/shared/types/productTypes";
+import { BASE_METADATA } from "@/domains/auth/shared/common/constants/constansts";
 
 interface IProps {
   params: Promise<{ categoryId: string }>;
@@ -23,9 +24,11 @@ export async function generateMetadata() {
   const url = `${BASE_URL}/product`;
 
   return {
+    ...BASE_METADATA,
     metadataBase: new URL(url),
     title,
     openGraph: {
+      ...BASE_METADATA.openGraph,
       url,
       title
     }

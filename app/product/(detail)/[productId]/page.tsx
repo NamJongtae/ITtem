@@ -2,6 +2,7 @@ import { cache, Suspense } from "react";
 import ProductDetailPrefetchBoundary from "@/domains/product/detail/components/ProductDetailPrefetchBoundary";
 import ProductDetailSkeletonUI from "@/domains/product/detail/components/ProductDetailSkeletonUI";
 import getProduct from "@/domains/product/shared/api/getProduct";
+import { BASE_METADATA } from "@/domains/auth/shared/common/constants/constansts";
 
 export const revalidate = 180;
 
@@ -20,8 +21,10 @@ export async function generateMetadata({
 
   if (!productId) {
     return {
+      ...BASE_METADATA,
       title: "ITtem | 존재하지 않는 상품",
       openGraph: {
+        ...BASE_METADATA.openGraph,
         title: "존재하지 않는 상품"
       }
     };

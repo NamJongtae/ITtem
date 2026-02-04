@@ -1,3 +1,4 @@
+import { BASE_METADATA } from "@/domains/auth/shared/common/constants/constansts";
 import ProfileTabsSSRSkeletonUI from "@/domains/user/profile/components/tabs/ProfileTabsSSRSkeletonUI";
 import ProfileUserInfoSkeletonUI from "@/domains/user/profile/components/user-info/UserInfoSkeletonUI";
 import UserProfilePrefetchBoundary from "@/domains/user/profile/components/UserProfilePrefetchBoundary";
@@ -18,9 +19,11 @@ export async function generateMetadata() {
   const title = `ITtem | 프로필`;
   const url = `${BASE_URL}/profile`;
   return {
+      ...BASE_METADATA,
     metadataBase: new URL(url),
     title,
     openGraph: {
+        ...BASE_METADATA.openGraph,
       url,
       title
     }
