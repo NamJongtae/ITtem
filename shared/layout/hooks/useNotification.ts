@@ -91,6 +91,7 @@ export default function useNotification() {
         equalTo,
         get,
         increment,
+        onChildAdded,
         onValue,
         orderByChild,
         query,
@@ -106,32 +107,36 @@ export default function useNotification() {
         equalTo(false)
       );
 
-      unsubscribeMessage = onValue(q, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          (Object.entries(data) as [string, NotificationMessageData][]).forEach(
-            async ([key, message]) => {
-              toast.info(message.content);
-              const messageRef = ref(
-                database,
-                `notification/${user.uid}/messages/${key}`
-              );
+      // 새로 추가된(isNotification === false) 알림에 대해서만 한 번만 콜백이 실행되도록 onChildAdded 사용
+      unsubscribeMessage = onChildAdded(
+        q,
+        async (snapshot) => {
+          const key = snapshot.key;
+          const message = snapshot.val() as NotificationMessageData | null;
 
-              await update(messageRef, { isNotification: true });
+          if (!key || !message) return;
 
-              const counterSnapshot = await get(counterRef);
-              if (counterSnapshot.exists()) {
-                await update(counterRef, { unreadCount: increment(1) });
-              } else {
-                await update(counterRef, { unreadCount: 1 });
-              }
-            }
+          toast.info(message.content);
+
+          const targetMessageRef = ref(
+            database,
+            `notification/${user.uid}/messages/${key}`
           );
+
+          await update(targetMessageRef, { isNotification: true });
+
+          const counterSnapshot = await get(counterRef);
+          if (counterSnapshot.exists()) {
+            await update(counterRef, { unreadCount: increment(1) });
+          } else {
+            await update(counterRef, { unreadCount: 1 });
+          }
+
           queryClient.invalidateQueries({
             queryKey: queryKeys.notification.messages().queryKey
           });
         }
-      });
+      );
 
       unsubscribeCounter = onValue(counterRef, (snapshot) => {
         const data = snapshot.val();
